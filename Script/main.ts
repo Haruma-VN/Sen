@@ -16,7 +16,9 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/exception.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/default/localization.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/filesystem.js`),
-            Path.Resolve(`${MainScriptDirectory}/test.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/conversion.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/official.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/split.js`),
         ]),
     ];
 
@@ -67,24 +69,69 @@ namespace Sen.Script {
                 Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3),
             ),
         );
-        const g_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        const sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                `Module loaded: Sen.Test.CreateConversion(file_path, output_path)`,
-            );
-            // Sen.Script.Test.ResourceConversion.CreateConversion("./src/RESOURCES.json", "./src/res.json");
-            Sen.Script.Test.SplitUnofficialResources.CreateConversion("./src/res.json", "./src/test_folder");
+            // // Sen.Script.Test.ResourceConversion.CreateConversion("./src/RESOURCES.json", "./src/res.json");
+            // Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(
+            //     "./Scripts/resources.beta.json",
+            //     "./Scripts/resources.beta2.json",
+            // );
+            // const options: Sen.Script.Modules.Third.JavaScript.MaxRectsAlgorithm.IOption = {
+            //     smart: true,
+            //     pot: true,
+            //     square: false,
+            //     allowRotation: true,
+            //     tag: false,
+            //     border: 5,
+            // }; // Set packing options
+            // let packer = new Sen.Script.Modules.Third.JavaScript.MaxRectsAlgorithm.MaxRectsPacker(
+            //     1024,
+            //     1024,
+            //     2,
+            //     options,
+            // ); // width, height, padding, options
+            // let input = [
+            //     // any object with width & height is OK since v2.1.0
+            //     { width: 600, height: 20, name: "tree", foo: "bar" },
+            //     { width: 600, height: 20, name: "flower" },
+            //     { width: 2000, height: 2000, name: "oversized background" },
+            //     { width: 1000, height: 1000, name: "background", color: 0x000000ff },
+            //     { width: 1000, height: 1000, name: "overlay", allowRotation: true },
+            // ];
+            // packer.addArray(input as any); // Start packing with input array
+            // // packer.next(); // Start a new packer bin
+            // packer.bins.forEach((bin) => {
+            //     Console.Print(null, JSON.stringify(bin.rects, null, "\t"));
+            // });
+            // DotNetBitmap.CompositeImages(
+            //     [
+            //         {
+            //             x: 0,
+            //             y: 0,
+            //             file_path: "./Scripts/R.png",
+            //             width: 485,
+            //             height: 768,
+            //         },
+            //     ],
+            //     "test.png",
+            //     "./Scripts",
+            //     1200,
+            //     1200,
+            // );
+            // // Reuse packer
+            // let bins = packer.save();
+            // packer.load(bins);
+            // packer.addArray(input as any);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
             // Console.Print(null, true);
         }
-        const g_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        const sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
                 /\{\}/g,
-                Sen.Script.Modules.System.Default.Timer.CalculateTime(g_module_time_start, g_module_time_end, 3),
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(sen_module_time_start, sen_module_time_end, 3),
             ),
         );
         Sen.Script.Modules.Platform.Constraints.ExitProgram();

@@ -1,5 +1,5 @@
-namespace Sen.Script.Test {
-    abstract class CheckOfficialResources {
+namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
+    export abstract class CheckOfficialResources {
         protected static CheckIntegerNumber(num: number, property: string, id: string, file_path: string): boolean {
             if (!Number.isInteger(num)) {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
@@ -144,7 +144,7 @@ namespace Sen.Script.Test {
             return true;
         }
     }
-    export class ResourceConversion extends CheckOfficialResources {
+    export class UnofficialResourceConversion extends CheckOfficialResources {
         private static CheckOfficialPathType<Template extends Resources_Group_Structure_Template>(
             resource_json: Template,
         ): "array" | "string" {
@@ -491,7 +491,7 @@ namespace Sen.Script.Test {
                     atlas: true,
                     width: (packet.packet[resource_atlas_parent[index]].dimension as any).width,
                     height: (packet.packet[resource_atlas_parent[index]].dimension as any).height,
-                    Sen: true,
+                    runtime: true,
                 });
                 for (let j_index: number = 0; j_index < resource_atlas_children_sprites_id.length; ++j_index) {
                     this.CheckIntegerNumber(
@@ -1103,7 +1103,7 @@ namespace Sen.Script.Test {
             );
             return resources_json;
         }
-        public static CreateWholeConversion(file_input: string, output_file: string): void {
+        public static CreateConversion(file_input: string, output_file: string): void {
             const res_json: res_json = Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(file_input) as res_json;
             Sen.Script.Modules.FileSystem.Json.WriteJson(
                 output_file,

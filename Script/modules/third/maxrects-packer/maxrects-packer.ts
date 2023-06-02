@@ -58,8 +58,8 @@ namespace Sen.Script.Modules.Third.JavaScript.MaxRectsAlgorithm {
     export class MaxRectsBin<T extends IRectangle = Rectangle> extends Bin<T> {
         public width: number;
         public height: number;
-        public freeRects: Rectangle[] = [];
-        public rects: T[] = [];
+        public freeRects: Rectangle[];
+        public rects: T[];
         private verticalExpand: boolean = false;
         private stage: Rectangle;
         private border: number;
@@ -81,6 +81,8 @@ namespace Sen.Script.Modules.Third.JavaScript.MaxRectsAlgorithm {
             options: IOption = {},
         ) {
             super();
+            this.freeRects = new Array();
+            this.rects = new Array();
             this.options = { ...this.options, ...options };
             this.width = this.options.smart ? 1 : maxWidth;
             this.height = this.options.smart ? 1 : maxHeight;

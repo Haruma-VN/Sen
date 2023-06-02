@@ -518,6 +518,46 @@ declare namespace DotNetBitmap {
      */
 
     export async function SaveImageAsync(imagePath: string, imageByte: Image<Rgba32>): Promise<void>;
+
+    /**
+     *
+     * @param objArray - Send the array of JS Object with width, height, x, y and file_path
+     * @param filename - File name for composite image
+     * @param output_directory - Output directory
+     * @param width - Input width
+     * @param height - Input height
+     * @returns Written image
+     */
+
+    export function CompositeImages<
+        T extends {
+            width: number;
+            height: number;
+            x: number;
+            y: number;
+            file_path: string;
+        },
+    >(objArray: Array<T>, filename: string, output_directory: string, width: int, height: int): void;
+
+    /**
+     *
+     * @param sourceImagePath - The image to extract
+     * @param outputImagePath - Output image
+     * @param x - The coordinate x
+     * @param y - The coordinate y
+     * @param width - Width of extracted image
+     * @param height - Height of extracted image
+     * @returns Extracted image
+     */
+
+    export function CropAndSaveImage(
+        sourceImagePath: string,
+        outputImagePath: string,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+    ): void;
 }
 
 namespace DotNetCrypto {
@@ -836,7 +876,7 @@ declare type Resource_Structure_Template = {
         atlas?: boolean;
         width?: number;
         height?: number;
-        Sen?: boolean;
+        runtime?: boolean;
         parent?: string;
         ah?: number;
         aw?: number;
@@ -853,6 +893,7 @@ declare type Resource_Structure_Template = {
 
 declare type Resources_Group_Structure_Template = {
     groups: Array<Resource_Structure_Template & any>;
+    slot_count: number;
 };
 
 declare type using_subgroup = {
@@ -876,7 +917,7 @@ declare type resource_atlas_and_sprites = {
         atlas?: boolean;
         width?: number;
         height?: number;
-        Sen?: boolean;
+        runtime?: boolean;
         parent?: string;
         ah?: number;
         aw?: number;

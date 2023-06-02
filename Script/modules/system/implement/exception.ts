@@ -614,7 +614,7 @@ namespace Sen.Script.Modules.Exceptions {
             case Sen.Script.Modules.Exceptions.EvaluateError: {
                 const name: string = (error as Sen.Script.Modules.Exceptions.EvaluateError).name;
                 const message: string = (error as Sen.Script.Modules.Exceptions.EvaluateError).message;
-                const location: string = (error as Sen.Script.Modules.Exceptions.EvaluateError).file_path;
+                const location: string = (error as Sen.Script.Modules.Exceptions.EvaluateError).script;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);

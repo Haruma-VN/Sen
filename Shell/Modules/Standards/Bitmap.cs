@@ -1,5 +1,9 @@
-﻿using SixLabors.ImageSharp.Formats.Jpeg;
+﻿using Jint.Native;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using Jint;
 
 namespace Sen.Modules.Standards.Bitmap
 {
@@ -93,6 +97,10 @@ namespace Sen.Modules.Standards.Bitmap
         public abstract void ExportGifToPngs(string gifImagePath, string outputDirectory, string frame_name);
 
         public abstract Task SaveImageAsync(string image_path, Image<Rgba32> image_byte);
+
+        public abstract void CompositeImages(JsValue[] image, string filename, string output_directory, int width, int height);
+
+        public abstract void CropAndSaveImage(string sourceImagePath, string outputImagePath, int x, int y, int width, int height);
     }
 
     public class Bitmap_Implement : Abstract_Bitmap
@@ -351,6 +359,48 @@ namespace Sen.Modules.Standards.Bitmap
             }
 
             return Task.CompletedTask;
+        }
+
+
+        public override void CompositeImages(JsValue[] images, string filename, string outputDirectory, int width, int height)
+        {
+            using var compositeImage = new Image<Rgba32>(width, height);
+            {
+                var path = new Sen.Modules.Standards.IOModule.Implement_Path();
+                foreach (var jsImage in images)
+                {
+                    var x = (int)jsImage.AsObject().Get("x").AsNumber();
+                    var y = (int)jsImage.AsObject().Get("y").AsNumber();
+                    var imageWidth = (int)jsImage.AsObject().Get("width").AsNumber();
+                    var imageHeight = (int)jsImage.AsObject().Get("height").AsNumber();
+                    var filePath = jsImage.AsObject().Get("file_path").AsString();
+
+
+                    var objectImage = Image.Load<Rgba32>(filePath);
+                    objectImage.Mutate(ctx => ctx.Resize(new ResizeOptions
+                    {
+                        Size = new Size(imageWidth, imageHeight),
+                        Mode = ResizeMode.Stretch
+                    }));
+
+                    compositeImage.Mutate(ctx => ctx.DrawImage(objectImage, new Point(x, y), 1f));
+                }
+
+                var outputPath = path.Join(outputDirectory, filename);
+                compositeImage.Save(outputPath);
+            }
+            return;
+        }
+
+        public override void CropAndSaveImage(string sourceImagePath, string outputImagePath, int x, int y, int width, int height)
+        {
+            using var sourceImage = Image.Load<Rgba32>(sourceImagePath);
+            {
+                var cropRectangle = new Rectangle(x, y, width, height);
+                sourceImage.Mutate(c => c.Crop(cropRectangle));
+                sourceImage.Save(outputImagePath);
+            }
+            return;
         }
 
 
