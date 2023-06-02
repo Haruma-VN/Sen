@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.JsonLibrary.Constraints {
+namespace Sen.Script.Modules.JsonLibrary.Constraints {
     /**
      * @param -  Comment Handling method for Json Parse
      */

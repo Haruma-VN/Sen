@@ -1,6 +1,6 @@
-namespace Runtime.Script {
+namespace Sen.Script {
     /**
-     * @package Script loaded to the Runtime
+     * @package Script loaded to the Sen
      */
     export const ScriptModules: Array<string> = [
         ...new Set([
@@ -30,7 +30,7 @@ namespace Runtime.Script {
         for (const script of scripts) {
             try {
                 JavaScriptEngine.Execute(
-                    Fs.ReadText(script, 0 as Runtime.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                    Fs.ReadText(script, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
                     script,
                 );
             } catch (error) {
@@ -48,47 +48,47 @@ namespace Runtime.Script {
     export async function Main(argument: string[]): Promise<void> {
         // Support UTF8 Console
         const time_start: number = Date.now();
-        Runtime.Script.LoadModules(Runtime.Script.ScriptModules);
+        Sen.Script.LoadModules(Sen.Script.ScriptModules);
         const time_end: number = Date.now();
-        if (DotNetPlatform.SenShell === Runtime.Script.Modules.Platform.Constraints.ShellType.Console) {
+        if (DotNetPlatform.SenShell === Sen.Script.Modules.Platform.Constraints.ShellType.Console) {
             DotNetPlatform.SupportUtf8Console();
         }
         Console.Print(
-            Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Runtime.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
                 /{\}/g,
-                Runtime.Script.Modules.System.Default.Localization.GetString("all_modules_have_been_loaded"),
+                Sen.Script.Modules.System.Default.Localization.GetString("all_modules_have_been_loaded"),
             ),
         );
         Console.Print(
-            Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Runtime.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
                 /\{\}/g,
-                Runtime.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3),
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3),
             ),
         );
-        const g_module_time_start: number = Runtime.Script.Modules.System.Default.Timer.CurrentTime();
+        const g_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
             Console.Print(
-                Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                `Module loaded: Runtime.Test.CreateConversion(file_path, output_path)`,
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                `Module loaded: Sen.Test.CreateConversion(file_path, output_path)`,
             );
-            // Runtime.Script.Test.ResourceConversion.CreateConversion("./src/RESOURCES.json", "./src/res.json");
-            Runtime.Script.Test.SplitUnofficialResources.CreateConversion("./src/res.json", "./src/test_folder");
+            // Sen.Script.Test.ResourceConversion.CreateConversion("./src/RESOURCES.json", "./src/res.json");
+            Sen.Script.Test.SplitUnofficialResources.CreateConversion("./src/res.json", "./src/test_folder");
         } catch (error: unknown) {
-            Runtime.Script.Modules.Exceptions.PrintError<Error, string>(error);
+            Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
             // Console.Print(null, true);
         }
-        const g_module_time_end: number = Runtime.Script.Modules.System.Default.Timer.CurrentTime();
+        const g_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         Console.Print(
-            Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Runtime.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
                 /\{\}/g,
-                Runtime.Script.Modules.System.Default.Timer.CalculateTime(g_module_time_start, g_module_time_end, 3),
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(g_module_time_start, g_module_time_end, 3),
             ),
         );
-        Runtime.Script.Modules.Platform.Constraints.ExitProgram();
+        Sen.Script.Modules.Platform.Constraints.ExitProgram();
     }
 }
 
-Runtime.Script.Main(args);
+Sen.Script.Main(args);

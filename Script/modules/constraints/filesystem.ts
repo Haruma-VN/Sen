@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.FileSystem.Constraints {
+namespace Sen.Script.Modules.FileSystem.Constraints {
     /**
      * @param -  Encoding for File Opening
      */

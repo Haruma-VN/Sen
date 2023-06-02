@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.Exceptions {
+namespace Sen.Script.Modules.Exceptions {
     /**
      * If inheritance this, will override the instance of method
      */
@@ -9,10 +9,10 @@ namespace Runtime.Script.Modules.Exceptions {
     }
 
     /**
-     * Implementing RuntimeError for JS
+     * Implementing SenError for JS
      */
 
-    export class RuntimeError extends Error {
+    export class SenError extends Error {
         /**
          * Out put file path to print
          */
@@ -24,7 +24,7 @@ namespace Runtime.Script.Modules.Exceptions {
          */
         public constructor(error: string, file_path: string) {
             super(error);
-            this.name = Runtime.Script.Modules.System.Default.Localization.GetString("runtime_error");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("Sen_error");
             this._file_path = Path.Resolve(file_path);
         }
 
@@ -64,7 +64,7 @@ namespace Runtime.Script.Modules.Exceptions {
         public constructor(error: string, script: string) {
             super(error);
             this._script = Path.Resolve(script);
-            this.name = Runtime.Script.Modules.System.Default.Localization.GetString("evaluate_error");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("evaluate_error");
         }
 
         /**
@@ -87,10 +87,10 @@ namespace Runtime.Script.Modules.Exceptions {
     }
 
     /**
-     * JS Missing file requirement implement Runtime
+     * JS Missing file requirement implement Sen
      */
 
-    export class MissingFileRequirement extends RuntimeError {
+    export class MissingFileRequirement extends SenError {
         /**
          *
          * @param error - Provide error message
@@ -98,7 +98,7 @@ namespace Runtime.Script.Modules.Exceptions {
          */
         public constructor(error: string, file_path: string) {
             super(error, file_path);
-            this.name = Runtime.Script.Modules.System.Default.Localization.GetString("missing_files_requirement");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("missing_files_requirement");
         }
     }
 
@@ -120,7 +120,7 @@ namespace Runtime.Script.Modules.Exceptions {
 
         public constructor(error: string, module: string) {
             super(error);
-            this.name = Runtime.Script.Modules.System.Default.Localization.GetString("module_not_found");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("module_not_found");
             this._module = module;
         }
 
@@ -162,7 +162,7 @@ namespace Runtime.Script.Modules.Exceptions {
 
         public constructor(error: string, property: string, file_path: string) {
             super(error);
-            this.name = Runtime.Script.Modules.System.Default.Localization.GetString("missing_property");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("missing_property");
             this._property = property;
             this._file_path = Path.Resolve(file_path);
         }
@@ -227,7 +227,7 @@ namespace Runtime.Script.Modules.Exceptions {
          */
         public constructor(message: string, property: string, file_path: string) {
             super(message, property, file_path);
-            this.name = Runtime.Script.Modules.System.Default.Localization.GetString("property_is_not_defined");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("property_is_not_defined");
         }
     }
 
@@ -246,7 +246,7 @@ namespace Runtime.Script.Modules.Exceptions {
          */
         public constructor(message: string, property: string, file_path: string, type_expected: string) {
             super(message, property, file_path);
-            this.name = Runtime.Script.Modules.System.Default.Localization.GetString("wrong_data_type");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("wrong_data_type");
             this._type_expected = type_expected;
         }
 
@@ -546,25 +546,25 @@ namespace Runtime.Script.Modules.Exceptions {
 
     export function ExecutionExceptionType(exception_type: string): void {
         Console.Print(
-            Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-            `${Runtime.Script.Modules.System.Default.Localization.GetString("exception_type")}${exception_type}`,
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("exception_type")}${exception_type}`,
         );
         return;
     }
 
     export function ExecutionLoadedFrom(file_location: string): void {
         Console.Print(
-            Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-            `${Runtime.Script.Modules.System.Default.Localization.GetString("exception_path")}`,
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("exception_path")}`,
         );
-        Console.Printf(Runtime.Script.Modules.Platform.Constraints.ConsoleColor.White, `   ${file_location}`);
+        Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `   ${file_location}`);
         return;
     }
 
     export function ExecutionError(message: string): void {
         Console.Print(
-            Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-            `${Runtime.Script.Modules.System.Default.Localization.GetString("execution_error").replace(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(
                 /\{\}/g,
                 `${message}`,
             )}`,
@@ -573,365 +573,360 @@ namespace Runtime.Script.Modules.Exceptions {
 
     export function PrintError<Generic_T extends Error, Generic_U extends string>(error: unknown): void {
         switch ((error as Generic_T).constructor) {
-            case Runtime.Script.Modules.Exceptions.BrokenFile: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.BrokenFile).name;
-                const file_location: string = (error as Runtime.Script.Modules.Exceptions.BrokenFile).file_location;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.BrokenFile).message;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(name);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.BrokenFile: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.BrokenFile).name;
+                const file_location: string = (error as Sen.Script.Modules.Exceptions.BrokenFile).file_location;
+                const message: string = (error as Sen.Script.Modules.Exceptions.BrokenFile).message;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.DOMDocumentError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.DOMDocumentError).name;
-                const file_location: string = (error as Runtime.Script.Modules.Exceptions.DOMDocumentError).file_path;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.DOMDocumentError).message;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(name);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.DOMDocumentError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.DOMDocumentError).name;
+                const file_location: string = (error as Sen.Script.Modules.Exceptions.DOMDocumentError).file_path;
+                const message: string = (error as Sen.Script.Modules.Exceptions.DOMDocumentError).message;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.DimensionError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.DimensionError).name;
-                const file_location: string = (error as Runtime.Script.Modules.Exceptions.DimensionError).file_path;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.DimensionError).message;
-                const property_error: string = (error as Runtime.Script.Modules.Exceptions.DimensionError)
+            case Sen.Script.Modules.Exceptions.DimensionError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.DimensionError).name;
+                const file_location: string = (error as Sen.Script.Modules.Exceptions.DimensionError).file_path;
+                const message: string = (error as Sen.Script.Modules.Exceptions.DimensionError).message;
+                const property_error: string = (error as Sen.Script.Modules.Exceptions.DimensionError)
                     .dimension_type_error;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(name);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.EncodingError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.EncodingError).name;
-                const file_location: string = (error as Runtime.Script.Modules.Exceptions.EncodingError).file_path;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.EncodingError).message;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(name);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.EncodingError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.EncodingError).name;
+                const file_location: string = (error as Sen.Script.Modules.Exceptions.EncodingError).file_path;
+                const message: string = (error as Sen.Script.Modules.Exceptions.EncodingError).message;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.EvaluateError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.EvaluateError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.EvaluateError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.EvaluateError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(name);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.EvaluateError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.EvaluateError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.EvaluateError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.EvaluateError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.ImageXMLError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.ImageXMLError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.ImageXMLError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.ImageXMLError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(name);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.ImageXMLError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.ImageXMLError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ImageXMLError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.ImageXMLError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.WrongDataType: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.WrongDataType).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.WrongDataType).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.WrongDataType).file_path;
-                const expected_data_type: string = (error as Runtime.Script.Modules.Exceptions.WrongDataType)
-                    .type_expected;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(name);
+            case Sen.Script.Modules.Exceptions.WrongDataType: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.WrongDataType).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.WrongDataType).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.WrongDataType).file_path;
+                const expected_data_type: string = (error as Sen.Script.Modules.Exceptions.WrongDataType).type_expected;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
                 Console.Print(
-                    Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                    `${Runtime.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
                         /\{\}/g,
-                        `${Runtime.Script.Modules.System.Default.Localization.GetString(
-                            "expected_variable_type",
-                        ).replace(/\{\}/g, expected_data_type)}`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("expected_variable_type").replace(
+                            /\{\}/g,
+                            expected_data_type,
+                        )}`,
                     )}`,
                 );
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.MissingProperty: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.MissingProperty).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.MissingProperty).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.MissingProperty).file_path;
-                const property: string = (error as Runtime.Script.Modules.Exceptions.MissingProperty).property;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_property_is"} "${property}"`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.MissingProperty: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.MissingProperty).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.MissingProperty).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.MissingProperty).file_path;
+                const property: string = (error as Sen.Script.Modules.Exceptions.MissingProperty).property;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_property_is"} "${property}"`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.PropertyHasNotBeenDefined: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.PropertyHasNotBeenDefined).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.PropertyHasNotBeenDefined).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.PropertyHasNotBeenDefined)
-                    .file_path;
-                const property: string = (error as Runtime.Script.Modules.Exceptions.PropertyHasNotBeenDefined)
-                    .property;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_property_is"} "${property}"`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined).file_path;
+                const property: string = (error as Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined).property;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_property_is"} "${property}"`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.RuntimeError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.RuntimeError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.RuntimeError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.RuntimeError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.SenError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.SenError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.SenError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.SenError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.RuntimeError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.RuntimeError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.RuntimeError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.RuntimeError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.SenError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.SenError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.SenError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.SenError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.MissingFileRequirement: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.MissingFileRequirement).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.MissingFileRequirement).message;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.MissingFileRequirement: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.MissingFileRequirement).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.MissingFileRequirement).message;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.MissingFile: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.MissingFile).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.MissingFile).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.MissingFile).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.MissingFile: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.MissingFile).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.MissingFile).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.MissingFile).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.WrongFile: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.WrongFile).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.WrongFile).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.WrongFile).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.WrongFile: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.WrongFile).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.WrongFile).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.WrongFile).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.BrokenFile: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.BrokenFile).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.BrokenFile).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.BrokenFile).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.BrokenFile: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.BrokenFile).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.BrokenFile).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.BrokenFile).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.MissingDirectory: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.MissingDirectory).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.MissingDirectory).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.MissingDirectory).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.MissingDirectory: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.MissingDirectory).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.MissingDirectory).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.MissingDirectory).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.InvalidRange: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.InvalidRange).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.InvalidRange).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.InvalidRange).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.InvalidRange: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.InvalidRange).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.InvalidRange).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.InvalidRange).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.DOMDocumentError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.DOMDocumentError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.DOMDocumentError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.DOMDocumentError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.DOMDocumentError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.DOMDocumentError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.DOMDocumentError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.DOMDocumentError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.ImageXMLError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.ImageXMLError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.ImageXMLError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.ImageXMLError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.ImageXMLError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.ImageXMLError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ImageXMLError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.ImageXMLError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.SpriteXMLError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.SpriteXMLError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.SpriteXMLError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.SpriteXMLError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.SpriteXMLError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.SpriteXMLError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.SpriteXMLError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.SpriteXMLError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement: {
+            case Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement: {
                 const name: string = (
-                    error as Runtime.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
+                    error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
                 ).name;
                 const message: string = (
-                    error as Runtime.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
+                    error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
                 ).message;
                 const location: string = (
-                    error as Runtime.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
+                    error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
                 ).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.ReadPathFailed: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.ReadPathFailed).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.ReadPathFailed).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.ReadPathFailed).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.ReadPathFailed: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.ReadPathFailed).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ReadPathFailed).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.ReadPathFailed).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.ResizeImageError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.ResizeImageError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.ResizeImageError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.MissingDirectory).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.ResizeImageError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.ResizeImageError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ResizeImageError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.MissingDirectory).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.UnknownFormat: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.UnknownFormat<Generic_U>).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.UnknownFormat<Generic_U>).message;
-                const format: Generic_U = (error as Runtime.Script.Modules.Exceptions.UnknownFormat<Generic_U>).format;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.MissingDirectory).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(
+            case Sen.Script.Modules.Exceptions.UnknownFormat: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.UnknownFormat<Generic_U>).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.UnknownFormat<Generic_U>).message;
+                const format: Generic_U = (error as Sen.Script.Modules.Exceptions.UnknownFormat<Generic_U>).format;
+                const location: string = (error as Sen.Script.Modules.Exceptions.MissingDirectory).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(
                     `${name} ${"and_unknown_format_is".replace(/\{\}/g, format)}`,
                 );
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.JSONParseSyntaxError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.JSONParseSyntaxError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.JSONParseSyntaxError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.JSONParseSyntaxError).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.JSONParseSyntaxError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.JSONParseSyntaxError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.JSONParseSyntaxError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.JSONParseSyntaxError).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.JSONParseTrailingCommasError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.JSONParseTrailingCommasError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.JSONParseTrailingCommasError)
-                    .message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.JSONParseTrailingCommasError)
+            case Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError)
                     .file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.JSONPatchOperationError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.JSONPatchOperationError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.JSONPatchOperationError).message;
-                const operation: string = (error as Runtime.Script.Modules.Exceptions.JSONPatchOperationError)
-                    .operation;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(
+            case Sen.Script.Modules.Exceptions.JSONPatchOperationError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.JSONPatchOperationError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.JSONPatchOperationError).message;
+                const operation: string = (error as Sen.Script.Modules.Exceptions.JSONPatchOperationError).operation;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(
                     `${name} ${"and_the_operation_is".replace(/\{\}/g, operation)}`,
                 );
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.WrongPropertyValue: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.WrongPropertyValue).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.WrongPropertyValue).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.WrongPropertyValue).file_path;
-                const additional_message: string = (error as Runtime.Script.Modules.Exceptions.WrongPropertyValue)
+            case Sen.Script.Modules.Exceptions.WrongPropertyValue: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).file_path;
+                const additional_message: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue)
                     .additional_message;
-                const property: string = (error as Runtime.Script.Modules.Exceptions.WrongPropertyValue).property;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(
+                const property: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).property;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(
                     `${name} ${"and_the_wrong_property_is".replace(/\{\}/g, property)}`,
                 );
                 Console.Print(
-                    Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                    `${Runtime.Script.Modules.System.Default.Localization.GetString(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString(
                         "execution_reminder",
                     )}${additional_message}`,
                 );
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.ModuleNotFound: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.ModuleNotFound).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.ModuleNotFound).message;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.ModuleNotFound: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.ModuleNotFound).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ModuleNotFound).message;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.UnsupportedDataType: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.UnsupportedDataType).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.UnsupportedDataType).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.UnsupportedDataType).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.UnsupportedDataType: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.UnsupportedDataType).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.UnsupportedDataType).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.UnsupportedDataType).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.UnsupportedFileType: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.UnsupportedFileType).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.UnsupportedFileType).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.UnsupportedFileType).file_path;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.UnsupportedFileType: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.UnsupportedFileType).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.UnsupportedFileType).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.UnsupportedFileType).file_path;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.CannotWriteFile: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.CannotWriteFile).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.CannotWriteFile).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.CannotWriteFile).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.CannotWriteFile: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.CannotWriteFile).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.CannotWriteFile).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.CannotWriteFile).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.CannotReadFileSystem: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.CannotReadFileSystem).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.CannotReadFileSystem).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.CannotReadFileSystem)
-                    .file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.CannotReadFileSystem: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.CannotReadFileSystem).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.CannotReadFileSystem).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.CannotReadFileSystem).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement)
+            case Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement)
                     .message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement)
+                const location: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement)
                     .file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Runtime.Script.Modules.Exceptions.JoinImageError: {
-                const name: string = (error as Runtime.Script.Modules.Exceptions.JoinImageError).name;
-                const message: string = (error as Runtime.Script.Modules.Exceptions.JoinImageError).message;
-                const location: string = (error as Runtime.Script.Modules.Exceptions.JoinImageError).file_location;
-                Runtime.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                Runtime.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                Runtime.Script.Modules.Exceptions.ExecutionError(message);
+            case Sen.Script.Modules.Exceptions.JoinImageError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.JoinImageError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.JoinImageError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.JoinImageError).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
             default: {
                 Console.Print(
-                    Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                    `${Runtime.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
                         /\{\}/g,
                         (error as DotNetSystem.Exception).message,
                     )}`,

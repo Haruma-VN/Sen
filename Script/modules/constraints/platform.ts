@@ -1,6 +1,6 @@
-namespace Runtime.Script.Modules.Platform.Constraints {
+namespace Sen.Script.Modules.Platform.Constraints {
     /**
-     * @param -  Shell Type for Runtime
+     * @param -  Shell Type for Sen
      */
     export enum ShellType {
         Console,
@@ -49,10 +49,10 @@ namespace Runtime.Script.Modules.Platform.Constraints {
 
     export function ExitProgram(): void {
         Console.Print(
-            Runtime.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Runtime.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(
                 /{\}/g,
-                Runtime.Script.Modules.System.Default.Localization.GetString("press_any_key_to_continue"),
+                Sen.Script.Modules.System.Default.Localization.GetString("press_any_key_to_continue"),
             ),
         );
     }

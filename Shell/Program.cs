@@ -8,7 +8,7 @@ namespace Sen
         public static int Main(string[] args)
         {
             var SystemConsole = new SystemImplement();
-            var Script_Directory = $"{Platform.CurrentDirectoryContainsShell}/Script";
+            var Script_Directory = $"{Platform.CurrentDirectoryContainsShell}/Scripts";
             try
             {
                 Engine.Evaluate(ref Script_Directory, args);

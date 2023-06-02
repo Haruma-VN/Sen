@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.Crypto.Constraints {
+namespace Sen.Script.Modules.Crypto.Constraints {
     /**
      * @param - Implemented Rijndael based on .NET Library
      * @param - Provide one padding

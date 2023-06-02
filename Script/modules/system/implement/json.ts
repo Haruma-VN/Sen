@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.FileSystem.Implement.JsonLibrary {
+namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
     /**
      *
      * @param jsonText Provide serialized JSON text as string

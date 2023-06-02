@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.System.Implement.JavaScript {
+namespace Sen.Script.Modules.System.Implement.JavaScript {
     /**
      *
      * @param js_string_to_evaluate - Pass JS String to Evaluate
@@ -21,8 +21,8 @@ namespace Runtime.Script.Modules.System.Implement.JavaScript {
 
     export function JSEvaluate(js_path: string): void {
         try {
-            Runtime.Script.Modules.System.Implement.JavaScript.Evaluate(
-                Fs.ReadText(js_path, Runtime.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+            Sen.Script.Modules.System.Implement.JavaScript.Evaluate(
+                Fs.ReadText(js_path, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
                 js_path,
             );
         } catch (error: any) {

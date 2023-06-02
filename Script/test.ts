@@ -1,20 +1,20 @@
-namespace Runtime.Script.Test {
+namespace Sen.Script.Test {
     abstract class CheckOfficialResources {
         protected static CheckIntegerNumber(num: number, property: string, id: string, file_path: string): boolean {
             if (!Number.isInteger(num)) {
-                throw new Runtime.Script.Modules.Exceptions.WrongDataType(
-                    `${Runtime.Script.Modules.System.Default.Localization.RegexReplace(
-                        Runtime.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
                         [
                             `${property}`,
                             `${id}`,
-                            `${Runtime.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
                             `${num}`,
                         ],
                     )}`,
                     property,
                     file_path,
-                    Runtime.Script.Modules.System.Default.Localization.GetString("integer"),
+                    Sen.Script.Modules.System.Default.Localization.GetString("integer"),
                 );
             }
             return true;
@@ -29,8 +29,8 @@ namespace Runtime.Script.Test {
                 sub_resource_data.resources === null ||
                 sub_resource_data.resources === void 0
             ) {
-                throw new Runtime.Script.Modules.Exceptions.MissingProperty(
-                    Runtime.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
                         /\{\}/g,
                         "resources",
                     ),
@@ -44,11 +44,8 @@ namespace Runtime.Script.Test {
                 sub_resource_data.id === null ||
                 sub_resource_data.id === void 0
             ) {
-                throw new Runtime.Script.Modules.Exceptions.MissingProperty(
-                    Runtime.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
-                        /\{\}/g,
-                        "id",
-                    ),
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(/\{\}/g, "id"),
                     "id",
                     file_path,
                 );
@@ -60,8 +57,8 @@ namespace Runtime.Script.Test {
             file_path: string,
         ): resources_group is Template {
             if (!("groups" in resources_group)) {
-                throw new Runtime.Script.Modules.Exceptions.MissingProperty(
-                    Runtime.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
                         /\{\}/g,
                         "groups",
                     ),
@@ -82,8 +79,8 @@ namespace Runtime.Script.Test {
                 sub_resource_data.res === null ||
                 sub_resource_data.res === void 0
             ) {
-                throw new Runtime.Script.Modules.Exceptions.MissingProperty(
-                    Runtime.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
                         /\{\}/g,
                         "res",
                     ),
@@ -98,8 +95,8 @@ namespace Runtime.Script.Test {
             file_path: string,
         ): res_json is Template {
             if (!("expand_path" in res_json)) {
-                throw new Runtime.Script.Modules.Exceptions.MissingProperty(
-                    Runtime.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
                         /\{\}/g,
                         "expand_path",
                     ),
@@ -108,26 +105,24 @@ namespace Runtime.Script.Test {
                 );
             }
             if (!(res_json.expand_path === "array") && !(res_json.expand_path === ("string" as any))) {
-                throw new Runtime.Script.Modules.Exceptions.WrongDataType(
-                    Runtime.Script.Modules.System.Default.Localization.RegexReplace(
-                        Runtime.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
                         [
                             "expand_path",
                             Path.Parse(file_path).basename,
-                            Runtime.Script.Modules.System.Default.Localization.GetString(
-                                "string_or_list_of_collections",
-                            ),
+                            Sen.Script.Modules.System.Default.Localization.GetString("string_or_list_of_collections"),
                             res_json.expand_path,
                         ],
                     ),
                     "expand_path",
                     file_path,
-                    Runtime.Script.Modules.System.Default.Localization.GetString("string_or_list_of_collections"),
+                    Sen.Script.Modules.System.Default.Localization.GetString("string_or_list_of_collections"),
                 );
             }
             if (!("groups" in res_json)) {
-                throw new Runtime.Script.Modules.Exceptions.MissingProperty(
-                    Runtime.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(
                         /\{\}/g,
                         "groups",
                     ),
@@ -140,9 +135,9 @@ namespace Runtime.Script.Test {
         protected static CheckString(assert_test: any, file_path: string): assert_test is string {
             if (typeof assert_test !== "string") {
                 throw new Error(
-                    Runtime.Script.Modules.System.Default.Localization.GetString("not_a").replace(
+                    Sen.Script.Modules.System.Default.Localization.GetString("not_a").replace(
                         /\{\}/g,
-                        Runtime.Script.Modules.System.Default.Localization.GetString("string"),
+                        Sen.Script.Modules.System.Default.Localization.GetString("string"),
                     ),
                 );
             }
@@ -167,7 +162,7 @@ namespace Runtime.Script.Test {
                     }
                 }
             }
-            throw new Error(Runtime.Script.Modules.System.Default.Localization.GetString("path_is_invalid"));
+            throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("path_is_invalid"));
         }
         private static ConvertOfficialSubgroupFile<
             Template extends Resource_Structure_Template,
@@ -447,10 +442,10 @@ namespace Runtime.Script.Test {
             Required_Template extends Resources_Group_Structure_Template,
             Res_JSON_Structure extends res_json,
         >(file_input: string, output_file: string): void {
-            const resource_json: Required_Template = Runtime.Script.Modules.FileSystem.Json.ReadJson<Required_Template>(
+            const resource_json: Required_Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Required_Template>(
                 file_input,
             ) as Required_Template;
-            Runtime.Script.Modules.FileSystem.Json.WriteJson<Res_JSON_Structure>(
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Res_JSON_Structure>(
                 output_file,
                 this.DoAllProcess<Required_Template, Res_JSON_Structure>(resource_json, file_input),
             );
@@ -496,7 +491,7 @@ namespace Runtime.Script.Test {
                     atlas: true,
                     width: (packet.packet[resource_atlas_parent[index]].dimension as any).width,
                     height: (packet.packet[resource_atlas_parent[index]].dimension as any).height,
-                    runtime: true,
+                    Sen: true,
                 });
                 for (let j_index: number = 0; j_index < resource_atlas_children_sprites_id.length; ++j_index) {
                     this.CheckIntegerNumber(
@@ -1109,10 +1104,8 @@ namespace Runtime.Script.Test {
             return resources_json;
         }
         public static CreateWholeConversion(file_input: string, output_file: string): void {
-            const res_json: res_json = Runtime.Script.Modules.FileSystem.Json.ReadJson<res_json>(
-                file_input,
-            ) as res_json;
-            Runtime.Script.Modules.FileSystem.Json.WriteJson(
+            const res_json: res_json = Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(file_input) as res_json;
+            Sen.Script.Modules.FileSystem.Json.WriteJson(
                 output_file,
                 this.DoAllProcess<res_json, Resources_Group_Structure_Template>(res_json, file_input),
             );
@@ -1155,10 +1148,10 @@ namespace Runtime.Script.Test {
             save_directory: string = Path.Resolve(`${Path.Dirname(file_path)}/${Path.Parse(file_path).name}.info`),
         ): void {
             const groups_directory: string = Path.Resolve(`${save_directory}/groups`);
-            const res_json: Template = Runtime.Script.Modules.FileSystem.Json.ReadJson<Template>(file_path) as Template;
+            const res_json: Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Template>(file_path) as Template;
             const info_json: Output_Value = this.SetDefaultInfo<Template, Output_Value>(res_json, file_path);
             Fs.CreateDirectory(Path.Resolve(`${save_directory}`));
-            Runtime.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(
                 Path.Resolve(Path.Resolve(`${save_directory}/info.json`)),
                 info_json,
             );
@@ -1169,7 +1162,7 @@ namespace Runtime.Script.Test {
                     res_json_children,
                     small_bundle_info_json
                 >(res_json.groups[info_json.groups[index]]);
-                Runtime.Script.Modules.FileSystem.Json.WriteJson<small_bundle_info_json>(
+                Sen.Script.Modules.FileSystem.Json.WriteJson<small_bundle_info_json>(
                     Path.Resolve(`${groups_directory}/${info_json.groups[index]}/data.json`),
                     subgroup_info_json,
                 );
@@ -1177,7 +1170,7 @@ namespace Runtime.Script.Test {
                 Fs.CreateDirectory(directory_contain_whole_subgroups);
                 const subgroup_keys: Array<string> = Object.keys(res_json.groups[info_json.groups[index]].subgroup);
                 for (let j_index: number = 0; j_index < subgroup_keys.length; ++j_index) {
-                    Runtime.Script.Modules.FileSystem.Json.WriteJson(
+                    Sen.Script.Modules.FileSystem.Json.WriteJson(
                         Path.Resolve(`${directory_contain_whole_subgroups}/${subgroup_keys[j_index]}.json`),
                         res_json.groups[info_json.groups[index]].subgroup[subgroup_keys[j_index]],
                     );

@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.Compression.Constraints {
+namespace Sen.Script.Modules.Compression.Constraints {
     /**
      * @param -  Provide Zlib level for all compression methods
      */

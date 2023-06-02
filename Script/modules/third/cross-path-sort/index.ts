@@ -2,7 +2,7 @@
 //  * @fileoverview Cross-platform file path sorting library for Node.js
 //  * @author Milos Djermanovic <milos.djermanovic@gmail.com>
 //  */
-namespace Runtime.Script.Modules.Third.JavaScript.CrossPathSort {
+namespace Sen.Script.Modules.Third.JavaScript.CrossPathSort {
     // Path types. Order of keys defines default order of path types in the sorted array.
     export type posixType = "rel" | "home" | "abs";
 

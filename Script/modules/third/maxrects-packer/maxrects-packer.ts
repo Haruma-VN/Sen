@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.Third.JavaScript.MaxRectsAlgorithm {
+namespace Sen.Script.Modules.Third.JavaScript.MaxRectsAlgorithm {
     export interface IRectangle {
         width: number;
         height: number;

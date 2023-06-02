@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.BitMap.Constraints {
+namespace Sen.Script.Modules.BitMap.Constraints {
     /**
      * @package Dimension interface for image
      *

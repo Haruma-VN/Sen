@@ -1,6 +1,6 @@
-namespace Runtime.Script.Modules.System.Default.Exceptions.Handler {
+namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
     /**
-     * @package Script loaded to the Runtime
+     * @package Script loaded to the Sen
      */
     export const ScriptModules: Array<string> = [
         ...new Set([
@@ -27,7 +27,7 @@ namespace Runtime.Script.Modules.System.Default.Exceptions.Handler {
     export function LoadModules(scripts: Array<string>): void {
         for (const script of scripts) {
             JavaScriptEngine.Execute(
-                Fs.ReadText(script, 0 as Runtime.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                Fs.ReadText(script, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
                 script,
             );
         }
@@ -39,13 +39,13 @@ namespace Runtime.Script.Modules.System.Default.Exceptions.Handler {
      * @param argument - Pass arguments from .NET here
      */
     export function HandleError(ex: Error): void {
-        Runtime.Script.Modules.System.Default.Exceptions.Handler.LoadModules(
-            Runtime.Script.Modules.System.Default.Exceptions.Handler.ScriptModules,
+        Sen.Script.Modules.System.Default.Exceptions.Handler.LoadModules(
+            Sen.Script.Modules.System.Default.Exceptions.Handler.ScriptModules,
         );
-        Runtime.Script.Modules.Exceptions.PrintError(ex);
-        Runtime.Script.Modules.Platform.Constraints.ExitProgram();
+        Sen.Script.Modules.Exceptions.PrintError(ex);
+        Sen.Script.Modules.Platform.Constraints.ExitProgram();
         return;
     }
 }
 
-Runtime.Script.Modules.System.Default.Exceptions.Handler.HandleError(DotNetExceptionArg as Error);
+Sen.Script.Modules.System.Default.Exceptions.Handler.HandleError(DotNetExceptionArg as Error);

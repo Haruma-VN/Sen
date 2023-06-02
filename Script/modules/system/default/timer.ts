@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.System.Default.Timer {
+namespace Sen.Script.Modules.System.Default.Timer {
     /**
      *
      * @returns Get current time

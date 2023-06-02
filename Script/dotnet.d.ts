@@ -16,7 +16,7 @@ declare namespace DotNetPlatform {
     export function CurrentPlatform(): "windows" | "linux" | "macintosh" | "unknown" | "ios" | "android";
 
     /**
-     * @returns The current Runtime is Console or GUI
+     * @returns The current Sen is Console or GUI
      */
     export const SenShell = "console" | "gui";
 
@@ -50,7 +50,7 @@ declare namespace Console {
      */
 
     export function Print<T extends any>(
-        color: Runtime.Script.Modules.Platform.Constraints.ConsoleColor | null,
+        color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null,
         ...params: Array<T>
     ): void;
     /**
@@ -59,7 +59,7 @@ declare namespace Console {
      */
 
     export function Printf<T extends any>(
-        color: Runtime.Script.Modules.Platform.Constraints.ConsoleColor | null,
+        color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null,
         ...params: Array<T>
     ): void;
 
@@ -75,7 +75,7 @@ declare namespace Console {
 
     export function TerminateProgram(): void;
     /**
-     * @returns Test error thrown from C# Runtime
+     * @returns Test error thrown from C# Sen
      */
 
     export function TestError(): DotNetSystem.Exception;
@@ -101,7 +101,7 @@ declare type float = number;
 
 /**
  * @packages Implementing File System based on C# & JS
- * @access Script can have access to File System through Runtime
+ * @access Script can have access to File System through Sen
  */
 
 declare namespace Fs {
@@ -113,7 +113,7 @@ declare namespace Fs {
 
     export function ReadText(
         file_path: string,
-        encoding: Runtime.Script.Modules.FileSystem.Constraints.EncodingType,
+        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
     ): string;
     /**
      *
@@ -124,7 +124,7 @@ declare namespace Fs {
     export function WriteText(
         file_path: string,
         data: string,
-        encoding: Runtime.Script.Modules.FileSystem.Constraints.EncodingType,
+        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
     ): void;
     /**
      *
@@ -146,7 +146,7 @@ declare namespace Fs {
      */
     export async function ReadTextAsync(
         file_path: string,
-        encoding: Runtime.Script.Modules.FileSystem.Constraints.EncodingType,
+        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
     ): Promise<string>;
     /**
      *
@@ -170,7 +170,7 @@ declare namespace Fs {
     export async function WriteTextAsync(
         file_path: string,
         data: string,
-        encoding: Runtime.Script.Modules.FileSystem.Constraints.EncodingType,
+        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
     ): Promise<void>;
     /**
      *
@@ -210,7 +210,7 @@ declare namespace Fs {
 
     export function ReadDirectory(
         directory: string,
-        ReadOption: Runtime.Script.Modules.FileSystem.Constraints.ReadDirectory,
+        ReadOption: Sen.Script.Modules.FileSystem.Constraints.ReadDirectory,
     ): Array<string>;
 }
 
@@ -367,7 +367,7 @@ declare namespace DotNetBitmap {
 
     export function GetDimension<Generic_T>(
         imagePath: string,
-    ): Runtime.Script.Modules.BitMap.Constraints.ImageInfo<Generic_T>;
+    ): Sen.Script.Modules.BitMap.Constraints.ImageInfo<Generic_T>;
 
     /**
      *
@@ -419,8 +419,8 @@ declare namespace DotNetBitmap {
      */
 
     export function ResizeImage(
-        original: Runtime.Script.Modules.BitMap.Constraints.ImageInfo<number>,
-        output: Runtime.Script.Modules.BitMap.Constraints.ImageInfo<number>,
+        original: Sen.Script.Modules.BitMap.Constraints.ImageInfo<number>,
+        output: Sen.Script.Modules.BitMap.Constraints.ImageInfo<number>,
     ): Image<Rgba32>;
 
     /**
@@ -570,8 +570,8 @@ namespace DotNetCrypto {
         plainText: string,
         password: string,
         saltValue: string,
-        rijndaelMode: Runtime.Script.Modules.Crypto.Constraints.RijndaelMode,
-        rijndaelPadding: Runtime.Script.Modules.Crypto.Constraints.RijndaelPadding,
+        rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode,
+        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding,
     ): Uint8Array;
 
     /**
@@ -588,8 +588,8 @@ namespace DotNetCrypto {
         encryptedBytes: Uint8Array,
         password: string,
         saltValue: string,
-        rijndaelMode: Runtime.Script.Modules.Crypto.Constraints.RijndaelMode,
-        rijndaelPadding: Runtime.Script.Modules.Crypto.Constraints.RijndaelPadding,
+        rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode,
+        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding,
     ): Uint8Array;
 }
 
@@ -644,7 +644,7 @@ declare namespace DotNetCompress {
 
     export function CompressZlibBytes<Generic_T, Generic_U>(
         data: Generic_T,
-        compression_level: Runtime.Script.Modules.Compression.Constraints.ZlibLevel,
+        compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel,
     ): Generic_U;
 
     /**
@@ -662,7 +662,7 @@ declare namespace DotNetCompress {
 declare const MainScriptDirectory: string;
 
 /**
- * @returns All scripts loaded by the Runtime program
+ * @returns All scripts loaded by the Sen program
  */
 
 declare const ScriptModules: Array<string>;
@@ -682,14 +682,14 @@ declare namespace JavaScriptEngine {
     /**
      *
      * @param js_string_to_execute - Pass JS to Evaluate as string
-     * @returns Add engine to the Runtime
+     * @returns Add engine to the Sen
      */
     export function Execute(js_string_to_execute: string, source: string): void;
     /**
      *
      * @param specifier - Pass specifier
      * @param code - Pass code
-     * @returns Added module JS import/export to the Runtime
+     * @returns Added module JS import/export to the Sen
      */
     export function AddModule(specifier: string, code: string): void;
 }
@@ -718,7 +718,7 @@ declare namespace DotNetSystem {
         toString(): string;
     }
 
-    class RuntimeException extends Exception {
+    class SenException extends Exception {
         constructor(public message?: string, public file_path?: string): void;
     }
 }
@@ -836,7 +836,7 @@ declare type Resource_Structure_Template = {
         atlas?: boolean;
         width?: number;
         height?: number;
-        runtime?: boolean;
+        Sen?: boolean;
         parent?: string;
         ah?: number;
         aw?: number;
@@ -876,7 +876,7 @@ declare type resource_atlas_and_sprites = {
         atlas?: boolean;
         width?: number;
         height?: number;
-        runtime?: boolean;
+        Sen?: boolean;
         parent?: string;
         ah?: number;
         aw?: number;

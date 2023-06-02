@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.System.Default.Localization {
+namespace Sen.Script.Modules.System.Default.Localization {
     /**
      *
      * @param property - Provide property to get

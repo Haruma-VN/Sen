@@ -1,4 +1,4 @@
-namespace Runtime.Script.Modules.FileSystem.Json {
+namespace Sen.Script.Modules.FileSystem.Json {
     /**
      *
      * @param filePath Provide file path to read json
@@ -6,8 +6,8 @@ namespace Runtime.Script.Modules.FileSystem.Json {
      */
 
     export function ReadJson<Generic_T>(filePath: string): Generic_T {
-        return Runtime.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
-            Fs.ReadText(filePath, Runtime.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+        return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
+            Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
         );
     }
 
@@ -26,8 +26,8 @@ namespace Runtime.Script.Modules.FileSystem.Json {
     ): void {
         Fs.WriteText(
             output_path,
-            Runtime.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent),
-            Runtime.Script.Modules.FileSystem.Constraints.EncodingType.UTF8,
+            Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent),
+            Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8,
         );
         return;
     }

@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "rootDir": "./",
-    "outDir": "../Script/",
+    "outDir": "../Scripts/",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
