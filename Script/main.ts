@@ -11,7 +11,7 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/json.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/javascript.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/third/maxrects-packer/maxrects-packer.js`),
-            Path.Resolve(`${MainScriptDirectory}/modules/third/cross-path-sort/index.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/third/fast-sort/sort.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/constraints/platform.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/exception.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/default/localization.js`),
@@ -80,21 +80,8 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractUnofficialPvZ2Atlas.ExtractPvZ2AtlasUnofficialStructure(
-                [
-                    "D:/Res/Tre's Temp File/ZombieSkycityZombossGroup_1536.json",
-                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
-                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
-                ],
-                "id",
-            );
-            // Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
-            //     "D:/Res/Tre's Temp File/res.json",
-            //     "D:/Res/Tre's Temp File/res.test",
-            // );
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
-            // Console.Print(null, true);
         }
         const Sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         Console.Print(

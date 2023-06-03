@@ -166,6 +166,7 @@
             }
             catch(Exception ex)
             {
+                #pragma warning disable CA2200
                 throw ex;
             }
         }
@@ -182,6 +183,7 @@
 
     public class TypeChecker : TypeCheckerAbstract
     {
+
         public override string GetStrictType(object data)
         {
             return GetTypeName(GetDataType(data));

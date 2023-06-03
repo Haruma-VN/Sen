@@ -80,3 +80,16 @@
 //     ],
 //     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888,
 // );
+
+// Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractUnofficialPvZ2Atlas.ExtractPvZ2AtlasUnofficialStructure(
+//     [
+//         "D:/Res/Tre's Temp File/ZombieSkycityZombossGroup_1536.json",
+//         "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
+//         "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
+//     ],
+//     "id",
+// );
+// Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
+//     "D:/Res/Tre's Temp File/res.json",
+//     "D:/Res/Tre's Temp File/res.test",
+// );

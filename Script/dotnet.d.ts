@@ -216,7 +216,7 @@ declare namespace Fs {
     export function ReadJson<Generic_T>(file_path: string): Generic_T;
 }
 
-declare namespace Type {
+declare namespace TypeChecker {
     /**
      *
      * @param data - Provide any variable here

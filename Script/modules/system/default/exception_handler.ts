@@ -11,10 +11,15 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/json.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/javascript.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/third/maxrects-packer/maxrects-packer.js`),
-            Path.Resolve(`${MainScriptDirectory}/modules/third/cross-path-sort/index.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/third/fast-sort/sort.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/constraints/platform.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/exception.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/default/localization.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/system/implement/filesystem.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/conversion.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/official.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/split.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`),
         ]),
     ];
 
