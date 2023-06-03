@@ -10,7 +10,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
     export interface AtlasJson {
         method: "id" | "path";
         subgroup: string;
-        expand_path: "array" | "string";
+        expand_path?: "array" | "string";
         trim: boolean;
         res: "1536" | "768" | "384" | "1200" | "640";
         groups: {
@@ -534,8 +534,462 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             );
             return;
         }
+
+        /**
+         *
+         * @param unofficial_subgroup - Pass unofficial subgroup (Sen standards)
+         * @param file_path - Pass file path here
+         * @returns Check done
+         */
+
+        private static CheckWholeUnofficialSubgroupStandard<Generic_T extends UnofficialSubgroupStandard>(
+            unofficial_subgroup: Generic_T,
+            file_path?: string,
+        ): void {
+            if (
+                !("type" in unofficial_subgroup) ||
+                unofficial_subgroup.type === null ||
+                unofficial_subgroup.type === undefined ||
+                unofficial_subgroup.type === void 0
+            ) {
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                        /\{\}/g,
+                        `type`,
+                    ),
+                    `type`,
+                    (file_path ??= "undefined"),
+                );
+            }
+            if (typeof unofficial_subgroup.type !== "string") {
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                        [
+                            `type`,
+                            file_path !== undefined ? Path.Parse(file_path).name : "undefined",
+                            Sen.Script.Modules.System.Default.Localization.GetString("string"),
+                            typeof unofficial_subgroup.type,
+                        ],
+                    ),
+                    `type`,
+                    (file_path ??= "undefined"),
+                    Sen.Script.Modules.System.Default.Localization.GetString("string"),
+                );
+            }
+            if (
+                !("packet" in unofficial_subgroup) ||
+                unofficial_subgroup.packet === null ||
+                unofficial_subgroup.packet === undefined ||
+                unofficial_subgroup.packet === void 0
+            ) {
+                throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                        /\{\}/g,
+                        `packet`,
+                    ),
+                    `packet`,
+                    (file_path ??= "undefined"),
+                );
+            }
+            const parents: Array<string> = Object.keys(unofficial_subgroup.packet);
+            for (let parent of parents) {
+                if (
+                    !("type" in unofficial_subgroup.packet[parent]) ||
+                    unofficial_subgroup.packet[parent].type === null ||
+                    unofficial_subgroup.packet[parent].type === undefined ||
+                    unofficial_subgroup.packet[parent].type === void 0
+                ) {
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                            /\{\}/g,
+                            `type`,
+                        ),
+                        `type`,
+                        (file_path ??= "undefined"),
+                    );
+                }
+                if (typeof unofficial_subgroup.packet[parent].type !== "string") {
+                    throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                            Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                            [
+                                `type`,
+                                parent,
+                                Sen.Script.Modules.System.Default.Localization.GetString("string"),
+                                typeof unofficial_subgroup.packet[parent].type,
+                            ],
+                        ),
+                        `type`,
+                        (file_path ??= "undefined"),
+                        Sen.Script.Modules.System.Default.Localization.GetString("string"),
+                    );
+                }
+                if (
+                    !("dimension" in unofficial_subgroup.packet[parent]) ||
+                    unofficial_subgroup.packet[parent].dimension === null ||
+                    unofficial_subgroup.packet[parent].dimension === undefined ||
+                    unofficial_subgroup.packet[parent].dimension === void 0
+                ) {
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                            /\{\}/g,
+                            `dimension`,
+                        ),
+                        `dimension`,
+                        (file_path ??= "undefined"),
+                    );
+                }
+                if (
+                    !("width" in unofficial_subgroup.packet[parent].dimension) ||
+                    unofficial_subgroup.packet[parent].dimension.width === null ||
+                    unofficial_subgroup.packet[parent].dimension.width === undefined ||
+                    unofficial_subgroup.packet[parent].dimension.width === void 0
+                ) {
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                            /\{\}/g,
+                            `width`,
+                        ),
+                        `width`,
+                        (file_path ??= "undefined"),
+                    );
+                }
+                if (!Number.isInteger(unofficial_subgroup.packet[parent].dimension.width)) {
+                    throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                            Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                            [
+                                `width`,
+                                parent,
+                                Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                unofficial_subgroup.packet[parent].dimension.width.toString(),
+                            ],
+                        ),
+                        `type`,
+                        (file_path ??= "undefined"),
+                        Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                    );
+                }
+                if (
+                    !("height" in unofficial_subgroup.packet[parent].dimension) ||
+                    unofficial_subgroup.packet[parent].dimension.height === null ||
+                    unofficial_subgroup.packet[parent].dimension.height === undefined ||
+                    unofficial_subgroup.packet[parent].dimension.height === void 0
+                ) {
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                            /\{\}/g,
+                            `height`,
+                        ),
+                        `height`,
+                        (file_path ??= "undefined"),
+                    );
+                }
+                if (!Number.isInteger(unofficial_subgroup.packet[parent].dimension.height)) {
+                    throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                            Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                            [
+                                `height`,
+                                parent,
+                                Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                unofficial_subgroup.packet[parent].dimension.height.toString(),
+                            ],
+                        ),
+                        `type`,
+                        (file_path ??= "undefined"),
+                        Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                    );
+                }
+                if (
+                    !("path" in unofficial_subgroup.packet[parent]) ||
+                    unofficial_subgroup.packet[parent].path === null ||
+                    unofficial_subgroup.packet[parent].path === undefined ||
+                    unofficial_subgroup.packet[parent].path === void 0
+                ) {
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                            /\{\}/g,
+                            `path`,
+                        ),
+                        `path`,
+                        (file_path ??= "undefined"),
+                    );
+                }
+                if (!Array.isArray(unofficial_subgroup.packet[parent].path)) {
+                    throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                            Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                            [
+                                `path`,
+                                parent,
+                                Sen.Script.Modules.System.Default.Localization.GetString("array"),
+                                typeof unofficial_subgroup.packet[parent].path,
+                            ],
+                        ),
+                        `path`,
+                        (file_path ??= "undefined"),
+                        Sen.Script.Modules.System.Default.Localization.GetString("path"),
+                    );
+                }
+                if (
+                    !("data" in unofficial_subgroup.packet[parent]) ||
+                    unofficial_subgroup.packet[parent].data === null ||
+                    unofficial_subgroup.packet[parent].data === undefined ||
+                    unofficial_subgroup.packet[parent].data === void 0
+                ) {
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                            /\{\}/g,
+                            `data`,
+                        ),
+                        `data`,
+                        (file_path ??= "undefined"),
+                    );
+                }
+                const childrens_data: Array<string> = Object.keys(unofficial_subgroup.packet[parent].data);
+                for (const children of childrens_data) {
+                    if (
+                        !("default" in unofficial_subgroup.packet[parent].data[children]) ||
+                        unofficial_subgroup.packet[parent].data[children].default === null ||
+                        unofficial_subgroup.packet[parent].data[children].default === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].default === void 0
+                    ) {
+                        throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                                /\{\}/g,
+                                `default`,
+                            ),
+                            `default`,
+                            (file_path ??= "undefined"),
+                        );
+                    }
+                    if (
+                        !("ax" in unofficial_subgroup.packet[parent].data[children].default) ||
+                        unofficial_subgroup.packet[parent].data[children].default.ax === null ||
+                        unofficial_subgroup.packet[parent].data[children].default.ax === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].default.ax === void 0
+                    ) {
+                        throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                                /\{\}/g,
+                                `ax`,
+                            ),
+                            `ax`,
+                            (file_path ??= "undefined"),
+                        );
+                    }
+                    if (!Number.isInteger(unofficial_subgroup.packet[parent].data[children].default.ax)) {
+                        throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                                Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                                [
+                                    `ax`,
+                                    children,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                    unofficial_subgroup.packet[parent].data[children].default.ax !== undefined
+                                        ? (
+                                              unofficial_subgroup.packet[parent].data[children].default.ax as number
+                                          ).toString()
+                                        : "undefined",
+                                ],
+                            ),
+                            `ax`,
+                            (file_path ??= "undefined"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                        );
+                    }
+                    if (
+                        !("ay" in unofficial_subgroup.packet[parent].data[children].default) ||
+                        unofficial_subgroup.packet[parent].data[children].default.ay === null ||
+                        unofficial_subgroup.packet[parent].data[children].default.ay === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].default.ay === void 0
+                    ) {
+                        throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                                /\{\}/g,
+                                `ay`,
+                            ),
+                            `ay`,
+                            (file_path ??= "undefined"),
+                        );
+                    }
+                    if (!Number.isInteger(unofficial_subgroup.packet[parent].data[children].default.ay)) {
+                        throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                                Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                                [
+                                    `ay`,
+                                    children,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                    unofficial_subgroup.packet[parent].data[children].default.ay !== undefined
+                                        ? (
+                                              unofficial_subgroup.packet[parent].data[children].default.ay as number
+                                          ).toString()
+                                        : "undefined",
+                                ],
+                            ),
+                            `ay`,
+                            (file_path ??= "undefined"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                        );
+                    }
+                    if (
+                        !("ah" in unofficial_subgroup.packet[parent].data[children].default) ||
+                        unofficial_subgroup.packet[parent].data[children].default.ah === null ||
+                        unofficial_subgroup.packet[parent].data[children].default.ah === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].default.ah === void 0
+                    ) {
+                        throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                                /\{\}/g,
+                                `ah`,
+                            ),
+                            `ah`,
+                            (file_path ??= "undefined"),
+                        );
+                    }
+                    if (!Number.isInteger(unofficial_subgroup.packet[parent].data[children].default.ah)) {
+                        throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                                Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                                [
+                                    `ah`,
+                                    children,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                    unofficial_subgroup.packet[parent].data[children].default.ah !== undefined
+                                        ? (
+                                              unofficial_subgroup.packet[parent].data[children].default.ah as number
+                                          ).toString()
+                                        : "undefined",
+                                ],
+                            ),
+                            `ah`,
+                            (file_path ??= "undefined"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                        );
+                    }
+                    if (
+                        !("aw" in unofficial_subgroup.packet[parent].data[children].default) ||
+                        unofficial_subgroup.packet[parent].data[children].default.aw === null ||
+                        unofficial_subgroup.packet[parent].data[children].default.aw === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].default.aw === void 0
+                    ) {
+                        throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                                /\{\}/g,
+                                `aw`,
+                            ),
+                            `aw`,
+                            (file_path ??= "undefined"),
+                        );
+                    }
+                    if (!Number.isInteger(unofficial_subgroup.packet[parent].data[children].default.aw)) {
+                        throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                                Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                                [
+                                    `aw`,
+                                    children,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                    unofficial_subgroup.packet[parent].data[children].default.aw !== undefined
+                                        ? (
+                                              unofficial_subgroup.packet[parent].data[children].default.aw as number
+                                          ).toString()
+                                        : "undefined",
+                                ],
+                            ),
+                            `aw`,
+                            (file_path ??= "undefined"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                        );
+                    }
+                    if (
+                        !("path" in unofficial_subgroup.packet[parent].data[children]) ||
+                        unofficial_subgroup.packet[parent].data[children].path === null ||
+                        unofficial_subgroup.packet[parent].data[children].path === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].path === void 0
+                    ) {
+                        throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                                /\{\}/g,
+                                `path`,
+                            ),
+                            `path`,
+                            (file_path ??= "undefined"),
+                        );
+                    }
+                    if (!Array.isArray(unofficial_subgroup.packet[parent].data[children].path)) {
+                        throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                                Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                                [
+                                    `path`,
+                                    children,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("array"),
+                                    typeof unofficial_subgroup.packet[parent].data[children].path,
+                                ],
+                            ),
+                            `path`,
+                            (file_path ??= "undefined"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("path"),
+                        );
+                    }
+                    if (
+                        !("type" in unofficial_subgroup.packet[parent].data[children]) ||
+                        unofficial_subgroup.packet[parent].data[children].type === null ||
+                        unofficial_subgroup.packet[parent].data[children].type === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].type === void 0
+                    ) {
+                        throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                                /\{\}/g,
+                                `type`,
+                            ),
+                            `type`,
+                            (file_path ??= "undefined"),
+                        );
+                    }
+                    if ("cols" in unofficial_subgroup.packet[parent].data[children]) {
+                        if (!Number.isInteger(unofficial_subgroup.packet[parent].data[children].default.cols)) {
+                            throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                                Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                                    [
+                                        `cols`,
+                                        children,
+                                        Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                        unofficial_subgroup.packet[parent].data[children].default.cols !== undefined
+                                            ? (
+                                                  unofficial_subgroup.packet[parent].data[children].default
+                                                      .cols as number
+                                              ).toString()
+                                            : "undefined",
+                                    ],
+                                ),
+                                `cols`,
+                                (file_path ??= "undefined"),
+                                Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                            );
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        public static CreateAtlasJsonFromUnofficial<Generic_T extends UnofficialSubgroupStandard>(
+            unofficial_subgroup: Generic_T,
+            method: "id" | "path",
+            file_path?: string,
+        ): AtlasJson {
+            this.CheckWholeUnofficialSubgroupStandard(unofficial_subgroup, file_path);
+            return {} as any;
+        }
     }
-    export class ExtractAtlas extends Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.CreateAtlasJson {
+
+    export class ExtractOfficialAtlas extends Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.CreateAtlasJson {
         /**
          *
          * @param argument - Pass all files here

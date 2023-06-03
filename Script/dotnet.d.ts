@@ -942,6 +942,35 @@ declare type sprite_data = {
     };
 };
 
+declare type UnofficialSubgroupStandard = {
+    type: resolution;
+    packet: {
+        [parent_name: string]: {
+            dimension: {
+                width: number;
+                height: number;
+            };
+            type: string;
+            path: Array<string>;
+            data: {
+                [each_sprite_id: string]: {
+                    default: {
+                        ax?: number;
+                        ay?: number;
+                        ah?: number;
+                        aw?: number;
+                        x?: number;
+                        y?: number;
+                        cols?: number;
+                    };
+                    type: string;
+                    path: Array<string>;
+                };
+            };
+        };
+    };
+};
+
 declare type resolution = "1536" | "768" | "384" | "1200" | "640" | null;
 
 declare type packet_data = {
