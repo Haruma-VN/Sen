@@ -615,7 +615,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                     `aw` in subgroup_children &&
                     `parent` in subgroup_children
                 ) {
-                    pngs.forEach(async (file) => {
+                    pngs.forEach((file: string) => {
                         if (subgroup_children.parent?.endsWith(Path.Parse(file).name.replace(/((.png))?$/i, ""))) {
                             subgroup_children.path = Array.isArray(subgroup_children.path)
                                 ? subgroup_children.path
@@ -639,9 +639,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                     });
                 }
             }
-            const output_images: Array<string> = new Array(...new Set(async_task.map((task) => task.outputImagePath)));
+            const output_images: Array<string> = new Array(
+                ...new Set(async_task.map((task: AsyncTaskImageSplit) => task.outputImagePath)),
+            );
             if (async_task.length !== output_images.length) {
-                this.FindDuplicates(async_task.map((task) => task.outputImagePath)).forEach((file) => {
+                this.FindDuplicates(async_task.map((task) => task.outputImagePath)).forEach((file: string) => {
                     Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
                         Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(

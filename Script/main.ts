@@ -130,13 +130,17 @@ namespace Sen.Script {
             // let bins = packer.save();
             // packer.load(bins);
             // packer.addArray(input as any);
-            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractAtlas.ExtractPvZ2AtlasOfficialStructure(
-                [
-                    "D:/Res/Tre's Temp File/ZombieSkycityZombossGroup_1536.json",
-                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
-                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
-                ],
-                "id",
+            // Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractAtlas.ExtractPvZ2AtlasOfficialStructure(
+            //     [
+            //         "D:/Res/Tre's Temp File/ZombieSkycityZombossGroup_1536.json",
+            //         "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
+            //         "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
+            //     ],
+            //     "id",
+            // );
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.merge_res_json.do_process_whole(
+                "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/res_split",
+                "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/resx.json",
             );
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);

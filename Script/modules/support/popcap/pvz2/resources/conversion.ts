@@ -1,4 +1,7 @@
 namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
+    export interface res_for_work extends small_bundle_info_json {
+        group_parent: string;
+    }
     export abstract class CheckOfficialResources {
         protected static CheckIntegerNumber(num: number, property: string, id: string, file_path: string): boolean {
             if (!Number.isInteger(num)) {
@@ -1121,8 +1124,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                 information: {
                     expand_path: res_json.expand_path as "string" | "array",
                 },
-                groups: Object.keys(res_json.groups),
+                groups: {},
             };
+            const info_groups: Array<string> = Object.keys(res_json.groups);
+            for (let i: number = 0; i < info_groups.length; ++i) {
+                info_json.groups[info_groups[i]] = this.GenerateSubgroup(res_json.groups[info_groups[i]]) as any;
+            }
             return info_json;
         }
         private static GenerateSubgroup<Template extends res_json_children, Value extends small_bundle_info_json>(
@@ -1133,15 +1140,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                 subgroups: Object.keys(res_json.subgroup),
             };
             return info_json;
-        }
-        private static CreateMultipleDirectory<Template extends Output_Value>(
-            save_directory: string,
-            info_json: Template,
-        ): void {
-            for (const directory of info_json.groups) {
-                Fs.CreateDirectory(Path.Resolve(`${save_directory}/${directory}`));
-            }
-            return;
         }
         public static DoWholeProcess<Template extends res_json>(
             file_path: string,
@@ -1156,23 +1154,15 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                 info_json,
             );
             Fs.CreateDirectory(groups_directory);
-            this.CreateMultipleDirectory<Output_Value>(groups_directory, info_json);
-            for (let index: number = 0; index < info_json.groups.length; ++index) {
-                const subgroup_info_json: small_bundle_info_json = this.GenerateSubgroup<
-                    res_json_children,
-                    small_bundle_info_json
-                >(res_json.groups[info_json.groups[index]]);
-                Sen.Script.Modules.FileSystem.Json.WriteJson<small_bundle_info_json>(
-                    Path.Resolve(`${groups_directory}/${info_json.groups[index]}/data.json`),
-                    subgroup_info_json,
+            const info_json_groups_keys: Array<string> = Object.keys(info_json.groups);
+            for (let index: number = 0; index < info_json_groups_keys.length; ++index) {
+                const subgroup_keys: Array<string> = Object.keys(
+                    res_json.groups[info_json_groups_keys[index]].subgroup,
                 );
-                const directory_contain_whole_subgroups: string = `${groups_directory}/${info_json.groups[index]}/subgroup`;
-                Fs.CreateDirectory(directory_contain_whole_subgroups);
-                const subgroup_keys: Array<string> = Object.keys(res_json.groups[info_json.groups[index]].subgroup);
                 for (let j_index: number = 0; j_index < subgroup_keys.length; ++j_index) {
                     Sen.Script.Modules.FileSystem.Json.WriteJson(
-                        Path.Resolve(`${directory_contain_whole_subgroups}/${subgroup_keys[j_index]}.json`),
-                        res_json.groups[info_json.groups[index]].subgroup[subgroup_keys[j_index]],
+                        Path.Resolve(`${groups_directory}/${subgroup_keys[j_index]}.json`),
+                        res_json.groups[info_json_groups_keys[index]].subgroup[subgroup_keys[j_index]],
                     );
                 }
             }
@@ -1186,6 +1176,146 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
          */
         public static CreateConversion(file_path: string, output_dir: string): void {
             this.DoWholeProcess<res_json>(file_path, output_dir);
+            return;
+        }
+    }
+
+    export class merge_res_json extends CheckOfficialResources {
+        private static check_info_json<Template extends Output_Value>(res_json: Template): res_json is Template {
+            if (!("information" in res_json)) {
+                throw new Error(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_information_is_null"),
+                );
+            }
+            if (!("expand_path" in res_json.information)) {
+                throw new Error(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_expand_path_is_null"),
+                );
+            }
+            if (res_json.information.expand_path !== "array" && res_json.information.expand_path !== "string") {
+                throw new Error(
+                    Sen.Script.Modules.System.Default.Localization.GetString(
+                        "property_expand_path_does_not_meet_requirement",
+                    ),
+                );
+            }
+            if (!("groups" in res_json)) {
+                throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("property_groups_is_null"));
+            }
+            return true;
+        }
+        private static check_data_json<Template extends small_bundle_info_json>(
+            res_json: Template,
+            file_path: string,
+        ): res_json is Template {
+            if (!("is_composite" in res_json)) {
+                throw new Error(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_composite_is_null"),
+                );
+            }
+            if (typeof res_json.is_composite !== "boolean") {
+                throw new Error(
+                    Sen.Script.Modules.System.Default.Localization.GetString(
+                        "property_is_composite_is_not_type_of_boolean",
+                    ),
+                );
+            }
+            if (!("subgroups" in res_json)) {
+                throw new Error(
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_subgroups_is_null"),
+                );
+            }
+            if (!Array.isArray(res_json.subgroups)) {
+                throw new Error(
+                    Sen.Script.Modules.System.Default.Localization.GetString(
+                        "property_is_subgroups_is_not_type_of_list",
+                    ),
+                );
+            }
+            return true;
+        }
+        private static check_directory_info(directory_path: string): void {
+            if (!Fs.DirectoryExists(directory_path)) {
+                throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, directory_path);
+            }
+            const info_json: string = Path.Resolve(`${directory_path}/info.json`);
+            if (!Fs.FileExists(info_json)) {
+                throw new Sen.Script.Modules.Exceptions.MissingFile(``, info_json);
+            }
+            const groups: string = Path.Resolve(`${directory_path}/groups`);
+            if (!Fs.DirectoryExists(groups)) {
+                throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, groups);
+            }
+            return;
+        }
+        private static check_groups(directory_path: string, collections: Array<string>): void {
+            for (const file of collections) {
+                const file_path: string = Path.Resolve(`${directory_path}/${file}.json`);
+                if (!Fs.FileExists(file_path)) {
+                    throw new Sen.Script.Modules.Exceptions.MissingFile(``, file_path);
+                }
+            }
+            return;
+        }
+        public static do_process_whole<Template extends Output_Value>(
+            directory_path: string,
+            output_file: string = Path.Resolve(
+                `${Path.Dirname(directory_path)}/${Path.Parse(directory_path).name}.json`,
+            ),
+        ): void {
+            this.check_directory_info(directory_path);
+            const info_json_information: Template = Sen.Script.Modules.FileSystem.Json.ReadJson(
+                Path.Resolve(`${directory_path}/info.json`),
+            ) as Template;
+            this.check_info_json<Output_Value>(info_json_information);
+            const res_json: res_json = {
+                expand_path: info_json_information.information.expand_path as "array" | "string",
+                groups: {},
+            };
+            const group_directory: string = Path.Resolve(`${directory_path}/groups`);
+            const groups_inventory: Array<res_for_work> = new Array();
+            const groups_collection: Array<string> = Object.keys(info_json_information.groups);
+            this.check_groups(
+                group_directory,
+                groups_collection.reduce((result, current) => {
+                    result.push(...(info_json_information.groups[current] as any).subgroups);
+                    return result;
+                }, new Array<string>()),
+            );
+            for (let index: number = 0; index < groups_collection.length; ++index) {
+                const group: string = groups_collection[index];
+                const data_json: small_bundle_info_json = info_json_information.groups[
+                    groups_collection[index]
+                ] as small_bundle_info_json & any;
+                this.check_data_json<small_bundle_info_json>(data_json, Path.Resolve(`${directory_path}/info.json`));
+                groups_inventory.push({
+                    ...data_json,
+                    group_parent: group,
+                });
+            }
+            for (let index: number = 0; index < groups_inventory.length; ++index) {
+                res_json.groups[groups_inventory[index].group_parent] = {
+                    is_composite: groups_inventory[index].is_composite,
+                    subgroup: {},
+                };
+                for (let j_index: number = 0; j_index < groups_inventory[index].subgroups.length; ++j_index) {
+                    res_json.groups[groups_inventory[index].group_parent].subgroup[
+                        groups_inventory[index].subgroups[j_index]
+                    ] = Sen.Script.Modules.FileSystem.Json.ReadJson(
+                        Path.Resolve(`${group_directory}/${groups_inventory[index].subgroups[j_index]}.json`),
+                    );
+                }
+            }
+            Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, res_json);
+            return;
+        }
+        /**
+         *
+         * @param directory_path - Pass directory here
+         * @param output_file - Pass output file location, etc: "C:/Haruma-VN/test.json"
+         */
+        public static create_conversion(directory_path: string, output_file?: string): void {
+            this.do_process_whole<Output_Value>(directory_path, output_file);
             return;
         }
     }

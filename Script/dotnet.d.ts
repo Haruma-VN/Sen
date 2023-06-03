@@ -991,7 +991,9 @@ declare type Output_Value = {
     information: {
         expand_path: "string" | "array";
     };
-    groups: Array<string>;
+    groups: {
+        [x: string]: res_json_children;
+    };
 };
 
 declare type res_json_children = {
