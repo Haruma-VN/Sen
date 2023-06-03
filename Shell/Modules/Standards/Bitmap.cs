@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Jint;
+using System.Text.Json.Nodes;
 
 namespace Sen.Modules.Standards.Bitmap
 {
@@ -101,6 +102,8 @@ namespace Sen.Modules.Standards.Bitmap
         public abstract void CompositeImages(JsValue[] image, string filename, string output_directory, int width, int height);
 
         public abstract void CropAndSaveImage(string sourceImagePath, string outputImagePath, int x, int y, int width, int height);
+
+        public abstract Task CropAndSaveImageAsync(string sourceImagePath, string outputImagePath, int x, int y, int width, int height);
     }
 
     public class Bitmap_Implement : Abstract_Bitmap
@@ -400,6 +403,43 @@ namespace Sen.Modules.Standards.Bitmap
                 sourceImage.Mutate(c => c.Crop(cropRectangle));
                 sourceImage.Save(outputImagePath);
             }
+            return;
+        }
+
+        public override async Task CropAndSaveImageAsync(string sourceImagePath, string outputImagePath, int x, int y, int width, int height)
+        {
+            using var sourceImage = await Image.LoadAsync<Rgba32>(sourceImagePath);
+            var cropRectangle = new Rectangle(x, y, width, height);
+            sourceImage.Mutate(c => c.Crop(cropRectangle));
+            await sourceImage.SaveAsync(outputImagePath);
+        }
+
+        public async Task CropAndSaveImagesAsync(dynamic[] images)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var image in images)
+            {
+                var sourceImagePath = image.sourceImagePath;
+                var outputImagePath = image.outputImagePath;
+                var x = (int)image.x;
+                var y = (int)image.y;
+                var width = (int)image.width;
+                var height = (int)image.height;
+
+                var task = CropAndSaveImageAsync(sourceImagePath, outputImagePath, x, y, width, height);
+                tasks.Add(task);
+            }
+
+            await Task.WhenAll(tasks);
+            return;
+        }
+
+
+        public void CropAndSaveImages(dynamic[] images)
+        {
+            var task = CropAndSaveImagesAsync(images);
+            task.Wait();
             return;
         }
 

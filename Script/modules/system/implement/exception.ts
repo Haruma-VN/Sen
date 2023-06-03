@@ -9,10 +9,10 @@ namespace Sen.Script.Modules.Exceptions {
     }
 
     /**
-     * Implementing SenError for JS
+     * Implementing RuntimeError for JS
      */
 
-    export class SenError extends Error {
+    export class RuntimeError extends Error {
         /**
          * Out put file path to print
          */
@@ -24,7 +24,7 @@ namespace Sen.Script.Modules.Exceptions {
          */
         public constructor(error: string, file_path: string) {
             super(error);
-            this.name = Sen.Script.Modules.System.Default.Localization.GetString("Sen_error");
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("runtime_error");
             this._file_path = Path.Resolve(file_path);
         }
 
@@ -90,7 +90,7 @@ namespace Sen.Script.Modules.Exceptions {
      * JS Missing file requirement implement Sen
      */
 
-    export class MissingFileRequirement extends SenError {
+    export class MissingFileRequirement extends RuntimeError {
         /**
          *
          * @param error - Provide error message
@@ -271,7 +271,7 @@ namespace Sen.Script.Modules.Exceptions {
         protected _file_path: string;
         public constructor(message: string, file_path: string, dimension_type_error: "width" | "height") {
             super(message);
-            this.name = "wrong_dimension";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("wrong_dimension");
             this._dimension_type_error = dimension_type_error;
             this._file_path = Path.Resolve(file_path);
         }
@@ -293,7 +293,7 @@ namespace Sen.Script.Modules.Exceptions {
         protected _file_path: string;
         public constructor(message: string, file_path: string) {
             super(message);
-            this.name = "missing_file";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("missing_file");
             this._file_path = Path.Resolve(file_path);
         }
 
@@ -309,7 +309,7 @@ namespace Sen.Script.Modules.Exceptions {
     export class MissingDirectory extends MissingFile {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "missing_directory";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("missing_directory");
         }
     }
 
@@ -319,7 +319,7 @@ namespace Sen.Script.Modules.Exceptions {
 
         public constructor(message: string, file_path: string, code: string) {
             super(message);
-            this.name = "resize_error";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("resize_error");
             this._file_path = Path.Resolve(file_path);
             this._code = code;
         }
@@ -337,7 +337,7 @@ namespace Sen.Script.Modules.Exceptions {
         private _format: T;
         public constructor(message: string, file_path: string, code: string, format: T) {
             super(message, file_path, code);
-            this.name = "unknown_format";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("unknown_format");
             this._format = format;
         }
         public get format(): T {
@@ -353,7 +353,7 @@ namespace Sen.Script.Modules.Exceptions {
         protected _file_path: string;
         public constructor(message: string, file_path: string) {
             super(message);
-            this.name = "unknown_format";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("unknown_format");
             this._file_path = Path.Resolve(file_path);
         }
         public get file_path(): string {
@@ -436,6 +436,7 @@ namespace Sen.Script.Modules.Exceptions {
         protected _file_path: string;
         public constructor(message: string, file_path: string) {
             super(message);
+            1;
             this.name = "invalid_range";
             this._file_path = Path.Resolve(file_path);
         }
@@ -506,7 +507,7 @@ namespace Sen.Script.Modules.Exceptions {
     export class CannotWriteFile extends MissingFile {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "cannot_write_file";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("cannot_write_file");
         }
     }
 
@@ -669,19 +670,19 @@ namespace Sen.Script.Modules.Exceptions {
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Sen.Script.Modules.Exceptions.SenError: {
-                const name: string = (error as Sen.Script.Modules.Exceptions.SenError).name;
-                const message: string = (error as Sen.Script.Modules.Exceptions.SenError).message;
-                const location: string = (error as Sen.Script.Modules.Exceptions.SenError).file_path;
+            case Sen.Script.Modules.Exceptions.RuntimeError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.RuntimeError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.RuntimeError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.RuntimeError).file_path;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
-            case Sen.Script.Modules.Exceptions.SenError: {
-                const name: string = (error as Sen.Script.Modules.Exceptions.SenError).name;
-                const message: string = (error as Sen.Script.Modules.Exceptions.SenError).message;
-                const location: string = (error as Sen.Script.Modules.Exceptions.SenError).file_path;
+            case Sen.Script.Modules.Exceptions.RuntimeError: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.RuntimeError).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.RuntimeError).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.RuntimeError).file_path;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);

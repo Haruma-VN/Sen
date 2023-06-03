@@ -48,7 +48,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 official_subgroup.id === void 0
             ) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                    `${Sen.Script.Modules.System.Default.Localization.GetString("undefined").replace(/\{\}/g, "id")}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                        /\{\}/g,
+                        "id",
+                    )}`,
                     "id",
                     (file_path ??= "undefined"),
                 );
@@ -60,7 +63,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 official_subgroup.parent === void 0
             ) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                    `${Sen.Script.Modules.System.Default.Localization.GetString("undefined").replace(
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
                         /\{\}/g,
                         "parent",
                     )}`,
@@ -75,7 +78,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 official_subgroup.resources === void 0
             ) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                    `${Sen.Script.Modules.System.Default.Localization.GetString("undefined").replace(
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
                         /\{\}/g,
                         "resources",
                     )}`,
@@ -90,7 +93,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 official_subgroup.type === void 0
             ) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                    `${Sen.Script.Modules.System.Default.Localization.GetString("undefined").replace(/\{\}/g, "type")}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
+                        /\{\}/g,
+                        "type",
+                    )}`,
                     "type",
                     (file_path ??= "undefined"),
                 );
@@ -503,6 +509,179 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 }
             }
             return atlas_json;
+        }
+
+        /**
+         *
+         * @param file_input - Pass file path in here
+         * @param file_output - Pass file output
+         * @param method - Pass method
+         * @returns Created atlas json at output path
+         */
+
+        public static CreateAtlasJsonFromOfficial(
+            file_input: string,
+            file_output: string,
+            method: "id" | "path",
+        ): void {
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(
+                file_output,
+                this.ConvertAtlasJsonFromOfficial<resource_atlas_and_sprites>(
+                    Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(file_input),
+                    method,
+                    file_input,
+                ),
+            );
+            return;
+        }
+    }
+    export class ExtractAtlas extends Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.CreateAtlasJson {
+        /**
+         *
+         * @param argument - Pass all files here
+         * @returns - Filtered files
+         */
+        public static SeperateParentsToArray(argument: Array<string>): Array<Array<string>> {
+            const seperate_array: Array<Array<string>> = new Array();
+            for (const arg of argument) {
+                if (/.+\.json$/.test(arg)) {
+                    const seperate_children: Array<string> = new Array();
+                    seperate_children.push(arg);
+                    for (const more_arg of argument) {
+                        if (
+                            Path.Parse(more_arg).name.startsWith(
+                                Path.Parse(arg)
+                                    .name.replace(/((\.json))?$/i, ``)
+                                    .toUpperCase(),
+                            )
+                        ) {
+                            seperate_children.push(more_arg);
+                        }
+                    }
+                    seperate_array.push(seperate_children);
+                }
+            }
+            return seperate_array;
+        }
+
+        /**
+         *
+         * @param array - Pass array contains duplicate
+         * @returns - Array of duplicates only
+         */
+
+        public static FindDuplicates(array: string[]): string[] {
+            const countMap: { [key: string]: number } = {};
+            const duplicates: string[] = [];
+            for (const item of array) {
+                countMap[item] = (countMap[item] || 0) + 1;
+            }
+            for (const item in countMap) {
+                if (countMap[item] > 1) {
+                    duplicates.push(item);
+                }
+            }
+
+            return duplicates;
+        }
+
+        /**
+         *
+         * @param argument - Pass arguments
+         * @param method - Pass method
+         * @returns Extracted PvZ2 Atlas
+         */
+
+        public static ExtractPvZ2AtlasOfficialStructure(argument: Array<string>, method: "id" | "path"): void {
+            // json must be official
+            const json: string = argument.filter((file) => /((\.json))?$/i.test(file))[0];
+            const pngs: Array<string> = argument.filter((file) => /((.png))?$/i.test(file));
+            const official_subgroup: resource_atlas_and_sprites =
+                Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(json);
+            const resources_used: resource_atlas_and_sprites = {
+                ...official_subgroup,
+                resources: [],
+            };
+            const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
+            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/sprite`);
+            Fs.CreateDirectory(directory_contains);
+            Fs.CreateDirectory(directory_contains_sprite);
+            const async_task: Array<AsyncTaskImageSplit> = new Array();
+            for (const subgroup_children of official_subgroup.resources) {
+                if (
+                    `ax` in subgroup_children &&
+                    `ay` in subgroup_children &&
+                    `ah` in subgroup_children &&
+                    `aw` in subgroup_children &&
+                    `parent` in subgroup_children
+                ) {
+                    pngs.forEach(async (file) => {
+                        if (subgroup_children.parent?.endsWith(Path.Parse(file).name.replace(/((.png))?$/i, ""))) {
+                            subgroup_children.path = Array.isArray(subgroup_children.path)
+                                ? subgroup_children.path
+                                : subgroup_children.path.split("\\");
+                            async_task.push({
+                                sourceImagePath: file,
+                                outputImagePath: Path.Resolve(
+                                    `${directory_contains_sprite}/${
+                                        method === "path"
+                                            ? subgroup_children.path[subgroup_children.path.length - 1]
+                                            : subgroup_children.id
+                                    }.png`,
+                                ),
+                                x: subgroup_children.ax as number,
+                                y: subgroup_children.ay as number,
+                                width: subgroup_children.aw as number,
+                                height: subgroup_children.ah as number,
+                            });
+                        }
+                        resources_used.resources.push(subgroup_children);
+                    });
+                }
+            }
+            const output_images: Array<string> = new Array(...new Set(async_task.map((task) => task.outputImagePath)));
+            if (async_task.length !== output_images.length) {
+                this.FindDuplicates(async_task.map((task) => task.outputImagePath)).forEach((file) => {
+                    Console.Print(
+                        Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("id_is_duplicated").replace(
+                                /\{\}/g,
+                                Path.Parse(file).basename,
+                            ),
+                        ),
+                    );
+                });
+                throw new Sen.Script.Modules.Exceptions.CannotWriteFile(
+                    Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(
+                        /\{\}/g,
+                        (async_task.length - output_images.length).toString(),
+                    ),
+                    json,
+                );
+            }
+            DotNetBitmap.CropAndSaveImages(async_task);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(
+                Path.Resolve(`${directory_contains}/atlas.json`),
+                this.ConvertAtlasJsonFromOfficial(resources_used, method, json),
+            );
+            return;
+        }
+
+        /**
+         *
+         * @param argument - Pass arguments here
+         * @param method - Pass method
+         * @returns Many splitted argument
+         */
+
+        public static ExtractManyPvZ2OfficialStructure(argument: Array<string>, method: "id" | "path"): void {
+            const SeperatedArray: Array<Array<string>> = this.SeperateParentsToArray(argument);
+            SeperatedArray.forEach((list_collections: Array<string>) => {
+                this.ExtractPvZ2AtlasOfficialStructure(list_collections, method);
+            });
+            return;
         }
     }
 }

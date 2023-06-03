@@ -13,7 +13,7 @@ declare namespace DotNetPlatform {
     /**
      * @returns The platform that the user is using right now
      */
-    export function CurrentPlatform(): "windows" | "linux" | "macintosh" | "unknown" | "ios" | "android";
+    export function CurrentPlatform(): Sen.Script.Modules.Platform.Constraints.ShellType.Console;
 
     /**
      * @returns The current Sen is Console or GUI
@@ -558,6 +558,45 @@ declare namespace DotNetBitmap {
         width: int,
         height: int,
     ): void;
+
+    /**
+     *
+     * @param sourceImagePath - The image to extract
+     * @param outputImagePath - Output image
+     * @param x - The coordinate x
+     * @param y - The coordinate y
+     * @param width - Width of extracted image
+     * @param height - Height of extracted image
+     * @async This function is a promise, please catch it with an await from ES6
+     * @returns Extracted image
+     */
+
+    export async function CropAndSaveImageAsync(
+        sourceImagePath: string,
+        outputImagePath: string,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+    ): Promise<void>;
+
+    /**
+     *
+     * @param images - Provide the images array of JS Object
+     */
+
+    export async function CropAndSaveImagesAsync(images: Array<AsyncTaskImageSplit>): Promise<void>;
+
+    export function CropAndSaveImages(images: Array<AsyncTaskImageSplit>): void;
+}
+
+declare interface AsyncTaskImageSplit {
+    sourceImagePath: string;
+    outputImagePath: string;
+    x: int;
+    y: int;
+    width: int;
+    height: int;
 }
 
 namespace DotNetCrypto {

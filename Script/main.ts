@@ -47,14 +47,22 @@ namespace Sen.Script {
      * @param argument - Pass arguments from .NET here
      */
 
-    export async function Main(argument: string[]): Promise<void> {
+    export function Main(argument: string[]): void {
         // Support UTF8 Console
+        if (DotNetPlatform.SenShell === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)) {
+            DotNetPlatform.SupportUtf8Console();
+        }
+        Console.Print(
+            null,
+            `Sen ~ 1.0.0 ~ ${
+                DotNetPlatform.CurrentPlatform() === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)
+                    ? "Console"
+                    : "GUI"
+            } ~ Windows`,
+        );
         const time_start: number = Date.now();
         Sen.Script.LoadModules(Sen.Script.ScriptModules);
         const time_end: number = Date.now();
-        if (DotNetPlatform.SenShell === Sen.Script.Modules.Platform.Constraints.ShellType.Console) {
-            DotNetPlatform.SupportUtf8Console();
-        }
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
@@ -69,7 +77,7 @@ namespace Sen.Script {
                 Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3),
             ),
         );
-        const sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
             // // Sen.Script.Test.ResourceConversion.CreateConversion("./src/RESOURCES.json", "./src/res.json");
             // Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(
@@ -122,16 +130,24 @@ namespace Sen.Script {
             // let bins = packer.save();
             // packer.load(bins);
             // packer.addArray(input as any);
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractAtlas.ExtractPvZ2AtlasOfficialStructure(
+                [
+                    "D:/Res/Tre's Temp File/ZombieSkycityZombossGroup_1536.json",
+                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
+                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
+                ],
+                "id",
+            );
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
             // Console.Print(null, true);
         }
-        const sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        const Sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
                 /\{\}/g,
-                Sen.Script.Modules.System.Default.Timer.CalculateTime(sen_module_time_start, sen_module_time_end, 3),
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3),
             ),
         );
         Sen.Script.Modules.Platform.Constraints.ExitProgram();
