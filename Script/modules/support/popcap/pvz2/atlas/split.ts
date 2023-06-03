@@ -476,10 +476,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             const atlas_json: AtlasJson = {
                 method: method,
                 expand_path: this.CheckOfficialPathType(official_subgroup),
+                subgroup: official_subgroup.id,
                 trim: false,
                 res: official_subgroup.res as "1536" | "768" | "384" | "1200" | "640",
                 groups: {},
-            } as AtlasJson;
+            };
             for (const subgroup of official_subgroup.resources) {
                 if (
                     "id" in subgroup &&
@@ -567,7 +568,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                         Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
                         [
                             `type`,
-                            file_path !== undefined ? Path.Parse(file_path).name : "undefined",
+                            file_path !== undefined ? Path.Parse(file_path).basename : "undefined",
                             Sen.Script.Modules.System.Default.Localization.GetString("string"),
                             typeof unofficial_subgroup.type,
                         ],
@@ -982,12 +983,36 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
         public static CreateAtlasJsonFromUnofficial<Generic_T extends UnofficialSubgroupStandard>(
             unofficial_subgroup: Generic_T,
             method: "id" | "path",
-            file_path?: string,
+            file_path: string,
         ): AtlasJson {
-            this.CheckWholeUnofficialSubgroupStandard(unofficial_subgroup, file_path);
-            return {} as any;
+            this.CheckWholeUnofficialSubgroupStandard<Generic_T>(unofficial_subgroup, file_path);
+            const atlas_json: AtlasJson = {
+                method: method,
+                subgroup: Path.Parse(file_path).name_without_extension,
+                trim: false,
+                res: unofficial_subgroup.type as "1536" | "768" | "384" | "640" | "1200",
+                groups: {},
+            };
+            const parents: Array<string> = Object.keys(unofficial_subgroup.packet);
+            for (const parent of parents) {
+                const datas: Array<string> = Object.keys(unofficial_subgroup.packet[parent].data);
+                for (const data of datas) {
+                    atlas_json.groups[data] = {
+                        default: {
+                            x: (unofficial_subgroup.packet[parent].data[data].default.x ??= 0),
+                            y: (unofficial_subgroup.packet[parent].data[data].default.y ??= 0),
+                        },
+                        path: [...unofficial_subgroup.packet[parent].data[data].path],
+                    };
+                }
+            }
+            return atlas_json;
         }
     }
+
+    /**
+     * PvZ2 Official Resources Structure splitting atlas
+     */
 
     export class ExtractOfficialAtlas extends Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.CreateAtlasJson {
         /**

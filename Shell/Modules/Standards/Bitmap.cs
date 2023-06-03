@@ -616,9 +616,6 @@ namespace Sen.Modules.Standards.Bitmap
 
 
 
-    }
-
-
     public abstract class TextureEncoderFastAbstraction
     {
         public abstract void CreateRGBA8888Encode(string input_file, string output_file);
@@ -674,6 +671,10 @@ namespace Sen.Modules.Standards.Bitmap
             }
             return;
         }
+
+
+
+    }
 
     public abstract class TextureEncoderAsyncAbstract
     {
@@ -750,11 +751,12 @@ namespace Sen.Modules.Standards.Bitmap
                 var width = (int)image.width;
                 var height = (int)image.height;
 
-                var task = format switch { 
+                var task = format switch
+                {
                     TextureEncoderUnofficial.RGBA8888 => this.CreateRGBA8888DecodeAsync(sourceImagePath, outputImagePath, width, height),
                     TextureEncoderUnofficial.ARGB8888 => this.CreateARGB8888DecodeAsync(sourceImagePath, outputImagePath, width, height),
                     _ => throw new Exception($"Have not implemented"),
-                }; 
+                };
                 tasks.Add(task);
             }
 
@@ -803,4 +805,3 @@ namespace Sen.Modules.Standards.Bitmap
     }
 
 }
-

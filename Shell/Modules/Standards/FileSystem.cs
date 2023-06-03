@@ -469,6 +469,7 @@ namespace Sen.Modules.Standards.IOModule
         public string dir { get; set; }
         public string ext { get; set; }
         public string basename { get; set; }
+        public string name_without_extension { get; set; }
     }
 
     public abstract class Path_Abstract
@@ -538,7 +539,7 @@ namespace Sen.Modules.Standards.IOModule
 
         public abstract string GetDirectoryName(string path);
 
-
+        public abstract string GetFileNameWithoutExtension(string filepath);
     }
 
 
@@ -587,6 +588,7 @@ namespace Sen.Modules.Standards.IOModule
             dir = this.GetDirectoryName(filePath),
             ext = this.Extname(filePath),
             basename = this.Basename(filePath),
+            name_without_extension = this.GetFileNameWithoutExtension(filePath),
         };
 
         public override string Relative(string from, string to) => Path.GetRelativePath(from, to);
@@ -597,9 +599,8 @@ namespace Sen.Modules.Standards.IOModule
 
         public override string GetFileName(string path) => Path.GetFileName(path);
 
-        public override string GetDirectoryName(string path)
-        {
-            return Path.GetDirectoryName(path);
-        }
+        public override string GetDirectoryName(string path) => Path.GetDirectoryName(path);
+
+        public override string GetFileNameWithoutExtension(string filepath) => Path.GetFileNameWithoutExtension(filepath);
     }
 }

@@ -235,7 +235,14 @@ declare interface FormatRecords {
 }
 
 /**
- * @package Records for path
+ * @package Path.Parse('/home/user/dir/file.txt');
+// Returns:
+// {
+
+//   @param dir: '/home/user/dir',
+//  @param  base: 'file.txt',
+//  @param  ext: '.txt',
+//   @param name: 'file' }
  */
 
 declare interface ParsedPath {
@@ -243,6 +250,7 @@ declare interface ParsedPath {
     dir: string;
     ext: string;
     basename: string;
+    name_without_extension: string;
 }
 
 /**
@@ -354,6 +362,14 @@ declare namespace Path {
      */
 
     export function GetDirectoryName(path: string): string;
+
+    /**
+     *
+     * @param path - Provide file path
+     * @returns Filename without extension
+     */
+
+    export function GetFileNameWithoutExtension(path: string): string;
 }
 
 declare type Image<Argb32> = Uint8Array;

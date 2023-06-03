@@ -1,7 +1,6 @@
 ﻿using Sen.Modules.Standards;
 using Sen.Modules.Standards.IOModule;
 using Sen.Modules.Standards.Bitmap;
-using static TextureEncoderFast;
 
 namespace Sen.Modules.JavaScript
 {
