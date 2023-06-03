@@ -587,7 +587,45 @@ declare namespace DotNetBitmap {
 
     export async function CropAndSaveImagesAsync(images: Array<AsyncTaskImageSplit>): Promise<void>;
 
+    /**
+     *
+     * @param images Provide array of images
+     */
+
     export function CropAndSaveImages(images: Array<AsyncTaskImageSplit>): void;
+}
+
+declare namespace TextureEncoder {
+    /**
+     *
+     * @param file_in - Provide file path as image in
+     * @param file_out - Provide file path out
+     */
+
+    export function CreateARGB8888Encode(file_in: string, file_out: string): void;
+
+    /**
+     *
+     * @param file_in - Provide file path as image in
+     * @param file_out - Provide file path out
+     */
+
+    export function CreateRGBA8888Encode(file_in: string, file_out: string): void;
+    /**
+     *
+     * @param file_in - Provide file path as image in
+     * @param file_out - Provide file path out
+     */
+
+    export function CreateARGB8888Decode(file_in: string, file_out: string, width: int, height: int): void;
+
+    /**
+     *
+     * @param file_in - Provide file path as image in
+     * @param file_out - Provide file path out
+     */
+
+    export function CreateRGBA8888Decode(file_in: string, file_out: string, width: int, height: int): void;
 }
 
 declare interface AsyncTaskImageSplit {

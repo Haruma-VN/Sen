@@ -137,10 +137,16 @@ namespace Sen.Script {
             //         "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
             //     ],
             //     "id",
+            // // );
+            // Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.merge_res_json.do_process_whole(
+            //     "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/res_split",
+            //     "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/resx.json",
             // );
-            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.merge_res_json.do_process_whole(
-                "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/res_split",
-                "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/resx.json",
+            TextureEncoder.CreateRGBA8888Decode(
+                "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.ptx",
+                "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_02.png",
+                4096,
+                4096,
             );
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);

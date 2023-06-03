@@ -49,6 +49,10 @@ namespace Sen.Modules.Standards.IOModule
 
         public abstract string[] ReadDirectory(string directory, Sen.Modules.Standards.IOModule.ReadDirectory ReadOption);
 
+        public abstract byte[] ReadBytes(string filepath);
+
+        public abstract void WriteBytes(string filepath, byte[] data);
+
 
     }
 
@@ -318,6 +322,17 @@ namespace Sen.Modules.Standards.IOModule
                 Sen.Modules.Standards.IOModule.ReadDirectory.AllNestedDirectory => Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
                 _ => throw new Exception(null),
             };
+        }
+
+        public override byte[] ReadBytes(string filepath)
+        {
+            return File.ReadAllBytes(filepath);
+        }
+
+        public override void WriteBytes(string filepath, byte[] data)
+        {
+            File.WriteAllBytes(filepath, data);
+            return;
         }
     }
 

@@ -4,10 +4,37 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Jint;
-using System.Text.Json.Nodes;
+using Sen.Modules.Standards;
+using System.Numerics;
+using SixLabors.ImageSharp.PixelFormats;
+using System.IO;
+using SixLabors.ImageSharp.Advanced;
 
 namespace Sen.Modules.Standards.Bitmap
 {
+    public class RawStreamWrite
+    {
+        public static void WriteUIntArrayToFile(uint[] array, string filePath)
+        {
+            var bytes = new byte[array.Length * sizeof(uint)];
+            Buffer.BlockCopy(array, 0, bytes, 0, bytes.Length);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+            {
+                stream.Write(bytes, 0, bytes.Length);
+            }
+        }
+
+        public static void WriteEncodedPixelsToFile(uint[] encodedPixels, string filePath)
+        {
+            byte[] bytes = new byte[encodedPixels.Length * sizeof(uint)];
+            Buffer.BlockCopy(encodedPixels, 0, bytes, 0, bytes.Length);
+
+            File.WriteAllBytes(filePath, bytes);
+        }
+
+    }
+
     public class Dimension<Generic_T>
     {
         protected Generic_T _width;
@@ -104,6 +131,12 @@ namespace Sen.Modules.Standards.Bitmap
         public abstract void CropAndSaveImage(string sourceImagePath, string outputImagePath, int x, int y, int width, int height);
 
         public abstract Task CropAndSaveImageAsync(string sourceImagePath, string outputImagePath, int x, int y, int width, int height);
+
+        public abstract void CropAndSaveImages(dynamic[] images);
+
+        public abstract void CreateRGBAOutput(string input_file, string output_file);
+
+
     }
 
     public class Bitmap_Implement : Abstract_Bitmap
@@ -114,20 +147,20 @@ namespace Sen.Modules.Standards.Bitmap
             return new ImageInfo<int>(image.Width, image.Height, imagePath);
         }
 
+
         public override byte[] ExtractAlphaChannel(string image_path)
         {
-            #pragma warning disable IDE0063
 
-            using (Image<Rgba32> image = Image.Load<Rgba32>(image_path))
+            using var image = Image.Load<Rgba32>(image_path);
             {
-                byte[] alphaBuffer = new byte[image.Width * image.Height];
+                var alphaBuffer = new byte[image.Width * image.Height];
 
                 var index = 0;
                 for (var y = 0; y < image.Height; y++)
                 {
                     for (var x = 0; x < image.Width; x++)
                     {
-                        Rgba32 pixel = image[x, y];
+                        var pixel = image[x, y];
                         alphaBuffer[index] = pixel.A;
                         index++;
                     }
@@ -139,23 +172,21 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override Image<Rgba32> CreateRgbaImage(byte[] alphaBuffer, byte[] redBuffer, byte[] greenBuffer, byte[] blueBuffer, int width, int height)
         {
-            #pragma warning disable IDE0090
 
-            Image<Rgba32> rgbaImage = new Image<Rgba32>(width, height);
+            var rgbaImage = new Image<Rgba32>(width, height);
 
             var index = 0;
             for (var y = 0; y < height; y++)
             {
                 for (var x = 0; x < width; x++)
                 {
-                    byte alpha = alphaBuffer[index];
-                    byte red = redBuffer[index];
-                    byte green = greenBuffer[index];
-                    byte blue = blueBuffer[index];
+                    var alpha = alphaBuffer[index];
+                    var red = redBuffer[index];
+                    var green = greenBuffer[index];
+                    var blue = blueBuffer[index];
 
-                    #pragma warning disable IDE0090
 
-                    Rgba32 pixel = new Rgba32(red, green, blue, alpha);
+                    var pixel = new Rgba32(red, green, blue, alpha);
                     rgbaImage[x, y] = pixel;
 
                     index++;
@@ -167,19 +198,19 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override Image<Argb32> CreateArgbImage(byte[] alphaBuffer, byte[] redBuffer, byte[] greenBuffer, byte[] blueBuffer, int width, int height)
         {
-            Image<Argb32> argbImage = new Image<Argb32>(width, height);
+            var argbImage = new Image<Argb32>(width, height);
 
             var index = 0;
             for (var y = 0; y < height; y++)
             {
                 for (var x = 0; x < width; x++)
                 {
-                    byte alpha = alphaBuffer[index];
-                    byte red = redBuffer[index];
-                    byte green = greenBuffer[index];
-                    byte blue = blueBuffer[index];
+                    var alpha = alphaBuffer[index];
+                    var red = redBuffer[index];
+                    var green = greenBuffer[index];
+                    var blue = blueBuffer[index];
 
-                    Argb32 pixel = new Argb32(alpha, red, green, blue);
+                    var pixel = new Argb32(alpha, red, green, blue);
                     argbImage[x, y] = pixel;
 
                     index++;
@@ -194,14 +225,14 @@ namespace Sen.Modules.Standards.Bitmap
 
             using var image = Image.Load<Rgba32>(image_path);
             {
-                byte[] redBuffer = new byte[image.Width * image.Height];
+                var redBuffer = new byte[image.Width * image.Height];
 
                 var index = 0;
                 for (var y = 0; y < image.Height; y++)
                 {
                     for (var x = 0; x < image.Width; x++)
                     {
-                        Rgba32 pixel = image[x, y];
+                        var pixel = image[x, y];
                         redBuffer[index] = pixel.R;
                         index++;
                     }
@@ -216,14 +247,14 @@ namespace Sen.Modules.Standards.Bitmap
 
             using var image = Image.Load<Rgba32>(image_path);
             {
-                byte[] greenBuffer = new byte[image.Width * image.Height];
+                var greenBuffer = new byte[image.Width * image.Height];
 
                 var index = 0;
                 for (var y = 0; y < image.Height; y++)
                 {
                     for (var x = 0; x < image.Width; x++)
                     {
-                        Rgba32 pixel = image[x, y];
+                        var pixel = image[x, y];
                         greenBuffer[index] = pixel.G;
                         index++;
                     }
@@ -238,14 +269,14 @@ namespace Sen.Modules.Standards.Bitmap
 
             using var image = Image.Load<Rgba32>(image_path);
             {
-                byte[] blueBuffer = new byte[image.Width * image.Height];
+                var blueBuffer = new byte[image.Width * image.Height];
 
                 var index = 0;
                 for (var y = 0; y < image.Height; y++)
                 {
                     for (var x = 0; x < image.Width; x++)
                     {
-                        Rgba32 pixel = image[x, y];
+                        var pixel = image[x, y];
                         blueBuffer[index] = pixel.G;
                         index++;
                     }
@@ -257,9 +288,9 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override Image<Rgba32> ResizeImage(Sen.Modules.Standards.Bitmap.ImageInfo<int> original, Sen.Modules.Standards.Bitmap.ImageInfo<int> output)
         {
-            using (Image<Rgba32> image = Image.Load<Rgba32>(original.file_path))
+            using var image = Image.Load<Rgba32>(original.file_path);
             {
-                Image<Rgba32> resizedImage = image.Clone(ctx => ctx.Resize(new ResizeOptions
+                var resizedImage = image.Clone(ctx => ctx.Resize(new ResizeOptions
                 {
                     Size = new Size(output.width, output.height),
                     Mode = ResizeMode.Stretch,
@@ -283,7 +314,7 @@ namespace Sen.Modules.Standards.Bitmap
                 {
                     if (index < images.Length)
                     {
-                        Image<Rgba32> currentImage = images[index];
+                        var currentImage = images[index];
                         result.Mutate(ctx => ctx
                             .DrawImage(currentImage, new Point(x * currentImage.Width, y * currentImage.Height), 1.0f));
                         index++;
@@ -302,9 +333,9 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override void RotateImage(string imagePath, string outputPath, float degrees)
         {
-            using Image<Rgba32> image = Image.Load<Rgba32>(imagePath);
+            using var image = Image.Load<Rgba32>(imagePath);
             {
-                Image<Rgba32> rotatedImage = image.Clone(x => x.Rotate(degrees));
+                var rotatedImage = image.Clone(x => x.Rotate(degrees));
                 rotatedImage.Save(outputPath);
                 return;
             }
@@ -312,7 +343,7 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override void ConvertPngToJpeg(string pngImagePath, string jpegImagePath)
         {
-            using Image<Rgba32> image = Image.Load<Rgba32>(pngImagePath);
+            using var image = Image.Load<Rgba32>(pngImagePath);
             {
                 image.Save(jpegImagePath, new JpegEncoder());
             }
@@ -331,8 +362,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override void ExportGifToPngs(string gifImagePath, string outputDirectory, string frame_name)
         {
-             var fs = new Sen.Modules.Standards.IOModule.FileSystem();
-             var path = new Sen.Modules.Standards.IOModule.Implement_Path();
+             var fs = new IOModule.FileSystem();
+             var path = new IOModule.Implement_Path();
              using var gifImage = Image.Load<Rgba32>(gifImagePath);
              {
                 if(!fs.DirectoryExists(outputDirectory))
@@ -369,7 +400,7 @@ namespace Sen.Modules.Standards.Bitmap
         {
             using var compositeImage = new Image<Rgba32>(width, height);
             {
-                var path = new Sen.Modules.Standards.IOModule.Implement_Path();
+                var path = new IOModule.Implement_Path();
                 foreach (var jsImage in images)
                 {
                     var x = (int)jsImage.AsObject().Get("x").AsNumber();
@@ -436,13 +467,210 @@ namespace Sen.Modules.Standards.Bitmap
         }
 
 
-        public void CropAndSaveImages(dynamic[] images)
+        public override void CropAndSaveImages(dynamic[] images)
         {
             var task = CropAndSaveImagesAsync(images);
             task.Wait();
             return;
         }
 
+        public override void CreateRGBAOutput(string input_file, string output_file)
+        {
+
+            var dimension = this.GetDimension(input_file);
+            var alpha_channel = this.ExtractAlphaChannel(input_file);
+            var red_channel = this.ExtractRedChannel(input_file);
+            var blue_channel = this.ExtractBlueChannel(input_file);
+            var green_channel = this.ExtractGreenChannel(input_file);
+
+            this.SaveImage(output_file, this.CreateRgbaImage(alpha_channel, red_channel, green_channel, blue_channel, dimension.width, dimension.height));
+            
+            return;
+        }
+    }
+
+    public abstract class TextureFormatHandlerAbstract
+    {
+
+        public abstract byte[] EncodeRGBA8888(byte[] imagebytes);
+
+        public abstract byte[] EncodeARGB8888(byte[] imageBytes);
+
+        public abstract Image<Rgba32> DecodeARGB8888(byte[] encodedPixels, int width, int height);
+
+        public abstract Image<Rgba32> DecodeRGBA8888(byte[] encodedPixels, int width, int height);
+
 
     }
-}
+
+    public class TextureFormatHandler : TextureFormatHandlerAbstract
+    {
+    
+        public TextureFormatHandler() { }
+
+
+        public override byte[] EncodeRGBA8888(byte[] imageBytes)
+        {
+            using var ms = new MemoryStream(imageBytes);
+            {
+                using var image = Image.Load<Rgba32>(ms);
+                {
+                    var width = image.Width;
+                    var height = image.Height;
+
+                    var encodedPixels = new byte[width * height * 4];
+
+                    var index = 0;
+                    for (var y = 0; y < height; y++)
+                    {
+                        for (var x = 0; x < width; x++)
+                        {
+                            var pixel = image[x, y];
+                            encodedPixels[index++] = pixel.R;
+                            encodedPixels[index++] = pixel.G;
+                            encodedPixels[index++] = pixel.B;
+                            encodedPixels[index++] = pixel.A;
+                        }
+                    }
+
+                    return encodedPixels;
+                }
+            }
+        }
+
+
+        public override byte[] EncodeARGB8888(byte[] imageBytes)
+        {
+            using var ms = new MemoryStream(imageBytes);
+            {
+                using var image = Image.Load<Rgba32>(ms);
+                {
+                    var width = image.Width;
+                    var height = image.Height;
+
+                    var encodedPixels = new byte[width * height * 4];
+
+                    var index = 0;
+                    for (var y = 0; y < height; y++)
+                    {
+                        for (var x = 0; x < width; x++)
+                        {
+                            var pixel = image[x, y];
+                            encodedPixels[index++] = pixel.B;
+                            encodedPixels[index++] = pixel.G;
+                            encodedPixels[index++] = pixel.R;
+                            encodedPixels[index++] = pixel.A;
+                        }
+                    }
+
+                    return encodedPixels;
+                }
+            }
+        }
+
+        public override Image<Rgba32> DecodeARGB8888(byte[] encodedPixels, int width, int height)
+        {
+            var image = new Image<Rgba32>(width, height);
+
+            var index = 0;
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    var b = encodedPixels[index++];
+                    var g = encodedPixels[index++];
+                    var r = encodedPixels[index++];
+                    var a = encodedPixels[index++];
+
+                    image[x, y] = new Rgba32(r, g, b, a);
+                }
+            }
+
+            return image;
+        }
+
+
+        public override Image<Rgba32> DecodeRGBA8888(byte[] encodedPixels, int width, int height)
+        {
+            var image = new Image<Rgba32>(width, height);
+
+            var index = 0;
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    var r = encodedPixels[index++];
+                    var g = encodedPixels[index++];
+                    var b = encodedPixels[index++];
+                    var a = encodedPixels[index++];
+
+                    image[x, y] = new Rgba32(r, g, b, a);
+                }
+            }
+
+            return image;
+        }
+    }
+
+
+
+    }
+
+
+    public abstract class TextureEncoderFastAbstraction
+    {
+        public abstract void CreateRGBA8888Encode(string input_file, string output_file);
+
+        public abstract void CreateARGB8888Encode(string input_file, string output_file);
+
+        public abstract void CreateRGBA8888Decode(string input_file, string output_file, int width, int height);
+
+        public abstract void CreateARGB8888Decode(string input_file, string output_file, int width, int height);
+
+    }
+
+
+    public class TextureEncoderFast : TextureEncoderFastAbstraction
+    {
+
+        public override void CreateRGBA8888Encode(string input_file, string output_file)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var encodedPixels = bitmap.EncodeRGBA8888(fs.ReadBytes(input_file));
+            fs.WriteBytes(output_file, encodedPixels);
+            return;
+        }
+
+        public override void CreateARGB8888Encode(string input_file, string output_file)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var encodedPixels = bitmap.EncodeARGB8888(fs.ReadBytes(input_file));
+            fs.WriteBytes(output_file, encodedPixels);
+            return;
+        }
+
+        public override void CreateRGBA8888Decode(string input_file, string output_file, int width, int height)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            using var image = bitmap.DecodeRGBA8888(fs.ReadBytes(input_file), width, height);
+            {
+                image.Save(output_file);
+            };
+            return;
+        }
+
+        public override void CreateARGB8888Decode(string input_file, string output_file, int width, int height)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            using var image = bitmap.DecodeARGB8888(fs.ReadBytes(input_file), width, height);
+            {
+                image.Save(output_file);
+            }
+        return;
+        }
+    }
+

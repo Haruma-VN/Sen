@@ -29,6 +29,7 @@ namespace Sen.Modules.JavaScript
             engine.SetValue("DotNetCompress", new Compress());
             engine.SetValue("JsonLibrary", new JsonImplement());
             engine.SetValue("DotNetLocalization", new Localization());
+            engine.SetValue("TextureEncoder", new TextureEncoderFast());
 
             try
             {
