@@ -1165,4 +1165,117 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             return;
         }
     }
+
+    /**
+     * Implement extracting Unofficial structure
+     */
+
+    export class ExtractUnofficialPvZ2Atlas extends Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split
+        .ExtractOfficialAtlas {
+        public static ExtractPvZ2AtlasUnofficialStructure(argument: Array<string>, method: "id" | "path"): void {
+            // json must be unofficial
+            const json: string = argument.filter((file) => /((\.json))?$/i.test(file))[0];
+            const pngs: Array<string> = argument.filter((file) => /((.png))?$/i.test(file));
+            const unofficial_subgroup: UnofficialSubgroupStandard =
+                Sen.Script.Modules.FileSystem.Json.ReadJson<UnofficialSubgroupStandard>(json);
+            const resources_used: UnofficialSubgroupStandard = {
+                ...unofficial_subgroup,
+                packet: {},
+            };
+            const parents: Array<string> = Object.keys(unofficial_subgroup.packet);
+            const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
+            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/sprite`);
+            Fs.CreateDirectory(directory_contains);
+            Fs.CreateDirectory(directory_contains_sprite);
+            const async_task: Array<AsyncTaskImageSplit> = new Array();
+            for (const parent of parents) {
+                const ids_collection: Array<string> = Object.keys(unofficial_subgroup.packet[parent].data);
+                resources_used.packet[parent] = {
+                    ...unofficial_subgroup.packet[parent],
+                    data: {},
+                };
+                for (const id of ids_collection) {
+                    if (
+                        `ax` in unofficial_subgroup.packet[parent].data[id].default &&
+                        `ay` in unofficial_subgroup.packet[parent].data[id].default &&
+                        `ah` in unofficial_subgroup.packet[parent].data[id].default &&
+                        `aw` in unofficial_subgroup.packet[parent].data[id].default
+                    ) {
+                        pngs.forEach((file: string) => {
+                            if (parent?.endsWith(Path.Parse(file).name.replace(/((.png))?$/i, ""))) {
+                                async_task.push({
+                                    sourceImagePath: file,
+                                    outputImagePath: Path.Resolve(
+                                        `${directory_contains_sprite}/${
+                                            method === "path"
+                                                ? unofficial_subgroup.packet[parent].data[id].path[
+                                                      unofficial_subgroup.packet[parent].data[id].path.length - 1
+                                                  ]
+                                                : id
+                                        }.png`,
+                                    ),
+                                    x: unofficial_subgroup.packet[parent].data[id].default.ax as number,
+                                    y: unofficial_subgroup.packet[parent].data[id].default.ay as number,
+                                    width: unofficial_subgroup.packet[parent].data[id].default.aw as number,
+                                    height: unofficial_subgroup.packet[parent].data[id].default.ah as number,
+                                });
+                            }
+                            resources_used.packet[parent].data[id] = {
+                                default: {
+                                    ...unofficial_subgroup.packet[parent].data[id].default,
+                                },
+                                path: [...unofficial_subgroup.packet[parent].data[id].path],
+                                type: unofficial_subgroup.packet[parent].data[id].type,
+                            };
+                        });
+                    }
+                }
+            }
+            const output_images: Array<string> = new Array(
+                ...new Set(async_task.map((task: AsyncTaskImageSplit) => task.outputImagePath)),
+            );
+            if (async_task.length !== output_images.length) {
+                this.FindDuplicates(async_task.map((task) => task.outputImagePath)).forEach((file: string) => {
+                    Console.Print(
+                        Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("id_is_duplicated").replace(
+                                /\{\}/g,
+                                Path.Parse(file).basename,
+                            ),
+                        ),
+                    );
+                });
+                throw new Sen.Script.Modules.Exceptions.CannotWriteFile(
+                    Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(
+                        /\{\}/g,
+                        (async_task.length - output_images.length).toString(),
+                    ),
+                    json,
+                );
+            }
+            DotNetBitmap.CropAndSaveImages(async_task);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(
+                Path.Resolve(`${directory_contains}/atlas.json`),
+                this.CreateAtlasJsonFromUnofficial(resources_used, method, json),
+            );
+            return;
+        }
+
+        /**
+         *
+         * @param argument - Pass arguments here
+         * @param method - Pass method
+         * @returns Many splitted argument
+         */
+
+        public static ExtractManyPvZ2UnOfficialStructure(argument: Array<string>, method: "id" | "path"): void {
+            const SeperatedArray: Array<Array<string>> = this.SeperateParentsToArray(argument);
+            SeperatedArray.forEach((list_collections: Array<string>) => {
+                this.ExtractPvZ2AtlasUnofficialStructure(list_collections, method);
+            });
+            return;
+        }
+    }
 }

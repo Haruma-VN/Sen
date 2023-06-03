@@ -212,6 +212,8 @@ declare namespace Fs {
         directory: string,
         ReadOption: Sen.Script.Modules.FileSystem.Constraints.ReadDirectory,
     ): Array<string>;
+
+    export function ReadJson<Generic_T>(file_path: string): Generic_T;
 }
 
 declare namespace Type {

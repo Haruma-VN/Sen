@@ -80,16 +80,18 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            Sen.Script.Modules.FileSystem.Json.WriteJson(
-                "./Scripts/atlas.map.json",
-                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.CreateAtlasJson.CreateAtlasJsonFromUnofficial(
-                    Sen.Script.Modules.FileSystem.Json.ReadJson<UnofficialSubgroupStandard>(
-                        "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/res_split/groups/AlwaysLoaded_1536.json",
-                    ),
-                    "id",
-                    "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/res_split/groups/AlwaysLoaded_1536.json",
-                ),
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractUnofficialPvZ2Atlas.ExtractPvZ2AtlasUnofficialStructure(
+                [
+                    "D:/Res/Tre's Temp File/ZombieSkycityZombossGroup_1536.json",
+                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
+                    "D:/Res/Tre's Temp File/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
+                ],
+                "id",
             );
+            // Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
+            //     "D:/Res/Tre's Temp File/res.json",
+            //     "D:/Res/Tre's Temp File/res.test",
+            // );
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
             // Console.Print(null, true);
