@@ -595,7 +595,7 @@ declare namespace DotNetBitmap {
     export function CropAndSaveImages(images: Array<AsyncTaskImageSplit>): void;
 }
 
-declare namespace TextureEncoder {
+declare namespace TextureHandler {
     /**
      *
      * @param file_in - Provide file path as image in
@@ -626,6 +626,48 @@ declare namespace TextureEncoder {
      */
 
     export function CreateRGBA8888Decode(file_in: string, file_out: string, width: int, height: int): void;
+}
+
+declare namespace TextureHandlerPromise {
+    /**
+     * Dynamic interface uses in the Runtime
+     */
+
+    declare interface Dynamic {
+        source: string;
+        output: string;
+    }
+
+    /**
+     *
+     * @param images - Pass array of images need to encode
+     * @param format - Pass encode format
+     */
+
+    export function EncodeAsyncImages(
+        images: Array<Dynamic>,
+        format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial,
+    ): void;
+
+    /**
+     * Extends from Dynamic
+     */
+
+    declare interface DecodeDynamic extends TextureHandlerPromise.Dynamic {
+        width: int;
+        height: int;
+    }
+
+    /**
+     *
+     * @param images - Pass array of images need to encode
+     * @param format - Pass encode format
+     */
+
+    export function DecodeAsyncImages(
+        images: Array<DecodeDynamic>,
+        format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial,
+    ): void;
 }
 
 declare interface AsyncTaskImageSplit {

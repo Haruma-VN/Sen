@@ -19,6 +19,7 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/conversion.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/official.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/split.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`),
         ]),
     ];
 
@@ -142,11 +143,24 @@ namespace Sen.Script {
             //     "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/res_split",
             //     "D:/CML/Sen/Shell/bin/Debug/net7.0/win-x64/Scripts/resx.json",
             // );
-            TextureEncoder.CreateRGBA8888Decode(
-                "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.ptx",
-                "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_02.png",
-                4096,
-                4096,
+            // TextureHandler.CreateRGBA8888Decode(
+            //     "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.ptx",
+            //     "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_02.png",
+            //     4096,
+            //     4096,
+            // );
+            TextureHandlerPromise.EncodeAsyncImages(
+                [
+                    {
+                        source: "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
+                        output: "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.ptx",
+                    },
+                    {
+                        source: "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
+                        output: "D:/Res/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.ptx",
+                    },
+                ],
+                Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888,
             );
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);

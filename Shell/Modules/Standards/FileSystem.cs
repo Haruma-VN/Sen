@@ -53,6 +53,8 @@ namespace Sen.Modules.Standards.IOModule
 
         public abstract void WriteBytes(string filepath, byte[] data);
 
+        public abstract Task WriteBytesAsync(string filepath, byte[] data);
+
 
     }
 
@@ -332,6 +334,12 @@ namespace Sen.Modules.Standards.IOModule
         public override void WriteBytes(string filepath, byte[] data)
         {
             File.WriteAllBytes(filepath, data);
+            return;
+        }
+
+        public override async Task WriteBytesAsync(string filepath, byte[] data)
+        {
+            await File.WriteAllBytesAsync(filepath, data);
             return;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Sen.Modules.Standards;
 using Sen.Modules.Standards.IOModule;
 using Sen.Modules.Standards.Bitmap;
+using static TextureEncoderFast;
 
 namespace Sen.Modules.JavaScript
 {
@@ -29,7 +30,8 @@ namespace Sen.Modules.JavaScript
             engine.SetValue("DotNetCompress", new Compress());
             engine.SetValue("JsonLibrary", new JsonImplement());
             engine.SetValue("DotNetLocalization", new Localization());
-            engine.SetValue("TextureEncoder", new TextureEncoderFast());
+            engine.SetValue("TextureHandler", new TextureEncoderFast());
+            engine.SetValue("TextureHandlerPromise", new TextureEncoderAsync());
 
             try
             {

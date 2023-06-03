@@ -136,6 +136,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public abstract void CreateRGBAOutput(string input_file, string output_file);
 
+        public abstract Task CropAndSaveImagesAsync(dynamic[] images);
+
 
     }
 
@@ -445,7 +447,7 @@ namespace Sen.Modules.Standards.Bitmap
             await sourceImage.SaveAsync(outputImagePath);
         }
 
-        public async Task CropAndSaveImagesAsync(dynamic[] images)
+        public override async Task CropAndSaveImagesAsync(dynamic[] images)
         {
             var tasks = new List<Task>();
 
@@ -670,7 +672,135 @@ namespace Sen.Modules.Standards.Bitmap
             {
                 image.Save(output_file);
             }
-        return;
+            return;
         }
+
+    public abstract class TextureEncoderAsyncAbstract
+    {
+        public abstract Task CreateRGBA8888EncodeAsync(string input_file, string output_file);
+
+        public abstract Task CreateARGB8888EncodeAsync(string input_file, string output_file);
+
+        public abstract Task CreateRGBA8888DecodeAsync(string input_file, string output_file, int width, int height);
+
+        public abstract Task CreateARGB8888DecodeAsync(string input_file, string output_file, int width, int height);
+
+        public abstract Task CreateDecodeAsync(dynamic[] images, TextureEncoderUnofficial format);
+
+        public abstract void DecodeAsyncImages(dynamic[] images, TextureEncoderUnofficial format);
+
+        public abstract void EncodeAsyncImages(dynamic[] images, TextureEncoderUnofficial format);
+
+        public abstract Task CreateEncodeAsync(dynamic[] images, TextureEncoderUnofficial format);
+
     }
+
+    public enum TextureEncoderUnofficial
+    {
+        RGBA8888,
+        ARGB8888,
+    }
+
+    public class TextureEncoderAsync : TextureEncoderAsyncAbstract
+    {
+        public override async Task CreateRGBA8888EncodeAsync(string input_file, string output_file)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var encodedPixels = await Task.Run(() => bitmap.EncodeRGBA8888(fs.ReadBytes(input_file)));
+            await fs.WriteBytesAsync(output_file, encodedPixels);
+            return;
+        }
+
+        public override async Task CreateARGB8888EncodeAsync(string input_file, string output_file)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var encodedPixels = await Task.Run(() => bitmap.EncodeARGB8888(fs.ReadBytes(input_file)));
+            await fs.WriteBytesAsync(output_file, encodedPixels);
+            return;
+        }
+
+        public override async Task CreateRGBA8888DecodeAsync(string input_file, string output_file, int width, int height)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            using var image = await Task.Run(() => bitmap.DecodeRGBA8888(fs.ReadBytes(input_file), width, height));
+            await image.SaveAsync(output_file);
+            return;
+        }
+
+        public override async Task CreateARGB8888DecodeAsync(string input_file, string output_file, int width, int height)
+        {
+            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            using var image = await Task.Run(() => bitmap.DecodeARGB8888(fs.ReadBytes(input_file), width, height));
+            await image.SaveAsync(output_file);
+            return;
+        }
+
+        public override async Task CreateDecodeAsync(dynamic[] images, TextureEncoderUnofficial format)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var image in images)
+            {
+                var sourceImagePath = image.source;
+                var outputImagePath = image.output;
+                var width = (int)image.width;
+                var height = (int)image.height;
+
+                var task = format switch { 
+                    TextureEncoderUnofficial.RGBA8888 => this.CreateRGBA8888DecodeAsync(sourceImagePath, outputImagePath, width, height),
+                    TextureEncoderUnofficial.ARGB8888 => this.CreateARGB8888DecodeAsync(sourceImagePath, outputImagePath, width, height),
+                    _ => throw new Exception($"Have not implemented"),
+                }; 
+                tasks.Add(task);
+            }
+
+            await Task.WhenAll(tasks);
+            return;
+        }
+
+
+        public override void EncodeAsyncImages(dynamic[] images, TextureEncoderUnofficial format)
+        {
+            var task = this.CreateEncodeAsync(images, format);
+            task.Wait();
+            return;
+        }
+
+        public override async Task CreateEncodeAsync(dynamic[] images, TextureEncoderUnofficial format)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var image in images)
+            {
+                var sourceImagePath = image.source;
+                var outputImagePath = image.output;
+
+                var task = format switch
+                {
+                    TextureEncoderUnofficial.RGBA8888 => this.CreateRGBA8888EncodeAsync(sourceImagePath, outputImagePath),
+                    TextureEncoderUnofficial.ARGB8888 => this.CreateARGB8888EncodeAsync(sourceImagePath, outputImagePath),
+                    _ => throw new Exception($"Have not implemented"),
+                };
+                tasks.Add(task);
+            }
+
+            await Task.WhenAll(tasks);
+            return;
+        }
+
+
+        public override void DecodeAsyncImages(dynamic[] images, TextureEncoderUnofficial format)
+        {
+            var task = this.CreateDecodeAsync(images, format);
+            task.Wait();
+            return;
+        }
+
+    }
+
+}
 
