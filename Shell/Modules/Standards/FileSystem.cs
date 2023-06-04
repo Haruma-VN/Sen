@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Sen.Modules.Standards.IOModule
+namespace Sen.Shell.Modules.Standards.IOModule
 {
 
     public enum EncodingType
@@ -47,7 +47,7 @@ namespace Sen.Modules.Standards.IOModule
 
         protected abstract void WriteBufferToFile(string filePath, byte[] buffer);
 
-        public abstract string[] ReadDirectory(string directory, Sen.Modules.Standards.IOModule.ReadDirectory ReadOption);
+        public abstract string[] ReadDirectory(string directory, Sen.Shell.Modules.Standards.IOModule.ReadDirectory ReadOption);
 
         public abstract byte[] ReadBytes(string filepath);
 
@@ -170,7 +170,7 @@ namespace Sen.Modules.Standards.IOModule
 
         public override Generic_T ReadJson<Generic_T>(string filepath)
         {
-            var json_library = new Sen.Modules.Standards.JsonImplement();
+            var json_library = new Sen.Shell.Modules.Standards.JsonImplement();
             return json_library.ParseJson<Generic_T>(this.ReadText(filepath, EncodingType.UTF8));
         }
 
@@ -206,7 +206,7 @@ namespace Sen.Modules.Standards.IOModule
 
         public override void WriteJson<Generic_T>(string output_path, Generic_T json_object)
         {
-            var json_library = new JsonImplement();
+            var json_library = new Sen.Shell.Modules.Standards.JsonImplement();
             var serialize_json = json_library.StringifyJson<Generic_T>(json_object, null);
             this.WriteText(output_path, serialize_json, EncodingType.UTF8);
             return;
@@ -282,7 +282,7 @@ namespace Sen.Modules.Standards.IOModule
             var last_index = file_path_collection.Count - 1;
             string requirement_file = file_path_collection.ElementAt<string>(last_index);
             file_path_collection.RemoveAt(last_index);
-            var path = new Sen.Modules.Standards.IOModule.Implement_Path();
+            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
             var output_directory = "";
             foreach(var directory in file_path_collection.ToArray<string>())
             {
@@ -302,7 +302,7 @@ namespace Sen.Modules.Standards.IOModule
             var last_index = file_path_collection.Count - 1;
             var requirement_file = file_path_collection[last_index];
             file_path_collection.RemoveAt(last_index);
-            var path = new Sen.Modules.Standards.IOModule.Implement_Path();
+            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
             var output_directory = "";
             foreach (var directory in file_path_collection.ToArray<string>())
             {
@@ -316,12 +316,12 @@ namespace Sen.Modules.Standards.IOModule
             return;
         }
 
-        public override string[] ReadDirectory(string directory, Sen.Modules.Standards.IOModule.ReadDirectory ReadOption)
+        public override string[] ReadDirectory(string directory, Sen.Shell.Modules.Standards.IOModule.ReadDirectory ReadOption)
         {
             return ReadOption switch
             {
-                Sen.Modules.Standards.IOModule.ReadDirectory.OnlyCurrentDirectory => Directory.GetFiles(directory, "*", SearchOption.TopDirectoryOnly),
-                Sen.Modules.Standards.IOModule.ReadDirectory.AllNestedDirectory => Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
+                Sen.Shell.Modules.Standards.IOModule.ReadDirectory.OnlyCurrentDirectory => Directory.GetFiles(directory, "*", SearchOption.TopDirectoryOnly),
+                Sen.Shell.Modules.Standards.IOModule.ReadDirectory.AllNestedDirectory => Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
                 _ => throw new Exception(null),
             };
         }

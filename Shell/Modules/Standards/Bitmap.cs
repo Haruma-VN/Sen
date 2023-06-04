@@ -4,13 +4,13 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Jint;
-using Sen.Modules.Standards;
+using Sen.Shell.Modules.Standards;
 using System.Numerics;
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
 using SixLabors.ImageSharp.Advanced;
 
-namespace Sen.Modules.Standards.Bitmap
+namespace Sen.Shell.Modules.Standards.Bitmap
 {
     public class RawStreamWrite
     {
@@ -108,7 +108,7 @@ namespace Sen.Modules.Standards.Bitmap
         public abstract Image<Rgba32> JoinImages(Image<Rgba32>[] images, int width, int height);
 
 
-        public abstract Image<Rgba32> ResizeImage(Sen.Modules.Standards.Bitmap.ImageInfo<int> original, Sen.Modules.Standards.Bitmap.ImageInfo<int> output);
+        public abstract Image<Rgba32> ResizeImage(Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> original, Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> output);
 
         public abstract void SaveImage(string image_path, Image<Rgba32> image_byte);
 
@@ -126,7 +126,7 @@ namespace Sen.Modules.Standards.Bitmap
 
         public abstract Task SaveImageAsync(string image_path, Image<Rgba32> image_byte);
 
-        public abstract void CompositeImages(JsValue[] image, string filename, string output_directory, int width, int height);
+        public abstract void CompositeImages(dynamic[] image, string filename, string output_directory, int width, int height);
 
         public abstract void CropAndSaveImage(string sourceImagePath, string outputImagePath, int x, int y, int width, int height);
 
@@ -288,7 +288,7 @@ namespace Sen.Modules.Standards.Bitmap
             }
         }
 
-        public override Image<Rgba32> ResizeImage(Sen.Modules.Standards.Bitmap.ImageInfo<int> original, Sen.Modules.Standards.Bitmap.ImageInfo<int> output)
+        public override Image<Rgba32> ResizeImage(Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> original, Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> output)
         {
             using var image = Image.Load<Rgba32>(original.file_path);
             {
@@ -398,21 +398,20 @@ namespace Sen.Modules.Standards.Bitmap
         }
 
 
-        public override void CompositeImages(JsValue[] images, string filename, string outputDirectory, int width, int height)
+        public override void CompositeImages(dynamic[] images, string filename, string outputDirectory, int width, int height)
         {
             using var compositeImage = new Image<Rgba32>(width, height);
             {
                 var path = new IOModule.Implement_Path();
                 foreach (var jsImage in images)
                 {
-                    var x = (int)jsImage.AsObject().Get("x").AsNumber();
-                    var y = (int)jsImage.AsObject().Get("y").AsNumber();
-                    var imageWidth = (int)jsImage.AsObject().Get("width").AsNumber();
-                    var imageHeight = (int)jsImage.AsObject().Get("height").AsNumber();
-                    var filePath = jsImage.AsObject().Get("file_path").AsString();
+                    var x = (int)jsImage.x;
+                    var y = (int)jsImage.y;
+                    var imageWidth = (int)jsImage.width;
+                    var imageHeight = (int)jsImage.height;
+                    var filePath = jsImage.file_path;
 
-
-                    var objectImage = Image.Load<Rgba32>(filePath);
+                    var objectImage =  Image.Load<Rgba32>((string)filePath);
                     objectImage.Mutate(ctx => ctx.Resize(new ResizeOptions
                     {
                         Size = new Size(imageWidth, imageHeight),
@@ -423,10 +422,14 @@ namespace Sen.Modules.Standards.Bitmap
                 }
 
                 var outputPath = path.Join(outputDirectory, filename);
-                compositeImage.Save(outputPath);
+                 compositeImage.Save(outputPath);
             }
             return;
         }
+
+
+
+
 
         public override void CropAndSaveImage(string sourceImagePath, string outputImagePath, int x, int y, int width, int height)
         {
@@ -634,8 +637,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override void CreateRGBA8888Encode(string input_file, string output_file)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = bitmap.EncodeRGBA8888(fs.ReadBytes(input_file));
             fs.WriteBytes(output_file, encodedPixels);
             return;
@@ -643,8 +646,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override void CreateARGB8888Encode(string input_file, string output_file)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = bitmap.EncodeARGB8888(fs.ReadBytes(input_file));
             fs.WriteBytes(output_file, encodedPixels);
             return;
@@ -652,8 +655,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override void CreateRGBA8888Decode(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = bitmap.DecodeRGBA8888(fs.ReadBytes(input_file), width, height);
             {
                 image.Save(output_file);
@@ -663,8 +666,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override void CreateARGB8888Decode(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = bitmap.DecodeARGB8888(fs.ReadBytes(input_file), width, height);
             {
                 image.Save(output_file);
@@ -706,8 +709,8 @@ namespace Sen.Modules.Standards.Bitmap
     {
         public override async Task CreateRGBA8888EncodeAsync(string input_file, string output_file)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = await Task.Run(() => bitmap.EncodeRGBA8888(fs.ReadBytes(input_file)));
             await fs.WriteBytesAsync(output_file, encodedPixels);
             return;
@@ -715,8 +718,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override async Task CreateARGB8888EncodeAsync(string input_file, string output_file)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = await Task.Run(() => bitmap.EncodeARGB8888(fs.ReadBytes(input_file)));
             await fs.WriteBytesAsync(output_file, encodedPixels);
             return;
@@ -724,8 +727,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override async Task CreateRGBA8888DecodeAsync(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = await Task.Run(() => bitmap.DecodeRGBA8888(fs.ReadBytes(input_file), width, height));
             await image.SaveAsync(output_file);
             return;
@@ -733,8 +736,8 @@ namespace Sen.Modules.Standards.Bitmap
 
         public override async Task CreateARGB8888DecodeAsync(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Modules.Standards.Bitmap.TextureFormatHandler();
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
+            var bitmap = new Sen.Shell.Modules.Standards.Bitmap.TextureFormatHandler();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = await Task.Run(() => bitmap.DecodeARGB8888(fs.ReadBytes(input_file), width, height));
             await image.SaveAsync(output_file);
             return;

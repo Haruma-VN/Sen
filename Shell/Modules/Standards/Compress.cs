@@ -1,7 +1,7 @@
 ﻿using Ionic.Zip;
 using Ionic.Zlib;
 
-namespace Sen.Modules.Standards
+namespace Sen.Shell.Modules.Standards
 {
 
     public abstract class Abstract_Compress

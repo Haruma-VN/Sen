@@ -269,11 +269,20 @@ namespace Sen.Script.Modules.Exceptions {
     export class DimensionError extends Error {
         protected _dimension_type_error: "width" | "height";
         protected _file_path: string;
-        public constructor(message: string, file_path: string, dimension_type_error: "width" | "height") {
+        private _additional_message: string | null = null;
+        public constructor(
+            message: string,
+            file_path: string,
+            dimension_type_error: "width" | "height",
+            additional_message?: string,
+        ) {
             super(message);
             this.name = Sen.Script.Modules.System.Default.Localization.GetString("wrong_dimension");
             this._dimension_type_error = dimension_type_error;
             this._file_path = Path.Resolve(file_path);
+            if (additional_message) {
+                this._additional_message = additional_message;
+            }
         }
         public get dimension_type_error(): "width" | "height" {
             return this._dimension_type_error;
@@ -286,6 +295,15 @@ namespace Sen.Script.Modules.Exceptions {
         }
         public set file_path(new_file_location: string) {
             this._file_path = new_file_location;
+        }
+        public get additional_message(): null | string {
+            if (this._additional_message) {
+                return this._additional_message;
+            }
+            return null;
+        }
+        public set additional_message(new_file_location: string) {
+            this._additional_message = new_file_location;
         }
     }
 
@@ -596,11 +614,21 @@ namespace Sen.Script.Modules.Exceptions {
                 const name: string = (error as Sen.Script.Modules.Exceptions.DimensionError).name;
                 const file_location: string = (error as Sen.Script.Modules.Exceptions.DimensionError).file_path;
                 const message: string = (error as Sen.Script.Modules.Exceptions.DimensionError).message;
-                const property_error: string = (error as Sen.Script.Modules.Exceptions.DimensionError)
-                    .dimension_type_error;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
+                if ((error as Sen.Script.Modules.Exceptions.DimensionError).additional_message) {
+                    const property_error: string = (error as Sen.Script.Modules.Exceptions.DimensionError)
+                        .dimension_type_error;
+                    const additional_message: string = (error as Sen.Script.Modules.Exceptions.DimensionError)
+                        .additional_message as string;
+                    Sen.Script.Modules.Exceptions.ExecutionError(
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                            Sen.Script.Modules.System.Default.Localization.GetString("property_is_oversized"),
+                            [`"${property_error}"`, `${additional_message}`],
+                        ),
+                    );
+                }
                 break;
             }
             case Sen.Script.Modules.Exceptions.EncodingError: {

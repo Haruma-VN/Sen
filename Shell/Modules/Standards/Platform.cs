@@ -2,7 +2,7 @@
 using System.Text;
 using System;
 
-namespace Sen.Modules.Standards
+namespace Sen.Shell.Modules.Standards
 {
 
     public enum ShellType

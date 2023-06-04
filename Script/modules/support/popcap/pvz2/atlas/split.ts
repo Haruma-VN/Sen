@@ -1082,7 +1082,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 resources: [],
             };
             const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
-            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/sprite`);
+            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}\\media`);
             Fs.CreateDirectory(directory_contains);
             Fs.CreateDirectory(directory_contains_sprite);
             const async_task: Array<AsyncTaskImageSplit> = new Array();
@@ -1184,7 +1184,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             };
             const parents: Array<string> = Object.keys(unofficial_subgroup.packet);
             const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
-            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/sprite`);
+            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}\\media`);
             Fs.CreateDirectory(directory_contains);
             Fs.CreateDirectory(directory_contains_sprite);
             const async_task: Array<AsyncTaskImageSplit> = new Array();

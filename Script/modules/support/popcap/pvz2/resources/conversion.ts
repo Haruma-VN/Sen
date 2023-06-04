@@ -1143,14 +1143,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         }
         public static DoWholeProcess<Template extends res_json>(
             file_path: string,
-            save_directory: string = Path.Resolve(`${Path.Dirname(file_path)}/${Path.Parse(file_path).name}.info`),
+            save_directory: string = Path.Resolve(`${Path.Dirname(file_path)}\\${Path.Parse(file_path).name}.info`),
         ): void {
-            const groups_directory: string = Path.Resolve(`${save_directory}/groups`);
+            const groups_directory: string = Path.Resolve(`${save_directory}\\groups`);
             const res_json: Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Template>(file_path) as Template;
             const info_json: Output_Value = this.SetDefaultInfo<Template, Output_Value>(res_json, file_path);
             Fs.CreateDirectory(Path.Resolve(`${save_directory}`));
             Sen.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(
-                Path.Resolve(Path.Resolve(`${save_directory}/info.json`)),
+                Path.Resolve(Path.Resolve(`${save_directory}\\info.json`)),
                 info_json,
             );
             Fs.CreateDirectory(groups_directory);
@@ -1161,7 +1161,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                 );
                 for (let j_index: number = 0; j_index < subgroup_keys.length; ++j_index) {
                     Sen.Script.Modules.FileSystem.Json.WriteJson(
-                        Path.Resolve(`${groups_directory}/${subgroup_keys[j_index]}.json`),
+                        Path.Resolve(`${groups_directory}\\${subgroup_keys[j_index]}.json`),
                         res_json.groups[info_json_groups_keys[index]].subgroup[subgroup_keys[j_index]],
                     );
                 }
@@ -1238,11 +1238,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             if (!Fs.DirectoryExists(directory_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, directory_path);
             }
-            const info_json: string = Path.Resolve(`${directory_path}/info.json`);
+            const info_json: string = Path.Resolve(`${directory_path}\\info.json`);
             if (!Fs.FileExists(info_json)) {
                 throw new Sen.Script.Modules.Exceptions.MissingFile(``, info_json);
             }
-            const groups: string = Path.Resolve(`${directory_path}/groups`);
+            const groups: string = Path.Resolve(`${directory_path}\\groups`);
             if (!Fs.DirectoryExists(groups)) {
                 throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, groups);
             }
@@ -1250,7 +1250,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         }
         private static check_groups(directory_path: string, collections: Array<string>): void {
             for (const file of collections) {
-                const file_path: string = Path.Resolve(`${directory_path}/${file}.json`);
+                const file_path: string = Path.Resolve(`${directory_path}\\${file}.json`);
                 if (!Fs.FileExists(file_path)) {
                     throw new Sen.Script.Modules.Exceptions.MissingFile(``, file_path);
                 }
@@ -1260,19 +1260,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         public static do_process_whole<Template extends Output_Value>(
             directory_path: string,
             output_file: string = Path.Resolve(
-                `${Path.Dirname(directory_path)}/${Path.Parse(directory_path).name}.json`,
+                `${Path.Dirname(directory_path)}\\${Path.Parse(directory_path).name}.json`,
             ),
         ): void {
             this.check_directory_info(directory_path);
             const info_json_information: Template = Sen.Script.Modules.FileSystem.Json.ReadJson(
-                Path.Resolve(`${directory_path}/info.json`),
+                Path.Resolve(`${directory_path}\\info.json`),
             ) as Template;
             this.check_info_json<Output_Value>(info_json_information);
             const res_json: res_json = {
                 expand_path: info_json_information.information.expand_path as "array" | "string",
                 groups: {},
             };
-            const group_directory: string = Path.Resolve(`${directory_path}/groups`);
+            const group_directory: string = Path.Resolve(`${directory_path}\\groups`);
             const groups_inventory: Array<res_for_work> = new Array();
             const groups_collection: Array<string> = Object.keys(info_json_information.groups);
             this.check_groups(
@@ -1287,7 +1287,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                 const data_json: small_bundle_info_json = info_json_information.groups[
                     groups_collection[index]
                 ] as small_bundle_info_json & any;
-                this.check_data_json<small_bundle_info_json>(data_json, Path.Resolve(`${directory_path}/info.json`));
+                this.check_data_json<small_bundle_info_json>(data_json, Path.Resolve(`${directory_path}\\info.json`));
                 groups_inventory.push({
                     ...data_json,
                     group_parent: group,
@@ -1302,7 +1302,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     res_json.groups[groups_inventory[index].group_parent].subgroup[
                         groups_inventory[index].subgroups[j_index]
                     ] = Sen.Script.Modules.FileSystem.Json.ReadJson(
-                        Path.Resolve(`${group_directory}/${groups_inventory[index].subgroups[j_index]}.json`),
+                        Path.Resolve(`${group_directory}\\${groups_inventory[index].subgroups[j_index]}.json`),
                     );
                 }
             }
@@ -1312,7 +1312,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         /**
          *
          * @param directory_path - Pass directory here
-         * @param output_file - Pass output file location, etc: "C:/Haruma-VN/test.json"
+         * @param output_file - Pass output file location, etc: "C:\\Haruma-VN\\test.json"
          */
         public static create_conversion(directory_path: string, output_file?: string): void {
             this.do_process_whole<Output_Value>(directory_path, output_file);

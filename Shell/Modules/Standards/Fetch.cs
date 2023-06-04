@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Sen.Modules.Standards
+namespace Sen.Shell.Modules.Standards
 {
 
     public abstract class Fetch_Abstract

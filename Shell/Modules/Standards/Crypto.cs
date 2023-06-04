@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Sen.Modules.Standards
+namespace Sen.Shell.Modules.Standards
 {
 
     public abstract class Crypto_Abstract

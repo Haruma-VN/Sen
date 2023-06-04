@@ -28,7 +28,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
             Fs.CreateDirectory(output_directory);
             for (const resource of resources_json.groups) {
                 Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
-                    Path.Resolve(`${output_directory}/${resource.id}.json`),
+                    Path.Resolve(`${output_directory}\\${resource.id}.json`),
                     resource,
                 );
             }

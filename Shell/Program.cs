@@ -1,5 +1,5 @@
-﻿using Sen.Modules.Standards;
-using Sen.Modules.JavaScript;
+﻿using Sen.Shell.Modules.Standards;
+using Sen.Shell.Modules.JavaScript;
 
 namespace Sen
 {

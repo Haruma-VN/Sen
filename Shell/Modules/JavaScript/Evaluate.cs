@@ -1,15 +1,15 @@
-﻿using Sen.Modules.Standards;
-using Sen.Modules.Standards.IOModule;
-using Sen.Modules.Standards.Bitmap;
+﻿using Sen.Shell.Modules.Standards;
+using Sen.Shell.Modules.Standards.IOModule;
+using Sen.Shell.Modules.Standards.Bitmap;
 
-namespace Sen.Modules.JavaScript
+namespace Sen.Shell.Modules.JavaScript
 {
     public class Engine
     {
         public static void Evaluate(ref string Script_Directory, string[] args)
         {
 
-            var path = new Implement_Path();
+            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
             Script_Directory = path.Resolve(Script_Directory);
             var fs = new FileSystem();
             var main_js = path.Resolve($"{Script_Directory}/main.js");

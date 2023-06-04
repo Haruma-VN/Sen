@@ -1,7 +1,7 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 
-namespace Sen.Modules.Standards
+namespace Sen.Shell.Modules.Standards
 {
 
     public abstract class Json_Abstract
@@ -23,8 +23,8 @@ namespace Sen.Modules.Standards
         public Localization() { }
         public override string Get(string property, string ScriptDirectory, string Language)
         {
-            var fs = new Sen.Modules.Standards.IOModule.FileSystem();
-            var path = new Sen.Modules.Standards.IOModule.Implement_Path();
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
             var file_path = path.Resolve($"{ScriptDirectory}/{Language}.json");
             if (!fs.FileExists(file_path))
             {
@@ -50,7 +50,7 @@ namespace Sen.Modules.Standards
     {
         public override string ToString()
         {
-            var JsonImplementTest = new Sen.Modules.Standards.JsonImplement();
+            var JsonImplementTest = new Sen.Shell.Modules.Standards.JsonImplement();
             return JsonImplementTest.StringifyJson(this, null);
         }
     }

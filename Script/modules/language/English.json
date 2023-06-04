@@ -35,5 +35,9 @@
     "missing_file": "Missing File",
     "missing_directory": "Missing Directory",
     "resize_error": "Resize Error",
-    "unknown_format": "Unknown Format"
+    "unknown_format": "Unknown Format",
+    "this_or_that": "{1} or {2}",
+    "no_such_file": "No such file {}",
+    "no_such_directory": "No such directory {}",
+    "contains_oversized_image": "Contains oversized image"
 }

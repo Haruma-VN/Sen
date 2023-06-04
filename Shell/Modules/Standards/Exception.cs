@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sen.Modules.Standards
+namespace Sen.Shell.Modules.Standards
 {
 
     public enum StandardsException
     {
-        SenException,
+        RuntimeException,
     }
 
-    public class SenException : System.Exception
+    public class RuntimeException : System.Exception
     {
 
         #pragma warning disable IDE1006
@@ -21,9 +21,9 @@ namespace Sen.Modules.Standards
 
         private string _file_path { get; set; }
 
-        public SenException(string message, string file_path) : base(message)
+        public RuntimeException(string message, string file_path) : base(message)
         {
-            this._errorCode = Sen.Modules.Standards.StandardsException.SenException;
+            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RuntimeException;
             this._file_path = file_path;
         }
 
