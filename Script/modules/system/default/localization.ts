@@ -5,7 +5,11 @@ namespace Sen.Script.Modules.System.Default.Localization {
      * @returns String if exists, else return property
      */
     export function GetString(property: string): string {
-        return DotNetLocalization.Get(property, Path.Resolve(`${MainScriptDirectory}\\modules\\language`), "English");
+        return DotNetLocalization.Get(
+            property,
+            Path.Resolve(`${MainScriptDirectory}\\modules\\customization\\language`),
+            "English",
+        );
     }
 
     /**
@@ -15,7 +19,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
      * @returns Test test test t
      */
 
-    export function RegexReplace(inputString: string, replacements: Array<string>) {
+    export function RegexReplace(inputString: string, replacements: Array<string>): string {
         return inputString.replace(/\{(\d+)\}/g, (match: string, index: string) => {
             let replacementIndex: number = parseInt(index) - 1;
             return replacements[replacementIndex] || match;

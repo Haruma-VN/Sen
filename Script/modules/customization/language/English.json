@@ -37,7 +37,17 @@
     "resize_error": "Resize Error",
     "unknown_format": "Unknown Format",
     "this_or_that": "{1} or {2}",
-    "no_such_file": "No such file {}",
-    "no_such_directory": "No such directory {}",
-    "contains_oversized_image": "Contains oversized image"
+    "no_such_file": "No such file: {}",
+    "no_such_directory": "No such directory: {}",
+    "no_such_file_or_directory": "No such file or directory: {}",
+    "contains_oversized_image": "Contains oversized image",
+    "property_is_oversized": "Property {1} is oversized, {2}",
+    "execution_argument": "Execution Argument: {}",
+    "execute_all_argument_in_queue": "Execute all arguments in queue",
+    "set_the_argument_to": "Set the input argument to {}",
+    "true": "true",
+    "false": "false",
+    "is_not_valid_input_argument": "{} is not a valid input argument",
+    "execution_in_progress": "Execution in progress: {}",
+    "no_argument_were_passed": "No arguments were found. Input more path by copy the current file or directory path & press enter to finish"
 }

@@ -21,6 +21,8 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\atlas\\split.js`),
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\atlas\\pack.js`),
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\texture\\encode.js`),
+            Path.Resolve(`${MainScriptDirectory}\\modules\\interface\\assert.js`),
+            Path.Resolve(`${MainScriptDirectory}\\modules\\interface\\arguments.js`),
         ]),
     ];
 
@@ -60,7 +62,7 @@ namespace Sen.Script {
                 DotNetPlatform.CurrentPlatform() === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)
                     ? "Console"
                     : "GUI"
-            } ~ Windows`,
+            } ~ Under development test`,
         );
         const time_start: number = Date.now();
         Sen.Script.LoadModules(Sen.Script.ScriptModules);
@@ -81,12 +83,7 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            TextureHandler.Decode_ETC1_RGB_A8(
-                "D:\\Res\\Tre's Temp File\\test\\ZOMBIESKYCITYZOMBOSSGROUP_1536_00.ptx",
-                "D:\\Res\\Tre's Temp File\\test\\ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
-                4039,
-                4039,
-            );
+            Sen.Script.Modules.Interface.Assert.Evaluate(argument);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }

@@ -67,7 +67,7 @@ declare namespace Console {
      * @returns Input argument as string
      */
 
-    export function Input(): string;
+    export function Input(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null): string;
 
     /**
      * @param - Console.ReadKey()
