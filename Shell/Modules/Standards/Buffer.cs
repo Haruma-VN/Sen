@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Sen.Shell.Modules.Standards.Buffer
+namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 {
 
     public class SenBuffer
