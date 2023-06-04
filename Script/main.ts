@@ -81,6 +81,12 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
+            TextureHandler.Decode_ETC1_RGB_A8(
+                "D:\\Res\\Tre's Temp File\\test\\ZOMBIESKYCITYZOMBOSSGROUP_1536_00.ptx",
+                "D:\\Res\\Tre's Temp File\\test\\ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
+                4039,
+                4039,
+            );
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }

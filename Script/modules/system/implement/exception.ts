@@ -293,10 +293,12 @@ namespace Sen.Script.Modules.Exceptions {
         public get file_path(): string {
             return this._file_path;
         }
-        public set file_path(new_file_location: string) {
-            this._file_path = new_file_location;
+        public set file_path(new_file_location: string | null) {
+            if (new_file_location) {
+                this._file_path = new_file_location;
+            }
         }
-        public get additional_message(): null | string {
+        public get additional_message(): any {
             if (this._additional_message) {
                 return this._additional_message;
             }

@@ -617,5 +617,137 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             );
             return;
         }
+
+        /**
+         *
+         * @param directory_path - Pass sprite directory
+         * @returns Packed atlas
+         */
+
+        public static PackForUnofficialSubgroupStructure(directory_path: string, width: int, height: int): void {
+            this.CheckWholeDirectory(directory_path);
+            const atlas_json_path: string = Path.Resolve(`${directory_path}\\atlas.json`);
+            const media_path: string = Path.Resolve(`${directory_path}\\media`);
+            const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson =
+                Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
+                    atlas_json_path,
+                ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
+            this.CheckAtlasJsonStructure(atlas_json);
+            const is_path: boolean = atlas_json.method === "path";
+            const group_members: Array<string> = Object.keys(atlas_json.groups);
+            const images_name: Array<string> = is_path
+                ? group_members.map((member) => atlas_json.groups[member].path.at(-1) as string)
+                : group_members;
+            this.CheckWholeMemberIfExists(media_path, images_name);
+            const packable_datas = this.AutoConversionToPackableData(atlas_json, atlas_json_path);
+            for (const data of packable_datas) {
+                if (is_path) {
+                    const dimension: BitMap.Constraints.ImageInfo<int> = DotNetBitmap.GetDimension<int>(
+                        Path.Resolve(`${media_path}\\${data.path.at(-1)}.png`),
+                    );
+                    (data as MaxRectsPackableData).width = dimension.width;
+                    (data as MaxRectsPackableData).height = dimension.height;
+                    (data as MaxRectsPackableData).file_path = Path.Resolve(dimension.file_path);
+                } else {
+                    const dimension: BitMap.Constraints.ImageInfo<int> = DotNetBitmap.GetDimension<int>(
+                        Path.Resolve(`${media_path}\\${data.id}.png`),
+                    );
+                    (data as MaxRectsPackableData).width = dimension.width;
+                    (data as MaxRectsPackableData).height = dimension.height;
+                    (data as MaxRectsPackableData).file_path = Path.Resolve(dimension.file_path);
+                }
+            }
+            const options: Record<"smart" | "pot" | "square" | "allowRotation", boolean> = {
+                smart: true,
+                pot: false,
+                square: true,
+                allowRotation: false,
+            };
+            const RectsPacker = new Sen.Script.Modules.Third.JavaScript.MaxRectsAlgorithm.MaxRectsPacker(
+                width,
+                height,
+                1,
+                options,
+            );
+            const subgroup_output: resource_atlas_and_sprites = {
+                id: atlas_json.subgroup,
+                parent: atlas_json.subgroup.replace(`_${atlas_json.res}`, ``),
+                res: atlas_json.res,
+                resources: [],
+                type: "simple",
+            };
+            const path_type: "string" | "array" =
+                "expand_path" in atlas_json && atlas_json.expand_path === "string" ? "string" : "array";
+            RectsPacker.addArray(packable_datas as any);
+            const max_rects_collections: Array<Array<MaxRectsReturnData>> = [];
+            RectsPacker.bins.forEach((bin) => max_rects_collections.push(bin.rects as any));
+            this.CheckOversizedImages(max_rects_collections, width, height);
+            for (let i: int = 0; i < max_rects_collections.length; ++i) {
+                const dimension_output_test: Dimension = atlas_json.trim
+                    ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i])
+                    : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
+                const parent_name: string = `${subgroup_output.id.toUpperCase()}_${i < 10 ? `0${i}` : `${i}`}`;
+                subgroup_output.resources.push({
+                    slot: 0,
+                    id: `ATLASIMAGE_ATLAS_${parent_name}`,
+                    path: path_type === "string" ? `atlases\\${parent_name}` : [`atlases`, `${parent_name}`],
+                    type: `Image`,
+                    atlas: true,
+                    width: dimension_output_test.width,
+                    height: dimension_output_test.height,
+                    runtime: true,
+                });
+                for (let j: number = 0; j < max_rects_collections[i].length; ++j) {
+                    subgroup_output.resources.push(
+                        "cols" in max_rects_collections[i][j]
+                            ? {
+                                  slot: 0,
+                                  id: max_rects_collections[i][j].id,
+                                  path:
+                                      path_type === "string"
+                                          ? max_rects_collections[i][j].path.join(`\\`)
+                                          : max_rects_collections[i][j].path,
+                                  type: `Image`,
+                                  parent: `ATLASIMAGE_ATLAS_${parent_name}`,
+                                  ax: max_rects_collections[i][j].x,
+                                  ay: max_rects_collections[i][j].y,
+                                  aw: max_rects_collections[i][j].width,
+                                  ah: max_rects_collections[i][j].height,
+                                  x: max_rects_collections[i][j].info_x,
+                                  y: max_rects_collections[i][j].info_y,
+                                  cols: max_rects_collections[i][j].cols,
+                              }
+                            : {
+                                  slot: 0,
+                                  id: max_rects_collections[i][j].id,
+                                  path:
+                                      path_type === "string"
+                                          ? max_rects_collections[i][j].path.join(`\\`)
+                                          : max_rects_collections[i][j].path,
+                                  type: `Image`,
+                                  parent: `ATLASIMAGE_ATLAS_${parent_name}`,
+                                  ax: max_rects_collections[i][j].x,
+                                  ay: max_rects_collections[i][j].y,
+                                  aw: max_rects_collections[i][j].width,
+                                  ah: max_rects_collections[i][j].height,
+                                  x: max_rects_collections[i][j].info_x,
+                                  y: max_rects_collections[i][j].info_y,
+                              },
+                    );
+                }
+                DotNetBitmap.CompositeImages(
+                    max_rects_collections[i],
+                    `${parent_name}.png`,
+                    `${Path.Dirname(directory_path)}`,
+                    dimension_output_test.width,
+                    dimension_output_test.height,
+                );
+            }
+            Sen.Script.Modules.FileSystem.Json.WriteJson<resource_atlas_and_sprites>(
+                `${Path.Resolve(Path.Dirname(directory_path))}\\${atlas_json.subgroup}.json`,
+                subgroup_output,
+            );
+            return;
+        }
     }
 }

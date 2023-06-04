@@ -644,6 +644,14 @@ declare namespace TextureHandler {
      */
 
     export function CreateRGBA8888Decode(file_in: string, file_out: string, width: int, height: int): void;
+
+    export function Decode_ETC1_RGB(path_in: string, path_out: string, width: int, height: int): void;
+
+    export function Decode_ETC1_RGB_A8(path_in: string, path_out: string, width: int, height: int): void;
+
+    export function Encode_ETC1_RGB(path_in: string, path_out: string): void;
+
+    export function Encode_ETC1_RGB_A8(path_in: string, path_out: string): void;
 }
 
 declare namespace TextureHandlerPromise {
