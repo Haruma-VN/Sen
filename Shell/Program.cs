@@ -1,7 +1,7 @@
 ﻿using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.JavaScript;
 
-namespace Sen
+namespace Sen.Shell
 {
      internal class Program
     {
