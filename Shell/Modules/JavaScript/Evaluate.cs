@@ -1,6 +1,7 @@
 ﻿using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Standards.Bitmap;
+using Sen.Shell.Modules.Support.TextureEncode.RSB;
 
 namespace Sen.Shell.Modules.JavaScript
 {

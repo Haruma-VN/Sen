@@ -1,5 +1,5 @@
 ﻿using System.Text;
-
+using Sen.Shell.Modules.Standards.IOModule;
 namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 {
 
@@ -10,6 +10,10 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public long length { get => baseStream.Length; set => baseStream.SetLength(value); }
         public long writeOffset { get; set; }
         public long readOffset { get; set; }
+
+        public int imageWidth;
+
+        public int imageHeight;
         private byte[]? m_buffer;
 
         //Constructors
@@ -50,12 +54,38 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         /// <param name="path"> { Path } The Bytes to use as the internal Bytes value.</param>
         /// </summary>
 
+
         public SenBuffer(string path)
         {
             byte[] bytes = File.ReadAllBytes(path);
             baseStream = new MemoryStream(bytes);
         }
 
+        /// <summary>
+        /// Creates a new SenBuffer apply imagePixels.
+        /// <param name="imageData"> { ImageData } The RGBA32[] to apply SenBuffer.</param>
+        /// <param name="width"> { Width } The width of the image.</param>
+        /// <param name="height"> { Height } The height of the image.</param>
+        /// </summary>
+
+        public SenBuffer(Rgba32[] imageData, int width, int height)
+        {
+            using (var image = Image.LoadPixelData<Rgba32>(imageData, width, height))
+            {
+                baseStream = new MemoryStream();
+                image.SaveAsPng(baseStream);
+            }
+        }
+
+        public Rgba32[] getImageData()
+        {
+            Image<Rgba32> image = Image.Load<Rgba32>(baseStream);
+            imageWidth = image.Width;
+            imageHeight = image.Height;
+            Rgba32[] pixelArray = new Rgba32[imageWidth * imageHeight];
+            image.CopyPixelDataTo(pixelArray);
+            return pixelArray;
+        }
         private void fixReadOffset(long offset)
         {
             if (offset != -1 && offset > -1)
@@ -96,7 +126,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public byte[] readBytes(int count, long offset = -1)
         {
             fixReadOffset(offset);
-            if (readOffset + count > length) throw new Exception(); //Offset is outside the bounds of the DataView;
+            if (readOffset + count > length) throw new ArgumentException($"Offset is outside the bounds of the DataView");
             byte[] array = new byte[count];
             baseStream.Read(array, 0, count);
             readOffset += count;
@@ -114,7 +144,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public byte[] getBytes(int count, long offset)
         {
             baseStream.Position = offset;
-            if (offset + count > length) throw new Exception(); //Offset is outside the bounds of the DataView;
+            if (offset + count > length) throw new ArgumentException($"Offset is outside the bounds of the DataView");
             byte[] array = new byte[count];
             baseStream.Read(array, 0, count);
             baseStream.Position = readOffset;
@@ -656,7 +686,22 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         }
         public virtual void OutFile(string output_path)
         {
-            //unfinished;
+            List<string> file_path_collection = output_path.Replace("\\", "/").Split("/").ToList<string>();
+            var last_index = file_path_collection.Count - 1;
+            string requirement_file = file_path_collection.ElementAt<string>(last_index);
+            file_path_collection.RemoveAt(last_index);
+            var path = new Implement_Path();
+            var output_directory = "";
+            var fs = new FileSystem();
+            foreach (var directory in file_path_collection.ToArray<string>())
+            {
+                if (!fs.DirectoryExists(directory))
+                {
+                    fs.CreateDirectory(directory);
+                }
+                output_directory = path.Join(output_directory, directory);
+            }
+            SaveFile(output_path);
         }
 
         public virtual void SaveFile(string path)

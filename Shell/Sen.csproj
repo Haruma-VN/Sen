@@ -25,6 +25,7 @@
     <None Remove="js\**" />
   </ItemGroup>
 
+
   <ItemGroup>
     <Compile Remove="Properties\Program.cs" />
   </ItemGroup>
