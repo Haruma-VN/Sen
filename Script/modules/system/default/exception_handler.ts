@@ -19,7 +19,10 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\resources\\conversion.js`),
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\resources\\official.js`),
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\atlas\\split.js`),
+            Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\atlas\\pack.js`),
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\texture\\encode.js`),
+            Path.Resolve(`${MainScriptDirectory}\\modules\\interface\\assert.js`),
+            Path.Resolve(`${MainScriptDirectory}\\modules\\interface\\arguments.js`),
         ]),
     ];
 

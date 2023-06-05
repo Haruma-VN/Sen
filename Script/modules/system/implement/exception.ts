@@ -975,5 +975,22 @@ namespace Sen.Script.Modules.Exceptions {
                       ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
                       ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > "),
         );
+        try {
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(
+                Path.Resolve(`${Sen.Script.Modules.Interface.Assert.debug_directory}\\${Date.now()}.json`),
+                (error as Error).stack !== null &&
+                    (error as Error).stack !== undefined &&
+                    (error as Error).stack !== void 0 &&
+                    "stack" in (error as Error)
+                    ? error
+                    : ({
+                          message: (error as DotNetSystem.Exception).message,
+                          stack: (error as DotNetSystem.Exception).stackTrace,
+                      } as any),
+            );
+        } catch (error: any) {
+            Console.Print(null, error.message);
+        }
+        return;
     }
 }

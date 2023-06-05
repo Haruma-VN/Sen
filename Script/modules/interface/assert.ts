@@ -5,6 +5,8 @@ namespace Sen.Script.Modules.Interface.Assert {
      * @returns
      */
     export function Evaluate(argument: Array<string>): void {
+        // create debug directory
+        Sen.Script.Modules.Interface.Assert.CreateDebugDirectory();
         if (argument.length === 0) {
             Sen.Script.Modules.Interface.Assert.InputMorePath(argument);
         }
@@ -123,6 +125,20 @@ namespace Sen.Script.Modules.Interface.Assert {
                 );
             }
             arg = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        }
+        return;
+    }
+
+    export const debug_directory: string = Path.Resolve(`${Path.Dirname(MainScriptDirectory)}\\Debug`);
+
+    /**
+     *
+     * @returns Create debug directory if not exists
+     */
+
+    export function CreateDebugDirectory(): void {
+        if (!Fs.DirectoryExists(debug_directory)) {
+            Fs.CreateDirectory(debug_directory);
         }
         return;
     }

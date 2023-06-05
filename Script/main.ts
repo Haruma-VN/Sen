@@ -92,7 +92,6 @@ namespace Sen.Script {
                 Console.Print(null, file);
                 PvZ2Shell.RTONDecode(file, file.replace(/((\.rton))?$/i, ".json"));
             });
-            // Sen.Script.Modules.Interface.Assert.Evaluate(argument);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }
