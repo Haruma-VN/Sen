@@ -614,46 +614,25 @@ declare namespace DotNetBitmap {
 }
 
 declare namespace TextureHandler {
+    // Decode
     /**
      *
-     * @param file_in - Provide file path as image in
-     * @param file_out - Provide file path out
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
      */
-
-    export function CreateARGB8888Encode(file_in: string, file_out: string): void;
-
-    /**
-     *
-     * @param file_in - Provide file path as image in
-     * @param file_out - Provide file path out
-     */
-
-    export function CreateRGBA8888Encode(file_in: string, file_out: string): void;
-    /**
-     *
-     * @param file_in - Provide file path as image in
-     * @param file_out - Provide file path out
-     */
-
-    export function CreateARGB8888Decode(file_in: string, file_out: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param file_in - Provide file path as image in
-     * @param file_out - Provide file path out
-     */
-
-    export function CreateRGBA8888Decode(file_in: string, file_out: string, width: int, height: int): void;
-
-    export function Decode_ETC1_RGB(path_in: string, path_out: string, width: int, height: int): void;
-
-    export function Decode_ETC1_RGB_A8(path_in: string, path_out: string, width: int, height: int): void;
-
-    export function Encode_ETC1_RGB(path_in: string, path_out: string): void;
-
-    export function Encode_ETC1_RGB_A8(path_in: string, path_out: string): void; // Decode
     export function Create_A8_Decode(input_file: string, output_file: string, width: number, height: number): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_ARGB1555_Decode(
         input_file: string,
         output_file: string,
@@ -661,6 +640,14 @@ declare namespace TextureHandler {
         height: number,
     ): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_ARGB4444_Decode(
         input_file: string,
         output_file: string,
@@ -668,18 +655,74 @@ declare namespace TextureHandler {
         height: number,
     ): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_L8_Decode(input_file: string, output_file: string, width: number, height: number): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_LA44_Decode(input_file: string, output_file: string, width: number, height: number): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_LA88_Decode(input_file: string, output_file: string, width: number, height: number): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_RGB565_Decode(input_file: string, output_file: string, width: number, height: number): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_RGB565_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_RGBA4444_Decode(input_file: string, output_file: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_RGBA4444_Block_Decode(
         input_file: string,
         output_file: string,
@@ -687,8 +730,24 @@ declare namespace TextureHandler {
         height: int,
     ): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_RGBA5551_Decode(input_file: string, output_file: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_RGBA5551_Block_Decode(
         input_file: string,
         output_file: string,
@@ -696,62 +755,227 @@ declare namespace TextureHandler {
         height: int,
     ): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_ARGB8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_RGBA8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_ETC1_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_ETC1_RGB_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_ETC1_RGB_A_Palette_Decode(path_in: string, path_out: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_PVRTC1_4BPP_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_PVRTC1_4BPP_RGBA_Decode(path_in: string, path_out: string, width: int, height: int): void;
 
+    /**
+     *
+     * @param input_file - Pass PTX in
+     * @param output_file - Pass output png
+     * @param width - Pass width
+     * @param height - Pass height
+     * @returns Decoded PNG
+     */
     export function Create_PVRTC1_4BPP_RGBA_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
 
     // Encode
+
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_A8_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_ARGB1555_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_ARGB4444_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_RGBA8888_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_L8_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_LA44_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_LA88_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_RGB565_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_RGB565_Block_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_RGBA4444_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_RGBA4444_Block_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_RGBA5551_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_RGBA5551_Block_Encode(input_file: string, output_file: string): void;
 
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
     export function Create_ARGB8888_Encode(input_file: string, output_file: string): void;
 
-    export function Create_ETC1_RGB_Encode(path_in: string, path_out: string): void;
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
+    export function Create_ETC1_RGB_Encode(input_file: string, output_file: string): void;
 
-    export function Create_ETC1_RGB_A8_Encode(path_in: string, path_out: string): void;
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
+    export function Create_ETC1_RGB_A8_Encode(input_file: string, output_file: string): void;
 
-    export function Create_ETC1_RGB_A_Palette_Encode(path_in: string, path_out: string): void;
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
+    export function Create_ETC1_RGB_A_Palette_Encode(input_file: string, output_file: string): void;
 
-    export function Create_PVRTC1_4BPP_RGB_Encode(path_in: string, path_out: string): void;
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
+    export function Create_PVRTC1_4BPP_RGB_Encode(input_file: string, output_file: string): void;
 
-    export function Create_PVRTC1_4BPP_RGBA_Encode(path_in: string, path_out: string): void;
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
+    export function Create_PVRTC1_4BPP_RGBA_Encode(input_file: string, output_file: string): void;
 
-    export function Create_PVRTC1_4BPP_RGBA_A8_Encode(path_in: string, path_out: string): void;
+    /**
+     *
+     * @param input_file - Provide file path as image in
+     * @param output_file - Provide file path out
+     */
+    export function Create_PVRTC1_4BPP_RGBA_A8_Encode(input_file: string, output_file: string): void;
 }
 
 declare namespace TextureHandlerPromise {
