@@ -83,7 +83,16 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            Sen.Script.Modules.Interface.Assert.Evaluate(argument);
+            const rtons_test: Array<string> = Fs.ReadDirectory(
+                `D:\\Workspace\\test\\PACKAGES`,
+                Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory,
+            );
+            Console.Print(null, "Synchronous test");
+            rtons_test.forEach((file) => {
+                Console.Print(null, file);
+                PvZ2Shell.RTONDecode(file, file.replace(/((\.rton))?$/i, ".json"));
+            });
+            // Sen.Script.Modules.Interface.Assert.Evaluate(argument);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }

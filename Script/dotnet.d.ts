@@ -1464,3 +1464,24 @@ declare type small_bundle_info_json = {
     is_composite: boolean;
     subgroups: Array<string>;
 };
+
+/**
+ * PvZ2 functions from the Shell
+ */
+
+declare namespace PvZ2Shell {
+    /**
+     *
+     * @param inFile - Pass RTON file here
+     * @param outFile - Pass JSON output here
+     * @returns RTON2JSON
+     */
+    export function RTONDecode(inFile: string, outFile: string): void;
+    /**
+     *
+     * @param inFile - Pass RTON files here as array
+     * @param outFile - Pass JSON output here as array
+     * @returns Multiple RTON2JSON
+     */
+    export function RTONDecodeAsync(inFiles: string[], outFiles: string[]): void;
+}

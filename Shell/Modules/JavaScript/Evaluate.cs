@@ -2,6 +2,7 @@
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Standards.Bitmap;
 using Sen.Shell.Modules.Support.TextureEncode.RSB;
+using Sen.Modules.Support.PvZ2;
 
 namespace Sen.Shell.Modules.JavaScript
 {
@@ -32,6 +33,7 @@ namespace Sen.Shell.Modules.JavaScript
             engine.SetValue("DotNetLocalization", new Localization());
             engine.SetValue("TextureHandler", new TextureEncoderFast());
             engine.SetValue("TextureHandlerPromise", new TextureEncoderAsync());
+            engine.SetValue("PvZ2Shell", new PvZ2Shell());
 
             try
             {

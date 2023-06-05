@@ -474,7 +474,7 @@ namespace Sen.Shell.Modules.Standards.Bitmap
 
         public override void CropAndSaveImages(dynamic[] images)
         {
-            var task = CropAndSaveImagesAsync(images);
+            var task = this.CropAndSaveImagesAsync(images);
             task.Wait();
             return;
         }
