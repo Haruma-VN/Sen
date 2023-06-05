@@ -651,7 +651,107 @@ declare namespace TextureHandler {
 
     export function Encode_ETC1_RGB(path_in: string, path_out: string): void;
 
-    export function Encode_ETC1_RGB_A8(path_in: string, path_out: string): void;
+    export function Encode_ETC1_RGB_A8(path_in: string, path_out: string): void; // Decode
+    export function Create_A8_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+    export function Create_ARGB1555_Decode(
+        input_file: string,
+        output_file: string,
+        width: number,
+        height: number,
+    ): void;
+
+    export function Create_ARGB4444_Decode(
+        input_file: string,
+        output_file: string,
+        width: number,
+        height: number,
+    ): void;
+
+    export function Create_L8_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+    export function Create_LA44_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+    export function Create_LA88_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+    export function Create_RGB565_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+    export function Create_RGB565_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+    export function Create_RGBA4444_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+    export function Create_RGBA4444_Block_Decode(
+        input_file: string,
+        output_file: string,
+        width: int,
+        height: int,
+    ): void;
+
+    export function Create_RGBA5551_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+    export function Create_RGBA5551_Block_Decode(
+        input_file: string,
+        output_file: string,
+        width: int,
+        height: int,
+    ): void;
+
+    export function Create_ARGB8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+    export function Create_RGBA8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+    export function Create_ETC1_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+    export function Create_ETC1_RGB_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+    export function Create_ETC1_RGB_A_Palette_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+    export function Create_PVRTC1_4BPP_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+    export function Create_PVRTC1_4BPP_RGBA_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+    export function Create_PVRTC1_4BPP_RGBA_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+    // Encode
+    export function Create_A8_Encode(input_file: string, output_file: string): void;
+
+    export function Create_ARGB1555_Encode(input_file: string, output_file: string): void;
+
+    export function Create_ARGB4444_Encode(input_file: string, output_file: string): void;
+
+    export function Create_RGBA8888_Encode(input_file: string, output_file: string): void;
+
+    export function Create_L8_Encode(input_file: string, output_file: string): void;
+
+    export function Create_LA44_Encode(input_file: string, output_file: string): void;
+
+    export function Create_LA88_Encode(input_file: string, output_file: string): void;
+
+    export function Create_RGB565_Encode(input_file: string, output_file: string): void;
+
+    export function Create_RGB565_Block_Encode(input_file: string, output_file: string): void;
+
+    export function Create_RGBA4444_Encode(input_file: string, output_file: string): void;
+
+    export function Create_RGBA4444_Block_Encode(input_file: string, output_file: string): void;
+
+    export function Create_RGBA5551_Encode(input_file: string, output_file: string): void;
+
+    export function Create_RGBA5551_Block_Encode(input_file: string, output_file: string): void;
+
+    export function Create_ARGB8888_Encode(input_file: string, output_file: string): void;
+
+    export function Create_ETC1_RGB_Encode(path_in: string, path_out: string): void;
+
+    export function Create_ETC1_RGB_A8_Encode(path_in: string, path_out: string): void;
+
+    export function Create_ETC1_RGB_A_Palette_Encode(path_in: string, path_out: string): void;
+
+    export function Create_PVRTC1_4BPP_RGB_Encode(path_in: string, path_out: string): void;
+
+    export function Create_PVRTC1_4BPP_RGBA_Encode(path_in: string, path_out: string): void;
+
+    export function Create_PVRTC1_4BPP_RGBA_A8_Encode(path_in: string, path_out: string): void;
 }
 
 declare namespace TextureHandlerPromise {
