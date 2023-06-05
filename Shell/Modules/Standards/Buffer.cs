@@ -77,12 +77,12 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             }
         }
 
-        public Rgba32[] getImageData()
+        public Rgba32[] getImageData(int width = 0, int height = 0)
         {
             Image<Rgba32> image = Image.Load<Rgba32>(baseStream);
             imageWidth = image.Width;
             imageHeight = image.Height;
-            Rgba32[] pixelArray = new Rgba32[imageWidth * imageHeight];
+            Rgba32[] pixelArray = new Rgba32[(width != 0 ? width : imageWidth) * (height != 0 ? height : imageHeight)];
             image.CopyPixelDataTo(pixelArray);
             return pixelArray;
         }
@@ -441,11 +441,11 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             baseStream.Position = writeOffset;
         }
 
-        public void writeUInt8(sbyte number, long offset = -1)
+        public void writeUInt8(byte number, long offset = -1)
         {
             fixWriteOffset(offset);
             m_buffer = new byte[1];
-            m_buffer[0] = (byte)number;
+            m_buffer[0] = number;
             writeBytes(m_buffer);
         }
 
@@ -584,6 +584,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             writeBytes(m_buffer);
         }
 
+
         public void writeUVarInt64(ulong number, long offset = -1)
         {
             ulong num;
@@ -595,6 +596,104 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             bytes.Add((byte)num);
             m_buffer = bytes.ToArray();
             fixWriteOffset(offset);
+            writeBytes(m_buffer);
+        }
+
+        public void writeInt8(sbyte number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[1];
+            m_buffer[0] = (byte)number;
+            writeBytes(m_buffer);
+        }
+
+        public void writeInt16LE(short number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[2];
+            m_buffer[0] = (byte)number;
+            m_buffer[1] = (byte)(number >> 8);
+            writeBytes(m_buffer);
+        }
+
+        public void writeInt16BE(short number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[2];
+            m_buffer[1] = (byte)number;
+            m_buffer[0] = (byte)(number >> 8);
+            writeBytes(m_buffer);
+        }
+
+        public void writeInt24LE(int number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[3];
+            m_buffer[0] = (byte)number;
+            m_buffer[1] = (byte)(number >> 8);
+            m_buffer[2] = (byte)(number >> 16);
+            writeBytes(m_buffer);
+        }
+
+        public void writeInt24BE(int number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[3];
+            m_buffer[2] = (byte)number;
+            m_buffer[1] = (byte)(number >> 8);
+            m_buffer[0] = (byte)(number >> 16);
+            writeBytes(m_buffer);
+        }
+
+        public void writeInt32LE(int number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[4];
+            m_buffer[0] = (byte)number;
+            m_buffer[1] = (byte)(number >> 8);
+            m_buffer[2] = (byte)(number >> 16);
+            m_buffer[3] = (byte)(number >> 24);
+            writeBytes(m_buffer);
+        }
+
+        public void writeInt32BE(int number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[4];
+            m_buffer[3] = (byte)number;
+            m_buffer[2] = (byte)(number >> 8);
+            m_buffer[1] = (byte)(number >> 16);
+            m_buffer[0] = (byte)(number >> 24);
+            writeBytes(m_buffer);
+        }
+
+        public void writeBigInt64LE(long number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[8];
+            m_buffer[0] = (byte)number;
+            m_buffer[1] = (byte)(number >> 8);
+            m_buffer[2] = (byte)(number >> 16);
+            m_buffer[3] = (byte)(number >> 24);
+            m_buffer[4] = (byte)(number >> 32);
+            m_buffer[5] = (byte)(number >> 40);
+            m_buffer[6] = (byte)(number >> 48);
+            m_buffer[7] = (byte)(number >> 56);
+            writeBytes(m_buffer);
+        }
+
+        public void writeBigInt64BE(long number, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            m_buffer = new byte[8];
+            m_buffer[7] = (byte)number;
+            m_buffer[6] = (byte)(number >> 8);
+            m_buffer[5] = (byte)(number >> 16);
+            m_buffer[4] = (byte)(number >> 24);
+            m_buffer[3] = (byte)(number >> 32);
+            m_buffer[2] = (byte)(number >> 40);
+            m_buffer[1] = (byte)(number >> 48);
+            m_buffer[0] = (byte)(number >> 56);
             writeBytes(m_buffer);
         }
 
@@ -712,6 +811,15 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 baseStream.CopyTo(fileStream);
             }
             Close();
+        }
+
+        public virtual async Task SaveFileAsync(string path)
+        {
+            using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                await baseStream.CopyToAsync(fileStream);
+            }
+            Flush();
         }
         public virtual void Close()
         {

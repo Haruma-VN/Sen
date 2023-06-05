@@ -48,6 +48,6 @@
     "true": "true",
     "false": "false",
     "is_not_valid_input_argument": "{} is not a valid input argument",
-    "execution_in_progress": "Execution in progress: {}",
+    "execution_in_progress": "Execution in progress: ({})",
     "no_argument_were_passed": "No arguments were found. Input more path by copy the current file or directory path & press enter to finish"
 }

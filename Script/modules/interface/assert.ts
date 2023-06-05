@@ -13,14 +13,47 @@ namespace Sen.Script.Modules.Interface.Assert {
             evaluate_more_argument = EvaluateMoreArgument();
         }
         if (evaluate_more_argument) {
+            PrintPath(argument, {
+                current: argument.length,
+                all: argument.length,
+            });
+        } else {
+            argument.forEach((arg, index) => {
+                PrintPath(arg, {
+                    current: index + 1,
+                    all: argument.length,
+                });
+            });
+        }
+        return;
+    }
+
+    /**
+     *
+     * @param argument - Pass argument here
+     * @param size - Pass size
+     * @returns
+     */
+
+    export function PrintPath(argument: Array<string> | string, size: { current: int; all: number }): void {
+        if (Array.isArray(argument)) {
             Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
                 `${Sen.Script.Modules.System.Default.Localization.GetString("execution_in_progress").replace(
                     /\{\}/g,
-                    `${argument.length}/${argument.length}`,
+                    `${size.current}/${size.all}`,
                 )}`,
             );
             argument.forEach((arg: string) => Console.Printf(null, `      ${arg}`));
+        } else {
+            Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_in_progress").replace(
+                    /\{\}/g,
+                    `${size.current}/${size.all}`,
+                )}`,
+            );
+            Console.Printf(null, `      ${argument satisfies string}`);
         }
         return;
     }
