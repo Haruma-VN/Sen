@@ -23,6 +23,7 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}\\modules\\support\\popcap\\pvz2\\texture\\encode.js`),
             Path.Resolve(`${MainScriptDirectory}\\modules\\interface\\assert.js`),
             Path.Resolve(`${MainScriptDirectory}\\modules\\interface\\arguments.js`),
+            Path.Resolve(`${MainScriptDirectory}\\modules\\interface\\execute.js`),
         ]),
     ];
 
@@ -83,13 +84,7 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            const rtons_test: Array<string> = Fs.ReadDirectory(
-                `D:\\Workspace\\test\\PACKAGES`,
-                Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory,
-            );
-            rtons_test.forEach((file: string) => {
-                PvZ2Shell.RTONDecode(file, file.replace(/((\.rton))?$/i, ".json"));
-            });
+            Sen.Script.Modules.Interface.Assert.Evaluate(argument);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }

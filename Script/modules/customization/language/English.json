@@ -49,5 +49,10 @@
     "false": "false",
     "is_not_valid_input_argument": "{} is not a valid input argument",
     "execution_in_progress": "Execution in progress: ({})",
-    "no_argument_were_passed": "No arguments were found. Input more path by copy the current file or directory path & press enter to finish"
+    "no_argument_were_passed": "No arguments were found. Input more path by copy the current file or directory path & press enter to finish",
+    "execution_size": "Execution size: {}",
+    "missing_in": "Missing {1} in {2}",
+    "js_evaluate": "JS Evaluate",
+    "all_functions_loaded": "All functions loaded",
+    "function_not_found": "Function {} not found, expected implement"
 }

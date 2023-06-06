@@ -7,8 +7,8 @@ namespace Sen.Script.Modules.System.Implement.JavaScript {
     export function Evaluate(js_string_to_evaluate: string, source: string): void {
         try {
             JavaScriptEngine.Evaluate(js_string_to_evaluate, source);
-        } catch (error: any) {
-            Console.Print(error.message);
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as Error).message, source);
         }
         return;
     }
@@ -26,7 +26,7 @@ namespace Sen.Script.Modules.System.Implement.JavaScript {
                 js_path,
             );
         } catch (error: any) {
-            Console.Print(error.message);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as Error).message, js_path);
         }
         return;
     }

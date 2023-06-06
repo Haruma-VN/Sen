@@ -56,6 +56,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
         public abstract Task WriteBytesAsync(string filepath, byte[] data);
 
 
+
     }
 
     public enum ReadDirectory
@@ -208,7 +209,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
         {
             var json_library = new Sen.Shell.Modules.Standards.JsonImplement();
             var serialize_json = json_library.StringifyJson<Generic_T>(json_object, null);
-            this.WriteText(output_path, serialize_json, EncodingType.UTF8);
+            this.OutFile(output_path, serialize_json);
             return;
         }
 
@@ -342,6 +343,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             await File.WriteAllBytesAsync(filepath, data);
             return;
         }
+
     }
 
     public class FormatRecords

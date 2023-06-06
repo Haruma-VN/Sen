@@ -1,36 +1,43 @@
-namespace Sen.Script.Modules.FileSystem.Json {
-    /**
-     *
-     * @param filePath Provide file path to read json
-     * @returns Deserialized JSON can be used by the tool
-     */
+namespace Sen.Script.Modules.FileSystem {
+    export class Json {
+        /**
+         *
+         * @param filePath Provide file path to read json
+         * @returns Deserialized JSON can be used by the tool
+         */
 
-    export function ReadJson<Generic_T>(filePath: string): Generic_T {
-        return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
-            Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
-        );
+        public static ReadJson<Generic_T>(filePath: string): Generic_T {
+            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
+                Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+            );
+        }
+
+        /**
+         *
+         * @param output_path - Provide output path as string
+         * @param serializedJson - Provide serialized JSON Data
+         * @param indent - Indent, can be skipped
+         * @returns Writted JSON
+         */
+
+        public static WriteJson<Generic_T>(
+            output_path: string,
+            serializedJson: Generic_T,
+            indent: string | number = "\t",
+        ): void {
+            Fs.OutFile(
+                output_path,
+                Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent),
+            );
+            return;
+        }
     }
 
     /**
-     *
-     * @param output_path - Provide output path as string
-     * @param serializedJson - Provide serialized JSON Data
-     * @param indent - Indent, can be skipped
-     * @returns Writted JSON
+     * filter file type
      */
 
-    export function WriteJson<Generic_T>(
-        output_path: string,
-        serializedJson: Generic_T,
-        indent: string | number = "\t",
-    ): void {
-        Fs.WriteText(
-            output_path,
-            Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent),
-            Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8,
-        );
-        return;
-    }
+    export type filter_file_type = "file" | "directory" | "unknown";
 
     /**
      *
@@ -38,10 +45,44 @@ namespace Sen.Script.Modules.FileSystem.Json {
      * @param filter - Pass filter option, if you want to filter extension pass ".json" for example for filtering only json
      * @param filter - Pass "main.js" for example for filtering whole file name
      * @param excludes - Pass exclude array, pass an empty array if you don't want to exclude anything
+     * @param file_type - The file type
      * @returns True if match else False
      */
 
-    export function FilterFilePath(filePath: string, filters: Array<string>, excludes: Array<string>): boolean {
+    export function FilterFilePath(
+        filePath: string,
+        filters: Array<string>,
+        excludes: Array<string>,
+        file_type: filter_file_type = "unknown",
+    ): boolean {
+        switch (file_type) {
+            case "directory": {
+                if (!Fs.DirectoryExists(filePath)) {
+                    return false;
+                }
+                break;
+            }
+            case "file": {
+                if (!Fs.FileExists(filePath)) {
+                    return false;
+                }
+                break;
+            }
+            case "unknown": {
+                if (Fs.DirectoryExists(filePath) || Fs.FileExists(filePath)) {
+                    break;
+                }
+            }
+            default: {
+                throw new Sen.Script.Modules.Exceptions.MissingFileRequirement(
+                    Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(
+                        /\{\}/g,
+                        "",
+                    ),
+                    filePath,
+                );
+            }
+        }
         for (const filter of filters) {
             let isExcluded: boolean = false;
             for (const excluse of excludes) {

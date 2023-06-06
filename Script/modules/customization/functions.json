@@ -1,0 +1,8 @@
+{
+    "js_evaluate": {
+        "func_number": 1,
+        "include": [".js"],
+        "exclude": [],
+        "type": "file"
+    }
+}

@@ -3,6 +3,10 @@ using Sen.Shell.Modules.Standards.IOModule;
 namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 {
 
+    #pragma warning disable IDE1006
+    #pragma warning disable IDE0063
+    #pragma warning disable IDE0079
+    #pragma warning disable IDE0060
     public class SenBuffer
     {
 
@@ -378,7 +382,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public string readStringByEmpty(long offset = -1)
         {
             fixReadOffset(offset);
-            List<byte> bytes = new List<byte>();
+            var bytes = new List<byte>();
             byte tp;
             while (true)
             {
@@ -571,7 +575,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public void writeUVarInt32(uint number, long offset = -1)
         {
             uint num;
-            List<byte> bytes = new List<byte>();
+            var bytes = new List<byte>();
             for (num = number; num >= 128; num >>= 7)
             {
                 bytes.Add((byte)(num | 0x80));
@@ -586,7 +590,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public void writeUVarInt64(ulong number, long offset = -1)
         {
             ulong num;
-            List<byte> bytes = new List<byte>();
+            var bytes = new List<byte>();
             for (num = number; num >= 128; num >>= 7)
             {
                 bytes.Add((byte)(num | 0x80));
@@ -698,7 +702,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public void writeVarInt32(int number, long offset = -1)
         {
             uint num;
-            List<byte> bytes = new List<byte>();
+            var bytes = new List<byte>();
             for (num = (uint)number; num >= 128; num >>= 7)
             {
                 bytes.Add((byte)(num | 0x80));
@@ -712,7 +716,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public void writeVarInt64(long number, long offset = -1)
         {
             ulong num;
-            List<byte> bytes = new List<byte>();
+            var bytes = new List<byte>();
             for (num = (ulong)number; num >= 128; num >>= 7)
             {
                 bytes.Add((byte)(num | 0x80));
@@ -773,7 +777,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             else
             {
                 bytes = new byte[baseStream.Length - baseStream.Position];
-                using (MemoryStream ms2 = new MemoryStream(bytes))
+                using var ms2 = new MemoryStream(bytes);
                 {
                     baseStream.CopyTo(ms2);
                 }

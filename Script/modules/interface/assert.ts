@@ -6,6 +6,7 @@ namespace Sen.Script.Modules.Interface.Assert {
      */
     export function Evaluate(argument: Array<string>): void {
         // create debug directory
+        Sen.Script.Modules.Interface.Assert.ProcessFunctionsJson();
         Sen.Script.Modules.Interface.Assert.CreateDebugDirectory();
         if (argument.length === 0) {
             Sen.Script.Modules.Interface.Assert.InputMorePath(argument);
@@ -19,13 +20,174 @@ namespace Sen.Script.Modules.Interface.Assert {
                 current: argument.length,
                 all: argument.length,
             });
+            Sen.Script.Modules.Interface.Execute.ExecuteArgument(argument);
         } else {
             argument.forEach((arg, index) => {
                 PrintPath(arg, {
                     current: index + 1,
                     all: argument.length,
                 });
+                Sen.Script.Modules.Interface.Execute.ExecuteArgument(arg);
             });
+        }
+        return;
+    }
+
+    /**
+     * Function json
+     */
+
+    export interface FunctionJson {
+        [x: string]: {
+            func_number: number;
+            include: Array<string>;
+            exclude: Array<string>;
+            type: Sen.Script.Modules.FileSystem.filter_file_type;
+        };
+    }
+
+    /**
+     * Function json file path
+     */
+
+    export const function_json_location: string = Path.Resolve(
+        `${MainScriptDirectory}\\modules\\customization\\functions.json`,
+    );
+
+    /**
+     * Deserialized function json
+     */
+
+    export const FunctionJsonObject: FunctionJson = Sen.Script.Modules.FileSystem.Json.ReadJson<FunctionJson>(
+        Sen.Script.Modules.Interface.Assert.function_json_location,
+    );
+
+    /**
+     * All functions name
+     */
+
+    export const FunctionCollection: Array<string> = Object.keys(
+        Sen.Script.Modules.Interface.Assert.FunctionJsonObject,
+    );
+
+    /**
+     * All functions number
+     */
+
+    export const FunctionNumbers: Array<int> = FunctionCollection.map(
+        (key: string) => Sen.Script.Modules.Interface.Assert.FunctionJsonObject[key].func_number,
+    );
+
+    /**
+     *
+     * @returns Process function json
+     */
+
+    export function ProcessFunctionsJson(): void {
+        for (let func of Sen.Script.Modules.Interface.Assert.FunctionCollection) {
+            if (!("func_number" in FunctionJsonObject[func])) {
+                throw new Sen.Script.Modules.Exceptions.RuntimeError(
+                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("missing_in"),
+                        [`"func_number"`, `${func}`],
+                    )}`,
+
+                    Sen.Script.Modules.Interface.Assert.function_json_location,
+                );
+            }
+            if (!Number.isInteger(FunctionJsonObject[func].func_number)) {
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                        [
+                            `func_number`,
+                            `${func}`,
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                            `${typeof FunctionJsonObject[func].func_number}`,
+                        ],
+                    ),
+                    `func_number`,
+                    function_json_location,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                );
+            }
+            if (!("type" in FunctionJsonObject[func])) {
+                throw new Sen.Script.Modules.Exceptions.RuntimeError(
+                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("missing_in"),
+                        [`"type"`, `${func}`],
+                    )}`,
+
+                    Sen.Script.Modules.Interface.Assert.function_json_location,
+                );
+            }
+            if (
+                FunctionJsonObject[func].type !== "directory" &&
+                FunctionJsonObject[func].type !== "file" &&
+                FunctionJsonObject[func].type !== "unknown"
+            ) {
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                        [`type`, `${func}`, `directory or file or unknown`, `${typeof FunctionJsonObject[func].type}`],
+                    ),
+                    `type`,
+                    function_json_location,
+                    `directory or file or unknown`,
+                );
+            }
+            if (!("include" in FunctionJsonObject[func])) {
+                throw new Sen.Script.Modules.Exceptions.RuntimeError(
+                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("missing_in"),
+                        [`"include"`, `${func}`],
+                    )}`,
+
+                    Sen.Script.Modules.Interface.Assert.function_json_location,
+                );
+            }
+            if (!Array.isArray(FunctionJsonObject[func].include)) {
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                        [
+                            `includes`,
+                            `${func}`,
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                            `${typeof FunctionJsonObject[func].include}`,
+                        ],
+                    ),
+                    `resources`,
+                    function_json_location,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                );
+            }
+            if (!("exclude" in FunctionJsonObject[func])) {
+                throw new Sen.Script.Modules.Exceptions.RuntimeError(
+                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("missing_in"),
+                        [`"exclude"`, `${func}`],
+                    )}`,
+
+                    Sen.Script.Modules.Interface.Assert.function_json_location,
+                );
+            }
+            if (!Array.isArray(FunctionJsonObject[func].exclude)) {
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                        Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
+                        [
+                            `exclude`,
+                            `${func}`,
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                            `${typeof FunctionJsonObject[func].exclude}`,
+                        ],
+                    ),
+                    `resources`,
+                    function_json_location,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                );
+            }
         }
         return;
     }
@@ -103,10 +265,11 @@ namespace Sen.Script.Modules.Interface.Assert {
     export function InputMorePath(argument: Array<string>): void {
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
-                /\{\}/g,
-                Sen.Script.Modules.System.Default.Localization.GetString("no_argument_were_passed"),
-            )}`,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, ``)}`,
+        );
+        Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.GetString("no_argument_were_passed")}`,
         );
         let arg: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (arg !== "") {
@@ -124,6 +287,13 @@ namespace Sen.Script.Modules.Interface.Assert {
                     )}`,
                 );
             }
+            Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_size").replace(
+                    /\{\}/g,
+                    `${argument.length}`,
+                )}`,
+            );
             arg = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         }
         return;

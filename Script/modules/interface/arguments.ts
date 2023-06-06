@@ -36,4 +36,28 @@ namespace Sen.Script.Modules.Interface.Arguments {
         }
         return assert_test as 1 | 0;
     }
+
+    /**
+     *
+     * @param available Input for argument
+     * @returns Evaluate option
+     */
+
+    export function TestInput(available: Array<int>): int {
+        let input: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        while (!Sen.Script.Modules.Interface.Assert.MatchInputWithNumbers(input, available)) {
+            Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(
+                        /\{\}/g,
+                        input,
+                    ),
+                )}`,
+            ),
+                (input = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan));
+        }
+        return parseInt(input) as int;
+    }
 }
