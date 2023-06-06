@@ -1,7 +1,7 @@
 ﻿using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Support.PvZ2.RTON;
 
-namespace Sen.Modules.Support.PvZ2
+namespace Sen.Shell.Modules.Support.PvZ2
 {
     public abstract class PvZ2ShellAbstract
     {

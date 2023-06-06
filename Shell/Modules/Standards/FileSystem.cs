@@ -292,6 +292,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
                 }
                 output_directory = path.Join(output_directory, directory);
             }
+            Console.WriteLine(output_directory);
             this.WriteFile<Generic_T>(path.Join(output_directory, requirement_file), data);
             return;
         }

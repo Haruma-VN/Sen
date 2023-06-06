@@ -1,5 +1,6 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using System.Text.Json;
+using System.Text.Encodings.Web;
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
     public abstract class RTONHandlerAbstract
@@ -12,7 +13,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         {
             SenBuffer RtonFile = new SenBuffer(inFile);
             SenBuffer JsonFile = RTONProcession.Decode(RtonFile, false);
-            JsonFile.SaveFile(outFile);
+            JsonFile.OutFile(outFile);
         }
     }
 
@@ -77,20 +78,25 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
 
         public static SenBuffer Decode(SenBuffer RtonFile, bool DecryptFile)
         {
+            R0x90List.Clear();
+            R0x92List.Clear();
             Stream stream = new MemoryStream();
-            Utf8JsonWriter jsonWriter = new Utf8JsonWriter(stream);
+            Utf8JsonWriter jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, Indented = true});
             if (DecryptFile)
             {
                 Decrypt(RtonFile);
             }
             string Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
-            if (Rton_magic != magic) throw new Exception();
-            if (Rton_ver != version) throw new Exception();
+            if (Rton_magic != magic) throw new ArgumentException($"This file is not RTON: {RtonFile.filePath}");
+            if (Rton_ver != version) throw new ArgumentException();
             ReadObject(RtonFile, jsonWriter);
             string EOF = RtonFile.readString(4);
-            if (EOF != EOR) throw new Exception();
+            if (EOF != EOR) throw new ArgumentException();
+            jsonWriter.Flush();
             SenBuffer JsonFile = new SenBuffer(stream);
+            R0x90List.Clear();
+            R0x92List.Clear();
             return JsonFile;
         }
 
@@ -250,7 +256,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                     }
                     break;
                 case 0x90:
-                    tempstring = RtonFile.readBytes(RtonFile.readVarInt32());
+                    int num = RtonFile.readVarInt32();
+                    tempstring = RtonFile.readBytes(num);
                     R0x90List.Add(tempstring);
                     if (valueType)
                     {
@@ -306,12 +313,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 case 0xB9:
                 case 0xBA:
                 case 0xBB:
-                    throw new Exception("0xb0-0xbb is not supported!");
+                    throw new ArgumentException("0xb0-0xbb is not supported!");
                 case 0xBC:
                     jsonWriter.WriteBooleanValue(RtonFile.readUInt8() != 0);
                     break;
                 default:
-                    throw new Exception();
+                    throw new ArgumentException($"Bytecode Error: {bytecode} in offset: {RtonFile.readOffset}");
 
             }
 
@@ -332,7 +339,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             {
                 case 0x00:
                     return Str_RTID_0;
-                case 0x01: //Not sure
+                case 0x01:
                     int value_1_2 = RtonFile.readVarInt32();
                     int value_1_1 = RtonFile.readVarInt32();
                     uint x16_1 = RtonFile.readUInt32LE();
@@ -351,21 +358,20 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                     string str1 = RtonFile.readStringByVarInt32();
                     return string.Format(Str_RTID_3, str1, str2);
                 default:
-                    throw new Exception($"No such type in 0x83: {temp}");
+                    throw new ArgumentException($"No such type in 0x83: {temp}");
             }
         }
 
         private static void ReadObject(SenBuffer RtonFile, Utf8JsonWriter jsonWriter)
         {
             jsonWriter.WriteStartObject();
-            byte bytecode;
-            do
+            byte bytecode = RtonFile.readUInt8();
+            while (bytecode != 0xFF)
             {
-                bytecode = RtonFile.readUInt8();
                 ReadBytecode(bytecode, false, RtonFile, jsonWriter);
                 ReadBytecode(RtonFile.readUInt8(), true, RtonFile, jsonWriter);
+                bytecode = RtonFile.readUInt8();
             }
-            while (bytecode != 0xFF);
             jsonWriter.WriteEndObject();
         }
 
@@ -373,7 +379,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         {
             jsonWriter.WriteStartArray();
             byte bytecode = RtonFile.readUInt8();
-            if (bytecode != 0xFD) throw new Exception();
+            if (bytecode != 0xFD) throw new ArgumentException();
             int number = RtonFile.readVarInt32();
             for (var i = 0; i < number; i++)
             {
@@ -381,7 +387,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 ReadBytecode(bytecode, true, RtonFile, jsonWriter);
             }
             bytecode = RtonFile.readUInt8();
-            if (bytecode != 0xFE) throw new Exception();
+            if (bytecode != 0xFE) throw new ArgumentException();
             jsonWriter.WriteEndArray();
         }
     }

@@ -10,10 +10,9 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public long length { get => baseStream.Length; set => baseStream.SetLength(value); }
         public long writeOffset { get; set; }
         public long readOffset { get; set; }
-
         public int imageWidth;
-
         public int imageHeight;
+        public string? filePath;
         private byte[]? m_buffer;
 
         //Constructors
@@ -57,6 +56,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public SenBuffer(string path)
         {
+            filePath = path;
             byte[] bytes = File.ReadAllBytes(path);
             baseStream = new MemoryStream(bytes);
         }
@@ -299,7 +299,6 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 b = readUInt8();
                 num |= (b & 0x7F) << num2;
                 num2 += 7;
-                readOffset += 1;
             }
             while ((b & 0x80) != 0);
             return num;
@@ -320,7 +319,6 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 b = readUInt8();
                 num |= ((long)(b & 0x7F)) << num2;
                 num2 += 7;
-                readOffset += 1;
             }
             while ((b & 0x80) != 0);
             return num;
@@ -783,23 +781,19 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             baseStream.Position = temp_offset;
             return bytes;
         }
+        public virtual void CreateDirectory(string output_path)
+        {
+            var path = new Implement_Path();
+            var fs = new FileSystem();
+            if (!fs.DirectoryExists(path.GetDirectoryName(output_path)))
+            {
+                fs.CreateDirectory(path.GetDirectoryName(output_path));
+            }
+        }
+
         public virtual void OutFile(string output_path)
         {
-            List<string> file_path_collection = output_path.Replace("\\", "/").Split("/").ToList<string>();
-            var last_index = file_path_collection.Count - 1;
-            string requirement_file = file_path_collection.ElementAt<string>(last_index);
-            file_path_collection.RemoveAt(last_index);
-            var path = new Implement_Path();
-            var output_directory = "";
-            var fs = new FileSystem();
-            foreach (var directory in file_path_collection.ToArray<string>())
-            {
-                if (!fs.DirectoryExists(directory))
-                {
-                    fs.CreateDirectory(directory);
-                }
-                output_directory = path.Join(output_directory, directory);
-            }
+            CreateDirectory(output_path);
             SaveFile(output_path);
         }
 
@@ -816,6 +810,16 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public virtual async Task SaveFileAsync(string path)
         {
             using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                await baseStream.CopyToAsync(fileStream);
+            }
+            Flush();
+        }
+
+        public virtual async Task OutFileAsync(string output_path)
+        {
+            CreateDirectory(output_path);
+            using (var fileStream = new FileStream(output_path, FileMode.Create, FileAccess.Write))
             {
                 await baseStream.CopyToAsync(fileStream);
             }
