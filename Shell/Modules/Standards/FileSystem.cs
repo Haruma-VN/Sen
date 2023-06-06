@@ -292,7 +292,6 @@ namespace Sen.Shell.Modules.Standards.IOModule
                 }
                 output_directory = path.Join(output_directory, directory);
             }
-            Console.WriteLine(output_directory);
             this.WriteFile<Generic_T>(path.Join(output_directory, requirement_file), data);
             return;
         }
@@ -595,6 +594,8 @@ namespace Sen.Shell.Modules.Standards.IOModule
         public override string Relative(string from, string to) => Path.GetRelativePath(from, to);
 
         public override string Resolve(string path) => Path.GetFullPath(path);
+
+        public static string FullPath(string path) => Path.GetFullPath(path);
 
         public override string Sep() => Path.DirectorySeparatorChar.ToString();
 

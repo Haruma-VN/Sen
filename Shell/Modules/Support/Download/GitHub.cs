@@ -102,6 +102,11 @@ namespace Sen.Shell.Modules.Support.Download
         // test: https://api.github.com/repos/Haruma-VN/Sen/releases/tags/scripts
         public static async Task DownloadScript(string script_dir, string link)
         {
+            var fs = new FileSystem();
+            if (fs.DirectoryExists(script_dir))
+            {
+                fs.DeleteDirectory(new string[] { script_dir });
+            }
             var json = new JsonImplement();
             var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
             var path = new Implement_Path();
@@ -114,7 +119,6 @@ namespace Sen.Shell.Modules.Support.Download
             var compression = new Compress();
             compression.UncompressZip(script_save, script_dir);
             // delete zip
-            var fs = new FileSystem();
             fs.DeleteDirectory(new string[] {script_save});
             return;
         }

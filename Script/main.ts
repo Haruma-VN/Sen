@@ -87,9 +87,7 @@ namespace Sen.Script {
                 `D:\\Workspace\\test\\PACKAGES`,
                 Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory,
             );
-            Console.Print(null, "Synchronous test");
-            rtons_test.forEach((file) => {
-                Console.Print(null, file);
+            rtons_test.forEach((file: string) => {
                 PvZ2Shell.RTONDecode(file, file.replace(/((\.rton))?$/i, ".json"));
             });
         } catch (error: unknown) {

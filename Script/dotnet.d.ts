@@ -1477,11 +1477,4 @@ declare namespace PvZ2Shell {
      * @returns RTON2JSON
      */
     export function RTONDecode(inFile: string, outFile: string): void;
-    /**
-     *
-     * @param inFile - Pass RTON files here as array
-     * @param outFile - Pass JSON output here as array
-     * @returns Multiple RTON2JSON
-     */
-    export function RTONDecodeAsync(inFiles: string[], outFiles: string[]): void;
 }

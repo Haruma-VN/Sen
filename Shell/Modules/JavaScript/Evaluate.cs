@@ -11,11 +11,10 @@ namespace Sen.Shell.Modules.JavaScript
 {
     public class Engine
     {
-        public static void Evaluate(ref string Script_Directory, string[] args)
+        public static void Evaluate(in string Script_Directory, string[] args)
         {
 
             var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
-            Script_Directory = path.Resolve(Script_Directory);
             var fs = new FileSystem();
             var main_js = path.Resolve($"{Script_Directory}/main.js");
             var SystemConsole = new SystemImplement();
@@ -44,16 +43,15 @@ namespace Sen.Shell.Modules.JavaScript
             }
             catch(Exception ex)
             {
-                EvaluateError(ref Script_Directory, ex);
+                EvaluateError(Script_Directory, ex);
             }
 
             return;
         }
 
-        public static void EvaluateError(ref string Script_Directory, Exception ex)
+        public static void EvaluateError(in string Script_Directory, Exception ex)
         {
             var path = new Implement_Path();
-            Script_Directory = path.Resolve(Script_Directory);
             var fs = new FileSystem();
             var SystemConsole = new SystemImplement();
             var engine = new Jint.Engine();
