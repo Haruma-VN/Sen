@@ -564,6 +564,11 @@ namespace Sen.Script.Modules.Exceptions {
             this.name = "cannot_read_file";
         }
     }
+    /**
+     *
+     * @param exception_type - Pass exception type
+     * @returns Execution load type
+     */
 
     export function ExecutionExceptionType(exception_type: string): void {
         Console.Print(
@@ -573,14 +578,26 @@ namespace Sen.Script.Modules.Exceptions {
         return;
     }
 
+    /**
+     *
+     * @param file_location - Pass file path here
+     * @returns Execution load print
+     */
+
     export function ExecutionLoadedFrom(file_location: string): void {
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
             `${Sen.Script.Modules.System.Default.Localization.GetString("exception_path")}`,
         );
-        Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `   ${file_location}`);
+        Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${file_location}`);
         return;
     }
+
+    /**
+     *
+     * @param message - Pass message here
+     * @returns Execution error
+     */
 
     export function ExecutionError(message: string): void {
         Console.Print(
@@ -590,7 +607,14 @@ namespace Sen.Script.Modules.Exceptions {
                 `${message}`,
             )}`,
         );
+        return;
     }
+
+    /**
+     *
+     * @param error - Print error test
+     * @returns
+     */
 
     export function PrintError<Generic_T extends Error, Generic_U extends string>(error: unknown): void {
         switch ((error as Generic_T).constructor) {

@@ -88,7 +88,12 @@ namespace Sen.Script.Modules.Interface.Execute {
      * function
      */
 
-    export type function_name = "js_evaluate" | "popcap_ptx_encode" | "popcap_ptx_decode";
+    export type function_name =
+        | "js_evaluate"
+        | "popcap_ptx_encode"
+        | "popcap_ptx_decode"
+        | "popcap_official_resources_split"
+        | "popcap_official_resources_merge";
 
     /**
      *
@@ -162,6 +167,38 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 break;
             }
+            case "popcap_official_resources_split": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(
+                        argument,
+                        argument.replace(/((\.json))?$/i, ".res"),
+                    );
+                } else {
+                    argument.forEach((arg: string) => {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(
+                            arg,
+                            arg.replace(/((\.json))?$/i, ".res"),
+                        );
+                    });
+                }
+                break;
+            }
+            case "popcap_official_resources_merge": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(
+                        argument,
+                        argument.replace(/((\.res))?$/i, ".json"),
+                    );
+                } else {
+                    argument.forEach((arg: string) => {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(
+                            arg,
+                            arg.replace(/((\.res))?$/i, ".json"),
+                        );
+                    });
+                }
+                break;
+            }
             default: {
                 throw new Sen.Script.Modules.Exceptions.RuntimeError(
                     Sen.Script.Modules.System.Default.Localization.GetString("function_not_found").replace(
@@ -169,7 +206,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         function_name,
                     ),
                     Sen.Script.Modules.Interface.Assert.function_json_location,
-                );
+                ) as never;
             }
         }
         return;

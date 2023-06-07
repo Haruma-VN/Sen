@@ -3,6 +3,11 @@ using System.Text.Json;
 using System.Text.Encodings.Web;
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
+    #pragma warning disable IDE0090
+    #pragma warning disable IDE0230
+    #pragma warning disable CS0414
+    #pragma warning disable IDE0060
+    #pragma warning disable CA2208
     public abstract class RTONHandlerAbstract
     {
         public abstract void Create_RTON_Decode(string inFile, string outFile);
@@ -11,8 +16,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
     {
         public override void Create_RTON_Decode(string inFile, string outFile)
         {
-            SenBuffer RtonFile = new SenBuffer(inFile);
-            SenBuffer JsonFile = RTONProcession.Decode(RtonFile, false);
+            var RtonFile = new SenBuffer(inFile);
+            var JsonFile = RTONProcession.Decode(RtonFile, false);
             JsonFile.OutFile(outFile);
         }
     }
@@ -35,41 +40,41 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
 
     public class RTONProcession
     {
-        static readonly string magic = "RTON";
+        public static readonly string magic = "RTON";
 
-        static readonly uint version = 1;
+        public static readonly uint version = 1;
 
-        static readonly string EOR = "DONE";
+        public static readonly string EOR = "DONE";
 
-        static readonly List<byte[]> R0x90List = new List<byte[]>();
+        public static readonly List<byte[]> R0x90List = new List<byte[]>();
 
-        static readonly List<byte[]> R0x92List = new List<byte[]>();
+        public static readonly List<byte[]> R0x92List = new List<byte[]>();
 
-        static readonly byte[] NULL = new byte[] { 0x2A };
+        public static readonly byte[] NULL = new byte[] { 0x2A };
 
-        static readonly byte[] RTID0 = new byte[] { 0x52, 0x54, 0x49, 0x44, 0x28, 0x30, 0x29 };
+        public static readonly byte[] RTID0 = new byte[] { 0x52, 0x54, 0x49, 0x44, 0x28, 0x30, 0x29 };
 
-        static readonly string Str_Null = "*";
+        public static readonly string Str_Null = "*";
 
-        static readonly string Str_RTID_Begin = "RTID(";
+        public static readonly string Str_RTID_Begin = "RTID(";
 
-        static readonly string Str_RTID_End = ")";
+        public static readonly string Str_RTID_End = ")";
 
-        static readonly string Str_RTID_0 = "RTID(0)";
+        public static readonly string Str_RTID_0 = "RTID(0)";
 
-        static readonly string Str_RTID_2 = "RTID({0}.{1}.{2:x8}@{3})";
+        public static readonly string Str_RTID_2 = "RTID({0}.{1}.{2:x8}@{3})";
 
-        static readonly string Str_RTID_3 = "RTID({0}@{1})";
+        public static readonly string Str_RTID_3 = "RTID({0}@{1})";
 
-        static readonly string Str_Binary = "$BINARY(\"{0}\", {1})";
+        public static readonly string Str_Binary = "$BINARY(\"{0}\", {1})";
 
-        static readonly string Str_Binary_Begin = "$BINARY(\"";
+        public static readonly string Str_Binary_Begin = "$BINARY(\"";
 
-        static readonly string Str_Binary_End = ")";
+        public static readonly string Str_Binary_End = ")";
 
-        static readonly string Str_Binary_Middle = "\", ";
+        public static readonly string Str_Binary_Middle = "\", ";
 
-        static byte[]? tempstring;
+        public static byte[]? tempstring;
 
         public static void Decrypt(SenBuffer RtonFile)
         {

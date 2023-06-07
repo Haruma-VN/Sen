@@ -61,5 +61,7 @@
     "input_height": "Input height",
     "popcap_ptx_encode": "PopCap PTX Encode",
     "popcap_ptx_decode": "PopCap PTX Decode",
-    "select_one_texture_format": "Select one texture format"
+    "select_one_texture_format": "Select one texture format",
+    "popcap_official_resources_split": "PopCap Official Resources Split",
+    "popcap_official_resources_merge": "PopCap Official Resources Merge"
 }

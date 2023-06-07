@@ -1174,7 +1174,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
         .ExtractOfficialAtlas {
         public static ExtractPvZ2AtlasUnofficialStructure(argument: Array<string>, method: "id" | "path"): void {
             // json must be unofficial
-            const json: string = argument.filter((file) => /((\.json))?$/i.test(file))[0];
+            const json: string = argument.find((file) => /((\.json))?$/i.test(file)) as string;
             const pngs: Array<string> = argument.filter((file) => /((.png))?$/i.test(file));
             const unofficial_subgroup: UnofficialSubgroupStandard =
                 Sen.Script.Modules.FileSystem.Json.ReadJson<UnofficialSubgroupStandard>(json);
@@ -1257,7 +1257,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             }
             DotNetBitmap.CropAndSaveImages(async_task);
             Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(
-                Path.Resolve(`${directory_contains}/atlas.json`),
+                Path.Resolve(`${directory_contains}\\atlas.json`),
                 this.CreateAtlasJsonFromUnofficial(resources_used, method, json),
             );
             return;
