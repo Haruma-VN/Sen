@@ -1,6 +1,8 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using System.Text.Json;
 using System.Text.Encodings.Web;
+using Sen.Shell.Modules.Standards;
+
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
     #pragma warning disable IDE0090
@@ -86,14 +88,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             R0x90List.Clear();
             R0x92List.Clear();
             Stream stream = new MemoryStream();
-            Utf8JsonWriter jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, Indented = true});
+            Utf8JsonWriter jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions { 
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, 
+                Indented = true
+            });
             if (DecryptFile)
             {
                 Decrypt(RtonFile);
             }
             string Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
-            if (Rton_magic != magic) throw new ArgumentException($"This file is not RTON: {RtonFile.filePath}");
+            if (Rton_magic != magic) throw new RTONException($"This file is not RTON", RtonFile.filePath ??= "undefined");
             if (Rton_ver != version) throw new ArgumentException();
             ReadObject(RtonFile, jsonWriter);
             string EOF = RtonFile.readString(4);

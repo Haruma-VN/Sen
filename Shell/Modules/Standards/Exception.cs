@@ -10,6 +10,7 @@ namespace Sen.Shell.Modules.Standards
     public enum StandardsException
     {
         RuntimeException,
+        RTONException,
     }
 
     public class RuntimeException : System.Exception
@@ -17,9 +18,9 @@ namespace Sen.Shell.Modules.Standards
 
         #pragma warning disable IDE1006
 
-        private StandardsException _errorCode { get; set; }
+        protected StandardsException _errorCode { get; set; }
 
-        private string _file_path { get; set; }
+        protected string _file_path { get; set; }
 
         public RuntimeException(string message, string file_path) : base(message)
         {
@@ -50,8 +51,14 @@ namespace Sen.Shell.Modules.Standards
                 }
             }
         }
+    }
 
+    public class RTONException : RuntimeException
+    {
 
-
+        public RTONException(string message, string file_path) : base(message, file_path)
+        {
+            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RTONException;
+        }
     }
 }

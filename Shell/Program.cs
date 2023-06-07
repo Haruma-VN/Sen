@@ -13,7 +13,7 @@ namespace Sen.Shell
             UserPlatform.Windows => Implement_Path.FullPath($"{Platform.CurrentDirectoryContainsShell}\\Scripts"),
             UserPlatform.Linux => Implement_Path.FullPath($"{Platform.CurrentDirectoryContainsShell}\\Scripts"),
             UserPlatform.Macintosh => Implement_Path.FullPath($"{Platform.CurrentDirectoryContainsShell}\\Scripts"),
-            UserPlatform.Android => Implement_Path.FullPath($"/sdcard/data/com.harumavn.sen.pvz2tool/Scripts"),
+            UserPlatform.Android => Implement_Path.FullPath($"storage/emulated/0/Android/data/com.vn.haruma.sen/scripts/"),
             UserPlatform.iOS => Implement_Path.FullPath($"?unknown"),
             _ => throw new Exception($"Unknown"),
         };
