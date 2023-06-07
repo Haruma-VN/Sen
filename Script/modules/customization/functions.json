@@ -4,5 +4,17 @@
         "include": [".js"],
         "exclude": [],
         "type": "file"
+    },
+    "popcap_ptx_encode": {
+        "func_number": 2,
+        "include": [".png"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_ptx_decode": {
+        "func_number": 3,
+        "include": [".ptx"],
+        "exclude": [],
+        "type": "file"
     }
 }

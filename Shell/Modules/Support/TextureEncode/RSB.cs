@@ -2069,7 +2069,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             Rgba32[] imageData = Encode_PVRTC1_4BPP_Block(image, ref width, height);
             PVRTC.PvrTcPacket[] packets = PVRTC.Encode_RGBA_4BPP(imageData, width);
             int packets_length = packets.Length;
-            SenBuffer image_encode = new SenBuffer();
+            var image_encode = new SenBuffer();
             for (var i = 0; i < packets_length; i++)
             {
                 image_encode.writeBigUInt64LE(packets[i].PvrTcWord);

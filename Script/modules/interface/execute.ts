@@ -13,6 +13,24 @@ namespace Sen.Script.Modules.Interface.Execute {
             ),
         );
         if (Array.isArray(argument)) {
+            Sen.Script.Modules.Interface.Assert.FunctionCollection.forEach((func: string) => {
+                const assert_test: boolean = argument.every((arg: string) =>
+                    Sen.Script.Modules.FileSystem.FilterFilePath(
+                        arg,
+                        Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].include,
+                        Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].exclude,
+                    ),
+                );
+                if (assert_test) {
+                    Console.Printf(
+                        null,
+                        `      ${
+                            Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number
+                        }. ${Sen.Script.Modules.System.Default.Localization.GetString(func)}`,
+                    );
+                    available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
+                }
+            });
         } else {
             Sen.Script.Modules.Interface.Assert.FunctionCollection.forEach((func: string) => {
                 if (
@@ -32,10 +50,21 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
             });
         }
+        if (available.length === 0) {
+            Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("no_function_were_found"),
+                ),
+            );
+            return;
+        }
         const func_name: function_name = Sen.Script.Modules.Interface.Execute.GetFunctionName(
             Sen.Script.Modules.Interface.Arguments.TestInput(available),
         );
         Sen.Script.Modules.Interface.Execute.Evaluate(func_name, argument);
+        return;
     }
 
     /**
@@ -55,7 +84,18 @@ namespace Sen.Script.Modules.Interface.Execute {
         return Sen.Script.Modules.Interface.Assert.FunctionCollection[index] as function_name;
     }
 
-    export type function_name = "js_evaluate" | "";
+    /**
+     * function
+     */
+
+    export type function_name = "js_evaluate" | "popcap_ptx_encode" | "popcap_ptx_decode";
+
+    /**
+     *
+     * @param function_name - Function name
+     * @param argument - Pass argument
+     * @returns Evaluate the tool
+     */
 
     export function Evaluate(
         function_name: Sen.Script.Modules.Interface.Execute.function_name,
@@ -66,7 +106,59 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(argument);
                 } else {
-                    argument.forEach((arg) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                    argument.forEach((arg: string) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                }
+                break;
+            }
+            case "popcap_ptx_decode": {
+                if (!Array.isArray(argument)) {
+                    const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
+                    const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<number> =
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
+                        argument,
+                        Path.Resolve(`${Path.Dirname(argument)}\\${Path.Parse(argument).name_without_extension}.png`),
+                        dimension.width,
+                        dimension.height,
+                        encode,
+                    );
+                } else {
+                    argument.forEach((arg: string) => {
+                        const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
+                        const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<number> =
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
+                            argument,
+                            Path.Resolve(`${Path.Dirname(arg)}\\${Path.Parse(arg).name_without_extension}.png`),
+                            dimension.width,
+                            dimension.height,
+                            encode,
+                        );
+                    });
+                }
+                break;
+            }
+            case "popcap_ptx_encode": {
+                if (!Array.isArray(argument)) {
+                    const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
+                        argument,
+                        Path.Resolve(`${Path.Dirname(argument)}\\${Path.Parse(argument).name_without_extension}.ptx`),
+                        encode,
+                    );
+                } else {
+                    argument.forEach((arg: string) => {
+                        const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
+                            argument,
+                            Path.Resolve(`${Path.Dirname(arg)}\\${Path.Parse(arg).name_without_extension}.ptx`),
+                            encode,
+                        );
+                    });
                 }
                 break;
             }
@@ -80,5 +172,6 @@ namespace Sen.Script.Modules.Interface.Execute {
                 );
             }
         }
+        return;
     }
 }
