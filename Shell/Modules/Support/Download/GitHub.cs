@@ -109,7 +109,7 @@ namespace Sen.Shell.Modules.Support.Download
             }
             var json = new JsonImplement();
             var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
-            var path = new Implement_Path();
+            var path = new ImplementPath();
             if(github_api_json.assets == null)
             {
                 throw new Exception($"assets not found from github api");
@@ -119,7 +119,7 @@ namespace Sen.Shell.Modules.Support.Download
             var compression = new Compress();
             compression.UncompressZip(script_save, script_dir);
             // delete zip
-            fs.DeleteDirectory(new string[] {script_save});
+            fs.DeleteFile(script_save);
             return;
         }
 

@@ -787,7 +787,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         }
         public virtual void CreateDirectory(string output_path)
         {
-            var path = new Implement_Path();
+            var path = new ImplementPath();
             var fs = new FileSystem();
             if (!fs.DirectoryExists(path.GetDirectoryName(output_path)))
             {

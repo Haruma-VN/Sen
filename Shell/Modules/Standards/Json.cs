@@ -24,7 +24,7 @@ namespace Sen.Shell.Modules.Standards
         public override string Get(string property, string ScriptDirectory, string Language)
         {
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
-            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
+            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
             var file_path = path.Resolve($"{ScriptDirectory}/{Language}.json");
             if (!fs.FileExists(file_path))
             {

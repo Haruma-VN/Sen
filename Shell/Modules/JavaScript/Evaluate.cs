@@ -14,7 +14,7 @@ namespace Sen.Shell.Modules.JavaScript
         public static void Evaluate(in string Script_Directory, string[] args)
         {
 
-            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
+            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
             var fs = new FileSystem();
             var main_js = path.Resolve($"{Script_Directory}/main.js");
             var SystemConsole = new SystemImplement();
@@ -52,7 +52,7 @@ namespace Sen.Shell.Modules.JavaScript
 
         public static void EvaluateError(in string Script_Directory, Exception ex)
         {
-            var path = new Implement_Path();
+            var path = new ImplementPath();
             var fs = new FileSystem();
             var SystemConsole = new SystemImplement();
             var engine = new Jint.Engine();

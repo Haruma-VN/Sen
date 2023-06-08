@@ -55,7 +55,15 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public abstract Task WriteBytesAsync(string filepath, byte[] data);
 
+        public abstract void DeleteFile(string filePath);
 
+        public abstract void MoveFile(string filePath, string outpath);
+
+        public abstract void MoveDirectory(string filePath, string outpath);
+
+        public abstract void RenameFile(string filePath, string newName);
+
+        public abstract void RenameDirectory(string filePath, string newName);
 
     }
 
@@ -69,6 +77,17 @@ namespace Sen.Shell.Modules.Standards.IOModule
     {
 
         public FileSystem() { }
+
+
+
+        public override void DeleteFile(string filePath)
+        {
+            if(this.FileExists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            return;
+        }
 
         protected override void WriteBufferToFile(string filePath, byte[] buffer)
         {
@@ -283,7 +302,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             var last_index = file_path_collection.Count - 1;
             string requirement_file = file_path_collection.ElementAt<string>(last_index);
             file_path_collection.RemoveAt(last_index);
-            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
+            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
             var output_directory = "";
             foreach(var directory in file_path_collection.ToArray<string>())
             {
@@ -303,7 +322,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             var last_index = file_path_collection.Count - 1;
             var requirement_file = file_path_collection[last_index];
             file_path_collection.RemoveAt(last_index);
-            var path = new Sen.Shell.Modules.Standards.IOModule.Implement_Path();
+            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
             var output_directory = "";
             foreach (var directory in file_path_collection.ToArray<string>())
             {
@@ -344,7 +363,38 @@ namespace Sen.Shell.Modules.Standards.IOModule
             return;
         }
 
+        public override void MoveFile(string filePath, string outpath)
+        {
+            File.Move(filePath, outpath); 
+            return;
+        }
+
+        public override void MoveDirectory(string filePath, string outpath)
+        {
+            Directory.Move(filePath, outpath);
+            return;
+        }
+
+        public override void RenameFile(string filePath, string newName)
+        {
+            var path = new ImplementPath();
+            string directoryPath = path.GetDirectoryName(filePath);
+            string newFilePath = path.Join(directoryPath, newName);
+            File.Move(filePath, newFilePath);
+            return;
+        }
+
+        public override void RenameDirectory(string filePath, string newName)
+        {
+            #pragma warning disable CS8602
+            var path = new ImplementPath();
+            string parentDirectoryPath = Directory.GetParent(filePath).FullName;
+            string newDirectoryPath = path.Join(parentDirectoryPath, newName);
+            Directory.Move(filePath, newDirectoryPath);
+            return;
+        }
     }
+
 
     public class FormatRecords
     {
@@ -545,7 +595,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
     }
 
 
-    public class Implement_Path : Path_Abstract
+    public class ImplementPath : Path_Abstract
     {
         public override string Basename(string path, params string[] suffixes)
         {

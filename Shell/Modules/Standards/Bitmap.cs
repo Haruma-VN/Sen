@@ -365,7 +365,7 @@ namespace Sen.Shell.Modules.Standards.Bitmap
         public override void ExportGifToPngs(string gifImagePath, string outputDirectory, string frame_name)
         {
              var fs = new IOModule.FileSystem();
-             var path = new IOModule.Implement_Path();
+             var path = new IOModule.ImplementPath();
              using var gifImage = Image.Load<Rgba32>(gifImagePath);
              {
                 if(!fs.DirectoryExists(outputDirectory))
@@ -402,7 +402,7 @@ namespace Sen.Shell.Modules.Standards.Bitmap
         {
             using var compositeImage = new Image<Rgba32>(width, height);
             {
-                var path = new IOModule.Implement_Path();
+                var path = new IOModule.ImplementPath();
                 foreach (var jsImage in images)
                 {
                     var x = (int)jsImage.x;
