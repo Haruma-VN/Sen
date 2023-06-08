@@ -53,9 +53,10 @@
         "exclude": [],
         "type": "directory"
     },
-    "popcap_atlas_split": {
+    "popcap_official_atlas_split": {
+        "#comment": "This function can only be executed when you drag a png & json to tool",
         "func_number": 10,
-        "include": [".json", ".png"],
+        "include": [],
         "exclude": [],
         "type": "unknown"
     }

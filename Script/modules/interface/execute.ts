@@ -13,7 +13,19 @@ namespace Sen.Script.Modules.Interface.Execute {
             ),
         );
         if (Array.isArray(argument)) {
-            Sen.Script.Modules.Interface.Assert.FunctionCollection.forEach((func: string) => {
+            for (const func of Sen.Script.Modules.Interface.Assert.FunctionCollection) {
+                if (func === "popcap_official_atlas_split") {
+                    if (Sen.Script.Modules.Interface.Assert.CheckForJsonAndPng(argument)) {
+                        Console.Printf(
+                            null,
+                            `      ${
+                                Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number
+                            }. ${Sen.Script.Modules.System.Default.Localization.GetString(func)}`,
+                        );
+                        available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
+                        continue;
+                    }
+                }
                 const assert_test: boolean = argument.every((arg: string) =>
                     Sen.Script.Modules.FileSystem.FilterFilePath(
                         arg,
@@ -30,7 +42,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     );
                     available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
                 }
-            });
+            }
         } else {
             Sen.Script.Modules.Interface.Assert.FunctionCollection.forEach((func: string) => {
                 if (
@@ -93,7 +105,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_ptx_encode"
         | "popcap_ptx_decode"
         | "popcap_official_resources_split"
-        | "popcap_official_resources_merge";
+        | "popcap_official_resources_merge"
+        | "popcap_official_atlas_split";
 
     /**
      *
@@ -123,7 +136,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
                     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
                         argument,
-                        Path.Resolve(`${Path.Dirname(argument)}\\${Path.Parse(argument).name_without_extension}.png`),
+                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.png`),
                         dimension.width,
                         dimension.height,
                         encode,
@@ -136,7 +149,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
                             argument,
-                            Path.Resolve(`${Path.Dirname(arg)}\\${Path.Parse(arg).name_without_extension}.png`),
+                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.png`),
                             dimension.width,
                             dimension.height,
                             encode,
@@ -151,7 +164,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
                     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
                         argument,
-                        Path.Resolve(`${Path.Dirname(argument)}\\${Path.Parse(argument).name_without_extension}.ptx`),
+                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.ptx`),
                         encode,
                     );
                 } else {
@@ -160,7 +173,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
                             argument,
-                            Path.Resolve(`${Path.Dirname(arg)}\\${Path.Parse(arg).name_without_extension}.ptx`),
+                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.ptx`),
                             encode,
                         );
                     });
@@ -196,6 +209,16 @@ namespace Sen.Script.Modules.Interface.Execute {
                             arg.replace(/((\.res))?$/i, ".json"),
                         );
                     });
+                }
+                break;
+            }
+            case "popcap_official_atlas_split": {
+                if (Array.isArray(argument)) {
+                    let method: "id" | "path" = "id";
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractOfficialAtlas.ExtractPvZ2AtlasOfficialStructure(
+                        argument,
+                        method,
+                    );
                 }
                 break;
             }

@@ -37,7 +37,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                 Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_path);
             this.CheckOfficial<Resources_Group_Structure_Template>(resources_json, file_path);
             Fs.CreateDirectory(output_directory);
-            const subgroup_directory: string = Path.Resolve(`${output_directory}\\subgroup`);
+            const subgroup_directory: string = Path.Resolve(`${output_directory}/subgroup`);
             Fs.CreateDirectory(subgroup_directory);
             const subgroup_json: official_subgroup_json = {};
             for (const resource of resources_json.groups) {
@@ -48,7 +48,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                 }
                 if ("resources" in resource && "parent" in resource) {
                     Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
-                        Path.Resolve(`${subgroup_directory}\\${resource.id}.json`),
+                        Path.Resolve(`${subgroup_directory}/${resource.id}.json`),
                         resource,
                     );
                 }
@@ -73,14 +73,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                             },
                         };
                         Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
-                            Path.Resolve(`${subgroup_directory}\\${resource.id}.json`),
+                            Path.Resolve(`${subgroup_directory}/${resource.id}.json`),
                             resource,
                         );
                     }
                 }
             }
             Sen.Script.Modules.FileSystem.Json.WriteJson<official_subgroup_json>(
-                Path.Resolve(`${output_directory}\\content.json`),
+                Path.Resolve(`${output_directory}/content.json`),
                 subgroup_json,
             );
             return;
@@ -157,7 +157,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                 // handle
                 const subgroups: Array<string> = Object.keys(content_json[contents[i]].subgroups);
                 for (let j_index: number = 0; j_index < subgroups.length; ++j_index) {
-                    const subgroup_path: string = Path.Resolve(`${subgroup_dir}\\${subgroups[j_index]}.json`);
+                    const subgroup_path: string = Path.Resolve(`${subgroup_dir}/${subgroups[j_index]}.json`);
                     if (!Fs.FileExists(subgroup_path)) {
                         throw new Sen.Script.Modules.Exceptions.MissingFile(
                             Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(
@@ -183,7 +183,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
             directory_path: string,
             output_file: string,
         ): void {
-            const content_json_path: string = Path.Resolve(`${directory_path}\\content.json`);
+            const content_json_path: string = Path.Resolve(`${directory_path}/content.json`);
             if (!Fs.FileExists(content_json_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingFile(
                     Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(
@@ -195,7 +195,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
             }
             const subgroup_json: official_subgroup_json =
                 Sen.Script.Modules.FileSystem.Json.ReadJson<official_subgroup_json>(content_json_path);
-            const subgroup_dir: string = Path.Resolve(`${directory_path}\\subgroup`);
+            const subgroup_dir: string = Path.Resolve(`${directory_path}/subgroup`);
             this.CheckDirectoryContainsSubgroups<official_subgroup_json>(subgroup_json, subgroup_dir);
             const directory_files: Array<string> = Fs.ReadDirectory(
                 subgroup_dir,
@@ -235,7 +235,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                     resources_json.groups.push(composite_object);
                 }
                 for (const subgroup of subgroups) {
-                    const subgroup_json_path: string = Path.Resolve(`${subgroup_dir}\\${subgroup}.json`);
+                    const subgroup_json_path: string = Path.Resolve(`${subgroup_dir}/${subgroup}.json`);
                     const deserialized_subgroup: resource_atlas_and_sprites =
                         Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(
                             subgroup_json_path,

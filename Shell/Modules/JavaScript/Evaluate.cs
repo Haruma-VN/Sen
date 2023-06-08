@@ -49,6 +49,7 @@ namespace Sen.Shell.Modules.JavaScript
             return;
         }
 
+
         public static void EvaluateError(in string Script_Directory, Exception ex)
         {
             var path = new Implement_Path();

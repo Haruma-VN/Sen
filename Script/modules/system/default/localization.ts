@@ -7,7 +7,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
     export function GetString(property: string): string {
         return DotNetLocalization.Get(
             property,
-            Path.Resolve(`${MainScriptDirectory}\\modules\\customization\\language`),
+            Path.Resolve(`${MainScriptDirectory}/modules/customization/language`),
             "English",
         );
     }

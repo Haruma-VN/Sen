@@ -9,6 +9,15 @@ namespace Sen.Script.Modules.Exceptions {
     }
 
     /**
+     * Exception from .NET
+     */
+
+    export enum StandardsException {
+        RuntimeException,
+        RTONException,
+    }
+
+    /**
      * Implementing RuntimeError for JS
      */
 
@@ -1001,7 +1010,7 @@ namespace Sen.Script.Modules.Exceptions {
         );
         try {
             Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(
-                Path.Resolve(`${Sen.Script.Modules.Interface.Assert.debug_directory}\\${Date.now()}.json`),
+                Path.Resolve(`${Sen.Script.Modules.Interface.Assert.debug_directory}/${Date.now()}.json`),
                 (error as Error).stack !== null &&
                     (error as Error).stack !== undefined &&
                     (error as Error).stack !== void 0 &&

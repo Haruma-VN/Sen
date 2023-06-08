@@ -88,8 +88,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             R0x90List.Clear();
             R0x92List.Clear();
             Stream stream = new MemoryStream();
-            Utf8JsonWriter jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions { 
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, 
+            Utf8JsonWriter jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 Indented = true
             });
             if (DecryptFile)

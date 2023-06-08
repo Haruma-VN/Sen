@@ -22,7 +22,7 @@ namespace Sen.Script.Modules.Interface.Assert {
             });
             Sen.Script.Modules.Interface.Execute.ExecuteArgument(argument);
         } else {
-            argument.forEach((arg, index) => {
+            argument.forEach((arg: string, index: number) => {
                 PrintPath(arg, {
                     current: index + 1,
                     all: argument.length,
@@ -51,7 +51,7 @@ namespace Sen.Script.Modules.Interface.Assert {
      */
 
     export const function_json_location: string = Path.Resolve(
-        `${MainScriptDirectory}\\modules\\customization\\functions.json`,
+        `${MainScriptDirectory}/modules/customization/functions.json`,
     );
 
     /**
@@ -299,7 +299,7 @@ namespace Sen.Script.Modules.Interface.Assert {
         return;
     }
 
-    export const debug_directory: string = Path.Resolve(`${Path.Dirname(MainScriptDirectory)}\\Debug`);
+    export const debug_directory: string = Path.Resolve(`${Path.Dirname(MainScriptDirectory)}/Debug`);
 
     /**
      *
@@ -311,5 +311,32 @@ namespace Sen.Script.Modules.Interface.Assert {
             Fs.CreateDirectory(debug_directory);
         }
         return;
+    }
+
+    /**
+     *
+     * @param argument - Provide argument
+     * @returns If contains, return true
+     */
+
+    export function CheckForJsonAndPng(argument: string[]): boolean {
+        const jsonRegex: RegExp = /\.json$/i;
+        const pngRegex: RegExp = /\.png$/i;
+        let hasJson: boolean = false;
+        let hasPng: boolean = false;
+
+        for (const filePath of argument) {
+            if (jsonRegex.test(filePath)) {
+                hasJson = true;
+            } else if (pngRegex.test(filePath)) {
+                hasPng = true;
+            }
+
+            if (hasJson && hasPng) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

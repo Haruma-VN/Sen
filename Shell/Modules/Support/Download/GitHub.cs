@@ -114,7 +114,7 @@ namespace Sen.Shell.Modules.Support.Download
             {
                 throw new Exception($"assets not found from github api");
             }
-            var script_save = path.Resolve($"{path.Dirname($"{script_dir}")}\\scripts.zip");
+            var script_save = path.Resolve($"{path.Dirname($"{script_dir}")}/scripts.zip");
             await GitHub.DownloadFileAsync(github_api_json.assets[0].browser_download_url, (script_save), $"Sen");
             var compression = new Compress();
             compression.UncompressZip(script_save, script_dir);

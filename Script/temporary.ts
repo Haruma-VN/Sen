@@ -94,15 +94,15 @@
 //     "D:/Res/Tre's Temp File/res.test",
 // );
 // Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(
-//     "D:\\Res\\Tre's Temp File\\test\\ZombieSkycityZombossGroup_1536.sprite",
+//     "D:/Res/Tre's Temp File/test/ZombieSkycityZombossGroup_1536.sprite",
 //     4096,
 //     4096,
 // );
 // Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractOfficialAtlas.ExtractPvZ2AtlasOfficialStructure(
 //     [
-//         "D:\\Res\\Tre's Temp File\\test\\ZombieSkycityZombossGroup_1536.json",
-//         "D:\\Res\\Tre's Temp File\\test\\ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
-//         "D:\\Res\\Tre's Temp File\\test\\ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
+//         "D:/Res/Tre's Temp File/test/ZombieSkycityZombossGroup_1536.json",
+//         "D:/Res/Tre's Temp File/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_00.png",
+//         "D:/Res/Tre's Temp File/test/ZOMBIESKYCITYZOMBOSSGROUP_1536_01.png",
 //     ],
 //     "id",
 // );

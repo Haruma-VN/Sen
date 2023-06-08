@@ -54,7 +54,7 @@
     "missing_in": "Missing {1} in {2}",
     "js_evaluate": "JS Evaluate",
     "all_functions_loaded": "All functions loaded",
-    "function_not_found": "Function {} not found, expected implement",
+    "function_not_found": "Function {} not found, expected implementation",
     "no_function_were_found": "No functions were found to be applied",
     "not_enough_parameter_to_evaluate": "Not enough parameter to evaluate",
     "input_width": "Input width",
@@ -63,5 +63,6 @@
     "popcap_ptx_decode": "PopCap PTX Decode",
     "select_one_texture_format": "Select one texture format",
     "popcap_official_resources_split": "PopCap Official Resources Split",
-    "popcap_official_resources_merge": "PopCap Official Resources Merge"
+    "popcap_official_resources_merge": "PopCap Official Resources Merge",
+    "popcap_official_atlas_split": "PopCap Official Atlas Split"
 }

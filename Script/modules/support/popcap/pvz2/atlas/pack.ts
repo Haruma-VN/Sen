@@ -264,7 +264,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
          */
 
         protected static CheckWholeDirectory(directory_path: string): void {
-            const atlas_json_path: string = Path.Resolve(`${directory_path}\\atlas.json`);
+            const atlas_json_path: string = Path.Resolve(`${directory_path}/atlas.json`);
             if (!Fs.FileExists(atlas_json_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingFile(
                     `${Sen.Script.Modules.System.Default.Localization.GetString(`no_such_file`).replace(
@@ -274,7 +274,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     atlas_json_path,
                 );
             }
-            const media_path: string = Path.Resolve(`${directory_path}\\media`);
+            const media_path: string = Path.Resolve(`${directory_path}/media`);
             if (!Fs.DirectoryExists(media_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingDirectory(
                     `${Sen.Script.Modules.System.Default.Localization.GetString(`no_such_directory`).replace(
@@ -289,7 +289,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
 
         protected static CheckWholeMemberIfExists(media_path: string, ids_collection: Array<string>): void {
             for (const id of ids_collection) {
-                const file: string = Path.Resolve(`${media_path}\\${id}.png`);
+                const file: string = Path.Resolve(`${media_path}/${id}.png`);
                 if (!Fs.FileExists(file)) {
                     throw new Sen.Script.Modules.Exceptions.MissingFile(
                         `${Sen.Script.Modules.System.Default.Localization.GetString(`no_such_file`).replace(
@@ -494,8 +494,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
 
         public static PackForOfficialSubgroupStructure(directory_path: string, width: int, height: int): void {
             this.CheckWholeDirectory(directory_path);
-            const atlas_json_path: string = Path.Resolve(`${directory_path}\\atlas.json`);
-            const media_path: string = Path.Resolve(`${directory_path}\\media`);
+            const atlas_json_path: string = Path.Resolve(`${directory_path}/atlas.json`);
+            const media_path: string = Path.Resolve(`${directory_path}/media`);
             const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson =
                 Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
                     atlas_json_path,
@@ -511,14 +511,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             for (const data of packable_datas) {
                 if (is_path) {
                     const dimension: BitMap.Constraints.ImageInfo<int> = DotNetBitmap.GetDimension<int>(
-                        Path.Resolve(`${media_path}\\${data.path.at(-1)}.png`),
+                        Path.Resolve(`${media_path}/${data.path.at(-1)}.png`),
                     );
                     (data as MaxRectsPackableData).width = dimension.width;
                     (data as MaxRectsPackableData).height = dimension.height;
                     (data as MaxRectsPackableData).file_path = Path.Resolve(dimension.file_path);
                 } else {
                     const dimension: BitMap.Constraints.ImageInfo<int> = DotNetBitmap.GetDimension<int>(
-                        Path.Resolve(`${media_path}\\${data.id}.png`),
+                        Path.Resolve(`${media_path}/${data.id}.png`),
                     );
                     (data as MaxRectsPackableData).width = dimension.width;
                     (data as MaxRectsPackableData).height = dimension.height;
@@ -612,7 +612,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 );
             }
             Sen.Script.Modules.FileSystem.Json.WriteJson<resource_atlas_and_sprites>(
-                `${Path.Resolve(Path.Dirname(directory_path))}\\${atlas_json.subgroup}.json`,
+                `${Path.Resolve(Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`,
                 subgroup_output,
             );
             return;
@@ -626,8 +626,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
 
         public static PackForUnofficialSubgroupStructure(directory_path: string, width: int, height: int): void {
             this.CheckWholeDirectory(directory_path);
-            const atlas_json_path: string = Path.Resolve(`${directory_path}\\atlas.json`);
-            const media_path: string = Path.Resolve(`${directory_path}\\media`);
+            const atlas_json_path: string = Path.Resolve(`${directory_path}/atlas.json`);
+            const media_path: string = Path.Resolve(`${directory_path}/media`);
             const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson =
                 Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
                     atlas_json_path,
@@ -643,14 +643,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             for (const data of packable_datas) {
                 if (is_path) {
                     const dimension: BitMap.Constraints.ImageInfo<int> = DotNetBitmap.GetDimension<int>(
-                        Path.Resolve(`${media_path}\\${data.path.at(-1)}.png`),
+                        Path.Resolve(`${media_path}/${data.path.at(-1)}.png`),
                     );
                     (data as MaxRectsPackableData).width = dimension.width;
                     (data as MaxRectsPackableData).height = dimension.height;
                     (data as MaxRectsPackableData).file_path = Path.Resolve(dimension.file_path);
                 } else {
                     const dimension: BitMap.Constraints.ImageInfo<int> = DotNetBitmap.GetDimension<int>(
-                        Path.Resolve(`${media_path}\\${data.id}.png`),
+                        Path.Resolve(`${media_path}/${data.id}.png`),
                     );
                     (data as MaxRectsPackableData).width = dimension.width;
                     (data as MaxRectsPackableData).height = dimension.height;
@@ -744,7 +744,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 );
             }
             Sen.Script.Modules.FileSystem.Json.WriteJson<resource_atlas_and_sprites>(
-                `${Path.Resolve(Path.Dirname(directory_path))}\\${atlas_json.subgroup}.json`,
+                `${Path.Resolve(Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`,
                 subgroup_output,
             );
             return;

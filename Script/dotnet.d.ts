@@ -1223,11 +1223,12 @@ declare namespace DotNetSystem {
         readonly innerException: Exception | null;
         readonly source: string | null;
         readonly helpLink: string | null;
+        readonly errorCode: Sen.Script.Modules.Exceptions.StandardsException;
 
         toString(): string;
     }
 
-    class SenException extends Exception {
+    class RuntimeException extends Exception {
         constructor(public message?: string, public file_path?: string): void;
     }
 }

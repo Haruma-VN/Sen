@@ -1082,7 +1082,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 resources: [],
             };
             const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
-            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}\\media`);
+            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/media`);
             Fs.CreateDirectory(directory_contains);
             Fs.CreateDirectory(directory_contains_sprite);
             const async_task: Array<AsyncTaskImageSplit> = new Array();
@@ -1184,7 +1184,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             };
             const parents: Array<string> = Object.keys(unofficial_subgroup.packet);
             const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
-            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}\\media`);
+            const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/media`);
             Fs.CreateDirectory(directory_contains);
             Fs.CreateDirectory(directory_contains_sprite);
             const async_task: Array<AsyncTaskImageSplit> = new Array();
@@ -1257,7 +1257,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             }
             DotNetBitmap.CropAndSaveImages(async_task);
             Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(
-                Path.Resolve(`${directory_contains}\\atlas.json`),
+                Path.Resolve(`${directory_contains}/atlas.json`),
                 this.CreateAtlasJsonFromUnofficial(resources_used, method, json),
             );
             return;
