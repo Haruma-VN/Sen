@@ -53,6 +53,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract void SupportUtf8Console();
 
+        public abstract string CurrentUserPlatform();
+
     }
 
     public class Platform : Platform_Abstract
@@ -83,7 +85,29 @@ namespace Sen.Shell.Modules.Standards
             }
         }
 
-        #pragma warning disable CS8601
+        public override string CurrentUserPlatform()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return "Windows";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return "Linux";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return "Macintosh";
+            }
+            else
+            {
+                return "Unknown";
+            }
+        }
+
+
+
+#pragma warning disable CS8601
 
         public readonly static string CurrentDirectoryContainsShell = Path.GetDirectoryName(Environment.ProcessPath);
 

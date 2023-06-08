@@ -63,7 +63,7 @@ namespace Sen.Script {
                 DotNetPlatform.CurrentPlatform() === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)
                     ? "Console"
                     : "GUI"
-            } ~ Under development test`,
+            } ~ ${DotNetPlatform.CurrentUserPlatform()}`,
         );
         const time_start: number = Date.now();
         Sen.Script.LoadModules(Sen.Script.ScriptModules);

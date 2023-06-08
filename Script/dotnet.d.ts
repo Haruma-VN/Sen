@@ -37,6 +37,12 @@ declare namespace DotNetPlatform {
      */
 
     export function SupportUtf8Console(): void;
+
+    /**
+     * @returns current user platform
+     */
+
+    export function CurrentUserPlatform(): string;
 }
 
 /**
@@ -213,7 +219,47 @@ declare namespace Fs {
         ReadOption: Sen.Script.Modules.FileSystem.Constraints.ReadDirectory,
     ): Array<string>;
 
-    export function ReadJson<Generic_T>(file_path: string): Generic_T;
+    /**
+     *
+     * @param filePath - Pass file path here
+     * @returns Deleted file
+     */
+
+    export function DeleteFile(filePath: string): void;
+
+    /**
+     *
+     * @param input - Pass file path to move
+     * @param output - Pass output path
+     * @returns Move file success
+     */
+
+    export function MoveFile(input: string, output: string): void;
+    /**
+     *
+     * @param input - Pass dir path to move
+     * @param output - Pass output path
+     * @returns Move dir success
+     */
+
+    export function MoveDirectory(input: string, output: string): void;
+    /**
+     *
+     * @param input - Pass file path to rename
+     * @param new_name - New name
+     * @returns Rename file success
+     */
+
+    export function RenameFile(input: string, new_name: string): void;
+    /**
+     *
+     *
+     * @param input - Pass directory path to rename
+     * @param new_name - New name
+     * @returns Rename directory success
+     */
+
+    export function RenameDirectory(input: string, new_name: string): void;
 }
 
 declare namespace TypeChecker {
