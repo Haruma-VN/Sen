@@ -21,13 +21,16 @@ namespace Sen.Shell.Modules.Support.Download
                 case UserPlatform.Windows:
                     {
                         string bat = Path.GetFullPath($"{Sen.Shell.Program.Script_Directory}/shell.bat");
+                        string batrun = Path.GetFullPath($"{Sen.Shell.Program.Script_Directory}/shellrun.bat");
                         if(fs.FileExists( bat ) )
                         {
                             fs.DeleteFile(bat);
                         }
-                        string current_shell = Path.GetFullPath($"{path.Dirname(Sen.Shell.Program.Script_Directory)}/shell.exe");
-                        string new_shell = Path.GetFullPath($"{path.Dirname(Sen.Shell.Program.Script_Directory)}/shell_new");
-                        fs.WriteText(bat, $"@echo off\r\nset \"currentShellPath={current_shell}\"\r\nset \"newShellPath={new_shell}\"\r\n\r\ntasklist /fi \"imagename eq %currentShellPath%\" | find /i \"%currentShellPath%\" >nul\r\n\r\nif errorlevel 1 (\r\n    rem Program is not running.\r\n) else (\r\n    taskkill /f /im \"%currentShellPath%\" >nul 2>&1\r\n)\r\n\r\nif not exist \"%currentShellPath%\" exit /b\r\nmove /y \"%newShellPath%\" \"%currentShellPath%\" >nul 2>&1\r\nfor %%F in (\"%currentShellPath%\") do (\r\n    ren \"%%F\" \"%%~nxF\" >nul 2>&1\r\n)\r\n\r\nexit /b\r\n", EncodingType.UTF8);
+                        string currentPath = Path.GetFullPath($"{path.Dirname(Sen.Shell.Program.Script_Directory)}");
+                        string currentShellName = "shell.exe";
+                        string newShellName = "shell_new";
+                        fs.WriteText(bat, $"@echo off\r\ncd {Path.GetFullPath($"{Sen.Shell.Program.Script_Directory}")}\r\nstart shellrun.bat /popup\r\nexit", EncodingType.UTF8);
+                        fs.WriteText(batrun, $"@echo off\r\nset currentPath={currentPath}\r\nset currentShellName={currentShellName} \r\nset newShellName={newShellName}\r\n\r\ncd %currentPath%\r\nStart /WAIT taskkill /f /im %currentShellName%\r\nTimeout /t 2 >NUL\r\nif not exist %newShellName% exit \r\nif exist %currentShellName% del %currentShellName%\r\nren %newShellName% %currentShellName%\r\nexit", EncodingType.UTF8);
                         break;
                     }
                 case UserPlatform.Macintosh:
@@ -39,7 +42,7 @@ namespace Sen.Shell.Modules.Support.Download
                             fs.DeleteFile(sh);
                             string current_shell = Path.GetFullPath($"{path.Dirname(Sen.Shell.Program.Script_Directory)}/shell");
                             string new_shell = Path.GetFullPath($"{path.Dirname(Sen.Shell.Program.Script_Directory)}/shell_new");
-                            fs.WriteText(sh, $"#!/bin/bash\r\n\r\ncurrentShellPath=\"{current_shell}\"\r\nnewShellPath=\"{new_shell}\"\r\nbatchFilePath=\"$0\"\r\n\r\nif [ ! -f \"$currentShellPath\" ]; then\r\n    exit 1\r\nfi\r\n\r\nrm \"$currentShellPath\"\r\nmv \"$newShellPath\" \"$currentShellPath\"\r\nmv \"$currentShellPath\" \"$currentShellPath\"\r\n\r\nsleep 3\r\nrm \"$batchFilePath\"", EncodingType.UTF8);
+                            fs.WriteText(sh, $"#!/bin/bash\r\n\r\ncurrentShellPath=\"{current_shell}\"\r\nnewShellPath=\"{new_shell}\"\r\nbatchFilePath=\"$0\"\r\n\r\nif [ ! -f \"$currentShellPath\" ]; then\r\n    exit 1\r\nfi\r\n\r\nrm \"$currentShellPath\"\r\nmv \"$newShellPath\" \"$currentShellPath\"\r\nmv \"$currentShellPath\" \"$currentShellPath\"\r\n\r\nsleep 3\r\nrm \"$batchFilePath\"", EncodingType.UNICODE);
                         }
                         break;
                     }

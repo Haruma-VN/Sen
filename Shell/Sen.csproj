@@ -9,6 +9,7 @@
     <Authors>Haruma-VN</Authors>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
+    <ApplicationIcon>Other\Sen.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(OS)' == 'Unix' ">
@@ -28,6 +29,11 @@
 
   <ItemGroup>
     <Compile Remove="Properties\Program.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Include="Other\Sen.ico" />
   </ItemGroup>
 
   <ItemGroup>
