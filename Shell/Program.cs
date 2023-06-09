@@ -3,6 +3,7 @@ using Sen.Shell.Modules.JavaScript;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Download;
 using System.IO;
+using System.Reflection;
 
 namespace Sen.Shell
 {

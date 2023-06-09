@@ -63,33 +63,42 @@ namespace Sen.Script {
      */
 
     export function ShellUpdateCheck(): void {
-        const available: Array<number> = new Array();
-        const assets = ShellUpdate.SendGetRequest(
-            `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
-            "Sen",
-        ).assets;
-        Console.Print(
-            2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-            `Execution Argument: Please select one Shell below to download`,
-        );
-        for (let i: number = 0; i < assets.length; ++i) {
-            available.push(i + 1);
-            Console.Printf(null, `      ${i + 1}. ${assets[i].name}`);
-        }
-        let input: string = Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
-        while (!available.includes(parseInt(input))) {
+        if (ShellUpdate.HasAdmin()) {
+            const available: Array<number> = new Array();
+            const assets = ShellUpdate.SendGetRequest(
+                `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
+                "Sen",
+            ).assets;
+            Console.Print(
+                2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                `Execution Argument: Please select one Shell below to download`,
+            );
+            for (let i: number = 0; i < assets.length; ++i) {
+                available.push(i + 1);
+                Console.Printf(null, `      ${i + 1}. ${assets[i].name}`);
+            }
+            let input: string = Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+            while (!available.includes(parseInt(input))) {
+                Console.Print(
+                    13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                    `Execution Failed: Does not included in the list`,
+                );
+                input = Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+            }
+            ShellUpdate.DownloadShell(
+                MainScriptDirectory,
+                `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
+                parseInt(input) - 1,
+                `shell_new`,
+            );
+        } else {
             Console.Print(
                 13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                `Execution Failed: Does not included in the list`,
+                `Execution Failed: You need to run as adminstrator to download new update`,
             );
-            input = Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+            throw new Error("Cannot download update");
         }
-        ShellUpdate.DownloadShell(
-            MainScriptDirectory,
-            `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
-            parseInt(input) - 1,
-            `new_shell`,
-        );
+        return;
     }
 
     export function Main(argument: string[]): void {

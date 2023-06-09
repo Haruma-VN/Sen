@@ -1567,6 +1567,12 @@ declare namespace ShellUpdate {
      */
 
     export function DownloadShell(save_dir: string, link: string, index: int, shell_name: string): void;
+
+    /**
+     * @returns If the user provide admin permission to execute
+     */
+
+    export function HasAdmin(): boolean;
 }
 
 declare interface GitHubReleases {

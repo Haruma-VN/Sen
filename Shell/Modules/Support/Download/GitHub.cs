@@ -161,7 +161,8 @@ namespace Sen.Shell.Modules.Support.Download
             }
             var shell_save = path.Resolve($"{path.Dirname($"{save_dir}")}/{shell_name}");
             await GitHub.DownloadFileAsync(github_api_json.assets[index].browser_download_url, (shell_save), $"Sen");
-            Sen.Shell.Modules.Support.Download.InternalShell.CreateExecuable($"{path.Dirname(Program.Script_Directory)}/shell.exe", $"{path.Dirname(Sen.Shell.Program.Script_Directory)}/new_shell.exe");
+            Sen.Shell.Modules.Support.Download.InternalShell.CreateExecuable();
+            Sen.Shell.Modules.Support.Download.InternalShell.ExecuteBat();
             return;
         }
 
@@ -171,7 +172,6 @@ namespace Sen.Shell.Modules.Support.Download
             task.Wait();
             return;
         }
-
 
 
     }
