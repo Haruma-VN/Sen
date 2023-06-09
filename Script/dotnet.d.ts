@@ -1525,3 +1525,119 @@ declare namespace PvZ2Shell {
      */
     export function RTONDecode(inFile: string, outFile: string): void;
 }
+
+/**
+ * Strictly checking version
+ */
+
+declare namespace ShellVersion {
+    /**
+     * Shell version of the current Shell
+     */
+
+    export const ShellVersion: int;
+
+    /**
+     * Script version of the current Script
+     */
+
+    export const ScriptRequirement: int;
+}
+
+/**
+ * Download update
+ */
+
+declare namespace ShellUpdate {
+    /**
+     *
+     * @param url - Provide link
+     * @param user_agent - Provide User Agent
+     * @returns context string
+     */
+
+    export function SendGetRequest(url: string, user_agent: string): GitHubReleases;
+
+    /**
+     *
+     * @param save_dir - Provide shell directory
+     * @param link - Provide download link to GitHub API
+     * @param index - Provide index
+     * @param shell_name - Provide download shell: shell.exe for example
+     */
+
+    export function DownloadShell(save_dir: string, link: string, index: int, shell_name: string): void;
+}
+
+declare interface GitHubReleases {
+    url: string;
+    assets_url: string;
+    upload_url: string;
+    html_url: string;
+    id: number;
+    author: {
+        login: string;
+        id: number;
+        node_id: string;
+        avatar_url: string;
+        gravatar_id: string;
+        url: string;
+        html_url: string;
+        followers_url: string;
+        following_url: string;
+        gists_url: string;
+        starred_url: string;
+        subscriptions_url: string;
+        organizations_url: string;
+        repos_url: string;
+        events_url: string;
+        received_events_url: string;
+        type: string;
+        site_admin: boolean;
+    };
+    node_id: string;
+    tag_name: string;
+    target_commitish: string;
+    name: string;
+    draft: boolean;
+    prerelease: boolean;
+    created_at: string;
+    published_at: string;
+    assets: Array<{
+        url: string;
+        id: number;
+        node_id: string;
+        name: string;
+        label: null | string;
+        uploader: {
+            login: string;
+            id: number;
+            node_id: string;
+            avatar_url: string;
+            gravatar_id: string;
+            url: string;
+            html_url: string;
+            followers_url: string;
+            following_url: string;
+            gists_url: string;
+            starred_url: string;
+            subscriptions_url: string;
+            organizations_url: string;
+            repos_url: string;
+            events_url: string;
+            received_events_url: string;
+            type: string;
+            site_admin: boolean;
+        };
+        content_type: string;
+        state: string;
+        size: number;
+        download_count: number;
+        created_at: string;
+        updated_at: string;
+        browser_download_url: string;
+    }>;
+    tarball_url: string;
+    zipball_url: string;
+    body: string;
+}

@@ -48,9 +48,49 @@ namespace Sen.Script {
     }
 
     /**
+     * Current Script version
+     */
+    export const ScriptVersion: int = 0;
+
+    /**
+     * Requirement version for Shell
+     */
+    export const ShellRequirement: int = 0;
+
+    /**
      *
      * @param argument - Pass arguments from .NET here
      */
+
+    export function ShellUpdateCheck(): void {
+        const available: Array<number> = new Array();
+        const assets = ShellUpdate.SendGetRequest(
+            `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
+            "Sen",
+        ).assets;
+        Console.Print(
+            2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            `Execution Argument: Please select one Shell below to download`,
+        );
+        for (let i: number = 0; i < assets.length; ++i) {
+            available.push(i + 1);
+            Console.Printf(null, `      ${i + 1}. ${assets[i].name}`);
+        }
+        let input: string = Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        while (!available.includes(parseInt(input))) {
+            Console.Print(
+                13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `Execution Failed: Does not included in the list`,
+            );
+            input = Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        }
+        ShellUpdate.DownloadShell(
+            MainScriptDirectory,
+            `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
+            parseInt(input) - 1,
+            `new_shell`,
+        );
+    }
 
     export function Main(argument: string[]): void {
         // Support UTF8 Console
@@ -65,6 +105,24 @@ namespace Sen.Script {
                     : "GUI"
             } ~ ${DotNetPlatform.CurrentUserPlatform()}`,
         );
+        if (ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
+            Console.Print(
+                13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`,
+            );
+            Sen.Script.Modules.Platform.Constraints.ExitProgram();
+            return;
+        }
+        if (Sen.Script.ShellRequirement > ShellVersion.ShellVersion) {
+            Console.Print(
+                13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `Execution Failed: Shell outdated, please update the shell to continue`,
+            );
+            Console.Print(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Download link:`);
+            Console.Printf(null, `      https://github.com/Haruma-VN/Sen/releases/tag/shell`);
+            Sen.Script.Modules.Platform.Constraints.ExitProgram();
+            return;
+        }
         const time_start: number = Date.now();
         Sen.Script.LoadModules(Sen.Script.ScriptModules);
         const time_end: number = Date.now();
@@ -84,6 +142,7 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
+            ShellUpdateCheck();
             Sen.Script.Modules.Interface.Assert.Evaluate(argument);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);

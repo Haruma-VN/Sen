@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Sen.Shell
 {
-     internal class Program
+     public class Program
      {
 
         public static readonly string Script_Directory = Platform.CurrentPlatform() switch {

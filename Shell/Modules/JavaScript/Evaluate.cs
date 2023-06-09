@@ -6,6 +6,7 @@ using Sen.Shell.Modules.Support.PvZ2;
 using Jint;
 using Jint.Native;
 using Jint.Runtime.Interop;
+using Sen.Shell.Modules.Support.Download;
 
 namespace Sen.Shell.Modules.JavaScript
 {
@@ -36,6 +37,8 @@ namespace Sen.Shell.Modules.JavaScript
             engine.SetValue("TextureHandler", new TextureEncoderFast());
             engine.SetValue("TextureHandlerPromise", new TextureEncoderAsync());
             engine.SetValue("PvZ2Shell", new PvZ2Shell());
+            engine.SetValue("ShellVersion", new Version());
+            engine.SetValue("ShellUpdate", new DownloadUpdate());
 
             try
             {
@@ -73,6 +76,8 @@ namespace Sen.Shell.Modules.JavaScript
             engine.SetValue("TextureHandler", new TextureEncoderFast());
             engine.SetValue("TextureHandlerPromise", new TextureEncoderAsync());
             engine.SetValue("PvZ2Shell", new PvZ2Shell());
+            engine.SetValue("ShellVersion", new Version());
+            engine.SetValue("ShellUpdate", new DownloadUpdate());
             engine.Execute(
                 fs.ReadText(path.Resolve($"{Script_Directory}/modules/system/default/exception_handler.js"), EncodingType.UTF8));
         }

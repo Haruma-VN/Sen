@@ -273,11 +273,14 @@ namespace Sen.Script.Modules.Interface.Assert {
         );
         let arg: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (arg !== "") {
-            if (arg.startsWith(`"`) && arg.endsWith(`"`)) {
+            if (arg.endsWith(" ")) {
+                arg = arg.slice(0, -1);
+            }
+            if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
                 arg = arg.slice(1, -1);
             }
             if (Fs.FileExists(arg) || Fs.DirectoryExists(arg)) {
-                argument.push(arg);
+                argument.push(Path.Resolve(arg));
             } else {
                 Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,

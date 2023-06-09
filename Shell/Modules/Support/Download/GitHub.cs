@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -96,6 +98,84 @@ namespace Sen.Shell.Modules.Support.Download
         public bool site_admin { get; set; }
     }
 
+    public abstract class DownloadUpdateAbstract
+    {
+        public abstract void CallDownloadScriptAndWait(string script_dir, string link);
+        public abstract bool HasAdmin();
+
+        public abstract GitHubReleases SendGetRequest(string url, string user_agent);
+
+        public abstract void DownloadShell(string save_dir, string link, int index, string shell_name);
+    }
+
+
+    public class DownloadUpdate : DownloadUpdateAbstract
+    {
+        public override void CallDownloadScriptAndWait(string script_dir, string link)
+        {
+            Task downloadTask = GitHub.DownloadScript(script_dir, link);
+            downloadTask.Wait();
+            return;
+        }
+
+
+
+        public override bool HasAdmin()
+        {
+            if (Platform.CurrentPlatform() == UserPlatform.Windows)
+            {
+                // Windows implementation
+                #pragma warning disable CA1416 // Validate platform compatibility
+                var identity = WindowsIdentity.GetCurrent();
+                var principal = new WindowsPrincipal(identity);
+                var path = new ImplementPath();
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            else if (Platform.CurrentPlatform() == UserPlatform.Macintosh || Platform.CurrentPlatform() == UserPlatform.Linux)
+            {
+                // Linux and macOS implementation
+                return Environment.GetEnvironmentVariable("USER") == "root";
+            }
+
+            // Unknown platform
+            return false;
+        }
+
+        public override GitHubReleases SendGetRequest(string url, string user_agent)
+        {
+            Task<string> task = GitHub.SendGetRequestAsync(url, user_agent);
+            task.Wait();
+            var json = new JsonImplement();
+
+            return json.ParseJson<GitHubReleases>(task.Result);
+        }
+
+        protected static async Task DownloadShellAsync(string save_dir, string link, int index, string shell_name)
+        {
+            var json = new JsonImplement();
+            var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
+            var path = new ImplementPath();
+            if (github_api_json.assets == null)
+            {
+                throw new Exception($"assets not found from github api");
+            }
+            var shell_save = path.Resolve($"{path.Dirname($"{save_dir}")}/{shell_name}");
+            await GitHub.DownloadFileAsync(github_api_json.assets[index].browser_download_url, (shell_save), $"Sen");
+            Sen.Shell.Modules.Support.Download.InternalShell.CreateExecuable($"{path.Dirname(Program.Script_Directory)}/shell.exe", $"{path.Dirname(Sen.Shell.Program.Script_Directory)}/new_shell.exe");
+            return;
+        }
+
+        public override void DownloadShell(string save_dir, string link, int index, string shell_name)
+        {
+            Task task = DownloadUpdate.DownloadShellAsync(save_dir, link, index, shell_name);
+            task.Wait();
+            return;
+        }
+
+
+
+    }
+
 
     public class GitHub
     {
@@ -124,7 +204,8 @@ namespace Sen.Shell.Modules.Support.Download
         }
 
 
-        protected static async Task<string> SendGetRequestAsync(string url, string user_agent)
+
+        public static async Task<string> SendGetRequestAsync(string url, string user_agent)
         {
             using var httpClient = new HttpClient();
             {
@@ -151,7 +232,7 @@ namespace Sen.Shell.Modules.Support.Download
             }
         }
 
-        protected static async Task DownloadFileAsync(string fileUrl, string filePath, string user_agent)
+        public static async Task DownloadFileAsync(string fileUrl, string filePath, string user_agent)
         {
             var fs = new FileSystem();
             using var client = new HttpClient();

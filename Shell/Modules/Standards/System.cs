@@ -18,6 +18,7 @@
 
     public class SystemImplement : SystemAbstract
     {
+
         public override void Print(Sen.Shell.Modules.Standards.ConsoleColor? color, params string[] texts)
         {
             var platform = new Sen.Shell.Modules.Standards.Platform();

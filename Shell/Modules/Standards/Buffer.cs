@@ -405,6 +405,11 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             return str;
         }
 
+        public string readStringByInt16LE(long offset = -1) {
+            fixReadOffset(offset);
+            return readString(readInt16LE());
+        }
+
         public string readStringByVarInt32(long offset = -1)
         {
             fixReadOffset(offset);
@@ -746,7 +751,17 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             fixWriteOffset(offset);
             writeVarInt64((number << 1) ^ (number >> 63));
         }
-        public void writeStringByVarInt32(string str, long offset = -1)
+
+        public void writeStringByInt16LE(string? str, long offset = -1) {
+            fixWriteOffset(offset);
+            if (str == null) {
+                writeInt16LE(0);
+            }
+            m_buffer = Encode.GetBytes(str!);
+            writeInt16LE((short)m_buffer.Length);
+            writeBytes(m_buffer);
+        }
+        public void writeStringByVarInt32(string? str, long offset = -1)
         {
             fixWriteOffset(offset);
             if (str == null)
@@ -754,7 +769,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 writeVarInt32(0);
                 return;
             }
-            m_buffer = Encode.GetBytes(str);
+            m_buffer = Encode.GetBytes(str!);
             writeVarInt32(m_buffer.Length);
             writeBytes(m_buffer);
         }
@@ -784,6 +799,16 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             }
             baseStream.Position = temp_offset;
             return bytes;
+        }
+
+        public Stream toStream() {
+            Flush();
+            return baseStream;
+        }
+        public string toString(string EncodingType = "UTF-8") {
+            Encoding encoding = Encoding.GetEncoding(EncodingType);
+            byte[] array = toBytes();
+            return encoding.GetString(array);
         }
         public virtual void CreateDirectory(string output_path)
         {
