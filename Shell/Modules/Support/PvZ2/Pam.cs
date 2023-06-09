@@ -1,6 +1,7 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using System.Text.Json;
 using System.Text;
+using Sen.Shell.Modules.Standards;
+
 namespace Sen.Shell.Modules.Support.PvZ2.PAM
 {
 
@@ -401,7 +402,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 PamInfo.sprite[i] = ReadSpriteInfo(PamFile, version);
             }
-            byte[] bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(PamInfo));
+            var json = new JsonImplement();
+            byte[] bytes = Encoding.UTF8.GetBytes(json.StringifyJson(PamInfo, null));
             SenBuffer PAMJson = new SenBuffer(bytes);
             return PAMJson;
         }
@@ -551,7 +553,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public static SenBuffer Encode(SenBuffer PamFile)
         {
             string JsonString = PamFile.toString()!;
-            PAMInfo PamJson = JsonSerializer.Deserialize<PAMInfo>(JsonString)!;
+            var json = new JsonImplement();
+            PAMInfo PamJson = json.ParseJson<PAMInfo>(JsonString)!;
             SenBuffer PamBinary = new SenBuffer();
             int version = PamJson.version;
             PamBinary.writeUInt32LE(PAMInfo.Magic);

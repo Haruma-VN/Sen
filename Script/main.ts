@@ -59,7 +59,7 @@ namespace Sen.Script {
 
     /**
      *
-     * @param argument - Pass arguments from .NET here
+     * @returns Update current Shell
      */
 
     export function ShellUpdateCheck(): void {
@@ -100,6 +100,11 @@ namespace Sen.Script {
         }
         return;
     }
+
+    /**
+     *
+     * @param argument - Pass arguments from .NET here
+     */
 
     export function Main(argument: string[]): void {
         // Support UTF8 Console
@@ -151,12 +156,20 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            ShellUpdateCheck();
+            // Sen.Script.ShellUpdateCheck();
             Sen.Script.Modules.Interface.Assert.Evaluate(argument);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }
         const Sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, ""),
+        );
+        Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`,
+        );
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(

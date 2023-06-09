@@ -64,5 +64,8 @@
     "select_one_texture_format": "Select one texture format",
     "popcap_official_resources_split": "PopCap Official Resources Split",
     "popcap_official_resources_merge": "PopCap Official Resources Merge",
-    "popcap_official_atlas_split": "PopCap Official Atlas Split"
+    "popcap_official_atlas_split": "PopCap Official Atlas Split",
+    "all_commands_executed": "All commands have been successfully executed!",
+    "popcap_official_pam_json_to_pam": "PopCap PAM JSON to PAM",
+    "popcap_official_pam_to_pam_json": "PopCap PAM to PAM JSON"
 }

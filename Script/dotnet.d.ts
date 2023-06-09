@@ -1524,6 +1524,30 @@ declare namespace PvZ2Shell {
      * @returns RTON2JSON
      */
     export function RTONDecode(inFile: string, outFile: string): void;
+    /**
+     *
+     * @param inFile - Pass JSON file here
+     * @param outFile - Pass RTON output here
+     * @returns JSON2RTON
+     */
+
+    export function RTONEncode(inFile: string, outFile: string): void;
+    /**
+     *
+     * @param inFile - Pass PAM file here
+     * @param outFile - Pass PAM JSON output here
+     * @returns Pam to Pam Json
+     */
+
+    export function PAMtoJSON(inFile: string, outFile: string): void;
+    /**
+     *
+     * @param inFile - Pass JSON file here
+     * @param outFile - Pass PAM output here
+     * @returns PAM Json to Pam
+     */
+
+    export function JSONtoPAM(inFile: string, outFile: string): void;
 }
 
 /**

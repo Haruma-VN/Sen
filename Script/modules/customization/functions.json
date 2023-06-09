@@ -59,5 +59,23 @@
         "include": [],
         "exclude": [],
         "type": "unknown"
+    },
+    "popcap_official_atlas_merge": {
+        "func_number": 11,
+        "include": [],
+        "exclude": [],
+        "type": "directory"
+    },
+    "popcap_official_pam_to_pam_json": {
+        "func_number": 14,
+        "include": [".pam"],
+        "exclude": [".pam.json"],
+        "type": "file"
+    },
+    "popcap_official_pam_json_to_pam": {
+        "func_number": 15,
+        "include": [".pam.json"],
+        "exclude": [".json"],
+        "type": "file"
     }
 }

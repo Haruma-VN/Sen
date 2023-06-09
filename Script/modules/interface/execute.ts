@@ -106,7 +106,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_ptx_decode"
         | "popcap_official_resources_split"
         | "popcap_official_resources_merge"
-        | "popcap_official_atlas_split";
+        | "popcap_official_atlas_split"
+        | "popcap_official_pam_to_pam_json"
+        | "popcap_official_pam_json_to_pam";
 
     /**
      *
@@ -119,6 +121,7 @@ namespace Sen.Script.Modules.Interface.Execute {
         function_name: Sen.Script.Modules.Interface.Execute.function_name,
         argument: string | string[],
     ): void {
+        const func_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         switch (function_name) {
             case "js_evaluate": {
                 if (!Array.isArray(argument)) {
@@ -222,6 +225,26 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 break;
             }
+            case "popcap_official_pam_to_pam_json": {
+                if (!Array.isArray(argument)) {
+                    PvZ2Shell.PAMtoJSON(argument, argument.replace(/((\.pam))?$/i, ".pam.json"));
+                } else {
+                    argument.forEach((arg: string) => {
+                        PvZ2Shell.PAMtoJSON(arg, arg.replace(/((\.pam))?$/i, ".pam.json"));
+                    });
+                }
+                break;
+            }
+            case "popcap_official_pam_json_to_pam": {
+                if (!Array.isArray(argument)) {
+                    PvZ2Shell.JSONtoPAM(argument, argument.replace(/((\.pam.json))?$/i, ".pam"));
+                } else {
+                    argument.forEach((arg: string) => {
+                        PvZ2Shell.JSONtoPAM(arg, arg.replace(/((\.pam.json))?$/i, ".pam"));
+                    });
+                }
+                break;
+            }
             default: {
                 throw new Sen.Script.Modules.Exceptions.RuntimeError(
                     Sen.Script.Modules.System.Default.Localization.GetString("function_not_found").replace(
@@ -232,6 +255,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                 ) as never;
             }
         }
+        const func_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(func_time_start, func_time_end, 3),
+            ),
+        );
         return;
     }
 }
