@@ -156,7 +156,6 @@ namespace Sen.Script {
         );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
-            // Sen.Script.ShellUpdateCheck();
             Sen.Script.Modules.Interface.Assert.Evaluate(argument);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);

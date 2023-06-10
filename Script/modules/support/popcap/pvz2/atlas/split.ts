@@ -1068,10 +1068,15 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
          *
          * @param argument - Pass arguments
          * @param method - Pass method
+         * @param output_directory - Pass output dir (optional)
          * @returns Extracted PvZ2 Atlas
          */
 
-        public static ExtractPvZ2AtlasOfficialStructure(argument: Array<string>, method: "id" | "path"): void {
+        public static ExtractPvZ2AtlasOfficialStructure(
+            argument: Array<string>,
+            method: "id" | "path",
+            output_directory?: string,
+        ): void {
             // json must be official
             const json: string = argument.filter((file) => /((\.json))?$/i.test(file))[0];
             const pngs: Array<string> = argument.filter((file) => /((.png))?$/i.test(file));
@@ -1081,7 +1086,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 ...official_subgroup,
                 resources: [],
             };
-            const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
+            const directory_contains: string = (output_directory ??= json.replace(/((.json))?$/i, `.sprite`));
             const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/media`);
             Fs.CreateDirectory(directory_contains);
             Fs.CreateDirectory(directory_contains_sprite);
@@ -1172,7 +1177,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
 
     export class ExtractUnofficialPvZ2Atlas extends Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split
         .ExtractOfficialAtlas {
-        public static ExtractPvZ2AtlasUnofficialStructure(argument: Array<string>, method: "id" | "path"): void {
+        /**
+         *
+         * @param argument - Pass arguments
+         * @param method - Pass method
+         * @param output_directory - Pass output dir (optional)
+         * @returns Extracted PvZ2 Atlas
+         */
+
+        public static ExtractPvZ2AtlasUnofficialStructure(
+            argument: Array<string>,
+            method: "id" | "path",
+            output_directory?: string,
+        ): void {
             // json must be unofficial
             const json: string = argument.find((file) => /((\.json))?$/i.test(file)) as string;
             const pngs: Array<string> = argument.filter((file) => /((.png))?$/i.test(file));
@@ -1183,7 +1200,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 packet: {},
             };
             const parents: Array<string> = Object.keys(unofficial_subgroup.packet);
-            const directory_contains: string = json.replace(/((.json))?$/i, `.sprite`);
+            const directory_contains: string = (output_directory ??= json.replace(/((.json))?$/i, `.sprite`));
             const directory_contains_sprite: string = Path.Resolve(`${directory_contains}/media`);
             Fs.CreateDirectory(directory_contains);
             Fs.CreateDirectory(directory_contains_sprite);

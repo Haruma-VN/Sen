@@ -554,10 +554,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 const dimension_output_test: Dimension = atlas_json.trim
                     ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i])
                     : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
-                const parent_name: string = `${subgroup_output.id.toUpperCase()}_${i < 10 ? `0${i}` : `${i}`}`;
+                const parent_name: string = `${subgroup_output.id}_${i < 10 ? `0${i}` : `${i}`}`;
                 subgroup_output.resources.push({
                     slot: 0,
-                    id: `ATLASIMAGE_ATLAS_${parent_name}`,
+                    id: `ATLASIMAGE_ATLAS_${parent_name.toUpperCase()}`,
                     path: path_type === "string" ? `atlases\\${parent_name}` : [`atlases`, `${parent_name}`],
                     type: `Image`,
                     atlas: true,
@@ -576,7 +576,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                                           ? max_rects_collections[i][j].path.join(`\\`)
                                           : max_rects_collections[i][j].path,
                                   type: `Image`,
-                                  parent: `ATLASIMAGE_ATLAS_${parent_name}`,
+                                  parent: `ATLASIMAGE_ATLAS_${parent_name.toUpperCase()}`,
                                   ax: max_rects_collections[i][j].x,
                                   ay: max_rects_collections[i][j].y,
                                   aw: max_rects_collections[i][j].width,
@@ -593,7 +593,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                                           ? max_rects_collections[i][j].path.join(`\\`)
                                           : max_rects_collections[i][j].path,
                                   type: `Image`,
-                                  parent: `ATLASIMAGE_ATLAS_${parent_name}`,
+                                  parent: `ATLASIMAGE_ATLAS_${parent_name.toUpperCase()}`,
                                   ax: max_rects_collections[i][j].x,
                                   ay: max_rects_collections[i][j].y,
                                   aw: max_rects_collections[i][j].width,
@@ -669,15 +669,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 1,
                 options,
             );
-            const subgroup_output: resource_atlas_and_sprites = {
-                id: atlas_json.subgroup,
-                parent: atlas_json.subgroup.replace(`_${atlas_json.res}`, ``),
-                res: atlas_json.res,
-                resources: [],
-                type: "simple",
+            const subgroup_output: sprite_data = {
+                [atlas_json.subgroup]: {
+                    type: atlas_json.res,
+                    packet: {},
+                },
             };
-            const path_type: "string" | "array" =
-                "expand_path" in atlas_json && atlas_json.expand_path === "string" ? "string" : "array";
             RectsPacker.addArray(packable_datas as any);
             const max_rects_collections: Array<Array<MaxRectsReturnData>> = [];
             RectsPacker.bins.forEach((bin) => max_rects_collections.push(bin.rects as any));
@@ -686,54 +683,30 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 const dimension_output_test: Dimension = atlas_json.trim
                     ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i])
                     : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
-                const parent_name: string = `${subgroup_output.id.toUpperCase()}_${i < 10 ? `0${i}` : `${i}`}`;
-                subgroup_output.resources.push({
-                    slot: 0,
-                    id: `ATLASIMAGE_ATLAS_${parent_name}`,
-                    path: path_type === "string" ? `atlases\\${parent_name}` : [`atlases`, `${parent_name}`],
-                    type: `Image`,
-                    atlas: true,
-                    width: dimension_output_test.width,
-                    height: dimension_output_test.height,
-                    runtime: true,
-                });
+                const parent_name: string = `${atlas_json.subgroup}_${i < 10 ? `0${i}` : `${i}`}`;
+                subgroup_output[atlas_json.subgroup].packet[parent_name] = {
+                    type: "Image",
+                    path: ["atlases", parent_name],
+                    dimension: {
+                        width: dimension_output_test.width,
+                        height: dimension_output_test.height,
+                    },
+                    data: {},
+                };
                 for (let j: number = 0; j < max_rects_collections[i].length; ++j) {
-                    subgroup_output.resources.push(
-                        "cols" in max_rects_collections[i][j]
-                            ? {
-                                  slot: 0,
-                                  id: max_rects_collections[i][j].id,
-                                  path:
-                                      path_type === "string"
-                                          ? max_rects_collections[i][j].path.join(`\\`)
-                                          : max_rects_collections[i][j].path,
-                                  type: `Image`,
-                                  parent: `ATLASIMAGE_ATLAS_${parent_name}`,
-                                  ax: max_rects_collections[i][j].x,
-                                  ay: max_rects_collections[i][j].y,
-                                  aw: max_rects_collections[i][j].width,
-                                  ah: max_rects_collections[i][j].height,
-                                  x: max_rects_collections[i][j].info_x,
-                                  y: max_rects_collections[i][j].info_y,
-                                  cols: max_rects_collections[i][j].cols,
-                              }
-                            : {
-                                  slot: 0,
-                                  id: max_rects_collections[i][j].id,
-                                  path:
-                                      path_type === "string"
-                                          ? max_rects_collections[i][j].path.join(`\\`)
-                                          : max_rects_collections[i][j].path,
-                                  type: `Image`,
-                                  parent: `ATLASIMAGE_ATLAS_${parent_name}`,
-                                  ax: max_rects_collections[i][j].x,
-                                  ay: max_rects_collections[i][j].y,
-                                  aw: max_rects_collections[i][j].width,
-                                  ah: max_rects_collections[i][j].height,
-                                  x: max_rects_collections[i][j].info_x,
-                                  y: max_rects_collections[i][j].info_y,
-                              },
-                    );
+                    subgroup_output[atlas_json.subgroup].packet[parent_name].data[max_rects_collections[i][j].id] = {
+                        default: {
+                            ax: max_rects_collections[i][j].x,
+                            ay: max_rects_collections[i][j].y,
+                            aw: max_rects_collections[i][j].width,
+                            ah: max_rects_collections[i][j].height,
+                            x: max_rects_collections[i][j].info_x,
+                            y: max_rects_collections[i][j].info_y,
+                            cols: max_rects_collections[i][j]?.cols,
+                        },
+                        path: max_rects_collections[i][j].path,
+                        type: `Image`,
+                    };
                 }
                 DotNetBitmap.CompositeImages(
                     max_rects_collections[i],
@@ -743,9 +716,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     dimension_output_test.height,
                 );
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<resource_atlas_and_sprites>(
+            Sen.Script.Modules.FileSystem.Json.WriteJson<sprite_data>(
                 `${Path.Resolve(Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`,
-                subgroup_output,
+                subgroup_output[atlas_json.subgroup] as any,
             );
             return;
         }

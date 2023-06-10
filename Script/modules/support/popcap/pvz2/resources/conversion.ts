@@ -1180,8 +1180,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         }
     }
 
-    export class merge_res_json extends CheckOfficialResources {
-        private static check_info_json<Template extends Output_Value>(res_json: Template): res_json is Template {
+    export class MergeUnofficialJson extends CheckOfficialResources {
+        private static CheckInfoJson<Template extends Output_Value>(res_json: Template): res_json is Template {
             if (!("information" in res_json)) {
                 throw new Error(
                     Sen.Script.Modules.System.Default.Localization.GetString("property_information_is_null"),
@@ -1204,7 +1204,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
-        private static check_data_json<Template extends small_bundle_info_json>(
+        private static CheckDataJson<Template extends small_bundle_info_json>(
             res_json: Template,
             file_path: string,
         ): res_json is Template {
@@ -1234,7 +1234,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
-        private static check_directory_info(directory_path: string): void {
+        private static CheckDirectoryInformation(directory_path: string): void {
             if (!Fs.DirectoryExists(directory_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, directory_path);
             }
@@ -1248,7 +1248,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return;
         }
-        private static check_groups(directory_path: string, collections: Array<string>): void {
+        private static CheckGroups(directory_path: string, collections: Array<string>): void {
             for (const file of collections) {
                 const file_path: string = Path.Resolve(`${directory_path}/${file}.json`);
                 if (!Fs.FileExists(file_path)) {
@@ -1257,17 +1257,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return;
         }
-        public static do_process_whole<Template extends Output_Value>(
+        public static DoAllProcess<Template extends Output_Value>(
             directory_path: string,
             output_file: string = Path.Resolve(
                 `${Path.Dirname(directory_path)}/${Path.Parse(directory_path).name}.json`,
             ),
         ): void {
-            this.check_directory_info(directory_path);
+            this.CheckDirectoryInformation(directory_path);
             const info_json_information: Template = Sen.Script.Modules.FileSystem.Json.ReadJson(
                 Path.Resolve(`${directory_path}/info.json`),
             ) as Template;
-            this.check_info_json<Output_Value>(info_json_information);
+            this.CheckInfoJson<Output_Value>(info_json_information);
             const res_json: res_json = {
                 expand_path: info_json_information.information.expand_path as "array" | "string",
                 groups: {},
@@ -1275,7 +1275,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             const group_directory: string = Path.Resolve(`${directory_path}/groups`);
             const groups_inventory: Array<res_for_work> = new Array();
             const groups_collection: Array<string> = Object.keys(info_json_information.groups);
-            this.check_groups(
+            this.CheckGroups(
                 group_directory,
                 groups_collection.reduce((result, current) => {
                     result.push(...(info_json_information.groups[current] as any).subgroups);
@@ -1287,7 +1287,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                 const data_json: small_bundle_info_json = info_json_information.groups[
                     groups_collection[index]
                 ] as small_bundle_info_json & any;
-                this.check_data_json<small_bundle_info_json>(data_json, Path.Resolve(`${directory_path}/info.json`));
+                this.CheckDataJson<small_bundle_info_json>(data_json, Path.Resolve(`${directory_path}/info.json`));
                 groups_inventory.push({
                     ...data_json,
                     group_parent: group,
@@ -1314,8 +1314,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
          * @param directory_path - Pass directory here
          * @param output_file - Pass output file location, etc: "C:/Haruma-VN/test.json"
          */
-        public static create_conversion(directory_path: string, output_file?: string): void {
-            this.do_process_whole<Output_Value>(directory_path, output_file);
+        public static CreateConversion(directory_path: string, output_file?: string): void {
+            this.DoAllProcess<Output_Value>(directory_path, output_file);
             return;
         }
     }

@@ -60,4 +60,26 @@ namespace Sen.Script.Modules.Interface.Arguments {
         }
         return parseInt(input) as int;
     }
+
+    /**
+     *
+     * @param msg - Pass message here
+     * @returns Input argument
+     */
+
+    export function InputInteger(msg: string): int {
+        Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, msg);
+        let input: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        while (!/^\d+$/.test(input)) {
+            Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("not_a_valid_integer_input"),
+                )}`,
+            );
+            input = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        }
+        return parseInt(input);
+    }
 }

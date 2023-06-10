@@ -14,7 +14,7 @@ namespace Sen.Script.Modules.Interface.Execute {
         );
         if (Array.isArray(argument)) {
             for (const func of Sen.Script.Modules.Interface.Assert.FunctionCollection) {
-                if (func === "popcap_official_atlas_split") {
+                if (func === "popcap_official_atlas_split" || func === "popcap_unofficial_atlas_split") {
                     if (Sen.Script.Modules.Interface.Assert.CheckForJsonAndPng(argument)) {
                         Console.Printf(
                             null,
@@ -108,7 +108,14 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_official_resources_merge"
         | "popcap_official_atlas_split"
         | "popcap_official_pam_to_pam_json"
-        | "popcap_official_pam_json_to_pam";
+        | "popcap_official_pam_json_to_pam"
+        | "popcap_official_atlas_merge"
+        | "popcap_unofficial_atlas_split"
+        | "popcap_unofficial_atlas_merge"
+        | "popcap_unofficial_resources_split"
+        | "popcap_unofficial_resources_merge"
+        | "popcap_rton_to_json"
+        | "popcap_json_to_rton";
 
     /**
      *
@@ -128,6 +135,55 @@ namespace Sen.Script.Modules.Interface.Execute {
                     Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(argument);
                 } else {
                     argument.forEach((arg: string) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                }
+                break;
+            }
+            case "popcap_unofficial_resources_split": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
+                        argument,
+                        argument.replace(/((\.json))?$/i, ".json.info"),
+                    );
+                } else {
+                    argument.forEach((arg: string) =>
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
+                            arg,
+                            arg.replace(/((\.json))?$/i, ".json.info"),
+                        ),
+                    );
+                }
+                break;
+            }
+            case "popcap_rton_to_json": {
+                Console.Print(null, "t");
+                if (!Array.isArray(argument)) {
+                    PvZ2Shell.RTONDecode(argument, argument.replace(/((\.rton))?$/i, ".json"));
+                } else {
+                    argument.forEach((arg: string) => PvZ2Shell.RTONDecode(arg, arg.replace(/((\.rton))?$/i, ".json")));
+                }
+                break;
+            }
+            case "popcap_json_to_rton": {
+                if (!Array.isArray(argument)) {
+                    PvZ2Shell.RTONEncode(argument, argument.replace(/((\.json))?$/i, ".rton"));
+                } else {
+                    argument.forEach((arg: string) => PvZ2Shell.RTONEncode(arg, arg.replace(/((\.json))?$/i, ".rton")));
+                }
+                break;
+            }
+            case "popcap_unofficial_resources_merge": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeUnofficialJson.CreateConversion(
+                        argument,
+                        argument.replace(/((\.json.info))?$/i, ".json"),
+                    );
+                } else {
+                    argument.forEach((arg: string) =>
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
+                            arg,
+                            arg.replace(/((\.json.info))?$/i, ".json"),
+                        ),
+                    );
                 }
                 break;
             }
@@ -156,6 +212,60 @@ namespace Sen.Script.Modules.Interface.Execute {
                             dimension.width,
                             dimension.height,
                             encode,
+                        );
+                    });
+                }
+                break;
+            }
+            case "popcap_official_atlas_merge": {
+                if (!Array.isArray(argument)) {
+                    let width: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("width"),
+                            ),
+                        ),
+                    );
+                    let height: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("height"),
+                            ),
+                        ),
+                    );
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(
+                        argument,
+                        width,
+                        height,
+                    );
+                } else {
+                    argument.forEach((arg: string) => {
+                        let width: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("width"),
+                                ),
+                            ),
+                        );
+                        let height: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("height"),
+                                ),
+                            ),
+                        );
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(
+                            arg,
+                            width,
+                            height,
                         );
                     });
                 }
@@ -222,6 +332,70 @@ namespace Sen.Script.Modules.Interface.Execute {
                         argument,
                         method,
                     );
+                }
+                break;
+            }
+            case "popcap_unofficial_atlas_split": {
+                if (Array.isArray(argument)) {
+                    let method: "id" | "path" = "id";
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractUnofficialPvZ2Atlas.ExtractPvZ2AtlasUnofficialStructure(
+                        argument,
+                        method,
+                    );
+                }
+                break;
+            }
+            case "popcap_unofficial_atlas_merge": {
+                if (!Array.isArray(argument)) {
+                    let width: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("width"),
+                            ),
+                        ),
+                    );
+                    let height: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("height"),
+                            ),
+                        ),
+                    );
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(
+                        argument,
+                        width,
+                        height,
+                    );
+                } else {
+                    argument.forEach((arg: string) => {
+                        let width: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("width"),
+                                ),
+                            ),
+                        );
+                        let height: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("input_").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("height"),
+                                ),
+                            ),
+                        );
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(
+                            arg,
+                            width,
+                            height,
+                        );
+                    });
                 }
                 break;
             }

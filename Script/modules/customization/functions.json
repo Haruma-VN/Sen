@@ -49,7 +49,7 @@
     },
     "popcap_unofficial_resources_merge": {
         "func_number": 9,
-        "include": ["res.json"],
+        "include": [".json.info"],
         "exclude": [],
         "type": "directory"
     },
@@ -62,7 +62,20 @@
     },
     "popcap_official_atlas_merge": {
         "func_number": 11,
+        "include": [".sprite"],
+        "exclude": [],
+        "type": "directory"
+    },
+    "popcap_unofficial_atlas_split": {
+        "#comment": "This function can only be executed when you drag a png & json to tool",
+        "func_number": 12,
         "include": [],
+        "exclude": [],
+        "type": "unknown"
+    },
+    "popcap_unofficial_atlas_merge": {
+        "func_number": 13,
+        "include": [".sprite"],
         "exclude": [],
         "type": "directory"
     },
@@ -76,6 +89,18 @@
         "func_number": 15,
         "include": [".pam.json"],
         "exclude": [".json"],
+        "type": "file"
+    },
+    "popcap_rton_to_json": {
+        "func_number": 16,
+        "include": [".rton"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_json_to_rton": {
+        "func_number": 17,
+        "include": [".json"],
+        "exclude": [".pam.json"],
         "type": "file"
     }
 }

@@ -67,5 +67,18 @@
     "popcap_official_atlas_split": "PopCap Official Atlas Split",
     "all_commands_executed": "All commands have been successfully executed!",
     "popcap_official_pam_json_to_pam": "PopCap PAM JSON to PAM",
-    "popcap_official_pam_to_pam_json": "PopCap PAM to PAM JSON"
+    "popcap_official_pam_to_pam_json": "PopCap PAM to PAM JSON",
+    "not_a_valid_integer_input": "Not a valid integer input",
+    "input_": "Input {}",
+    "width": "width",
+    "height": "height",
+    "popcap_official_to_unofficial": "PopCap Resources Convert from Unofficial Structure",
+    "popcap_unofficial_to_official": "PopCap Resources Convert to Unofficial Structure",
+    "popcap_unofficial_resources_split": "PopCap Unofficial Resources Split",
+    "popcap_unofficial_resources_merge": "PopCap Unofficial Resources Merge",
+    "popcap_official_atlas_merge": "PopCap Official Atlas Merge",
+    "popcap_unofficial_atlas_split": "PopCap Unofficial Atlas Split",
+    "popcap_unofficial_atlas_merge": "PopCap Unofficial Atlas Merge",
+    "popcap_rton_to_json": "PopCap RTON to JSON",
+    "popcap_json_to_rton": "PopCap JSON to RTON"
 }
