@@ -50,6 +50,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize {
         return;
     }
 
+    /**
+     * Resize all PopCap Sprites class implement Tre
+     */
+
     export class ResizePopCapSprite extends Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson {
         /**
          *

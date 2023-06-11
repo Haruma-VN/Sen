@@ -826,7 +826,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public virtual void SaveFile(string path)
         {
-            using (var fileStream = new FileStream(path, FileMode.Create))
+            using var fileStream = new FileStream(path, FileMode.Create);
             {
                 baseStream.Seek(0, SeekOrigin.Begin);
                 baseStream.CopyTo(fileStream);

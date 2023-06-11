@@ -432,12 +432,25 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_sprite_resize": {
                 if (!Array.isArray(argument)) {
+                    const original: int = 1536;
+                    const modified: int = 768;
                     Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(
                         argument,
-                        1536,
-                        768,
-                        "D:/Workspace/test/test1",
+                        original,
+                        modified,
+                        argument.replace(original.toString(), modified.toString()),
                     );
+                } else {
+                    argument.forEach((arg: string) => {
+                        const original: int = 1536;
+                        const modified: int = 768;
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(
+                            arg,
+                            original,
+                            modified,
+                            arg.replace(original.toString(), modified.toString()),
+                        );
+                    });
                 }
                 break;
             }
