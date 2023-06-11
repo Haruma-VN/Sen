@@ -21,6 +21,7 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/split.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/pack.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/animation/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/assert.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/arguments.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/execute.js`),

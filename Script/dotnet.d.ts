@@ -88,6 +88,12 @@ declare namespace Console {
 }
 
 /**
+ * @abstract Double
+ */
+
+declare type double = number;
+
+/**
  * @abstract Data type for long number
  */
 

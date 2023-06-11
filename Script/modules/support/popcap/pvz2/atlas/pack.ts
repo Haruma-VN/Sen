@@ -684,7 +684,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i])
                     : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
                 const parent_name: string = `${atlas_json.subgroup}_${i < 10 ? `0${i}` : `${i}`}`;
-                subgroup_output[atlas_json.subgroup].packet[parent_name] = {
+                const parent_packet: string = `ATLASIMAGE_ATLAS_${parent_name.toUpperCase()}`;
+                subgroup_output[atlas_json.subgroup].packet[parent_packet] = {
                     type: "Image",
                     path: ["atlases", parent_name],
                     dimension: {
@@ -694,7 +695,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     data: {},
                 };
                 for (let j: number = 0; j < max_rects_collections[i].length; ++j) {
-                    subgroup_output[atlas_json.subgroup].packet[parent_name].data[max_rects_collections[i][j].id] = {
+                    subgroup_output[atlas_json.subgroup].packet[parent_packet].data[max_rects_collections[i][j].id] = {
                         default: {
                             ax: max_rects_collections[i][j].x,
                             ay: max_rects_collections[i][j].y,

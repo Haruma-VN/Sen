@@ -411,9 +411,19 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_pam_json_to_pam": {
                 if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
+                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(
+                            argument,
+                        ),
+                    );
                     PvZ2Shell.JSONtoPAM(argument, argument.replace(/((\.pam.json))?$/i, ".pam"));
                 } else {
                     argument.forEach((arg: string) => {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
+                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(
+                                arg,
+                            ),
+                        );
                         PvZ2Shell.JSONtoPAM(arg, arg.replace(/((\.pam.json))?$/i, ".pam"));
                     });
                 }
