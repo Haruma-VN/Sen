@@ -401,6 +401,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             for (var i = 0; i < spritesCount; i++)
             {
                 PamInfo.sprite[i] = ReadSpriteInfo(PamFile, version);
+                if (version < 4) {
+                    PamInfo.sprite[i].frame_rate = PamInfo.frame_rate;
+                }
+            }
+            if (version <= 3 || PamFile.readBool())
+            {
+                PamInfo.main_sprite = ReadSpriteInfo(PamFile, version);
+                if (version < 4)
+                {
+                    PamInfo.main_sprite.frame_rate = frame_rate;
+                }
             }
             var json = new JsonImplement();
             byte[] bytes = Encoding.UTF8.GetBytes(json.StringifyJson(PamInfo, null));
@@ -552,9 +563,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         //Encode
         public static SenBuffer Encode(SenBuffer PamFile)
         {
-            string JsonString = PamFile.toString()!;
+            string JsonString = PamFile.toString();
             var json = new JsonImplement();
-            PAMInfo PamJson = json.ParseJson<PAMInfo>(JsonString)!;
+            PAMInfo PamJson = json.ParseJson<PAMInfo>(JsonString);
             SenBuffer PamBinary = new SenBuffer();
             int version = PamJson.version;
             PamBinary.writeUInt32LE(PAMInfo.Magic);
@@ -610,6 +621,23 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     SpriteInfo sprite = PamJson.sprite[i];
                     WriteSpriteInfo(PamBinary, version, sprite);
+                }
+            }
+            if (version <= 3)
+            {
+                SpriteInfo mainSprite = PamJson.main_sprite ?? new SpriteInfo();
+                WriteSpriteInfo(PamBinary, version, mainSprite);
+            }
+            else
+            {
+                if (PamJson.main_sprite == null)
+                {
+                    PamBinary.writeBool(false);
+                }
+                else
+                {
+                    PamBinary.writeBool(true);
+                    WriteSpriteInfo(PamBinary, version, PamJson.main_sprite);
                 }
             }
             return PamBinary;

@@ -757,9 +757,8 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             if (str == null) {
                 writeInt16LE(0);
             }
-            m_buffer = Encode.GetBytes(str!);
-            writeInt16LE((short)m_buffer.Length);
-            writeBytes(m_buffer);
+            writeInt16LE((short)str!.Length);
+            writeString(str!);
         }
         public void writeStringByVarInt32(string? str, long offset = -1)
         {
@@ -769,9 +768,8 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 writeVarInt32(0);
                 return;
             }
-            m_buffer = Encode.GetBytes(str!);
-            writeVarInt32(m_buffer.Length);
-            writeBytes(m_buffer);
+            writeVarInt32(str!.Length);
+            writeString(str!);
         }
 
         public void writeSenBuffer(SenBuffer input, long offset = -1)
