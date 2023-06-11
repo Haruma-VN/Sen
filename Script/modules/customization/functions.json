@@ -102,5 +102,11 @@
         "include": [".json"],
         "exclude": [".pam.json"],
         "type": "file"
+    },
+    "popcap_sprite_resize": {
+        "func_number": 18,
+        "include": [".sprite"],
+        "exclude": [],
+        "type": "directory"
     }
 }

@@ -483,15 +483,13 @@ declare namespace DotNetBitmap {
 
     /**
      *
-     * @param original - Pass original ImageInfo
-     * @param output - Pass modified (expected) ImageInfo
-     * @returns Modified
+     * @param new_width - Pass new width
+     * @param new_height - Pass new height
+     * @param file_path - Pass old file path
+     * @param outpath - Pass output path
      */
 
-    export function ResizeImage(
-        original: Sen.Script.Modules.BitMap.Constraints.ImageInfo<number>,
-        output: Sen.Script.Modules.BitMap.Constraints.ImageInfo<number>,
-    ): Image<Rgba32>;
+    export function ResizeImage(new_width: int, new_height: int, file_path: string, outpath: string): void;
 
     /**
      *

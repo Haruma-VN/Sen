@@ -108,7 +108,7 @@ namespace Sen.Shell.Modules.Standards.Bitmap
         public abstract Image<Rgba32> JoinImages(Image<Rgba32>[] images, int width, int height);
 
 
-        public abstract Image<Rgba32> ResizeImage(Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> original, Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> output);
+        public abstract void ResizeImage(int new_width, int new_height, string file_path, string outpath);
 
         public abstract void SaveImage(string image_path, Image<Rgba32> image_byte);
 
@@ -288,19 +288,21 @@ namespace Sen.Shell.Modules.Standards.Bitmap
             }
         }
 
-        public override Image<Rgba32> ResizeImage(Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> original, Sen.Shell.Modules.Standards.Bitmap.ImageInfo<int> output)
+        public override void ResizeImage(int new_width, int new_height, string file_path, string outpath)
         {
-            using var image = Image.Load<Rgba32>(original.file_path);
+            using var image = Image.Load<Rgba32>(file_path);
             {
                 var resizedImage = image.Clone(ctx => ctx.Resize(new ResizeOptions
                 {
-                    Size = new Size(output.width, output.height),
+                    Size = new Size(new_width, new_height),
                     Mode = ResizeMode.Stretch,
                 }));
-
-                return resizedImage;
+                resizedImage.Save(outpath);
             }
+            return;
         }
+
+
 
         public override Image<Rgba32> JoinImages(Image<Rgba32>[] images, int width, int height)
         {

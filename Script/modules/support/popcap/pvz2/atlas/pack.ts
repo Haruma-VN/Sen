@@ -507,7 +507,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 ? group_members.map((member) => atlas_json.groups[member].path.at(-1) as string)
                 : group_members;
             this.CheckWholeMemberIfExists(media_path, images_name);
-            const packable_datas = this.AutoConversionToPackableData(atlas_json, atlas_json_path);
+            const packable_datas: (PackableData | MaxRectsPackableData)[] = this.AutoConversionToPackableData(
+                atlas_json,
+                atlas_json_path,
+            );
             for (const data of packable_datas) {
                 if (is_path) {
                     const dimension: BitMap.Constraints.ImageInfo<int> = DotNetBitmap.GetDimension<int>(

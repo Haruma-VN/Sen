@@ -81,5 +81,6 @@
     "popcap_unofficial_atlas_merge": "PopCap Unofficial Atlas Merge",
     "popcap_rton_to_json": "PopCap RTON to JSON",
     "popcap_json_to_rton": "PopCap JSON to RTON",
-    "size_of_array_does_not_match": "Size of {1} does not match. Expected {2}"
+    "size_of_array_does_not_match": "Size of {1} does not match. Expected {2}",
+    "popcap_sprite_resize": "PopCap Sprites Resize"
 }

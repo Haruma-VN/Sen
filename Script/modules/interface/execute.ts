@@ -115,7 +115,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_unofficial_resources_split"
         | "popcap_unofficial_resources_merge"
         | "popcap_rton_to_json"
-        | "popcap_json_to_rton";
+        | "popcap_json_to_rton"
+        | "popcap_sprite_resize";
 
     /**
      *
@@ -426,6 +427,17 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         PvZ2Shell.JSONtoPAM(arg, arg.replace(/((\.pam.json))?$/i, ".pam"));
                     });
+                }
+                break;
+            }
+            case "popcap_sprite_resize": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(
+                        argument,
+                        1536,
+                        768,
+                        "D:/Workspace/test/test1",
+                    );
                 }
                 break;
             }
