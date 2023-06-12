@@ -82,4 +82,48 @@ namespace Sen.Script.Modules.Interface.Arguments {
         }
         return parseInt(input);
     }
+
+    /**
+     *
+     * @param type - Type for input
+     * @returns File path input by the user
+     */
+
+    export function InputPath(type: "file" | "directory" | "unknown"): string {
+        let arg: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        while (arg !== "") {
+            if (arg.endsWith(" ")) {
+                arg = arg.slice(0, -1);
+            }
+            if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
+                arg = arg.slice(1, -1);
+            }
+            switch (type) {
+                case "file": {
+                    if (Fs.FileExists(arg)) {
+                        return arg;
+                    }
+                }
+                case "directory": {
+                    if (Fs.DirectoryExists(arg)) {
+                        return arg;
+                    }
+                }
+                default: {
+                    if (Fs.FileExists(arg) || Fs.DirectoryExists(arg)) {
+                        return arg;
+                    }
+                }
+            }
+            Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(
+                    /\{\}/g,
+                    arg,
+                )}`,
+            );
+            arg = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        }
+        return "" as never;
+    }
 }

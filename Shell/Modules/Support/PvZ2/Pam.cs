@@ -371,12 +371,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             PAMInfo PamInfo = new PAMInfo();
             uint PAM_magic = PamFile.readUInt32LE();
-            if (PAM_magic != PAMInfo.Magic) throw new ArgumentException();
+            if (PAM_magic != PAMInfo.Magic) throw new ArgumentException("PAM Magic undefined");
             int version = PamFile.readInt32LE();
             PamInfo.version = version;
             if (version > 6 || version < 1)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Version number must be in range 1 <= version <= 6");
             }
             byte frame_rate = PamFile.readUInt8();
             PamInfo.frame_rate = frame_rate;
@@ -420,7 +420,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         }
         private static ImageInfo ReadImageInfo(SenBuffer PamFile, int version)
         {
-            ImageInfo image = new ImageInfo();
+            #pragma warning disable IDE0017
+            var image = new ImageInfo();
             image.name = PamFile.readStringByInt16LE();
             image.size = new int[2];
             if (version >= 4)
@@ -572,7 +573,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             PamBinary.writeInt32LE(version);
             if (version > 6 || version < 1)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("PAM version must be in range 1 <= version <= 6");
             }
             PamBinary.writeUInt8(PamJson.frame_rate);
             if (PamJson.position == null || PamJson.position.Length < 2)

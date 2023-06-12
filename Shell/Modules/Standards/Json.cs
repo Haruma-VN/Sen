@@ -93,8 +93,8 @@ namespace Sen.Shell.Modules.Standards
             {
                 throw new ArgumentNullException(nameof(obj));
             }
-            Type type = obj.GetType();
-            PropertyInfo[] propertyInfos = type.GetProperties();
+            var type = obj.GetType();
+            var propertyInfos = type.GetProperties();
             var keys = new List<string>();
             foreach (var propertyInfo in propertyInfos)
             {
@@ -110,8 +110,8 @@ namespace Sen.Shell.Modules.Standards
                 throw new ArgumentNullException(nameof(obj));
             }
             var values = new List<object>();
-            Type type = obj.GetType();
-            PropertyInfo[] propertyInfos = type.GetProperties();
+            var type = obj.GetType();
+            var propertyInfos = type.GetProperties();
             foreach (var propertyInfo in propertyInfos)
             {
                 #pragma warning disable CS8604
@@ -139,6 +139,7 @@ namespace Sen.Shell.Modules.Standards
 
         public static Generic_T FromEntries<Generic_T>(object[][] obj_array)
         {
+            #pragma warning disable CS8600
             dynamic obj = Activator.CreateInstance<Generic_T>();
             foreach (var item in obj_array)
             {
@@ -148,6 +149,7 @@ namespace Sen.Shell.Modules.Standards
                 var property = typeof(Generic_T).GetProperty(key);
                 if (property is null)
                 {
+                    #pragma warning disable CS8602
                     property.SetValue(obj, value);
                 }
             }
