@@ -5,11 +5,11 @@ using Sen.Shell.Modules.Standards;
 namespace Sen.Shell.Modules.Support.PvZ2.PAM
 {
 
-#pragma warning disable IDE0090
-#pragma warning disable IDE0230
-#pragma warning disable CS0414
-#pragma warning disable IDE0060
-#pragma warning disable CS8602
+    #pragma warning disable IDE0090
+    #pragma warning disable IDE1006
+    #pragma warning disable CS0414
+    #pragma warning disable IDE0060
+    #pragma warning disable CS8602
 
     internal class PAMInfo
     {

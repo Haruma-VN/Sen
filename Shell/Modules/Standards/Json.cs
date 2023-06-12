@@ -1,4 +1,6 @@
-﻿using System.Text.Encodings.Web;
+﻿using System.Dynamic;
+using System.Reflection;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace Sen.Shell.Modules.Standards
@@ -78,6 +80,80 @@ namespace Sen.Shell.Modules.Standards
             SerializerOptions ??= this.ConstraintJsonSerializerOptions;
             return JsonSerializer.Serialize<Generic_T>(json_serialized, SerializerOptions);
         }
+
+    }
+
+
+    public static class Object
+    {
+
+        public static string[] Keys<Generic_T>(Generic_T obj)
+        {
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+            Type type = obj.GetType();
+            PropertyInfo[] propertyInfos = type.GetProperties();
+            var keys = new List<string>();
+            foreach (var propertyInfo in propertyInfos)
+            {
+                keys.Add(propertyInfo.Name);
+            }
+            return keys.ToArray();
+        }
+
+        public static object[] Values<Generic_T>(Generic_T obj)
+        {
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+            var values = new List<object>();
+            Type type = obj.GetType();
+            PropertyInfo[] propertyInfos = type.GetProperties();
+            foreach (var propertyInfo in propertyInfos)
+            {
+                #pragma warning disable CS8604
+                values.Add(propertyInfo.GetValue(obj));
+            }
+            return values.ToArray();
+        }
+
+
+        public static object[][] Entries<Generic_T>(Generic_T obj)
+        {
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+            var entries = new List<object[]>();
+            var keys = Object.Keys<Generic_T>(obj);
+            var values = Object.Values<Generic_T>(obj);
+            for(var i = 0; i < keys.Length; i++)
+            {
+                entries.Add(new object[2] { keys[i], values[i] });
+            }
+            return entries.ToArray();
+        }
+
+        public static Generic_T FromEntries<Generic_T>(object[][] obj_array)
+        {
+            dynamic obj = Activator.CreateInstance<Generic_T>();
+            foreach (var item in obj_array)
+            {
+                var key = item[0].ToString();
+                var value = item[1];
+
+                var property = typeof(Generic_T).GetProperty(key);
+                if (property is null)
+                {
+                    property.SetValue(obj, value);
+                }
+            }
+            return obj;
+        }
+
 
 
     }

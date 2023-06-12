@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
@@ -11,35 +10,26 @@
     <SelfContained>true</SelfContained>
     <ApplicationIcon>Other\Sen.ico</ApplicationIcon>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(OS)' == 'Unix' ">
     <RuntimeIdentifier>linux-x64;osx-x64</RuntimeIdentifier>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="js\**" />
     <EmbeddedResource Remove="js\**" />
     <None Remove="js\**" />
   </ItemGroup>
-
-
   <ItemGroup>
     <Compile Remove="Properties\Program.cs" />
   </ItemGroup>
-
-
   <ItemGroup>
     <Content Include="Other\Sen.ico" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.Jint" Version="3.21.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
   </ItemGroup>
-
 </Project>

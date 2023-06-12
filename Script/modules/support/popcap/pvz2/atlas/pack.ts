@@ -63,7 +63,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
      * @returns Check if the number is a power of 2
      */
 
-    function create_2n_square(num: number): number {
+    export function Create2nSquareRoot(num: number): number {
         const power = Math.ceil(Math.log2(num));
         return Math.pow(2, power);
     }
@@ -83,8 +83,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             { maxWidth: 0, maxHeight: 0 },
         );
         return {
-            width: create_2n_square(maxWidth),
-            height: create_2n_square(maxHeight),
+            width: Create2nSquareRoot(maxWidth),
+            height: Create2nSquareRoot(maxHeight),
         };
     }
 
