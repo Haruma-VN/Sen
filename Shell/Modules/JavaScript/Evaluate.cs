@@ -10,9 +10,9 @@ using Sen.Shell.Modules.Support.Download;
 
 namespace Sen.Shell.Modules.JavaScript
 {
-    public class Engine
+    public class JSEvaluate
     {
-        public static void Evaluate(in string Script_Directory, string[] args)
+        public static void Execute(in string Script_Directory, string[] args)
         {
 
             var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
@@ -39,6 +39,7 @@ namespace Sen.Shell.Modules.JavaScript
             engine.SetValue("PvZ2Shell", new PvZ2Shell());
             engine.SetValue("ShellVersion", new Version());
             engine.SetValue("ShellUpdate", new DownloadUpdate());
+            engine.SetValue("Buffer", typeof(Implement.Buffer));
 
             try
             {
@@ -78,6 +79,7 @@ namespace Sen.Shell.Modules.JavaScript
             engine.SetValue("PvZ2Shell", new PvZ2Shell());
             engine.SetValue("ShellVersion", new Version());
             engine.SetValue("ShellUpdate", new DownloadUpdate());
+            engine.SetValue("Buffer", typeof(Implement.Buffer));
             engine.Execute(
                 fs.ReadText(path.Resolve($"{Script_Directory}/modules/system/default/exception_handler.js"), EncodingType.UTF8));
         }

@@ -1,12 +1,5 @@
 {
     "default": {
         "language": "English"
-    },
-    "extension": {
-        "disable_plant_levels": {
-            "script": "/modules/extension/pvz2/erase_plant_levels.js",
-            "enabled": true,
-            "func_number": 1
-        }
     }
 }

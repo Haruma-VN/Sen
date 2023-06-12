@@ -85,6 +85,15 @@ declare namespace Console {
      */
 
     export function TestError(): DotNetSystem.Exception;
+    /**
+     *
+     * @param params - Pass object or array here to continue
+     */
+
+    export function Debug<T extends Array<any> | object>(
+        color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null,
+        ...params: Array<T>
+    ): void;
 }
 
 /**
@@ -274,7 +283,7 @@ declare namespace TypeChecker {
      * @param data - Provide any variable here
      * @returns - Variable type
      */
-    export function GetType(data: any): string;
+    export function GetStrictType(data: any): string;
 }
 /**
  * @package Self implement Records
@@ -1674,4 +1683,14 @@ declare interface GitHubReleases {
     tarball_url: string;
     zipball_url: string;
     body: string;
+}
+
+declare namespace Buffer {
+    export function Alloc(size: int): Buffer.JSBuffer;
+
+    export interface JSBuffer {
+        ToString(): string;
+        readonly Length: int;
+        ToArray(): Array<byte>;
+    }
 }

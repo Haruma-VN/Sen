@@ -1,5 +1,5 @@
 namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
-    export interface res_for_work extends small_bundle_info_json {
+    export interface ResourcesForWork extends small_bundle_info_json {
         group_parent: string;
     }
     export abstract class CheckOfficialResources {
@@ -1273,7 +1273,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                 groups: {},
             };
             const group_directory: string = Path.Resolve(`${directory_path}/groups`);
-            const groups_inventory: Array<res_for_work> = new Array();
+            const groups_inventory: Array<ResourcesForWork> = new Array();
             const groups_collection: Array<string> = Object.keys(info_json_information.groups);
             this.CheckGroups(
                 group_directory,
