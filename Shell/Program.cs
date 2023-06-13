@@ -31,11 +31,11 @@ namespace Sen.Shell
             }
             try
             {
-                JSEvaluate.Execute(Script_Directory, args);
+                JSEngine.Execute(Script_Directory, args);
             }
             catch (Exception ex)
             {
-                JSEvaluate.EvaluateError(Script_Directory, ex);
+                JSEngine.EvaluateError(Script_Directory, ex);
             }
             finally
             {

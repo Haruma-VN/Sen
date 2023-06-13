@@ -10,7 +10,7 @@ using Sen.Shell.Modules.Support.Download;
 
 namespace Sen.Shell.Modules.JavaScript
 {
-    public class JSEvaluate
+    public class JSEngine
     {
         public static void Execute(in string Script_Directory, string[] args)
         {
