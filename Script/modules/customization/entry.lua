@@ -1,4 +1,4 @@
-customization = {
+local customization = {
     default = {
         -- Language available: "English", "Vietnamese", "Chinese"
         -- Language set as default is "English", but you can change it yourself
