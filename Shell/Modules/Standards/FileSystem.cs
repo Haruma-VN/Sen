@@ -120,7 +120,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             }
             else
             {
-                throw new ArgumentException($"Invalid data type. Expecting string or collection of bytes.");
+                throw new Sen.Shell.Modules.Standards.RuntimeException($"Invalid data type. Expecting string or collection of bytes.", "undefined");
             }
             return;
         }

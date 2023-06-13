@@ -76,10 +76,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             string Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
             if (Rton_magic != magic) throw new RTONException($"This file is not RTON", RtonFile.filePath ??= "undefined");
-            if (Rton_ver != version) throw new ArgumentException();
+            if (Rton_ver != version) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
             ReadObject(RtonFile, jsonWriter);
             string EOF = RtonFile.readString(4);
-            if (EOF != EOR) throw new ArgumentException();
+            if (EOF != EOR) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
             jsonWriter.Flush();
             SenBuffer JsonFile = new SenBuffer(stream);
             R0x90List.Clear();
@@ -300,12 +300,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 case 0xB9:
                 case 0xBA:
                 case 0xBB:
-                    throw new ArgumentException("0xb0-0xbb is not supported!");
+                    throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
                 case 0xBC:
                     jsonWriter.WriteBooleanValue(RtonFile.readUInt8() != 0);
                     break;
                 default:
-                    throw new ArgumentException($"Bytecode Error: {bytecode} in offset: {RtonFile.readOffset}");
+                    throw new RTONException($"Bytecode Error: {bytecode} in offset: {RtonFile.readOffset}", RtonFile.filePath ??= "undefined");
 
             }
 
@@ -345,7 +345,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                     string str1 = RtonFile.readStringByVarInt32();
                     return string.Format(Str_RTID_3, str1, str2);
                 default:
-                    throw new ArgumentException($"No such type in 0x83: {temp}");
+                    throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
             }
         }
 
@@ -366,7 +366,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         {
             jsonWriter.WriteStartArray();
             byte bytecode = RtonFile.readUInt8();
-            if (bytecode != 0xFD) throw new ArgumentException();
+            if (bytecode != 0xFD) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
             int number = RtonFile.readVarInt32();
             for (var i = 0; i < number; i++)
             {
@@ -374,7 +374,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 ReadBytecode(bytecode, true, RtonFile, jsonWriter);
             }
             bytecode = RtonFile.readUInt8();
-            if (bytecode != 0xFE) throw new ArgumentException();
+            if (bytecode != 0xFE) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
             jsonWriter.WriteEndArray();
         }
 
@@ -634,7 +634,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                         WriteNumber(RtonFile, value);
                         break;
                     default:
-                        throw new ArgumentException();
+                        throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
                 }
         }
 

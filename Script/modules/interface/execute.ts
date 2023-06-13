@@ -156,7 +156,6 @@ namespace Sen.Script.Modules.Interface.Execute {
                 break;
             }
             case "popcap_rton_to_json": {
-                Console.Print(null, "t");
                 if (!Array.isArray(argument)) {
                     PvZ2Shell.RTONDecode(argument, argument.replace(/((\.rton))?$/i, ".json"));
                 } else {

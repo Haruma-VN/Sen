@@ -1,4 +1,13 @@
 namespace Sen.Script.Modules.System.Default.Localization {
+    export type entry_json = {
+        default: {
+            language: string;
+        };
+    };
+
+    export const language: string = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(
+        `${MainScriptDirectory}/modules/customization/entry.json`,
+    ).default.language;
     /**
      *
      * @param property - Provide property to get
@@ -8,7 +17,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
         return DotNetLocalization.Get(
             property,
             Path.Resolve(`${MainScriptDirectory}/modules/customization/language`),
-            "English",
+            `${Sen.Script.Modules.System.Default.Localization.language}`,
         );
     }
 

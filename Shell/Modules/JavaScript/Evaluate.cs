@@ -7,6 +7,8 @@ using Jint;
 using Jint.Native;
 using Jint.Runtime.Interop;
 using Sen.Shell.Modules.Support.Download;
+using Jint.Native.Function;
+using Jint.Native.Object;
 
 namespace Sen.Shell.Modules.JavaScript
 {

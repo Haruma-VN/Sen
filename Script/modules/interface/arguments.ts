@@ -8,14 +8,14 @@ namespace Sen.Script.Modules.Interface.Arguments {
             null,
             `      0. ${Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(
                 /\{\}/g,
-                Sen.Script.Modules.System.Default.Localization.GetString("false"),
+                Sen.Script.Modules.System.Default.Localization.GetString("False"),
             )}`,
         );
         Console.Printf(
             null,
             `      1. ${Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(
                 /\{\}/g,
-                Sen.Script.Modules.System.Default.Localization.GetString("true"),
+                Sen.Script.Modules.System.Default.Localization.GetString("True"),
             )}`,
         );
         let input: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);

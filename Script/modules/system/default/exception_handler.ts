@@ -14,15 +14,18 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
             Path.Resolve(`${MainScriptDirectory}/modules/third/fast-sort/sort.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/constraints/platform.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/exception.js`),
-            Path.Resolve(`${MainScriptDirectory}/modules/system/default/localization.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/filesystem.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/system/default/localization.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/conversion.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/resources/official.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/split.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/pack.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/resize.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/animation/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/assert.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/arguments.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/interface/execute.js`),
         ]),
     ];
 
@@ -61,6 +64,16 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
                         throw new Sen.Script.Modules.Exceptions.RuntimeError(
                             ex as any,
                             ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
+                        );
+                    }
+                    case Sen.Script.Modules.Exceptions.StandardsException.RTONException: {
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
+                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
+                        );
+                        throw new Sen.Script.Modules.Exceptions.BrokenFile(
+                            ex as any,
+                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
+                            `Broken RTON file`,
                         );
                     }
                 }

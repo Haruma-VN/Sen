@@ -1685,8 +1685,26 @@ declare interface GitHubReleases {
     body: string;
 }
 
+declare enum BufferCompare {
+    same = 0,
+    larger = 1,
+    smaller = -1,
+}
+
 declare namespace Buffer {
     export function Alloc(size: int): Buffer.JSBuffer;
+
+    export function Compare(otherBuffer: Buffer.JSBuffer): BufferCompare;
+
+    export function From(input: string): Buffer.JSBuffer;
+
+    export function Includes(otherBuffer: Buffer.JSBuffer): boolean;
+
+    export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
+
+    export function LastIndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
+
+    export function Slice(startIndex: int = 0, endIndex: int? = null): Buffer.JSBuffer;
 
     export interface JSBuffer {
         ToString(): string;
