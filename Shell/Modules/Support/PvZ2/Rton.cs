@@ -5,11 +5,18 @@ using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
-#pragma warning disable IDE0090
-#pragma warning disable IDE0230
-#pragma warning disable CS0414
-#pragma warning disable IDE0060
-#pragma warning disable CA2208
+    [Flags]
+    public enum RTONListException
+    {
+        Magic,
+        Version,
+        Ends,
+    }
+
+    #pragma warning disable IDE0090
+    #pragma warning disable IDE0230
+    #pragma warning disable CS0414
+    #pragma warning disable IDE0060
 
     public class RTONProcession
     {
@@ -75,11 +82,25 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             }
             string Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
-            if (Rton_magic != magic) throw new RTONException($"This file is not RTON", RtonFile.filePath ??= "undefined");
-            if (Rton_ver != version) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+            if (Rton_magic != magic) throw new RTONDecodeException(
+                $"wrong_rton_header", 
+                RtonFile.filePath ??= "undefined", 
+                $"begin_with_rton",
+                RTONListException.Magic
+                );
+
+            if (Rton_ver != version) throw new RTONDecodeException(
+                $"wrong_rton_version",
+                RtonFile.filePath ??= "undefined",
+                $"version_must_be_1", 
+                RTONListException.Version
+                );
             ReadObject(RtonFile, jsonWriter);
             string EOF = RtonFile.readString(4);
-            if (EOF != EOR) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+            if (EOF != EOR) throw new RTONDecodeException($"end_of_rton_file_wrong",
+                RtonFile.filePath ??= "undefined", 
+                $"end_of_rton_must_be_done", 
+                RTONListException.Ends);
             jsonWriter.Flush();
             SenBuffer JsonFile = new SenBuffer(stream);
             R0x90List.Clear();

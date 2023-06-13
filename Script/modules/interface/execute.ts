@@ -116,7 +116,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_unofficial_resources_merge"
         | "popcap_rton_to_json"
         | "popcap_json_to_rton"
-        | "popcap_sprite_resize";
+        | "popcap_sprite_resize"
+        | "popcap_official_pam_to_flash_animation"
+        | "popcap_official_pam_from_flash_animation";
 
     /**
      *
@@ -151,6 +153,16 @@ namespace Sen.Script.Modules.Interface.Execute {
                             arg,
                             arg.replace(/((\.json))?$/i, ".json.info"),
                         ),
+                    );
+                }
+                break;
+            }
+            case "popcap_official_pam_from_flash_animation": {
+                if (!Array.isArray(argument)) {
+                    PvZ2Shell.FlashAnimationtoPAM(argument, argument.replace(/((\.xfl))?$/i, ".pam"));
+                } else {
+                    argument.forEach((arg: string) =>
+                        PvZ2Shell.FlashAnimationtoPAM(arg, arg.replace(/((\.xfl))?$/i, ".pam")),
                     );
                 }
                 break;
@@ -401,10 +413,22 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_pam_to_pam_json": {
                 if (!Array.isArray(argument)) {
-                    PvZ2Shell.PAMtoJSON(argument, argument.replace(/((\.pam))?$/i, ".pam.json"));
+                    PvZ2Shell.PAMtoPAMJSON(argument, argument.replace(/((\.pam))?$/i, ".pam.json"));
                 } else {
                     argument.forEach((arg: string) => {
-                        PvZ2Shell.PAMtoJSON(arg, arg.replace(/((\.pam))?$/i, ".pam.json"));
+                        PvZ2Shell.PAMtoPAMJSON(arg, arg.replace(/((\.pam))?$/i, ".pam.json"));
+                    });
+                }
+                break;
+            }
+            case "popcap_official_pam_to_flash_animation": {
+                if (!Array.isArray(argument)) {
+                    let resolution: int = 1536;
+                    PvZ2Shell.PAMtoFlashAnimation(argument, argument.replace(/((\.pam))?$/i, ".xfl"), resolution);
+                } else {
+                    argument.forEach((arg: string) => {
+                        let resolution: int = 1536;
+                        PvZ2Shell.PAMtoFlashAnimation(arg, arg.replace(/((\.pam))?$/i, ".xfl"), resolution);
                     });
                 }
                 break;
@@ -416,7 +440,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument,
                         ),
                     );
-                    PvZ2Shell.JSONtoPAM(argument, argument.replace(/((\.pam.json))?$/i, ".pam"));
+                    PvZ2Shell.PAMJSONtoPAM(argument, argument.replace(/((\.pam.json))?$/i, ".pam"));
                 } else {
                     argument.forEach((arg: string) => {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
@@ -424,7 +448,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 arg,
                             ),
                         );
-                        PvZ2Shell.JSONtoPAM(arg, arg.replace(/((\.pam.json))?$/i, ".pam"));
+                        PvZ2Shell.PAMJSONtoPAM(arg, arg.replace(/((\.pam.json))?$/i, ".pam"));
                     });
                 }
                 break;

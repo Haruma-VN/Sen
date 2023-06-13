@@ -1277,7 +1277,7 @@ declare namespace DotNetSystem {
     class Exception {
         constructor(message?: string);
 
-        readonly message: string;
+        message: string;
         readonly stackTrace: string | null;
         readonly innerException: Exception | null;
         readonly source: string | null;
@@ -1289,6 +1289,15 @@ declare namespace DotNetSystem {
 
     class RuntimeException extends Exception {
         constructor(public message?: string, public file_path?: string): void;
+    }
+
+    class RTONDecodeException extends RuntimeException {
+        constructor(
+            public message: string,
+            public file_path: string,
+            public expected: string,
+            public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Check.RTONListException,
+        ): void;
     }
 }
 
@@ -1552,7 +1561,7 @@ declare namespace PvZ2Shell {
      * @returns Pam to Pam Json
      */
 
-    export function PAMtoJSON(inFile: string, outFile: string): void;
+    export function PAMtoPAMJSON(inFile: string, outFile: string): void;
     /**
      *
      * @param inFile - Pass JSON file here
@@ -1560,7 +1569,40 @@ declare namespace PvZ2Shell {
      * @returns PAM Json to Pam
      */
 
-    export function JSONtoPAM(inFile: string, outFile: string): void;
+    export function PAMJSONtoPAM(inFile: string, outFile: string): void;
+
+    /**
+     *
+     * @param inFile - PAM JSON
+     * @param outFolder - Out dir
+     * @param resolution - Pass resize resolution
+     */
+
+    export function PAMJSONtoFlashAnimation(inFile: string, outFolder: string, resolution: int): void;
+
+    /**
+     *
+     * @param inFolder - .XFL
+     * @param outFolder - Out PAM JSON
+     */
+
+    export function FlashAnimationtoPAMJSON(inFolder: string, outFile: string): void;
+
+    /**
+     *
+     * @param inFile - PAM
+     * @param outFolder - Out dir
+     * @param resolution - Pass resize resolution
+     */
+
+    export function PAMtoFlashAnimation(inFile: string, outFolder: string, resolution: int): void;
+    /**
+     *
+     * @param inFolder - .XFL
+     * @param outFolder - Out PAM
+     */
+
+    export function FlashAnimationtoPAM(inFolder: string, outFile: string): void;
 }
 
 /**

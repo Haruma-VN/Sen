@@ -7,10 +7,15 @@ using System.Threading.Tasks;
 namespace Sen.Shell.Modules.Standards
 {
 
+    [Flags]
     public enum StandardsException
     {
         RuntimeException,
         RTONException,
+        RTONDecodeException,
+        PAMException,
+        PAMEncodeException,
+        PAMDecodeException,
     }
 
     public class RuntimeException : System.Exception
@@ -59,6 +64,50 @@ namespace Sen.Shell.Modules.Standards
         public RTONException(string message, string file_path) : base(message, file_path)
         {
             this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RTONException;
+        }
+    }
+
+    public class PAMException : RuntimeException
+    {
+        public PAMException(string message, string errorCode) : base(message, errorCode)
+        {
+            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMException;
+        }
+    }
+
+    public class PAMEncodeException : RuntimeException
+    {
+        public PAMEncodeException(string message, string errorCode) : base(message, errorCode)
+        {
+            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMEncodeException;
+        }
+    }
+
+    public class PAMDecodeException : RuntimeException
+    {
+        public PAMDecodeException(string message, string errorCode) : base(message, errorCode)
+        {
+            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMDecodeException;
+        }
+    }
+
+    public class RTONDecodeException : RTONException
+    {
+
+        private Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException _Exception;
+        public Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException exception
+        {
+            get { return this._Exception; }
+            set { this._Exception = value; }
+        }
+
+        public string expected;
+
+        public RTONDecodeException(string message, string errorCode, string expected ,Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException exception) : base(message, errorCode)
+        {
+            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RTONDecodeException;
+            this._Exception = exception;
+            this.expected = expected;
         }
     }
 }

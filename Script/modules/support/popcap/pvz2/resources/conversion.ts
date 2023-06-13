@@ -1150,7 +1150,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             const info_json: Output_Value = this.SetDefaultInfo<Template, Output_Value>(res_json, file_path);
             Fs.CreateDirectory(Path.Resolve(`${save_directory}`));
             Sen.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(
-                Path.Resolve(Path.Resolve(`${save_directory}/info.json`)),
+                Path.Resolve(`${save_directory}/info.json`),
                 info_json,
             );
             Fs.CreateDirectory(groups_directory);

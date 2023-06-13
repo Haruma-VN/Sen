@@ -108,5 +108,17 @@
         "include": [".sprite"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_official_pam_to_flash_animation": {
+        "func_number": 19,
+        "include": [".pam"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_official_pam_from_flash_animation": {
+        "func_number": 20,
+        "include": [".xfl"],
+        "exclude": [],
+        "type": "directory"
     }
 }

@@ -70,11 +70,42 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
                         Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
                             ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
                         );
+                        (ex as DotNetSystem.Exception).message =
+                            Sen.Script.Modules.System.Default.Localization.GetString(ex.message);
                         throw new Sen.Script.Modules.Exceptions.BrokenFile(
                             ex as any,
                             ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
-                            `Broken RTON file`,
+                            Sen.Script.Modules.System.Default.Localization.GetString("rton_file_error"),
                         );
+                    }
+                    case Sen.Script.Modules.Exceptions.StandardsException.RTONDecodeException: {
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
+                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
+                        );
+                        (ex as Sen.Script.Modules.Exceptions.WrongPropertyValue & any).additional_message =
+                            Sen.Script.Modules.System.Default.Localization.GetString(
+                                (ex as DotNetSystem.RTONDecodeException).expected,
+                            );
+                        Sen.Script.Modules.Exceptions.ExecutionError(
+                            Sen.Script.Modules.System.Default.Localization.GetString(
+                                (ex as DotNetSystem.RTONDecodeException).message,
+                            ),
+                        );
+                        Sen.Script.Modules.Exceptions.ExecutionExceptionType(
+                            Sen.Script.Modules.System.Default.Localization.GetString(
+                                (ex as DotNetSystem.RTONDecodeException).expected,
+                            ),
+                        );
+                        Console.Printf(
+                            null,
+                            (ex as DotNetSystem.Exception).stackTrace
+                                ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
+                                ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > "),
+                        );
+                        break;
+                    }
+                    default: {
+                        throw new Error(ex as any);
                     }
                 }
             }

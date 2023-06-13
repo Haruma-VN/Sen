@@ -15,6 +15,10 @@ namespace Sen.Script.Modules.Exceptions {
     export enum StandardsException {
         RuntimeException,
         RTONException,
+        RTONDecodeException,
+        PAMException,
+        PAMEncodeException,
+        PAMDecodeException,
     }
 
     /**

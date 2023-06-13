@@ -1,5 +1,7 @@
 ﻿using System.Text;
-using Sen.Shell.Modules.Standards.IOModule;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 {
 
@@ -46,6 +48,11 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         {
         }
 
+        /// <summary>
+        /// Creates a new  SenBuffer instance.
+        /// <param name="size"> { Size } The size to create length of SenBuffer.</param>
+        /// </summary>
+
         public SenBuffer(int size)
         {
             byte[] bytes = new byte[size];
@@ -53,10 +60,31 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         }
 
         /// <summary>
-        /// Creates a new SenBuffer instance.
-        /// <param name="path"> { Path } The Bytes to use as the internal Bytes value.</param>
+        /// Creates a new  SenBuffer instance.
+        /// <param name="document"> { XElement } Support to save xml file.</param>
         /// </summary>
 
+        public SenBuffer(XElement document)
+        {
+            foreach (var e in document.DescendantsAndSelf())
+            {
+                e.Name = document + e.Name.LocalName;
+            }
+            XmlWriterSettings settings = new()
+            {
+                Indent = true,
+                IndentChars = "\t",
+                OmitXmlDeclaration = true
+            };
+            baseStream = new MemoryStream();
+            XDocument XDdocument = new(new XDeclaration("1.0", "utf-8", null), document);
+            XDdocument.Save(baseStream);
+        }
+
+        /// <summary>
+        /// Creates a new SenBuffer instance.
+        /// <param name="path"> { Path } The Path to use access the file value.</param>
+        /// </summary>
 
         public SenBuffer(string path)
         {
@@ -826,12 +854,26 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public virtual void SaveFile(string path)
         {
-            using var fileStream = new FileStream(path, FileMode.Create);
+            using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 baseStream.Seek(0, SeekOrigin.Begin);
                 baseStream.CopyTo(fileStream);
             }
             Close();
+        }
+
+        public static XElement ReadXml(string path) {
+            XElement data = XDocument.Load(path).Root!;
+            foreach (var e in data.DescendantsAndSelf())
+            {
+                e.Name = e.Name.LocalName;
+            }
+            return data;
+        }
+
+        public static void SaveXml(string path, XElement document) {
+            SenBuffer data = new SenBuffer(document);
+            data.SaveFile(path);
         }
 
         public virtual async Task SaveFileAsync(string path)
