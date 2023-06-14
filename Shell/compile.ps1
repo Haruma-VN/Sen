@@ -20,7 +20,11 @@ dotnet publish -c Release -r linux-arm64 --self-contained true
 $publishPath = "./bin/Release/net8.0"
 $movePath = "./bin/Release/net8.0/"
 
+
+
+
 $platforms = @("win-x64", "win-x86", "win-arm", "win-arm64", "osx-x64", "osx-arm64", "linux-x64", "linux-arm", "linux-arm64")
+
 
 foreach ($platform in $platforms) {
     $directoryPath = Join-Path -Path $publishPath -ChildPath $platform
@@ -33,6 +37,28 @@ foreach ($platform in $platforms) {
         Move-Item -Path (Join-Path -Path $directoryPath -ChildPath $newDirectoryName) -Destination $movePath -Force -ErrorAction SilentlyContinue
         Remove-Item -Path $directoryPath -Force -Recurse -ErrorAction SilentlyContinue
     }
+}
+
+function Compress-Folder {
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$FolderPath
+    )
+
+    $FolderPath = Resolve-Path $FolderPath
+    $DirectoryName = (Get-Item $FolderPath).Name
+    $ZipFileName = "$DirectoryName.zip"
+
+    Add-Type -A 'System.IO.Compression.FileSystem'
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($FolderPath, $ZipFileName)
+
+    Write-Host "Folder '$FolderPath' compressed to '$ZipFileName'."
+}
+
+foreach ($platform in $platforms) {
+    $directoryPath = Join-Path -Path $publishPath -ChildPath "shell.$platform"
+    Compress-Folder -FolderPath $directoryPath
 }
 
 Write-Host "All commands executed!"
