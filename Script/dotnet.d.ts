@@ -1603,6 +1603,21 @@ declare namespace PvZ2Shell {
      */
 
     export function FlashAnimationtoPAM(inFolder: string, outFile: string): void;
+
+    /**
+     *
+     * @param inFile - Pass RSG file path
+     * @param outFolder - Out directory
+     */
+
+    export function RSGUnpack(inFile: string, outFolder: string): void;
+    /**
+     *
+     * @param inDirectory - Pass RSG packet directory path
+     * @param outFile - Out File
+     */
+
+    export function RSGPack(inDirectory: string, outFile: string): void;
 }
 
 /**
@@ -1727,26 +1742,77 @@ declare interface GitHubReleases {
     body: string;
 }
 
+/**
+ * Buffer Compare
+ */
+
 declare enum BufferCompare {
     same = 0,
     larger = 1,
     smaller = -1,
 }
 
+/**
+ * Buffer implemented from .NET
+ */
+
 declare namespace Buffer {
+    /**
+     *
+     * @param size - Pass size to allocate
+     */
     export function Alloc(size: int): Buffer.JSBuffer;
+
+    /**
+     *
+     * @param otherBuffer - Pass other Buffer here to compare
+     */
 
     export function Compare(otherBuffer: Buffer.JSBuffer): BufferCompare;
 
+    /**
+     *
+     * @param input - Pass string to create buffer
+     */
+
     export function From(input: string): Buffer.JSBuffer;
+
+    /**
+     *
+     * @param otherBuffer - Check if it's included
+     */
 
     export function Includes(otherBuffer: Buffer.JSBuffer): boolean;
 
+    /**
+     *
+     * @param value - Val find
+     * @param startIndex - Start index
+     * @param endIndex - End index
+     */
+
     export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
+
+    /**
+     *
+     * @param value - Val find
+     * @param startIndex - Start index
+     * @param endIndex - End index
+     */
 
     export function LastIndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
 
+    /**
+     *
+     * @param startIndex - Start slice
+     * @param endIndex - End slice
+     */
+
     export function Slice(startIndex: int = 0, endIndex: int? = null): Buffer.JSBuffer;
+
+    /**
+     * JS Buffer
+     */
 
     export interface JSBuffer {
         ToString(): string;

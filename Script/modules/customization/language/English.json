@@ -148,5 +148,7 @@
     "invalid_image_matrix_length": "Invalid Image Matrix length",
     "invalid_image_transformationpoint_length": "Invalid Image TransformationPoint length",
     "invalid_image_point_length": "Invalid Image Point length",
-    "invalid_image_transform": "Invalid Image Transform"
+    "invalid_image_transform": "Invalid Image Transform",
+    "popcap_rsg_unpack": "PopCap RSG Unpack",
+    "popcap_rsg_pack": "PopCap RSG Pack"
 }

@@ -120,5 +120,29 @@
         "include": [".xfl"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_official_pam_json_to_flash_animation": {
+        "func_number": 21,
+        "include": [".pam.json"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_official_pam_json_from_flash_animation": {
+        "func_number": 22,
+        "include": [".xfl"],
+        "exclude": [],
+        "type": "directory"
+    },
+    "popcap_rsg_unpack": {
+        "func_number": 23,
+        "include": [".rsg"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rsg_pack": {
+        "func_number": 24,
+        "include": [".packet"],
+        "exclude": [],
+        "type": "directory"
     }
 }

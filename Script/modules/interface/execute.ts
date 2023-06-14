@@ -120,7 +120,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_official_pam_to_flash_animation"
         | "popcap_official_pam_from_flash_animation"
         | "popcap_official_resources_to_unofficial_resources"
-        | "popcap_unofficial_resources_to_official_resources";
+        | "popcap_unofficial_resources_to_official_resources"
+        | "popcap_rsg_unpack"
+        | "popcap_rsg_pack";
 
     /**
      *
@@ -154,6 +156,38 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                             arg,
                             Path.Resolve(`${Path.Dirname(arg)}/res.json`),
+                        ),
+                    );
+                }
+                break;
+            }
+            case "popcap_rsg_unpack": {
+                if (!Array.isArray(argument)) {
+                    PvZ2Shell.RSGUnpack(
+                        argument,
+                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.packet`),
+                    );
+                } else {
+                    argument.forEach((arg: string) =>
+                        PvZ2Shell.RSGUnpack(
+                            arg,
+                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.packet`),
+                        ),
+                    );
+                }
+                break;
+            }
+            case "popcap_rsg_pack": {
+                if (!Array.isArray(argument)) {
+                    PvZ2Shell.RSGPack(
+                        argument,
+                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rsg`),
+                    );
+                } else {
+                    argument.forEach((arg: string) =>
+                        PvZ2Shell.RSGPack(
+                            arg,
+                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rsg`),
                         ),
                     );
                 }

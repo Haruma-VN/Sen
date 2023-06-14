@@ -67,6 +67,7 @@ namespace Sen.Script {
     export function ShellUpdateCheck(): void {
         if (ShellUpdate.HasAdmin()) {
             const available: Array<number> = new Array();
+            11;
             const assets = ShellUpdate.SendGetRequest(
                 `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
                 "Sen",
