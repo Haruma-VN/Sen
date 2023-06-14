@@ -1,6 +1,7 @@
 ﻿using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Support.PvZ2.RTON;
 using Sen.Shell.Modules.Support.PvZ2.PAM;
+using Sen.Shell.Modules.Support.PvZ2.RSG;
 namespace Sen.Shell.Modules.Support.PvZ2
 {
     public abstract class PvZ2ShellAbstract
@@ -20,6 +21,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public abstract void PAMtoFlashAnimation(string inFile, string outFolder, int resolution);
 
         public abstract void FlashAnimationtoPAM(string inFolder, string outFile);
+
+        public abstract void RSGUnpack(string inFile, string outFolder);
+
+        public abstract void RSGPack(string inFolder, string outFile);
 
     }
 
@@ -85,6 +90,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
             var PAMJson = PAM_Animation.Encode(inFolder);
             var PAMFile = PAM_Binary.Encode(PAMJson);
             PAMFile.OutFile(outFile);
+            return;
+        }
+
+        public override void RSGUnpack(string inFile, string outFolder) {
+            var RsgFile = new SenBuffer(inFile);
+            RSGFunction.UnpackNormal(RsgFile, outFolder);
+            return;
+        }
+
+        public override void RSGPack(string inFile, string outFolder) {
             return;
         }
     }

@@ -1,12 +1,16 @@
-﻿using Sen.Shell.Modules.Standards;
+﻿using Esprima.Ast;
+using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 // Download script instantly
@@ -15,6 +19,8 @@ namespace Sen.Shell.Modules.Support.Download
 {
     #pragma warning disable CS8618
     #pragma warning disable IDE1006
+
+    [JsonSerializable(typeof(Asset))]
     public class Asset
     {
         public string url { get; set; }
@@ -31,6 +37,7 @@ namespace Sen.Shell.Modules.Support.Download
         public DateTime updated_at { get; set; }
         public string browser_download_url { get; set; }
     }
+    [JsonSerializable (typeof (Author))]
 
     public class Author
     {
@@ -53,6 +60,7 @@ namespace Sen.Shell.Modules.Support.Download
         public string type { get; set; }
         public bool site_admin { get; set; }
     }
+    [JsonSerializable (typeof (GitHubReleases))]
 
     public class GitHubReleases
     {
@@ -75,6 +83,7 @@ namespace Sen.Shell.Modules.Support.Download
         public string zipball_url { get; set; }
         public string body { get; set; }
     }
+    [JsonSerializable (typeof (Uploader))]
 
     public class Uploader
     {
@@ -97,7 +106,6 @@ namespace Sen.Shell.Modules.Support.Download
         public string type { get; set; }
         public bool site_admin { get; set; }
     }
-
     public abstract class DownloadUpdateAbstract
     {
         public abstract void CallDownloadScriptAndWait(string script_dir, string link);
