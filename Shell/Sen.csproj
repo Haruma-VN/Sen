@@ -8,42 +8,13 @@
     <Authors>Haruma-VN</Authors>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
-    <ApplicationIcon>Other\Sen.ico</ApplicationIcon>
-    <SignAssembly>False</SignAssembly>
-    <PackAsTool>True</PackAsTool>
-    <ToolCommandName>$(TargetName)</ToolCommandName>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <UseWindowsForms>False</UseWindowsForms>
-    <UseWPF>False</UseWPF>
-    <ErrorReport>queue</ErrorReport>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <IncludeSymbols>True</IncludeSymbols>
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	  <ApplicationIcon>Other\Sen.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(OS)' == 'Unix' ">
     <RuntimeIdentifier>linux-x64;osx-x64</RuntimeIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>embedded</DebugType>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <FileAlignment>8192</FileAlignment>
-    <WarningLevel>9999</WarningLevel>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <Deterministic>True</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>embedded</DebugType>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <FileAlignment>8192</FileAlignment>
-    <WarningLevel>9999</WarningLevel>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <Deterministic>True</Deterministic>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="js\**" />
@@ -55,12 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Other\Sen.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.16.0" />
