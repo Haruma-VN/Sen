@@ -23,9 +23,16 @@
 
 -   [TwinStar](https://github.com/twinkles-twinstar/): His project [TwinStar.ToolKit](https://github.com/twinkles-twinstar/TwinStar.ToolKit) has helped me a lot on making this project.
 
--   [viiguess](https://github.com/viiguess): She has helped a lot on reporting bugs on the predecessor version of `Sen` which is `Tre` that helped me to fix them in this project.
+-   [vi_i_guess](https://github.com/viiguess): She has helped a lot on reporting bugs on the predecessor version of `Sen` which is `Tre` that helped me to fix them in this project.
 
--   ...people in the PvZ2-modding community: This tool has various contribution, all thanks several ideas of the people in the modding community has helping me made them in functionality.
+-   People in the PvZ2-modding community: This tool has various contribution, all thanks several ideas of the people in the modding community has helping me made them in functionality.
+
+## How to reach me?
+
+-   My Personal Mail: harumavn@outlook.com
+-   My Discord: Haruma#3635
+-   Join Sen discord server for more help: [Discord Server](https://discord.gg/C2Xr2kaBYJ)
+-   Issues relate to `Sen` or any requests: [GitHub Issues](https://github.com/Haruma-VN/Sen/issues)
 
 ## Final Words
 
