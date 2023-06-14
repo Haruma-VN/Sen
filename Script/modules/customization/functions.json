@@ -29,13 +29,13 @@
         "exclude": [],
         "type": "directory"
     },
-    "popcap_official_to_unofficial": {
+    "popcap_official_resources_to_unofficial_resources": {
         "func_number": 6,
         "include": ["resources.json"],
         "exclude": [],
         "type": "file"
     },
-    "popcap_unofficial_to_official": {
+    "popcap_unofficial_resources_to_official_resources": {
         "func_number": 7,
         "include": ["res.json"],
         "exclude": [],

@@ -5,6 +5,12 @@ using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
+
+#pragma warning disable IDE0090
+#pragma warning disable IDE0230
+#pragma warning disable CS0414
+#pragma warning disable CS8603
+#pragma warning disable IDE0060
     [Flags]
     public enum RTONListException
     {
@@ -13,10 +19,95 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         Ends,
     }
 
-    #pragma warning disable IDE0090
-    #pragma warning disable IDE0230
-    #pragma warning disable CS0414
-    #pragma warning disable IDE0060
+    public class List
+    {
+        internal class StringPool
+        {
+            Dictionary<string, PoolInfo> stringPool;
+            long position;
+            int index;
+            bool autoPool = false;
+
+            public StringPool(bool autoPool)
+            {
+                stringPool = new Dictionary<string, PoolInfo>();
+                position = 0;
+                index = 0;
+                this.autoPool = autoPool;
+            }
+
+            public StringPool()
+            {
+                stringPool = new Dictionary<string, PoolInfo>();
+                position = 0;
+                index = 0;
+            }
+
+            public int Length => index;
+
+            public PoolInfo this[int index]
+            {
+                get
+                {
+                    if (index > this.index)
+                    {
+                        return null;
+                    }
+                    return stringPool.ElementAt(index).Value;
+                }
+            }
+
+            public PoolInfo this[string id]
+            {
+                get
+                {
+                    if (!stringPool.ContainsKey(id))
+                    {
+                        if (autoPool)
+                        {
+                            return ThrowInPool(id);
+                        }
+                        return null;
+                    }
+                    return stringPool[id];
+                }
+            }
+
+            public bool Exist(string id)
+            {
+                return stringPool.ContainsKey(id);
+            }
+
+            public void Clear()
+            {
+                stringPool.Clear();
+                position = 0;
+                index = 0;
+            }
+            public PoolInfo ThrowInPool(string poolKey)
+            {
+                if (!stringPool.ContainsKey(poolKey))
+                {
+                    stringPool.Add(poolKey, new PoolInfo(position, index++, poolKey));
+                    position += poolKey.Length + 1;
+                }
+                return stringPool[poolKey];
+            }
+        }
+
+        internal class PoolInfo
+        {
+            public long Offset;
+            public int Index;
+            public string Value;
+            public PoolInfo(long offset, int index, string value)
+            {
+                Offset = offset;
+                Index = index;
+                Value = value;
+            }
+        }
+    }
 
     public class RTONProcession
     {
@@ -29,11 +120,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         public static readonly List<byte[]> R0x90List = new List<byte[]>();
 
         public static readonly List<byte[]> R0x92List = new List<byte[]>();
-
-        public static readonly List<string> R0x90WriteList = new List<string>();
-
-        public static readonly List<string> R0x92WriteList = new List<string>();
-
 
         public static readonly byte[] NULL = new byte[] { 0x2A };
 
@@ -61,9 +147,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
 
         public static byte[]? tempstring;
 
+        public static string RTONChineseKey = "";
+
         public static void Decrypt(SenBuffer RtonFile)
         {
-
         }
         // Rton_to_Json
         public static SenBuffer Decode(SenBuffer RtonFile, bool DecryptFile)
@@ -83,8 +170,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             string Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
             if (Rton_magic != magic) throw new RTONDecodeException(
-                $"wrong_rton_header", 
-                RtonFile.filePath ??= "undefined", 
+                $"wrong_rton_header",
+                RtonFile.filePath ??= "undefined",
                 $"begin_with_rton",
                 RTONListException.Magic
                 );
@@ -92,14 +179,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             if (Rton_ver != version) throw new RTONDecodeException(
                 $"wrong_rton_version",
                 RtonFile.filePath ??= "undefined",
-                $"version_must_be_1", 
+                $"version_must_be_1",
                 RTONListException.Version
                 );
             ReadObject(RtonFile, jsonWriter);
             string EOF = RtonFile.readString(4);
             if (EOF != EOR) throw new RTONDecodeException($"end_of_rton_file_wrong",
-                RtonFile.filePath ??= "undefined", 
-                $"end_of_rton_must_be_done", 
+                RtonFile.filePath ??= "undefined",
+                $"end_of_rton_must_be_done",
                 RTONListException.Ends);
             jsonWriter.Flush();
             SenBuffer JsonFile = new SenBuffer(stream);
@@ -399,21 +486,27 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             jsonWriter.WriteEndArray();
         }
 
+        public static void Encrypt(ref SenBuffer RtonFile)
+        {
+        }
+
         //Json to Rton
         public static SenBuffer Encode(byte[] JsonBuffer, bool EncryptFile)
         {
-            R0x90WriteList.Clear();
-            R0x92WriteList.Clear();
+            List.StringPool R0x90 = new List.StringPool();
+            List.StringPool R0x92 = new List.StringPool();
             Stream stream = new MemoryStream(JsonBuffer);
             JsonDocument Json = JsonDocument.Parse(stream, new JsonDocumentOptions { AllowTrailingCommas = true });
             JsonElement root = Json.RootElement;
             SenBuffer RtonFile = new SenBuffer();
             RtonFile.writeString(magic);
             RtonFile.writeUInt32LE(version);
-            WriteObject(RtonFile, root);
+            WriteObject(RtonFile, root, R0x90, R0x92);
             RtonFile.writeString(EOR);
-            R0x90WriteList.Clear();
-            R0x92WriteList.Clear();
+            if (EncryptFile)
+            {
+                Encrypt(ref RtonFile);
+            }
             return RtonFile;
         }
 
@@ -426,7 +519,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             return true;
         }
 
-        private static void WriteString(SenBuffer RtonFile, string? str)
+        private static void WriteString(SenBuffer RtonFile, string? str, List.StringPool R0x90, List.StringPool R0x92)
         {
             if (str == Str_Null)
             {
@@ -436,30 +529,30 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             else if (WriteBinary(RtonFile, str!)) { }
             else if (IsASCII(str!))
             {
-                if (R0x90WriteList.Contains(str!))
+                if (R0x90.Exist(str!))
                 {
                     RtonFile.writeUInt8(0x91);
-                    RtonFile.writeVarInt32(R0x90WriteList.IndexOf(str!));
+                    RtonFile.writeVarInt32(R0x90[str!].Index);
                 }
                 else
                 {
                     RtonFile.writeUInt8(0x90);
                     RtonFile.writeStringByVarInt32(str!);
-                    R0x90WriteList.Add(str!);
+                    R0x90.ThrowInPool(str!);
                 }
             }
             else
             {
-                if (R0x90WriteList.Contains(str!))
+                if (R0x92.Exist(str!))
                 {
                     RtonFile.writeUInt8(0x93);
-                    RtonFile.writeVarInt32(R0x92WriteList.IndexOf(str!));
+                    RtonFile.writeVarInt32(R0x92[str!].Index);
                 }
                 else
                 {
                     RtonFile.writeUInt8(0x92);
                     RtonFile.writeStringByVarInt32(str!);
-                    R0x92WriteList.Add(str!);
+                    R0x92.ThrowInPool(str!);
                 }
             }
         }
@@ -627,55 +720,57 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             }
         }
 
-        private static void WriteVauleJson(SenBuffer RtonFile, JsonElement value) {
+        private static void WriteVauleJson(SenBuffer RtonFile, JsonElement value, List.StringPool R0x90, List.StringPool R0x92)
+        {
             switch (value.ValueKind)
-                {
-                    case JsonValueKind.Object:
-                        RtonFile.writeUInt8(0x85);
-                        WriteObject(RtonFile, value);
-                        break;
-                    case JsonValueKind.Array:
-                        RtonFile.writeUInt8(0x86);
-                        WriteArray(RtonFile, value);
-                        break;
-                    case JsonValueKind.Undefined:
-                    case JsonValueKind.Null:
-                        RtonFile.writeUInt8(0x84);
-                        break;
-                    case JsonValueKind.True:
-                        RtonFile.writeBool(true);
-                        break;
-                    case JsonValueKind.False:
-                        RtonFile.writeBool(false);
-                        break;
-                    case JsonValueKind.String:
-                        WriteString(RtonFile, value.GetString());
-                        break;
-                    case JsonValueKind.Number:
-                        WriteNumber(RtonFile, value);
-                        break;
-                    default:
-                        throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
-                }
+            {
+                case JsonValueKind.Object:
+                    RtonFile.writeUInt8(0x85);
+                    WriteObject(RtonFile, value, R0x90, R0x92);
+                    break;
+                case JsonValueKind.Array:
+                    RtonFile.writeUInt8(0x86);
+                    WriteArray(RtonFile, value, R0x90, R0x92);
+                    break;
+                case JsonValueKind.Undefined:
+                case JsonValueKind.Null:
+                    RtonFile.writeUInt8(0x84);
+                    break;
+                case JsonValueKind.True:
+                    RtonFile.writeBool(true);
+                    break;
+                case JsonValueKind.False:
+                    RtonFile.writeBool(false);
+                    break;
+                case JsonValueKind.String:
+                    WriteString(RtonFile, value.GetString(), R0x90, R0x92);
+                    break;
+                case JsonValueKind.Number:
+                    WriteNumber(RtonFile, value);
+                    break;
+                default:
+                    throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+            }
         }
 
-        private static void WriteObject(SenBuffer RtonFile, JsonElement json)
+        private static void WriteObject(SenBuffer RtonFile, JsonElement json, List.StringPool R0x90, List.StringPool R0x92)
         {
             foreach (JsonProperty property in json.EnumerateObject())
             {
-                WriteString(RtonFile, property.Name);
-                WriteVauleJson(RtonFile, property.Value);
+                WriteString(RtonFile, property.Name, R0x90, R0x92);
+                WriteVauleJson(RtonFile, property.Value, R0x90, R0x92);
             }
             RtonFile.writeUInt8(0xFF);
         }
 
-        private static void WriteArray(SenBuffer RtonFile, JsonElement json)
+        private static void WriteArray(SenBuffer RtonFile, JsonElement json, List.StringPool R0x90, List.StringPool R0x92)
         {
             RtonFile.writeUInt8(0xFD);
             int arrayLength = json.GetArrayLength();
             RtonFile.writeVarInt32(arrayLength);
-            for (var i = 0; i < arrayLength; i++) {
-                WriteVauleJson(RtonFile, json[i]);
+            for (var i = 0; i < arrayLength; i++)
+            {
+                WriteVauleJson(RtonFile, json[i], R0x90, R0x92);
             }
             RtonFile.writeUInt8(0xFE);
         }

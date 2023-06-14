@@ -118,7 +118,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_json_to_rton"
         | "popcap_sprite_resize"
         | "popcap_official_pam_to_flash_animation"
-        | "popcap_official_pam_from_flash_animation";
+        | "popcap_official_pam_from_flash_animation"
+        | "popcap_official_resources_to_unofficial_resources"
+        | "popcap_unofficial_resources_to_official_resources";
 
     /**
      *
@@ -138,6 +140,38 @@ namespace Sen.Script.Modules.Interface.Execute {
                     Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(argument);
                 } else {
                     argument.forEach((arg: string) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                }
+                break;
+            }
+            case "popcap_official_resources_to_unofficial_resources": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
+                        argument,
+                        Path.Resolve(`${Path.Dirname(argument)}/res.json`),
+                    );
+                } else {
+                    argument.forEach((arg: string) =>
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
+                            arg,
+                            Path.Resolve(`${Path.Dirname(arg)}/res.json`),
+                        ),
+                    );
+                }
+                break;
+            }
+            case "popcap_unofficial_resources_to_official_resources": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
+                        argument,
+                        Path.Resolve(`${Path.Dirname(argument)}/resources.json`),
+                    );
+                } else {
+                    argument.forEach((arg: string) =>
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
+                            arg,
+                            Path.Resolve(`${Path.Dirname(arg)}/resources.json`),
+                        ),
+                    );
                 }
                 break;
             }

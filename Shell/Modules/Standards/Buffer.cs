@@ -60,28 +60,6 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         }
 
         /// <summary>
-        /// Creates a new  SenBuffer instance.
-        /// <param name="document"> { XElement } Support to save xml file.</param>
-        /// </summary>
-
-        public SenBuffer(XElement document)
-        {
-            foreach (var e in document.DescendantsAndSelf())
-            {
-                e.Name = document + e.Name.LocalName;
-            }
-            XmlWriterSettings settings = new()
-            {
-                Indent = true,
-                IndentChars = "\t",
-                OmitXmlDeclaration = true
-            };
-            baseStream = new MemoryStream();
-            XDocument XDdocument = new(new XDeclaration("1.0", "utf-8", null), document);
-            XDdocument.Save(baseStream);
-        }
-
-        /// <summary>
         /// Creates a new SenBuffer instance.
         /// <param name="path"> { Path } The Path to use access the file value.</param>
         /// </summary>
@@ -784,6 +762,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             fixWriteOffset(offset);
             if (str == null) {
                 writeInt16LE(0);
+                return;
             }
             writeInt16LE((short)str!.Length);
             writeString(str!);
@@ -871,9 +850,20 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             return data;
         }
 
-        public static void SaveXml(string path, XElement document) {
-            SenBuffer data = new SenBuffer(document);
-            data.SaveFile(path);
+        public static void SaveXml(string outPath, XElement document, XNamespace xflns) {
+            foreach (var e in document.DescendantsAndSelf())
+            {
+                e.Name = xflns + e.Name.LocalName;
+            }
+            XmlWriterSettings settings = new()
+            {
+                Indent = true,
+                IndentChars = "\t",
+                OmitXmlDeclaration = true
+            };
+            using var writer = XmlWriter.Create(outPath, settings);
+            XDocument XDdocument = new(new XDeclaration("1.0", "utf-8", null), document);
+            XDdocument.Save(writer);
         }
 
         public virtual async Task SaveFileAsync(string path)
