@@ -30,7 +30,6 @@
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.Jint" Version="3.21.2" />
-    <PackageReference Include="MoonSharp" Version="2.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
   </ItemGroup>
 </Project>
