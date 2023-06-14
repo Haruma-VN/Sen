@@ -1477,7 +1477,7 @@ declare type resource_atlas_and_sprites = {
     parent: string;
     res: string;
     resources: Array<{
-        slot: number;
+        slot?: number;
         id: string;
         path: string | Array<string>;
         type: string;

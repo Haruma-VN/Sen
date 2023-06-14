@@ -104,6 +104,22 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
                         );
                         break;
                     }
+                    case Sen.Script.Modules.Exceptions.StandardsException.PAMException: {
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
+                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
+                        );
+                        Sen.Script.Modules.Exceptions.ExecutionError(
+                            Sen.Script.Modules.System.Default.Localization.GetString(
+                                (ex as DotNetSystem.RTONDecodeException).message,
+                            ),
+                        );
+                        Console.Printf(
+                            null,
+                            (ex as DotNetSystem.Exception).stackTrace
+                                ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
+                                ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > "),
+                        );
+                    }
                     default: {
                         throw new Error(ex as any);
                     }

@@ -559,7 +559,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
                 const parent_name: string = `${subgroup_output.id}_${i < 10 ? `0${i}` : `${i}`}`;
                 subgroup_output.resources.push({
-                    slot: 0,
                     id: `ATLASIMAGE_ATLAS_${parent_name.toUpperCase()}`,
                     path: path_type === "string" ? `atlases\\${parent_name}` : [`atlases`, `${parent_name}`],
                     type: `Image`,
@@ -572,7 +571,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     subgroup_output.resources.push(
                         "cols" in max_rects_collections[i][j]
                             ? {
-                                  slot: 0,
                                   id: max_rects_collections[i][j].id,
                                   path:
                                       path_type === "string"
@@ -589,7 +587,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                                   cols: max_rects_collections[i][j].cols,
                               }
                             : {
-                                  slot: 0,
                                   id: max_rects_collections[i][j].id,
                                   path:
                                       path_type === "string"
