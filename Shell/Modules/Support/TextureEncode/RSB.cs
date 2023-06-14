@@ -25,7 +25,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public abstract SenBuffer Decode_RGBA4444(SenBuffer encodedPixels, int width, int height);
 
         public abstract SenBuffer Decode_RGBA4444_Block(SenBuffer encodedPixels, int width, int height);
-        
+
         public abstract SenBuffer Decode_RGBA5551(SenBuffer encodedPixels, int width, int height);
 
         public abstract SenBuffer Decode_RGBA5551_Block(SenBuffer encodedPixels, int width, int height);
@@ -1679,7 +1679,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
                 var task = format switch
                 {
-                    
+
                     TextureEncoderUnofficial.A8 => this.Create_A8_Decode_Async(sourceImagePath, outputImagePath, width, height),
                     TextureEncoderUnofficial.ARGB4444 => this.Create_ARGB1555_Decode_Async(sourceImagePath, outputImagePath, width, height),
                     TextureEncoderUnofficial.ARGB1555 => this.Create_ARGB1555_Decode_Async(sourceImagePath, outputImagePath, width, height),
@@ -1946,8 +1946,10 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
     }
     public class PVRTC1Encoder
     {
-        private static Rgba32[] Decode_PVRTC1_4BPP_Block(SenBuffer image_bytes, int newWidth, int newHeight)
+        private static Rgba32[] Decode_PVRTC1_4BPP_Block(SenBuffer image_bytes, int width, int height)
         {
+            int newWidth = width;
+            int newHeight = height;
             if (newWidth < 8)
             {
                 newWidth = 8;
@@ -1975,12 +1977,20 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                 packets[i] = new PVRTC.PvrTcPacket(image_bytes.readBigUInt64LE());
             }
             Rgba32[] imageData = PVRTC.Decode_4BPP(packets, newWidth);
+            if (newWidth != width || newHeight != height) {
+                Image<Rgba32> paddedImage = Image.LoadPixelData<Rgba32>(imageData, newWidth, newHeight);
+                paddedImage.Mutate(ctx => ctx.Crop(new Rectangle(0, 0, width, height)));
+                imageData = new Rgba32[width * height];
+                paddedImage.CopyPixelDataTo(imageData);
+            }
             return imageData;
         }
 
-        private static Rgba32[] Encode_PVRTC1_4BPP_Block(SenBuffer image, ref int newWidth, int newHeight)
+        private static Rgba32[] Encode_PVRTC1_4BPP_Block(SenBuffer inFile, ref int newWidth, int newHeight)
         {
-            SenBuffer image_encode = new SenBuffer();
+            Image<Rgba32> image = inFile.getImage();
+            newWidth = image.Width;
+            newHeight = image.Height;
             if (newWidth < 8)
             {
                 newWidth = 8;
@@ -2000,8 +2010,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             if (newWidth != newHeight)
             {
                 newWidth = newHeight = Math.Max(newWidth, newHeight);
-            }
-            Rgba32[] imageData = image.getImageData(newHeight, newHeight);
+            };
+            Image<Rgba32> paddedImage = new Image<Rgba32>(newWidth, newHeight);
+            paddedImage.Mutate(ctx => ctx.DrawImage(image, new Point(0, 0), 1f));
+            Rgba32[] imageData = new Rgba32[newWidth * newHeight];
+            paddedImage.CopyPixelDataTo(imageData);
             return imageData;
         }
 

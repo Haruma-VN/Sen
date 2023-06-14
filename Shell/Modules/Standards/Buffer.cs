@@ -89,12 +89,17 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public Rgba32[] getImageData(int width = 0, int height = 0)
         {
-            Image<Rgba32> image = Image.Load<Rgba32>(baseStream);
+            Image<Rgba32> image = getImage();
             imageWidth = image.Width;
             imageHeight = image.Height;
             Rgba32[] pixelArray = new Rgba32[(width != 0 ? width : imageWidth) * (height != 0 ? height : imageHeight)];
             image.CopyPixelDataTo(pixelArray);
             return pixelArray;
+        }
+
+        public Image<Rgba32> getImage() {
+            Image<Rgba32> image = Image.Load<Rgba32>(baseStream);
+            return image;
         }
         private void fixReadOffset(long offset)
         {
