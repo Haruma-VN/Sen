@@ -1,10 +1,13 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
-using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
 {
+    #pragma warning disable CS8618
+    #pragma warning disable SYSLIB0020
     internal class PacketInfo
     {
         public int head_version { get; set; }
@@ -14,20 +17,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
     internal class ResInfo
     {
-        public RSG_DataInfo[]? dataInfo { get; set; }
-        public RSG_AtlasInfo[]? atlasInfo { get; set; }
-
-    }
-
-    internal class RSG_DataInfo
-    {
-        public string[] path { get; set; }
-    }
-
-    internal class RSG_AtlasInfo
-    {
-        public string[] path { get; set; }
-        public PtxInfo ptxInfo { get; set; }
+        public string path { get; set; }
+        public PtxInfo? ptxInfo { get; set; }
     }
 
     internal class PtxInfo
@@ -53,27 +44,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         public int fileList_Offset { get; set; }
     }
 
-    internal class FileList
-    {
-        public List<Part0_List> part0List = new List<Part0_List>();
-        public List<Part1_List> part1List = new List<Part1_List>();
-    }
 
-    internal class Part0_List
-    {
-        public string path { get; set; }
-        public int offset { get; set; }
-        public int size { get; set; }
-    }
-    internal class Part1_List
-    {
-        public string path { get; set; }
-        public int offset { get; set; }
-        public int size { get; set; }
-        public int id { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
-    }
 
     internal class NameDict
     {
@@ -81,19 +52,96 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         public int offsetByte { get; set; }
     }
 
+
     internal class RSGFunction
     {
+
+        public static List<Part0_List> part0List = new List<Part0_List>();
+
+        public static List<Part1_List> part1List = new List<Part1_List>();
+
+        public class Part0_List
+        {
+            public string path { get; set; }
+            public int offset { get; set; }
+            public int size { get; set; }
+        }
+        public class Part1_List
+        {
+            public string path { get; set; }
+            public int offset { get; set; }
+            public int size { get; set; }
+            public int id { get; set; }
+            public int width { get; set; }
+            public int height { get; set; }
+        }
+        public static readonly int[,] ZlibLevelCompression = {
+            {120, 1},
+            {120, 94},
+            {120, 156},
+            {120, 218},
+        };
         public static void UnpackNormal(SenBuffer RsgFile, string outFolder)
         {
             RSG_head HeadInfo = ReadRSG_Head(RsgFile);
-            FileList fileList = FileListSplit(RsgFile, HeadInfo);
-            var fs = new FileSystem();
+            part0List.Clear();
+            part1List.Clear();
+            FileListSplit(RsgFile, HeadInfo);
             var json = new JsonImplement();
-            fs.CreateDirectory(outFolder);
-            byte[] bytes = Encoding.UTF8.GetBytes(json.StringifyJson(fileList, null));
-            SenBuffer fileListWrite = new SenBuffer(bytes);
-            fileListWrite.SaveFile($"{outFolder}/fileList.json");
+            var fs = new FileSystem();
+            byte[] fileData;   
+            List<ResInfo> resInfo = new List<ResInfo>();
+            int part0_Length = part0List.Count;
+            if (part0_Length > 0)
+            {
+                byte[] part0RawData = CheckZlib(RsgFile, HeadInfo, false);
+                for (var i = 0; i < part0_Length; i++)
+                {
+                    fileData = new byte[part0List[i].size];
+                    Array.Copy(part0RawData, (long)part0List[i].offset, fileData, 0, (long)part0List[i].size);
+                    fs.OutFile($"{outFolder}/res/{part0List[i].path}", fileData);
+                    resInfo.Add(new ResInfo {
+                        path = part0List[i].path,
+                    });
+                }
+            }
+            int part1_Length = part1List.Count;
+            if (part1_Length > 0)
+            {
+                byte[] part1RawData = CheckZlib(RsgFile, HeadInfo, true);
+                for (var i = 0; i < part1_Length; i++)
+                {
+                    fileData = new byte[part1List[i].size];
+                    Array.Copy(part1RawData, (long)part1List[i].offset, fileData, 0, (long)part1List[i].size);
+                    fs.OutFile($"{outFolder}/res/{part1List[i].path}", fileData);
+                    resInfo.Add(new ResInfo {
+                        path = part1List[i].path,
+                        ptxInfo = new PtxInfo{
+                            id = part1List[i].id,
+                            width = part1List[i].width,
+                            height = part1List[i].height
+                        }
+                    });
+                }
+            }
+            PacketInfo packetInfo = new PacketInfo
+            {
+                head_version = HeadInfo.version,
+                compression_flags = HeadInfo.flags,
+                res = resInfo.ToArray(),
+            };
+
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                IgnoreNullValues = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            };
+            var packet_info = json.StringifyJson(packetInfo, options);
+            fs.OutFile($"{outFolder}/packet_info.json", packet_info);
+            RsgFile.Close();
         }
+
 
         private static RSG_head ReadRSG_Head(SenBuffer RsgFile)
         {
@@ -121,18 +169,56 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             return HeadInfo;
         }
 
-        private static FileList FileListSplit(SenBuffer RsgFile, RSG_head HeadInfo)
+        private static byte[] CheckZlib(SenBuffer RsgFile, RSG_head HeadInfo, bool atlasInfo)
         {
-            FileList fileList = new FileList();
+            bool ZlibHeaderCheck(byte[] RSGData)
+            {
+                for (int i = 0; i < ZlibLevelCompression.GetLength(0); i++)
+                {
+                    if (RSGData[0] == ZlibLevelCompression[i, 0] && RSGData[1] == ZlibLevelCompression[i, 1])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            var Compress = new Compress();
+            if (atlasInfo)
+            {
+                if (HeadInfo.flags == 0 || HeadInfo.flags == 2 || (HeadInfo.part1_Size == HeadInfo.part1_Zlib && HeadInfo.part1_Size != 0) || ZlibHeaderCheck(RsgFile.getBytes(2, HeadInfo.part1_Offset)))
+                {
+                    return RsgFile.getBytes(HeadInfo.part1_Size, HeadInfo.part1_Offset);
+                }
+                else
+                {
+                    return Compress.UncompressZlibBytes(RsgFile.getBytes(HeadInfo.part1_Zlib, HeadInfo.part1_Offset));
+                }
+            }
+            else
+            {
+                if (HeadInfo.flags < 2 || (HeadInfo.part0_Size == HeadInfo.part0_Zlib && HeadInfo.part0_Size != 0) || ZlibHeaderCheck(RsgFile.getBytes(2, HeadInfo.part0_Offset)))
+                {
+                    return RsgFile.getBytes(HeadInfo.part0_Size, HeadInfo.part0_Offset);
+                }
+                else
+                {
+                    return Compress.UncompressZlibBytes(RsgFile.getBytes(HeadInfo.part0_Zlib, HeadInfo.part0_Offset));
+                }
+            }
+        }
+
+        private static void FileListSplit(SenBuffer RsgFile, RSG_head HeadInfo)
+        {
+            var json = new JsonImplement();
             List<NameDict> nameDict = new List<NameDict>();
             string namePath = "";
             int tempOffset = HeadInfo.fileList_Offset;
             RsgFile.readOffset = tempOffset;
             int offsetLimit = tempOffset + HeadInfo.fileList_Length;
-            while (tempOffset < offsetLimit)
+            while (RsgFile.readOffset < offsetLimit)
             {
                 string characterByte = RsgFile.readString(1);
-                int offsetByte = RsgFile.readInt24LE();
+                int offsetByte = RsgFile.readInt24LE() * 4;
                 if (characterByte == "\0")
                 {
                     if (offsetByte != 0)
@@ -145,16 +231,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                         );
                         namePath += characterByte;
                     }
-                    bool typeByte = RsgFile.readBool();
+                    bool typeByte = RsgFile.readInt32LE() == 1;
                     if (typeByte)
                     {
-                        fileList.part1List.Add(
+                        part1List.Add(
                             new Part1_List
                             {
                                 path = namePath,
                                 offset = RsgFile.readInt32LE(),
                                 size = RsgFile.readInt32LE(),
-                                id = RsgFile.readInt32LE(RsgFile.readOffset + 12),
+                                id = RsgFile.readInt32LE(RsgFile.readOffset + 8),
                                 width = RsgFile.readInt32LE(),
                                 height = RsgFile.readInt32LE()
                             }
@@ -162,7 +248,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     }
                     else
                     {
-                        fileList.part0List.Add(
+                        part0List.Add(
                             new Part0_List
                             {
                                 path = namePath,
@@ -171,17 +257,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                             }
                         );
                     }
-                    nameDict.ForEach(e =>
+                    for (var i = 0; i < nameDict.Count; i++)
                     {
-                        if (e.offsetByte < RsgFile.readInt32LE())
+                        if (nameDict[i].offsetByte + tempOffset == RsgFile.readOffset)
                         {
-                            nameDict.Remove(e);
+                            namePath = nameDict[i].namePath;
+                            nameDict.RemoveAt(i);
+                            break;
                         }
-                        else
-                        {
-                            namePath = e.namePath;
-                        }
-                    });
+                    }
                 }
                 else
                 {
@@ -201,7 +285,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     }
                 }
             }
-            return fileList;
         }
     }
 

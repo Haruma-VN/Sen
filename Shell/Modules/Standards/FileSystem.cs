@@ -298,41 +298,23 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void OutFile<Generic_T>(string output_path, Generic_T data)
         {
-            List<string> file_path_collection = output_path.Replace("\\", "/").Split("/").ToList<string>();
-            var last_index = file_path_collection.Count - 1;
-            string requirement_file = file_path_collection.ElementAt<string>(last_index);
-            file_path_collection.RemoveAt(last_index);
             var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
-            var output_directory = "";
-            foreach(var directory in file_path_collection.ToArray<string>())
+            if (!this.DirectoryExists(path.GetDirectoryName(output_path)))
             {
-                if(!this.DirectoryExists(directory))
-                {
-                    this.CreateDirectory(directory);
-                }
-                output_directory = path.Join(output_directory, directory);
+                this.CreateDirectory(path.GetDirectoryName(output_path));
             }
-            this.WriteFile<Generic_T>(path.Join(output_directory, requirement_file), data);
+            this.WriteFile<Generic_T>(output_path, data);
             return;
         }
 
         public override async Task OutFileAsync<Generic_T>(string output_path, Generic_T data)
         {
-            List<string> file_path_collection = output_path.Replace("\\", "/").Split("/").ToList<string>();
-            var last_index = file_path_collection.Count - 1;
-            var requirement_file = file_path_collection[last_index];
-            file_path_collection.RemoveAt(last_index);
             var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
-            var output_directory = "";
-            foreach (var directory in file_path_collection.ToArray<string>())
+            if (!this.DirectoryExists(path.GetDirectoryName(output_path)))
             {
-                if (!this.DirectoryExists(directory))
-                {
-                    this.CreateDirectory(directory);
-                }
-                output_directory = path.Join(output_directory, directory);
+                this.CreateDirectory(path.GetDirectoryName(output_path));
             }
-            await this.WriteFileAsync<Generic_T>(path.Join(output_directory, requirement_file), data);
+            await this.WriteFileAsync<Generic_T>(output_path, data);
             return;
         }
 
