@@ -5,12 +5,14 @@ using System;
 namespace Sen.Shell.Modules.Standards
 {
 
+    [Flags]
     public enum ShellType
     {
         Console,
         GUI,
     }
 
+    [Flags]
     public enum UserPlatform
     {
         Windows,
@@ -21,6 +23,7 @@ namespace Sen.Shell.Modules.Standards
         Unknown,
     }
 
+    [Flags]
     public enum ConsoleColor
     {
         Black,
@@ -117,7 +120,7 @@ namespace Sen.Shell.Modules.Standards
 
         public override bool IsUTF8Support()
         {
-            if(this.SenShell == ShellType.Console)
+            if (this.SenShell == ShellType.Console)
             {
                 Encoding utf8 = new UTF8Encoding();
 
@@ -165,7 +168,7 @@ namespace Sen.Shell.Modules.Standards
                 }
                 else
                 {
-                    #pragma warning disable CS8600
+#pragma warning disable CS8600
                     string term = Environment.GetEnvironmentVariable("TERM");
                     if (!string.IsNullOrEmpty(term) && term.ToLower().Contains("color"))
                     {
@@ -180,7 +183,7 @@ namespace Sen.Shell.Modules.Standards
 
         public override void SupportUtf8Console()
         {
-            if(this.SenShell == ShellType.Console)
+            if (this.SenShell == ShellType.Console)
             {
                 Encoding utf8 = new UTF8Encoding();
                 Console.OutputEncoding = utf8;

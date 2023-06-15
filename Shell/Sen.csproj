@@ -25,6 +25,11 @@
     <Compile Remove="Properties\Program.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="compile.bat" />
+    <None Remove="compile.ps1" />
+    <None Remove="compile.sh" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Other\Sen.ico" />
   </ItemGroup>
   <ItemGroup>

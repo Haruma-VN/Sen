@@ -23,6 +23,7 @@ namespace Sen.Shell.Modules.Standards
 
     }
 
+    [Flags]
     public enum RijndaelMode
     {
         CBC,
@@ -31,6 +32,7 @@ namespace Sen.Shell.Modules.Standards
         CTS,
     }
 
+    [Flags]
     public enum RijndaelPadding
     {
         None,
@@ -113,7 +115,7 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] RijndaelEncrypt(string plainText, string password, string salt_value, RijndaelMode Rijndael_Mode, RijndaelPadding Rijndael_Padding)
         {
-            #pragma warning disable SYSLIB0022
+#pragma warning disable SYSLIB0022
             using var rijndael = Rijndael.Create();
             {
                 rijndael.Mode = Rijndael_Mode switch
@@ -137,7 +139,7 @@ namespace Sen.Shell.Modules.Standards
                 byte[] salt = Encoding.UTF8.GetBytes(salt_value);
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
 
-                #pragma warning disable SYSLIB0041
+#pragma warning disable SYSLIB0041
                 using var deriveBytes = new Rfc2898DeriveBytes(passwordBytes, salt, 1000);
                 {
                     rijndael.Key = deriveBytes.GetBytes(32);
@@ -158,9 +160,9 @@ namespace Sen.Shell.Modules.Standards
             }
         }
 
-        public override byte[] RijndaelDecrypt(byte[] encryptedBytes, string password, string salt_value ,RijndaelMode Rijndael_Mode, RijndaelPadding Rijndael_Padding)
+        public override byte[] RijndaelDecrypt(byte[] encryptedBytes, string password, string salt_value, RijndaelMode Rijndael_Mode, RijndaelPadding Rijndael_Padding)
         {
-            #pragma warning disable SYSLIB0022
+#pragma warning disable SYSLIB0022
             using var rijndael = Rijndael.Create();
             {
                 rijndael.Mode = Rijndael_Mode switch
@@ -185,7 +187,7 @@ namespace Sen.Shell.Modules.Standards
                 byte[] salt = Encoding.UTF8.GetBytes(salt_value);
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
 
-                #pragma warning disable SYSLIB0041
+#pragma warning disable SYSLIB0041
                 using var deriveBytes = new Rfc2898DeriveBytes(passwordBytes, salt, 1000);
                 {
                     rijndael.Key = deriveBytes.GetBytes(32);

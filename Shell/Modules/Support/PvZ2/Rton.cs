@@ -21,7 +21,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
 
     public class List
     {
-        internal class StringPool
+        public class StringPool
         {
             Dictionary<string, PoolInfo> stringPool;
             long position;
@@ -95,7 +95,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             }
         }
 
-        internal class PoolInfo
+        public class PoolInfo
         {
             public long Offset;
             public int Index;

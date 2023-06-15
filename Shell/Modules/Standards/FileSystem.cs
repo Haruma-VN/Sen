@@ -2,7 +2,7 @@
 
 namespace Sen.Shell.Modules.Standards.IOModule
 {
-
+    [Flags]
     public enum EncodingType
     {
         UTF8,
@@ -67,6 +67,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
     }
 
+    [Flags]
     public enum ReadDirectory
     {
         OnlyCurrentDirectory,
@@ -82,7 +83,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void DeleteFile(string filePath)
         {
-            if(this.FileExists(filePath))
+            if (this.FileExists(filePath))
             {
                 File.Delete(filePath);
             }
@@ -102,10 +103,10 @@ namespace Sen.Shell.Modules.Standards.IOModule
         {
             if (data is string)
             {
-                #pragma warning disable CS8600
+#pragma warning disable CS8600
                 string dataString = data as string;
 
-                #pragma warning disable CS8604
+#pragma warning disable CS8604
                 byte[] buffer = Encoding.UTF8.GetBytes(dataString);
                 this.WriteBufferToFile(filePath, buffer);
             }
@@ -154,12 +155,13 @@ namespace Sen.Shell.Modules.Standards.IOModule
         }
 
 
-        public override void CreateDirectory(string path) {
+        public override void CreateDirectory(string path)
+        {
             if (path == null)
             {
                 throw new ArgumentNullException(path);
             }
-            if(!Directory.Exists(path))
+            if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
@@ -168,12 +170,12 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void DeleteDirectory(string[] directories)
         {
-            if(directories == null)
+            if (directories == null)
             {
-                #pragma warning disable CA2208
+#pragma warning disable CA2208
                 throw new ArgumentNullException($"directories must not be null");
             }
-            foreach(var directory in directories)
+            foreach (var directory in directories)
             {
                 if (Directory.Exists(directory))
                 {
@@ -196,7 +198,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override async Task<Generic_T> ReadJsonAsync<Generic_T>(string filepath)
         {
-            Generic_T json_object = await Task.Run(()=>this.ReadJson<Generic_T>(filepath));
+            Generic_T json_object = await Task.Run(() => this.ReadJson<Generic_T>(filepath));
             return json_object;
         }
 
@@ -209,7 +211,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
                 EncodingType.LATIN1 => File.ReadAllText(file_path, encoding: Encoding.Latin1),
                 EncodingType.UNICODE => File.ReadAllText(file_path, encoding: Encoding.Unicode),
                 _ => File.ReadAllText(file_path, encoding: Encoding.Default),
-            } ;
+            };
         }
 
         public override Task<string> ReadTextAsync(string file_path, EncodingType encoding)
@@ -234,13 +236,13 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override async Task WriteJsonAsync<Generic_T>(string output_path, Generic_T json_object)
         {
-            await Task.Run(()=>this.WriteJson<Generic_T>(output_path, json_object));
+            await Task.Run(() => this.WriteJson<Generic_T>(output_path, json_object));
             return;
         }
 
         public override void WriteText(string filepath, string data, EncodingType encoding)
         {
-            switch(encoding)
+            switch (encoding)
             {
                 case EncodingType.UTF8:
                     {
@@ -347,7 +349,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void MoveFile(string filePath, string outpath)
         {
-            File.Move(filePath, outpath); 
+            File.Move(filePath, outpath);
             return;
         }
 
@@ -368,7 +370,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void RenameDirectory(string filePath, string newName)
         {
-            #pragma warning disable CS8602
+#pragma warning disable CS8602
             var path = new ImplementPath();
             string parentDirectoryPath = Directory.GetParent(filePath).FullName;
             string newDirectoryPath = path.Join(parentDirectoryPath, newName);
@@ -390,7 +392,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         private string _name;
 
-        #pragma warning disable IDE1006
+#pragma warning disable IDE1006
         public string root
         {
             get { return this._root; }
@@ -452,11 +454,11 @@ namespace Sen.Shell.Modules.Standards.IOModule
             }
         }
 
-        #pragma warning disable CS8618
+#pragma warning disable CS8618
         public FormatRecords()
         {
         }
-        #pragma warning disable CS8618
+#pragma warning disable CS8618
         public FormatRecords(string root, string dir, string basename, string extname, string name)
         {
             if (root != null)
@@ -498,7 +500,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
     public class ParsedPath
     {
 
-        #pragma warning disable IDE1006
+#pragma warning disable IDE1006
         public string name { get; set; }
         public string dir { get; set; }
         public string ext { get; set; }
@@ -601,14 +603,14 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override string Delimiter() => Path.PathSeparator.ToString();
 
-        #pragma warning disable CS8603
+#pragma warning disable CS8603
 
         public override string Dirname(string path) => Path.GetDirectoryName(path);
 
         public override string Extname(string path) => Path.GetExtension(path);
 
         public override FormatRecords Format(string dir, string root, string baseName, string name, string ext) =>
-            new (root, dir, baseName, ext, name);
+            new(root, dir, baseName, ext, name);
 
         public override bool IsAbsolute(string path) => Path.IsPathRooted(path);
 

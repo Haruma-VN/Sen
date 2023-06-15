@@ -2,11 +2,10 @@
 using Sen.Shell.Modules.JavaScript;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Download;
-using Object = Sen.Shell.Modules.Standards.Object;
 
 namespace Sen.Shell
 {
-     public class Program
+     internal class Program
      {
 
         public static readonly string Script_Directory = Platform.CurrentPlatform() switch {

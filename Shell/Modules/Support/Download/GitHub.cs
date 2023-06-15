@@ -13,99 +13,345 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+[assembly: SuppressMessage ("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Sen.Shell.Modules.Support.Download.DownloadUpdate.HasAdmin~System.Boolean")]
+
 // Download script instantly
 
 namespace Sen.Shell.Modules.Support.Download
 {
-    #pragma warning disable CS8618
-    #pragma warning disable IDE1006
 
     [JsonSerializable(typeof(Asset))]
     public class Asset
     {
-        public string url { get; set; }
-        public int id { get; set; }
-        public string node_id { get; set; }
-        public string name { get; set; }
-        public object label { get; set; }
-        public Uploader uploader { get; set; }
-        public string content_type { get; set; }
-        public string state { get; set; }
-        public int size { get; set; }
-        public int download_count { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
-        public string browser_download_url { get; set; }
+        [JsonPropertyName ("url")]
+        [JsonRequired]
+        public required string Url { get; set; }
+
+        [JsonPropertyName("id")]
+        [JsonRequired]
+        public required int Id { get; set; }
+
+        [JsonPropertyName("node_id")]
+        [JsonRequired]
+        public required string Node_id { get; set; }
+
+        [JsonPropertyName ("name")]
+        [JsonRequired]
+        public required string Name { get; set; }
+
+        [JsonPropertyName ("label")]
+        [JsonRequired]
+        public required object Label { get; set; }
+
+        [JsonPropertyName ("uploader")]
+        [JsonRequired]
+        public required Uploader Uploader { get; set; }
+
+        [JsonPropertyName ("content_type")]
+        [JsonRequired]
+        public required string Content_type { get; set; }
+
+        [JsonPropertyName ("state")]
+        [JsonRequired]
+        public required string State { get; set; }
+
+        [JsonPropertyName ("size")]
+        [JsonRequired]
+        public required int Size { get; set; }
+
+        [JsonPropertyName("download_count")]
+        [JsonRequired]
+
+        public required int Download_count { get; set; }
+
+        [JsonPropertyName("created_at")]
+        [JsonRequired]
+
+        public required DateTime Created_at { get; set; }
+
+        [JsonPropertyName ("updated_at")]
+        [JsonRequired]
+        public required DateTime Updated_at { get; set; }
+
+        [JsonPropertyName ("browser_download_url")]
+        [JsonRequired]
+        public required string Browser_download_url { get; set; }
     }
     [JsonSerializable (typeof (Author))]
 
     public class Author
     {
-        public string login { get; set; }
-        public int id { get; set; }
-        public string node_id { get; set; }
-        public string avatar_url { get; set; }
-        public string gravatar_id { get; set; }
-        public string url { get; set; }
-        public string html_url { get; set; }
-        public string followers_url { get; set; }
-        public string following_url { get; set; }
-        public string gists_url { get; set; }
-        public string starred_url { get; set; }
-        public string subscriptions_url { get; set; }
-        public string organizations_url { get; set; }
-        public string repos_url { get; set; }
-        public string events_url { get; set; }
-        public string received_events_url { get; set; }
-        public string type { get; set; }
-        public bool site_admin { get; set; }
+        [JsonPropertyName("login")]
+        [JsonRequired]
+        public required string Login { get; set; }
+
+        [JsonPropertyName ("id")]
+        [JsonRequired]
+        public required int Id { get; set; }
+
+        [JsonPropertyName ("node_id")]
+        [JsonRequired]
+
+        public required string Node_id { get; set; }
+
+        [JsonPropertyName ("avatar_url")]
+        [JsonRequired]
+        public required string Avatar_url { get; set; }
+
+        [JsonPropertyName ("gravatar_id")]
+        [JsonRequired]
+        public required string Gravatar_id { get; set; }
+
+        [JsonPropertyName ("url")]
+        [JsonRequired]
+
+        public required string Url { get; set; }
+
+        [JsonPropertyName ("html_url")]
+        [JsonRequired]
+        public required string Html_url { get; set; }
+
+        [JsonPropertyName ("followers_url")]
+        [JsonRequired]
+        public required string Followers_url { get; set; }
+
+        [JsonPropertyName ("following_url")]
+        [JsonRequired]
+
+        public required string Following_url { get; set; }
+
+        [JsonPropertyName ("gists_url")]
+        [JsonRequired]
+        public required string Gists_url { get; set; }
+
+        [JsonPropertyName ("starred_url")]
+        [JsonRequired]
+
+        public required string Starred_url { get; set; }
+
+        [JsonPropertyName ("subscriptions_url")]
+        [JsonRequired]
+        public required string Subscriptions_url { get; set; }
+
+        [JsonPropertyName ("organizations_url")]
+        [JsonRequired]
+        public required string Organizations_url { get; set; }
+
+        [JsonPropertyName ("repos_url")]
+        [JsonRequired]
+
+        public required string Repos_url { get; set; }
+
+        [JsonPropertyName ("events_url")]
+        [JsonRequired]
+
+        public required string Events_url { get; set; }
+
+        [JsonPropertyName ("received_events_url")]
+        [JsonRequired]
+
+        public required string Received_events_url { get; set; }
+
+        [JsonPropertyName ("type")]
+        [JsonRequired]
+
+        public required string Type { get; set; }
+
+        [JsonPropertyName ("site_admin")]
+        [JsonRequired]
+
+        public required bool Site_admin { get; set; }
     }
     [JsonSerializable (typeof (GitHubReleases))]
 
     public class GitHubReleases
     {
-        public string url { get; set; }
-        public string assets_url { get; set; }
-        public string upload_url { get; set; }
-        public string html_url { get; set; }
-        public int id { get; set; }
-        public Author author { get; set; }
-        public string node_id { get; set; }
-        public string tag_name { get; set; }
-        public string target_commitish { get; set; }
-        public string name { get; set; }
-        public bool draft { get; set; }
-        public bool prerelease { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime published_at { get; set; }
-        public List<Asset> assets { get; set; }
-        public string tarball_url { get; set; }
-        public string zipball_url { get; set; }
-        public string body { get; set; }
+
+        [JsonPropertyName("url")]
+        [JsonRequired]
+
+        public required string Url { get; set; }
+
+        [JsonPropertyName ("assets_url")]
+        [JsonRequired]
+
+        public required string Assets_url { get; set; }
+
+        [JsonPropertyName ("upload_url")]
+        [JsonRequired]
+
+        public required string Upload_url { get; set; }
+
+        [JsonPropertyName ("html_url")]
+        [JsonRequired]
+
+        public required string Html_url { get; set; }
+
+        [JsonPropertyName ("id")]
+        [JsonRequired]
+
+        public required int Id { get; set; }
+
+        [JsonPropertyName ("author")]
+        [JsonRequired]
+
+        public required Author Author { get; set; }
+
+        [JsonPropertyName ("node_id")]
+        [JsonRequired]
+
+        public required string Node_id { get; set; }
+
+        [JsonPropertyName ("tag_name")]
+        [JsonRequired]
+
+        public required string Tag_name { get; set; }
+
+        [JsonPropertyName ("target_commitish")]
+        [JsonRequired]
+
+        public required string Target_commitish { get; set; }
+
+        [JsonPropertyName ("name")]
+        [JsonRequired]
+
+        public required string Name { get; set; }
+
+        [JsonPropertyName ("draft")]
+        [JsonRequired]
+
+        public required bool Draft { get; set; }
+
+        [JsonPropertyName ("prerelease")]
+        [JsonRequired]
+
+        public required bool Prerelease { get; set; }
+
+        [JsonPropertyName ("created_at")]
+        [JsonRequired]
+
+        public required DateTime Created_at { get; set; }
+
+        [JsonPropertyName ("published_at")]
+        [JsonRequired]
+
+        public required DateTime Published_at { get; set; }
+
+        [JsonPropertyName ("assets")]
+        [JsonRequired]
+
+        public required List<Asset> Assets { get; set; }
+
+        [JsonPropertyName ("tarball_url")]
+        [JsonRequired]
+
+        public required string Tarball_url { get; set; }
+
+        [JsonPropertyName ("zipball_url")]
+        [JsonRequired]
+
+        public required string Zipball_url { get; set; }
+
+        [JsonPropertyName ("body")]
+        [JsonRequired]
+
+        public required string Body { get; set; }
     }
     [JsonSerializable (typeof (Uploader))]
 
     public class Uploader
     {
-        public string login { get; set; }
-        public int id { get; set; }
-        public string node_id { get; set; }
-        public string avatar_url { get; set; }
-        public string gravatar_id { get; set; }
-        public string url { get; set; }
-        public string html_url { get; set; }
-        public string followers_url { get; set; }
-        public string following_url { get; set; }
-        public string gists_url { get; set; }
-        public string starred_url { get; set; }
-        public string subscriptions_url { get; set; }
-        public string organizations_url { get; set; }
-        public string repos_url { get; set; }
-        public string events_url { get; set; }
-        public string received_events_url { get; set; }
-        public string type { get; set; }
-        public bool site_admin { get; set; }
+        [JsonPropertyName ("login")]
+        [JsonRequired]
+
+        public required string Login { get; set; }
+
+        [JsonPropertyName ("id")]
+        [JsonRequired]
+
+        public required int Id { get; set; }
+
+        [JsonPropertyName ("node_id")]
+        [JsonRequired]
+
+        public required string Node_id { get; set; }
+
+        [JsonPropertyName ("avatar_url")]
+        [JsonRequired]
+
+        public required string Avatar_url { get; set; }
+
+        [JsonPropertyName ("gravatar_id")]
+        [JsonRequired]
+
+        public required string Gravatar_id { get; set; }
+
+        [JsonPropertyName ("url")]
+        [JsonRequired]
+
+        public required string Url { get; set; }
+
+        [JsonPropertyName ("html_url")]
+        [JsonRequired]
+
+        public required string Html_url { get; set; }
+
+        [JsonPropertyName ("followers_url")]
+        [JsonRequired]
+
+        public required string Followers_url { get; set; }
+
+        [JsonPropertyName ("following_url")]
+        [JsonRequired]
+
+        public required string Following_url { get; set; }
+
+        [JsonPropertyName ("gists_url")]
+        [JsonRequired]
+
+        public required string Gists_url { get; set; }
+
+        [JsonPropertyName ("starred_url")]
+        [JsonRequired]
+
+        public required string Starred_url { get; set; }
+
+        [JsonPropertyName ("subscriptions_url")]
+        [JsonRequired]
+
+        public required string Subscriptions_url { get; set; }
+
+        [JsonPropertyName ("organizations_url")]
+        [JsonRequired]
+
+        public required string Organizations_url { get; set; }
+
+        [JsonPropertyName ("repos_url")]
+        [JsonRequired]
+
+        public required string Repos_url { get; set; }
+
+        [JsonPropertyName ("events_url")]
+        [JsonRequired]
+
+        public required string Events_url { get; set; }
+
+        [JsonPropertyName ("received_events_url")]
+        [JsonRequired]
+
+        public required string Received_events_url { get; set; }
+
+        [JsonPropertyName ("type")]
+        [JsonRequired]
+
+        public required string Type { get; set; }
+
+        [JsonPropertyName ("site_admin")]
+        [JsonRequired]
+
+        public required bool Site_admin { get; set; }
     }
+
     public abstract class DownloadUpdateAbstract
     {
         public abstract void CallDownloadScriptAndWait(string script_dir, string link);
@@ -132,12 +378,11 @@ namespace Sen.Shell.Modules.Support.Download
         {
             if (Platform.CurrentPlatform() == UserPlatform.Windows)
             {
-                // Windows implementation
-                #pragma warning disable CA1416 // Validate platform compatibility
-                var identity = WindowsIdentity.GetCurrent();
-                var principal = new WindowsPrincipal(identity);
-                var path = new ImplementPath();
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+                    // Windows implementation
+                    var identity = WindowsIdentity.GetCurrent();
+                    var principal = new WindowsPrincipal(identity);
+                    var path = new ImplementPath();
+                    return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
             else if (Platform.CurrentPlatform() == UserPlatform.Macintosh || Platform.CurrentPlatform() == UserPlatform.Linux)
             {
@@ -163,12 +408,12 @@ namespace Sen.Shell.Modules.Support.Download
             var json = new JsonImplement();
             var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
             var path = new ImplementPath();
-            if (github_api_json.assets == null)
+            if (github_api_json.Assets == null)
             {
                 throw new Exception($"assets not found from github api");
             }
             var shell_save = path.Resolve($"{path.Dirname($"{save_dir}")}/{shell_name}");
-            await GitHub.DownloadFileAsync(github_api_json.assets[index].browser_download_url, (shell_save), $"Sen");
+            await GitHub.DownloadFileAsync(github_api_json.Assets[index].Browser_download_url, (shell_save), $"Sen");
             Sen.Shell.Modules.Support.Download.InternalShell.CreateExecuable();
             Sen.Shell.Modules.Support.Download.InternalShell.ExecuteBat();
             return;
@@ -198,12 +443,12 @@ namespace Sen.Shell.Modules.Support.Download
             var json = new JsonImplement();
             var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
             var path = new ImplementPath();
-            if(github_api_json.assets == null)
+            if(github_api_json.Assets == null)
             {
                 throw new Exception($"assets not found from github api");
             }
             var script_save = path.Resolve($"{path.Dirname($"{script_dir}")}/scripts.zip");
-            await GitHub.DownloadFileAsync(github_api_json.assets[0].browser_download_url, (script_save), $"Sen");
+            await GitHub.DownloadFileAsync(github_api_json.Assets[0].Browser_download_url, (script_save), $"Sen");
             var compression = new Compress();
             compression.UncompressZip(script_save, script_dir);
             // delete zip

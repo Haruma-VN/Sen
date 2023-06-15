@@ -1190,6 +1190,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
     }
 
+    [Flags]
     public enum TextureEncoderUnofficial
     {
         A8,
@@ -1977,7 +1978,8 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                 packets[i] = new PVRTC.PvrTcPacket(image_bytes.readBigUInt64LE());
             }
             Rgba32[] imageData = PVRTC.Decode_4BPP(packets, newWidth);
-            if (newWidth != width || newHeight != height) {
+            if (newWidth != width || newHeight != height)
+            {
                 Image<Rgba32> paddedImage = Image.LoadPixelData<Rgba32>(imageData, newWidth, newHeight);
                 paddedImage.Mutate(ctx => ctx.Crop(new Rectangle(0, 0, width, height)));
                 imageData = new Rgba32[width * height];

@@ -6,29 +6,29 @@ using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
 {
-    #pragma warning disable CS8618
-    #pragma warning disable SYSLIB0020
-    internal class PacketInfo
+#pragma warning disable CS8618
+#pragma warning disable SYSLIB0020
+    public class PacketInfo
     {
         public int head_version { get; set; }
         public int compression_flags { get; set; }
         public ResInfo[] res { get; set; }
     }
 
-    internal class ResInfo
+    public class ResInfo
     {
         public string path { get; set; }
         public PtxInfo? ptxInfo { get; set; }
     }
 
-    internal class PtxInfo
+    public class PtxInfo
     {
         public int id { get; set; }
         public int width { get; set; }
         public int height { get; set; }
     }
 
-    internal class RSG_head
+    public class RSG_head
     {
         public static readonly string magic = "pgsr";
         public int version { get; set; }
@@ -46,14 +46,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
 
 
-    internal class NameDict
+    public class NameDict
     {
         public string namePath { get; set; }
         public int offsetByte { get; set; }
     }
 
 
-    internal class RSGFunction
+    public class RSGFunction
     {
 
         public static List<Part0_List> part0List = new List<Part0_List>();
@@ -89,7 +89,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             FileListSplit(RsgFile, HeadInfo);
             var json = new JsonImplement();
             var fs = new FileSystem();
-            byte[] fileData;   
+            byte[] fileData;
             List<ResInfo> resInfo = new List<ResInfo>();
             int part0_Length = part0List.Count;
             if (part0_Length > 0)
@@ -100,7 +100,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     fileData = new byte[part0List[i].size];
                     Array.Copy(part0RawData, (long)part0List[i].offset, fileData, 0, (long)part0List[i].size);
                     fs.OutFile($"{outFolder}/res/{part0List[i].path}", fileData);
-                    resInfo.Add(new ResInfo {
+                    resInfo.Add(new ResInfo
+                    {
                         path = part0List[i].path,
                     });
                 }
@@ -114,9 +115,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     fileData = new byte[part1List[i].size];
                     Array.Copy(part1RawData, (long)part1List[i].offset, fileData, 0, (long)part1List[i].size);
                     fs.OutFile($"{outFolder}/res/{part1List[i].path}", fileData);
-                    resInfo.Add(new ResInfo {
+                    resInfo.Add(new ResInfo
+                    {
                         path = part1List[i].path,
-                        ptxInfo = new PtxInfo{
+                        ptxInfo = new PtxInfo
+                        {
                             id = part1List[i].id,
                             width = part1List[i].width,
                             height = part1List[i].height

@@ -19,6 +19,7 @@ namespace Sen.Shell.Modules.Standards
         public abstract byte[] UncompressZlibBytes<Generic_T>(Generic_T zlibData) where Generic_T : IList<byte>;
 
     }
+    [Flags]
     public enum ZlibCompressionLevel
     {
         Level0,

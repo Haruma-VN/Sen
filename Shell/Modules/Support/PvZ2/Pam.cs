@@ -16,7 +16,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 #pragma warning disable CS8618
 #pragma warning disable CS8602
 
-    internal class PAMInfo
+    public class PAMInfo
     {
         public static readonly uint Magic = 0xBAF01954;
         public int version { get; set; } = 6;
@@ -29,14 +29,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     }
 
 
-    internal class ImageInfo
+    public class ImageInfo
     {
         public string? name { get; set; }
         public int[] size { get; set; }
         public double[] transform { get; set; }
     }
 
-    internal class SpriteInfo
+    public class SpriteInfo
     {
         public string? name { get; set; }
         public string? description { get; set; }
@@ -46,7 +46,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
     }
 
-    internal class ExtraInfo {
+    public class ExtraInfo
+    {
         public int version { get; set; } = 6;
         public byte frame_rate { get; set; } = 30;
         public double[] position { get; set; }
@@ -55,17 +56,19 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public ExtraSpriteInfo main_sprite { get; set; }
     }
 
-    internal class ExtraImageInfo {
+    public class ExtraImageInfo
+    {
         public string? name { get; set; }
         public int[] size { get; set; }
     }
 
-    internal class ExtraSpriteInfo {
+    public class ExtraSpriteInfo
+    {
         public string? name { get; set; }
     }
 
     [Flags]
-    internal enum FrameFlags : byte
+    public enum FrameFlags : byte
     {
         Removes = 1,
         Adds = 2,
@@ -75,7 +78,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         Commands = 32
     }
 
-    internal class FrameInfo
+    public class FrameInfo
     {
         public string? label { get; set; }
         public bool stop { get; set; }
@@ -892,7 +895,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         }
     }
 
-    internal class Model
+    public class Model
     {
         public bool? state { get; set; }
         public int index { get; set; }
@@ -904,7 +907,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public double[] transform { get; set; }
     }
 
-    internal class FlashPackage
+    public class FlashPackage
     {
         public class Library
         {
@@ -917,7 +920,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public Library library { get; set; }
     }
 
-    internal class PrevEnd
+    public class PrevEnd
     {
         public int flow { get; set; }
         public int command { get; set; }
@@ -1428,7 +1431,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return PAMJson;
         }
 
-        private static PAMInfo ParseMainDocument(FlashPackage PAMRipe) {
+        private static PAMInfo ParseMainDocument(FlashPackage PAMRipe)
+        {
             XElement x_DOMDocument = PAMRipe.document;
             if (x_DOMDocument.Name.LocalName != "DOMDocument")
             {
@@ -1530,7 +1534,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         {
                             throw new PAMException("Invalid Script CDATA", "undefined");
                         }
-                        if (((XCData)x_script_text).Value.Trim() != "stop();") 
+                        if (((XCData)x_script_text).Value.Trim() != "stop();")
                         {
                             throw new PAMException("Invalid Script CDATA vaule", ((XCData)x_script_text).Value.Trim());
                         }
@@ -1588,7 +1592,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                             }
                             main_sprite_frame[frame_index].command.Add(new FrameInfo.CommandsInfo
                             {
-                                command = new string[2] { regex_result.Groups[1].Value, regex_result.Groups[2].Value}
+                                command = new string[2] { regex_result.Groups[1].Value, regex_result.Groups[2].Value }
                             });
                         }
                     });
@@ -1600,7 +1604,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             int frame_rate = int.Parse(x_DOMDocument.Attribute("frameRate").Value);
             int width = int.Parse(x_DOMDocument.Attribute("width").Value);
             int height = int.Parse(x_DOMDocument.Attribute("height").Value);
-            PAMInfo PamInfo = new PAMInfo{
+            PAMInfo PamInfo = new PAMInfo
+            {
                 version = PAMRipe.extra.version,
                 frame_rate = (byte)frame_rate,
                 position = PAMRipe.extra.position,
@@ -1838,7 +1843,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     };
                 }
             }
-            return result.Take(result.Count - 1).ToArray();    
+            return result.Take(result.Count - 1).ToArray();
         }
 
         private static double[] ParseImageDocument(XElement x_DOMSymbolItem, int index)

@@ -36,4 +36,4 @@
 
 ## Final Words
 
--   The purpose of this project just one, erase the barrier between low-level modders and profession modders. I highly believe that only by contributing open source project can people achieve the fully productivity and creativity. In the other hand, monopolizing technology for the good of a small group of people, is meaningless as there will be people willing to share them in the future. If anyone has walkthrough the time we using `QuickBMS` or `Mali Textool Compression` for editing game files, we know how to treasure what we have today.
+-   The purpose of this project just one, reduce the barrier between low-level modders and profession modders. I highly believe that only by contributing open source project can people achieve the fully productivity and creativity. In the other hand, monopolizing technology for the good of a small group of people, is meaningless as there will be people willing to share them in the future. If anyone has walkthrough the time we using `QuickBMS` or `Mali Textool Compression` for editing game files, we know how to treasure what we have today.
