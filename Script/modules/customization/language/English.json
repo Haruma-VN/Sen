@@ -90,8 +90,8 @@
     "begin_with_rton": "RTON file must begins with \"RTON\"",
     "version_must_be_1": "RTON Version number must be 1",
     "end_of_rton_must_be_done": "RTON file must ends with \"DONE\"",
-    "popcap_official_pam_to_flash_animation": "PopCap PAM Convert To Adobe Flash Animation",
-    "popcap_official_pam_from_flash_animation": "PopCap PAM Convert From Adobe Flash Animation",
+    "popcap_official_pam_to_flash_animation": "PopCap PAM Convert To Adobe Animate Flash Animation",
+    "popcap_official_pam_from_flash_animation": "PopCap PAM Convert From Adobe Animate Flash Animation",
     "pam_version_out_of_range": "PopCap Animation version out of range",
     "invalid_pam_magic": "Invalid PopCap Animation header",
     "invalid_transform_size": "Invalid Transform Size",
@@ -150,5 +150,8 @@
     "invalid_image_point_length": "Invalid Image Point length",
     "invalid_image_transform": "Invalid Image Transform",
     "popcap_rsg_unpack": "PopCap RSG Unpack",
-    "popcap_rsg_pack": "PopCap RSG Pack"
+    "popcap_rsg_pack": "PopCap RSG Pack",
+    "popcap_official_pam_json_to_flash_animation": "PopCap PAM Json To Adobe Animate Flash Animation",
+    "popcap_official_pam_json_from_flash_animation": "PopCap PAM Json From Adobe Animate Flash Animation",
+    "execution_receievd_as_default": "Execution Out As Result:"
 }

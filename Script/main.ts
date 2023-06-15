@@ -64,7 +64,7 @@ namespace Sen.Script {
      * @returns Update current Shell
      */
 
-    export function ShellUpdateCheck(): void {
+    export function ShellUpdateByAutomatically(): void {
         if (ShellUpdate.HasAdmin()) {
             const available: Array<number> = new Array();
             11;

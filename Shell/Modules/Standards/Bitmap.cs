@@ -7,6 +7,7 @@ using Jint;
 using Sen.Shell.Modules.Standards;
 using System.Numerics;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
 using SixLabors.ImageSharp.Advanced;
 
@@ -74,6 +75,8 @@ namespace Sen.Shell.Modules.Standards.Bitmap
     public class ImageInfo<Generic_T> : Dimension<Generic_T>
     {
         private string _file_path;
+
+        #pragma warning disable IDE1006
 
         public string file_path
         {

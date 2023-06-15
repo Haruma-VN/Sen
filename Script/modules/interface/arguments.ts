@@ -126,4 +126,19 @@ namespace Sen.Script.Modules.Interface.Arguments {
         }
         return "" as never;
     }
+
+    /**
+     *
+     * @param argument - Pass argument here
+     * @returns Printing message
+     */
+
+    export function ArgumentPrint(argument: string): void {
+        Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_receievd_as_default"),
+        );
+        Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `       ${argument}`);
+        return;
+    }
 }

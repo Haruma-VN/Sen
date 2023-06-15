@@ -122,7 +122,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_official_resources_to_unofficial_resources"
         | "popcap_unofficial_resources_to_official_resources"
         | "popcap_rsg_unpack"
-        | "popcap_rsg_pack";
+        | "popcap_rsg_pack"
+        | "popcap_official_pam_json_to_flash_animation"
+        | "popcap_official_pam_json_from_flash_animation";
 
     /**
      *
@@ -147,123 +149,179 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_resources_to_unofficial_resources": {
                 if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/res.json`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                         argument,
-                        Path.Resolve(`${Path.Dirname(argument)}/res.json`),
+                        output_argument,
                     );
                 } else {
-                    argument.forEach((arg: string) =>
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/res.json`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                             arg,
-                            Path.Resolve(`${Path.Dirname(arg)}/res.json`),
-                        ),
-                    );
+                            output_argument,
+                        );
+                    });
                 }
                 break;
             }
             case "popcap_rsg_unpack": {
                 if (!Array.isArray(argument)) {
-                    PvZ2Shell.RSGUnpack(
-                        argument,
-                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.packet`),
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.packet`,
                     );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.RSGUnpack(argument, output_argument);
                 } else {
-                    argument.forEach((arg: string) =>
-                        PvZ2Shell.RSGUnpack(
-                            arg,
-                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.packet`),
-                        ),
-                    );
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.packet`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.RSGUnpack(arg, output_argument);
+                    });
                 }
                 break;
             }
             case "popcap_rsg_pack": {
                 if (!Array.isArray(argument)) {
-                    PvZ2Shell.RSGPack(
-                        argument,
-                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rsg`),
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rsg`,
                     );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.RSGPack(argument, output_argument);
                 } else {
-                    argument.forEach((arg: string) =>
-                        PvZ2Shell.RSGPack(
-                            arg,
-                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rsg`),
-                        ),
-                    );
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rsg`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.RSGPack(arg, output_argument);
+                    });
                 }
                 break;
             }
             case "popcap_unofficial_resources_to_official_resources": {
                 if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/resources.json`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
                         argument,
-                        Path.Resolve(`${Path.Dirname(argument)}/resources.json`),
+                        output_argument,
                     );
                 } else {
-                    argument.forEach((arg: string) =>
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/resources.json`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
                             arg,
-                            Path.Resolve(`${Path.Dirname(arg)}/resources.json`),
-                        ),
-                    );
+                            output_argument,
+                        );
+                    });
                 }
                 break;
             }
             case "popcap_unofficial_resources_split": {
                 if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json.info`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
                         argument,
-                        argument.replace(/((\.json))?$/i, ".json.info"),
+                        output_argument,
                     );
                 } else {
-                    argument.forEach((arg: string) =>
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json.info`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
                             arg,
-                            arg.replace(/((\.json))?$/i, ".json.info"),
-                        ),
-                    );
+                            output_argument,
+                        );
+                    });
                 }
                 break;
             }
             case "popcap_official_pam_from_flash_animation": {
                 if (!Array.isArray(argument)) {
-                    PvZ2Shell.FlashAnimationtoPAM(argument, argument.replace(/((\.xfl))?$/i, ".pam"));
-                } else {
-                    argument.forEach((arg: string) =>
-                        PvZ2Shell.FlashAnimationtoPAM(arg, arg.replace(/((\.xfl))?$/i, ".pam")),
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`,
                     );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.FlashAnimationtoPAM(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.FlashAnimationtoPAM(arg, output_argument);
+                    });
                 }
                 break;
             }
             case "popcap_rton_to_json": {
                 if (!Array.isArray(argument)) {
-                    PvZ2Shell.RTONDecode(argument, argument.replace(/((\.rton))?$/i, ".json"));
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.RTONDecode(argument, output_argument);
                 } else {
-                    argument.forEach((arg: string) => PvZ2Shell.RTONDecode(arg, arg.replace(/((\.rton))?$/i, ".json")));
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.RTONDecode(arg, output_argument);
+                    });
                 }
                 break;
             }
             case "popcap_json_to_rton": {
                 if (!Array.isArray(argument)) {
-                    PvZ2Shell.RTONEncode(argument, argument.replace(/((\.json))?$/i, ".rton"));
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rton`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.RTONEncode(argument, output_argument);
                 } else {
-                    argument.forEach((arg: string) => PvZ2Shell.RTONEncode(arg, arg.replace(/((\.json))?$/i, ".rton")));
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rton`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.RTONEncode(arg, output_argument);
+                    });
                 }
                 break;
             }
             case "popcap_unofficial_resources_merge": {
                 if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeUnofficialJson.CreateConversion(
                         argument,
-                        argument.replace(/((\.json.info))?$/i, ".json"),
+                        output_argument,
                     );
                 } else {
-                    argument.forEach((arg: string) =>
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(
                             arg,
-                            arg.replace(/((\.json.info))?$/i, ".json"),
-                        ),
-                    );
+                            output_argument,
+                        );
+                    });
                 }
                 break;
             }
@@ -273,9 +331,13 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
                     const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<number> =
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.png`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
                         argument,
-                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.png`),
+                        output_argument,
                         dimension.width,
                         dimension.height,
                         encode,
@@ -286,9 +348,13 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
                         const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<number> =
                             Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.png`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
                             argument,
-                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.png`),
+                            output_argument,
                             dimension.width,
                             dimension.height,
                             encode,
@@ -355,18 +421,26 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.ptx`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
                         argument,
-                        Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.ptx`),
+                        output_argument,
                         encode,
                     );
                 } else {
                     argument.forEach((arg: string) => {
                         const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
                             Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.ptx`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
                             argument,
-                            Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.ptx`),
+                            output_argument,
                             encode,
                         );
                     });
@@ -375,15 +449,23 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_resources_split": {
                 if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.res`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(
                         argument,
-                        argument.replace(/((\.json))?$/i, ".res"),
+                        output_argument,
                     );
                 } else {
                     argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.res`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(
                             arg,
-                            arg.replace(/((\.json))?$/i, ".res"),
+                            output_argument,
                         );
                     });
                 }
@@ -391,15 +473,23 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_resources_merge": {
                 if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(
                         argument,
-                        argument.replace(/((\.res))?$/i, ".json"),
+                        output_argument,
                     );
                 } else {
                     argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(
                             arg,
-                            arg.replace(/((\.res))?$/i, ".json"),
+                            output_argument,
                         );
                     });
                 }
@@ -481,22 +571,38 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_pam_to_pam_json": {
                 if (!Array.isArray(argument)) {
-                    PvZ2Shell.PAMtoPAMJSON(argument, argument.replace(/((\.pam))?$/i, ".pam.json"));
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam.json`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.PAMtoPAMJSON(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
-                        PvZ2Shell.PAMtoPAMJSON(arg, arg.replace(/((\.pam))?$/i, ".pam.json"));
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam.json`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.PAMtoPAMJSON(arg, output_argument);
                     });
                 }
                 break;
             }
             case "popcap_official_pam_to_flash_animation": {
                 if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.xfl`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     let resolution: int = 1536;
-                    PvZ2Shell.PAMtoFlashAnimation(argument, argument.replace(/((\.pam))?$/i, ".xfl"), resolution);
+                    PvZ2Shell.PAMtoFlashAnimation(argument, output_argument, resolution);
                 } else {
                     argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.xfl`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         let resolution: int = 1536;
-                        PvZ2Shell.PAMtoFlashAnimation(arg, arg.replace(/((\.pam))?$/i, ".xfl"), resolution);
+                        PvZ2Shell.PAMtoFlashAnimation(arg, output_argument, resolution);
                     });
                 }
                 break;
@@ -508,7 +614,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument,
                         ),
                     );
-                    PvZ2Shell.PAMJSONtoPAM(argument, argument.replace(/((\.pam.json))?$/i, ".pam"));
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.PAMJSONtoPAM(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
@@ -516,7 +626,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 arg,
                             ),
                         );
-                        PvZ2Shell.PAMJSONtoPAM(arg, arg.replace(/((\.pam.json))?$/i, ".pam"));
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.PAMJSONtoPAM(arg, output_argument);
                     });
                 }
                 break;
@@ -525,22 +639,88 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const original: int = 1536;
                     const modified: int = 768;
+                    const output_argument: string = Path.Resolve(
+                        argument.replace(original.toString(), modified.toString()),
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(
                         argument,
                         original,
                         modified,
-                        argument.replace(original.toString(), modified.toString()),
+                        output_argument,
                     );
                 } else {
                     argument.forEach((arg: string) => {
                         const original: int = 1536;
                         const modified: int = 768;
+                        const output_argument: string = Path.Resolve(
+                            arg.replace(original.toString(), modified.toString()),
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(
                             arg,
                             original,
                             modified,
-                            arg.replace(original.toString(), modified.toString()),
+                            output_argument,
                         );
+                    });
+                }
+                break;
+            }
+            case "popcap_official_pam_json_from_flash_animation": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
+                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(
+                            argument,
+                        ),
+                    );
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam.json`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.FlashAnimationtoPAMJSON(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
+                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(
+                                arg,
+                            ),
+                        );
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.FlashAnimationtoPAMJSON(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_official_pam_json_to_flash_animation": {
+                if (!Array.isArray(argument)) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
+                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(
+                            argument,
+                        ),
+                    );
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.xfl`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    let resolution: int = 1536;
+                    PvZ2Shell.PAMJSONtoFlashAnimation(argument, output_argument, resolution);
+                } else {
+                    argument.forEach((arg: string) => {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
+                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(
+                                arg,
+                            ),
+                        );
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.xfl`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        let resolution: int = 1536;
+                        PvZ2Shell.PAMJSONtoFlashAnimation(arg, output_argument, resolution);
                     });
                 }
                 break;

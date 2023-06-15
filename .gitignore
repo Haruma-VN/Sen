@@ -399,3 +399,7 @@ FodyWeavers.xsd
 *.sln.iml
 Scripts.zip
 *.zip
+*.yml
+Shell/.editorconfig
+.github/workflows/dotnet.yml
+*.yml
