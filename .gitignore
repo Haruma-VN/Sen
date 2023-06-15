@@ -400,6 +400,7 @@ FodyWeavers.xsd
 Scripts.zip
 *.zip
 *.yml
-Shell/.editorconfig
 .github/workflows/dotnet.yml
 *.yml
+*.js
+Scripts

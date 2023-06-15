@@ -22,10 +22,11 @@ namespace Sen.Shell.Modules.Standards.Misc
                 default:
                     break;
             }
-            Image<Rgba32> image = Image.Load<Rgba32>(fileInput);
-            Anime4KScaler anime4K = new Anime4KScaler(algorithmVersion);
-            Image<Rgba32> output = anime4K.Scale(image, scaleRatio);
+            var image = Image.Load<Rgba32>(fileInput);
+            var anime4K = new Anime4KScaler(algorithmVersion);
+            var output = anime4K.Scale(image, scaleRatio);
             output.SaveAsPng(fileOuput);
+            return;
         }
     }
 }

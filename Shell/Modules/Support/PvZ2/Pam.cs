@@ -19,6 +19,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     public class PAMInfo
     {
         public static readonly uint Magic = 0xBAF01954;
+        
         public int version { get; set; } = 6;
         public byte frame_rate { get; set; } = 30;
         public double[] position { get; set; }

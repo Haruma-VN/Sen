@@ -153,5 +153,7 @@
     "popcap_rsg_pack": "PopCap RSG Pack",
     "popcap_official_pam_json_to_flash_animation": "PopCap PAM Json To Adobe Animate Flash Animation",
     "popcap_official_pam_json_from_flash_animation": "PopCap PAM Json From Adobe Animate Flash Animation",
-    "execution_receievd_as_default": "Execution Out As Result:"
+    "execution_receievd_as_default": "Execution Out As Result:",
+    "invalid_size": "Invalid Size",
+    "size_of_this_must_be": "Size of {1} must be {2}"
 }

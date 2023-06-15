@@ -591,6 +591,13 @@ namespace Sen.Script.Modules.Exceptions {
         return;
     }
 
+    export class WrongListSize extends JoinImageError {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("invalid_size");
+        }
+    }
+
     /**
      *
      * @param file_location - Pass file path here
@@ -986,6 +993,15 @@ namespace Sen.Script.Modules.Exceptions {
                 const name: string = (error as Sen.Script.Modules.Exceptions.JoinImageError).name;
                 const message: string = (error as Sen.Script.Modules.Exceptions.JoinImageError).message;
                 const location: string = (error as Sen.Script.Modules.Exceptions.JoinImageError).file_location;
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                Sen.Script.Modules.Exceptions.ExecutionError(message);
+                break;
+            }
+            case Sen.Script.Modules.Exceptions.WrongListSize: {
+                const name: string = (error as Sen.Script.Modules.Exceptions.WrongListSize).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.WrongListSize).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.WrongListSize).file_location;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
