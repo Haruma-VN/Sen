@@ -8,33 +8,24 @@ using System.Text.RegularExpressions;
 
 namespace Sen.Shell.Modules.Support.PvZ2.PAM
 {
-
-#pragma warning disable IDE0090
-#pragma warning disable CS8600
-#pragma warning disable CS8604
-#pragma warning disable CS0414
-#pragma warning disable CS8618
-#pragma warning disable CS8602
-
     public class PAMInfo
     {
         public static readonly uint Magic = 0xBAF01954;
-        
         public int version { get; set; } = 6;
         public byte frame_rate { get; set; } = 30;
-        public double[] position { get; set; }
-        public double[] size { get; set; }
-        public ImageInfo[] image { get; set; }
-        public SpriteInfo[] sprite { get; set; }
-        public SpriteInfo main_sprite { get; set; }
+        public required double[] position { get; set; }
+        public required double[] size { get; set; }
+        public required ImageInfo[] image { get; set; }
+        public required SpriteInfo[] sprite { get; set; }
+        public required SpriteInfo main_sprite { get; set; }
     }
 
 
     public class ImageInfo
     {
-        public string? name { get; set; }
-        public int[] size { get; set; }
-        public double[] transform { get; set; }
+        public required string name { get; set; }
+        public required int[] size { get; set; }
+        public required double[] transform { get; set; }
     }
 
     public class SpriteInfo
@@ -42,8 +33,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public string? name { get; set; }
         public string? description { get; set; }
         public double frame_rate { get; set; }
-        public int[] work_area { get; set; }
-        public FrameInfo[] frame { get; set; }
+        public int[]? work_area { get; set; }
+        public FrameInfo[]? frame { get; set; }
 
     }
 
@@ -51,16 +42,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     {
         public int version { get; set; } = 6;
         public byte frame_rate { get; set; } = 30;
-        public double[] position { get; set; }
-        public ExtraImageInfo[] image { get; set; }
-        public ExtraSpriteInfo[] sprite { get; set; }
-        public ExtraSpriteInfo main_sprite { get; set; }
+        public required double[] position { get; set; }
+        public ExtraImageInfo[]? image { get; set; }
+        public ExtraSpriteInfo[]? sprite { get; set; }
+        public ExtraSpriteInfo? main_sprite { get; set; }
     }
 
     public class ExtraImageInfo
     {
         public string? name { get; set; }
-        public int[] size { get; set; }
+        public required int[] size { get; set; }
     }
 
     public class ExtraSpriteInfo
@@ -83,10 +74,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     {
         public string? label { get; set; }
         public bool stop { get; set; }
-        public List<CommandsInfo> command { get; set; }
-        public List<RemovesInfo> remove { get; set; }
-        public List<AddsInfo> append { get; set; }
-        public List<MovesInfo> change { get; set; }
+        public List<CommandsInfo>? command { get; set; }
+        public List<RemovesInfo>? remove { get; set; }
+        public List<AddsInfo>? append { get; set; }
+        public List<MovesInfo>? change { get; set; }
 
         public class CommandsInfo
         {
@@ -397,96 +388,106 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         // Decode
         public static SenBuffer Decode(SenBuffer PamFile)
         {
-            PAMInfo PamInfo = new PAMInfo();
             uint PAM_magic = PamFile.readUInt32LE();
             if (PAM_magic != PAMInfo.Magic) throw new PAMException("Invalid PAM magic", PamFile.filePath ?? "undefined");
             int version = PamFile.readInt32LE();
-            PamInfo.version = version;
             if (version > 6 || version < 1)
             {
                 throw new PAMException("PAM version out of range", PamFile.filePath ?? "undefined");
             }
             byte frame_rate = PamFile.readUInt8();
-            PamInfo.frame_rate = frame_rate;
-            PamInfo.position = new double[2];
+            double[] position = new double[2];
             for (var i = 0; i < 2; i++)
             {
-                PamInfo.position[i] = PamFile.readInt16LE() / 20d;
+                position[i] = PamFile.readInt16LE() / 20d;
             }
-            PamInfo.size = new double[2];
+            double[] size = new double[2];
             for (var i = 0; i < 2; i++)
             {
-                PamInfo.size[i] = PamFile.readInt16LE() / 20d;
+                size[i] = PamFile.readInt16LE() / 20d;
             }
             int imagesCount = PamFile.readInt16LE();
-            PamInfo.image = new ImageInfo[imagesCount];
+            var image = new ImageInfo[imagesCount];
             for (var i = 0; i < imagesCount; i++)
             {
-                PamInfo.image[i] = ReadImageInfo(PamFile, version);
+                image[i] = ReadImageInfo(PamFile, version);
             }
             int spritesCount = PamFile.readInt16LE();
-            PamInfo.sprite = new SpriteInfo[spritesCount];
+            var sprite = new SpriteInfo[spritesCount];
             for (var i = 0; i < spritesCount; i++)
             {
-                PamInfo.sprite[i] = ReadSpriteInfo(PamFile, version);
+                sprite[i] = ReadSpriteInfo(PamFile, version);
                 if (version < 4)
                 {
-                    PamInfo.sprite[i].frame_rate = PamInfo.frame_rate;
+                    sprite[i].frame_rate = frame_rate;
                 }
             }
+            var main_sprite = new SpriteInfo();
             if (version <= 3 || PamFile.readBool())
             {
-                PamInfo.main_sprite = ReadSpriteInfo(PamFile, version);
+                main_sprite = ReadSpriteInfo(PamFile, version);
                 if (version < 4)
                 {
-                    PamInfo.main_sprite.frame_rate = frame_rate;
+                    main_sprite.frame_rate = frame_rate;
                 }
             }
             var json = new JsonImplement();
+            var PamInfo = new PAMInfo{
+                version = version,
+                frame_rate = frame_rate,
+                position = position,
+                size = size,
+                image = image,
+                sprite = sprite,
+                main_sprite = main_sprite,
+            };
             byte[] bytes = Encoding.UTF8.GetBytes(json.StringifyJson(PamInfo, null));
             SenBuffer PAMJson = new SenBuffer(bytes);
             return PAMJson;
         }
         private static ImageInfo ReadImageInfo(SenBuffer PamFile, int version)
         {
-            ImageInfo image = new ImageInfo();
-            image.name = PamFile.readStringByInt16LE();
-            image.size = new int[2];
+            var name = PamFile.readStringByInt16LE();
+            var size = new int[2];
             if (version >= 4)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    image.size[i] = PamFile.readInt16LE();
+                    size[i] = PamFile.readInt16LE();
                 }
             }
             else
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    image.size[i] = -1;
+                    size[i] = -1;
                 }
             }
-            image.transform = new double[6];
+            var transform = new double[6];
             if (version == 1)
             {
                 double num = PamFile.readInt16LE() / 1000d;
-                image.transform[0] = Math.Cos(num);
-                image.transform[2] = -Math.Sin(num);
-                image.transform[1] = Math.Sin(num);
-                image.transform[3] = Math.Cos(num);
-                image.transform[4] = PamFile.readInt16LE() / 20d;
-                image.transform[5] = PamFile.readInt16LE() / 20d;
+                transform[0] = Math.Cos(num);
+                transform[2] = -Math.Sin(num);
+                transform[1] = Math.Sin(num);
+                transform[3] = Math.Cos(num);
+                transform[4] = PamFile.readInt16LE() / 20d;
+                transform[5] = PamFile.readInt16LE() / 20d;
             }
             else
             {
-                image.transform[0] = PamFile.readInt32LE() / 1310720d;
-                image.transform[2] = PamFile.readInt32LE() / 1310720d;
-                image.transform[1] = PamFile.readInt32LE() / 1310720d;
-                image.transform[3] = PamFile.readInt32LE() / 1310720d;
-                image.transform[4] = PamFile.readInt16LE() / 20d;
-                image.transform[5] = PamFile.readInt16LE() / 20d;
+                transform[0] = PamFile.readInt32LE() / 1310720d;
+                transform[2] = PamFile.readInt32LE() / 1310720d;
+                transform[1] = PamFile.readInt32LE() / 1310720d;
+                transform[3] = PamFile.readInt32LE() / 1310720d;
+                transform[4] = PamFile.readInt16LE() / 20d;
+                transform[5] = PamFile.readInt16LE() / 20d;
             }
-            return image;
+            return new ImageInfo{
+                name = name,
+                size = size,
+                transform = transform
+            };
         }
 
         private static SpriteInfo ReadSpriteInfo(SenBuffer PamFile, int version)
@@ -807,7 +808,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     PamBinary.writeInt16LE((short)sprite.work_area[1]);
                 }
             }
-            int framesCount = sprite.frame.Length;
+            int framesCount = sprite.frame!.Length;
             for (int i = 0; i < framesCount; i++)
             {
                 FrameInfo frame = sprite.frame[i];
@@ -826,7 +827,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             PamBinary.writeUInt8((byte)flags);
             if ((flags & FrameFlags.Removes) != 0)
             {
-                int count = frame.remove.Count;
+                int count = frame.remove!.Count;
                 if (count < 255 && count >= 0)
                 {
                     PamBinary.writeUInt8((byte)count);
@@ -843,7 +844,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             if ((flags & FrameFlags.Adds) != 0)
             {
-                int count = frame.append.Count;
+                int count = frame.append!.Count;
                 if (count < 255 && count >= 0)
                 {
                     PamBinary.writeUInt8((byte)count);
@@ -860,7 +861,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             if ((flags & FrameFlags.Moves) != 0)
             {
-                int count = frame.change.Count;
+                int count = frame.change!.Count;
                 if (count < 255 && count >= 0)
                 {
                     PamBinary.writeUInt8((byte)count);
@@ -885,7 +886,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             if ((flags & FrameFlags.Commands) != 0)
             {
-                int count = frame.command.Count;
+                int count = frame.command!.Count;
                 if (count > 255) count = 255;
                 PamBinary.writeUInt8((byte)count);
                 for (int i = 0; i < count; i++)
@@ -904,21 +905,21 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public bool sprite { get; set; }
         public int frame_start { get; set; }
         public int frame_duration { get; set; }
-        public double[] color { get; set; }
-        public double[] transform { get; set; }
+        public required double[] color { get; set; }
+        public required double[] transform { get; set; }
     }
 
     public class FlashPackage
     {
         public class Library
         {
-            public XElement[] image { get; set; }
-            public XElement[] sprite { get; set; }
-            public XElement main_sprite { get; set; }
+            public required XElement[] image { get; set; }
+            public required XElement[] sprite { get; set; }
+            public required XElement main_sprite { get; set; }
         }
-        public ExtraInfo extra { get; set; }
-        public XElement document { get; set; }
-        public Library library { get; set; }
+        public required ExtraInfo extra { get; set; }
+        public required XElement document { get; set; }
+        public required Library library { get; set; }
     }
 
     public class PrevEnd
@@ -1013,7 +1014,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             };
             List<XElement> flow_node = new();
             List<XElement> command_node = new();
-            PamJson.main_sprite.frame.Select((frame, frame_index) =>
+            PamJson.main_sprite.frame!.Select((frame, frame_index) =>
             {
                 if (frame.label != null || frame.stop)
                 {
@@ -1046,7 +1047,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     flow_node.Add(node);
                     prev_end.flow = frame_index;
                 }
-                if (frame.command.Count > 0)
+                if (frame.command!.Count > 0)
                 {
                     if (prev_end.command + 1 < frame_index)
                     {
@@ -1067,7 +1068,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 return string.Empty;
             }).ToArray();
-            if (prev_end.flow + 1 < PamJson.main_sprite.frame.Length)
+            if (prev_end.flow + 1 < PamJson.main_sprite.frame!.Length)
             {
                 flow_node.Add(new XElement("DOMFrame",
                 new XAttribute("index", prev_end.flow + 1),
@@ -1234,13 +1235,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             Dictionary<int, Model> model = new();
             Dictionary<int, List<XElement>> frame_node_list = new();
-            sprite.frame.Select((frame, frame_index) =>
+            sprite.frame!.Select((frame, frame_index) =>
             {
-                foreach (var e in frame.remove)
+                foreach (var e in frame.remove!)
                 {
                     model[e.index].state = false;
                 }
-                foreach (var e in frame.append)
+                foreach (var e in frame.append!)
                 {
                     model[e.index] = new()
                     {
@@ -1264,7 +1265,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         );
                     }
                 }
-                foreach (var e in frame.change)
+                foreach (var e in frame.change!)
                 {
                     var layer = model[e.index];
                     layer.state = true;
@@ -1306,7 +1307,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                                 new XAttribute("libraryItemName", $"sprite/sprite_{layer.resource + 1}"),
                                                 new XAttribute("symbolType", "graphic"),
                                                 new XAttribute("loop", "loop"),
-                                                new XAttribute("firstFrame", (frame_index - (layer.frame_start)) % (sub_sprite[(layer.resource)].frame.Length)),
+                                                new XAttribute("firstFrame", (frame_index - (layer.frame_start)) % (sub_sprite[(layer.resource)].frame!.Length)),
                                             },
                                             new XElement("matrix",
                                                 new XElement("Matrix",
@@ -1421,8 +1422,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 document = document,
                 library = new FlashPackage.Library
                 {
-                    image = extra.image.Select((e, i) => (SenBuffer.ReadXml($"{inFolder}/library/image/image_{i + 1}.xml"))).ToArray(),
-                    sprite = extra.sprite.Select((e, i) => (SenBuffer.ReadXml($"{inFolder}/library/sprite/sprite_{i + 1}.xml"))).ToArray(),
+                    image = extra.image!.Select((e, i) => (SenBuffer.ReadXml($"{inFolder}/library/image/image_{i + 1}.xml"))).ToArray(),
+                    sprite = extra.sprite!.Select((e, i) => (SenBuffer.ReadXml($"{inFolder}/library/sprite/sprite_{i + 1}.xml"))).ToArray(),
                     main_sprite = SenBuffer.ReadXml($"{inFolder}/library/main_sprite.xml")
                 }
             };
@@ -1473,7 +1474,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var x_DOMTimeline = x_DOMTimeline_list[0];
                 if (((string)x_DOMTimeline.Attribute("name")!) != "animation")
                 {
-                    throw new PAMException("Invalid DOMTimeline name", (string)x_DOMTimeline.Attribute("name"));
+                    throw new PAMException("Invalid DOMTimeline name", (string)x_DOMTimeline.Attribute("name")!);
                 }
                 var x_layers_list = x_DOMTimeline.Elements("layers").ToArray();
                 if (x_layers_list.Length != 1)
@@ -1497,12 +1498,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     var x_DOMFrame_list = x_frames.Elements("DOMFrame").ToList();
                     x_DOMFrame_list.ForEach((x_DOMFrame) =>
                     {
-                        int frame_index = int.Parse(x_DOMFrame.Attribute("index").Value);
+                        int frame_index = int.Parse(x_DOMFrame.Attribute("index")!.Value);
                         if (x_DOMFrame.Attribute("name") != null)
                         {
                             if (((string)x_DOMFrame.Attribute("labelType")!) != "name")
                             {
-                                throw new PAMException("Invalid DOMFrame name", (string)x_DOMFrame.Attribute("labelType"));
+                                throw new PAMException("Invalid DOMFrame name", (string)x_DOMFrame.Attribute("labelType")!);
                             }
                             main_sprite_frame[frame_index].label = ((string)x_DOMFrame.Attribute("name")!);
                         }
@@ -1531,7 +1532,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                             throw new PAMException("Invalid Script length", $"Actionscript length: {x_script.Nodes().Count()}");
                         }
                         var x_script_text = x_script.FirstNode;
-                        if (x_script_text.NodeType != XmlNodeType.CDATA)
+                        if (x_script_text!.NodeType != XmlNodeType.CDATA)
                         {
                             throw new PAMException("Invalid Script CDATA", "undefined");
                         }
@@ -1553,7 +1554,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     var x_DOMFrame_list = x_frames.Elements("DOMFrame").ToList();
                     x_DOMFrame_list.ForEach((x_DOMFrame) =>
                     {
-                        int frame_index = int.Parse(x_DOMFrame.Attribute("index").Value);
+                        int frame_index = int.Parse(x_DOMFrame.Attribute("index")!.Value);
                         var x_Actionscript_list = x_DOMFrame.Elements("Actionscript").ToArray();
                         if (x_Actionscript_list.Length == 0)
                         {
@@ -1579,7 +1580,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                             throw new PAMException("Invalid DOMFrame script nodes length", $"Script nodes length: {x_script.Nodes().Count()}");
                         }
                         var x_script_text = x_script.FirstNode;
-                        if (x_script_text.NodeType != XmlNodeType.CDATA)
+                        if (x_script_text!.NodeType != XmlNodeType.CDATA)
                         {
                             throw new PAMException("Invalid DOMFrame CDATA", "undefined");
                         }
@@ -1591,7 +1592,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                             {
                                 throw new PAMException("Invaid command string", "undefined");
                             }
-                            main_sprite_frame[frame_index].command.Add(new FrameInfo.CommandsInfo
+                            main_sprite_frame[frame_index].command!.Add(new FrameInfo.CommandsInfo
                             {
                                 command = new string[2] { regex_result.Groups[1].Value, regex_result.Groups[2].Value }
                             });
@@ -1602,22 +1603,22 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     var x_DOMLayer_sprite = x_DOMLayer_list[2];
                 }
             }
-            int frame_rate = int.Parse(x_DOMDocument.Attribute("frameRate").Value);
-            int width = int.Parse(x_DOMDocument.Attribute("width").Value);
-            int height = int.Parse(x_DOMDocument.Attribute("height").Value);
+            int frame_rate = int.Parse(x_DOMDocument.Attribute("frameRate")!.Value);
+            int width = int.Parse(x_DOMDocument.Attribute("width")!.Value);
+            int height = int.Parse(x_DOMDocument.Attribute("height")!.Value);
             PAMInfo PamInfo = new PAMInfo
             {
                 version = PAMRipe.extra.version,
                 frame_rate = (byte)frame_rate,
                 position = PAMRipe.extra.position,
                 size = new double[] { width, height },
-                image = PAMRipe.extra.image.Select((e, i) => new ImageInfo { name = e.name, size = e.size, transform = ParseImageDocument(PAMRipe.library.image[i], i) }).ToArray(),
-                sprite = PAMRipe.extra.sprite.Select((e, i) =>
+                image = PAMRipe.extra.image!.Select((e, i) => new ImageInfo { name = e.name!, size = e.size, transform = ParseImageDocument(PAMRipe.library.image[i], i) }).ToArray(),
+                sprite = PAMRipe.extra.sprite!.Select((e, i) =>
                 {
                     var frame = ParseSpriteDocument(PAMRipe.library.sprite[i], i);
                     return new SpriteInfo { name = e.name, frame_rate = frame_rate, work_area = new int[] { 0, frame.Length }, frame = frame };
                 }).ToArray(),
-                main_sprite = new() { name = PAMRipe.extra.main_sprite.name, frame_rate = frame_rate, work_area = new int[] { 0, main_sprite_frame.Length }, frame = main_sprite_frame },
+                main_sprite = new() { name = PAMRipe.extra.main_sprite!.name, frame_rate = frame_rate, work_area = new int[] { 0, main_sprite_frame.Length }, frame = main_sprite_frame },
             };
             return PamInfo;
         }
@@ -1632,7 +1633,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             if ((string)x_DOMSymbolItem.Attribute("name")! != (index == -1 ? "main_sprite" : $"sprite/sprite_{index + 1}"))
             {
-                throw new PAMException("Invalid Sprite DOMSymbolItem name", (string)x_DOMSymbolItem.Attribute("name"));
+                throw new PAMException("Invalid Sprite DOMSymbolItem name", (string)x_DOMSymbolItem.Attribute("name")!);
             }
             var x_timeline_list = x_DOMSymbolItem.Elements("timeline").ToArray();
             if (x_timeline_list.Length != 1)
@@ -1648,7 +1649,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var x_DOMTimeline = x_DOMTimeline_list[0];
             if ((string)x_DOMTimeline.Attribute("name")! != (index == -1 ? "main_sprite" : $"sprite_{index + 1}"))
             {
-                throw new PAMException("Invalid Sprite DOMTimeline name", (string)x_DOMTimeline.Attribute("name"));
+                throw new PAMException("Invalid Sprite DOMTimeline name", (string)x_DOMTimeline.Attribute("name")!);
             }
             var x_layers_list = x_DOMTimeline.Elements("layers").ToArray();
             if (x_layers_list.Length != 1)
@@ -1693,7 +1694,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     if (model != null)
                     {
                         var target_frame = get_frame_at(model.frame_start + model.frame_duration);
-                        target_frame.remove.Add(new FrameInfo.RemovesInfo
+                        target_frame.remove!.Add(new FrameInfo.RemovesInfo
                         {
                             index = model.index,
                         });
@@ -1796,8 +1797,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                             frame_start = frame_index,
                             frame_duration = frame_duration,
                             color = (double[])k_initial_color.Clone(),
+                            transform = new double[2],
                         };
-                        target_frame.append.Add(new FrameInfo.AddsInfo
+                        target_frame.append!.Add(new FrameInfo.AddsInfo
                         {
                             index = model.index,
                             name = null,
@@ -1820,7 +1822,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     {
                         model.color = color;
                     }
-                    target_frame.change.Add(new FrameInfo.MovesInfo
+                    target_frame.change!.Add(new FrameInfo.MovesInfo
                     {
                         index = model.index,
                         transform = transform,
@@ -1855,7 +1857,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             if ((string)x_DOMSymbolItem.Attribute("name")! != $"image/image_{index + 1}")
             {
-                throw new PAMException("Invaild Image DOMSymbolItem name", (string)x_DOMSymbolItem.Attribute("name"));
+                throw new PAMException("Invaild Image DOMSymbolItem name", (string)x_DOMSymbolItem.Attribute("name")!);
             }
             var x_timeline_list = x_DOMSymbolItem.Elements("timeline").ToArray();
             if (x_timeline_list.Length != 1)
@@ -1871,7 +1873,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var x_DOMTimeline = x_DOMTimeline_list[0];
             if ((string)x_DOMTimeline.Attribute("name")! != $"image_{index + 1}")
             {
-                throw new PAMException("Invalid Image DOMTimeline name", (string)x_DOMTimeline.Attribute("name"));
+                throw new PAMException("Invalid Image DOMTimeline name", (string)x_DOMTimeline.Attribute("name")!);
             }
             var x_layers_list = x_DOMTimeline.Elements("layers").ToArray();
             if (x_layers_list.Length != 1)
@@ -1911,7 +1913,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var x_DOMSymbolInstance = x_DOMSymbolInstance_list[0];
             if ((string)x_DOMSymbolInstance.Attribute("libraryItemName")! != $"source/source_{index + 1}")
             {
-                throw new PAMException("Invalid Image DOMSymbolInstance name", (string)x_DOMSymbolInstance.Attribute("libraryItemName"));
+                throw new PAMException("Invalid Image DOMSymbolInstance name", (string)x_DOMSymbolInstance.Attribute("libraryItemName")!);
             }
             var x_matrix_list = x_DOMSymbolInstance.Elements("matrix").ToArray();
             if (x_matrix_list.Length != 1)
@@ -1967,33 +1969,33 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         private static double[] ParseTransformOriginal(XElement x_Matrix)
         {
             return new double[] {
-                double.Parse((string)x_Matrix.Attribute("x") ?? "0"),
-                double.Parse((string)x_Matrix.Attribute("y") ?? "0"),
+                double.Parse((string?)x_Matrix!.Attribute("x") ?? "0"),
+                double.Parse((string?)x_Matrix!.Attribute("y") ?? "0"),
             };
         }
 
         private static double[] ParseTransform(XElement x_Matrix)
         {
             return new double[] {
-                double.Parse((string)x_Matrix.Attribute("a") ?? "1"),
-                double.Parse((string)x_Matrix.Attribute("b") ?? "0"),
-                double.Parse((string)x_Matrix.Attribute("c") ?? "0"),
-                double.Parse((string)x_Matrix.Attribute("d") ?? "1"),
-                double.Parse((string)x_Matrix.Attribute("tx") ?? "0"),
-                double.Parse((string)x_Matrix.Attribute("ty") ?? "0"),
+                double.Parse((string?)x_Matrix!.Attribute("a") ?? "1"),
+                double.Parse((string?)x_Matrix!.Attribute("b") ?? "0"),
+                double.Parse((string?)x_Matrix!.Attribute("c") ?? "0"),
+                double.Parse((string?)x_Matrix!.Attribute("d") ?? "1"),
+                double.Parse((string?)x_Matrix!.Attribute("tx") ?? "0"),
+                double.Parse((string?)x_Matrix!.Attribute("ty") ?? "0"),
             };
         }
-        private static double ParseColorCompute(string multiplier_s, string offset_s)
+        private static double ParseColorCompute(string? multiplier_s, string? offset_s)
         {
             return Math.Max(0, Math.Min(255, double.Parse(multiplier_s ?? "1") * 255 + double.Parse(offset_s ?? "0"))) / 255;
         }
         private static double[] ParseColor(XElement x_Matrix)
         {
             return new double[] {
-                ParseColorCompute((string)x_Matrix.Attribute("redMultiplier"), (string)x_Matrix.Attribute("redOffset")),
-                ParseColorCompute((string)x_Matrix.Attribute("greenMultiplier"), (string)x_Matrix.Attribute("greenOffset")),
-                ParseColorCompute((string)x_Matrix.Attribute("blueMultiplier"), (string)x_Matrix.Attribute("blueOffset")),
-                ParseColorCompute((string)x_Matrix.Attribute("alphaMultiplier"), (string)x_Matrix.Attribute("alphaOffset")),
+                ParseColorCompute((string?)x_Matrix!.Attribute("redMultiplier"), (string?)x_Matrix!.Attribute("redOffset")),
+                ParseColorCompute((string?)x_Matrix!.Attribute("greenMultiplier"), (string?)x_Matrix!.Attribute("greenOffset")),
+                ParseColorCompute((string?)x_Matrix!.Attribute("blueMultiplier"), (string?)x_Matrix!.Attribute("blueOffset")),
+                ParseColorCompute((string?)x_Matrix!.Attribute("alphaMultiplier"), (string?)x_Matrix.Attribute("alphaOffset")),
             };
         }
     }

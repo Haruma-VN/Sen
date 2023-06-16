@@ -23,7 +23,6 @@ namespace Sen.Shell.Modules.Standards
 
     }
 
-    [Flags]
     public enum RijndaelMode
     {
         CBC,
@@ -32,7 +31,6 @@ namespace Sen.Shell.Modules.Standards
         CTS,
     }
 
-    [Flags]
     public enum RijndaelPadding
     {
         None,

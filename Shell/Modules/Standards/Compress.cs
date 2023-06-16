@@ -19,7 +19,6 @@ namespace Sen.Shell.Modules.Standards
         public abstract byte[] UncompressZlibBytes<Generic_T>(Generic_T zlibData) where Generic_T : IList<byte>;
 
     }
-    [Flags]
     public enum ZlibCompressionLevel
     {
         Level0,
@@ -116,17 +115,26 @@ namespace Sen.Shell.Modules.Standards
                 _ => CompressionLevel.Default,
 
             };
-
-            using var memoryStream = new MemoryStream();
-            using (var zlibStream = new ZlibStream(memoryStream, CompressionMode.Compress, compressionLevel))
+            byte[] dataBytes;
+            if (data is byte[] byteArray)
             {
-                using var writer = new StreamWriter(zlibStream);
-                {
-                    writer.Write(data);
-                }
+                dataBytes = byteArray;
             }
-
-            return memoryStream.ToArray();
+            else if (data is Array array && array.GetType().GetElementType() == typeof(byte))
+            {
+                dataBytes = array.Cast<byte>().ToArray();
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid zlib. Expected byte array or byte[].");
+            }
+            using var memoryStream = new MemoryStream(dataBytes);
+            using var zlibStream = new ZlibStream(memoryStream, CompressionMode.Compress, compressionLevel);
+            using var outputStream = new MemoryStream();
+            {
+                zlibStream.CopyTo(outputStream);
+                return outputStream.ToArray();
+            }
         }
 
         public override void UncompressZip(string zip_input, string extracted_directory)

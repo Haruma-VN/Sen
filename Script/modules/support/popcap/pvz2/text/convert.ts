@@ -62,7 +62,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.TextTable {
 
         public abstract ConvertLocalizationTable<
             Generic_T extends PopCapLocalizationText | PopCapLocalizationJsonMap | PopCapLocalizationJsonList,
-        >(data: Generic_T, convert: AllowedConversion): void;
+        >(data: Generic_T, convert: AllowedConversion, is_text: boolean): void;
     }
 
     /**
@@ -218,12 +218,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.TextTable {
 
         public override ConvertLocalizationTable<
             Generic_T extends PopCapLocalizationJsonList | PopCapLocalizationJsonMap | PopCapLocalizationText,
-        >(data: Generic_T, convert: AllowedConversion): Generic_T {
-            let is_text: boolean = false;
-            try {
-                JSON.parse(data as any);
-            } catch (error) {
-                is_text = true;
+        >(data: Generic_T, convert: AllowedConversion, is_text: boolean, file_path?: string): Generic_T {
+            if (is_text && convert === "text") {
+                throw new Sen.Script.Modules.Exceptions.EvaluateError("Non valid data", (file_path ??= "undefined"));
+            }
+            if (!is_text) {
+                this.CheckOfficialPopCapLocalizationJsonStructure(
+                    data as PopCapLocalizationJsonList | PopCapLocalizationJsonMap,
+                );
             }
             if (is_text) {
                 const destination: Generic_T = {
@@ -243,11 +245,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.TextTable {
         }
 
         public static DoAllConversion(): void {
-            const text_table = new ConvertTable();
+            const TextTable = new ConvertTable();
             let input = Console.Input(null);
-            text_table.ConvertLocalizationTable(
-                Fs.ReadText(input, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+            let is_text: boolean = false;
+            let ripe_data: string = Fs.ReadText(input, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8);
+            try {
+                JSON.parse(ripe_data);
+            } catch (error) {
+                is_text = true;
+            }
+            TextTable.ConvertLocalizationTable(
+                is_text
+                    ? (ripe_data as PopCapLocalizationText)
+                    : (JSON.parse(ripe_data) as PopCapLocalizationJsonList | PopCapLocalizationJsonMap),
                 "json_list",
+                is_text,
             );
         }
     }

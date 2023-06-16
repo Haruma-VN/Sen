@@ -2,7 +2,6 @@
 
 namespace Sen.Shell.Modules.Standards.IOModule
 {
-    [Flags]
     public enum EncodingType
     {
         UTF8,
@@ -67,7 +66,6 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
     }
 
-    [Flags]
     public enum ReadDirectory
     {
         OnlyCurrentDirectory,

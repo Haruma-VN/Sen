@@ -11,7 +11,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
 #pragma warning disable CS0414
 #pragma warning disable CS8603
 #pragma warning disable IDE0060
-    [Flags]
     public enum RTONListException
     {
         Magic,

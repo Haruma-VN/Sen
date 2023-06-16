@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Sen.Shell.Modules.Standards
 {
 
-    [Flags]
     public enum StandardsException
     {
         RuntimeException,
@@ -21,7 +20,7 @@ namespace Sen.Shell.Modules.Standards
     public class RuntimeException : System.Exception
     {
 
-        #pragma warning disable IDE1006
+#pragma warning disable IDE1006
 
         protected StandardsException _errorCode { get; set; }
 
@@ -103,7 +102,7 @@ namespace Sen.Shell.Modules.Standards
 
         public string expected;
 
-        public RTONDecodeException(string message, string errorCode, string expected ,Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException exception) : base(message, errorCode)
+        public RTONDecodeException(string message, string errorCode, string expected, Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException exception) : base(message, errorCode)
         {
             this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RTONDecodeException;
             this._Exception = exception;

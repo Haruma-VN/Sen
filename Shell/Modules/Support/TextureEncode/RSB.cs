@@ -1190,7 +1190,6 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
     }
 
-    [Flags]
     public enum TextureEncoderUnofficial
     {
         A8,

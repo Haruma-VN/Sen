@@ -18,6 +18,8 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public long readOffset { get; set; }
         public int imageWidth;
         public int imageHeight;
+        public long tempReadOffset;
+        public long tempWriteOffset;
         public string? filePath;
         private byte[]? m_buffer;
 
@@ -443,6 +445,25 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             byte[] str_bytes = encoding.GetBytes(str);
             writeBytes(str_bytes);
         }
+        
+        public void writeNull(int count, long offset = -1)
+        {
+            if (count < 0) throw new Exception();
+            if (count == 0) return;
+            fixWriteOffset(offset);
+            byte[] nullbytes = new byte[count];
+            writeBytes(nullbytes);
+        }
+        
+        public void writeStringFourByte(string str, long offset = -1) {
+            fixWriteOffset(offset);
+            var strLength = str.Length;
+            byte[] str_bytes = new byte[strLength * 4 + 4];
+            for (var i = 0; i < strLength; i++) {
+                str_bytes[i * 4] = (byte)str[i];
+            }
+            writeBytes(str_bytes);
+        }
 
         public void setBytes(byte[] array, long offset, Boolean overwriteOffset)
         {
@@ -820,6 +841,23 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             byte[] array = toBytes();
             return encoding.GetString(array);
         }
+
+        public void BackupReadOffset() {
+            tempReadOffset = readOffset;
+        }
+
+        public void RestoreReadOffset() {
+            readOffset = tempReadOffset;
+        }
+
+        public void BackupWriteOffset() {
+            tempWriteOffset = writeOffset;
+        }
+
+        public void RestoreWriteOffset() {
+            writeOffset = tempWriteOffset;
+        }
+
         public virtual void CreateDirectory(string output_path)
         {
             var path = new ImplementPath();

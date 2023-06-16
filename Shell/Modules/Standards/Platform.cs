@@ -5,14 +5,12 @@ using System;
 namespace Sen.Shell.Modules.Standards
 {
 
-    [Flags]
     public enum ShellType
     {
         Console,
         GUI,
     }
 
-    [Flags]
     public enum UserPlatform
     {
         Windows,
@@ -23,7 +21,6 @@ namespace Sen.Shell.Modules.Standards
         Unknown,
     }
 
-    [Flags]
     public enum ConsoleColor
     {
         Black,

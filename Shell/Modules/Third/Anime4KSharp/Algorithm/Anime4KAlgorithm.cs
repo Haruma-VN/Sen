@@ -4,7 +4,6 @@
     /// Contains all supported anime4k algorithm versions in the library
     /// </summary>
     ///
-    [Flags]
     public enum Anime4KAlgorithmVersion
     {
         /// <summary>

@@ -2,22 +2,33 @@ using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Sen.Shell.Modules.Standards;
+
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
 {
-#pragma warning disable CS8618
 #pragma warning disable SYSLIB0020
     public class PacketInfo
     {
+        [JsonPropertyName("head_version")]
+        [JsonRequired]
         public int head_version { get; set; }
+
+        [JsonPropertyName("compression_flags")]
+        [JsonRequired]
         public int compression_flags { get; set; }
-        public ResInfo[] res { get; set; }
+
+        [JsonPropertyName("res")]
+        [JsonRequired]
+        public required ResInfo[] res { get; set; }
     }
 
     public class ResInfo
     {
-        public string path { get; set; }
+        [JsonPropertyName("path")]
+        [JsonRequired]
+        public required string path { get; set; }
         public PtxInfo? ptxInfo { get; set; }
     }
 
@@ -44,14 +55,26 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         public int fileList_Offset { get; set; }
     }
 
-
-
     public class NameDict
     {
-        public string namePath { get; set; }
-        public int offsetByte { get; set; }
+        public required string namePath { get; set; }
+        public required int offsetByte { get; set; }
     }
 
+    public class PathTemp
+    {
+        public required string pathSlice { get; set; }
+        public int key { get; set; }
+        public required ResInfo resInfo { get; set; }
+        public required bool isAtlas { get; set; }
+        public List<PathPosition> positions = new List<PathPosition>();
+    }
+
+    public class PathPosition
+    {
+        public int position { get; set; }
+        public int offset { get; set; }
+    }
 
     public class RSGFunction
     {
@@ -62,18 +85,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
         public class Part0_List
         {
-            public string path { get; set; }
-            public int offset { get; set; }
-            public int size { get; set; }
+            public required string path { get; set; }
+            public required int offset { get; set; }
+            public required int size { get; set; }
         }
         public class Part1_List
         {
-            public string path { get; set; }
-            public int offset { get; set; }
-            public int size { get; set; }
-            public int id { get; set; }
-            public int width { get; set; }
-            public int height { get; set; }
+            public required string path { get; set; }
+            public required int offset { get; set; }
+            public required int size { get; set; }
+            public required int id { get; set; }
+            public required int width { get; set; }
+            public required int height { get; set; }
         }
         public static readonly int[,] ZlibLevelCompression = {
             {120, 1},
@@ -81,7 +104,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             {120, 156},
             {120, 218},
         };
-        public static void UnpackNormal(SenBuffer RsgFile, string outFolder)
+        public static void Unpack(SenBuffer RsgFile, string outFolder)
         {
             RSG_head HeadInfo = ReadRSG_Head(RsgFile);
             part0List.Clear();
@@ -213,7 +236,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         private static void FileListSplit(SenBuffer RsgFile, RSG_head HeadInfo)
         {
             var json = new JsonImplement();
-            List<NameDict> nameDict = new List<NameDict>();
+            var nameDict = new List<NameDict>();
             string namePath = "";
             int tempOffset = HeadInfo.fileList_Offset;
             RsgFile.readOffset = tempOffset;
@@ -243,8 +266,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                                 path = namePath,
                                 offset = RsgFile.readInt32LE(),
                                 size = RsgFile.readInt32LE(),
-                                id = RsgFile.readInt32LE(RsgFile.readOffset + 8),
-                                width = RsgFile.readInt32LE(),
+                                id = RsgFile.readInt32LE(),
+                                width = RsgFile.readInt32LE(RsgFile.readOffset + 8),
                                 height = RsgFile.readInt32LE()
                             }
                         );
@@ -289,7 +312,224 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
             }
         }
+        // Pack RSG
+        public static SenBuffer Pack(string inFolder)
+        {
+            var fs = new FileSystem();
+            if (!fs.FileExists($"{inFolder}/packet_info.json")) throw new Exception("PacketInfo is not exists");
+            PacketInfo packetInfo = fs.ReadJson<PacketInfo>($"{inFolder}/packet_info.json");
+            if (packetInfo.head_version != 3 && packetInfo.head_version != 4) throw new Exception("RSG version out of range");
+            if (packetInfo.compression_flags < 0 || packetInfo.compression_flags > 3) throw new Exception("RSG compression flags out of range");
+            var RSGFile = new SenBuffer();
+            RSGFile.writeString(RSG_head.magic);
+            RSGFile.writeInt32LE(packetInfo.head_version);
+            RSGFile.writeNull(8);
+            RSGFile.writeInt32LE(packetInfo.compression_flags);
+            RSGFile.writeNull(72);
+            var pathTemps = FileListPack(packetInfo.res);
+            WriteRSG(RSGFile, pathTemps, packetInfo.compression_flags, inFolder);
+            return RSGFile;
+        }
+
+        private static bool IsNotASCII(string str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] > 127) return true;
+            }
+            return false;
+        }
+
+        private static List<PathTemp> FileListPack(ResInfo[] ResInfo)
+        {
+            var ResInfoList = ResInfo.ToList();
+            ResInfoList.Insert(0, new ResInfo { path = "" });
+            ResInfoList.Sort((a, b) => a.path.CompareTo(b.path));
+            var ListLength = ResInfoList.Count - 1;
+            var pathTemps = new List<PathTemp>();
+            int w_postion = 0;
+            for (var i = 0; i < ListLength; i++)
+            {
+                string Path1 = ResInfoList[i].path.ToUpper();
+                string Path2 = ResInfoList[i + 1].path.ToUpper();
+                if (IsNotASCII(Path2)) throw new Exception("Item Path must be ASCII");
+                var strLongestLength = Path1.Length >= Path2.Length ? Path1.Length : Path2.Length;
+                for (var k = 0; k < strLongestLength; k++)
+                {
+                    if (k >= Path1.Length || k >= Path2.Length || Path1[k] != Path2[k])
+                    {
+                        for (var h = pathTemps.Count; h > 0; h--)
+                        {
+                            if (k >= pathTemps[h - 1].key)
+                            {
+                                pathTemps[h - 1].positions.Add(new PathPosition
+                                {
+                                    position = w_postion,
+                                    offset = (k - pathTemps[h - 1].key)
+                                });
+                                break;
+                            }
+
+                        }
+                        w_postion += (Path2.EndsWith(".PTX") ? (Path2.Length - k + 9) : (Path2.Length - k + 4));
+                        pathTemps.Add(new PathTemp
+                        {
+                            pathSlice = Path2.Substring(k),
+                            key = k,
+                            resInfo = ResInfo[i],
+                            isAtlas = (Path2.EndsWith(".PTX") ? true : false),
+                        });
+                        break;
+                    }
+                }
+            }
+            return pathTemps;
+        }
+
+        private static void WriteRSG(SenBuffer RSGFile, List<PathTemp> pathTemps, int compression_flags, string inFolder)
+        {
+            var pathTempLength = pathTemps.Count;
+            var fileListBeginOffset = RSGFile.writeOffset;
+            if (fileListBeginOffset != 92) throw new Exception("Invalid fileList Offset");
+            var fs = new FileSystem();
+            SenBuffer dataGroup = new SenBuffer();
+            SenBuffer atlasGroup = new SenBuffer();
+            int dataPos = 0;
+            int atlasPos = 0;
+            for (var i = 0; i < pathTempLength; i++)
+            {
+                var beginOffset = RSGFile.writeOffset;
+                var PacketResInfo = pathTemps[i].resInfo;
+                RSGFile.writeStringFourByte(pathTemps[i].pathSlice);
+                RSGFile.BackupWriteOffset();
+                var endOffset = RSGFile.writeOffset;
+                for (var h = 0; h < pathTemps[i].positions.Count; h++)
+                {
+                    RSGFile.writeInt24LE(pathTemps[i].positions[h].position, beginOffset + pathTemps[i].positions[h].offset * 4 + 1);
+                }
+                byte[] dataItem = fs.ReadBytes($"{inFolder}/res/{PacketResInfo.path}");
+                int appendLength = BeautifyLength(dataItem.Length);
+                if (pathTemps[i].isAtlas)
+                {
+                    atlasGroup.writeBytes(dataItem);
+                    atlasGroup.writeNull(appendLength);
+                    RSGFile.RestoreWriteOffset();
+                    RSGFile.writeInt32LE(1);
+                    RSGFile.writeInt32LE(atlasPos);
+                    RSGFile.writeInt32LE(dataItem.Length);
+                    RSGFile.writeInt32LE(PacketResInfo.ptxInfo!.id);
+                    RSGFile.writeNull(8);
+                    RSGFile.writeInt32LE(PacketResInfo.ptxInfo!.width);
+                    RSGFile.writeInt32LE(PacketResInfo.ptxInfo!.height);
+                    atlasPos += dataItem.Length + appendLength;
+                }
+                else
+                {
+                    dataGroup.writeBytes(dataItem);
+                    dataGroup.writeNull(appendLength);
+                    RSGFile.RestoreWriteOffset();
+                    RSGFile.writeInt32LE(0);
+                    RSGFile.writeInt32LE(dataPos);
+                    RSGFile.writeInt32LE(dataItem.Length);
+                    dataPos += dataItem.Length + appendLength;
+                }
+            }
+            var fileListLength = RSGFile.writeOffset - fileListBeginOffset;
+            RSGFile.writeNull(BeautifyLength((int)RSGFile.writeOffset));
+            RSGFile.BackupWriteOffset();
+            RSGFile.writeInt32LE((int)RSGFile.writeOffset, 0x14);
+            RSGFile.writeInt32LE((int)fileListLength, 0x48);
+            RSGFile.writeInt32LE((int)fileListBeginOffset);
+            RSGFile.RestoreWriteOffset();
+            Compressor(RSGFile, dataGroup, atlasGroup, compression_flags);
+        }
+
+        private static void Compressor(SenBuffer RSGFile, SenBuffer dataGroup, SenBuffer atlasGroup, int compression_flags)
+        {
+            var Compress = new Compress();
+            void DataWrite(byte[] dataBytes, int flags) {
+                int part0_Offset = (int)RSGFile.writeOffset;
+                int part0_Size = dataBytes.Length;
+                if (flags < 2)
+                {
+                    RSGFile.writeBytes(dataBytes);
+                    RSGFile.BackupWriteOffset();
+                    RSGFile.writeInt32LE(part0_Offset, 0x18);
+                    RSGFile.writeInt32LE(part0_Size);
+                    RSGFile.writeInt32LE(part0_Size);
+                    RSGFile.RestoreWriteOffset();
+                }
+                else
+                {
+                    byte[] ZlibBytes = Compress.CompressZlibBytes(dataBytes, ZlibCompressionLevel.Level9);
+                    int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
+                    RSGFile.writeBytes(ZlibBytes);
+                    RSGFile.writeNull(ZlibAppendLength);
+                    int part0_Zlib = ZlibBytes.Length + ZlibAppendLength;
+                    RSGFile.BackupWriteOffset();
+                    RSGFile.writeInt32LE(part0_Offset, 0x18);
+                    RSGFile.writeInt32LE(part0_Zlib);
+                    RSGFile.writeInt32LE(part0_Size);
+                    RSGFile.RestoreWriteOffset();
+                }
+            }
+            if (dataGroup.length != 0)
+            {
+                byte[] dataBytes = dataGroup.toBytes();
+                dataGroup.Close();
+                DataWrite(dataBytes, compression_flags);
+            }
+            if (atlasGroup.length != 0)
+            {
+                byte[] atlasBytes = atlasGroup.toBytes();
+                atlasGroup.Close();
+                int part1_Offset;
+                int part1_Size = atlasBytes.Length;
+                if (compression_flags == 0 || compression_flags == 2) {
+                    if (dataGroup.length == 0) {
+                        DataWrite(new byte[4096], 3);
+                    }
+                    part1_Offset = (int)RSGFile.writeOffset;
+                    RSGFile.writeBytes(atlasBytes);
+                    RSGFile.BackupWriteOffset();
+                    RSGFile.writeInt32LE(part1_Offset, 0x28);
+                    RSGFile.writeInt32LE(part1_Size);
+                    RSGFile.writeInt32LE(part1_Size);
+                    RSGFile.RestoreWriteOffset();
+                }
+                else {
+                    if (compression_flags == 3 && dataGroup.length == 0) {
+                        DataWrite(new byte[4096], 3);
+                    }
+                    part1_Offset = (int)RSGFile.writeOffset;
+                    byte[] ZlibBytes = Compress.CompressZlibBytes(atlasBytes, ZlibCompressionLevel.Level9);
+                    int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
+                    RSGFile.writeBytes(ZlibBytes);
+                    RSGFile.writeNull(ZlibAppendLength);
+                    int part1_Zlib = ZlibBytes.Length + ZlibAppendLength;
+                    RSGFile.BackupWriteOffset();
+                    RSGFile.writeInt32LE(part1_Offset, 0x28);
+                    RSGFile.writeInt32LE(part1_Zlib);
+                    RSGFile.writeInt32LE(part1_Size);
+                    RSGFile.RestoreWriteOffset();
+                }
+            }
+            else
+            {
+                RSGFile.writeInt32LE((int)RSGFile.length, 0x28);
+            }
+        }
+
+        public static int BeautifyLength(int oriLength)
+        {
+            if (oriLength % 4096 == 0)
+            {
+                return oriLength;
+            }
+            else
+            {
+                return 4096 - (oriLength % 4096);
+            }
+        }
     }
-
-
 }
