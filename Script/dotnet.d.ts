@@ -1618,6 +1618,20 @@ declare namespace PvZ2Shell {
      */
 
     export function RSGPack(inDirectory: string, outFile: string): void;
+    /**
+     *
+     * @param inFile - Pass RSB file path
+     * @param outFolder - Out directory unpacked
+     */
+
+    export function RSBUnpack(inFile: string, outFolder: string): void;
+    /**
+     *
+     * @param inDirectory - Pass RSB bundle directory path
+     * @param outFile - Out RSB
+     */
+
+    export function RSBPack(inDirectory: string, outFile: string): void;
 }
 
 /**

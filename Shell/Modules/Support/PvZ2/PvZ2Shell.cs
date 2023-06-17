@@ -26,6 +26,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RSGPack(string inFolder, string outFile);
 
+        public abstract void RSBUnpack(string inRSBpath, string outFolder);
+
+        public abstract void RSBPack(string RSBDirectory, string outRSB);
+
+
     }
 
     public class PvZ2Shell : PvZ2ShellAbstract
@@ -95,11 +100,23 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public override void RSGUnpack(string inFile, string outFolder) {
             var RsgFile = new SenBuffer(inFile);
-            RSGFunction.UnpackNormal(RsgFile, outFolder);
+            RSGFunction.Unpack(RsgFile, outFolder);
             return;
         }
 
-        public override void RSGPack(string inFile, string outFolder) {
+        public override void RSGPack(string inFolder, string outFile) {
+            var RSGFile = RSGFunction.Pack(inFolder);
+            RSGFile.OutFile(outFile);
+            return;
+        }
+
+        public override void RSBUnpack(string inRSBpath, string outFolder)
+        {
+            return;
+        }
+
+        public override void RSBPack(string RSBDirectory, string outRSB)
+        {
             return;
         }
     }

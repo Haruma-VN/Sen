@@ -144,5 +144,17 @@
         "include": [".packet"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_rsb_unpack": {
+        "func_number": 25,
+        "include": [".rsb"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rsb_pack": {
+        "func_number": 26,
+        "include": [".bundle"],
+        "exclude": [],
+        "type": "directory"
     }
 }

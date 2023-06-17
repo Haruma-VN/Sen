@@ -124,7 +124,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsg_unpack"
         | "popcap_rsg_pack"
         | "popcap_official_pam_json_to_flash_animation"
-        | "popcap_official_pam_json_from_flash_animation";
+        | "popcap_official_pam_json_from_flash_animation"
+        | "popcap_rsb_unpack"
+        | "popcap_rsb_pack";
 
     /**
      *
@@ -199,6 +201,42 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         PvZ2Shell.RSGPack(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_rsb_unpack": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name}.bundle`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.RSBUnpack(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name}.bundle`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.RSBUnpack(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_rsb_pack": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}`,
+                    );
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.RSBPack(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}`,
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.RSBPack(arg, output_argument);
                     });
                 }
                 break;

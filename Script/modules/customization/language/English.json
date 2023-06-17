@@ -155,5 +155,8 @@
     "popcap_official_pam_json_from_flash_animation": "PopCap PAM Json From Adobe Animate Flash Animation",
     "execution_receievd_as_default": "Execution Out As Result:",
     "invalid_size": "Invalid Size",
-    "size_of_this_must_be": "Size of {1} must be {2}"
+    "size_of_this_must_be": "Size of {1} must be {2}",
+    "popcap_localization_text_table": "PopCap Localization Text Table",
+    "popcap_rsb_unpack": "PopCap RSB Unpack",
+    "popcap_rsb_pack": "PopCap RSB Pack"
 }
