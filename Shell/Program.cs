@@ -3,6 +3,8 @@ using Sen.Shell.Modules.JavaScript;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Download;
 using Esprima.Ast;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace Sen.Shell
 {
@@ -18,9 +20,9 @@ namespace Sen.Shell
             _ => throw new Exception($"Unknown"),
         };
 
-
         public async static Task<int> Main(string[] args)
         {
+            Sen.Shell.Modules.Support.Misc.SignWindowsRegistry.AssignExtensionWithSen();
             var SystemConsole = new SystemImplement();
             var path = new ImplementPath();
             var fs = new FileSystem();

@@ -1,15 +1,15 @@
 # Shell
 
-`Shell` using [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) for longer support, create an interface for users to interact with the tool and contains various functions to use.
+`Shell` using [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) for long term support, create an interface for users to interact with the tool and contains various functions to use.
 
 ## Project development
 
 If you wish to compile the project yourself, you would need these:
 
 -   [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/)
--   [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+-   [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
-The compiled project is compiled to `onefile` to remove the `.NET 7.0 Requirement`, but if you have it on your local machine, you can compile the project yourself to reduce the size of `Shell`
+The compiled project is compiled to `onefile` to remove the `.NET 8.0 Requirement`, but if you have it on your local machine, you can compile the project yourself to reduce the size of `Shell`
 
 To compile the project, first open the `Sen.csproj` with `Microsoft Visual Studio 2022`, right click on `Sen` > `publish` and compile the project, the new executable will appears on your local machine without any issues.
 

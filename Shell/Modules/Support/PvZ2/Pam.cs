@@ -598,7 +598,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 throw new PAMException("PAM version out of range", "undefined");
             }
-            PamBinary.writeUInt8(Convert.ToByte(PamJson.frame_rate));
+            PamBinary.writeUInt8((byte)(PamJson.frame_rate));
             if (PamJson.position == null || PamJson.position.Length < 2)
             {
                 PamBinary.writeInt16LE(0);
