@@ -23,8 +23,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
         };
     };
 
-    export class PopCapResources extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion
-        .CheckOfficialResources {
+    export class PopCapResources extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.CheckOfficialResources {
         /**
          *
          * @param file_path - Pass resources.json file path here
@@ -42,14 +41,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
             const subgroup_json: official_subgroup_json = {};
             for (const resource of resources_json.groups) {
                 if ("resources" in resource) {
-                    resource.resources.forEach(
-                        (element: { slot?: int }, index: number) => delete resource.resources[index].slot,
-                    );
+                    resource.resources.forEach((element: { slot?: int }, index: number) => delete resource.resources[index].slot);
                 }
                 if ("resources" in resource && "parent" in resource) {
                     Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
                         Path.Resolve(`${subgroup_directory}/${resource.id}.json`),
-                        resource,
+                        resource
                     );
                 }
                 if ("subgroups" in resource || ("resources" in resource && !("parent" in resource))) {
@@ -74,15 +71,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                         };
                         Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
                             Path.Resolve(`${subgroup_directory}/${resource.id}.json`),
-                            resource,
+                            resource
                         );
                     }
                 }
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<official_subgroup_json>(
-                Path.Resolve(`${output_directory}/content.json`),
-                subgroup_json,
-            );
+            Sen.Script.Modules.FileSystem.Json.WriteJson<official_subgroup_json>(Path.Resolve(`${output_directory}/content.json`), subgroup_json);
             return;
         }
 
@@ -98,7 +92,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(
                     Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(/\{\}/g, "id"),
                     `id`,
-                    file_path,
+                    file_path
                 );
             }
             return;
@@ -111,21 +105,15 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          * @returns Checked
          */
 
-        public static CheckDirectoryContainsSubgroups<T extends official_subgroup_json>(
-            content_json: T,
-            subgroup_dir: string,
-        ): void {
+        public static CheckDirectoryContainsSubgroups<T extends official_subgroup_json>(content_json: T, subgroup_dir: string): void {
             const contents: Array<string> = Object.keys(content_json);
             for (let i: number = 0; i < contents.length; ++i) {
                 // checker
                 if (!("is_composite" in content_json[contents[i]])) {
                     throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                            /\{\}/g,
-                            "is_composite",
-                        )}`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, "is_composite")}`,
                         "is_composite",
-                        contents[i],
+                        contents[i]
                     );
                 }
                 if (typeof content_json[contents[i]].is_composite !== "boolean") {
@@ -137,21 +125,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                                 `${contents[i]}`,
                                 `${Sen.Script.Modules.System.Default.Localization.GetString("boolean")}`,
                                 `${typeof content_json[contents[i]].is_composite}`,
-                            ],
+                            ]
                         ),
                         `is_composite`,
                         "undefined",
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("boolean")}`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("boolean")}`
                     );
                 }
                 if (!("subgroups" in content_json[contents[i]])) {
                     throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                            /\{\}/g,
-                            "subgroups",
-                        )}`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, "subgroups")}`,
                         "subgroups",
-                        contents[i],
+                        contents[i]
                     );
                 }
                 // handle
@@ -160,11 +145,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                     const subgroup_path: string = Path.Resolve(`${subgroup_dir}/${subgroups[j_index]}.json`);
                     if (!Fs.FileExists(subgroup_path)) {
                         throw new Sen.Script.Modules.Exceptions.MissingFile(
-                            Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(
-                                /\{\}/g,
-                                subgroup_path,
-                            ),
-                            subgroup_path,
+                            Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(/\{\}/g, subgroup_path),
+                            subgroup_path
                         );
                     }
                 }
@@ -179,28 +161,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          * @returns Merged file
          */
 
-        public static MergePopCapResources<Generic_T extends Resources_Group_Structure_Template>(
-            directory_path: string,
-            output_file: string,
-        ): void {
+        public static MergePopCapResources<Generic_T extends Resources_Group_Structure_Template>(directory_path: string, output_file: string): void {
             const content_json_path: string = Path.Resolve(`${directory_path}/content.json`);
             if (!Fs.FileExists(content_json_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingFile(
-                    Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(
-                        /\{\}/g,
-                        content_json_path,
-                    ),
-                    content_json_path,
+                    Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(/\{\}/g, content_json_path),
+                    content_json_path
                 );
             }
-            const subgroup_json: official_subgroup_json =
-                Sen.Script.Modules.FileSystem.Json.ReadJson<official_subgroup_json>(content_json_path);
+            const subgroup_json: official_subgroup_json = Sen.Script.Modules.FileSystem.Json.ReadJson<official_subgroup_json>(content_json_path);
             const subgroup_dir: string = Path.Resolve(`${directory_path}/subgroup`);
             this.CheckDirectoryContainsSubgroups<official_subgroup_json>(subgroup_json, subgroup_dir);
-            const directory_files: Array<string> = Fs.ReadDirectory(
-                subgroup_dir,
-                Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory,
-            );
+            const directory_files: Array<string> = Fs.ReadDirectory(subgroup_dir, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory);
             const resources_json: Generic_T = {
                 version: 1,
                 content_version: 1,
@@ -229,24 +201,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                                   }
                                 : {
                                       id: subgroup,
-                                  },
+                                  }
                         );
                     }
                     resources_json.groups.push(composite_object);
                 }
                 for (const subgroup of subgroups) {
                     const subgroup_json_path: string = Path.Resolve(`${subgroup_dir}/${subgroup}.json`);
-                    const deserialized_subgroup: resource_atlas_and_sprites =
-                        Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(
-                            subgroup_json_path,
-                        ) satisfies resource_atlas_and_sprites;
+                    const deserialized_subgroup: resource_atlas_and_sprites = Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(
+                        subgroup_json_path
+                    ) satisfies resource_atlas_and_sprites;
                     if (!("resources" in deserialized_subgroup)) {
                         throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                            `${Sen.Script.Modules.System.Default.Localization.GetString(
-                                "property_is_undefined",
-                            ).replace(/\{\}/g, "resources")}`,
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, "resources")}`,
                             "resources",
-                            subgroup_json_path,
+                            subgroup_json_path
                         );
                     }
                     deserialized_subgroup.resources.forEach((element) => {
@@ -266,20 +235,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          * @returns "array" or string
          */
         private static CheckOfficialPathType<Template extends Resources_Group_Structure_Template>(
-            resource_json: Template,
+            resource_json: Template
         ): Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType {
             for (let index: number = 0; index < resource_json.groups.length; ++index) {
                 if ("resources" in resource_json.groups[index]) {
                     for (let j_index: number = 0; j_index < resource_json.groups[index].resources.length; ++j_index) {
-                        if (
-                            "path" in resource_json.groups[index].resources[j_index] &&
-                            Array.isArray(resource_json.groups[index].resources[j_index].path)
-                        ) {
-                            return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType
-                                .array;
-                        } else {
-                            return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType
-                                .string;
+                        if ("path" in resource_json.groups[index].resources[j_index]) {
+                            try {
+                                (resource_json.groups[index].resources[j_index] as Array<string>).join("\\");
+                                return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array;
+                            } catch {
+                                return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.string;
+                            }
                         }
                     }
                 }
@@ -296,21 +263,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
 
         public static ConvertOfficialPathToString<Generic_T extends Resources_Group_Structure_Template>(
             resources_json: Generic_T,
-            file_path?: string,
+            check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType,
+            file_path?: string
         ): Generic_T {
             this.CheckOfficial<Generic_T>(resources_json, (file_path ??= "undefined"));
-            const check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType =
-                this.CheckOfficialPathType<Generic_T>(resources_json);
-            if (
-                check_resources_path ===
-                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.string
-            ) {
+            if (check_resources_path === Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.string) {
                 throw new Sen.Script.Modules.Exceptions.EvaluateError(
                     Sen.Script.Modules.System.Default.Localization.RegexReplace(
                         Sen.Script.Modules.System.Default.Localization.GetString("already_being_type_of"),
-                        [`"path"`, `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`],
+                        [`"path"`, `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`]
                     ),
-                    (file_path ??= "undefined"),
+                    (file_path ??= "undefined")
                 );
             }
             resources_json.groups.forEach((subgroup: Resource_Structure_Template) => {
@@ -331,22 +294,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
 
         public static ConvertOfficialPathToArray<Generic_T extends Resources_Group_Structure_Template>(
             resources_json: Generic_T,
-            file_path?: string,
+            file_path?: string
         ): Generic_T {
             this.CheckOfficial<Generic_T>(resources_json, (file_path ??= "undefined"));
             const check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType =
                 this.CheckOfficialPathType<Generic_T>(resources_json);
             Console.Print(null, check_resources_path);
-            if (
-                check_resources_path ===
-                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array
-            ) {
+            if (check_resources_path === Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array) {
                 throw new Sen.Script.Modules.Exceptions.EvaluateError(
                     Sen.Script.Modules.System.Default.Localization.RegexReplace(
                         Sen.Script.Modules.System.Default.Localization.GetString("already_being_type_of"),
-                        [`"path"`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`],
+                        [`"path"`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`]
                     ),
-                    (file_path ??= "undefined"),
+                    (file_path ??= "undefined")
                 );
             }
             resources_json.groups.forEach((subgroup: Resource_Structure_Template) => {
@@ -364,8 +324,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
      * Implemented class, only for write file
      */
 
-    export class PopCapResourcesPathConversion extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official
-        .PopCapResources {
+    export class PopCapResourcesPathConversion extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources {
         /**
          *
          * @param file_in - File input
@@ -373,13 +332,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          * @returns The resources becomes path like "images\popcap\test\haruma"
          */
 
-        public static ConvertResourcesOfficialPathToString(file_in: string, file_out: string): void {
+        public static ConvertResourcesOfficialPathToString(file_in: string, file_out: string, path: PopCapResourcesPathType): void {
             Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
                 file_out,
                 this.ConvertOfficialPathToString<Resources_Group_Structure_Template>(
                     Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_in),
-                    file_in,
-                ),
+                    path,
+                    file_in
+                )
             );
             return;
         }
@@ -396,8 +356,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                 file_out,
                 this.ConvertOfficialPathToArray<Resources_Group_Structure_Template>(
                     Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_in),
-                    file_in,
-                ),
+                    file_in
+                )
             );
             return;
         }

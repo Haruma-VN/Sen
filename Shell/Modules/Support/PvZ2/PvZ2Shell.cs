@@ -1,4 +1,5 @@
 ﻿using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Support.PvZ2.RTON;
 using Sen.Shell.Modules.Support.PvZ2.PAM;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
@@ -22,13 +23,17 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void FlashAnimationtoPAM(string inFolder, string outFile);
 
-        public abstract void RSGUnpack(string inFile, string outFolder);
+        public abstract PacketInfo RSGUnpack(string inFile, string outFolder);
 
-        public abstract void RSGPack(string inFolder, string outFile);
+        public abstract void RSGPack(string inFolder, string outFile, PacketInfo packet_info);
 
         public abstract void RSBUnpack(string inRSBpath, string outFolder);
 
         public abstract void RSBPack(string RSBDirectory, string outRSB);
+
+        public abstract void RSBUnpackByLenient(string RSBin, string outRSBdirectory);
+
+        public abstract void RSBDisturb(string RSBin, string outRSB);
 
 
     }
@@ -98,14 +103,15 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override void RSGUnpack(string inFile, string outFolder) {
+        public override PacketInfo RSGUnpack(string inFile, string outFolder) {
             var RsgFile = new SenBuffer(inFile);
-            RSGFunction.Unpack(RsgFile, outFolder);
-            return;
+            var PacketInfo = RSGFunction.Unpack(RsgFile, outFolder);
+            return PacketInfo;
         }
 
-        public override void RSGPack(string inFolder, string outFile) {
-            var RSGFile = RSGFunction.Pack(inFolder);
+        public override void RSGPack(string inFolder, string outFile, PacketInfo packet_info) {
+            var json = new JsonImplement();
+            var RSGFile = RSGFunction.Pack(inFolder, packet_info);
             RSGFile.OutFile(outFile);
             return;
         }
@@ -116,6 +122,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
         }
 
         public override void RSBPack(string RSBDirectory, string outRSB)
+        {
+            return;
+        }
+
+        public override void RSBUnpackByLenient(string RSBin, string outRSBdirectory)
+        {
+            return;
+        }
+
+        public override void RSBDisturb(string RSBin, string outRSB)
         {
             return;
         }

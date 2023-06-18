@@ -55,19 +55,13 @@ declare namespace Console {
      * @param params - Pass any things here and the tool will console out the input value.
      */
 
-    export function Print<T extends any>(
-        color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null,
-        ...params: Array<T>
-    ): void;
+    export function Print<T extends any>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
     /**
      *
      * @param params - Pass any things here and the tool will console out the input value.
      */
 
-    export function Printf<T extends any>(
-        color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null,
-        ...params: Array<T>
-    ): void;
+    export function Printf<T extends any>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
 
     /**
      * @returns Input argument as string
@@ -90,10 +84,7 @@ declare namespace Console {
      * @param params - Pass object or array here to continue
      */
 
-    export function Debug<T extends Array<any> | object>(
-        color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null,
-        ...params: Array<T>
-    ): void;
+    export function Debug<T extends Array<any> | object>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
 }
 
 /**
@@ -132,21 +123,14 @@ declare namespace Fs {
      * @param encoding - Choose one encoding type.
      */
 
-    export function ReadText(
-        file_path: string,
-        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
-    ): string;
+    export function ReadText(file_path: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): string;
     /**
      *
      * @param file_path - Provide file path to write.
      * @param data - Provide file data.
      * @param encoding - Provide encoding type (can choose from enum).
      */
-    export function WriteText(
-        file_path: string,
-        data: string,
-        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
-    ): void;
+    export function WriteText(file_path: string, data: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): void;
     /**
      *
      * @param directory_path - Provide directory path to create.
@@ -165,10 +149,7 @@ declare namespace Fs {
      * @param encoding - Provide encoding from const enum.
      * @returns ASYNCHRONOUS read text file, please provide an await to make the function synchronous.
      */
-    export async function ReadTextAsync(
-        file_path: string,
-        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
-    ): Promise<string>;
+    export async function ReadTextAsync(file_path: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): Promise<string>;
     /**
      *
      * @param directory_path - Provide Directory path.
@@ -188,11 +169,7 @@ declare namespace Fs {
      * @param encoding - Provide Encoding Type to Write file.
      * @returns Asynchronous Write file, please provide ES6 async await to make the function synchronous.
      */
-    export async function WriteTextAsync(
-        file_path: string,
-        data: string,
-        encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType,
-    ): Promise<void>;
+    export async function WriteTextAsync(file_path: string, data: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): Promise<void>;
     /**
      *
      * @param output_path - Output file expected.
@@ -229,10 +206,7 @@ declare namespace Fs {
      * @returns Readed directory
      */
 
-    export function ReadDirectory(
-        directory: string,
-        ReadOption: Sen.Script.Modules.FileSystem.Constraints.ReadDirectory,
-    ): Array<string>;
+    export function ReadDirectory(directory: string, ReadOption: Sen.Script.Modules.FileSystem.Constraints.ReadDirectory): Array<string>;
 
     /**
      *
@@ -444,9 +418,7 @@ declare namespace DotNetBitmap {
      * @returns width & height of the provided image
      */
 
-    export function GetDimension<Generic_T>(
-        imagePath: string,
-    ): Sen.Script.Modules.BitMap.Constraints.ImageInfo<Generic_T>;
+    export function GetDimension<Generic_T>(imagePath: string): Sen.Script.Modules.BitMap.Constraints.ImageInfo<Generic_T>;
 
     /**
      *
@@ -526,7 +498,7 @@ declare namespace DotNetBitmap {
         greenBuffer: Uint8Array,
         blueBuffer: Uint8Array,
         width: number,
-        height: number,
+        height: number
     ): Image<Rgba32>;
 
     /**
@@ -546,7 +518,7 @@ declare namespace DotNetBitmap {
         greenBuffer: Uint8Array,
         blueBuffer: Uint8Array,
         width: number,
-        height: number,
+        height: number
     ): Image<Argb32>;
 
     /**
@@ -613,7 +585,7 @@ declare namespace DotNetBitmap {
             x: number;
             y: number;
             file_path: string;
-        },
+        }
     >(objArray: Array<T>, filename: string, output_directory: string, width: int, height: int): void;
 
     /**
@@ -627,14 +599,7 @@ declare namespace DotNetBitmap {
      * @returns Extracted image
      */
 
-    export function CropAndSaveImage(
-        sourceImagePath: string,
-        outputImagePath: string,
-        x: int,
-        y: int,
-        width: int,
-        height: int,
-    ): void;
+    export function CropAndSaveImage(sourceImagePath: string, outputImagePath: string, x: int, y: int, width: int, height: int): void;
 
     /**
      *
@@ -648,14 +613,7 @@ declare namespace DotNetBitmap {
      * @returns Extracted image
      */
 
-    export async function CropAndSaveImageAsync(
-        sourceImagePath: string,
-        outputImagePath: string,
-        x: int,
-        y: int,
-        width: int,
-        height: int,
-    ): Promise<void>;
+    export async function CropAndSaveImageAsync(sourceImagePath: string, outputImagePath: string, x: int, y: int, width: int, height: int): Promise<void>;
 
     /**
      *
@@ -692,12 +650,7 @@ declare namespace TextureHandler {
      * @param height - Pass height
      * @returns Decoded PNG
      */
-    export function Create_ARGB1555_Decode(
-        input_file: string,
-        output_file: string,
-        width: number,
-        height: number,
-    ): void;
+    export function Create_ARGB1555_Decode(input_file: string, output_file: string, width: number, height: number): void;
 
     /**
      *
@@ -707,12 +660,7 @@ declare namespace TextureHandler {
      * @param height - Pass height
      * @returns Decoded PNG
      */
-    export function Create_ARGB4444_Decode(
-        input_file: string,
-        output_file: string,
-        width: number,
-        height: number,
-    ): void;
+    export function Create_ARGB4444_Decode(input_file: string, output_file: string, width: number, height: number): void;
 
     /**
      *
@@ -782,12 +730,7 @@ declare namespace TextureHandler {
      * @param height - Pass height
      * @returns Decoded PNG
      */
-    export function Create_RGBA4444_Block_Decode(
-        input_file: string,
-        output_file: string,
-        width: int,
-        height: int,
-    ): void;
+    export function Create_RGBA4444_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
 
     /**
      *
@@ -807,12 +750,7 @@ declare namespace TextureHandler {
      * @param height - Pass height
      * @returns Decoded PNG
      */
-    export function Create_RGBA5551_Block_Decode(
-        input_file: string,
-        output_file: string,
-        width: int,
-        height: int,
-    ): void;
+    export function Create_RGBA5551_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
 
     /**
      *
@@ -1053,10 +991,7 @@ declare namespace TextureHandlerPromise {
      * @param format - Pass encode format
      */
 
-    export function EncodeAsyncImages(
-        images: Array<Dynamic>,
-        format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial,
-    ): void;
+    export function EncodeAsyncImages(images: Array<Dynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
 
     /**
      * Extends from Dynamic
@@ -1075,7 +1010,7 @@ declare namespace TextureHandlerPromise {
 
     export function DecodeAsyncImages(
         images: Array<DecodeDynamic>,
-        format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial,
+        format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial
     ): void;
 }
 
@@ -1139,7 +1074,7 @@ namespace DotNetCrypto {
         password: string,
         saltValue: string,
         rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode,
-        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding,
+        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding
     ): Uint8Array;
 
     /**
@@ -1157,7 +1092,7 @@ namespace DotNetCrypto {
         password: string,
         saltValue: string,
         rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode,
-        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding,
+        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding
     ): Uint8Array;
 }
 
@@ -1212,7 +1147,7 @@ declare namespace DotNetCompress {
 
     export function CompressZlibBytes<Generic_T, Generic_U>(
         data: Generic_T,
-        compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel,
+        compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel
     ): Generic_U;
 
     /**
@@ -1296,7 +1231,7 @@ declare namespace DotNetSystem {
             public message: string,
             public file_path: string,
             public expected: string,
-            public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Check.RTONListException,
+            public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Check.RTONListException
         ): void;
     }
 }
@@ -1610,14 +1545,14 @@ declare namespace PvZ2Shell {
      * @param outFolder - Out directory
      */
 
-    export function RSGUnpack(inFile: string, outFolder: string): void;
+    export function RSGUnpack(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
     /**
      *
      * @param inDirectory - Pass RSG packet directory path
      * @param outFile - Out File
      */
 
-    export function RSGPack(inDirectory: string, outFile: string): void;
+    export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo): void;
     /**
      *
      * @param inFile - Pass RSB file path

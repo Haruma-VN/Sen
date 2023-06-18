@@ -1,7 +1,5 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Sen.Shell.Modules.Standards;
 
@@ -11,25 +9,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 #pragma warning disable SYSLIB0020
     public class PacketInfo
     {
-        [JsonPropertyName("head_version")]
-        [JsonRequired]
         public int head_version { get; set; }
 
-        [JsonPropertyName("compression_flags")]
-        [JsonRequired]
         public int compression_flags { get; set; }
 
-        [JsonPropertyName("res")]
-        [JsonRequired]
         public required ResInfo[] res { get; set; }
     }
 
     public class ResInfo
     {
-        [JsonPropertyName("path")]
-        [JsonRequired]
         public required string path { get; set; }
-        public PtxInfo? ptxInfo { get; set; }
+        public PtxInfo? ptx_info { get; set; }
     }
 
     public class PtxInfo
@@ -104,7 +94,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             {120, 156},
             {120, 218},
         };
-        public static void Unpack(SenBuffer RsgFile, string outFolder)
+        public static PacketInfo Unpack(SenBuffer RsgFile, string outFolder)
         {
             RSG_head HeadInfo = ReadRSG_Head(RsgFile);
             part0List.Clear();
@@ -141,7 +131,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     resInfo.Add(new ResInfo
                     {
                         path = part1List[i].path,
-                        ptxInfo = new PtxInfo
+                        ptx_info = new PtxInfo
                         {
                             id = part1List[i].id,
                             width = part1List[i].width,
@@ -156,16 +146,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 compression_flags = HeadInfo.flags,
                 res = resInfo.ToArray(),
             };
-
-            JsonSerializerOptions options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                IgnoreNullValues = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            };
-            var packet_info = json.StringifyJson(packetInfo, options);
-            fs.OutFile($"{outFolder}/packet_info.json", packet_info);
             RsgFile.Close();
+            return packetInfo;
         }
 
 
@@ -313,11 +295,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             }
         }
         // Pack RSG
-        public static SenBuffer Pack(string inFolder)
+        public static SenBuffer Pack(string inFolder, PacketInfo packetInfo)
         {
-            var fs = new FileSystem();
-            if (!fs.FileExists($"{inFolder}/packet_info.json")) throw new Exception("PacketInfo is not exists");
-            PacketInfo packetInfo = fs.ReadJson<PacketInfo>($"{inFolder}/packet_info.json");
             if (packetInfo.head_version != 3 && packetInfo.head_version != 4) throw new Exception("RSG version out of range");
             if (packetInfo.compression_flags < 0 || packetInfo.compression_flags > 3) throw new Exception("RSG compression flags out of range");
             var RSGFile = new SenBuffer();
@@ -417,10 +396,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     RSGFile.writeInt32LE(1);
                     RSGFile.writeInt32LE(atlasPos);
                     RSGFile.writeInt32LE(dataItem.Length);
-                    RSGFile.writeInt32LE(PacketResInfo.ptxInfo!.id);
+                    RSGFile.writeInt32LE(PacketResInfo.ptx_info!.id);
                     RSGFile.writeNull(8);
-                    RSGFile.writeInt32LE(PacketResInfo.ptxInfo!.width);
-                    RSGFile.writeInt32LE(PacketResInfo.ptxInfo!.height);
+                    RSGFile.writeInt32LE(PacketResInfo.ptx_info!.width);
+                    RSGFile.writeInt32LE(PacketResInfo.ptx_info!.height);
                     atlasPos += dataItem.Length + appendLength;
                 }
                 else

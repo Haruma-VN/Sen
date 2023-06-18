@@ -135,7 +135,7 @@
     },
     "popcap_rsg_unpack": {
         "func_number": 23,
-        "include": [".rsg"],
+        "include": [".rsg", ".pgsr"],
         "exclude": [],
         "type": "file"
     },
@@ -147,7 +147,7 @@
     },
     "popcap_rsb_unpack": {
         "func_number": 25,
-        "include": [".rsb"],
+        "include": [".rsb", ".obb"],
         "exclude": [],
         "type": "file"
     },
