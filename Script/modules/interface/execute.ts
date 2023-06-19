@@ -124,7 +124,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_official_pam_json_to_flash_animation"
         | "popcap_official_pam_json_from_flash_animation"
         | "popcap_rsb_unpack"
-        | "popcap_rsb_pack";
+        | "popcap_rsb_pack"
+        | "popcap_zlib_compress"
+        | "popcap_zlib_uncompress";
 
     /**
      *
@@ -675,6 +677,106 @@ namespace Sen.Script.Modules.Interface.Execute {
                             `resolution`
                         );
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimateAdobeFlashAnimation(arg, output_argument, resolution);
+                    });
+                }
+                break;
+            }
+            case "popcap_zlib_compress": {
+                if (!Array.isArray(argument)) {
+                    const use_64bit_variant: boolean = Boolean(
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                            [0, 1],
+                            {
+                                "0": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("unknown"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                ],
+                                "1": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                ],
+                            },
+                            `${MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                            `use_64_bit_variant`
+                        ) as 0 | 1
+                    );
+                    const output_argument: string = Path.Resolve(`${argument}.bin`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const use_64bit_variant: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                [0, 1],
+                                {
+                                    "0": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("unknown"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                    ],
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    ],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                                `use_64_bit_variant`
+                            ) as 0 | 1
+                        );
+                        const output_argument: string = Path.Resolve(`${arg}.bin`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_zlib_uncompress": {
+                if (!Array.isArray(argument)) {
+                    const use_64bit_variant: boolean = Boolean(
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                            [0, 1],
+                            {
+                                "0": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("unknown"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                ],
+                                "1": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                ],
+                            },
+                            `${MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                            `use_64_bit_variant`
+                        ) as 0 | 1
+                    );
+                    const output_argument: string = Path.Resolve(`${argument}.bin`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    PvZ2Shell.PopCapZlibUncompress(argument, use_64bit_variant, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const use_64bit_variant: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                [0, 1],
+                                {
+                                    "0": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("unknown"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                    ],
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    ],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                                `use_64_bit_variant`
+                            ) as 0 | 1
+                        );
+                        const output_argument: string = Path.Resolve(`${arg}.bin`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        PvZ2Shell.PopCapZlibUncompress(arg, use_64bit_variant, output_argument);
                     });
                 }
                 break;

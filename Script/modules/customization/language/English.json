@@ -187,5 +187,11 @@
     "popcap_resize_animation": "PopCap Adobe Animate Flash Animation Resize",
     "toast_notification_message": "{1} finished in {2}s",
     "popcap_rsb_unpack_by_lenient": "PopCap RSB Unpack By Lenient",
-    "popcap_rsb_disturb": "PopCap RSB Disturb"
+    "popcap_rsb_disturb": "PopCap RSB Disturb",
+    "popcap_zlib_uncompress": "PopCap Zlib Uncompress",
+    "popcap_zlib_compress": "PopCap Zlib Compress",
+    "use_64_bit_variant": "Use 64-bits variant",
+    "not_use_64_bit_variant": "Does not use 64-bits variant",
+    "set_this_if_you_using_pvzgames": "Select this if you modding any PvZ Games on Android",
+    "unknown": "Unknown"
 }

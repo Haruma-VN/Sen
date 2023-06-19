@@ -1579,6 +1579,21 @@ declare namespace PvZ2Shell {
      */
 
     export function RSBPack(inDirectory: string, outFile: string): void;
+
+    /**
+     *
+     * @param base - Pass zlib base
+     * @param outFile - Pass outfile
+     */
+
+    export function PopCapZlibCompress(Ripefile: string, Use64variant: boolean, outFile: string): void;
+    /**
+     *
+     * @param base - Pass zlib base
+     * @param outFile - Pass outfile
+     */
+
+    export function PopCapZlibUncompress(Ripefile: string, Use64variant: boolean, outFile: string): void;
 }
 
 /**

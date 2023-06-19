@@ -27,6 +27,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract PacketInfo RSGUnpack(string inFile, string outFolder);
 
+        public abstract void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile);
+
+        public abstract void PopCapZlibUncompress(string ripefile, bool use64bitvariant, string outFile);
+
         public abstract void RSGPack(string inFolder, string outFile, PacketInfo packet_info);
 
         public abstract void RSBUnpack(string inRSBpath, string outFolder);
@@ -146,6 +150,24 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public override void WWiseSoundBankEncode(string soundbank_dir, string out_bnk)
         {
+            return;
+        }
+
+        public override void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile)
+        {
+            var zlib = new Zlib();
+            var zlib_data = zlib.ZlibCompress(ripefile, use64bitvariant);
+            var fs = new FileSystem();
+            fs.OutFile<byte[]>(outFile, zlib_data);
+            return;
+        }
+
+        public override void PopCapZlibUncompress(string ripefile, bool use64bitvariant, string outFile)
+        {
+            var zlib = new Zlib();
+            var uncompresszlib_data = zlib.ZlibUncompress(ripefile, use64bitvariant);
+            var fs = new FileSystem();
+            fs.OutFile<byte[]>(outFile, uncompresszlib_data);
             return;
         }
     }

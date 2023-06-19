@@ -231,5 +231,27 @@ namespace Sen.Shell.Modules.JavaScript.Implement
 
             return -1;
         }
+
+        public static byte[] Concat(params byte[][] arrays)
+        {
+            int totalLength = arrays.Sum(a => a.Length);
+            byte[] result = new byte[totalLength];
+            int offset = 0;
+
+            foreach (byte[] array in arrays)
+            {
+                System.Buffer.BlockCopy(array, 0, result, offset, array.Length);
+                offset += array.Length;
+            }
+
+            return result;
+        }
+
+        public static byte[] Slice(byte[] source, int start, int length)
+        {
+            byte[] slicedBytes = new byte[length];
+            Array.Copy(source, start, slicedBytes, 0, length);
+            return slicedBytes;
+        }
     }
 }

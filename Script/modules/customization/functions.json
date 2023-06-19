@@ -180,5 +180,17 @@
         "include": [".soundbank"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_zlib_compress": {
+        "func_number": 31,
+        "include": [".rsb"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_zlib_uncompress": {
+        "func_number": 32,
+        "include": [".smf"],
+        "exclude": [],
+        "type": "file"
     }
 }
