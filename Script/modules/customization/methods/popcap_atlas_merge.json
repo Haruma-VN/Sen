@@ -4,6 +4,6 @@
     "square": true,
     "allowRotation": false,
     "padding": 1,
-    "width": 16384,
-    "height": 16384
+    "width": "?",
+    "height": "?"
 }

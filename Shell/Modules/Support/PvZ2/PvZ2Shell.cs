@@ -1,5 +1,4 @@
 ﻿using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Support.PvZ2.RTON;
 using Sen.Shell.Modules.Support.PvZ2.PAM;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
@@ -11,17 +10,17 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RTONEncode(string inFile, string outFile);
 
-        public abstract void PAMtoPAMJSON(string inFile, string outFile);
+        public abstract PAMInfo PAMtoPAMJSON(string inFile);
 
-        public abstract void PAMJSONtoPAM(string inFile, string outFile);
+        public abstract void PAMJSONtoPAM(PAMInfo PAMJson, string outFile);
 
-        public abstract void PAMJSONtoFlashAnimation(string inFile, string outFolder, int resolution);
+        public abstract ExtraInfo PAMJSONtoFlashAnimation(PAMInfo PAMJson, string outFolder, int resolution);
 
-        public abstract void FlashAnimationtoPAMJSON(string inFolder, string outFile);
+        public abstract PAMInfo FlashAnimationtoPAMJSON(string inFolder, ExtraInfo extraInfo);
 
-        public abstract void PAMtoFlashAnimation(string inFile, string outFolder, int resolution);
+        public abstract ExtraInfo PAMtoFlashAnimation(string inFile, string outFolder, int resolution);
 
-        public abstract void FlashAnimationtoPAM(string inFolder, string outFile);
+        public abstract void FlashAnimationtoPAM(string inFolder, string outFile, ExtraInfo extraInfo);
 
         public abstract PacketInfo RSGUnpack(string inFile, string outFolder);
 
@@ -57,47 +56,43 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override void PAMtoPAMJSON(string inFile, string outFile)
+        public override PAMInfo PAMtoPAMJSON(string inFile)
         {
             var PAMFile = new SenBuffer(inFile);
             var PAMJson = PAM_Binary.Decode(PAMFile);
-            PAMJson.OutFile(outFile);
-            return;
+            return PAMJson;
         }
 
-        public override void PAMJSONtoPAM(string inFile, string outFile)
+        public override void PAMJSONtoPAM(PAMInfo PAMJson, string outFile)
         {
-            var PAMJson = new SenBuffer(inFile);
             var PAMFile = PAM_Binary.Encode(PAMJson);
             PAMFile.OutFile(outFile);
             return;
         }
 
-        public override void PAMJSONtoFlashAnimation(string inFile, string outFolder, int resolution)
+        public override ExtraInfo PAMJSONtoFlashAnimation(PAMInfo PAMJson, string outFolder, int resolution)
+        {
+            var extraInfo = PAM_Animation.Decode(PAMJson, outFolder, resolution);
+            return extraInfo;
+        }
+
+        public override PAMInfo FlashAnimationtoPAMJSON(string inFolder, ExtraInfo extraInfo)
+        {
+            var PAMJson = PAM_Animation.Encode(inFolder, extraInfo);
+            return PAMJson;
+        }
+
+         public override ExtraInfo PAMtoFlashAnimation(string inFile, string outFolder, int resolution)
         {
             var PAMFile = new SenBuffer(inFile);
-            PAM_Animation.Decode(PAMFile, outFolder, resolution);
-            return;
+            var PamInfo = PAM_Binary.Decode(PAMFile);
+            var extraInfo = PAM_Animation.Decode(PamInfo, outFolder, resolution);
+            return extraInfo;
         }
 
-        public override void FlashAnimationtoPAMJSON(string inFolder, string outFile)
+        public override void FlashAnimationtoPAM(string inFolder, string outFile, ExtraInfo extraInfo)
         {
-            var PAMJson = PAM_Animation.Encode(inFolder);
-            PAMJson.OutFile(outFile);
-            return;
-        }
-
-         public override void PAMtoFlashAnimation(string inFile, string outFolder, int resolution)
-        {
-            var PAMFile = new SenBuffer(inFile);
-            var PAMJson = PAM_Binary.Decode(PAMFile);
-            PAM_Animation.Decode(PAMJson, outFolder, resolution);
-            return;
-        }
-
-        public override void FlashAnimationtoPAM(string inFolder, string outFile)
-        {
-            var PAMJson = PAM_Animation.Encode(inFolder);
+            var PAMJson = PAM_Animation.Encode(inFolder, extraInfo);
             var PAMFile = PAM_Binary.Encode(PAMJson);
             PAMFile.OutFile(outFile);
             return;
@@ -110,7 +105,6 @@ namespace Sen.Shell.Modules.Support.PvZ2
         }
 
         public override void RSGPack(string inFolder, string outFile, PacketInfo packet_info) {
-            var json = new JsonImplement();
             var RSGFile = RSGFunction.Pack(inFolder, packet_info);
             RSGFile.OutFile(outFile);
             return;

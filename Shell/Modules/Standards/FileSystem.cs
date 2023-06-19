@@ -168,11 +168,6 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void DeleteDirectory(string[] directories)
         {
-            if (directories == null)
-            {
-#pragma warning disable CA2208
-                throw new ArgumentNullException($"directories must not be null");
-            }
             foreach (var directory in directories)
             {
                 if (Directory.Exists(directory))

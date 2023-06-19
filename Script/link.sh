@@ -35,6 +35,16 @@ find "$source" -type f -name "*.lua" -print0 | while IFS= read -r -d '' item; do
     cp "$item" "$destination"
 done
 
+# Copy Png files
+find "$source" -type f -name "*.png" -print0 | while IFS= read -r -d '' item; do
+    relativePath=${item#"$source"}
+    destination="$target$relativePath"
+    echo "Copying: $relativePath"
+    destinationDir=$(dirname "$destination")
+    mkdir -p "$destinationDir"
+    cp "$item" "$destination"
+done
+
 # Run tsc
 echo "Transpiling TS to JS"
 tsc

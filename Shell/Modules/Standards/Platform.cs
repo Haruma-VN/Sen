@@ -55,6 +55,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract string CurrentUserPlatform();
 
+        public abstract void SendNotification(string message, string title);
+
     }
 
     public class Platform : Platform_Abstract
@@ -185,6 +187,40 @@ namespace Sen.Shell.Modules.Standards
                 Encoding utf8 = new UTF8Encoding();
                 Console.OutputEncoding = utf8;
             }
+            return;
+        }
+
+        public override void SendNotification(string message, string title)
+        {
+            var toast = new Sen.Shell.Modules.Support.Misc.ToastNotification();
+            try
+            {
+
+                switch (Platform.CurrentPlatform())
+                {
+                    case UserPlatform.Macintosh:
+                        {
+                            toast.SendMacintosh(message, title);
+                            break;
+                        }
+                    case UserPlatform.Windows:
+                        {
+                            toast.SendWindows(message, title);
+                            break;
+                        }
+                    case UserPlatform.Linux:
+                        {
+                            toast.SendLinux(message, title);
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
+            catch { }
+            finally { }
             return;
         }
 

@@ -675,13 +675,20 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
         }
         const func_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        const time_spent: string = Sen.Script.Modules.System.Default.Timer.CalculateTime(func_time_start, func_time_end, 3);
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
-                /\{\}/g,
-                Sen.Script.Modules.System.Default.Timer.CalculateTime(func_time_start, func_time_end, 3)
-            )
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, time_spent)
         );
+        if (Sen.Script.Modules.System.Default.Localization.notification) {
+            DotNetPlatform.SendNotification(
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(
+                    Sen.Script.Modules.System.Default.Localization.GetString("toast_notification_message"),
+                    [Sen.Script.Modules.System.Default.Localization.GetString(function_name), time_spent]
+                ),
+                `Sen`
+            );
+        }
         return;
     }
 }

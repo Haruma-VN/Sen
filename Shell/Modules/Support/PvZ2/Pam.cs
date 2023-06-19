@@ -386,7 +386,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     public class PAM_Binary
     {
         // Decode
-        public static SenBuffer Decode(SenBuffer PamFile)
+        public static PAMInfo Decode(SenBuffer PamFile)
         {
             uint PAM_magic = PamFile.readUInt32LE();
             if (PAM_magic != PAMInfo.Magic) throw new PAMException("Invalid PAM magic", PamFile.filePath ?? "undefined");
@@ -431,8 +431,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     main_sprite.frame_rate = frame_rate;
                 }
             }
-            var json = new JsonImplement();
-            var PamInfo = new PAMInfo{
+            var PamJson = new PAMInfo{
                 version = version,
                 frame_rate = frame_rate,
                 position = position,
@@ -441,9 +440,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 sprite = sprite,
                 main_sprite = main_sprite,
             };
-            byte[] bytes = Encoding.UTF8.GetBytes(json.StringifyJson(PamInfo, null));
-            SenBuffer PAMJson = new SenBuffer(bytes);
-            return PAMJson;
+            return PamJson;
         }
         private static ImageInfo ReadImageInfo(SenBuffer PamFile, int version)
         {
@@ -591,18 +588,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return frameInfo;
         }
         //Encode
-        public static SenBuffer Encode(SenBuffer PamFile)
+        public static SenBuffer Encode(PAMInfo PamJson)
         {
-            string JsonString = PamFile.toString();
-            var json = new JsonImplement();
-            PAMInfo PamJson = json.ParseJson<PAMInfo>(JsonString);
             SenBuffer PamBinary = new SenBuffer();
             int version = PamJson.version;
             PamBinary.writeUInt32LE(PAMInfo.Magic);
             PamBinary.writeInt32LE(version);
             if (version > 6 || version < 1)
             {
-                throw new PAMException("PAM version out of range", PamFile.filePath ?? "undefined");
+                throw new PAMException("PAM version out of range", "undefined");
             }
             PamBinary.writeUInt8(PamJson.frame_rate);
             if (PamJson.position == null || PamJson.position.Length < 2)
@@ -945,11 +939,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         private static readonly double[] k_initial_color = { 1.0, 1.0, 1.0, 1.0 };
 
-        public static void Decode(SenBuffer PamFile, string outFolder, int resolution)
+        public static ExtraInfo Decode(PAMInfo PamJson, string outFolder, int resolution)
         {
-            string JsonString = PamFile.toString();
-            var json = new JsonImplement();
-            PAMInfo PamJson = json.ParseJson<PAMInfo>(JsonString);
             var fs = new FileSystem();
             fs.CreateDirectory($"{outFolder}/library/media");
             fs.CreateDirectory($"{outFolder}/library/image");
@@ -983,7 +974,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     main_sprite = WriteSpriteDocument(-1, PamJson.main_sprite, PamJson.sprite)
                 }
             };
-            fs.WriteJson($"{outFolder}/extra.json", PamRipe.extra);
             SenBuffer.SaveXml($"{outFolder}/DOMDocument.xml", PamRipe.document, xflns);
             PamRipe.library.image.Select((e, i) =>
             {
@@ -1003,6 +993,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }).ToArray();
             SenBuffer.SaveXml($"{outFolder}/LIBRARY/main_sprite.xml", PamRipe.library.main_sprite, xflns);
             fs.WriteText($"{outFolder}/main.xfl", k_xfl_content, EncodingType.ASCII);
+            return PamRipe.extra;
         }
 
         private static XElement WriteDomDocument(PAMInfo PamJson)
@@ -1410,11 +1401,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             };
         }
 
-        public static SenBuffer Encode(string inFolder)
+        public static PAMInfo Encode(string inFolder, ExtraInfo extra)
         {
             var json = new JsonImplement();
             var fs = new FileSystem();
-            ExtraInfo extra = fs.ReadJson<ExtraInfo>($"{inFolder}/extra.json");
             XElement document = SenBuffer.ReadXml($"{inFolder}/DOMDocument.xml");
             FlashPackage PAMRipe = new FlashPackage
             {
@@ -1427,9 +1417,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     main_sprite = SenBuffer.ReadXml($"{inFolder}/library/main_sprite.xml")
                 }
             };
-            PAMInfo PamInfo = ParseMainDocument(PAMRipe);
-            byte[] bytes = Encoding.UTF8.GetBytes(json.StringifyJson(PamInfo, null));
-            SenBuffer PAMJson = new SenBuffer(bytes);
+            PAMInfo PAMJson = ParseMainDocument(PAMRipe);
             return PAMJson;
         }
 

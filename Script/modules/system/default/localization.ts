@@ -1,13 +1,27 @@
 namespace Sen.Script.Modules.System.Default.Localization {
+    /**
+     * Entry json
+     */
     export type entry_json = {
         default: {
             language: string;
+            notification_when_finish: boolean;
         };
     };
 
-    export const language: string = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(
-        `${MainScriptDirectory}/modules/customization/entry.json`,
-    ).default.language;
+    /**
+     * Tool language
+     */
+
+    export const notification: boolean = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(`${MainScriptDirectory}/modules/customization/entry.json`)
+        .default.notification_when_finish;
+
+    /**
+     * Tool language
+     */
+
+    export const language: string = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(`${MainScriptDirectory}/modules/customization/entry.json`).default
+        .language;
     /**
      *
      * @param property - Provide property to get
@@ -17,7 +31,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
         return DotNetLocalization.Get(
             property,
             Path.Resolve(`${MainScriptDirectory}/modules/customization/language`),
-            `${Sen.Script.Modules.System.Default.Localization.language}`,
+            `${Sen.Script.Modules.System.Default.Localization.language}`
         );
     }
 

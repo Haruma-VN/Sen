@@ -184,5 +184,6 @@
     "popcap_res_1200": "PopCap Res 1200 for PvZ2-Chinese Android",
     "popcap_sprite_resize_original_res": "PopCap Sprite Input Original Res Resolution",
     "popcap_sprite_resize_output_res": "PopCap Sprite Output Res Resolution",
-    "popcap_resize_animation": "PopCap Adobe Animate Flash Animation Resize"
+    "popcap_resize_animation": "PopCap Adobe Animate Flash Animation Resize",
+    "toast_notification_message": "{1} finished in {2}s"
 }

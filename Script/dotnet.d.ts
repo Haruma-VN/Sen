@@ -43,6 +43,15 @@ declare namespace DotNetPlatform {
      */
 
     export function CurrentUserPlatform(): string;
+
+    /**
+     *
+     * @param message - Send message here
+     * @param title - Send title here
+     * Sending notification message through multiple platform
+     */
+
+    export function SendNotification(message: string, title: string): void;
 }
 
 /**
