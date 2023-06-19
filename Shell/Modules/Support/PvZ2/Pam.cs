@@ -8,9 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace Sen.Shell.Modules.Support.PvZ2.PAM
 {
+
     public class PAMInfo
     {
-        public static readonly uint Magic = 0xBAF01954;
         public int version { get; set; } = 6;
         public int frame_rate { get; set; } = 30;
         public required double[] position { get; set; }
@@ -68,6 +68,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         FrameName = 8,
         Stop = 16,
         Commands = 32
+    }
+
+
+    public static class Magic
+    {
+        public static readonly uint MagicNumber = 0xBAF01954;
     }
 
     public class FrameInfo
@@ -389,7 +395,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public static PAMInfo Decode(SenBuffer PamFile)
         {
             uint PAM_magic = PamFile.readUInt32LE();
-            if (PAM_magic != PAMInfo.Magic) throw new PAMException("Invalid PAM magic", PamFile.filePath ?? "undefined");
+            if (PAM_magic != Magic.MagicNumber) throw new PAMException("Invalid PAM magic", PamFile.filePath ?? "undefined");
             int version = PamFile.readInt32LE();
             if (version > 6 || version < 1)
             {
@@ -592,7 +598,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             SenBuffer PamBinary = new SenBuffer();
             int version = PamJson.version;
-            PamBinary.writeUInt32LE(PAMInfo.Magic);
+            PamBinary.writeUInt32LE(Magic.MagicNumber);
             PamBinary.writeInt32LE(version);
             if (version > 6 || version < 1)
             {

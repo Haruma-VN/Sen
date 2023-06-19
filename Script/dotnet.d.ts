@@ -1513,7 +1513,7 @@ declare namespace PvZ2Shell {
      * @returns PAM Json to Pam
      */
 
-    export function PAMJSONtoPAM(PamJson: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson, outFile: string): void;
+    export function PAMJSONtoPAM(PamJson: string, outFile: string): void;
 
     /**
      *
@@ -1522,11 +1522,7 @@ declare namespace PvZ2Shell {
      * @param resolution - Pass resize resolution
      */
 
-    export function PAMJSONtoFlashAnimation(
-        PAMJson: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson,
-        outFolder: string,
-        resolution: int
-    ): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
+    export function PAMJSONtoFlashAnimation(PAMJson: string, outFolder: string, resolution: int): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
 
     /**
      *
@@ -1553,7 +1549,7 @@ declare namespace PvZ2Shell {
      * @param outFolder - Out PAM
      */
 
-    export function FlashAnimationtoPAM(inFolder: string, outFile: string): void;
+    export function FlashAnimationtoPAM(inFolder: string, outFile: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): void;
 
     /**
      *

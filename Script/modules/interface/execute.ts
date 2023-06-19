@@ -292,12 +292,20 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                    PvZ2Shell.FlashAnimationtoPAM(argument, output_argument);
+                    PvZ2Shell.FlashAnimationtoPAM(
+                        argument,
+                        output_argument,
+                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(`${argument}/extra.json`)
+                    );
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                        PvZ2Shell.FlashAnimationtoPAM(arg, output_argument);
+                        PvZ2Shell.FlashAnimationtoPAM(
+                            arg,
+                            output_argument,
+                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(`${arg}/extra.json`)
+                        );
                     });
                 }
                 break;
@@ -558,7 +566,9 @@ namespace Sen.Script.Modules.Interface.Execute {
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
                         Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(argument)
                     );
-                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`);
+                    const output_argument: string = Path.Resolve(
+                        `${Path.Dirname(argument)}/${Path.Parse(Path.Parse(argument).name_without_extension).name_without_extension}.pam`
+                    );
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimation(argument, output_argument);
                 } else {
@@ -566,7 +576,9 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
                             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(arg)
                         );
-                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
+                        const output_argument: string = Path.Resolve(
+                            `${Path.Dirname(arg)}/${Path.Parse(Path.Parse(arg).name_without_extension).name_without_extension}.pam`
+                        );
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimation(arg, output_argument);
                     });

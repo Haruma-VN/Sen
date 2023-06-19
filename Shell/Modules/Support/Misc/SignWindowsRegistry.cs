@@ -1,13 +1,6 @@
 ﻿using Microsoft.Win32;
 using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sen.Shell.Modules.Support.Misc
 {
@@ -46,7 +39,7 @@ namespace Sen.Shell.Modules.Support.Misc
             {
                 var progID = $"Sen.FileType";
                 var path = new ImplementPath();
-                string[] extensions = { ".rsb", ".rsg", ".pam", ".rton", ".json", ".png", ".ptx", ".js", ".obb", };
+                string[] extensions = { ".rsb", ".rsg", ".pam", ".rton", ".json", ".png", ".ptx", ".js", ".obb", ".bnk" };
                 var appPath = path.Resolve($"{path.Dirname(Sen.Shell.Program.Script_Directory)}/Sen.exe");
                 if (!IsFileExtensionAssociated(progID, extensions[0]))
                 {

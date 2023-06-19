@@ -90,6 +90,18 @@ namespace Sen.Script {
     }
 
     /**
+     * Test shell
+     */
+
+    export function TestShell(): void {
+        if (DotNetPlatform.CurrentUserPlatform() === "windows") {
+            if (!Fs.FileExists(`${Path.Resolve(`${Path.Dirname(MainScriptDirectory)}/Sen.exe`)}`)) {
+                throw new Error(`The Shell name must be "Sen.exe" on platform windows`);
+            }
+        }
+    }
+
+    /**
      *
      * @param argument - Pass arguments from .NET here
      */
@@ -123,6 +135,7 @@ namespace Sen.Script {
             Sen.Script.Modules.Platform.Constraints.ExitProgram();
             return;
         }
+        Sen.Script.TestShell();
         const time_start: number = Date.now();
         Sen.Script.LoadModules(Sen.Script.ScriptModules);
         const time_end: number = Date.now();

@@ -2,6 +2,9 @@
 using Sen.Shell.Modules.Support.PvZ2.RTON;
 using Sen.Shell.Modules.Support.PvZ2.PAM;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
+using Sen.Shell.Modules.Standards;
+using Sen.Shell.Modules.Standards.IOModule;
+
 namespace Sen.Shell.Modules.Support.PvZ2
 {
     public abstract class PvZ2ShellAbstract
@@ -12,9 +15,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract PAMInfo PAMtoPAMJSON(string inFile);
 
-        public abstract void PAMJSONtoPAM(PAMInfo PAMJson, string outFile);
+        public abstract void PAMJSONtoPAM(string PAMJson, string outFile);
 
-        public abstract ExtraInfo PAMJSONtoFlashAnimation(PAMInfo PAMJson, string outFolder, int resolution);
+        public abstract ExtraInfo PAMJSONtoFlashAnimation(string PAMJson, string outFolder, int resolution);
 
         public abstract PAMInfo FlashAnimationtoPAMJSON(string inFolder, ExtraInfo extraInfo);
 
@@ -33,6 +36,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public abstract void RSBUnpackByLenient(string RSBin, string outRSBdirectory);
 
         public abstract void RSBDisturb(string RSBin, string outRSB);
+
+        public abstract void WWiseSoundBankDecode(string bnk_in, string bnk_dir_out);
+
+        public abstract void WWiseSoundBankEncode(string soundbank_dir, string out_bnk);
 
 
     }
@@ -63,16 +70,18 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return PAMJson;
         }
 
-        public override void PAMJSONtoPAM(PAMInfo PAMJson, string outFile)
+        public override void PAMJSONtoPAM(string PAMJson, string outFile)
         {
-            var PAMFile = PAM_Binary.Encode(PAMJson);
+            var fs = new FileSystem();
+            var PAMFile = PAM_Binary.Encode(fs.ReadJson<PAMInfo>(PAMJson));
             PAMFile.OutFile(outFile);
             return;
         }
 
-        public override ExtraInfo PAMJSONtoFlashAnimation(PAMInfo PAMJson, string outFolder, int resolution)
+        public override ExtraInfo PAMJSONtoFlashAnimation(string PAMJson, string outFolder, int resolution)
         {
-            var extraInfo = PAM_Animation.Decode(PAMJson, outFolder, resolution);
+            var fs = new FileSystem();
+            var extraInfo = PAM_Animation.Decode(fs.ReadJson<PAMInfo>(PAMJson), outFolder, resolution);
             return extraInfo;
         }
 
@@ -126,6 +135,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
         }
 
         public override void RSBDisturb(string RSBin, string outRSB)
+        {
+            return;
+        }
+
+        public override void WWiseSoundBankDecode(string bnk_in, string bnk_dir_out)
+        {
+            return;
+        }
+
+        public override void WWiseSoundBankEncode(string soundbank_dir, string out_bnk)
         {
             return;
         }

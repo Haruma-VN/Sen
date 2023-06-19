@@ -156,5 +156,29 @@
         "include": [".bundle"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_rsb_disturb": {
+        "func_number": 27,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rsb_unpack_by_lenient": {
+        "func_number": 28,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "type": "file"
+    },
+    "wwise_soundbank_decode": {
+        "func_number": 29,
+        "include": [".bnk"],
+        "exclude": [],
+        "type": "file"
+    },
+    "wwise_soundbank_encode": {
+        "func_number": 30,
+        "include": [".soundbank"],
+        "exclude": [],
+        "type": "directory"
     }
 }
