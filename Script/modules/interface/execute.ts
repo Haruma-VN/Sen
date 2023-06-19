@@ -519,12 +519,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam.json`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                    PvZ2Shell.PAMtoPAMJSON(argument, output_argument);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimationJson(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam.json`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                        PvZ2Shell.PAMtoPAMJSON(arg, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimationJson(arg, output_argument);
                     });
                 }
                 break;
@@ -538,7 +538,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.xfl`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                    PvZ2Shell.PAMtoFlashAnimation(argument, output_argument, resolution);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimateAdobeFlashAnimation(argument, output_argument, resolution);
                 } else {
                     argument.forEach((arg: string) => {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
@@ -548,7 +548,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.xfl`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                        PvZ2Shell.PAMtoFlashAnimation(arg, output_argument, resolution);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimateAdobeFlashAnimation(arg, output_argument, resolution);
                     });
                 }
                 break;
@@ -560,7 +560,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                    PvZ2Shell.PAMJSONtoPAM(argument, output_argument);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimation(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
@@ -568,7 +568,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                        PvZ2Shell.PAMJSONtoPAM(arg, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimation(arg, output_argument);
                     });
                 }
                 break;
@@ -624,7 +624,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam.json`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                    PvZ2Shell.FlashAnimationtoPAMJSON(argument, output_argument);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
@@ -632,7 +632,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
-                        PvZ2Shell.FlashAnimationtoPAMJSON(arg, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(arg, output_argument);
                     });
                 }
                 break;
@@ -649,7 +649,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         `${MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
                         `resolution`
                     );
-                    PvZ2Shell.PAMJSONtoFlashAnimation(argument, output_argument, resolution);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimateAdobeFlashAnimation(argument, output_argument, resolution);
                 } else {
                     argument.forEach((arg: string) => {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
@@ -662,7 +662,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             `${MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
                             `resolution`
                         );
-                        PvZ2Shell.PAMJSONtoFlashAnimation(arg, output_argument, resolution);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimateAdobeFlashAnimation(arg, output_argument, resolution);
                     });
                 }
                 break;

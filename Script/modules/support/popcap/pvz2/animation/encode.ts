@@ -94,6 +94,24 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         Commands = 32,
     }
 
+    export interface ExtraInfo {
+        version: number;
+        frame_rate: number;
+        position: number[];
+        image?: ExtraImageInfo[];
+        sprite?: ExtraSpriteInfo[];
+        main_sprite?: ExtraSpriteInfo;
+    }
+
+    export interface ExtraImageInfo {
+        name?: string;
+        size: number[];
+    }
+
+    export interface ExtraSpriteInfo {
+        name?: string;
+    }
+
     /**
      *
      * @param pam_json - Send json obj here
@@ -101,34 +119,25 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
      * @returns if the obj is pam json
      */
 
-    export function CheckPamJson(
-        pam_json: SexyAppFrameworkAnimationPamJson,
-        file_path?: string,
-    ): pam_json is SexyAppFrameworkAnimationPamJson {
+    export function CheckPamJson(pam_json: SexyAppFrameworkAnimationPamJson, file_path?: string): pam_json is SexyAppFrameworkAnimationPamJson {
         if (!("version" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                    /\{\}/g,
-                    `version`,
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `version`),
                 `version`,
-                (file_path ??= "undefined"),
+                (file_path ??= "undefined")
             );
         }
         if (!Number.isInteger(pam_json.version)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                    [
-                        `version`,
-                        `${pam_json.version}`,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
-                        `${typeof pam_json.version}`,
-                    ],
-                ),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `version`,
+                    `${pam_json.version}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                    `${typeof pam_json.version}`,
+                ]),
                 `version`,
                 (file_path ??= "undefined"),
-                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
             );
         }
         if (
@@ -140,217 +149,263 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             pam_json.version !== 6
         ) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                    [`version`, `${pam_json.version}`, `1, 2, 3, 4, 5, 6`, `${pam_json.version}`],
-                ),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `version`,
+                    `${pam_json.version}`,
+                    `1, 2, 3, 4, 5, 6`,
+                    `${pam_json.version}`,
+                ]),
                 `version`,
                 (file_path ??= "undefined"),
-                `1, 2, 3, 4, 5, 6`,
+                `1, 2, 3, 4, 5, 6`
             );
         }
         if (!("frame_rate" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                    /\{\}/g,
-                    `frame_rate`,
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `frame_rate`),
                 `frame_rate`,
-                (file_path ??= "undefined"),
+                (file_path ??= "undefined")
             );
         }
         if (!Number.isInteger(pam_json.frame_rate)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                    [
-                        `frame_rate`,
-                        `${pam_json.frame_rate}`,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
-                        `${typeof pam_json.frame_rate}`,
-                    ],
-                ),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `frame_rate`,
+                    `${pam_json.frame_rate}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                    `${typeof pam_json.frame_rate}`,
+                ]),
                 `frame_rate`,
                 (file_path ??= "undefined"),
-                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
             );
         }
         if (!("position" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                    /\{\}/g,
-                    `position`,
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `position`),
                 `position`,
-                (file_path ??= "undefined"),
+                (file_path ??= "undefined")
             );
         }
         if (!Array.isArray(pam_json.position)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                    [
-                        `position`,
-                        `${pam_json.position}`,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
-                        `${typeof pam_json.position}`,
-                    ],
-                ),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `position`,
+                    `${pam_json.position}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.position}`,
+                ]),
                 `position`,
                 (file_path ??= "undefined"),
-                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
             );
         }
         if (pam_json.position.length !== 2) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
                 Sen.Script.Modules.System.Default.Localization.RegexReplace(
                     Sen.Script.Modules.System.Default.Localization.GetString("size_of_array_does_not_match"),
-                    [`position`, `2`],
+                    [`position`, `2`]
                 ),
                 `position`,
                 (file_path ??= "undefined"),
-                `this.position.size() == 2`,
+                `this.position.size() == 2`
             );
         }
         if (!("size" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                    /\{\}/g,
-                    `size`,
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `size`),
                 `size`,
-                (file_path ??= "undefined"),
+                (file_path ??= "undefined")
             );
         }
         if (!Array.isArray(pam_json.size)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                    [
-                        `size`,
-                        `${pam_json.size}`,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
-                        `${typeof pam_json.size}`,
-                    ],
-                ),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `size`,
+                    `${pam_json.size}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.size}`,
+                ]),
                 `size`,
                 (file_path ??= "undefined"),
-                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
             );
         }
         if (pam_json.size.length !== 2) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
                 Sen.Script.Modules.System.Default.Localization.RegexReplace(
                     Sen.Script.Modules.System.Default.Localization.GetString("size_of_array_does_not_match"),
-                    [`size`, `2`],
+                    [`size`, `2`]
                 ),
                 `size`,
                 (file_path ??= "undefined"),
-                `this.size.size() == 2`,
+                `this.size.size() == 2`
             );
         }
         if (!("image" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                    /\{\}/g,
-                    `image`,
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `image`),
                 `image`,
-                (file_path ??= "undefined"),
+                (file_path ??= "undefined")
             );
         }
         if (!Array.isArray(pam_json.image)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                    [
-                        `image`,
-                        `${pam_json.image}`,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
-                        `${typeof pam_json.image}`,
-                    ],
-                ),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `image`,
+                    `${pam_json.image}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.image}`,
+                ]),
                 `image`,
                 (file_path ??= "undefined"),
-                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
             );
         }
         // check image
         for (let image of pam_json.image) {
             if (!("size" in image)) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                        /\{\}/g,
-                        `size`,
-                    ),
+                    Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `size`),
                     `size`,
-                    (file_path ??= "undefined"),
+                    (file_path ??= "undefined")
                 );
             }
             if (!Array.isArray(image.size)) {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
                     Sen.Script.Modules.System.Default.Localization.RegexReplace(
                         Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                        [
-                            `size`,
-                            `${image.size}`,
-                            `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
-                            `${typeof image.size}`,
-                        ],
+                        [`size`, `${image.size}`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`, `${typeof image.size}`]
                     ),
                     `size`,
                     (file_path ??= "undefined"),
-                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
                 );
             }
             if (image.size.length !== 2) {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
                     Sen.Script.Modules.System.Default.Localization.RegexReplace(
                         Sen.Script.Modules.System.Default.Localization.GetString("size_of_array_does_not_match"),
-                        [`size`, `2`],
+                        [`size`, `2`]
                     ),
                     `size`,
                     (file_path ??= "undefined"),
-                    `this.size.size() == 2`,
+                    `this.size.size() == 2`
                 );
             }
         }
         if (!("sprite" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                    /\{\}/g,
-                    `sprite`,
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `sprite`),
                 `sprite`,
-                (file_path ??= "undefined"),
+                (file_path ??= "undefined")
             );
         }
         if (!Array.isArray(pam_json.sprite)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                    Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"),
-                    [
-                        `sprite`,
-                        `${pam_json.sprite}`,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
-                        `${typeof pam_json.sprite}`,
-                    ],
-                ),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `sprite`,
+                    `${pam_json.sprite}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.sprite}`,
+                ]),
                 `sprite`,
                 (file_path ??= "undefined"),
-                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
             );
         }
         if (!("main_sprite" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(
-                    /\{\}/g,
-                    `main_sprite`,
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `main_sprite`),
                 `main_sprite`,
-                (file_path ??= "undefined"),
+                (file_path ??= "undefined")
             );
         }
         return true;
+    }
+
+    /**
+     *
+     * @param inFile - Pass PAM
+     * @param outFile - Pass output pam json
+     * @returns PAM to PAM JSON
+     */
+
+    export function PopCapAnimationToAnimationJson(inFile: string, outFile: string): void {
+        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = PvZ2Shell.PAMtoPAMJSON(inFile);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
+        return;
+    }
+
+    /**
+     *
+     * @param inFile - Pass PAM JSON
+     * @param outFile - Pass PAM Output
+     * @returns PAM JSON to PAM
+     */
+
+    export function PopCapAnimationJsonToAnimation(inFile: string, outFile: string): void {
+        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
+        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
+        PvZ2Shell.PAMJSONtoPAM(pam_json, outFile);
+        return;
+    }
+
+    /**
+     *
+     * @param inFile - Pass PAM JSON
+     * @param outputDirectory - Pass output directory
+     * @param resolution - Pass resolution
+     * @returns PAM JSON to XFL
+     */
+
+    // PAMJSONtoFlashAnimation
+    export function PopCapAnimationJsonToAnimateAdobeFlashAnimation(inFile: string, outputDirectory: string, resolution: int): void {
+        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
+        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
+        const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = PvZ2Shell.PAMJSONtoFlashAnimation(pam_json, outputDirectory, resolution);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(
+            Path.Resolve(`${outputDirectory}/extra.json`),
+            extra_json
+        );
+        return;
+    }
+
+    /**
+     *
+     * @param inDirectory - Pass directory
+     * @param outFile - Pass output pam json
+     * @returns XFL to PAM JSON
+     */
+
+    // FlashAnimationtoPAMJSON
+    export function AnimateAdobeFlashAnimationToPopCapAnimationJson(inDirectory: string, outFile: string): void {
+        const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(Path.Resolve(`${inDirectory}/extra.json`));
+        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = PvZ2Shell.FlashAnimationtoPAMJSON(
+            inDirectory,
+            extra_json
+        );
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
+        return;
+    }
+
+    /**
+     *
+     * @param inFile - Pass PAM
+     * @param outputDirectory - Pass output directory
+     * @param resolution - Pass resolution
+     * @returns PAM to XFL
+     */
+
+    export function PopCapAnimationToAnimateAdobeFlashAnimation(inFile: string, outputDirectory: string, resolution: int): void {
+        const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = PvZ2Shell.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(
+            Path.Resolve(`${outputDirectory}/extra.json`),
+            extra_json
+        );
+        return;
     }
 }

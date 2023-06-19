@@ -12,7 +12,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     {
         public static readonly uint Magic = 0xBAF01954;
         public int version { get; set; } = 6;
-        public byte frame_rate { get; set; } = 30;
+        public int frame_rate { get; set; } = 30;
         public required double[] position { get; set; }
         public required double[] size { get; set; }
         public required ImageInfo[] image { get; set; }
@@ -41,7 +41,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     public class ExtraInfo
     {
         public int version { get; set; } = 6;
-        public byte frame_rate { get; set; } = 30;
+        public int frame_rate { get; set; } = 30;
         public required double[] position { get; set; }
         public ExtraImageInfo[]? image { get; set; }
         public ExtraSpriteInfo[]? sprite { get; set; }
@@ -395,7 +395,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 throw new PAMException("PAM version out of range", PamFile.filePath ?? "undefined");
             }
-            byte frame_rate = PamFile.readUInt8();
+            int frame_rate = (int)PamFile.readUInt8();
             double[] position = new double[2];
             for (var i = 0; i < 2; i++)
             {
@@ -598,7 +598,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 throw new PAMException("PAM version out of range", "undefined");
             }
-            PamBinary.writeUInt8(PamJson.frame_rate);
+            PamBinary.writeUInt8(Convert.ToByte(PamJson.frame_rate));
             if (PamJson.position == null || PamJson.position.Length < 2)
             {
                 PamBinary.writeInt16LE(0);
@@ -774,7 +774,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     PamBinary.writeStringByInt16LE(sprite.description);
                 }
-                PamBinary.writeInt32LE((int)(sprite.frame_rate * 65536d));
+                PamBinary.writeInt32LE(((int)(sprite.frame_rate * 65536d)));
             }
             if (version >= 5)
             {
@@ -1597,7 +1597,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             PAMInfo PamInfo = new PAMInfo
             {
                 version = PAMRipe.extra.version,
-                frame_rate = (byte)frame_rate,
+                frame_rate = frame_rate,
                 position = PAMRipe.extra.position,
                 size = new double[] { width, height },
                 image = PAMRipe.extra.image!.Select((e, i) => new ImageInfo { name = e.name!, size = e.size, transform = ParseImageDocument(PAMRipe.library.image[i], i) }).ToArray(),

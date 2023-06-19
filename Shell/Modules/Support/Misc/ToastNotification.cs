@@ -29,8 +29,23 @@ namespace Sen.Shell.Modules.Support.Misc
 
         public override void SendLinux(string message, string title)
         {
-            string notification = ($"notify-send '{title}' '{message}'");
-            Process.Start("bash", $"-c \"{notification}\"");
+            string dbusCommand = $"dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.Notify string:\"\" uint32:0 string:\"\" string:\"{title}\" string:\"{message}\" array:string:\"\" dict:string:string:\"\" int32:-1";
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "bash",
+                Arguments = $"-c \"{dbusCommand}\"",
+                UseShellExecute = false,
+                RedirectStandardError = true
+            };
+
+            Process process = new Process
+            {
+                StartInfo = startInfo
+            };
+
+            process.Start();
+            process.WaitForExit();
             return;
         }
 
