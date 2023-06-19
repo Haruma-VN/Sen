@@ -15,7 +15,7 @@
 
 ## Modulus Composite
 
--   `Shell` - Using `.NET 7.0 Runtime` as Console Application Project, create interface and has various functions inside it.
+-   `Shell` - Using `.NET 8.0 Runtime` as Console Application Project, create interface and has various functions inside it.
 
 -   `Script` - Script control flows of the tool.
 

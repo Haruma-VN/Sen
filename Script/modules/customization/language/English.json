@@ -193,5 +193,6 @@
     "use_64_bit_variant": "Use 64-bits variant",
     "not_use_64_bit_variant": "Does not use 64-bits variant",
     "set_this_if_you_using_pvzgames": "Select this if you modding any PvZ Games on Android",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "zlib_array_unsupported": "Zlib Array Unsupported"
 }

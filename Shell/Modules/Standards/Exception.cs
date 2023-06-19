@@ -15,12 +15,13 @@ namespace Sen.Shell.Modules.Standards
         PAMException,
         PAMEncodeException,
         PAMDecodeException,
+        ZlibException,
     }
 
     public class RuntimeException : System.Exception
     {
 
-#pragma warning disable IDE1006
+        #pragma warning disable IDE1006
 
         protected StandardsException _errorCode { get; set; }
 
@@ -87,6 +88,14 @@ namespace Sen.Shell.Modules.Standards
         public PAMDecodeException(string message, string errorCode) : base(message, errorCode)
         {
             this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMDecodeException;
+        }
+    }
+
+    public class ZlibException : RuntimeException
+    {
+        public ZlibException(string message, string errorCode) : base(message, errorCode)
+        {
+            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.ZlibException;
         }
     }
 

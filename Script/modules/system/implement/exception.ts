@@ -19,6 +19,7 @@ namespace Sen.Script.Modules.Exceptions {
         PAMException,
         PAMEncodeException,
         PAMDecodeException,
+        ZlibException,
     }
 
     /**
@@ -193,12 +194,7 @@ namespace Sen.Script.Modules.Exceptions {
          */
 
         public set property(new_property: string) {
-            if (
-                typeof new_property === "string" &&
-                new_property !== null &&
-                new_property !== undefined &&
-                new_property !== void 0
-            ) {
+            if (typeof new_property === "string" && new_property !== null && new_property !== undefined && new_property !== void 0) {
                 this._property = new_property;
             }
         }
@@ -216,12 +212,7 @@ namespace Sen.Script.Modules.Exceptions {
          */
 
         public set file_path(new_file_path: string) {
-            if (
-                typeof new_file_path === "string" &&
-                new_file_path !== null &&
-                new_file_path !== undefined &&
-                new_file_path !== void 0
-            ) {
+            if (typeof new_file_path === "string" && new_file_path !== null && new_file_path !== undefined && new_file_path !== void 0) {
                 this._file_path = new_file_path;
             }
         }
@@ -283,12 +274,7 @@ namespace Sen.Script.Modules.Exceptions {
         protected _dimension_type_error: "width" | "height";
         protected _file_path: string;
         private _additional_message: string | null = null;
-        public constructor(
-            message: string,
-            file_path: string,
-            dimension_type_error: "width" | "height",
-            additional_message?: string,
-        ) {
+        public constructor(message: string, file_path: string, dimension_type_error: "width" | "height", additional_message?: string) {
             super(message);
             this.name = Sen.Script.Modules.System.Default.Localization.GetString("wrong_dimension");
             this._dimension_type_error = dimension_type_error;
@@ -434,12 +420,7 @@ namespace Sen.Script.Modules.Exceptions {
         public constructor(error: string, property: string, file_path: string, additional_message?: string) {
             super(error, property, file_path);
             this.name = "wrong_property_value";
-            if (
-                additional_message !== null &&
-                additional_message !== undefined &&
-                additional_message !== void 0 &&
-                typeof additional_message === "string"
-            ) {
+            if (additional_message !== null && additional_message !== undefined && additional_message !== void 0 && typeof additional_message === "string") {
                 this._additional_message = additional_message;
             }
         }
@@ -586,7 +567,7 @@ namespace Sen.Script.Modules.Exceptions {
     export function ExecutionExceptionType(exception_type: string): void {
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-            `${Sen.Script.Modules.System.Default.Localization.GetString("exception_type")}${exception_type}`,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("exception_type")}${exception_type}`
         );
         return;
     }
@@ -607,7 +588,7 @@ namespace Sen.Script.Modules.Exceptions {
     export function ExecutionLoadedFrom(file_location: string): void {
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-            `${Sen.Script.Modules.System.Default.Localization.GetString("exception_path")}`,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("exception_path")}`
         );
         Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${file_location}`);
         return;
@@ -622,10 +603,7 @@ namespace Sen.Script.Modules.Exceptions {
     export function ExecutionError(message: string): void {
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(
-                /\{\}/g,
-                `${message}`,
-            )}`,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, `${message}`)}`
         );
         return;
     }
@@ -664,15 +642,13 @@ namespace Sen.Script.Modules.Exceptions {
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(file_location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
                 if ((error as Sen.Script.Modules.Exceptions.DimensionError).additional_message) {
-                    const property_error: string = (error as Sen.Script.Modules.Exceptions.DimensionError)
-                        .dimension_type_error;
-                    const additional_message: string = (error as Sen.Script.Modules.Exceptions.DimensionError)
-                        .additional_message as string;
+                    const property_error: string = (error as Sen.Script.Modules.Exceptions.DimensionError).dimension_type_error;
+                    const additional_message: string = (error as Sen.Script.Modules.Exceptions.DimensionError).additional_message as string;
                     Sen.Script.Modules.Exceptions.ExecutionError(
                         Sen.Script.Modules.System.Default.Localization.RegexReplace(
                             Sen.Script.Modules.System.Default.Localization.GetString("property_is_oversized"),
-                            [`"${property_error}"`, `${additional_message}`],
-                        ),
+                            [`"${property_error}"`, `${additional_message}`]
+                        )
                     );
                 }
                 break;
@@ -714,11 +690,8 @@ namespace Sen.Script.Modules.Exceptions {
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
                     `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
                         /\{\}/g,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("expected_variable_type").replace(
-                            /\{\}/g,
-                            expected_data_type,
-                        )}`,
-                    )}`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("expected_variable_type").replace(/\{\}/g, expected_data_type)}`
+                    )}`
                 );
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
@@ -842,15 +815,9 @@ namespace Sen.Script.Modules.Exceptions {
                 break;
             }
             case Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement: {
-                const name: string = (
-                    error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
-                ).name;
-                const message: string = (
-                    error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
-                ).message;
-                const location: string = (
-                    error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement
-                ).file_path;
+                const name: string = (error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement).name;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.ResourceDataTypeContainerStrictlyRequirement).file_path;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
@@ -879,9 +846,7 @@ namespace Sen.Script.Modules.Exceptions {
                 const message: string = (error as Sen.Script.Modules.Exceptions.UnknownFormat<Generic_U>).message;
                 const format: Generic_U = (error as Sen.Script.Modules.Exceptions.UnknownFormat<Generic_U>).format;
                 const location: string = (error as Sen.Script.Modules.Exceptions.MissingDirectory).file_location;
-                Sen.Script.Modules.Exceptions.ExecutionExceptionType(
-                    `${name} ${"and_unknown_format_is".replace(/\{\}/g, format)}`,
-                );
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_unknown_format_is".replace(/\{\}/g, format)}`);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
@@ -898,8 +863,7 @@ namespace Sen.Script.Modules.Exceptions {
             case Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError: {
                 const name: string = (error as Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError).name;
                 const message: string = (error as Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError).message;
-                const location: string = (error as Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError)
-                    .file_path;
+                const location: string = (error as Sen.Script.Modules.Exceptions.JSONParseTrailingCommasError).file_path;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
@@ -909,9 +873,7 @@ namespace Sen.Script.Modules.Exceptions {
                 const name: string = (error as Sen.Script.Modules.Exceptions.JSONPatchOperationError).name;
                 const message: string = (error as Sen.Script.Modules.Exceptions.JSONPatchOperationError).message;
                 const operation: string = (error as Sen.Script.Modules.Exceptions.JSONPatchOperationError).operation;
-                Sen.Script.Modules.Exceptions.ExecutionExceptionType(
-                    `${name} ${"and_the_operation_is".replace(/\{\}/g, operation)}`,
-                );
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_the_operation_is".replace(/\{\}/g, operation)}`);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
                 break;
             }
@@ -919,17 +881,12 @@ namespace Sen.Script.Modules.Exceptions {
                 const name: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).name;
                 const message: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).message;
                 const location: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).file_path;
-                const additional_message: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue)
-                    .additional_message;
+                const additional_message: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).additional_message;
                 const property: string = (error as Sen.Script.Modules.Exceptions.WrongPropertyValue).property;
-                Sen.Script.Modules.Exceptions.ExecutionExceptionType(
-                    `${name} ${"and_the_wrong_property_is".replace(/\{\}/g, property)}`,
-                );
+                Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_the_wrong_property_is".replace(/\{\}/g, property)}`);
                 Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                    `${Sen.Script.Modules.System.Default.Localization.GetString(
-                        "execution_reminder",
-                    )}${additional_message}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("execution_reminder")}${additional_message}`
                 );
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
@@ -980,10 +937,8 @@ namespace Sen.Script.Modules.Exceptions {
             }
             case Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement: {
                 const name: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement).name;
-                const message: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement)
-                    .message;
-                const location: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement)
-                    .file_location;
+                const message: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement).message;
+                const location: string = (error as Sen.Script.Modules.Exceptions.ExtensionDoesNotMeetsRequirement).file_location;
                 Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                 Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                 Sen.Script.Modules.Exceptions.ExecutionError(message);
@@ -1012,34 +967,28 @@ namespace Sen.Script.Modules.Exceptions {
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
                     `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
                         /\{\}/g,
-                        (error as DotNetSystem.Exception).message,
-                    )}`,
+                        (error as DotNetSystem.Exception).message
+                    )}`
                 );
             }
         }
         Console.Printf(
             null,
-            (error as Error).stack !== null &&
-                (error as Error).stack !== undefined &&
-                (error as Error).stack !== void 0 &&
-                "stack" in (error as Error)
+            (error as Error).stack !== null && (error as Error).stack !== undefined && (error as Error).stack !== void 0 && "stack" in (error as Error)
                 ? (error as Error).stack?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
                 : (error as DotNetSystem.Exception).stackTrace
                       ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
-                      ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > "),
+                      ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
         );
         try {
             Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(
                 Path.Resolve(`${Sen.Script.Modules.Interface.Assert.debug_directory}/${Date.now()}.json`),
-                (error as Error).stack !== null &&
-                    (error as Error).stack !== undefined &&
-                    (error as Error).stack !== void 0 &&
-                    "stack" in (error as Error)
+                (error as Error).stack !== null && (error as Error).stack !== undefined && (error as Error).stack !== void 0 && "stack" in (error as Error)
                     ? error
                     : ({
                           message: (error as DotNetSystem.Exception).message,
                           stack: (error as DotNetSystem.Exception).stackTrace,
-                      } as any),
+                      } as any)
             );
         } catch (error: any) {
             Console.Print(null, error.message);

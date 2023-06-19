@@ -38,7 +38,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         name?: string;
         description?: string;
         frame_rate: double;
-        work_area?: [int, int];
+        work_area: [int, int];
         frame?: Array<SexyAppFrameworkFrameInfo>;
     };
 

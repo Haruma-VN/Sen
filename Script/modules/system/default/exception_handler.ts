@@ -37,10 +37,7 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
 
     export function LoadModules(scripts: Array<string>): void {
         for (const script of scripts) {
-            JavaScriptEngine.Execute(
-                Fs.ReadText(script, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
-                script,
-            );
+            JavaScriptEngine.Execute(Fs.ReadText(script, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), script);
         }
         return;
     }
@@ -50,74 +47,64 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
      * @param argument - Pass arguments from .NET here
      */
     export function HandleError(ex: Error | DotNetSystem.Exception): void {
-        Sen.Script.Modules.System.Default.Exceptions.Handler.LoadModules(
-            Sen.Script.Modules.System.Default.Exceptions.Handler.ScriptModules,
-        );
+        Sen.Script.Modules.System.Default.Exceptions.Handler.LoadModules(Sen.Script.Modules.System.Default.Exceptions.Handler.ScriptModules);
         try {
             if ("stackTrace" in ex) {
                 // .NET
                 switch ((ex as DotNetSystem.RuntimeException).errorCode) {
                     case Sen.Script.Modules.Exceptions.StandardsException.RuntimeException: {
-                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
-                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
-                        );
-                        throw new Sen.Script.Modules.Exceptions.RuntimeError(
-                            ex as any,
-                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
-                        );
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"));
+                        throw new Sen.Script.Modules.Exceptions.RuntimeError(ex as any, ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"));
                     }
                     case Sen.Script.Modules.Exceptions.StandardsException.RTONException: {
-                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
-                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
-                        );
-                        (ex as DotNetSystem.Exception).message =
-                            Sen.Script.Modules.System.Default.Localization.GetString(ex.message);
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"));
+                        (ex as DotNetSystem.Exception).message = Sen.Script.Modules.System.Default.Localization.GetString(ex.message);
                         throw new Sen.Script.Modules.Exceptions.BrokenFile(
                             ex as any,
                             ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
-                            Sen.Script.Modules.System.Default.Localization.GetString("rton_file_error"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("rton_file_error")
                         );
                     }
                     case Sen.Script.Modules.Exceptions.StandardsException.RTONDecodeException: {
-                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
-                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
-                        );
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"));
                         (ex as Sen.Script.Modules.Exceptions.WrongPropertyValue & any).additional_message =
-                            Sen.Script.Modules.System.Default.Localization.GetString(
-                                (ex as DotNetSystem.RTONDecodeException).expected,
-                            );
+                            Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).expected);
                         Sen.Script.Modules.Exceptions.ExecutionError(
-                            Sen.Script.Modules.System.Default.Localization.GetString(
-                                (ex as DotNetSystem.RTONDecodeException).message,
-                            ),
+                            Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).message)
                         );
                         Sen.Script.Modules.Exceptions.ExecutionExceptionType(
-                            Sen.Script.Modules.System.Default.Localization.GetString(
-                                (ex as DotNetSystem.RTONDecodeException).expected,
-                            ),
+                            Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).expected)
                         );
                         Console.Printf(
                             null,
                             (ex as DotNetSystem.Exception).stackTrace
                                 ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
-                                ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > "),
+                                ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
                         );
                         break;
                     }
                     case Sen.Script.Modules.Exceptions.StandardsException.PAMException: {
-                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(
-                            ((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"),
-                        );
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"));
                         Sen.Script.Modules.Exceptions.ExecutionError(
-                            Sen.Script.Modules.System.Default.Localization.GetString(
-                                (ex as DotNetSystem.RTONDecodeException).message,
-                            ),
+                            Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).message)
                         );
                         Console.Printf(
                             null,
                             (ex as DotNetSystem.Exception).stackTrace
                                 ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
-                                ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > "),
+                                ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
+                        );
+                    }
+                    case Sen.Script.Modules.Exceptions.StandardsException.ZlibException: {
+                        Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"));
+                        Sen.Script.Modules.Exceptions.ExecutionError(
+                            Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).message)
+                        );
+                        Console.Printf(
+                            null,
+                            (ex as DotNetSystem.Exception).stackTrace
+                                ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
+                                ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
                         );
                     }
                     default: {
