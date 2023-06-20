@@ -4,6 +4,7 @@ using Sen.Shell.Modules.Support.PvZ2.PAM;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
 using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule;
+using Sen.Shell.Modules.Support.Compress;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -155,7 +156,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public override void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile)
         {
-            var zlib = new Zlib();
+            var zlib = new PopCapZlib();
             var zlib_data = zlib.ZlibCompress(ripefile, use64bitvariant);
             var fs = new FileSystem();
             fs.OutFile<byte[]>(outFile, zlib_data);
@@ -164,7 +165,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public override void PopCapZlibUncompress(string ripefile, bool use64bitvariant, string outFile)
         {
-            var zlib = new Zlib();
+            var zlib = new PopCapZlib();
             var uncompresszlib_data = zlib.ZlibUncompress(ripefile, use64bitvariant);
             var fs = new FileSystem();
             fs.OutFile<byte[]>(outFile, uncompresszlib_data);

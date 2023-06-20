@@ -6,7 +6,7 @@ using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
 {
-#pragma warning disable SYSLIB0020
+    using Compress = Standards.Compress;
     public class PacketInfo
     {
         public int head_version { get; set; }

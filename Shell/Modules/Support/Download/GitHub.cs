@@ -19,6 +19,9 @@ using System.Threading.Tasks;
 
 namespace Sen.Shell.Modules.Support.Download
 {
+    
+    using Compress = Standards.Compress;
+
 
     [JsonSerializable(typeof(Asset))]
     public class Asset
