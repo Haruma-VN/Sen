@@ -1,4 +1,5 @@
 ﻿using Ionic.BZip2;
+using System.IO.Compression;
 
 namespace Sen.Shell.Modules.Support.Compress.Other
 {
@@ -39,6 +40,34 @@ namespace Sen.Shell.Modules.Support.Compress.Other
         {
             return Convert.FromBase64String(data);
         }
+
+    }
+
+    public class Zlib
+    {
+        public static byte[] CompressZlibBytes(byte[] data, CompressionLevel compressionLevel)
+        {
+            using var memoryStream = new MemoryStream();
+            {
+                using var zlibStream = new DeflateStream(memoryStream, compressionLevel);
+                {
+                    zlibStream.Write(data, 0, data.Length);
+                }
+                return memoryStream.ToArray();
+            }
+        }
+
+        public static byte[] UncompressZlibBytes(byte[] compressedData)
+        {
+            using var compressedStream = new MemoryStream(compressedData);
+            using var zlibStream = new DeflateStream(compressedStream, CompressionMode.Decompress);
+            using var outputStream = new MemoryStream();
+            {
+                zlibStream.CopyTo(outputStream);
+                return outputStream.ToArray();
+            }
+        }
+
 
     }
 

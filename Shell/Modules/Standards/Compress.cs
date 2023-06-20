@@ -34,6 +34,7 @@ namespace Sen.Shell.Modules.Standards
         None,
         BestCompression,
         BestSpeed,
+        Default,
     }
 
 
@@ -136,6 +137,7 @@ namespace Sen.Shell.Modules.Standards
                 return outputStream.ToArray();
             }
         }
+
 
         public override void UncompressZip(string zip_input, string extracted_directory)
         {

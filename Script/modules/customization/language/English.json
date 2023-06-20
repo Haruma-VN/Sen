@@ -194,5 +194,8 @@
     "not_use_64_bit_variant": "Does not use 64-bits variant",
     "set_this_if_you_using_pvzgames": "Select this if you modding any PvZ Games on Android",
     "unknown": "Unknown",
-    "zlib_array_unsupported": "Zlib Array Unsupported"
+    "zlib_array_unsupported": "Zlib Array Unsupported",
+    "execution_warning": "Execution Warning: {}",
+    "file_already_exists": "File {} already exists, Sen will remove instantly",
+    "directory_already_exists": "Directory {} already exists, files which same name will be overwritten"
 }

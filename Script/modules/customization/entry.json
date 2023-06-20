@@ -1,6 +1,7 @@
 {
     "default": {
         "language": "English",
-        "notification_when_finish": true
+        "notification_when_finish": true,
+        "override": true
     }
 }

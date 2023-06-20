@@ -1,12 +1,14 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
-using System.Text.Json.Serialization;
 using Sen.Shell.Modules.Standards;
 
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
 {
     using Compress = Standards.Compress;
+
+    using DotNetZlib = Sen.Shell.Modules.Support.Compress.Other.Zlib;
+
     public class PacketInfo
     {
         public int head_version { get; set; }

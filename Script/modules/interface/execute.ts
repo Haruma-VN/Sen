@@ -168,7 +168,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ? "array"
                             : "string";
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/res.json`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                         argument,
                         output_argument,
@@ -196,7 +196,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 ? "array"
                                 : "string";
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/res.json`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                             arg,
                             output_argument,
