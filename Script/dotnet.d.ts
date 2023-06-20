@@ -1586,7 +1586,12 @@ declare namespace PvZ2Shell {
      * @param outFile - Pass outfile
      */
 
-    export function PopCapZlibCompress(Ripefile: string, Use64variant: boolean, outFile: string): void;
+    export function PopCapZlibCompress(
+        Ripefile: string,
+        Use64variant: boolean,
+        outFile: string,
+        zlibLevel: Sen.Script.Modules.Compression.Constraints.ZlibLevel
+    ): void;
     /**
      *
      * @param base - Pass zlib base

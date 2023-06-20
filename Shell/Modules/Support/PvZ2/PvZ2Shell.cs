@@ -4,6 +4,7 @@ using Sen.Shell.Modules.Support.PvZ2.PAM;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Compress;
+using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -27,7 +28,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract PacketInfo RSGUnpack(string inFile, string outFolder);
 
-        public abstract void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile);
+        public abstract void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile, ZlibCompressionLevel zlib_level);
 
         public abstract void PopCapZlibUncompress(string ripefile, bool use64bitvariant, string outFile);
 
@@ -153,10 +154,14 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile)
+        public override void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile, ZlibCompressionLevel zlib_level)
         {
             var zlib = new PopCapZlib();
-            var zlib_data = zlib.ZlibCompress(ripefile, use64bitvariant);
+            var zlib_data = zlib.ZlibCompress(new ZlibCompress() { 
+                RipeFile = ripefile,
+                Use64BitVariant = use64bitvariant, 
+                ZlibLevel = zlib_level 
+            });
             var fs = new FileSystem();
             fs.OutFile<byte[]>(outFile, zlib_data);
             return;

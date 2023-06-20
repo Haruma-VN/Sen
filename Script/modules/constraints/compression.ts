@@ -16,5 +16,6 @@ namespace Sen.Script.Modules.Compression.Constraints {
         None,
         BestCompression,
         BestSpeed,
+        Default,
     }
 }

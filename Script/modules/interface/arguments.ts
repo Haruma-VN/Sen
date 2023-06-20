@@ -127,23 +127,37 @@ namespace Sen.Script.Modules.Interface.Arguments {
 
     export function ArgumentPrint(argument: string, type: "file" | "directory"): void {
         if (type === "file" && Fs.FileExists(argument)) {
-            Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists").replace(/\{\}/g, argument)
-                )
-            );
-            Fs.DeleteFile(argument);
+            if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
+                Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
+                        /\{\}/g,
+                        Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists_remove_instantly").replace(/\{\}/g, argument)
+                    )
+                );
+                Fs.DeleteFile(argument);
+            } else {
+                throw new Sen.Script.Modules.Exceptions.AlreadyExists(
+                    Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists"),
+                    argument
+                );
+            }
         }
         if (type === "directory" && Fs.DirectoryExists(argument)) {
-            Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists").replace(/\{\}/g, argument)
-                )
-            );
+            if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
+                Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
+                        /\{\}/g,
+                        Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists_override").replace(/\{\}/g, argument)
+                    )
+                );
+            } else {
+                throw new Sen.Script.Modules.Exceptions.AlreadyExists(
+                    Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists"),
+                    argument
+                );
+            }
         }
         Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,

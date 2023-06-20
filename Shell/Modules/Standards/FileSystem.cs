@@ -493,7 +493,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
     public class ParsedPath
     {
 
-#pragma warning disable IDE1006
+        #pragma warning disable IDE1006
         public string name { get; set; }
         public string dir { get; set; }
         public string ext { get; set; }

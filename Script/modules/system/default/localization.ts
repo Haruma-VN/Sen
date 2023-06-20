@@ -6,27 +6,37 @@ namespace Sen.Script.Modules.System.Default.Localization {
         default: {
             language: string;
             notification_when_finish: boolean;
+            override: boolean;
         };
     };
 
-    /**
-     * Tool language
-     */
-
-    export const notification: boolean = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(`${MainScriptDirectory}/modules/customization/entry.json`)
-        .default.notification_when_finish;
+    export const EntryJson: Sen.Script.Modules.System.Default.Localization.entry_json = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(
+        `${MainScriptDirectory}/modules/customization/entry.json`
+    );
 
     /**
      * Tool language
      */
 
-    export const language: string = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(`${MainScriptDirectory}/modules/customization/entry.json`).default
-        .language;
+    export const notification: boolean = Sen.Script.Modules.System.Default.Localization.EntryJson.default.notification_when_finish;
+
+    /**
+     * Tool language
+     */
+
+    export const language: string = Sen.Script.Modules.System.Default.Localization.EntryJson.default.language;
+
+    /**
+     * Override file/directory
+     */
+
+    export const override: boolean = Sen.Script.Modules.System.Default.Localization.EntryJson.default.override;
     /**
      *
      * @param property - Provide property to get
      * @returns String if exists, else return property
      */
+
     export function GetString(property: string): string {
         return DotNetLocalization.Get(
             property,

@@ -196,6 +196,9 @@
     "unknown": "Unknown",
     "zlib_array_unsupported": "Zlib Array Unsupported",
     "execution_warning": "Execution Warning: {}",
-    "file_already_exists": "File {} already exists, Sen will remove instantly",
-    "directory_already_exists": "Directory {} already exists, files which same name will be overwritten"
+    "file_already_exists_remove_instantly": "File {} already exists, Sen will remove before override",
+    "directory_already_exists_override": "Directory {} already exists, files with same name will be overwritten",
+    "already_exists": "Already exists",
+    "file_already_exists": "File already exists",
+    "directory_already_exists": "Directory already exists"
 }

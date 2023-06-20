@@ -703,7 +703,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     );
                     const output_argument: string = Path.Resolve(`${argument}.bin`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument);
+                    PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
                 } else {
                     argument.forEach((arg: string) => {
                         const use_64bit_variant: boolean = Boolean(
@@ -726,7 +726,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         const output_argument: string = Path.Resolve(`${arg}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument);
+                        PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
                     });
                 }
                 break;
