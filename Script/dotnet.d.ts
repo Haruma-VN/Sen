@@ -1555,23 +1555,29 @@ declare namespace PvZ2Shell {
      *
      * @param inFile - Pass RSG file path
      * @param outFolder - Out directory
+     * @param useResDirectory - Want to use res dir or not
      */
 
-    export function RSGUnpack(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+    export function RSGUnpack(inFile: string, outFolder: string, useResDirectory: boolean = true): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
     /**
      *
      * @param inDirectory - Pass RSG packet directory path
      * @param outFile - Out File
      */
 
-    export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo): void;
+    export function RSGPack(
+        inDirectory: string,
+        outFile: string,
+        packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo,
+        useResDirectory: boolean = true
+    ): void;
     /**
      *
      * @param inFile - Pass RSB file path
      * @param outFolder - Out directory unpacked
      */
 
-    export function RSBUnpack(inFile: string, outFolder: string): void;
+    export function RSBUnpack(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
     /**
      *
      * @param inDirectory - Pass RSB bundle directory path
@@ -1599,6 +1605,12 @@ declare namespace PvZ2Shell {
      */
 
     export function PopCapZlibUncompress(Ripefile: string, Use64variant: boolean, outFile: string): void;
+    /**
+     *
+     * @param inRSB - Pass RSB base
+     */
+
+    export function ProcessRSBData(inRSB: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead;
 }
 
 /**

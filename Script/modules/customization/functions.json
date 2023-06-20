@@ -192,5 +192,17 @@
         "include": [".smf"],
         "exclude": [],
         "type": "file"
+    },
+    "popcap_rsb_unpack_simple": {
+        "func_number": 33,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rsb_pack_simple": {
+        "func_number": 34,
+        "include": [".bundle"],
+        "exclude": [],
+        "type": "directory"
     }
 }

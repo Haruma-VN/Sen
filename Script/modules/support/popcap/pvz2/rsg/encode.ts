@@ -3,7 +3,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
      * Packet Info interface
      */
     export interface PacketInfo {
-        head_version: number;
+        version: number;
         compression_flags: number;
         res: ResInfo[];
     }

@@ -1,5 +1,7 @@
-﻿using Sen.Shell.Modules.Standards;
+﻿using Jint;
+using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule;
+using System.Collections;
 using System.Runtime.InteropServices;
 
 namespace Sen.Shell.Modules.Support.Compress
@@ -16,12 +18,14 @@ namespace Sen.Shell.Modules.Support.Compress
 
         public abstract byte[] ZlibUncompress(string ripefile, bool use64bitvariant);
 
+        public abstract void CheckPopCapZlibMagic(byte[] header, string? filepath);
+
     }
 
     public unsafe class ZlibBase
     {
 
-        public unsafe readonly byte[] header = new byte[] { 0xD4, 0xFE, 0xAD, 0xDE };
+        public unsafe readonly byte[] magic = new byte[] { 0xD4, 0xFE, 0xAD, 0xDE };
 
         public unsafe readonly byte[] blank = new byte[] { 0x00, 0x00, 0x00, 0x00 };
     }
@@ -40,6 +44,15 @@ namespace Sen.Shell.Modules.Support.Compress
     {
         public PopCapZlib() { }
 
+        public override void CheckPopCapZlibMagic(byte[] header, string? filepath)
+        {
+            var testMagic = header.Take(4).ToArray();
+            var zlib_base = new ZlibBase();
+            if (!testMagic.SequenceEqual<byte>(zlib_base.magic))
+            {
+                throw new ZlibException($"mismatch_popcap_zlib_magic", filepath ?? "undefined");
+            };
+        }
 
         public override unsafe byte[] ZlibCompress(ZlibCompress options)
         {
@@ -64,9 +77,9 @@ namespace Sen.Shell.Modules.Support.Compress
                 }
                 var bytes = options.Use64BitVariant switch
                 {
-                    true => Buffer.Concat(((ZlibBase*)zlib_base_ptr)->header, ((ZlibBase*)zlib_base_ptr)->blank, 
+                    true => Buffer.Concat(((ZlibBase*)zlib_base_ptr)->magic, ((ZlibBase*)zlib_base_ptr)->blank, 
                     (*(byte[]*)bits_ptr)),
-                    false => Buffer.Concat(((ZlibBase*)zlib_base_ptr)->header, (*(byte[]*)bits_ptr))
+                    false => Buffer.Concat(((ZlibBase*)zlib_base_ptr)->magic, (*(byte[]*)bits_ptr))
                 };
                 var buffer = Buffer.From(bytes).ToArray();
                 var compress = new Compress();
@@ -84,6 +97,7 @@ namespace Sen.Shell.Modules.Support.Compress
             void* file_stream = &fs;
             var ripe_data = ((FileSystem*)file_stream)->ReadBytes(ripefile);
             Marshal.FreeHGlobal((IntPtr)file_stream);
+            this.CheckPopCapZlibMagic(ripe_data, ripefile);
             var buffer = use64bitvariant switch
             {
                 true => Buffer.Slice(ripe_data, 16, ripe_data.Length - 16),

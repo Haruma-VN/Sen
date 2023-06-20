@@ -2,6 +2,7 @@
 using Sen.Shell.Modules.Support.PvZ2.RTON;
 using Sen.Shell.Modules.Support.PvZ2.PAM;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
+using Sen.Shell.Modules.Support.PvZ2.RSB;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Compress;
 using Sen.Shell.Modules.Standards;
@@ -26,15 +27,15 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void FlashAnimationtoPAM(string inFolder, string outFile, ExtraInfo extraInfo);
 
-        public abstract PacketInfo RSGUnpack(string inFile, string outFolder);
+        public abstract PacketInfo RSGUnpack(string inFile, string outFolder, bool useResDirectory);
 
         public abstract void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile, ZlibCompressionLevel zlib_level);
 
         public abstract void PopCapZlibUncompress(string ripefile, bool use64bitvariant, string outFile);
 
-        public abstract void RSGPack(string inFolder, string outFile, PacketInfo packet_info);
+        public abstract void RSGPack(string inFolder, string outFile, PacketInfo packet_info, bool useResDirectory);
 
-        public abstract void RSBUnpack(string inRSBpath, string outFolder);
+        public abstract MainfestInfo RSBUnpack(string inRSBpath, string outFolder);
 
         public abstract void RSBPack(string RSBDirectory, string outRSB);
 
@@ -45,6 +46,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public abstract void WWiseSoundBankDecode(string bnk_in, string bnk_dir_out);
 
         public abstract void WWiseSoundBankEncode(string soundbank_dir, string out_bnk);
+
+        public abstract RSB_head ProcessRSBData(string infile);
 
 
     }
@@ -112,21 +115,22 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override PacketInfo RSGUnpack(string inFile, string outFolder) {
+        public override PacketInfo RSGUnpack(string inFile, string outFolder, bool useResDirectory = true) {
             var RsgFile = new SenBuffer(inFile);
-            var PacketInfo = RSGFunction.Unpack(RsgFile, outFolder);
+            var PacketInfo = RSGFunction.Unpack(RsgFile, outFolder, useResDirectory);
             return PacketInfo;
         }
 
-        public override void RSGPack(string inFolder, string outFile, PacketInfo packet_info) {
-            var RSGFile = RSGFunction.Pack(inFolder, packet_info);
+        public override void RSGPack(string inFolder, string outFile, PacketInfo packet_info, bool useResDirectory = true) {
+            var RSGFile = RSGFunction.Pack(inFolder, packet_info, useResDirectory);
             RSGFile.OutFile(outFile);
             return;
         }
 
-        public override void RSBUnpack(string inRSBpath, string outFolder)
+        public override MainfestInfo RSBUnpack(string inRSBpath, string outFolder)
         {
-            return;
+            var buffer = new SenBuffer(inRSBpath);
+            return RSBFunction.Unpack(buffer, outFolder);
         }
 
         public override void RSBPack(string RSBDirectory, string outRSB)
@@ -174,6 +178,12 @@ namespace Sen.Shell.Modules.Support.PvZ2
             var fs = new FileSystem();
             fs.OutFile<byte[]>(outFile, uncompresszlib_data);
             return;
+        }
+
+        public override RSB_head ProcessRSBData(string infile)
+        {
+            var buffer = new SenBuffer(infile);
+            return RSBFunction.ReadHead(buffer);
         }
     }
 }

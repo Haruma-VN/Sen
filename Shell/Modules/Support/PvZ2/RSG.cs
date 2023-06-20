@@ -1,17 +1,16 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
+using System.Text.Json.Serialization;
 using Sen.Shell.Modules.Standards;
 
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
 {
+#pragma warning disable SYSLIB0020
     using Compress = Standards.Compress;
-
-    using DotNetZlib = Sen.Shell.Modules.Support.Compress.Other.Zlib;
-
     public class PacketInfo
     {
-        public int head_version { get; set; }
+        public int version { get; set; }
 
         public int compression_flags { get; set; }
 
@@ -29,6 +28,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         public int id { get; set; }
         public int width { get; set; }
         public int height { get; set; }
+        public int? format { get; set; }
     }
 
     public class RSG_head
@@ -96,7 +96,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             {120, 156},
             {120, 218},
         };
-        public static PacketInfo Unpack(SenBuffer RsgFile, string outFolder)
+        public static PacketInfo Unpack(SenBuffer RsgFile, string outFolder, bool UseResFolder = true)
         {
             RSG_head HeadInfo = ReadRSG_Head(RsgFile);
             part0List.Clear();
@@ -114,7 +114,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 {
                     fileData = new byte[part0List[i].size];
                     Array.Copy(part0RawData, (long)part0List[i].offset, fileData, 0, (long)part0List[i].size);
-                    fs.OutFile($"{outFolder}/res/{part0List[i].path}", fileData);
+                    fs.OutFile(UseResFolder ? $"{outFolder}/res/{part0List[i].path}" : $"{outFolder}/{part0List[i].path}", fileData);
                     resInfo.Add(new ResInfo
                     {
                         path = part0List[i].path,
@@ -129,7 +129,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 {
                     fileData = new byte[part1List[i].size];
                     Array.Copy(part1RawData, (long)part1List[i].offset, fileData, 0, (long)part1List[i].size);
-                    fs.OutFile($"{outFolder}/res/{part1List[i].path}", fileData);
+                    fs.OutFile(UseResFolder ? $"{outFolder}/res/{part1List[i].path}" : $"{outFolder}/{part1List[i].path}", fileData);
                     resInfo.Add(new ResInfo
                     {
                         path = part1List[i].path,
@@ -144,7 +144,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             }
             PacketInfo packetInfo = new PacketInfo
             {
-                head_version = HeadInfo.version,
+                version = HeadInfo.version,
                 compression_flags = HeadInfo.flags,
                 res = resInfo.ToArray(),
             };
@@ -297,18 +297,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             }
         }
         // Pack RSG
-        public static SenBuffer Pack(string inFolder, PacketInfo packetInfo)
+        public static SenBuffer Pack(string inFolder, PacketInfo packetInfo, bool UseResFolder = true)
         {
-            if (packetInfo.head_version != 3 && packetInfo.head_version != 4) throw new Exception("RSG version out of range");
+            if (packetInfo.version != 3 && packetInfo.version != 4) throw new Exception("RSG version out of range");
             if (packetInfo.compression_flags < 0 || packetInfo.compression_flags > 3) throw new Exception("RSG compression flags out of range");
             var RSGFile = new SenBuffer();
             RSGFile.writeString(RSG_head.magic);
-            RSGFile.writeInt32LE(packetInfo.head_version);
+            RSGFile.writeInt32LE(packetInfo.version);
             RSGFile.writeNull(8);
             RSGFile.writeInt32LE(packetInfo.compression_flags);
             RSGFile.writeNull(72);
             var pathTemps = FileListPack(packetInfo.res);
-            WriteRSG(RSGFile, pathTemps, packetInfo.compression_flags, inFolder);
+            WriteRSG(RSGFile, pathTemps, packetInfo.compression_flags, inFolder, UseResFolder);
             return RSGFile;
         }
 
@@ -367,7 +367,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             return pathTemps;
         }
 
-        private static void WriteRSG(SenBuffer RSGFile, List<PathTemp> pathTemps, int compression_flags, string inFolder)
+        private static void WriteRSG(SenBuffer RSGFile, List<PathTemp> pathTemps, int compression_flags, string inFolder, bool UseResFolder = true)
         {
             var pathTempLength = pathTemps.Count;
             var fileListBeginOffset = RSGFile.writeOffset;
@@ -388,7 +388,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 {
                     RSGFile.writeInt24LE(pathTemps[i].positions[h].position, beginOffset + pathTemps[i].positions[h].offset * 4 + 1);
                 }
-                byte[] dataItem = fs.ReadBytes($"{inFolder}/res/{PacketResInfo.path}");
+                byte[] dataItem = fs.ReadBytes(UseResFolder ? $"{inFolder}/res/{PacketResInfo.path}" : $"{inFolder}/{PacketResInfo.path}");
                 int appendLength = BeautifyLength(dataItem.Length);
                 if (pathTemps[i].isAtlas)
                 {
