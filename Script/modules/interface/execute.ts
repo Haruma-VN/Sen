@@ -209,12 +209,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_rsg_unpack": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.packet`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.packet`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(arg, output_argument);
                     });
                 }
@@ -223,12 +223,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_rsg_pack": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rsg`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rsg`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(arg, output_argument);
                     });
                 }
@@ -237,12 +237,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_rsb_unpack": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name}.bundle`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     PvZ2Shell.RSBUnpack(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name}.bundle`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         PvZ2Shell.RSBUnpack(arg, output_argument);
                     });
                 }
@@ -251,12 +251,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_rsb_pack": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.RSBPack(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.RSBPack(arg, output_argument);
                     });
                 }
@@ -265,12 +265,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_unofficial_resources_to_official_resources": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/resources.json`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/resources.json`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(arg, output_argument);
                     });
                 }
@@ -279,12 +279,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_unofficial_resources_split": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json.info`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json.info`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(arg, output_argument);
                     });
                 }
@@ -293,7 +293,7 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_official_pam_from_flash_animation": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.FlashAnimationtoPAM(
                         argument,
                         output_argument,
@@ -302,7 +302,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.FlashAnimationtoPAM(
                             arg,
                             output_argument,
@@ -315,12 +315,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_rton_to_json": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.RTONDecode(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.RTONDecode(arg, output_argument);
                     });
                 }
@@ -329,12 +329,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_json_to_rton": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rton`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.RTONEncode(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rton`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.RTONEncode(arg, output_argument);
                     });
                 }
@@ -343,12 +343,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_unofficial_resources_merge": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeUnofficialJson.CreateConversion(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(arg, output_argument);
                     });
                 }
@@ -361,7 +361,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<int> =
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.png`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(argument, output_argument, dimension.width, dimension.height, encode);
                 } else {
                     argument.forEach((arg: string) => {
@@ -370,7 +370,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<int> =
                             Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputDimension();
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.png`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
                             argument,
                             output_argument,
@@ -401,14 +401,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                     const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.ptx`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(argument, output_argument, encode);
                 } else {
                     argument.forEach((arg: string) => {
                         const encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial =
                             Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.InputEncode();
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.ptx`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(argument, output_argument, encode);
                     });
                 }
@@ -417,12 +417,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_official_resources_split": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.res`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.res`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(arg, output_argument);
                     });
                 }
@@ -431,12 +431,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_official_resources_merge": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(arg, output_argument);
                     });
                 }
@@ -528,12 +528,12 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "popcap_official_pam_to_pam_json": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam.json`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimationJson(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam.json`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimationJson(arg, output_argument);
                     });
                 }
@@ -547,7 +547,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         `resolution`
                     );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.xfl`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimateAdobeFlashAnimation(argument, output_argument, resolution);
                 } else {
                     argument.forEach((arg: string) => {
@@ -557,7 +557,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             `resolution`
                         );
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.xfl`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimateAdobeFlashAnimation(arg, output_argument, resolution);
                     });
                 }
@@ -571,7 +571,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     const output_argument: string = Path.Resolve(
                         `${Path.Dirname(argument)}/${Path.Parse(Path.Parse(argument).name_without_extension).name_without_extension}.pam`
                     );
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimation(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
@@ -581,7 +581,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Path.Resolve(
                             `${Path.Dirname(arg)}/${Path.Parse(Path.Parse(arg).name_without_extension).name_without_extension}.pam`
                         );
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimation(arg, output_argument);
                     });
                 }
@@ -600,7 +600,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         `output_res`
                     );
                     const output_argument: string = Path.Resolve(argument.replace(original.toString(), modified.toString()));
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(
                         argument,
                         original,
@@ -620,7 +620,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             `output_res`
                         );
                         const output_argument: string = Path.Resolve(arg.replace(original.toString(), modified.toString()));
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(
                             arg,
                             original,
@@ -637,7 +637,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(argument)
                     );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam.json`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
@@ -645,7 +645,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(arg)
                         );
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(arg, output_argument);
                     });
                 }
@@ -657,7 +657,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(argument)
                     );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.xfl`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                         Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                         `${MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
@@ -670,7 +670,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(arg)
                         );
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.xfl`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                             `${MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
@@ -702,7 +702,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         ) as 0 | 1
                     );
                     const output_argument: string = Path.Resolve(`${argument}.bin`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
@@ -725,7 +725,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 0 | 1
                         );
                         const output_argument: string = Path.Resolve(`${arg}.bin`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument);
                     });
                 }
@@ -752,7 +752,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         ) as 0 | 1
                     );
                     const output_argument: string = Path.Resolve(`${argument}.bin`);
-                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.PopCapZlibUncompress(argument, use_64bit_variant, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
@@ -775,7 +775,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 0 | 1
                         );
                         const output_argument: string = Path.Resolve(`${arg}.bin`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.PopCapZlibUncompress(arg, use_64bit_variant, output_argument);
                     });
                 }

@@ -554,7 +554,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     );
                 }
                 const output_argument: string = Path.Resolve(`${Path.Dirname(directory_path)}/${parent_name}.png`);
-                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                 DotNetBitmap.CompositeImages(
                     max_rects_collections[i],
                     `${parent_name}.png`,
@@ -564,7 +564,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 );
             }
             const output_argument: string = Path.Resolve(`${Path.Resolve(Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`);
-            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument);
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
             Sen.Script.Modules.FileSystem.Json.WriteJson<resource_atlas_and_sprites>(
                 `${Path.Resolve(Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`,
                 subgroup_output
