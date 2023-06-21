@@ -989,6 +989,12 @@ namespace Sen.Script.Modules.Exceptions {
                 );
             }
         }
+        if (Sen.Script.Modules.System.Default.Localization.notification) {
+            DotNetPlatform.SendNotification(
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, (error as Error).message),
+                `Sen`
+            );
+        }
         Console.Printf(
             null,
             (error as Error).stack !== null && (error as Error).stack !== undefined && (error as Error).stack !== void 0 && "stack" in (error as Error)

@@ -6,14 +6,25 @@ using Sen.Shell.Modules.Support.PvZ2.RSB;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Compress;
 using Sen.Shell.Modules.Standards;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
+
+    public struct RTONHead
+    {
+        public string magic;
+        public string end;
+        public int version;
+    }
+
+
     public abstract class PvZ2ShellAbstract
     {
-        public abstract void RTONDecode(string inFile, string outFile);
+        public abstract void RTONDecode(string inFile, string outFile, bool DecryptRTON);
 
-        public abstract void RTONEncode(string inFile, string outFile);
+        public abstract void RTONEncode(string inFile, string outFile, bool EncryptRTON);
 
         public abstract PAMInfo PAMtoPAMJSON(string inFile);
 
@@ -49,24 +60,26 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract RSB_head ProcessRSBData(string infile);
 
+        public abstract RTONHead ProcessRTONData(string infile);
+
 
     }
 
     public class PvZ2Shell : PvZ2ShellAbstract
     {
-        public override void RTONDecode(string inFile, string outFile)
+        public override void RTONDecode(string inFile, string outFile, bool DecryptRTON = false)
         {
             var RtonFile = new SenBuffer(inFile);
-            var JsonFile = RTONProcession.Decode(RtonFile, false);
+            var JsonFile = RTONProcession.Decode(RtonFile, DecryptRTON);
             JsonFile.OutFile(outFile);
             return;
         }
 
-        public override void RTONEncode(string inFile, string outFile)
+        public override void RTONEncode(string inFile, string outFile, bool EncryptRTON = false)
         {
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new FileSystem();
             var JsonFile = fs.ReadBytes(inFile);
-            var RtonFile = RTONProcession.Encode(JsonFile, false);
+            var RtonFile = RTONProcession.Encode(JsonFile, EncryptRTON);
             RtonFile.OutFile(outFile);
             return;
         }
@@ -184,6 +197,29 @@ namespace Sen.Shell.Modules.Support.PvZ2
         {
             var buffer = new SenBuffer(infile);
             return RSBFunction.ReadHead(buffer);
+        }
+
+        public override RTONHead ProcessRTONData(string infile)
+        {
+            RTONProcession.R0x90List.Clear();
+            RTONProcession.R0x92List.Clear();
+            var stream = new MemoryStream();
+            var RtonFile = new SenBuffer(infile);
+            var Rton_magic = RtonFile.readString(4);
+            var Rton_ver = RtonFile.readUInt32LE();
+            var jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                Indented = true
+            });
+            RTONProcession.ReadObject(RtonFile, jsonWriter);
+            var EOF = RtonFile.readString(4);
+            return new RTONHead()
+            {
+                version = (int)Rton_ver,
+                magic = Rton_magic,
+                end = EOF
+            };
         }
     }
 }

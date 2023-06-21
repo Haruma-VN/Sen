@@ -411,12 +411,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    PvZ2Shell.RTONDecode(argument, output_argument);
+                    PvZ2Shell.RTONDecode(argument, output_argument, false);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.RTONDecode(arg, output_argument);
+                        PvZ2Shell.RTONDecode(arg, output_argument, false);
                     });
                 }
                 break;
@@ -425,12 +425,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rton`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    PvZ2Shell.RTONEncode(argument, output_argument);
+                    PvZ2Shell.RTONEncode(argument, output_argument, false);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rton`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.RTONEncode(arg, output_argument);
+                        PvZ2Shell.RTONEncode(arg, output_argument, false);
                     });
                 }
                 break;

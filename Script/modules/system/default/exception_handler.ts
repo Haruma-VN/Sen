@@ -2,6 +2,7 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
     /**
      * @package Script loaded to the Sen
      */
+
     export const ScriptModules: Array<string> = [
         ...new Set([
             Path.Resolve(`${MainScriptDirectory}/modules/constraints/compression.js`),
@@ -23,6 +24,9 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/resize.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/animation/encode.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/argument/input.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rsg/encode.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rsb/unpack.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/assert.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/arguments.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/execute.js`),
@@ -81,6 +85,15 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
                                 ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
                                 ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
                         );
+                        if (Sen.Script.Modules.System.Default.Localization.notification) {
+                            DotNetPlatform.SendNotification(
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).message)
+                                ),
+                                `Sen`
+                            );
+                        }
                         break;
                     }
                     case Sen.Script.Modules.Exceptions.StandardsException.PAMException: {
@@ -94,6 +107,15 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
                                 ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
                                 ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
                         );
+                        if (Sen.Script.Modules.System.Default.Localization.notification) {
+                            DotNetPlatform.SendNotification(
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).message)
+                                ),
+                                `Sen`
+                            );
+                        }
                     }
                     case Sen.Script.Modules.Exceptions.StandardsException.ZlibException: {
                         Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((ex as DotNetSystem.RuntimeException).file_path ??= "undefined"));
@@ -106,6 +128,15 @@ namespace Sen.Script.Modules.System.Default.Exceptions.Handler {
                                 ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
                                 ?.replace(/(\s)at(\s)/g, DotNetPlatform.IsUTF8Support() ? " ▶ " : " > ")
                         );
+                        if (Sen.Script.Modules.System.Default.Localization.notification) {
+                            DotNetPlatform.SendNotification(
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString((ex as DotNetSystem.RTONDecodeException).message)
+                                ),
+                                `Sen`
+                            );
+                        }
                     }
                     default: {
                         throw new Error(ex as any);

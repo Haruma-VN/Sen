@@ -1240,7 +1240,7 @@ declare namespace DotNetSystem {
             public message: string,
             public file_path: string,
             public expected: string,
-            public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Check.RTONListException
+            public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONListException
         ): void;
     }
 }
@@ -1489,7 +1489,7 @@ declare namespace PvZ2Shell {
      * @param outFile - Pass JSON output here
      * @returns RTON2JSON
      */
-    export function RTONDecode(inFile: string, outFile: string): void;
+    export function RTONDecode(inFile: string, outFile: string, decryptRTON: boolean): void;
     /**
      *
      * @param inFile - Pass JSON file here
@@ -1497,7 +1497,7 @@ declare namespace PvZ2Shell {
      * @returns JSON2RTON
      */
 
-    export function RTONEncode(inFile: string, outFile: string): void;
+    export function RTONEncode(inFile: string, outFile: string, encryptRTON: boolean): void;
     /**
      *
      * @param inFile - Pass PAM file here
@@ -1611,6 +1611,12 @@ declare namespace PvZ2Shell {
      */
 
     export function ProcessRSBData(inRSB: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead;
+    /**
+     *
+     * @param inRTON - Pass RTON
+     */
+
+    export function ProcessRTONData(inRTON: string): Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONHead;
 }
 
 /**

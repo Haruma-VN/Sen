@@ -156,8 +156,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         {
             R0x90List.Clear();
             R0x92List.Clear();
-            Stream stream = new MemoryStream();
-            Utf8JsonWriter jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions
+            var stream = new MemoryStream();
+            var jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 Indented = true
@@ -456,7 +456,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             }
         }
 
-        private static void ReadObject(SenBuffer RtonFile, Utf8JsonWriter jsonWriter)
+        public static void ReadObject(SenBuffer RtonFile, Utf8JsonWriter jsonWriter)
         {
             jsonWriter.WriteStartObject();
             byte bytecode = RtonFile.readUInt8();
@@ -492,12 +492,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         //Json to Rton
         public static SenBuffer Encode(byte[] JsonBuffer, bool EncryptFile)
         {
-            List.StringPool R0x90 = new List.StringPool();
-            List.StringPool R0x92 = new List.StringPool();
-            Stream stream = new MemoryStream(JsonBuffer);
-            JsonDocument Json = JsonDocument.Parse(stream, new JsonDocumentOptions { AllowTrailingCommas = true });
-            JsonElement root = Json.RootElement;
-            SenBuffer RtonFile = new SenBuffer();
+            var R0x90 = new List.StringPool();
+            var R0x92 = new List.StringPool();
+            var stream = new MemoryStream(JsonBuffer);
+            var Json = JsonDocument.Parse(stream, new JsonDocumentOptions { AllowTrailingCommas = true });
+            var root = Json.RootElement;
+            var RtonFile = new SenBuffer();
             RtonFile.writeString(magic);
             RtonFile.writeUInt32LE(version);
             WriteObject(RtonFile, root, R0x90, R0x92);
@@ -511,7 +511,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
 
         private static bool IsASCII(string str)
         {
-            for (int i = 0; i < str.Length; i++)
+            for (var i = 0; i < str.Length; i++)
             {
                 if (str[i] > 127) return false;
             }
@@ -598,7 +598,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                     string str2 = newstr[(index + 1)..];
                     bool isr8302 = true;
                     int dot1index = 0, dot2index = 0, dindex = 0;
-                    for (int i = 0; i < str1.Length; i++)
+                    for (var i = 0; i < str1.Length; i++)
                     {
                         if (str1[i] == '.')
                         {

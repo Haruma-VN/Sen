@@ -201,7 +201,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
                 const resources_json_path: string = Path.Resolve(
                     `${Path.Dirname(resources_rton_path)}/${Path.Parse(resources_rton_path).name_without_extension}.json`
                 );
-                PvZ2Shell.RTONDecode(resources_rton_path, resources_json_path);
+                PvZ2Shell.RTONDecode(resources_rton_path, resources_json_path, false);
                 Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                     resources_json_path,
                     Path.Resolve(`${outDirectory}/res.json`),
