@@ -1617,6 +1617,12 @@ declare namespace PvZ2Shell {
      */
 
     export function ProcessRTONData(inRTON: string): Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONHead;
+    /**
+     *
+     * @param inPAM - Pass PAM
+     */
+
+    export function ProcessPAMData(inPAM: string): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PAMHeader;
 }
 
 /**

@@ -389,20 +389,19 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    PvZ2Shell.FlashAnimationtoPAM(
-                        argument,
-                        output_argument,
-                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(`${argument}/extra.json`)
+                    const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
+                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${argument}/extra.json`)
                     );
+                    Sen.Script.Modules.FileSystem.Json.WriteJson(`${argument}/extra5.json`, extra);
+                    PvZ2Shell.FlashAnimationtoPAM(argument, output_argument, extra);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.FlashAnimationtoPAM(
-                            arg,
-                            output_argument,
-                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(`${arg}/extra.json`)
+                        const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
+                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${arg}/extra.json`)
                         );
+                        PvZ2Shell.FlashAnimationtoPAM(arg, output_argument, extra);
                     });
                 }
                 break;
@@ -728,9 +727,6 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_pam_json_from_flash_animation": {
                 if (!Array.isArray(argument)) {
-                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
-                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(argument)
-                    );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam.json`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(argument, output_argument);
@@ -748,9 +744,6 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_official_pam_json_to_flash_animation": {
                 if (!Array.isArray(argument)) {
-                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
-                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(argument)
-                    );
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.xfl`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(

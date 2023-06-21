@@ -6,12 +6,10 @@ using Sen.Shell.Modules.Support.PvZ2.RSB;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Compress;
 using Sen.Shell.Modules.Standards;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-
 namespace Sen.Shell.Modules.Support.PvZ2
 {
 
+    #region RTONHead
     public struct RTONHead
     {
         public string magic;
@@ -19,6 +17,21 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public int version;
     }
 
+    #endregion
+
+
+    #region PAMHead
+
+    public struct PAMHeader
+    {
+        public uint magic;
+        public int version;
+        public int frame_rate;
+    }
+
+    #endregion
+
+    #region PvZ2Shell
 
     public abstract class PvZ2ShellAbstract
     {
@@ -62,8 +75,14 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract RTONHead ProcessRTONData(string infile);
 
+        public abstract PAMHeader ProcessPAMData(string inFile);
+
 
     }
+
+    #endregion
+
+    #region Functions
 
     public class PvZ2Shell : PvZ2ShellAbstract
     {
@@ -201,19 +220,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public override RTONHead ProcessRTONData(string infile)
         {
-            RTONProcession.R0x90List.Clear();
-            RTONProcession.R0x92List.Clear();
-            var stream = new MemoryStream();
             var RtonFile = new SenBuffer(infile);
             var Rton_magic = RtonFile.readString(4);
             var Rton_ver = RtonFile.readUInt32LE();
-            var jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                Indented = true
-            });
-            RTONProcession.ReadObject(RtonFile, jsonWriter);
-            var EOF = RtonFile.readString(4);
+            var EOF = RtonFile.readString(4, RtonFile.length - 4);
             return new RTONHead()
             {
                 version = (int)Rton_ver,
@@ -221,5 +231,21 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 end = EOF
             };
         }
+
+        public override PAMHeader ProcessPAMData(string inFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var magic = buffer.readUInt32LE();
+            int version = buffer.readInt32LE();
+            int frame_rate = buffer.readUInt8();
+            return new PAMHeader()
+            {
+                version = version,
+                frame_rate = frame_rate,
+                magic = magic,
+            };
+        }
+
+        #endregion
     }
 }

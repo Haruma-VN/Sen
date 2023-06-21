@@ -395,7 +395,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public static PAMInfo Decode(SenBuffer PamFile)
         {
             uint PAM_magic = PamFile.readUInt32LE();
-            if (PAM_magic != Magic.MagicNumber) throw new PAMException("Invalid PAM magic", PamFile.filePath ?? "undefined");
+            if (PAM_magic != Magic.MagicNumber)
+            {
+                throw new PAMException("Invalid PAM magic", PamFile.filePath ?? "undefined");
+            }
             int version = PamFile.readInt32LE();
             if (version > 6 || version < 1)
             {

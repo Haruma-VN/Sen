@@ -366,9 +366,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
         const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = PvZ2Shell.PAMJSONtoFlashAnimation(inFile, outputDirectory, resolution);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
             Path.Resolve(`${outputDirectory}/extra.json`),
-            extra_json
+            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json)
         );
         return;
     }
@@ -382,8 +382,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
 
     // FlashAnimationtoPAMJSON
     export function AnimateAdobeFlashAnimationToPopCapAnimationJson(inDirectory: string, outFile: string): void {
-        const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo =
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(Path.Resolve(`${inDirectory}/extra.json`));
+        const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
+                Path.Resolve(`${inDirectory}/extra.json`)
+            )
+        );
         const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = PvZ2Shell.FlashAnimationtoPAMJSON(
             inDirectory,
             extra_json
@@ -402,10 +405,111 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
 
     export function PopCapAnimationToAnimateAdobeFlashAnimation(inFile: string, outputDirectory: string, resolution: int): void {
         const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = PvZ2Shell.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo>(
+        const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
             Path.Resolve(`${outputDirectory}/extra.json`),
-            extra_json
+            extra
         );
         return;
+    }
+
+    /**
+     * Send from Shell
+     */
+
+    export interface PAMHeader {
+        magic: int;
+        version: int;
+        frame_rate: int;
+    }
+
+    export interface ExtraJsonForUser {
+        version: number;
+        frame_rate: number;
+        position: [int, int];
+        image: {
+            [image_string: string]: {
+                name: string;
+                width: int;
+                height: int;
+            };
+        };
+        sprite: {
+            [sprite_string: string]: string;
+        };
+        main_sprite: {
+            main_sprite: "";
+        };
+    }
+
+    /**
+     *
+     * @param information - Pass information
+     * @returns Convert Extra Json
+     */
+
+    export function ExtraJsonConvert(
+        information: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo
+    ): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser {
+        const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser = {
+            version: information.version,
+            frame_rate: information.frame_rate,
+            position: [information.position[0], information.position[1]],
+            image: {},
+            sprite: {},
+            main_sprite: {
+                main_sprite: "",
+            },
+        };
+        if ("image" in information) {
+            for (let i: number = 0; i < (information.image as ExtraImageInfo[]).length; ++i) {
+                extra.image[`image_${i + 1}`] = {
+                    name: (information.image as ExtraImageInfo[])[i].name as string,
+                    width: (information.image as ExtraImageInfo[])[i].size[0] as int,
+                    height: (information.image as ExtraImageInfo[])[i].size[1] as int,
+                };
+            }
+        }
+        if ("sprite" in information) {
+            for (let i: number = 0; i < (information.sprite as ExtraSpriteInfo[]).length; ++i) {
+                extra.sprite[`sprite_${i + 1}`] = ((information.sprite as ExtraSpriteInfo[])[i] as ExtraSpriteInfo).name as string;
+            }
+        }
+        return extra;
+    }
+
+    /**
+     *
+     * @param information - Pass information of extra json
+     * @returns Extra json readed by shell
+     */
+
+    export function ExtraJsonConvertBack(
+        information: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser
+    ): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo {
+        const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = {
+            version: information.version,
+            frame_rate: information.frame_rate,
+            position: information.position,
+            image: [],
+            sprite: [],
+            main_sprite: {
+                name: "",
+            },
+        };
+        const images: Array<string> = Object.keys(information.image);
+        for (let i: int = 0; i < images.length; ++i) {
+            (extra.image as Array<ExtraImageInfo>).push({
+                name: information.image[images[i]].name,
+                size: [information.image[images[i]].width, information.image[images[i]].height],
+            });
+        }
+        const sprites: Array<string> = Object.keys(information.sprite);
+        for (let i: int = 0; i < sprites.length; ++i) {
+            (extra.sprite as Array<ExtraSpriteInfo>).push({
+                name: sprites[i],
+            });
+        }
+        return extra;
     }
 }
