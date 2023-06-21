@@ -2,6 +2,7 @@
     "default": {
         "language": "English",
         "notification_when_finish": true,
-        "override": true
+        "override": true,
+        "use_trailing_commas": false
     }
 }

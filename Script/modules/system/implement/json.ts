@@ -16,8 +16,10 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      * @returns Stringify JSON as string
      */
 
-    export function StringifyJson<Generic_T>(serializedJson: Generic_T, indent: string | number = "\t"): string {
-        return JSON.stringify(serializedJson, null, indent);
+    export function StringifyJson<Generic_T>(serializedJson: Generic_T, indent: string | number = "\t", addTrailingCommas: boolean): string {
+        return addTrailingCommas
+            ? Sen.Script.Modules.FileSystem.Implement.JsonLibrary.AddTrailingCommas(JSON.stringify(serializedJson, null, indent))
+            : JSON.stringify(serializedJson, null, indent);
     }
 
     /**
@@ -276,5 +278,37 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
         }
 
         return result + buffer + (isInsideComment ? strip(jsonString.slice(offset)) : jsonString.slice(offset));
+    }
+
+    /**
+     *
+     * @param jsonData - Pass JSON Data
+     * @returns Trailing commas JSON
+     */
+
+    export function AddTrailingCommas(jsonData: string): string {
+        const data: Array<string> = jsonData.split("\n");
+        const lastLine: string | undefined = data.pop();
+        const modifiedData: Array<string> = data.map((line: string) => {
+            if (line.match(/^\s*[\[{]|[,{]\s*$/)) {
+                return line;
+            } else {
+                const trimmedLine = line.trim();
+                const lastChar = trimmedLine[trimmedLine.length - 1];
+                if (lastChar === "," || lastChar === "{" || lastChar === "[") {
+                    return line;
+                } else {
+                    return `${line},`;
+                }
+            }
+        });
+        if (lastLine && !lastLine.match(/^\s*[\]}]\s*$/)) {
+            modifiedData.push(`${lastLine},`);
+        } else if (lastLine) {
+            modifiedData.push(lastLine);
+        }
+        let result: string = modifiedData.join("\n");
+        result = result.replace(/({|\[)(\s*),(\s*)(}|])/g, "$1$2$4$5");
+        return result;
     }
 }

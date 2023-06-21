@@ -7,6 +7,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
             language: string;
             notification_when_finish: boolean;
             override: boolean;
+            use_trailing_commas: boolean;
         };
     };
 
@@ -31,6 +32,12 @@ namespace Sen.Script.Modules.System.Default.Localization {
      */
 
     export const override: boolean = Sen.Script.Modules.System.Default.Localization.EntryJson.default.override;
+
+    /**
+     * If enabled, json output will be trailing commas
+     */
+
+    export const use_trailing_commas: boolean = Sen.Script.Modules.System.Default.Localization.EntryJson.default.use_trailing_commas;
     /**
      *
      * @param property - Provide property to get

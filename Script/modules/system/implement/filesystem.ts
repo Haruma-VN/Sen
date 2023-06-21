@@ -8,7 +8,7 @@ namespace Sen.Script.Modules.FileSystem {
 
         public static ReadJson<Generic_T>(filePath: string): Generic_T {
             return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
-                Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8)
             );
         }
 
@@ -20,14 +20,14 @@ namespace Sen.Script.Modules.FileSystem {
          * @returns Writted JSON
          */
 
-        public static WriteJson<Generic_T>(
-            output_path: string,
-            serializedJson: Generic_T,
-            indent: string | number = "\t",
-        ): void {
+        public static WriteJson<Generic_T>(output_path: string, serializedJson: Generic_T, indent: string | number = "\t"): void {
             Fs.OutFile(
                 output_path,
-                Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent),
+                Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(
+                    serializedJson,
+                    indent,
+                    Sen.Script.Modules.System.Default.Localization.use_trailing_commas
+                )
             );
             return;
         }
@@ -49,12 +49,7 @@ namespace Sen.Script.Modules.FileSystem {
      * @returns True if match else False
      */
 
-    export function FilterFilePath(
-        filePath: string,
-        filters: Array<string>,
-        excludes: Array<string>,
-        file_type: filter_file_type = "unknown",
-    ): boolean {
+    export function FilterFilePath(filePath: string, filters: Array<string>, excludes: Array<string>, file_type: filter_file_type = "unknown"): boolean {
         switch (file_type) {
             case "directory": {
                 if (!Fs.DirectoryExists(filePath)) {
@@ -75,11 +70,8 @@ namespace Sen.Script.Modules.FileSystem {
             }
             default: {
                 throw new Sen.Script.Modules.Exceptions.MissingFileRequirement(
-                    Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(
-                        /\{\}/g,
-                        "",
-                    ),
-                    filePath,
+                    Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(/\{\}/g, ""),
+                    filePath
                 );
             }
         }
