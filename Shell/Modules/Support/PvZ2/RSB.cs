@@ -14,6 +14,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public required GroupInfo[] group { get; set; }
     }
 
+    public class MainfestInfoLite {
+        public required int version { get; set; }
+        public required string[] group { get; set; }
+    }
+
     public class RSBPathInfo
     {
         public required string[] rsgs { get; set; }
@@ -204,10 +209,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public static MainfestInfo Unpack(SenBuffer RSBFile, string outFolder)
         {
             var rsbHeadInfo = ReadHead(RSBFile);
-            var fs = new FileSystem();
-            var json = new JsonImplement();
             var fileList = new List<FileListInfo>();
-            fs.CreateDirectory(outFolder);
             FileListSplit(RSBFile, rsbHeadInfo.fileList_BeginOffset, rsbHeadInfo.fileListLength, ref fileList);
             var rsgList = new List<FileListInfo>();
             FileListSplit(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, ref rsgList);
@@ -289,7 +291,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     };
                     rsgNameList.Add(rsgInfoList[rsgInfoCount].name);
                     byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
-                    fs.OutFile($"{outFolder}/packet/{rsgInfoList[rsgInfoCount].name}.rsg", packetFile);
+                    SenBuffer wr = new SenBuffer(packetFile);
+                    wr.OutFile($"{outFolder}/packet/{rsgInfoList[rsgInfoCount].name}.rsg");
                     var packetInfoList = new PacketInfo
                     {
                         version = RSBFile.readInt32LE((long)rsgInfoList[rsgInfoCount].rsgOffset + 4),
@@ -320,7 +323,34 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 },
                 group = groupList.ToArray(),
             };
+            RSBFile.Close();
             return mainfest_info;
+        }
+
+        public static MainfestInfoLite PVZ2FastUnpack(SenBuffer RSBFile, string outFolder) {
+            int version = RSBFile.readInt32LE(4);
+            if (version != 4) throw new Exception("Only support version 4");
+            int rsgNumber = RSBFile.readInt32LE(40);
+            int rsgBeginOffset = RSBFile.readInt32LE();
+            int fileList = RSBFile.readInt32LE(108);
+            RSBFile.readOffset = rsgBeginOffset;
+            string[] rsgList = new string[rsgNumber];
+            for (var i = 0; i < rsgNumber; i++) {
+                var startOffset = RSBFile.readOffset;
+                string rsgName = RSBFile.readStringByEmpty();
+                int rsgLength = RSBFile.readInt32LE(startOffset + 132);
+                RSBFile.readOffset = startOffset + 204;
+                byte[] rsgFile = RSBFile.getBytes(rsgLength, fileList);
+                SenBuffer writer = new SenBuffer(rsgFile);
+                writer.SaveFile($"{outFolder}/packet/{rsgName}.rsg");
+                rsgList[i] = rsgName;
+                fileList += rsgLength;
+            }
+            RSBFile.Close();
+            return new MainfestInfoLite{
+                version = version,
+                group = rsgList
+            };
         }
 
         private static void ReadResoucesDescription(SenBuffer RSBFile, RSB_head rsbHeadInfo, string outFolder)
@@ -445,6 +475,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 RSBFile.RestoreReadOffset();
             }
             var fs = new FileSystem();
+            fs.CreateDirectory($"{outFolder}/description");
             fs.WriteJson($"{outFolder}/description.json", DescriptionGroup.ToArray());
         }
 
