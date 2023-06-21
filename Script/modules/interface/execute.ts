@@ -389,18 +389,23 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.pam`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
-                        Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${argument}/extra.json`)
-                    );
-                    Sen.Script.Modules.FileSystem.Json.WriteJson(`${argument}/extra5.json`, extra);
+                    const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo =
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
+                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
+                                `${argument}/extra.json`
+                            )
+                        );
                     PvZ2Shell.FlashAnimationtoPAM(argument, output_argument, extra);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
-                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${arg}/extra.json`)
-                        );
+                        const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo =
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
+                                Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
+                                    `${arg}/extra.json`
+                                )
+                            );
                         PvZ2Shell.FlashAnimationtoPAM(arg, output_argument, extra);
                     });
                 }
