@@ -907,6 +907,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             using var writer = XmlWriter.Create(outPath, settings);
             XDocument XDdocument = new(new XDeclaration("1.0", "utf-8", null), document);
             XDdocument.Save(writer);
+            return;
         }
 
         public virtual async Task SaveFileAsync(string path)

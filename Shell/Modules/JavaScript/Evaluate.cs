@@ -42,6 +42,8 @@ namespace Sen.Shell.Modules.JavaScript
             engine.SetValue("ShellVersion", new Version());
             engine.SetValue("ShellUpdate", new DownloadUpdate());
             engine.SetValue("Buffer", typeof(Implement.Buffer));
+            engine.SetValue("PvZ2XML", new Support.Flash.PvZ2XML());
+            engine.SetValue("XMLHelper", new Support.Flash.XmlHelper());
 
             try
             {
@@ -82,6 +84,8 @@ namespace Sen.Shell.Modules.JavaScript
             engine.SetValue("ShellVersion", new Version());
             engine.SetValue("ShellUpdate", new DownloadUpdate());
             engine.SetValue("Buffer", typeof(Implement.Buffer));
+            engine.SetValue("PvZ2XML", new Support.Flash.PvZ2XML());
+            engine.SetValue("XMLHelper", new Support.Flash.XmlHelper());
             engine.Execute(
                 fs.ReadText(path.Resolve($"{Script_Directory}/modules/system/default/exception_handler.js"), EncodingType.UTF8));
         }

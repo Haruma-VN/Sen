@@ -206,5 +206,6 @@
     "popcap_rsb_pack_simple": "PopCap RSB Pack Simple",
     "rton_are_encrypted": "RTONs inside Packages are encrypted?",
     "use_encrypted_rton_decrypt": "Decrypt encrypted RTONs",
-    "use_normal_rton": "RTONs are not Encrypted"
+    "use_normal_rton": "RTONs are not Encrypted",
+    "total_sprites_count": "Total Sprites Count: {}"
 }

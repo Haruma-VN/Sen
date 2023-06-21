@@ -5,8 +5,8 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      * @returns Deserialized JSON can be used by the tool
      */
 
-    export function ParseJson<Generic_T>(jsonText: string): Generic_T {
-        return JSON.parse(jsonText) as Generic_T;
+    export function ParseJson<Generic_T>(jsonText: string, useTrailingCommas: boolean): Generic_T {
+        return useTrailingCommas ? JSON.parse(StripJsonTrailingCommas(jsonText)) : (JSON.parse(jsonText) as Generic_T);
     }
 
     /**

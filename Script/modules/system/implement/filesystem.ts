@@ -8,7 +8,8 @@ namespace Sen.Script.Modules.FileSystem {
 
         public static ReadJson<Generic_T>(filePath: string): Generic_T {
             return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
-                Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8)
+                Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                Sen.Script.Modules.System.Default.Localization.use_trailing_commas
             );
         }
 

@@ -1825,3 +1825,31 @@ declare namespace Buffer {
         ToArray(): Array<byte>;
     }
 }
+
+/**
+ * XML namespace for PopCap Animation Animate Adobe XML
+ */
+
+namespace PvZ2XML {
+    /**
+     *
+     * @param index - Start index
+     * @param transform - Transform
+     * @param outpath - Output path
+     */
+    export function WriteImageDocument(index: int, transform: [double, double, double, double, double, double], outpath: string): void;
+    /**
+     *
+     * @param index - Start index
+     * @param name - Name of image
+     * @param outpath - Output path
+     */
+
+    export function WriteSourceDocument(index: int, name: string, resolution: int, outpath: string): void;
+}
+
+namespace XMLHelper {
+    export function Deserialize<T>(xml: string): T;
+
+    export function Serialize<T>(obj: T, out: string): string;
+}

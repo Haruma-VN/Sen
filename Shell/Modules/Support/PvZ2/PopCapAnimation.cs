@@ -940,9 +940,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         private const string k_xfl_version = "2.971";
 
-        private static XAttribute k_xmlns_attribute = new(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        public readonly static XAttribute k_xmlns_attribute = new(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
-        private static XNamespace xflns = "http://ns.adobe.com/xfl/2008/";
+        public readonly static XNamespace xflns = $"http://ns.adobe.com/xfl/2008/";
 
         private static double[] k_initial_transform = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
 
@@ -1154,9 +1154,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             );
         }
 
-        private static XElement WriteSourceDocument(int index, ImageInfo image, int resolution)
+        public static XElement WriteSourceDocument(int index, ImageInfo image, int resolution)
         {
-            XElement sourceDocument = new XElement("DOMSymbolItem",
+            var sourceDocument = new XElement("DOMSymbolItem",
                 k_xmlns_attribute,
                 new XAttribute("name", $"source/source_{index + 1}"),
                 new XAttribute("symbolType", "graphic"),
@@ -1185,9 +1185,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             );
             return sourceDocument;
         }
-        private static XElement WriteImageDocument(int index, ImageInfo image)
+        public static XElement WriteImageDocument(int index, ImageInfo image)
         {
-            XElement imageDocument = new XElement("DOMSymbolItem",
+            var imageDocument = new XElement("DOMSymbolItem",
                 k_xmlns_attribute,
                 new XAttribute("name", $"image/image_{index + 1}"),
                 new XAttribute("symbolType", "graphic"),
@@ -1231,7 +1231,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             );
             return imageDocument;
         }
-        private static XElement WriteSpriteDocument(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite)
+        public static XElement WriteSpriteDocument(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite)
         {
             Dictionary<int, Model> model = new();
             Dictionary<int, List<XElement>> frame_node_list = new();

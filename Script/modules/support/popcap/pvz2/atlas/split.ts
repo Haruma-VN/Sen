@@ -1096,6 +1096,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 Path.Resolve(`${directory_contains}/atlas.json`),
                 this.CreateAtlasJsonFromUnofficial(resources_used, method, json)
             );
+            Console.Print(null, Sen.Script.Modules.System.Default.Localization.GetString("total_sprites_count").replace(/\{\}/g, `${async_task.length}`));
             return;
         }
 
