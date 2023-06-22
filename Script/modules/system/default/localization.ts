@@ -9,11 +9,20 @@ namespace Sen.Script.Modules.System.Default.Localization {
             override: boolean;
             use_trailing_commas: boolean;
         };
+        additional: {
+            packed_codebooks_aoTuV_603: string;
+        };
     };
 
     export const EntryJson: Sen.Script.Modules.System.Default.Localization.entry_json = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(
         `${MainScriptDirectory}/modules/customization/entry.json`
     );
+
+    /**
+     * Destination
+     */
+
+    export const packed_codebooks_aoTuV_603: string = EntryJson.additional.packed_codebooks_aoTuV_603;
 
     /**
      * Tool language

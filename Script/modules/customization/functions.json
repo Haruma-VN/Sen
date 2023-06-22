@@ -204,5 +204,11 @@
         "include": [".bundle"],
         "exclude": [],
         "type": "directory"
+    },
+    "wwise_media_to_ogg": {
+        "func_number": 35,
+        "include": [".wem"],
+        "exclude": [],
+        "type": "file"
     }
 }

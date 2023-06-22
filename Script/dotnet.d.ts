@@ -1623,6 +1623,14 @@ declare namespace PvZ2Shell {
      */
 
     export function ProcessPAMData(inPAM: string): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PAMHeader;
+
+    /**
+     *
+     * @param inWEM - Pass wem path
+     * @param outOGG - Pass OGG output path
+     */
+
+    export function WemToOGG(inWEM: string, outOGG: string, destination: string, inlineCodebook: boolean, inlineSetup: boolean): void;
 }
 
 /**

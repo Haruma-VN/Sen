@@ -128,7 +128,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_zlib_compress"
         | "popcap_zlib_uncompress"
         | "popcap_rsb_unpack_simple"
-        | "popcap_rsb_pack_simple";
+        | "popcap_rsb_pack_simple"
+        | "wwise_media_to_ogg";
 
     /**
      *
@@ -145,6 +146,32 @@ namespace Sen.Script.Modules.Interface.Execute {
                     Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(argument);
                 } else {
                     argument.forEach((arg: string) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                }
+                break;
+            }
+            case "wwise_media_to_ogg": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.ogg`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    PvZ2Shell.WemToOGG(
+                        argument,
+                        output_argument,
+                        `${MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`,
+                        false,
+                        false
+                    );
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.ogg`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        PvZ2Shell.WemToOGG(
+                            arg,
+                            output_argument,
+                            `${MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`,
+                            false,
+                            false
+                        );
+                    });
                 }
                 break;
             }

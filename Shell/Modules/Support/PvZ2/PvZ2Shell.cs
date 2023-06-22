@@ -6,6 +6,8 @@ using Sen.Shell.Modules.Support.PvZ2.RSB;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Compress;
 using Sen.Shell.Modules.Standards;
+using WEMSharp;
+
 namespace Sen.Shell.Modules.Support.PvZ2
 {
 
@@ -76,6 +78,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public abstract RTONHead ProcessRTONData(string infile);
 
         public abstract PAMHeader ProcessPAMData(string inFile);
+
+        public abstract void WemToOGG(string inFile, string outFile, string destination, bool inlineCodebook, bool inlineSetup);
 
 
     }
@@ -245,6 +249,19 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 frame_rate = frame_rate,
                 magic = magic,
             };
+        }
+
+        public override void WemToOGG(string inFile, string outFile, string destination, bool inlineCodebook, bool inlineSetup)
+        {
+            try
+            {
+                var wem = new WEMFile(inFile, WEMForcePacketFormat.NoForcePacketFormat);
+                wem.GenerateOGG(outFile, destination, inlineCodebook, inlineSetup);
+                return;
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
         #endregion

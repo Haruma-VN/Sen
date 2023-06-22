@@ -217,5 +217,6 @@
     "ignore_encrypt": "Ignore for PvZ2-International Version RTONs",
     "convert_res_json_to_resources_json": "Generate Resources.json with official format",
     "convert_by_automatically": "Convert res.json to resources.json",
-    "use_legacy_resources_json": "Use existed Resources.json"
+    "use_legacy_resources_json": "Use existed Resources.json",
+    "wwise_media_to_ogg": "WEM to OGG"
 }
