@@ -2,9 +2,6 @@
 using Sen.Shell.Modules.JavaScript;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Download;
-using Esprima.Ast;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 namespace Sen.Shell
 {
