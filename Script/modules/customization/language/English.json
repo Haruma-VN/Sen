@@ -207,5 +207,15 @@
     "rton_are_encrypted": "RTONs inside Packages are encrypted?",
     "use_encrypted_rton_decrypt": "Decrypt encrypted RTONs",
     "use_normal_rton": "RTONs are not Encrypted",
-    "total_sprites_count": "Total Sprites Count: {}"
+    "total_sprites_count": "Total Sprites Count: {}",
+    "exception_raise": "Exception Raise: {}",
+    "execution_process": "Execution Processed: {}",
+    "converted_res_json_to_resources_json": "Converted res.json to RESOURCES.json",
+    "finish_rsg_pack": "Finished PopCap RSG Pack for {}",
+    "encrypt_pvz2_rtons": "Encrypt Packages RTONs for PvZ2-Chinese Version",
+    "encrypt_pvz2_rtons_for_pvz2c": "Encrypt All RTONs inside PROPERTIES",
+    "ignore_encrypt": "Ignore for PvZ2-International Version RTONs",
+    "convert_res_json_to_resources_json": "Generate Resources.json with official format",
+    "convert_by_automatically": "Convert res.json to resources.json",
+    "use_legacy_resources_json": "Use existed Resources.json"
 }

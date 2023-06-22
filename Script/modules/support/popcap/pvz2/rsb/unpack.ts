@@ -118,44 +118,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
         return manifest_info;
     }
-
-    /**
-     *
-     * @param information - Pass information deserialize manifest
-     * @returns Workaround manifest (Only for for the shell)
-     */
-
-    export function ConvertFromManifest(
-        information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation
-    ): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
-        const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = {
-            version: information.version as 3 | 4,
-            group: [],
-        } satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
-        const groups: Array<string> = Object.keys(information.group);
-        for (const group of groups) {
-            const infox: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo = {
-                name: group,
-                is_composite: information.group[group].is_composite,
-                subgroup: [],
-            };
-            const subgroups: Array<string> = Object.keys(information.group[group].subgroup);
-            for (const subgroup of subgroups) {
-                const construct_data: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo = {
-                    name_packet: subgroup,
-                    category: information.group[group].subgroup[subgroup].category,
-                    packet_info: information.group[group].subgroup[subgroup].packet_info,
-                };
-                construct_data.packet_info.res.forEach((res) => {
-                    res.path = (res.path as Array<string>).join("\\");
-                });
-                infox.subgroup.push(construct_data);
-            }
-            manifest_info.group.push(infox);
-        }
-        return manifest_info;
-    }
-
     /**
      *
      * @param inRSB - Pass RSB
@@ -193,7 +155,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
                 outDirectory
             ) as Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
         const manifest_group: string | undefined = manifest_additional_information.path?.rsgs.find((rsg: string) => /__MANIFESTGROUP__(.+)?/i.test(rsg));
-        const packages: string | undefined = manifest_additional_information.path?.rsgs.find((rsg: string) => /Packages(.+)?/i.test(rsg));
+        const packages: string | undefined = manifest_additional_information.path?.rsgs.find(
+            (rsg: string) => /Packages(.+)?/i.test(rsg) && rsg.toUpperCase() === "PACKAGES"
+        );
         if (manifest_group) {
             PvZ2Shell.RSGUnpack(Path.Resolve(`${outDirectory}/packet/${manifest_group}.rsg`), Path.Resolve(`${outDirectory}/resource`), false);
             const resources_rton_path: string = Path.Resolve(`${outDirectory}/resource/PROPERTIES/RESOURCES.RTON`);
@@ -208,9 +172,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
                     information.expand_path
                 );
             }
+            Fs.DeleteFile(Path.Resolve(`${outDirectory}/packet/${manifest_group}.rsg`));
         }
         if (packages) {
             PvZ2Shell.RSGUnpack(Path.Resolve(`${outDirectory}/packet/${packages}.rsg`), Path.Resolve(`${outDirectory}/resource`), false);
+            Fs.DeleteFile(Path.Resolve(`${outDirectory}/packet/${packages}.rsg`));
         }
         return;
     }

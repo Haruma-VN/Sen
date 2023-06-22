@@ -1584,7 +1584,7 @@ declare namespace PvZ2Shell {
      * @param outFile - Out RSB
      */
 
-    export function RSBPack(inDirectory: string, outFile: string): void;
+    export function RSBPack(inDirectory: string, outFile: string, manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo): void;
 
     /**
      *

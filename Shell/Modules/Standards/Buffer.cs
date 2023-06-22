@@ -441,9 +441,19 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public void writeString(string str, long offset = -1, string EncodingType = "UTF-8")
         {
+            fixWriteOffset(offset);
             Encoding encoding = Encoding.GetEncoding(EncodingType);
             byte[] str_bytes = encoding.GetBytes(str);
             writeBytes(str_bytes);
+        }
+
+        public void writeStringByEmpty(string str, long offset = -1) {
+            if (str == null) {
+                writeUInt8(0);
+                return;
+            }
+            writeString(str, offset);
+            writeUInt8(0);
         }
         
         public void writeNull(int count, long offset = -1)
@@ -907,7 +917,6 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             using var writer = XmlWriter.Create(outPath, settings);
             XDocument XDdocument = new(new XDeclaration("1.0", "utf-8", null), document);
             XDdocument.Save(writer);
-            return;
         }
 
         public virtual async Task SaveFileAsync(string path)

@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Sen.Shell.Modules.Standards
 {
@@ -64,6 +65,7 @@ namespace Sen.Shell.Modules.Standards
         {
             WriteIndented = true,
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
         public JsonImplement() { }

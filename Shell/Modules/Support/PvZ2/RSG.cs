@@ -1,5 +1,6 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
+using System.Text.Json.Serialization;
 using Sen.Shell.Modules.Standards;
 
 
@@ -95,40 +96,46 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             {120, 156},
             {120, 218},
         };
-        public static PacketInfo Unpack(SenBuffer RsgFile, string outFolder, bool UseResFolder = true)
+        public static PacketInfo Unpack(SenBuffer RsgFile, string outFolder, bool UseResFolder = true, bool GetPacketInfo = false)
         {
             RSG_head HeadInfo = ReadRSG_Head(RsgFile);
             part0List.Clear();
             part1List.Clear();
             FileListSplit(RsgFile, HeadInfo);
-            var json = new JsonImplement();
-            var fs = new FileSystem();
-            byte[] fileData;
+            var fileData = new SenBuffer();
+            var part0RawData = new SenBuffer();
+            var part1RawData = new SenBuffer();
             List<ResInfo> resInfo = new List<ResInfo>();
             int part0_Length = part0List.Count;
             if (part0_Length > 0)
             {
-                byte[] part0RawData = CheckZlib(RsgFile, HeadInfo, false);
+
+                if (!GetPacketInfo) part0RawData = new SenBuffer(CheckZlib(RsgFile, HeadInfo, false));
                 for (var i = 0; i < part0_Length; i++)
                 {
-                    fileData = new byte[part0List[i].size];
-                    Array.Copy(part0RawData, (long)part0List[i].offset, fileData, 0, (long)part0List[i].size);
-                    fs.OutFile(UseResFolder ? $"{outFolder}/res/{part0List[i].path}" : $"{outFolder}/{part0List[i].path}", fileData);
+                    if (!GetPacketInfo)
+                    {
+                        fileData = new SenBuffer(part0RawData.getBytes(part0List[i].size, part0List[i].offset));
+                        fileData.OutFile(UseResFolder ? $"{outFolder}/res/{part0List[i].path}" : $"{outFolder}/{part0List[i].path}");
+                    }
                     resInfo.Add(new ResInfo
                     {
                         path = part0List[i].path,
                     });
                 }
+                part0RawData.Close();
             }
             int part1_Length = part1List.Count;
             if (part1_Length > 0)
             {
-                byte[] part1RawData = CheckZlib(RsgFile, HeadInfo, true);
+                if (!GetPacketInfo) part1RawData = new SenBuffer(CheckZlib(RsgFile, HeadInfo, true));
                 for (var i = 0; i < part1_Length; i++)
                 {
-                    fileData = new byte[part1List[i].size];
-                    Array.Copy(part1RawData, (long)part1List[i].offset, fileData, 0, (long)part1List[i].size);
-                    fs.OutFile(UseResFolder ? $"{outFolder}/res/{part1List[i].path}" : $"{outFolder}/{part1List[i].path}", fileData);
+                    if (!GetPacketInfo)
+                    {
+                        fileData = new SenBuffer(part1RawData.getBytes(part1List[i].size, part1List[i].offset));
+                        fileData.OutFile(UseResFolder ? $"{outFolder}/res/{part1List[i].path}" : $"{outFolder}/{part1List[i].path}");
+                    }
                     resInfo.Add(new ResInfo
                     {
                         path = part1List[i].path,
@@ -140,6 +147,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                         }
                     });
                 }
+                part1RawData.Close();
             }
             PacketInfo packetInfo = new PacketInfo
             {
@@ -147,7 +155,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 compression_flags = HeadInfo.flags,
                 res = resInfo.ToArray(),
             };
-            RsgFile.Close();
+            if (!GetPacketInfo)
+            {
+                RsgFile.Close();
+            }
             return packetInfo;
         }
 
@@ -311,7 +322,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             return RSGFile;
         }
 
-        private static bool IsNotASCII(string str)
+        public static bool IsNotASCII(string str)
         {
             for (int i = 0; i < str.Length; i++)
             {
@@ -382,7 +393,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 var PacketResInfo = pathTemps[i].resInfo;
                 RSGFile.writeStringFourByte(pathTemps[i].pathSlice);
                 RSGFile.BackupWriteOffset();
-                var endOffset = RSGFile.writeOffset;
                 for (var h = 0; h < pathTemps[i].positions.Count; h++)
                 {
                     RSGFile.writeInt24LE(pathTemps[i].positions[h].position, beginOffset + pathTemps[i].positions[h].offset * 4 + 1);
@@ -427,7 +437,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         private static void Compressor(SenBuffer RSGFile, SenBuffer dataGroup, SenBuffer atlasGroup, int compression_flags)
         {
             var Compress = new Compress();
-            void DataWrite(byte[] dataBytes, int flags) {
+            void DataWrite(byte[] dataBytes, int flags)
+            {
                 int part0_Offset = (int)RSGFile.writeOffset;
                 int part0_Size = dataBytes.Length;
                 if (flags < 2)
@@ -465,8 +476,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 atlasGroup.Close();
                 int part1_Offset;
                 int part1_Size = atlasBytes.Length;
-                if (compression_flags == 0 || compression_flags == 2) {
-                    if (dataGroup.length == 0) {
+                if (compression_flags == 0 || compression_flags == 2)
+                {
+                    if (dataGroup.length == 0)
+                    {
                         DataWrite(new byte[4096], 3);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;
@@ -477,8 +490,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     RSGFile.writeInt32LE(part1_Size);
                     RSGFile.RestoreWriteOffset();
                 }
-                else {
-                    if (compression_flags == 3 && dataGroup.length == 0) {
+                else
+                {
+                    if (compression_flags == 3 && dataGroup.length == 0)
+                    {
                         DataWrite(new byte[4096], 3);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;

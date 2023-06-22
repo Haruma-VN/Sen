@@ -2,6 +2,7 @@ using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
+using Sen.Shell.Modules.Support.PvZ2.RTON;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSB
 {
@@ -12,11 +13,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public required RSBPathInfo path { get; set; }
 
         public required GroupInfo[] group { get; set; }
-    }
-
-    public class MainfestInfoLite {
-        public required int version { get; set; }
-        public required string[] group { get; set; }
     }
 
     public class RSBPathInfo
@@ -35,7 +31,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
     public class SubGroupInfo
     {
         public required string name_packet { get; set; }
-        public int? category { get; set; }
+        public required int category { get; set; }
         public required PacketInfo packet_info { get; set; }
 
     }
@@ -51,18 +47,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public int rsgList_BeginOffset { get; set; }
         public int rsgNumber { get; set; }
         public int rsgInfo_BeginOffset { get; set; }
-        public int rsgInfo_EachLength { get; set; }
+        public int rsgInfo_EachLength { get; set; } = 204;
         public int compositeNumber { get; set; }
         public int compostieInfo_BeginOffset { get; set; }
-        public int compositeInfo_EachLength { get; set; }
+        public int compositeInfo_EachLength { get; set; } = 1156;
         public int compositeListLength { get; set; }
         public int compositeList_BeginOffset { get; set; }
         public int autopoolNumber { get; set; }
         public int autopoolInfo_BeginOffset { get; set; }
-        public int autopoolInfo_EachLength { get; set; }
+        public int autopoolInfo_EachLength { get; set; } = 152;
         public int ptxNumber { get; set; }
         public int ptxInfo_BeginOffset { get; set; }
-        public int ptxInfo_EachLength { get; set; }
+        public int ptxInfo_EachLength { get; set; } = 16;
         public int part1_BeginOffset { get; set; }
         public int part2_BeginOffset { get; set; }
         public int part3_BeginOffset { get; set; }
@@ -94,6 +90,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public required int rsgOffset { get; set; }
         public required int rsgLength { get; set; }
         public required int poolIndex { get; set; }
+        public required int ptxNumber { get; set; }
         public required int ptxBeforeNumber { get; set; }
     }
 
@@ -109,7 +106,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public required int ptxIndex { get; set; }
         public required int width { get; set; }
         public required int height { get; set; }
-        public required int width_plus { get; set; }
+        public required int row_by_count { get; set; }
         public required int format { get; set; }
     }
 
@@ -129,6 +126,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
     {
         public required string id { get; set; }
         public required string res { get; set; }
+        public required string language { get; set; }
         public required DescriptionResources[] resources { get; set; }
     }
 
@@ -138,7 +136,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public required string id { get; set; }
         public required string path { get; set; }
         public PropertiesPtxInfo? ptx_info { get; set; }
-        public required Dictionary<string, string>[] properties { get; set; }
+        public required Dictionary<string, string> properties { get; set; }
     }
 
     public class PropertiesPtxInfo
@@ -204,11 +202,21 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public required string value { get; set; }
     }
 
+    public class RSBPathTemp
+    {
+        public required string pathSlice { get; set; }
+        public int key { get; set; }
+        public required int poolIndex { get; set; }
+        public List<PathPosition> positions = new List<PathPosition>();
+    }
+
     public class RSBFunction
     {
         public static MainfestInfo Unpack(SenBuffer RSBFile, string outFolder)
         {
             var rsbHeadInfo = ReadHead(RSBFile);
+            if (rsbHeadInfo.version == 3 && rsbHeadInfo.fileList_BeginOffset != 0x6C) throw new Exception("Invalid File List Offset");
+            if (rsbHeadInfo.version == 4 && rsbHeadInfo.fileList_BeginOffset != 0x70) throw new Exception("Invalid File List Offset");
             var fileList = new List<FileListInfo>();
             FileListSplit(RSBFile, rsbHeadInfo.fileList_BeginOffset, rsbHeadInfo.fileListLength, ref fileList);
             var rsgList = new List<FileListInfo>();
@@ -234,13 +242,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             // Unpack RSG
             var groupList = new List<GroupInfo>();
             var compositeLength = compositeInfo.Count;
-            var ptxInfoNum = 0;
             var rsgNameList = new List<string>();
             for (var i = 0; i < compositeLength; i++)
             {
-                if (compositeInfo[i].name.ToUpper() != compositeList[i].namePath.Replace("_COMPOSITESHELL", ""))
+                if (compositeInfo[i].name.ToUpper() != compositeList[i].namePath.ToUpper().Replace("_COMPOSITESHELL", ""))
                 {
-                    throw new Exception(compositeInfo[i].name);
+                    throw new Exception($"Invalid composite index: {compositeInfo[i].name}");
                 }
                 var subGroupList = new List<SubGroupInfo>();
                 for (var k = 0; k < compositeInfo[i].packetNumber; k++)
@@ -260,11 +267,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     }
                     if (rsgInfoList[rsgInfoCount].name.ToUpper() != rsgList[rsgListCount].namePath.ToUpper())
                     {
-                        throw new Exception($"Invalid rsg name: {rsgInfoList[rsgInfoCount].name}");
-                    }
+                        throw new Exception($"Invalid rsg name: {rsgInfoList[rsgInfoCount].name} || {rsgList[rsgListCount].namePath} in poolIndex: {packetIndex}");
+                    };
+                    rsgNameList.Add(rsgInfoList[rsgInfoCount].name);
+                    byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
+                    SenBuffer RSGFile = new SenBuffer(packetFile);
+                    PacketInfo packetInfo = RSGFunction.Unpack(RSGFile, "", false, true);
                     var resInfoList = new List<ResInfo>();
                     var fileListLength = fileList.Count;
-                    var ptxId = 0;
+                    var ptxBeforeNumber = rsgInfoList[rsgInfoCount].ptxBeforeNumber;
                     for (var h = 0; h < fileListLength; h++)
                     {
                         if (fileList[h].poolIndex == packetIndex)
@@ -273,26 +284,40 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                             {
                                 path = fileList[h].namePath,
                             };
-                            if (fileList[h].namePath.EndsWith(".PTX"))
+                            var resInfoLength = packetInfo.res.Length;
+                            var existItemPacket = false;
+                            for (var m = 0; m < resInfoLength; m++)
                             {
-                                resInfo.ptx_info = new RSG.PtxInfo
+                                if (packetInfo.res[m].path.ToUpper() == fileList[h].namePath.ToUpper())
                                 {
-                                    id = ptxId,
-                                    width = ptxInfoList[ptxInfoNum].width,
-                                    height = ptxInfoList[ptxInfoNum].height,
-                                    format = ptxInfoList[ptxInfoNum].format
-                                };
-                                ptxInfoNum++;
-                                ptxId++;
+                                    existItemPacket = true;
+                                    if (fileList[h].namePath.EndsWith(".PTX") && compositeInfo[i].isComposite)
+                                    {
+                                        if (ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].width != packetInfo.res[m].ptx_info!.width)
+                                        {
+                                            throw new Exception($"Invalid item packet width: {fileList[h].namePath}");
+                                        }
+                                        if (ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].height != packetInfo.res[m].ptx_info!.height)
+                                        {
+                                            throw new Exception($"Invalid item packet height: {fileList[h].namePath}");
+                                        }
+                                        resInfo.ptx_info = new RSG.PtxInfo
+                                        {
+                                            id = packetInfo.res[m].ptx_info!.id,
+                                            width = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].width,
+                                            height = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].height,
+                                            format = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].format,
+                                        };
+                                    }
+                                    break;
+                                }
                             }
+                            if (!existItemPacket) throw new Exception("Invalid Item Packet");
                             resInfoList.Add(resInfo);
                         }
                         if (fileList[h].poolIndex > packetIndex) break;
                     };
-                    rsgNameList.Add(rsgInfoList[rsgInfoCount].name);
-                    byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
-                    SenBuffer wr = new SenBuffer(packetFile);
-                    wr.OutFile($"{outFolder}/packet/{rsgInfoList[rsgInfoCount].name}.rsg");
+                    RSGFile.OutFile($"{outFolder}/packet/{rsgInfoList[rsgInfoCount].name}.rsg");
                     var packetInfoList = new PacketInfo
                     {
                         version = RSBFile.readInt32LE((long)rsgInfoList[rsgInfoCount].rsgOffset + 4),
@@ -324,33 +349,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 group = groupList.ToArray(),
             };
             RSBFile.Close();
+            var fs = new FileSystem();
+            //  rsbHeadInfo.version == 3 ?
+            fs.WriteJson<MainfestInfo>($"{outFolder}/description.json", rsbHeadInfo.version == 4 ? null : mainfest_info);
             return mainfest_info;
-        }
-
-        public static MainfestInfoLite PVZ2FastUnpack(SenBuffer RSBFile, string outFolder) {
-            int version = RSBFile.readInt32LE(4);
-            if (version != 4) throw new Exception("Only support version 4");
-            int rsgNumber = RSBFile.readInt32LE(40);
-            int rsgBeginOffset = RSBFile.readInt32LE();
-            int fileList = RSBFile.readInt32LE(108);
-            RSBFile.readOffset = rsgBeginOffset;
-            string[] rsgList = new string[rsgNumber];
-            for (var i = 0; i < rsgNumber; i++) {
-                var startOffset = RSBFile.readOffset;
-                string rsgName = RSBFile.readStringByEmpty();
-                int rsgLength = RSBFile.readInt32LE(startOffset + 132);
-                RSBFile.readOffset = startOffset + 204;
-                byte[] rsgFile = RSBFile.getBytes(rsgLength, fileList);
-                SenBuffer writer = new SenBuffer(rsgFile);
-                writer.SaveFile($"{outFolder}/packet/{rsgName}.rsg");
-                rsgList[i] = rsgName;
-                fileList += rsgLength;
-            }
-            RSBFile.Close();
-            return new MainfestInfoLite{
-                version = version,
-                group = rsgList
-            };
         }
 
         private static void ReadResoucesDescription(SenBuffer RSBFile, RSB_head rsbHeadInfo, string outFolder)
@@ -388,6 +390,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         id = rsgId,
                         res = $"{resolutionRatio}",
+                        language = language,
                         resources = new DescriptionResources[resourcesNumber],
                     });
                     rsgInfoList.Add(new ResourcesRsgInfo
@@ -399,7 +402,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         resourcesInfoList = resourcesInfoList.ToArray()
                     });
                 }
-                DescriptionGroup.Add(new DescriptionGroup{
+                DescriptionGroup.Add(new DescriptionGroup
+                {
                     id = id,
                     composite = !id.EndsWith("_CompositeShell"),
                     subgroups = subgroup.ToArray(),
@@ -420,9 +424,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         RSBFile.readOffset = part2_Offset + compositeResoucesInfo[i].rsgInfoList[k].resourcesInfoList[h].infoOffsetPart2;
                         {
-                            if (RSBFile.readInt32LE() != 0x0) throw new Exception("Invalid Part2 Offset");
+                            if (RSBFile.readInt32LE() != 0x0) throw new Exception($"Invalid Part2 Offset: {RSBFile.readOffset}");
                             var type = RSBFile.readUInt16LE();
-                            if (RSBFile.readUInt16LE() != 0x1C) throw new Exception("Invalid head length");
+                            if (RSBFile.readUInt16LE() != 0x1C) throw new Exception($"Invalid head length : {RSBFile.readOffset}");
                             var ptxInfoEndOffsetPart2 = RSBFile.readInt32LE();
                             var ptxInfoBeginOffsetPart2 = RSBFile.readInt32LE();
                             var resIdOffsetPart3 = RSBFile.readInt32LE();
@@ -448,7 +452,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                     parent = RSBFile.getStringByEmpty(part3_Offset + RSBFile.readInt32LE()),
                                 };
                             }
-                            var propertiesInfoList = new Dictionary<string, string>[propertiesNumber];
+                            var propertiesInfoList = new Dictionary<string, string>();
                             for (var l = 0; l < propertiesNumber; l++)
                             {
                                 var keyOffsetPart3 = RSBFile.readInt32LE();
@@ -456,9 +460,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                 var valueOffsetPart3 = RSBFile.readInt32LE();
                                 var key = RSBFile.getStringByEmpty(part3_Offset + keyOffsetPart3);
                                 var value = RSBFile.getStringByEmpty(part3_Offset + valueOffsetPart3);
-                                var property = new Dictionary<string, string>();
-                                property.Add(key, value);
-                                propertiesInfoList[l] = property;
+                                propertiesInfoList.Add(key, value);
                             }
                             var descriptionResources = new DescriptionResources
                             {
@@ -473,10 +475,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     }
                 }
                 RSBFile.RestoreReadOffset();
-            }
+            };
+            var resourcesDescription = new ResourcesDescription
+            {
+                groups = DescriptionGroup.ToArray()
+            };
             var fs = new FileSystem();
             fs.CreateDirectory($"{outFolder}/description");
-            fs.WriteJson($"{outFolder}/description.json", DescriptionGroup.ToArray());
+            fs.WriteJson($"{outFolder}/description.json", resourcesDescription);
         }
 
         public static RSB_head ReadHead(SenBuffer RSBFile)
@@ -542,6 +548,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         namePath = namePath,
                         poolIndex = RSBFile.readInt32LE(),
+
                     });
                     for (var i = 0; i < nameDict.Count; i++)
                     {
@@ -571,7 +578,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     }
                 }
             }
-            fileList.Sort((a, b) => a.poolIndex.CompareTo(b.poolIndex));
+            fileList.Sort(delegate (FileListInfo a, FileListInfo b)
+            {
+                return a.poolIndex.CompareTo(b.poolIndex);
+            });
             CheckEndOffset(RSBFile, offsetLimit);
         }
 
@@ -619,13 +629,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 var rsgOffset = RSBFile.readInt32LE();
                 var rsgLength = RSBFile.readInt32LE();
                 var rsgIndex = RSBFile.readInt32LE();
-                var ptxBeforeNumber = RSBFile.readInt32LE(startOffset + rsbHeadInfo.rsgInfo_EachLength - 4);
+                var ptxNumber = RSBFile.readInt32LE(startOffset + rsbHeadInfo.rsgInfo_EachLength - 8);
+                var ptxBeforeNumber = RSBFile.readInt32LE();
                 rsgInfoList.Add(new RSGInfo
                 {
                     name = packetName,
                     rsgOffset = rsgOffset,
                     rsgLength = rsgLength,
                     poolIndex = rsgIndex,
+                    ptxNumber = ptxNumber,
                     ptxBeforeNumber = ptxBeforeNumber,
                 });
             }
@@ -663,7 +675,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     ptxIndex = i,
                     width = RSBFile.readInt32LE(),
                     height = RSBFile.readInt32LE(),
-                    width_plus = RSBFile.readInt32LE(),
+                    row_by_count = RSBFile.readInt32LE(),
                     format = RSBFile.readInt32LE()
                 });
             }
@@ -674,6 +686,436 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         private static void CheckEndOffset(SenBuffer RSBFile, int endOffset)
         {
             if ((int)RSBFile.readOffset != endOffset) throw new Exception($"invalid offset: {RSBFile.readOffset} | {endOffset}");
+        }
+
+        public static void Pack(string inFolder, string outFile, MainfestInfo manifestInfo)
+        {
+            var RSBFile = new SenBuffer();
+            RSBFile.writeString(RSB_head.magic);
+            var version = manifestInfo.version;
+            int fileList_BeginOffset;
+            if (version == 3)
+            {
+                fileList_BeginOffset = 0x6C;
+            }
+            else if (version == 4)
+            {
+                fileList_BeginOffset = 0x70;
+            }
+            else
+            {
+                throw new Exception("Invalid RSB version");
+            }
+            var rsbHeadInfo = new RSB_head();
+            RSBFile.writeInt32LE(version);
+            RSBFile.writeNull(fileList_BeginOffset - 8);
+            var fileList = new List<FileListInfo>();
+            var rsgFileList = new List<FileListInfo>();
+            var compositeList = new List<FileListInfo>();
+            var compositeInfo = new SenBuffer();
+            var rsgInfo = new SenBuffer();
+            var autopoolInfo = new SenBuffer();
+            var ptxInfo = new SenBuffer();
+            var rsgFileBank = new SenBuffer();
+            var rsgPacketIndex = 0;
+            var groupLength = manifestInfo.group.Length;
+            var ptxBeforeNumber = 0;
+            for (var i = 0; i < groupLength; i++)
+            {
+                var compositeName = manifestInfo.group[i].is_composite ? manifestInfo.group[i].name : $"{manifestInfo.group[i].name}_CompositeShell";
+                compositeList.Add(new FileListInfo
+                {
+                    namePath = compositeName.ToUpper(),
+                    poolIndex = i,
+                });
+                compositeInfo.writeString(compositeName);
+                compositeInfo.writeNull(128 - compositeName.Length);
+                var subgroupLength = manifestInfo.group[i].subgroup.Length;
+                for (var k = 0; k < subgroupLength; k++)
+                {
+                    var rsgName = manifestInfo.group[i].subgroup[k].name_packet;
+                    var rsgComposite = false;
+                    rsgFileList.Add(new FileListInfo
+                    {
+                        namePath = rsgName.ToUpper(),
+                        poolIndex = rsgPacketIndex,
+                    });
+                    SenBuffer RSGFile = new SenBuffer($"{inFolder}/packet/{rsgName}.rsg");
+                    ComparePacketInfo(manifestInfo.group[i].subgroup[k].packet_info, RSGFile);
+                    var ptxNumber = 0;
+                    var resInfoLength = manifestInfo.group[i].subgroup[k].packet_info.res.Length;
+                    for (var l = 0; l < resInfoLength; l++)
+                    {
+                        fileList.Add(new FileListInfo
+                        {
+                            namePath = manifestInfo.group[i].subgroup[k].packet_info.res[l].path.ToUpper(),
+                            poolIndex = rsgPacketIndex,
+                        });
+                        if (manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info != null)
+                        {
+                            ptxNumber++;
+                            rsgComposite = true;
+                            {
+                                // Write PtxInfo
+                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.width);
+                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.height);
+                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.width * 4);
+                                int format = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.format ?? -1;
+                                if (format == -1) throw new Exception($"Invalid RSG format: {manifestInfo.group[i].subgroup[k].packet_info.res[l].path}");
+                                ptxInfo.writeInt32LE(format);
+                            }
+                        }
+                    }
+                    {
+                        // Write CompositeInfo
+                        compositeInfo.writeInt32LE(rsgPacketIndex);
+                        compositeInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].category);
+                        compositeInfo.writeNull(8);
+                    }
+                    {
+                        // Write RSGInfo
+                        rsgInfo.writeString(rsgName);
+                        rsgInfo.writeNull(128 - rsgName.Length);
+                        rsgInfo.writeInt32LE((int)rsgFileBank.writeOffset);
+                        {
+                            // WritePacket
+                            rsgFileBank.writeBytes(RSGFile.toBytes());
+                        }
+                        rsgInfo.writeInt32LE((int)RSGFile.length);
+                        rsgInfo.writeInt32LE(rsgPacketIndex);
+                        rsgInfo.writeBytes(RSGFile.getBytes(56, 0x10));
+                        var rsgWriteOffset = rsgInfo.writeOffset;
+                        rsgInfo.writeInt32LE(RSGFile.readInt32LE(0x20), rsgWriteOffset - 36);
+                        rsgInfo.writeInt32LE(ptxNumber, rsgWriteOffset);
+                        rsgInfo.writeInt32LE(ptxBeforeNumber);
+                        ptxBeforeNumber += ptxNumber;
+                    }
+                    {
+                        // Write AutopoolInfo
+                        var autopoolName = rsgName + "_AutoPool";
+                        autopoolInfo.writeString(autopoolName);
+                        autopoolInfo.writeNull(128 - autopoolName.Length);
+                        if (rsgComposite)
+                        {
+                            autopoolInfo.writeInt32LE(RSGFile.readInt32LE(0x18));
+                            autopoolInfo.writeInt32LE(RSGFile.readInt32LE(0x30));
+                        }
+                        else
+                        {
+                            autopoolInfo.writeInt32LE(RSGFile.readInt32LE(0x18) + RSGFile.readInt32LE(0x20));
+                            autopoolInfo.writeInt32LE(0);
+                        }
+                        autopoolInfo.writeInt32LE(1);
+                        autopoolInfo.writeNull(12);
+                    }
+                    rsgPacketIndex++;
+                    RSGFile.readOffset = 0;
+                }
+                compositeInfo.writeNull(1024 - (subgroupLength * 16));
+                compositeInfo.writeInt32LE(subgroupLength);
+            }
+            {
+                var fileList_PathTemp = new List<RSBPathTemp>();
+                FileListPack(fileList, ref fileList_PathTemp);
+                var rsgList_PathTemp = new List<RSBPathTemp>();
+                FileListPack(rsgFileList, ref rsgList_PathTemp);
+                var compositeList_PathTemp = new List<RSBPathTemp>();
+                FileListPack(compositeList, ref compositeList_PathTemp);
+                var fileList_PathTemp_Length = fileList_PathTemp.Count;
+                rsbHeadInfo.fileList_BeginOffset = fileList_BeginOffset;
+                // Filelist
+                for (var i = 0; i < fileList_PathTemp_Length; i++)
+                {
+                    WriteFileList(RSBFile, fileList_PathTemp[i]);
+                }
+                rsbHeadInfo.fileListLength = (int)RSBFile.writeOffset - fileList_BeginOffset;
+                // RSGList
+                var rsgList_PathTemp_Length = rsgList_PathTemp.Count;
+                rsbHeadInfo.rsgList_BeginOffset = (int)RSBFile.writeOffset;
+                for (var i = 0; i < rsgList_PathTemp_Length; i++)
+                {
+                    WriteFileList(RSBFile, rsgList_PathTemp[i]);
+                }
+                rsbHeadInfo.rsgListLength = (int)RSBFile.writeOffset - rsbHeadInfo.rsgList_BeginOffset;
+                // CompositeInfo 
+                rsbHeadInfo.compositeNumber = groupLength;
+                rsbHeadInfo.compostieInfo_BeginOffset = (int)RSBFile.writeOffset;
+                RSBFile.writeBytes(compositeInfo.toBytes());
+                compositeInfo.Close();
+                // CompositeList
+                var compositeList_PathTemp_Length = compositeList_PathTemp.Count;
+                rsbHeadInfo.compositeList_BeginOffset = (int)RSBFile.writeOffset;
+                for (var i = 0; i < compositeList_PathTemp_Length; i++)
+                {
+                    WriteFileList(RSBFile, compositeList_PathTemp[i]);
+                }
+                rsbHeadInfo.compositeListLength = (int)RSBFile.writeOffset - rsbHeadInfo.compositeList_BeginOffset;
+                // RSGInfo  
+                rsbHeadInfo.rsgInfo_BeginOffset = (int)RSBFile.writeOffset;
+                rsbHeadInfo.rsgNumber = rsgPacketIndex;
+                RSBFile.writeBytes(rsgInfo.toBytes());
+                rsgInfo.Close();
+                // AutopoolInfo
+                rsbHeadInfo.autopoolInfo_BeginOffset = (int)RSBFile.writeOffset;
+                rsbHeadInfo.autopoolNumber = rsgPacketIndex;
+                RSBFile.writeBytes(autopoolInfo.toBytes());
+                autopoolInfo.Close();
+                // PtxInfo 
+                rsbHeadInfo.ptxInfo_BeginOffset = (int)RSBFile.writeOffset;
+                rsbHeadInfo.ptxNumber = ptxBeforeNumber;
+                RSBFile.writeBytes(ptxInfo.toBytes());
+                ptxInfo.Close();
+                if (version == 3)
+                {
+                    // Descripition
+                    WriteResourcesDescription(RSBFile, rsbHeadInfo, inFolder);
+                }
+                RSBFile.writeNull(RSGFunction.BeautifyLength((int)RSBFile.writeOffset));
+                // Packet
+                var fileOffset = (int)RSBFile.writeOffset;
+                rsbHeadInfo.fileOffset = fileOffset;
+                RSBFile.writeBytes(rsgFileBank.toBytes());
+                rsgFileBank.Close();
+                // Rewrite PacketOffset
+                RSBFile.readOffset = rsbHeadInfo.rsgInfo_BeginOffset;
+                for (var i = 0; i < rsbHeadInfo.rsgNumber; i++)
+                {
+                    var rsgInfoFileOffset = (rsbHeadInfo.rsgInfo_BeginOffset + i * rsbHeadInfo.rsgInfo_EachLength) + 128;
+                    var packetOffset = RSBFile.readInt32LE(rsgInfoFileOffset);
+                    RSBFile.writeInt32LE(packetOffset + fileOffset, rsgInfoFileOffset);
+                }
+                // WriteHead
+                rsbHeadInfo.version = version;
+                WriteHead(RSBFile, rsbHeadInfo);
+            }
+            RSBFile.OutFile(outFile);
+        }
+
+        private static void WriteResourcesDescription(SenBuffer RSBFile, RSB_head rsbHeadInfo, string inFolder)
+        {
+            var StringList = new List.StringPool();
+            var fs = new FileSystem();
+            var resourcesDescription = fs.ReadJson<ResourcesDescription>($"{inFolder}/description.json");
+            var groupsLength = resourcesDescription.groups.Length;
+            var part1_Res = new SenBuffer();
+            var part2_Res = new SenBuffer();
+            var part3_Res = new SenBuffer();
+            Dictionary<string, int> stringPool = new Dictionary<string, int>();
+            int ThrowInPool(string poolKey)
+            {
+                if (!stringPool.ContainsKey(poolKey))
+                {
+                    stringPool.Add(poolKey, (int)part3_Res.writeOffset);
+                    part3_Res.writeStringByEmpty(poolKey);
+                }
+                return stringPool[poolKey];
+            }
+            part3_Res.writeNull(1);
+            stringPool.Add("", 0);
+            for (var i = 0; i < groupsLength; i++)
+            {
+                var idOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].id);
+                part1_Res.writeInt32LE(idOffsetPart3);
+                var rsgNumber = resourcesDescription.groups[i].subgroups.Length;
+                part1_Res.writeInt32LE(rsgNumber);
+                part1_Res.writeInt32LE(0x10);
+                for (var k = 0; k < rsgNumber; k++)
+                {
+                    part1_Res.writeInt32LE(Int32.Parse(resourcesDescription.groups[i].subgroups[k].res));
+                    var language = resourcesDescription.groups[i].subgroups[k].language;
+                    if (language == string.Empty)
+                    {
+                        part1_Res.writeInt32LE(0x0);
+                    }
+                    else
+                    {
+                        part1_Res.writeString((language + "    ")[..4]);
+                    }
+                    idOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].id);
+                    part1_Res.writeInt32LE(idOffsetPart3);
+                    var resourcesLength = resourcesDescription.groups[i].subgroups[k].resources.Length;
+                    part1_Res.writeInt32LE(resourcesLength);
+                    for (var l = 0; l < resourcesLength; l++)
+                    {
+                        // Start writePart2
+                        {
+                            part2_Res.writeInt32LE(0x0);
+                            var type = resourcesDescription.groups[i].subgroups[k].resources[l].type;
+                            part2_Res.writeUInt16LE((ushort)type);
+                            part2_Res.writeUInt16LE(0x1C);
+                            part2_Res.BackupWriteOffset();
+                            part2_Res.writeOffset += (0x8);
+                            idOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].resources[l].id);
+                            var pathOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].resources[l].path);
+                            part2_Res.writeInt32LE(idOffsetPart3);
+                            part2_Res.writeInt32LE(pathOffsetPart3);
+                            var properties = resourcesDescription.groups[i].subgroups[k].resources[l].properties;
+                            var propertiesNumber = properties.Count;
+                            part2_Res.writeInt32LE(propertiesNumber);
+                            if (type == 0)
+                            {
+                                var ptxInfoBeginOffsetPart2 = (int)part2_Res.writeOffset;
+                                // Write PTXInfo
+                                {
+                                    var ptx_info = resourcesDescription.groups[i].subgroups[k].resources[l].ptx_info;
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.imagetype ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.aflags ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.x ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.y ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.ax ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.ay ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.aw ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.ah ?? "0"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.rows ?? "1"));
+                                    part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.cols ?? "1"));
+                                    var parentOffsetInPart3 = ThrowInPool(ptx_info?.parent ?? string.Empty);
+                                    part2_Res.writeInt32LE(parentOffsetInPart3);
+                                }
+                                var ptxInfoEndOffsetPart2 = (int)part2_Res.writeOffset;
+                                part2_Res.RestoreWriteOffset();
+                                part2_Res.writeInt32LE(ptxInfoEndOffsetPart2);
+                                part2_Res.writeInt32LE(ptxInfoBeginOffsetPart2);
+                                part2_Res.writeOffset = ptxInfoEndOffsetPart2;
+                            }
+                            foreach (KeyValuePair<string, string> property in properties)
+                            {
+                                var keyOffsetInPart3 = ThrowInPool(property.Key ?? string.Empty);
+                                var valueOffsetInPart3 = ThrowInPool(property.Value ?? string.Empty);
+                                part2_Res.writeInt32LE(keyOffsetInPart3);
+                                part2_Res.writeInt32LE(0x0);
+                                part2_Res.writeInt32LE(valueOffsetInPart3);
+                            }
+                        }
+                        //-----------
+                    }
+                    var idOffsetPart2 = (int)part2_Res.writeOffset;
+                    part1_Res.writeInt32LE(idOffsetPart2);
+                }
+            }
+            rsbHeadInfo.part1_BeginOffset = (int)RSBFile.writeOffset;
+            RSBFile.writeBytes(part1_Res.toBytes());
+            part1_Res.Close();
+            rsbHeadInfo.part2_BeginOffset = (int)RSBFile.writeOffset;
+            RSBFile.writeBytes(part2_Res.toBytes());
+            part2_Res.Close();
+            rsbHeadInfo.part3_BeginOffset = (int)RSBFile.writeOffset;
+            RSBFile.writeBytes(part3_Res.toBytes());
+            part3_Res.Close();
+        }
+
+        private static void WriteHead(SenBuffer RSBFile, RSB_head rsbHeadInfo)
+        {
+            RSBFile.writeInt32LE(rsbHeadInfo.fileOffset, 12);
+            RSBFile.writeInt32LE(rsbHeadInfo.fileListLength);
+            RSBFile.writeInt32LE(rsbHeadInfo.fileList_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.rsgListLength, 32);
+            RSBFile.writeInt32LE(rsbHeadInfo.rsgList_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.rsgNumber);
+            RSBFile.writeInt32LE(rsbHeadInfo.rsgInfo_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.rsgInfo_EachLength);
+            RSBFile.writeInt32LE(rsbHeadInfo.compositeNumber);
+            RSBFile.writeInt32LE(rsbHeadInfo.compostieInfo_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.compositeInfo_EachLength);
+            RSBFile.writeInt32LE(rsbHeadInfo.compositeListLength);
+            RSBFile.writeInt32LE(rsbHeadInfo.compositeList_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.autopoolNumber);
+            RSBFile.writeInt32LE(rsbHeadInfo.autopoolInfo_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.autopoolInfo_EachLength);
+            RSBFile.writeInt32LE(rsbHeadInfo.ptxNumber);
+            RSBFile.writeInt32LE(rsbHeadInfo.ptxInfo_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.ptxInfo_EachLength);
+            RSBFile.writeInt32LE(rsbHeadInfo.part1_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.part2_BeginOffset);
+            RSBFile.writeInt32LE(rsbHeadInfo.part3_BeginOffset);
+            if (rsbHeadInfo.version == 4)
+            {
+                RSBFile.writeInt32LE(rsbHeadInfo.fileOffset);
+            }
+
+        }
+
+        private static void WriteFileList(SenBuffer RSBFile, RSBPathTemp pathTemp)
+        {
+            var beginOffset = RSBFile.writeOffset;
+            RSBFile.writeStringFourByte(pathTemp.pathSlice);
+            RSBFile.BackupWriteOffset();
+            for (var h = 0; h < pathTemp.positions.Count; h++)
+            {
+                RSBFile.writeInt24LE(pathTemp.positions[h].position, beginOffset + pathTemp.positions[h].offset * 4 + 1);
+            }
+            RSBFile.RestoreWriteOffset();
+            RSBFile.writeInt32LE(pathTemp.poolIndex);
+        }
+
+        private static void ComparePacketInfo(PacketInfo modifyPacketInfo, SenBuffer RSGFile)
+        {
+            void ThrowError<Generic_T>(string typeError, Generic_T oriValue, Generic_T modifyValue)
+            {
+                throw new Exception($"RSG {typeError} is not same. In ManiFestInfo: {oriValue} | In RSGFile: {modifyValue}. RSG path: {RSGFile.filePath}");
+            }
+            PacketInfo oriPacketInfo = RSGFunction.Unpack(RSGFile, "", false, true);
+            if (oriPacketInfo.version != modifyPacketInfo.version) ThrowError("version", oriPacketInfo.version, modifyPacketInfo.version);
+            if (oriPacketInfo.compression_flags != modifyPacketInfo.compression_flags) ThrowError("compression flags", oriPacketInfo.compression_flags, modifyPacketInfo.compression_flags);
+            if (oriPacketInfo.res.Length != modifyPacketInfo.res.Length) ThrowError("item number", oriPacketInfo.res.Length, modifyPacketInfo.res.Length);
+            var oriPacketResInfo = oriPacketInfo.res;
+            Array.Sort(oriPacketResInfo, (a, b) => a.path.CompareTo(b.path));
+            var modifyPacketResInfo = modifyPacketInfo.res;
+            Array.Sort(modifyPacketResInfo, (a, b) => a.path.CompareTo(b.path));
+            for (var i = 0; i < modifyPacketResInfo.Length; i++)
+            {
+                if (oriPacketResInfo[i].path != modifyPacketResInfo[i].path) ThrowError("item path", oriPacketResInfo[i].path, modifyPacketResInfo[i].path);
+                if (oriPacketResInfo[i].ptx_info != null && modifyPacketResInfo[i].ptx_info != null)
+                {
+                    if (oriPacketResInfo[i].ptx_info!.id != modifyPacketResInfo[i].ptx_info!.id) ThrowError("item id", oriPacketResInfo[i].ptx_info!.id, modifyPacketResInfo[i].ptx_info!.id);
+                    if (oriPacketResInfo[i].ptx_info!.width != modifyPacketResInfo[i].ptx_info!.width) ThrowError("item width", oriPacketResInfo[i].ptx_info!.width, modifyPacketResInfo[i].ptx_info!.width);
+                    if (oriPacketResInfo[i].ptx_info!.height != modifyPacketResInfo[i].ptx_info!.height) ThrowError("item height", oriPacketResInfo[i].ptx_info!.height, modifyPacketResInfo[i].ptx_info!.height);
+                }
+            }
+        }
+
+        private static void FileListPack(List<FileListInfo> fileList, ref List<RSBPathTemp> pathTempList)
+        {
+            fileList.Sort(delegate (FileListInfo a, FileListInfo b)
+            {
+                return string.CompareOrdinal(a.namePath, b.namePath);
+            });
+            fileList.Insert(0, new FileListInfo { namePath = "", poolIndex = -1 });
+            var ListLength = fileList.Count - 1;
+            int w_postion = 0;
+            for (var i = 0; i < ListLength; i++)
+            {
+                string Path1 = fileList[i].namePath.ToUpper();
+                string Path2 = fileList[i + 1].namePath.ToUpper();
+                if (RSGFunction.IsNotASCII(Path2)) throw new Exception("Item Path must be ASCII");
+                var strLongestLength = Path1.Length >= Path2.Length ? Path1.Length : Path2.Length;
+                for (var k = 0; k < strLongestLength; k++)
+                {
+                    if (k >= Path1.Length || k >= Path2.Length || Path1[k] != Path2[k])
+                    {
+                        for (var h = pathTempList.Count; h > 0; h--)
+                        {
+                            if (k >= pathTempList[h - 1].key)
+                            {
+                                pathTempList[h - 1].positions.Add(new PathPosition
+                                {
+                                    position = w_postion,
+                                    offset = (k - pathTempList[h - 1].key)
+                                });
+                                break;
+                            }
+
+                        }
+                        w_postion += Path2.Length - k + 2;
+                        pathTempList.Add(new RSBPathTemp
+                        {
+                            pathSlice = Path2.Substring(k),
+                            key = k,
+                            poolIndex = fileList[i + 1].poolIndex,
+                        });
+                        break;
+                    }
+                }
+            }
         }
     }
 

@@ -31,7 +31,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     #endregion
 
-    #region PvZ2Shell
+    #region PvZ2Shell Abstract
 
     public abstract class PvZ2ShellAbstract
     {
@@ -61,7 +61,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract MainfestInfo RSBUnpack(string inRSBpath, string outFolder);
 
-        public abstract void RSBPack(string RSBDirectory, string outRSB);
+        public abstract void RSBPack(string RSBDirectory, string outRSB, MainfestInfo mainfestInfo);
 
         public abstract void RSBUnpackByLenient(string RSBin, string outRSBdirectory);
 
@@ -165,8 +165,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return RSBFunction.Unpack(buffer, outFolder);
         }
 
-        public override void RSBPack(string RSBDirectory, string outRSB)
+        public override void RSBPack(string RSBDirectory, string outRSB, MainfestInfo mainfestInfo)
         {
+            RSBFunction.Pack(RSBDirectory, outRSB, mainfestInfo);
             return;
         }
 

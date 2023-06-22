@@ -987,6 +987,7 @@ namespace Sen.Script.Modules.Exceptions {
                         (error as DotNetSystem.Exception).message
                     )}`
                 );
+                break;
             }
         }
         if (Sen.Script.Modules.System.Default.Localization.notification) {
@@ -994,6 +995,10 @@ namespace Sen.Script.Modules.Exceptions {
                 Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, (error as Error).message),
                 `Sen`
             );
+        }
+        if ("stack" in (error as any)) {
+            let firstLine = (error as any).stack.split("\n")[0];
+            Sen.Script.Modules.Exceptions.CatchException(firstLine);
         }
         Console.Printf(
             null,
@@ -1016,6 +1021,62 @@ namespace Sen.Script.Modules.Exceptions {
         } catch (error: any) {
             Console.Print(null, error.message);
         }
+        return;
+    }
+
+    /**
+     *
+     * @param text - Pass text
+     * @param line - Pass line
+     * @returns text at that line
+     */
+
+    export function GoToLine(text: string, line: int): string {
+        const lines = text.split("\n");
+
+        if (line >= 1 && line <= lines.length) {
+            return lines[line - 1];
+        }
+
+        return "";
+    }
+
+    export function FormatError(stack: string): string {
+        while (stack.startsWith(" ")) {
+            stack = stack.slice(1);
+        }
+        return stack;
+    }
+
+    export function CatchException(errorString: string): void {
+        const regexPattern: RegExp = /(.+)\s(.+):(\d+):(\d+)/;
+        const match = errorString.match(regexPattern);
+
+        if (match) {
+            let stack: int = -1;
+            match.forEach((f: string, index) => {
+                stack = Fs.FileExists(f) ? index : stack;
+            });
+            if (stack !== -1) {
+                const filePath: string = match[stack];
+                const lineNumber: string = match[stack + 1];
+                const columnNumber: string = match[stack + 2];
+
+                Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                    Sen.Script.Modules.System.Default.Localization.GetString("exception_raise").replace(
+                        /\{\}/g,
+                        Sen.Script.Modules.Exceptions.FormatError(
+                            `${Sen.Script.Modules.Exceptions.GoToLine(
+                                Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                                parseInt(lineNumber)
+                            )}`
+                        )
+                    )
+                );
+            }
+        }
+
         return;
     }
 }

@@ -127,7 +127,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_pack"
         | "popcap_zlib_compress"
         | "popcap_zlib_uncompress"
-        | "popcap_rsb_unpack_simple";
+        | "popcap_rsb_unpack_simple"
+        | "popcap_rsb_pack_simple";
 
     /**
      *
@@ -347,12 +348,108 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    PvZ2Shell.RSBPack(argument, output_argument);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(argument, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.RSBPack(arg, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_rsb_pack_simple": {
+                if (!Array.isArray(argument)) {
+                    const encrypted_rton: boolean = Boolean(
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons"),
+                            [0, 1],
+                            {
+                                "0": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt"),
+                                ],
+                                "1": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c"),
+                                ],
+                            },
+                            `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                            `encryptedRton`
+                        ) as 0 | 1
+                    );
+                    const generate_resources: boolean =
+                        (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("convert_res_json_to_resources_json"),
+                            [1, 2],
+                            {
+                                "1": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically"),
+                                ],
+                                "2": [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json"),
+                                ],
+                            },
+                            `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                            `use_res_json`
+                        ) as 1 | 2) === 1
+                            ? true
+                            : false;
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSBBySimple(argument, output_argument, {
+                        encryptionKey: "",
+                        encryptRTON: encrypted_rton,
+                        generate_resources: generate_resources,
+                    });
+                } else {
+                    argument.forEach((arg: string) => {
+                        const encrypted_rton: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons"),
+                                [0, 1],
+                                {
+                                    "0": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt"),
+                                    ],
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c"),
+                                    ],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                                `encryptedRton`
+                            ) as 0 | 1
+                        );
+                        const generate_resources: boolean =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("convert_res_json_to_resources_json"),
+                                [1, 2],
+                                {
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically"),
+                                    ],
+                                    "2": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json"),
+                                    ],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                                `use_res_json`
+                            ) as 1 | 2) === 1
+                                ? true
+                                : false;
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSBBySimple(arg, output_argument, {
+                            encryptionKey: "",
+                            encryptRTON: encrypted_rton,
+                            generate_resources: generate_resources,
+                        });
                     });
                 }
                 break;
