@@ -31,7 +31,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
     public class SubGroupInfo
     {
         public required string name_packet { get; set; }
-        public required int category { get; set; }
+        public required string[] category { get; set; }
         public required PacketInfo packet_info { get; set; }
 
     }
@@ -81,7 +81,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
     public class CompositePacketInfo
     {
         public required int packetIndex { get; set; }
-        public required int category { get; set; }
+        public required string[] category { get; set; }
     }
 
     public class RSGInfo
@@ -210,8 +210,29 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public List<PathPosition> positions = new List<PathPosition>();
     }
 
+
+
     public class RSBFunction
     {
+        public static readonly Dictionary<int, int> RomByCountFormat = new Dictionary<int, int>()
+        {
+            {0, 4},
+            {1, 2},
+            {2, 2},
+            {3, 2},
+            {4, 2},
+            {5, 2},
+            {6, 2},
+            {21, 2},
+            {22, 2},
+            {23, 2},
+            {30, 4},
+            {147, 4},
+            {148, 4},
+            {150, 4},
+        };
+
+
         public static MainfestInfo Unpack(SenBuffer RSBFile, string outFolder)
         {
             var rsbHeadInfo = ReadHead(RSBFile);
@@ -327,7 +348,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     subGroupList.Add(new SubGroupInfo
                     {
                         name_packet = rsgInfoList[rsgInfoCount].name,
-                        category = compositeInfo[i].packetInfo![k].category,
+                        category = new string[] { compositeInfo[i].packetInfo![k].category[0], compositeInfo[i].packetInfo![k].category[1] },
                         packet_info = packetInfoList,
                     });
                 }
@@ -349,9 +370,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 group = groupList.ToArray(),
             };
             RSBFile.Close();
-            var fs = new FileSystem();
-            //  rsbHeadInfo.version == 3 ?
-            fs.WriteJson<MainfestInfo>($"{outFolder}/description.json", rsbHeadInfo.version == 4 ? null : mainfest_info);
             return mainfest_info;
         }
 
@@ -385,7 +403,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                             infoOffsetPart2 = infoOffsetPart2,
                         });
                     }
-                    var rsgId = RSBFile.getStringByEmpty(part3_Offset + idOffsetPart3);
+                    var rsgId = RSBFile.getStringByEmpty(part3_Offset + rsgIdOffsetPart3);
                     subgroup.Add(new DescriptionSubGroup
                     {
                         id = rsgId,
@@ -481,7 +499,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 groups = DescriptionGroup.ToArray()
             };
             var fs = new FileSystem();
-            fs.CreateDirectory($"{outFolder}/description");
             fs.WriteJson($"{outFolder}/description.json", resourcesDescription);
         }
 
@@ -601,9 +618,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     packetInfo.Add(new CompositePacketInfo
                     {
                         packetIndex = RSBFile.readInt32LE(),
-                        category = RSBFile.readInt32LE(),
+                        category = new string[] { RSBFile.readInt32LE().ToString(), RSBFile.readString(4).Replace("\0", "") },
                     });
-                    RSBFile.readBytes(8);
+                    RSBFile.readBytes(4);
                 }
                 compositeInfoList.Add(new CompositeInfo
                 {
@@ -670,13 +687,19 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             RSBFile.readOffset = (long)rsbHeadInfo.ptxInfo_BeginOffset;
             for (var i = 0; i < rsbHeadInfo.ptxNumber; i++)
             {
+                var width = RSBFile.readInt32LE();
+                var height = RSBFile.readInt32LE();
+                var row_by_count = RSBFile.readInt32LE();
+                var format = RSBFile.readInt32LE();
+                var count = RomByCountFormat.ContainsKey(format) ? RomByCountFormat[format] : 4;
+                if (row_by_count / count != width) throw new Exception($"Invalid ptx info: {RSBFile.readOffset}");
                 ptxInfoList.Add(new PtxInfo
                 {
                     ptxIndex = i,
-                    width = RSBFile.readInt32LE(),
-                    height = RSBFile.readInt32LE(),
-                    row_by_count = RSBFile.readInt32LE(),
-                    format = RSBFile.readInt32LE()
+                    width = width,
+                    height = height,
+                    row_by_count = row_by_count,
+                    format = format,
                 });
             }
             var endOffset = rsbHeadInfo.ptxInfo_EachLength * rsbHeadInfo.ptxNumber + rsbHeadInfo.ptxInfo_BeginOffset;
@@ -757,10 +780,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                             rsgComposite = true;
                             {
                                 // Write PtxInfo
-                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.width);
+                                var id = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.id;
+                                var ptxOffset = (ptxBeforeNumber + id) * 16;
+                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.width, ptxOffset);
                                 ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.height);
-                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.width * 4);
                                 int format = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.format ?? -1;
+                                var count = RomByCountFormat.ContainsKey(format) ? RomByCountFormat[format] : 4;
+                                ptxInfo.writeInt32LE(count * manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.width);
                                 if (format == -1) throw new Exception($"Invalid RSG format: {manifestInfo.group[i].subgroup[k].packet_info.res[l].path}");
                                 ptxInfo.writeInt32LE(format);
                             }
@@ -769,8 +795,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         // Write CompositeInfo
                         compositeInfo.writeInt32LE(rsgPacketIndex);
-                        compositeInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].category);
-                        compositeInfo.writeNull(8);
+                        compositeInfo.writeInt32LE(Int32.Parse(manifestInfo.group[i].subgroup[k].category[0]));
+                        if (manifestInfo.group[i].subgroup[k].category[1] != null && manifestInfo.group[i].subgroup[k].category[1] != string.Empty) {
+                            if (manifestInfo.group[i].subgroup[k].category[1].Length != 4) throw new Exception ("Category out of Length");
+                            compositeInfo.writeString(manifestInfo.group[i].subgroup[k].category[1]);
+                        }
+                        else {
+                            compositeInfo.writeNull(4);
+                        }
+                        compositeInfo.writeNull(4);
                     }
                     {
                         // Write RSGInfo
@@ -931,12 +964,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         part1_Res.writeString((language + "    ")[..4]);
                     }
-                    idOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].id);
-                    part1_Res.writeInt32LE(idOffsetPart3);
-                    var resourcesLength = resourcesDescription.groups[i].subgroups[k].resources.Length;
-                    part1_Res.writeInt32LE(resourcesLength);
-                    for (var l = 0; l < resourcesLength; l++)
+                    var rsgIdOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].id);
+                    part1_Res.writeInt32LE(rsgIdOffsetPart3);
+                    var resourcesNumber = resourcesDescription.groups[i].subgroups[k].resources.Length;
+                    part1_Res.writeInt32LE(resourcesNumber);
+                    for (var l = 0; l < resourcesNumber; l++)
                     {
+                        var idOffsetPart2 = (int)part2_Res.writeOffset;
+                        part1_Res.writeInt32LE(idOffsetPart2);
                         // Start writePart2
                         {
                             part2_Res.writeInt32LE(0x0);
@@ -988,8 +1023,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         }
                         //-----------
                     }
-                    var idOffsetPart2 = (int)part2_Res.writeOffset;
-                    part1_Res.writeInt32LE(idOffsetPart2);
                 }
             }
             rsbHeadInfo.part1_BeginOffset = (int)RSBFile.writeOffset;
