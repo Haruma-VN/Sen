@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Text.Encodings.Web;
-using Sen.Shell.Modules.Standards;
+﻿using System.Text.Encodings.Web;
 
 namespace Sen.Shell.Modules.Standards
 {

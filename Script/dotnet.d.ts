@@ -1685,6 +1685,24 @@ declare namespace ShellUpdate {
      */
 
     export function HasAdmin(): boolean;
+
+    /**
+     *
+     * @param fileUrl - Pass URL here
+     * @param filePath - Pass output path
+     * @param user_agent - Pass User agent
+     */
+
+    export function DownloadFromServer(fileUrl: string, filePath: string, user_agent: string): void;
+
+    /**
+     *
+     * @param fileUrls - Pass URL here
+     * @param filePaths - Pass output path
+     * @param user_agent - Pass User agent
+     */
+
+    export function DownloadFromMultipleThread(fileUrls: string[], filePaths: string[], user_agent: string): void;
 }
 
 declare interface GitHubReleases {
@@ -1850,7 +1868,13 @@ namespace PvZ2XML {
      * @param transform - Transform
      * @param outpath - Output path
      */
-    export function WriteImageDocument(index: int, transform: [double, double, double, double, double, double], outpath: string): void;
+    export function WriteImageDocument(
+        index: int,
+        name: string,
+        size: [int, int],
+        transform: [double, double, double, double, double, double],
+        outpath: string
+    ): void;
     /**
      *
      * @param index - Start index
@@ -1859,6 +1883,15 @@ namespace PvZ2XML {
      */
 
     export function WriteSourceDocument(index: int, name: string, resolution: int, outpath: string): void;
+
+    export interface DOMDocumentAddon {
+        media: string[];
+        sprite: string[];
+        source: string[];
+        image: string[];
+    }
+
+    export function InsertDOMDocumentData(a: PvZ2XML.DOMDocumentAddon, xml: string, outFile: string): void;
 }
 
 namespace XMLHelper {

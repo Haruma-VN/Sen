@@ -1,15 +1,5 @@
-﻿using Jint.Native;
-using SixLabors.ImageSharp.Formats.Jpeg;
+﻿using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using Jint;
-using Sen.Shell.Modules.Standards;
-using System.Numerics;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
-using SixLabors.ImageSharp.Advanced;
 
 namespace Sen.Shell.Modules.Standards.Bitmap
 {

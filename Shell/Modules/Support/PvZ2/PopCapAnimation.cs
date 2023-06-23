@@ -932,19 +932,19 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
     public class PAM_Animation
     {
-        private const int k_standard_resolution = 1200;
+        public const int k_standard_resolution = 1200;
 
-        private const string k_xfl_content = "PROXY-CS5";
+        public const string k_xfl_content = "PROXY-CS5";
 
-        private const string k_xfl_version = "2.971";
+        public const string k_xfl_version = "2.971";
 
         public readonly static XAttribute k_xmlns_attribute = new(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
         public readonly static XNamespace xflns = $"http://ns.adobe.com/xfl/2008/";
 
-        private static double[] k_initial_transform = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+        public static readonly double[] k_initial_transform = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
 
-        private static readonly double[] k_initial_color = { 1.0, 1.0, 1.0, 1.0 };
+        public static readonly double[] k_initial_color = { 1.0, 1.0, 1.0, 1.0 };
 
         public static ExtraInfo Decode(PAMInfo PamJson, string outFolder, int resolution)
         {

@@ -363,6 +363,11 @@ namespace Sen.Shell.Modules.Support.Download
         public abstract GitHubReleases SendGetRequest(string url, string user_agent);
 
         public abstract void DownloadShell(string save_dir, string link, int index, string shell_name);
+
+        public abstract void DownloadFromServer(string fileUrl, string filePath, string user_agent);
+
+        public abstract void DownloadFromMultipleThread(string[] fileUrls, string[] filePaths, string user_agent);
+
     }
 
 
@@ -376,6 +381,27 @@ namespace Sen.Shell.Modules.Support.Download
         }
 
 
+        public override void DownloadFromServer(string fileUrl, string filePath, string user_agent)
+        {
+            Task task = (GitHub.DownloadFileAsync(fileUrl, filePath, user_agent));
+            task.Wait();    
+            return;
+        }
+
+        public override void DownloadFromMultipleThread(string[] fileUrls, string[] filePaths, string user_agent)
+        {
+            if(filePaths.Length != fileUrls.Length)
+            {
+                throw new Exception("Does not match size of array");
+            }
+            for(var i = 0 ; i < fileUrls.Length; i++)
+            {
+                DownloadFromServer(fileUrls[i], filePaths[i], user_agent);
+            }
+            return;
+        }
+
+
 
         public override bool HasAdmin()
         {
@@ -384,7 +410,6 @@ namespace Sen.Shell.Modules.Support.Download
                     // Windows implementation
                     var identity = WindowsIdentity.GetCurrent();
                     var principal = new WindowsPrincipal(identity);
-                    var path = new ImplementPath();
                     return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
             else if (Platform.CurrentPlatform() == UserPlatform.Macintosh || Platform.CurrentPlatform() == UserPlatform.Linux)
@@ -424,7 +449,7 @@ namespace Sen.Shell.Modules.Support.Download
 
         public override void DownloadShell(string save_dir, string link, int index, string shell_name)
         {
-            Task task = DownloadUpdate.DownloadShellAsync(save_dir, link, index, shell_name);
+            Task task = DownloadShellAsync(save_dir, link, index, shell_name);
             task.Wait();
             return;
         }
@@ -451,7 +476,7 @@ namespace Sen.Shell.Modules.Support.Download
                 throw new Exception($"assets not found from github api");
             }
             var script_save = path.Resolve($"{path.Dirname($"{script_dir}")}/scripts.zip");
-            await GitHub.DownloadFileAsync(github_api_json.Assets[0].Browser_download_url, (script_save), $"Sen");
+            await DownloadFileAsync(github_api_json.Assets[0].Browser_download_url, (script_save), $"Sen");
             var compression = new Compress();
             compression.UncompressZip(script_save, script_dir);
             // delete zip
@@ -460,6 +485,7 @@ namespace Sen.Shell.Modules.Support.Download
             platform.SendNotification("Script download success, happy modding!", "Sen");
             return;
         }
+
 
 
 
@@ -501,5 +527,6 @@ namespace Sen.Shell.Modules.Support.Download
             };
             return;
         }
+
     }
 }

@@ -6,8 +6,8 @@ using ImageInfo = Sen.Shell.Modules.Support.PvZ2.PAM.ImageInfo;
 using SpriteInfo = Sen.Shell.Modules.Support.PvZ2.PAM.SpriteInfo;
 using System.Dynamic;
 using System.Xml.Linq;
-using System.Text;
 using System.Collections;
+using System.Linq;
 using System.Reflection.Metadata;
 
 namespace Sen.Shell.Modules.Support.Flash
@@ -20,6 +20,8 @@ namespace Sen.Shell.Modules.Support.Flash
         public abstract void WriteImageDocument(int index, string name, int[] size, double[] transform, string outpath);
 
         public abstract void WriteSourceDocument(int index, string name, int[] size, double[] transform, int resolution, string outpath);
+
+        public abstract void InsertDOMDocumentData(DOMDocument a, string xml, string outFile);
     }
 
     #endregion
@@ -27,10 +29,69 @@ namespace Sen.Shell.Modules.Support.Flash
 
     #region PvZ2 XML
 
+
+    public struct DOMDocument
+    {
+        public required string[] media;
+
+        public required string[] source;
+
+        public required string[] image;
+
+        public required string[] sprite;
+    }
+
+
     public class PvZ2XML : XMLWrite
     {
         public PvZ2XML() { }
-        
+
+        public override void InsertDOMDocumentData(DOMDocument dom, string xml, string outFile)
+        {
+            var domdocument_deserialize = XDocument.Parse(xml);
+            var domdocument_namespace = domdocument_deserialize!.Root!.GetDefaultNamespace();
+            var domdocument_resource_media_element = domdocument_deserialize!.Descendants(domdocument_namespace + "media").FirstOrDefault();
+            if (domdocument_resource_media_element is not null)
+            {
+                foreach (var media in dom.media)
+                {
+                    domdocument_resource_media_element!.Add(new XElement("DOMBitmapItem", new XAttribute("name", media), new XAttribute("href", $"media/{media}.png")));
+                }
+            }
+            var document_resource_symbols_element = domdocument_deserialize.Descendants(domdocument_namespace + "symbols");
+            if(document_resource_symbols_element is not null)
+            {
+                var document_resource_symbols_element_attribute_source = document_resource_symbols_element!.FirstOrDefault<XElement>()!.Elements(domdocument_namespace + "Include")
+                    .Where(element => element!.Attribute("href")!.Value!.Contains("source"))!.ToList<XElement>();
+                var document_resource_symbols_element_attribute_image = document_resource_symbols_element!.FirstOrDefault<XElement>()!.Elements(domdocument_namespace + "Include")
+                    .Where(element => element!.Attribute("href")!.Value!.Contains("image")).ToList<XElement>();
+                var document_resource_symbols_element_attribute_sprite = document_resource_symbols_element!.FirstOrDefault<XElement>()!.Elements(domdocument_namespace + "Include")
+                    .Where(element => element.Attribute("href")!.Value.Contains("sprite")
+                && !element.Attribute("href")!.Value.Contains("main_sprite")).ToList<XElement>();
+                document_resource_symbols_element!.FirstOrDefault<XElement>()!.RemoveAll();
+                dom.image.ToList<string>().ForEach(element =>
+                (document_resource_symbols_element_attribute_image as List<XElement>)!.Add(new XElement("Include", new XAttribute("href", $"image/{element as string}.png"))));
+                dom.source.ToList<string>()!.ForEach(element =>
+                (document_resource_symbols_element_attribute_source as List<XElement>)!.Add(new XElement("Include", new XAttribute("href", $"source/{element as string}.png"))));
+                dom.sprite.ToList<string>()!.ForEach(element =>
+                (document_resource_symbols_element_attribute_sprite as List<XElement>)!.Add(new XElement("Include", new XAttribute("href", $"sprite/{element as string}.png"))));
+                (document_resource_symbols_element_attribute_sprite as List<XElement>)!.Add(new XElement(domdocument_namespace+"Include", new XAttribute("href", $"main_sprite.xml")));
+                document_resource_symbols_element!.FirstOrDefault<XElement>()!.RemoveAll();
+                document_resource_symbols_element_attribute_source!.ToArray<XElement>()!.Concat<XElement>(document_resource_symbols_element_attribute_image!.ToArray<XElement>())
+                    .Concat<XElement>(document_resource_symbols_element_attribute_sprite!.ToArray<XElement>()).ToList<XElement>().
+                    ForEach(element => document_resource_symbols_element!.FirstOrDefault<XElement>()!.Add(element as XElement));
+            }
+            var domdocument_serialize_settings = new XmlWriterSettings()
+            {
+                Indent = true,
+                IndentChars = "\t",
+                OmitXmlDeclaration = true,
+            };
+            using var domdocument_serialize_xml_writer = XmlWriter.Create(outFile, domdocument_serialize_settings);
+            domdocument_deserialize.Save(domdocument_serialize_xml_writer);
+            return;
+        }
+
         public override void WriteImageDocument(int index, string name, int[] size, double[] transform, string outpath)
         {
             var image = new ImageInfo()

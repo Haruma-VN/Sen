@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
+
 namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 {
 
@@ -912,11 +912,12 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             {
                 Indent = true,
                 IndentChars = "\t",
-                OmitXmlDeclaration = true
+                OmitXmlDeclaration = true,
             };
             using var writer = XmlWriter.Create(outPath, settings);
             XDocument XDdocument = new(new XDeclaration("1.0", "utf-8", null), document);
             XDdocument.Save(writer);
+            return;
         }
 
         public virtual async Task SaveFileAsync(string path)

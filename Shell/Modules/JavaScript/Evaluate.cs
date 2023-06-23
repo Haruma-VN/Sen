@@ -4,11 +4,7 @@ using Sen.Shell.Modules.Standards.Bitmap;
 using Sen.Shell.Modules.Support.TextureEncode.RSB;
 using Sen.Shell.Modules.Support.PvZ2;
 using Jint;
-using Jint.Native;
-using Jint.Runtime.Interop;
 using Sen.Shell.Modules.Support.Download;
-using Jint.Native.Function;
-using Jint.Native.Object;
 
 namespace Sen.Shell.Modules.JavaScript
 {
@@ -17,11 +13,11 @@ namespace Sen.Shell.Modules.JavaScript
         public static void Execute(in string Script_Directory, string[] args)
         {
 
-            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
+            var path = new ImplementPath();
             var fs = new FileSystem();
             var main_js = path.Resolve($"{Script_Directory}/main.js");
             var SystemConsole = new SystemImplement();
-            var engine = new Jint.Engine(options => options.AllowClr(typeof(Program).Assembly));
+            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly));
 
             engine.SetValue("Fs", fs);
             engine.SetValue("args", args);
@@ -63,7 +59,7 @@ namespace Sen.Shell.Modules.JavaScript
             var path = new ImplementPath();
             var fs = new FileSystem();
             var SystemConsole = new SystemImplement();
-            var engine = new Jint.Engine();
+            var engine = new Engine();
             engine.SetValue("DotNetExceptionArg", ex);
 
             engine.SetValue("Fs", fs);

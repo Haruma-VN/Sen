@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace WEMSharp
+﻿namespace WEMSharp
 {
     /// <summary>
     /// Wrapper around a Stream that supports reading bits

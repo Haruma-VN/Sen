@@ -12,6 +12,7 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/javascript.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/third/maxrects-packer/maxrects-packer.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/third/fast-sort/sort.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/third/node-xmlcreate/main.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/constraints/platform.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/exception.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/system/implement/filesystem.js`),

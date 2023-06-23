@@ -1,6 +1,5 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
-using System;
 
 namespace Sen.Shell.Modules.Standards
 {
@@ -169,7 +168,7 @@ namespace Sen.Shell.Modules.Standards
                 }
                 else
                 {
-#pragma warning disable CS8600
+                    #pragma warning disable CS8600
                     string term = Environment.GetEnvironmentVariable("TERM");
                     if (!string.IsNullOrEmpty(term) && term.ToLower().Contains("color"))
                     {
