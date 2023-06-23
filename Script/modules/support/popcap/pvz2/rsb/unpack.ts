@@ -28,6 +28,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
     export interface MainfestInfo {
         version: number;
+        ptx_info_size: number;
         path?: RSBPathInfo;
         group: GroupInfo[];
     }
@@ -45,8 +46,27 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
     export interface SubGroupInfo {
         name_packet: string;
-        category?: number | null;
-        packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+        category: [number, string | null];
+        packet_info: RSBPacketInfo;
+    }
+
+    export interface RSBPacketInfo {
+        version: number;
+        compression_flags: number;
+        res: ResInfo[];
+    }
+
+    export interface ResInfo {
+        path: string | string[];
+        ptx_info?: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo;
+        ptx_property?: PtxProperty;
+    }
+
+    export interface PtxProperty {
+        format: number;
+        pitch: number;
+        alpha_size: number | null;
+        alpha_format: number | null;
     }
 
     /**
@@ -63,13 +83,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
     export interface RSBManifestInformation {
         version: 3 | 4;
+        ptx_info_size: 16 | 20 | 24;
         group: {
             [composite_name: string]: {
                 is_composite: boolean;
                 subgroup: {
                     [subgroup_children: string]: {
-                        category?: number | null;
-                        packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+                        category: [number, string | null];
+                        packet_info: RSBPacketInfo;
                     };
                 };
             };
@@ -87,6 +108,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
     ): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation {
         const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = {
             version: information.version as 3 | 4,
+            ptx_info_size: information.ptx_info_size as 16 | 20 | 24,
             group: {},
         };
 
@@ -99,18 +121,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
             subgroup.forEach((subgroupInfo: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
                 const { name_packet, category, packet_info } = subgroupInfo satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo;
-                const packetInfo: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = {
+                const packetInfo: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = {
                     version: packet_info.version,
                     compression_flags: packet_info.compression_flags,
                     res: [],
                 };
 
-                packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo) => {
+                packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ResInfo) => {
                     packetInfo.res.push({ ...res, path: (res.path as string).split("\\") });
                 });
 
                 manifest_info.group[name].subgroup[name_packet] = {
-                    category,
+                    category: [Number(category[0]), (category[1] == "" ? null : category[1])],
                     packet_info: packetInfo,
                 };
             });

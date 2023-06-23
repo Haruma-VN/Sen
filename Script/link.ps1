@@ -54,6 +54,7 @@ Get-ChildItem $source -recurse -Filter "*.png" | ForEach-Object {
     }
     Copy-Item -Path $item -Destination $destination
 }
+
 # Copy Bin files
 Get-ChildItem $source -recurse -Filter "*.bin" | ForEach-Object {
     $item = $_.FullName.Replace('\', '/')

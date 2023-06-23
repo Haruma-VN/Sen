@@ -59,14 +59,26 @@ namespace Sen.Shell.Modules.Standards
     }
 
 
+
+    public class CustomIndentedJsonConverter<T> : JsonConverter<T>
+    {
+        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return JsonSerializer.Deserialize<T>(ref reader, options);
+        }
+
+        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
+        {
+            var json = JsonSerializer.Serialize(value, options);
+            var indentedJson = json.Replace("\n", "\n\t");
+            writer.WriteStringValue(indentedJson);
+        }
+    }
+
+
     public class JsonImplement : Json_Abstract
     {
-        private readonly JsonSerializerOptions ConstraintJsonSerializerOptions = new()
-        {
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        };
+
 
         public JsonImplement() { }
 
@@ -79,11 +91,19 @@ namespace Sen.Shell.Modules.Standards
 
         public override string StringifyJson<Generic_T>(Generic_T json_serialized, JsonSerializerOptions? SerializerOptions)
         {
-            SerializerOptions ??= this.ConstraintJsonSerializerOptions;
+            SerializerOptions ??= new()
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new CustomIndentedJsonConverter<Generic_T>() }
+            };
+;
             return JsonSerializer.Serialize<Generic_T>(json_serialized, SerializerOptions);
         }
-
     }
+
+
 
 
     public static class Object

@@ -232,8 +232,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         }
         public class MovesInfo
         {
-            public static readonly int LongCoordsMinVersion = 5;
-            public static readonly int MatrixMinVersion = 2;
             [Flags]
             public enum MoveFlags
             {
@@ -281,7 +279,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 int v0 = (int)(transform[^2] * 20);
                 int v1 = (int)(transform[^1] * 20);
-                if (version >= LongCoordsMinVersion)
+                if (version >= 5)
                 {
                     PamFile.writeInt32LE(v0);
                     PamFile.writeInt32LE(v1);
@@ -1456,6 +1454,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var x_Include_list = x_symbols.Elements("Include").ToArray();
             }
             var main_sprite_frame = ParseSpriteDocument(PAMRipe.library.main_sprite, -1);
+            var lastFrame = main_sprite_frame.Length;
             {
                 var x_timelines_list = x_DOMDocument.Elements("timelines").ToArray();
                 if (x_timelines_list.Length != 1)
@@ -1537,7 +1536,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         {
                             throw new PAMException("Invalid Script CDATA vaule", ((XCData)x_script_text).Value.Trim());
                         }
-                        main_sprite_frame[frame_index].stop = true;
+                        if (frame_index < lastFrame) {
+                            main_sprite_frame[frame_index].stop = true;
+                        }
+                        else if (frame_index >= lastFrame) {
+                            main_sprite_frame[lastFrame  - 1].stop = true;
+                        }
                     });
                 }
                 {

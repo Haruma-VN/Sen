@@ -253,15 +253,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public override void WemToOGG(string inFile, string outFile, string destination, bool inlineCodebook, bool inlineSetup)
         {
-            try
-            {
-                var wem = new WEMFile(inFile, WEMForcePacketFormat.NoForcePacketFormat);
-                wem.GenerateOGG(outFile, destination, inlineCodebook, inlineSetup);
-                return;
-            }catch(Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            var wem = new WEMFile(inFile, WEMForcePacketFormat.NoForcePacketFormat);
+            wem.GenerateOGG(outFile, destination, inlineCodebook, inlineSetup);
+            return;
         }
 
         #endregion

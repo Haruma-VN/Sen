@@ -52,6 +52,11 @@ declare namespace DotNetPlatform {
      */
 
     export function SendNotification(message: string, title: string): void;
+
+    /**
+     * Shell that host this tool
+     */
+    export function ShellHost(): string;
 }
 
 /**

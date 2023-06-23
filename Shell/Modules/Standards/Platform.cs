@@ -57,6 +57,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract void SendNotification(string message, string title);
 
+        public abstract string ShellHost();
+
     }
 
     public class Platform : Platform_Abstract
@@ -192,11 +194,11 @@ namespace Sen.Shell.Modules.Standards
 
         public override void SendNotification(string message, string title)
         {
-            var toast = new Sen.Shell.Modules.Support.Misc.ToastNotification();
+            var toast = new Support.Misc.ToastNotification();
             try
             {
 
-                switch (Platform.CurrentPlatform())
+                switch (CurrentPlatform())
                 {
                     case UserPlatform.Macintosh:
                         {
@@ -222,6 +224,11 @@ namespace Sen.Shell.Modules.Standards
             catch { }
             finally { }
             return;
+        }
+
+        public override string ShellHost()
+        {
+            return "Console";
         }
 
         /// Xamarin.Forms only

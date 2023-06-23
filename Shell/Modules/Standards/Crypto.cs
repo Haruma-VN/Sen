@@ -21,6 +21,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract byte[] RijndaelDecrypt(byte[] encryptedBytes, string password, string salt_value, RijndaelMode Rijndael_Mode, RijndaelPadding Rijndael_Padding);
 
+       // public abstract byte[] AESEncrypt(string plainText, string password, string salt);
+
     }
 
     public enum RijndaelMode

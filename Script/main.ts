@@ -113,12 +113,7 @@ namespace Sen.Script {
         if (DotNetPlatform.SenShell === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)) {
             DotNetPlatform.SupportUtf8Console();
         }
-        Console.Print(
-            null,
-            `Sen ~ 1.0.0 ~ ${
-                DotNetPlatform.CurrentPlatform() === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console) ? "Console" : "GUI"
-            } ~ ${DotNetPlatform.CurrentUserPlatform()}`
-        );
+        Console.Print(null, `Sen ~ 1.0.0 ~ ${DotNetPlatform.ShellHost()} ~ ${DotNetPlatform.CurrentUserPlatform()}`);
         if (ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Console.Print(
                 13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,

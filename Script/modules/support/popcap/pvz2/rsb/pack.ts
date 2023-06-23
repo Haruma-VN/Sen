@@ -10,6 +10,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
     ): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
         const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = {
             version: information.version as 3 | 4,
+            ptx_info_size: information.ptx_info_size as 16 | 20 | 24,
             group: [],
         } satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
         const groups: Array<string> = Object.keys(information.group);
@@ -115,6 +116,22 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
                 `${inDirectory}/res.json`,
                 `${inDirectory}/resource/PROPERTIES/RESOURCES.json`
+            );
+        } else {
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
+                `${inDirectory}/resource/PROPERTIES/RESOURCES.json`,
+                `${inDirectory}/res.json`,
+                Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(`${inDirectory}/res.json`).expand_path
+            );
+            Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json").replace(
+                        /\{\}/g,
+                        Path.Parse(manifestgroup_save).name_without_extension
+                    )
+                )
             );
         }
         if (manifest_group !== -1) {

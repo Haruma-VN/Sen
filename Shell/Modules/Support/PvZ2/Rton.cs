@@ -166,7 +166,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             {
                 Decrypt(RtonFile);
             }
-            string Rton_magic = RtonFile.readString(4);
+            var Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
             if (Rton_magic != magic) throw new RTONDecodeException(
                 $"wrong_rton_header",
@@ -182,13 +182,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 RTONListException.Version
                 );
             ReadObject(RtonFile, jsonWriter);
-            string EOF = RtonFile.readString(4);
+            var EOF = RtonFile.readString(4);
             if (EOF != EOR) throw new RTONDecodeException($"end_of_rton_file_wrong",
                 RtonFile.filePath ??= "undefined",
                 $"end_of_rton_must_be_done",
                 RTONListException.Ends);
             jsonWriter.Flush();
-            SenBuffer JsonFile = new SenBuffer(stream);
+            var JsonFile = new SenBuffer(stream);
             R0x90List.Clear();
             R0x92List.Clear();
             return JsonFile;
