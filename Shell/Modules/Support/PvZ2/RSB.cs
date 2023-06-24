@@ -1186,19 +1186,23 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             }
         }
         // Misc 
-        public static void RSBObfuscate(SenBuffer RSBFile) {
+        public static void RSBObfuscate(SenBuffer RSBFile)
+        {
             var HeadInfo = ReadHead(RSBFile);
             var rsgNumber = HeadInfo.rsgNumber;
             RSBFile.readOffset = HeadInfo.rsgInfo_BeginOffset;
-            for (var i = 0; i < rsgNumber; i++) {
+            for (var i = 0; i < rsgNumber; i++)
+            {
                 var startOffset = RSBFile.readOffset;
+                var autopoolStartOffset = HeadInfo.autopoolInfo_BeginOffset + i * 152;
                 RSBFile.writeNull(128, startOffset);
+                RSBFile.writeNull(128, autopoolStartOffset);
                 RSBFile.writeNull(4, startOffset + 132);
                 var packetOffset = RSBFile.readUInt32LE(startOffset + 128);
                 RSBFile.writeNull(64, packetOffset);
                 RSBFile.readOffset = startOffset + HeadInfo.rsgInfo_EachLength;
             }
-        } 
+        }
     }
 
 }
