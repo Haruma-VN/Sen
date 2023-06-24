@@ -1636,6 +1636,13 @@ declare namespace PvZ2Shell {
      */
 
     export function WemToOGG(inWEM: string, outOGG: string, destination: string, inlineCodebook: boolean, inlineSetup: boolean): void;
+    /**
+     *
+     * @param inFile - Pass RSB file path
+     * @param outRsb - Out RSB
+     */
+
+    export function RSBObfuscate(inFile: string, outRsb: string): void;
 }
 
 /**

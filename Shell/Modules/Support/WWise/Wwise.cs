@@ -484,6 +484,7 @@ namespace Sen.Shell.Modules.Support.WWise
         {
             return Convert.FromHexString(hexString.Replace(" ", ""));
         }
+
         private static void EncodeType<T>(SenBuffer BNKFile, T WWiseType, WWiseInfoSimple WWiseInfo, string inFolder)
         {
             switch (WWiseType)

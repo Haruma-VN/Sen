@@ -68,7 +68,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RSBUnpackByLenient(string RSBin, string outRSBdirectory);
 
-        public abstract void RSBDisturb(string RSBin, string outRSB);
+        public abstract void RSBObfuscate(string RSBin, string outRSB);
 
         public abstract WWiseInfoSimple WWiseSoundBankDecode(string bnk_in, string bnk_dir_out);
 
@@ -181,10 +181,14 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override void RSBDisturb(string RSBin, string outRSB)
+        public override void RSBObfuscate(string RSBin, string outRSB)
         {
+            var RSBFile = new SenBuffer(RSBin);
+            RSBFunction.RSBObfuscate(RSBFile);
+            RSBFile.OutFile(outRSB);
             return;
         }
+
 
         public override WWiseInfoSimple WWiseSoundBankDecode(string bnk_in, string bnk_dir_out)
         {

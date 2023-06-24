@@ -187,7 +187,7 @@
     "popcap_resize_animation": "PopCap Adobe Animate Flash Animation Resize",
     "toast_notification_message": "{1} finished in {2}s",
     "popcap_rsb_unpack_by_lenient": "PopCap RSB Unpack By Lenient",
-    "popcap_rsb_disturb": "PopCap RSB Disturb",
+    "popcap_rsb_obfuscate": "PopCap RSB Obfuscate",
     "popcap_zlib_uncompress": "PopCap Zlib Uncompress",
     "popcap_zlib_compress": "PopCap Zlib Compress",
     "use_64_bit_variant": "Use 64-bits variant",

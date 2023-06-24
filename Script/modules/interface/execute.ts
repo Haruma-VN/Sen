@@ -129,7 +129,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_zlib_uncompress"
         | "popcap_rsb_unpack_simple"
         | "popcap_rsb_pack_simple"
-        | "wwise_media_to_ogg";
+        | "wwise_media_to_ogg"
+        | "popcap_rsb_obfuscate";
 
     /**
      *
@@ -867,6 +868,20 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.pam`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_rsb_obfuscate": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name}.bin`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    PvZ2Shell.RSBObfuscate(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name}.bin`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        PvZ2Shell.RSBObfuscate(arg, output_argument);
                     });
                 }
                 break;

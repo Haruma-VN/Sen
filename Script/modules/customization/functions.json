@@ -157,7 +157,7 @@
         "exclude": [],
         "type": "directory"
     },
-    "popcap_rsb_disturb": {
+    "popcap_rsb_obfuscate": {
         "func_number": 27,
         "include": [".rsb", ".obb"],
         "exclude": [],
