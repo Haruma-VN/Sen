@@ -72,14 +72,14 @@ namespace Sen.Shell.Modules.Support.Flash
                 dom.image.ToList<string>().ForEach(element =>
                 (document_resource_symbols_element_attribute_image as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"image/{element as string}.xml"))));
                 dom.source.ToList<string>()!.ForEach(element =>
-                (document_resource_symbols_element_attribute_source as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"source/{element as string}.png"))));
+                (document_resource_symbols_element_attribute_source as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"source/{element as string}.xml"))));
                 dom.sprite.ToList<string>()!.ForEach(element =>
-                (document_resource_symbols_element_attribute_sprite as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"sprite/{element as string}.png"))));
+                (document_resource_symbols_element_attribute_sprite as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"sprite/{element as string}.xml"))));
                 document_resource_symbols_element!.FirstOrDefault<XElement>()!.RemoveAll();
                 document_resource_symbols_element_attribute_source!.ToArray<XElement>()!.Concat<XElement>(document_resource_symbols_element_attribute_image!.ToArray<XElement>())
-                    .Concat<XElement>(document_resource_symbols_element_attribute_sprite!.ToArray<XElement>()).ToList<XElement>()
-                    .Concat(new List<XElement>() { new XElement(domdocument_namespace + "Include", new XAttribute("href", $"main_sprite.xml")) }).ToList<XElement>()
-                    .ForEach(element => document_resource_symbols_element!.FirstOrDefault<XElement>()!.Add(element as XElement));
+                    !.Concat<XElement>(document_resource_symbols_element_attribute_sprite!.ToArray<XElement>())!.ToList<XElement>()
+                    !.Concat(new List<XElement>() { new XElement(domdocument_namespace + "Include", new XAttribute("href", $"main_sprite.xml")) })!.ToList<XElement>()
+                    !.ForEach(element => document_resource_symbols_element!.FirstOrDefault<XElement>()!.Add(element as XElement));
             }
             var domdocument_serialize_settings = new XmlWriterSettings()
             {
