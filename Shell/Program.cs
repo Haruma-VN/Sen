@@ -19,7 +19,7 @@ namespace Sen.Shell
 
         public async static Task<int> Main(string[] args)
         {
-            Sen.Shell.Modules.Support.Misc.SignWindowsRegistry.AssignExtensionWithSen();
+            Modules.Support.Misc.SignWindowsRegistry.AssignExtensionWithSen();
             var SystemConsole = new SystemImplement();
             var path = new ImplementPath();
             var fs = new FileSystem();
