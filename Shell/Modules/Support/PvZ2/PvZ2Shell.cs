@@ -7,6 +7,7 @@ using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Compress;
 using Sen.Shell.Modules.Standards;
 using WEMSharp;
+using Sen.Shell.Modules.Support.WWise;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -69,9 +70,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RSBDisturb(string RSBin, string outRSB);
 
-        public abstract void WWiseSoundBankDecode(string bnk_in, string bnk_dir_out);
+        public abstract WWiseInfoSimple WWiseSoundBankDecode(string bnk_in, string bnk_dir_out);
 
-        public abstract void WWiseSoundBankEncode(string soundbank_dir, string out_bnk);
+        public abstract void WWiseSoundBankEncode(string soundbank_dir, string out_bnk, WWiseInfoSimple information);
 
         public abstract RSB_head ProcessRSBData(string infile);
 
@@ -185,13 +186,17 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override void WWiseSoundBankDecode(string bnk_in, string bnk_dir_out)
+        public override WWiseInfoSimple WWiseSoundBankDecode(string bnk_in, string bnk_dir_out)
         {
-            return;
+            var wwise_soundbank = new SenBuffer(bnk_in);
+            var wwise_json = WwiseFunction.DecodeSimple(wwise_soundbank, bnk_dir_out);
+            return wwise_json;
         }
 
-        public override void WWiseSoundBankEncode(string soundbank_dir, string out_bnk)
+        public override void WWiseSoundBankEncode(string soundbank_dir, string out_bnk, WWiseInfoSimple information)
         {
+            var wwise_soundbank = WwiseFunction.EncodeSimple(information, soundbank_dir);
+            wwise_soundbank.OutFile(out_bnk);
             return;
         }
 
