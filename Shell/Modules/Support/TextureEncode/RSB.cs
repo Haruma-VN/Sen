@@ -70,8 +70,8 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public TextureFormatHandler() { }
         public override SenBuffer Decode_A8(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
                 imageData[i].R = 255;
@@ -79,47 +79,46 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                 imageData[i].B = 255;
                 imageData[i].A = encodedPixels.readUInt8();
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_ARGB1555(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                ushort temp_pixels = encodedPixels.readUInt16LE();
-                int r = (temp_pixels & 0x7C00) >> 10;
-                int g = (temp_pixels & 0x3E0) >> 5;
-                int b = temp_pixels & 0x1F;
+                var temp_pixels = encodedPixels.readUInt16LE();
+                var r = (temp_pixels & 0x7C00) >> 10;
+                var g = (temp_pixels & 0x3E0) >> 5;
+                var b = temp_pixels & 0x1F;
                 imageData[i] = new Rgba32((byte)((r << 3) | (r >> 2)), (byte)((g << 3) | (g >> 2)), (byte)((b << 3) | (b >> 2)), (byte)-(temp_pixels >> 15));
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_ARGB4444(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                ushort temp_pixels = encodedPixels.readUInt16LE();
-                int a = temp_pixels >> 12;
-                int r = (temp_pixels & 0xF00) >> 8;
-                int g = (temp_pixels & 0xF0) >> 4;
-                int b = temp_pixels & 0xF;
+                var temp_pixels = encodedPixels.readUInt16LE();
+                var a = temp_pixels >> 12;
+                var r = (temp_pixels & 0xF00) >> 8;
+                var g = (temp_pixels & 0xF0) >> 4;
+                var b = temp_pixels & 0xF;
                 imageData[i] = new Rgba32((byte)((r << 4) | r), (byte)((g << 4) | g), (byte)((b << 4) | b), (byte)((a << 4) | a));
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override Image<Rgba32> Decode_ARGB8888(byte[] encodedPixels, int width, int height)
         {
             var image = new Image<Rgba32>(width, height);
-
             var index = 0;
             for (var y = 0; y < height; y++)
             {
@@ -139,86 +138,86 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Decode_L8(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                byte l = encodedPixels.readUInt8();
+                var l = encodedPixels.readUInt8();
                 imageData[i].R = l;
                 imageData[i].G = l;
                 imageData[i].B = l;
                 imageData[i].A = 255;
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_LA44(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                int temp_pixels = encodedPixels.readUInt8();
-                int a = temp_pixels & 0xF;
+                var temp_pixels = encodedPixels.readUInt8();
+                var a = temp_pixels & 0xF;
                 temp_pixels >>= 4;
-                byte l = (byte)(temp_pixels | (temp_pixels << 4));
+                var l = (byte)(temp_pixels | (temp_pixels << 4));
                 imageData[i].R = l;
                 imageData[i].G = l;
                 imageData[i].B = l;
                 imageData[i].A = (byte)(a | (a << 4));
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_LA88(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                int temp_pixels = encodedPixels.readUInt16LE();
-                byte l = (byte)(temp_pixels >> 8);
+                var temp_pixels = encodedPixels.readUInt16LE();
+                var l = (byte)(temp_pixels >> 8);
                 imageData[i].R = l;
                 imageData[i].G = l;
                 imageData[i].B = l;
                 imageData[i].A = (byte)(temp_pixels & 0xFF);
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_RGB565(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                ushort temp_pixels = encodedPixels.readUInt16LE();
-                int a = temp_pixels >> 11;
-                int r = (temp_pixels & 0x7E0) >> 5;
-                int g = (temp_pixels & 0xF0) >> 4;
-                int b = temp_pixels & 0x1F;
+                var temp_pixels = encodedPixels.readUInt16LE();
+                var a = temp_pixels >> 11;
+                var r = (temp_pixels & 0x7E0) >> 5;
+                var g = (temp_pixels & 0xF0) >> 4;
+                var b = temp_pixels & 0x1F;
                 imageData[i] = new Rgba32((byte)((r << 3) | (r >> 2)), (byte)((g << 2) | (g >> 4)), (byte)((b << 3) | (b >> 2)));
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_RGB565_Block(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
-            for (int i = 0; i < height; i += 32)
+            var square = width * height;
+            var imageData = new Rgba32[square];
+            for (var i = 0; i < height; i += 32)
             {
-                for (int w = 0; w < width; w += 32)
+                for (var w = 0; w < width; w += 32)
                 {
-                    for (int j = 0; j < 32; j++)
+                    for (var j = 0; j < 32; j++)
                     {
-                        for (int k = 0; k < 32; k++)
+                        for (var k = 0; k < 32; k++)
                         {
-                            ushort temp_pixels = encodedPixels.readUInt16LE();
+                            var temp_pixels = encodedPixels.readUInt16LE();
                             if ((i + j) < height && (w + k) < width)
                             {
                                 imageData[(i + j) * width + w + k] = new Rgba32((byte)((temp_pixels & 0xF800) >> 8), (byte)((temp_pixels & 0x7E0) >> 3), (byte)((temp_pixels & 0x1F) << 3), 255);
@@ -227,31 +226,31 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                     }
                 }
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_RGBA4444(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                ushort temp_pixels = encodedPixels.readUInt16LE();
-                int a = temp_pixels >> 12;
-                int r = (temp_pixels & 0xF00) >> 8;
-                int g = (temp_pixels & 0xF0) >> 4;
-                int b = temp_pixels & 0xF;
+                var temp_pixels = encodedPixels.readUInt16LE();
+                var a = temp_pixels >> 12;
+                var r = (temp_pixels & 0xF00) >> 8;
+                var g = (temp_pixels & 0xF0) >> 4;
+                var b = temp_pixels & 0xF;
                 imageData[i] = new Rgba32((byte)((r << 4) | r), (byte)((g << 4) | g), (byte)((b << 4) | b), (byte)((a << 4) | a));
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_RGBA4444_Block(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < height; i += 32)
             {
                 for (var w = 0; w < width; w += 32)
@@ -260,43 +259,43 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                     {
                         for (var k = 0; k < 32; k++)
                         {
-                            ushort temp_pixels = encodedPixels.readUInt16LE();
+                            var temp_pixels = encodedPixels.readUInt16LE();
                             if ((i + j) < height && (w + k) < width)
                             {
-                                int r = temp_pixels >> 12;
-                                int g = (temp_pixels & 0xF00) >> 8;
-                                int b = (temp_pixels & 0xF0) >> 4;
-                                int a = temp_pixels & 0xF;
+                                var r = temp_pixels >> 12;
+                                var g = (temp_pixels & 0xF00) >> 8;
+                                var b = (temp_pixels & 0xF0) >> 4;
+                                var a = temp_pixels & 0xF;
                                 imageData[(i + j) * width + w + k] = new Rgba32((byte)((r << 4) | r), (byte)((g << 4) | g), (byte)((b << 4) | b), (byte)((a << 4) | a));
                             }
                         }
                     }
                 }
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_RGBA5551(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < square; i++)
             {
-                ushort temp_pixels = encodedPixels.readUInt16LE();
-                int r = (temp_pixels & 0xF800) >> 11;
-                int g = (temp_pixels & 0x7C0) >> 6;
-                int b = (temp_pixels & 0x3E) >> 1;
+                var temp_pixels = encodedPixels.readUInt16LE();
+                var r = (temp_pixels & 0xF800) >> 11;
+                var g = (temp_pixels & 0x7C0) >> 6;
+                var b = (temp_pixels & 0x3E) >> 1;
                 imageData[i] = new Rgba32((byte)((r << 3) | (r >> 2)), (byte)((g << 3) | (g >> 2)), (byte)((b << 3) | (b >> 2)), (byte)-(temp_pixels & 0x1));
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public override SenBuffer Decode_RGBA5551_Block(SenBuffer encodedPixels, int width, int height)
         {
-            int square = width * height;
-            Rgba32[] imageData = new Rgba32[square];
+            var square = width * height;
+            var imageData = new Rgba32[square];
             for (var i = 0; i < height; i += 32)
             {
                 for (var w = 0; w < width; w += 32)
@@ -305,19 +304,19 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                     {
                         for (var k = 0; k < 32; k++)
                         {
-                            ushort temp_pixels = encodedPixels.readUInt16LE();
+                            var temp_pixels = encodedPixels.readUInt16LE();
                             if ((i + j) < height && (w + k) < width)
                             {
-                                int r = temp_pixels >> 11;
-                                int g = (temp_pixels & 0x7C0) >> 6;
-                                int b = (temp_pixels & 0x3E) >> 1;
+                                var r = temp_pixels >> 11;
+                                var g = (temp_pixels & 0x7C0) >> 6;
+                                var b = (temp_pixels & 0x3E) >> 1;
                                 imageData[(i + j) * width + w + k] = new Rgba32((byte)((r << 3) | (r >> 2)), (byte)((g << 3) | (g >> 2)), (byte)((b << 3) | (b >> 2)), (byte)-(temp_pixels & 0x1));
                             }
                         }
                     }
                 }
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
@@ -325,7 +324,6 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override Image<Rgba32> Decode_RGBA8888(byte[] encodedPixels, int width, int height)
         {
             var image = new Image<Rgba32>(width, height);
-
             var index = 0;
             for (var y = 0; y < height; y++)
             {
@@ -335,7 +333,6 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                     var g = encodedPixels[index++];
                     var b = encodedPixels[index++];
                     var a = encodedPixels[index++];
-
                     image[x, y] = new Rgba32(r, g, b, a);
                 }
             }
@@ -345,10 +342,10 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_A8(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
             SenBuffer image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
@@ -359,11 +356,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_ARGB1555(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt16LE((ushort)(((imageData[i].A & 0x80) << 8) | (imageData[i].B >> 3) | ((imageData[i].G & 0xF8) << 2) | ((imageData[i].R & 0xF8) << 7)));
@@ -373,11 +370,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_ARGB4444(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt16LE((ushort)((imageData[i].B >> 4) | (imageData[i].G & 0xF0) | ((imageData[i].R & 0xF0) << 4) | ((imageData[i].A & 0xF0) << 8)));
@@ -416,11 +413,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_L8(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt8(Max(imageData[i].R * 0.299 + imageData[i].G * 0.587 + imageData[i].B * 0.114));
@@ -430,11 +427,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_LA44(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt8((byte)(((Max(imageData[i].R * 0.299 + imageData[i].G * 0.587 + imageData[i].B * 0.114)) & 0xF0) | ((imageData[i].A) >> 4)));
@@ -444,11 +441,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_LA88(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt16LE((ushort)(((Max(imageData[i].R * 0.299 + imageData[i].G * 0.587 + imageData[i].B * 0.114)) << 8) | imageData[i].A));
@@ -458,11 +455,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_RGB565(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt16LE((ushort)((imageData[i].B >> 3) | ((imageData[i].G & 0xFC) << 3) | ((imageData[i].R & 0xF8) << 8)));
@@ -472,28 +469,28 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_RGB565_Block(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
-            int newwidth = width;
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
+            var newwidth = width;
             if ((newwidth & 31) != 0)
             {
                 newwidth |= 31;
                 newwidth++;
             }
-            for (int i = 0; i < height; i += 32)
+            for (var i = 0; i < height; i += 32)
             {
-                for (int w = 0; w < width; w += 32)
+                for (var w = 0; w < width; w += 32)
                 {
-                    for (int j = 0; j < 32; j++)
+                    for (var j = 0; j < 32; j++)
                     {
-                        for (int k = 0; k < 32; k++)
+                        for (var k = 0; k < 32; k++)
                         {
                             if ((i + j) < height && (w + k) < width)
                             {
-                                int temp = (i + j) * width + w + k;
+                                var temp = (i + j) * width + w + k;
                                 image_encode.writeUInt16LE((ushort)(((imageData[temp].B & 0xF8) >> 3) | ((imageData[temp].G & 0xFC) << 3) | ((imageData[temp].R & 0xF8) << 8)));
                             }
                             else
@@ -509,10 +506,10 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_RGBA4444(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
             SenBuffer image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
@@ -523,28 +520,28 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_RGBA4444_Block(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
             SenBuffer image_encode = new SenBuffer();
-            int newwidth = width;
+            var newwidth = width;
             if ((newwidth & 31) != 0)
             {
                 newwidth |= 31;
                 newwidth++;
             }
-            for (int i = 0; i < height; i += 32)
+            for (var i = 0; i < height; i += 32)
             {
-                for (int w = 0; w < width; w += 32)
+                for (var w = 0; w < width; w += 32)
                 {
-                    for (int j = 0; j < 32; j++)
+                    for (var j = 0; j < 32; j++)
                     {
-                        for (int k = 0; k < 32; k++)
+                        for (var k = 0; k < 32; k++)
                         {
                             if ((i + j) < height && (w + k) < width)
                             {
-                                int temp = (i + j) * width + w + k;
+                                var temp = (i + j) * width + w + k;
                                 image_encode.writeUInt16LE((ushort)((imageData[temp].A >> 4) | (imageData[temp].B & 0xF0) | ((imageData[temp].G & 0xF0) << 4) | ((imageData[temp].R & 0xF0) << 8)));
                             }
                             else
@@ -560,11 +557,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_RGBA5551(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt16LE((ushort)(((imageData[i].A & 0x80) >> 7) | ((imageData[i].B & 0xF8) >> 2) | ((imageData[i].G & 0xF8) << 3) | ((imageData[i].R & 0xF8) << 8)));
@@ -574,28 +571,28 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override SenBuffer Encode_RGBA5551_Block(SenBuffer imageBytes)
         {
-            Rgba32[] imageData = imageBytes.getImageData();
-            int width = imageBytes.imageWidth;
-            int height = imageBytes.imageHeight;
-            int square = width * height;
-            SenBuffer image_encode = new SenBuffer();
-            int newwidth = width;
+            var imageData = imageBytes.getImageData();
+            var width = imageBytes.imageWidth;
+            var height = imageBytes.imageHeight;
+            var square = width * height;
+            var image_encode = new SenBuffer();
+            var newwidth = width;
             if ((newwidth & 31) != 0)
             {
                 newwidth |= 31;
                 newwidth++;
             }
-            for (int i = 0; i < height; i += 32)
+            for (var i = 0; i < height; i += 32)
             {
-                for (int w = 0; w < width; w += 32)
+                for (var w = 0; w < width; w += 32)
                 {
-                    for (int j = 0; j < 32; j++)
+                    for (var j = 0; j < 32; j++)
                     {
-                        for (int k = 0; k < 32; k++)
+                        for (var k = 0; k < 32; k++)
                         {
                             if ((i + j) < height && (w + k) < width)
                             {
-                                int temp = (i + j) * width + w + k;
+                                var temp = (i + j) * width + w + k;
                                 image_encode.writeUInt16LE((ushort)(((imageData[temp].A & 0x80) >> 7) | ((imageData[temp].B & 0xF8) >> 2) | ((imageData[temp].G & 0xF8) << 3) | ((imageData[temp].R & 0xF8) << 8)));
                             }
                             else
@@ -638,9 +635,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             }
         }
 
-        static byte Max(double a)
+        public static byte Max(double a)
         {
-            int k = (int)a;
+            var k = (int)a;
             if (k >= 255) return 255;
             return (byte)k;
         }
@@ -743,7 +740,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_A8_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_A8(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -752,7 +749,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_ARGB1555_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_ARGB1555(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -761,7 +758,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_ARGB4444_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_ARGB4444(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -769,7 +766,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override void Create_ARGB8888_Decode(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = bitmap.Decode_ARGB8888(fs.ReadBytes(input_file), width, height);
             {
@@ -781,7 +778,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_L8_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_L8(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -790,7 +787,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_LA44_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_LA44(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -799,7 +796,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_LA88_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_LA88(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -808,7 +805,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGB565_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGB565(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -817,7 +814,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGB565_Block_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGB565_Block(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -826,7 +823,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA4444_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA4444(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -835,7 +832,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA4444_Block_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA4444_Block(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -844,7 +841,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA5551_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA5551(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -853,7 +850,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA5551_Block_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA5551_Block(image_bytes, width, height);
             image_decode.SaveFile(path_out);
             return;
@@ -861,7 +858,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override void Create_RGBA8888_Decode(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = bitmap.Decode_RGBA8888(fs.ReadBytes(input_file), width, height);
             {
@@ -921,7 +918,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_A8_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_A8(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -930,7 +927,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_ARGB1555_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_ARGB1555(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -939,7 +936,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_ARGB4444_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_ARGB4444(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -947,7 +944,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override void Create_ARGB8888_Encode(string input_file, string output_file)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = bitmap.Encode_ARGB8888(fs.ReadBytes(input_file));
             fs.WriteBytes(output_file, encodedPixels);
@@ -957,7 +954,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_L8_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_L8(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -966,7 +963,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_LA44_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_LA44(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -975,7 +972,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_LA88_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_LA88(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -984,7 +981,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGB565_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGB565(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -993,7 +990,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGB565_Block_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGB565_Block(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -1002,7 +999,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA4444_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA4444(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -1011,7 +1008,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA4444_Block_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA4444_Block(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -1020,7 +1017,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA5551_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA5551(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -1029,7 +1026,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override void Create_RGBA5551_Block_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA5551_Block(image_bytes);
             image_decode.SaveFile(path_out);
             return;
@@ -1037,7 +1034,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override void Create_RGBA8888_Encode(string input_file, string output_file)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = bitmap.Encode_RGBA8888(fs.ReadBytes(input_file));
             fs.WriteBytes(output_file, encodedPixels);
@@ -1253,7 +1250,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_A8_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_A8(image_bytes, width, height));
@@ -1264,7 +1261,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_ARGB1555_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_ARGB1555(image_bytes, width, height));
@@ -1275,7 +1272,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_ARGB4444_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_ARGB4444(image_bytes, width, height));
@@ -1286,7 +1283,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_L8_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_L8(image_bytes, width, height));
@@ -1297,7 +1294,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_LA44_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_LA44(image_bytes, width, height));
@@ -1307,7 +1304,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         }
         public override async Task Create_LA88_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_LA88(image_bytes, width, height));
@@ -1317,7 +1314,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         }
         public override async Task Create_RGB565_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGB565(image_bytes, width, height));
@@ -1327,7 +1324,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         }
         public override async Task Create_RGB565_Block_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGB565_Block(image_bytes, width, height));
@@ -1338,7 +1335,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA4444_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA4444(image_bytes, width, height));
@@ -1348,7 +1345,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         }
         public override async Task Create_RGBA4444_Block_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA4444_Block(image_bytes, width, height));
@@ -1358,7 +1355,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         }
         public override async Task Create_RGBA5551_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA5551(image_bytes, width, height));
@@ -1369,7 +1366,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA5551_Block_Decode_Async(string path, string path_out, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA5551_Block(image_bytes, width, height));
@@ -1380,7 +1377,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA8888_Decode_Async(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = await Task.Run(() => bitmap.Decode_RGBA8888(fs.ReadBytes(input_file), width, height));
             await image.SaveAsync(output_file);
@@ -1389,7 +1386,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_ARGB8888_Decode_Async(string input_file, string output_file, int width, int height)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             using var image = await Task.Run(() => bitmap.Decode_ARGB8888(fs.ReadBytes(input_file), width, height));
             await image.SaveAsync(output_file);
@@ -1458,7 +1455,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_A8_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_A8(image_bytes));
@@ -1469,7 +1466,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_ARGB1555_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_ARGB1555(image_bytes));
@@ -1480,7 +1477,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_ARGB4444_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_ARGB4444(image_bytes));
@@ -1491,7 +1488,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_L8_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_L8(image_bytes));
@@ -1502,7 +1499,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_LA44_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_LA44(image_bytes));
@@ -1513,7 +1510,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_LA88_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_LA88(image_bytes));
@@ -1524,7 +1521,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGB565_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGB565(image_bytes));
@@ -1535,7 +1532,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGB565_Block_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGB565_Block(image_bytes));
@@ -1546,7 +1543,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA4444_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA4444(image_bytes));
@@ -1557,7 +1554,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA4444_Block_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA4444_Block(image_bytes));
@@ -1568,7 +1565,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA5551_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA5551(image_bytes));
@@ -1579,7 +1576,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA5551_Block_Encode_Async(string path_in, string path_out)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA5551_Block(image_bytes));
@@ -1590,7 +1587,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_RGBA8888_Encode_Async(string input_file, string output_file)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = await Task.Run(() => bitmap.Encode_RGBA8888(fs.ReadBytes(input_file)));
             await fs.WriteBytesAsync(output_file, encodedPixels);
@@ -1599,7 +1596,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public override async Task Create_ARGB8888_Encode_Async(string input_file, string output_file)
         {
-            var bitmap = new Sen.Shell.Modules.Support.TextureEncode.RSB.TextureFormatHandler();
+            var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
             var encodedPixels = await Task.Run(() => bitmap.Encode_ARGB8888(fs.ReadBytes(input_file)));
             await fs.WriteBytesAsync(output_file, encodedPixels);
@@ -1772,17 +1769,17 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         private static Rgba32[] Decode_ETC1_Block(SenBuffer image_bytes, int width, int height)
         {
-            Rgba32[] imageData = new Rgba32[width * height];
-            for (int y = 0; y < height; y += 4)
+            var imageData = new Rgba32[width * height];
+            for (var y = 0; y < height; y += 4)
             {
-                for (int x = 0; x < width; x += 4)
+                for (var x = 0; x < width; x += 4)
                 {
-                    ulong temp = image_bytes.readBigUInt64BE();
-                    Rgba32[] color_buffer = new Rgba32[16];
+                    var temp = image_bytes.readBigUInt64BE();
+                    var color_buffer = new Rgba32[16];
                     ETC1.DecodeETC1(temp, color_buffer);
-                    for (int i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++)
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (var j = 0; j < 4; j++)
                         {
                             if ((y + i) < height && (x + j) < width)
                             {
@@ -1797,15 +1794,15 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         private static SenBuffer Encode_ETC1_Block(Rgba32[] imageData, int width, int height)
         {
-            SenBuffer image_encode = new SenBuffer();
-            Rgba32[] color_buffer = new Rgba32[16];
-            for (int y = 0; y < height; y += 4)
+            var image_encode = new SenBuffer();
+            var color_buffer = new Rgba32[16];
+            for (var y = 0; y < height; y += 4)
             {
-                for (int x = 0; x < width; x += 4)
+                for (var x = 0; x < width; x += 4)
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++)
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (var j = 0; j < 4; j++)
                         {
                             color_buffer[(i << 2) | j] =
                                 ((y + i) < height && (x + j) < width)
@@ -1813,7 +1810,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                                 : new Rgba32(0, 0, 0, 255);
                         }
                     }
-                    ulong pixels_ulong = ETC1.VerticalETC1(color_buffer);
+                    var pixels_ulong = ETC1.VerticalETC1(color_buffer);
                     image_encode.writeBigUInt64BE(pixels_ulong);
                 }
             }
@@ -1823,26 +1820,26 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public static SenBuffer Decode_ETC1_RGB(SenBuffer image_bytes, int width, int height)
         {
-            Rgba32[] imageData = Decode_ETC1_Block(image_bytes, width, height);
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var imageData = Decode_ETC1_Block(image_bytes, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public static SenBuffer Decode_ETC1_RGB_A8(SenBuffer image_bytes, int width, int height)
         {
-            Rgba32[] imageData = Decode_ETC1_Block(image_bytes, width, height);
+            var imageData = Decode_ETC1_Block(image_bytes, width, height);
             var square = width * height;
             for (var i = 0; i < square; i++)
             {
                 imageData[i].A = image_bytes.readUInt8();
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public static SenBuffer Decode_ETC1_RGB_A_Palette(SenBuffer image_bytes, int width, int height)
         {
-            Rgba32[] imageData = Decode_ETC1_Block(image_bytes, width, height);
+            var imageData = Decode_ETC1_Block(image_bytes, width, height);
             int num = image_bytes.readUInt8();
             byte[] index_table = new byte[num == 0 ? 2 : num];
             int bit_depth;
@@ -1856,18 +1853,18 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             {
                 for (var i = 0; i < num; i++)
                 {
-                    int p_byte = image_bytes.readUInt8();
+                    var p_byte = image_bytes.readUInt8();
                     index_table[i] = (byte)((p_byte << 4) | p_byte);
                 }
-                int tableSize = 2;
+                var tableSize = 2;
                 for (bit_depth = 1; num > tableSize; bit_depth++)
                 {
                     tableSize *= 2;
                 }
 
             }
-            int square = width * height;
-            int bitPostion = 0;
+            var square = width * height;
+            var bitPostion = 0;
             byte buffer = 0;
             int readOneBit()
             {
@@ -1880,7 +1877,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             }
             int readBits(int bits)
             {
-                int ans = 0;
+                var ans = 0;
                 for (var i = bits - 1; i >= 0; i--)
                 {
                     ans |= readOneBit() << 1;
@@ -1891,26 +1888,26 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             {
                 imageData[k].A = index_table[readBits(bit_depth)];
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public static SenBuffer Encode_ETC1_RGB(SenBuffer image)
         {
-            Rgba32[] imageData = image.getImageData();
+            var imageData = image.getImageData();
             var width = image.imageWidth;
             var height = image.imageHeight;
-            SenBuffer image_encode = Encode_ETC1_Block(imageData, width, height);
+            var image_encode = Encode_ETC1_Block(imageData, width, height);
             return image_encode;
         }
 
         public static SenBuffer Encode_ETC1_RGB_A8(SenBuffer image)
         {
-            Rgba32[] imageData = image.getImageData();
+            var imageData = image.getImageData();
             var width = image.imageWidth;
             var height = image.imageHeight;
             var square = width * height;
-            SenBuffer image_encode = Encode_ETC1_Block(imageData, width, height);
+            var image_encode = Encode_ETC1_Block(imageData, width, height);
             for (var i = 0; i < square; i++)
             {
                 image_encode.writeUInt8(imageData[i].A);
@@ -1920,11 +1917,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public static SenBuffer Encode_ETC1_RGB_A_Palette(SenBuffer image)
         {
-            Rgba32[] imageData = image.getImageData();
+            var imageData = image.getImageData();
             var width = image.imageWidth;
             var height = image.imageHeight;
             var square = width * height;
-            SenBuffer image_encode = Encode_ETC1_Block(imageData, width, height);
+            var image_encode = Encode_ETC1_Block(imageData, width, height);
             image_encode.writeUInt8(0x10);
             for (byte i = 0; i < 16; i++)
             {
@@ -1948,8 +1945,8 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
     {
         private static Rgba32[] Decode_PVRTC1_4BPP_Block(SenBuffer image_bytes, int width, int height)
         {
-            int newWidth = width;
-            int newHeight = height;
+            var newWidth = width;
+            var newHeight = height;
             if (newWidth < 8)
             {
                 newWidth = 8;
@@ -1970,16 +1967,16 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             {
                 newWidth = newHeight = Math.Max(newWidth, newHeight);
             }
-            PVRTC.PvrTcPacket[] packets = new PVRTC.PvrTcPacket[(newWidth * newHeight) >> 4];
-            int packets_length = packets.Length;
+            var packets = new PVRTC.PvrTcPacket[(newWidth * newHeight) >> 4];
+            var packets_length = packets.Length;
             for (var i = 0; i < packets_length; i++)
             {
                 packets[i] = new PVRTC.PvrTcPacket(image_bytes.readBigUInt64LE());
             }
-            Rgba32[] imageData = PVRTC.Decode_4BPP(packets, newWidth);
+            var imageData = PVRTC.Decode_4BPP(packets, newWidth);
             if (newWidth != width || newHeight != height)
             {
-                Image<Rgba32> paddedImage = Image.LoadPixelData<Rgba32>(imageData, newWidth, newHeight);
+                var paddedImage = Image.LoadPixelData<Rgba32>(imageData, newWidth, newHeight);
                 paddedImage.Mutate(ctx => ctx.Crop(new Rectangle(0, 0, width, height)));
                 imageData = new Rgba32[width * height];
                 paddedImage.CopyPixelDataTo(imageData);
@@ -1989,7 +1986,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         private static Rgba32[] Encode_PVRTC1_4BPP_Block(SenBuffer inFile, ref int newWidth, int newHeight)
         {
-            Image<Rgba32> image = inFile.getImage();
+            var image = inFile.getImage();
             newWidth = image.Width;
             newHeight = image.Height;
             if (newWidth < 8)
@@ -2012,48 +2009,48 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             {
                 newWidth = newHeight = Math.Max(newWidth, newHeight);
             };
-            Image<Rgba32> paddedImage = new Image<Rgba32>(newWidth, newHeight);
+            var paddedImage = new Image<Rgba32>(newWidth, newHeight);
             paddedImage.Mutate(ctx => ctx.DrawImage(image, new Point(0, 0), 1f));
-            Rgba32[] imageData = new Rgba32[newWidth * newHeight];
+            var imageData = new Rgba32[newWidth * newHeight];
             paddedImage.CopyPixelDataTo(imageData);
             return imageData;
         }
 
         public static SenBuffer Decode_PVRTC1_4BPP_RGB(SenBuffer image_bytes, int width, int height)
         {
-            Rgba32[] imageData = Decode_PVRTC1_4BPP_Block(image_bytes, width, height);
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var imageData = Decode_PVRTC1_4BPP_Block(image_bytes, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public static SenBuffer Decode_PVRTC1_4BPP_RGBA(SenBuffer image_bytes, int width, int height)
         {
-            Rgba32[] imageData = Decode_PVRTC1_4BPP_Block(image_bytes, width, height);
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var imageData = Decode_PVRTC1_4BPP_Block(image_bytes, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
         public static SenBuffer Decode_PVRTC1_4BPP_RGBA_A8(SenBuffer image_bytes, int width, int height)
         {
-            Rgba32[] imageData = Decode_PVRTC1_4BPP_Block(image_bytes, width, height);
-            int square = width * height;
+            var imageData = Decode_PVRTC1_4BPP_Block(image_bytes, width, height);
+            var square = width * height;
             for (var i = 0; i < square; i++)
             {
                 imageData[i].A = image_bytes.readUInt8();
             }
-            SenBuffer image_decode = new SenBuffer(imageData, width, height);
+            var image_decode = new SenBuffer(imageData, width, height);
             return image_decode;
         }
 
 
         public static SenBuffer Encode_PVRTC1_4BPP_RGB(SenBuffer image)
         {
-            int width = 0;
-            int height = 0;
-            Rgba32[] imageData = Encode_PVRTC1_4BPP_Block(image, ref width, height);
-            PVRTC.PvrTcPacket[] packets = PVRTC.Encode_RGB_4BPP(imageData, width);
-            int packets_length = packets.Length;
-            SenBuffer image_encode = new SenBuffer();
+            var width = 0;
+            var height = 0;
+            var imageData = Encode_PVRTC1_4BPP_Block(image, ref width, height);
+            var packets = PVRTC.Encode_RGB_4BPP(imageData, width);
+            var packets_length = packets.Length;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < packets_length; i++)
             {
                 image_encode.writeBigUInt64LE(packets[i].PvrTcWord);
@@ -2063,12 +2060,12 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public static SenBuffer Encode_PVRTC1_4BPP_RGBA(SenBuffer image)
         {
-            int width = 0;
-            int height = 0;
-            Rgba32[] imageData = Encode_PVRTC1_4BPP_Block(image, ref width, height);
-            PVRTC.PvrTcPacket[] packets = PVRTC.Encode_RGBA_4BPP(imageData, width);
-            int packets_length = packets.Length;
-            SenBuffer image_encode = new SenBuffer();
+            var width = 0;
+            var height = 0;
+            var imageData = Encode_PVRTC1_4BPP_Block(image, ref width, height);
+            var packets = PVRTC.Encode_RGBA_4BPP(imageData, width);
+            var packets_length = packets.Length;
+            var image_encode = new SenBuffer();
             for (var i = 0; i < packets_length; i++)
             {
                 image_encode.writeBigUInt64LE(packets[i].PvrTcWord);
@@ -2078,11 +2075,11 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 
         public static SenBuffer Encode_PVRTC1_4BPP_RGBA_A8(SenBuffer image)
         {
-            int width = 0;
-            int height = 0;
-            Rgba32[] imageData = Encode_PVRTC1_4BPP_Block(image, ref width, height);
-            PVRTC.PvrTcPacket[] packets = PVRTC.Encode_RGBA_4BPP(imageData, width);
-            int packets_length = packets.Length;
+            var width = 0;
+            var height = 0;
+            var imageData = Encode_PVRTC1_4BPP_Block(image, ref width, height);
+            var packets = PVRTC.Encode_RGBA_4BPP(imageData, width);
+            var packets_length = packets.Length;
             var image_encode = new SenBuffer();
             for (var i = 0; i < packets_length; i++)
             {

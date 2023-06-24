@@ -55,7 +55,7 @@ namespace Sen.Shell.Modules.Support.Flash
             {
                 foreach (var media in dom.media)
                 {
-                    domdocument_resource_media_element!.Add(new XElement("DOMBitmapItem", new XAttribute("name", media), new XAttribute("href", $"media/{media}.png")));
+                    domdocument_resource_media_element!.Add(new XElement(domdocument_namespace + "DOMBitmapItem", new XAttribute("name", $"media/{media}"), new XAttribute("href", $"media/{media}.png")));
                 }
             }
             var document_resource_symbols_element = domdocument_deserialize.Descendants(domdocument_namespace + "symbols");
@@ -70,16 +70,16 @@ namespace Sen.Shell.Modules.Support.Flash
                 && !element.Attribute("href")!.Value.Contains("main_sprite")).ToList<XElement>();
                 document_resource_symbols_element!.FirstOrDefault<XElement>()!.RemoveAll();
                 dom.image.ToList<string>().ForEach(element =>
-                (document_resource_symbols_element_attribute_image as List<XElement>)!.Add(new XElement("Include", new XAttribute("href", $"image/{element as string}.png"))));
+                (document_resource_symbols_element_attribute_image as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"image/{element as string}.xml"))));
                 dom.source.ToList<string>()!.ForEach(element =>
-                (document_resource_symbols_element_attribute_source as List<XElement>)!.Add(new XElement("Include", new XAttribute("href", $"source/{element as string}.png"))));
+                (document_resource_symbols_element_attribute_source as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"source/{element as string}.png"))));
                 dom.sprite.ToList<string>()!.ForEach(element =>
-                (document_resource_symbols_element_attribute_sprite as List<XElement>)!.Add(new XElement("Include", new XAttribute("href", $"sprite/{element as string}.png"))));
-                (document_resource_symbols_element_attribute_sprite as List<XElement>)!.Add(new XElement(domdocument_namespace+"Include", new XAttribute("href", $"main_sprite.xml")));
+                (document_resource_symbols_element_attribute_sprite as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"sprite/{element as string}.png"))));
                 document_resource_symbols_element!.FirstOrDefault<XElement>()!.RemoveAll();
                 document_resource_symbols_element_attribute_source!.ToArray<XElement>()!.Concat<XElement>(document_resource_symbols_element_attribute_image!.ToArray<XElement>())
-                    .Concat<XElement>(document_resource_symbols_element_attribute_sprite!.ToArray<XElement>()).ToList<XElement>().
-                    ForEach(element => document_resource_symbols_element!.FirstOrDefault<XElement>()!.Add(element as XElement));
+                    .Concat<XElement>(document_resource_symbols_element_attribute_sprite!.ToArray<XElement>()).ToList<XElement>()
+                    .Concat(new List<XElement>() { new XElement(domdocument_namespace + "Include", new XAttribute("href", $"main_sprite.xml")) }).ToList<XElement>()
+                    .ForEach(element => document_resource_symbols_element!.FirstOrDefault<XElement>()!.Add(element as XElement));
             }
             var domdocument_serialize_settings = new XmlWriterSettings()
             {
