@@ -1487,14 +1487,36 @@ declare type small_bundle_info_json = {
  * PvZ2 functions from the Shell
  */
 
+declare interface RTONCipher {
+    crypt: boolean;
+    key: string;
+}
+
 declare namespace PvZ2Shell {
+    /**
+     *
+     * @param inFile - Pass RTON
+     * @param outFile - Out RTON
+     * @param decryptRTON - RTON Cipher
+     */
+
+    export function RTONEncrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
+    /**
+     *
+     * @param inFile - Pass RTON
+     * @param outFile - Out RTON
+     * @param decryptRTON - RTON Cipher
+     */
+
+    export function RTONDecrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
+
     /**
      *
      * @param inFile - Pass RTON file here
      * @param outFile - Pass JSON output here
      * @returns RTON2JSON
      */
-    export function RTONDecode(inFile: string, outFile: string, decryptRTON: boolean): void;
+    export function RTONDecode(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
     /**
      *
      * @param inFile - Pass JSON file here
@@ -1502,7 +1524,7 @@ declare namespace PvZ2Shell {
      * @returns JSON2RTON
      */
 
-    export function RTONEncode(inFile: string, outFile: string, encryptRTON: boolean): void;
+    export function RTONEncode(inFile: string, outFile: string, encryptRTON: RTONCipher): void;
     /**
      *
      * @param inFile - Pass PAM file here

@@ -8,6 +8,7 @@ using Sen.Shell.Modules.Support.Compress;
 using Sen.Shell.Modules.Standards;
 using WEMSharp;
 using Sen.Shell.Modules.Support.WWise;
+using static Sen.Shell.Modules.Support.PvZ2.RTON.RTONProcession;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -38,9 +39,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public abstract class PvZ2ShellAbstract
     {
-        public abstract void RTONDecode(string inFile, string outFile, bool DecryptRTON);
+        public abstract void RTONDecode(string inFile, string outFile, RTONCipher DecryptRTON);
 
-        public abstract void RTONEncode(string inFile, string outFile, bool EncryptRTON);
+        public abstract void RTONEncode(string inFile, string outFile, RTONCipher DecryptRTON);
 
         public abstract PAMInfo PAMtoPAMJSON(string inFile);
 
@@ -82,6 +83,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void WemToOGG(string inFile, string outFile, string destination, bool inlineCodebook, bool inlineSetup);
 
+        public abstract void RTONDecrypt(string inFile, string outFile, RTONCipher crypt);
+
+        public abstract void RTONEncrypt(string inFile, string outFile, RTONCipher crypt);
+
 
     }
 
@@ -91,7 +96,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public class PvZ2Shell : PvZ2ShellAbstract
     {
-        public override void RTONDecode(string inFile, string outFile, bool DecryptRTON = false)
+        public override void RTONDecode(string inFile, string outFile, RTONCipher DecryptRTON)
         {
             var RtonFile = new SenBuffer(inFile);
             var JsonFile = RTONProcession.Decode(RtonFile, DecryptRTON);
@@ -99,7 +104,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override void RTONEncode(string inFile, string outFile, bool EncryptRTON = false)
+        public override void RTONEncode(string inFile, string outFile, RTONCipher EncryptRTON)
         {
             var fs = new FileSystem();
             var JsonFile = fs.ReadBytes(inFile);
@@ -264,6 +269,22 @@ namespace Sen.Shell.Modules.Support.PvZ2
         {
             var wem = new WEMFile(inFile, WEMForcePacketFormat.NoForcePacketFormat);
             wem.GenerateOGG(outFile, destination, inlineCodebook, inlineSetup);
+            return;
+        }
+
+        public override void RTONDecrypt(string inFile, string outFile, RTONCipher crypt)
+        {
+            var buffer = new SenBuffer(inFile);
+            var rton = RTONProcession.Decrypt(buffer, crypt.key);
+            rton.OutFile(outFile);
+            return;
+        }
+
+        public override void RTONEncrypt(string inFile, string outFile, RTONCipher crypt)
+        {
+            var buffer = new SenBuffer(inFile);
+            var rton = RTONProcession.Encrypt(buffer, crypt.key);
+            rton.OutFile(outFile);
             return;
         }
 

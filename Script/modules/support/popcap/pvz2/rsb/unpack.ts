@@ -132,7 +132,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
                 });
 
                 manifest_info.group[name].subgroup[name_packet] = {
-                    category: [Number(category[0]), (category[1] == "" ? null : category[1])],
+                    category: [Number(category[0]), category[1] == "" ? null : category[1]],
                     packet_info: packetInfo,
                 };
             });
@@ -187,7 +187,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
                 const resources_json_path: string = Path.Resolve(
                     `${Path.Dirname(resources_rton_path)}/${Path.Parse(resources_rton_path).name_without_extension}.json`
                 );
-                PvZ2Shell.RTONDecode(resources_rton_path, resources_json_path, false);
+                PvZ2Shell.RTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                     resources_json_path,
                     Path.Resolve(`${outDirectory}/res.json`),

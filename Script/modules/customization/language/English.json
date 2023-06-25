@@ -221,5 +221,9 @@
     "wwise_media_to_ogg": "WEM to OGG",
     "converted_resources_json_to_res_json": "Converted resources.json to res.json",
     "wwise_soundbank_decode": "WWise Soundbank Decode",
-    "wwise_soundbank_encode": "WWise Soundbank Encode"
+    "wwise_soundbank_encode": "WWise Soundbank Encode",
+    "popcap_rton_encrypt": "PopCap RTON Encrypt",
+    "popcap_rton_decrypt": "PopCap RTON Decrypt",
+    "popcap_rton_encode_and_encrypt": "PopCap JSON to RTON and Encrypt RTON",
+    "popcap_rton_decrypt_and_decode": "PopCap RTON Decrypt and Convert To JSON"
 }

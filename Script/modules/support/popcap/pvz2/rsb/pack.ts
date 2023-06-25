@@ -97,7 +97,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             files.forEach((file: string) => {
                 if (Path.Parse(file).ext.toUpperCase() === `.JSON`) {
                     json_count++;
-                    PvZ2Shell.RTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), option.encryptRTON);
+                    PvZ2Shell.RTONEncode(
+                        file,
+                        file.replace(/((\.json))?$/i, ".RTON"),
+                        option.encryptRTON
+                            ? Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt
+                            : Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
+                    );
                 }
             });
             Console.Print(
@@ -135,7 +141,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             );
         }
         if (manifest_group !== -1) {
-            PvZ2Shell.RTONEncode(`${inDirectory}/resource/PROPERTIES/RESOURCES.json`, `${inDirectory}/resource/PROPERTIES/RESOURCES.RTON`, false);
+            PvZ2Shell.RTONEncode(
+                `${inDirectory}/resource/PROPERTIES/RESOURCES.json`,
+                `${inDirectory}/resource/PROPERTIES/RESOURCES.RTON`,
+                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
+            );
             PvZ2Shell.RSGPack(`${inDirectory}/resource/`, manifestgroup_save, manifest.group[manifest_group].subgroup[0].packet_info, false);
             Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,

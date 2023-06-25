@@ -1,10 +1,12 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using System.Text.Json;
 using System.Text.Encodings.Web;
+using System.Text;
 using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
+
 
 #pragma warning disable IDE0090
 #pragma warning disable IDE0230
@@ -146,13 +148,26 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
 
         public static byte[]? tempstring;
 
-        public static string RTONChineseKey = "";
+        public static readonly string RTONChineseKey = $"65bd1b2305f46eb2806b935aab7630bb";
 
-        public static void Decrypt(SenBuffer RtonFile)
+        public static SenBuffer Decrypt(SenBuffer RtonFile, string encryptionKey)
         {
+            var RijndaelCheck = RtonFile.readInt16LE();
+            if (RijndaelCheck != 0x10) throw new Exception("This RTON is not encrypt");
+            var Crypto = new ImplementCrypto();
+            var keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
+            byte[] ivBytes = new byte[24];
+            Array.Copy(keyBytes, 4, ivBytes, 0, 24);
+            return new SenBuffer(Crypto.RTONRijndaelDecrypt(RtonFile.getBytes((int)(RtonFile.length - 2), 2), ivBytes, keyBytes, new Org.BouncyCastle.Crypto.Paddings.ZeroBytePadding()));
+        }
+
+        public struct RTONCipher
+        {
+            public required bool crypt;
+            public required string key;
         }
         // Rton_to_Json
-        public static SenBuffer Decode(SenBuffer RtonFile, bool DecryptFile)
+        public static SenBuffer Decode(SenBuffer RtonFile, RTONCipher decrypt)
         {
             R0x90List.Clear();
             R0x92List.Clear();
@@ -162,9 +177,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 Indented = true
             });
-            if (DecryptFile)
+            if (decrypt.crypt)
             {
-                Decrypt(RtonFile);
+                RtonFile = Decrypt(RtonFile, decrypt.key);
             }
             var Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
@@ -485,12 +500,22 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             jsonWriter.WriteEndArray();
         }
 
-        public static void Encrypt(ref SenBuffer RtonFile)
+        public static SenBuffer Encrypt(SenBuffer RtonFile, string encryptionKey)
         {
+            var Crypto = new ImplementCrypto();
+            var keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
+            byte[] ivBytes = new byte[24];
+            Array.Copy(keyBytes, 4, ivBytes, 0, 24);
+            var padSize = (ivBytes.Length - ((RtonFile.length + ivBytes.Length - 1) % ivBytes.Length + 1));
+            RtonFile.writeNull((int)padSize);
+            var RTONEncrypt = new SenBuffer();
+            RTONEncrypt.writeInt16LE(0x10);
+            RTONEncrypt.writeBytes(Crypto.RTONRijndaelEncrypt(RtonFile.toBytes(), ivBytes, keyBytes, new Org.BouncyCastle.Crypto.Paddings.ZeroBytePadding()));
+            return RTONEncrypt;
         }
 
         //Json to Rton
-        public static SenBuffer Encode(byte[] JsonBuffer, bool EncryptFile)
+        public static SenBuffer Encode(byte[] JsonBuffer, RTONCipher EncryptFile)
         {
             var R0x90 = new List.StringPool();
             var R0x92 = new List.StringPool();
@@ -502,9 +527,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             RtonFile.writeUInt32LE(version);
             WriteObject(RtonFile, root, R0x90, R0x92);
             RtonFile.writeString(EOR);
-            if (EncryptFile)
+            if (EncryptFile.crypt)
             {
-                Encrypt(ref RtonFile);
+                RtonFile = Encrypt(RtonFile, EncryptFile.key);
             }
             return RtonFile;
         }

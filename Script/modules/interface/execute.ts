@@ -132,7 +132,11 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "wwise_media_to_ogg"
         | "popcap_rsb_obfuscate"
         | "wwise_soundbank_decode"
-        | "wwise_soundbank_encode";
+        | "wwise_soundbank_encode"
+        | "popcap_rton_encrypt"
+        | "popcap_rton_decrypt"
+        | "popcap_rton_encode_and_encrypt"
+        | "popcap_rton_decrypt_and_decode";
 
     /**
      *
@@ -149,6 +153,34 @@ namespace Sen.Script.Modules.Interface.Execute {
                     Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(argument);
                 } else {
                     argument.forEach((arg: string) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                }
+                break;
+            }
+            case "popcap_rton_decrypt": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.bin`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    PvZ2Shell.RTONDecrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.bin`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        PvZ2Shell.RTONDecrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    });
+                }
+                break;
+            }
+            case "popcap_rton_encrypt": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.bin`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    PvZ2Shell.RTONEncrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.bin`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        PvZ2Shell.RTONEncrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    });
                 }
                 break;
             }
@@ -570,12 +602,40 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    PvZ2Shell.RTONDecode(argument, output_argument, false);
+                    PvZ2Shell.RTONDecode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.RTONDecode(arg, output_argument, false);
+                        PvZ2Shell.RTONDecode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                    });
+                }
+                break;
+            }
+            case "popcap_rton_decrypt_and_decode": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.json`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    PvZ2Shell.RTONDecode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.json`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        PvZ2Shell.RTONDecode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    });
+                }
+                break;
+            }
+            case "popcap_rton_encode_and_encrypt": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rton`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    PvZ2Shell.RTONEncode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rton`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        PvZ2Shell.RTONEncode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     });
                 }
                 break;
@@ -584,12 +644,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.rton`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    PvZ2Shell.RTONEncode(argument, output_argument, false);
+                    PvZ2Shell.RTONEncode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.rton`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.RTONEncode(arg, output_argument, false);
+                        PvZ2Shell.RTONEncode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                     });
                 }
                 break;

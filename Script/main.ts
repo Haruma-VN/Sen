@@ -27,6 +27,7 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rsg/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rsb/unpack.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rsb/pack.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rton/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/wwise/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/assert.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/interface/arguments.js`),

@@ -210,5 +210,29 @@
         "include": [".wem"],
         "exclude": [],
         "type": "file"
+    },
+    "popcap_rton_encrypt": {
+        "func_number": 36,
+        "include": [".rton"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rton_decrypt": {
+        "func_number": 37,
+        "include": [".rton"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rton_decrypt_and_decode": {
+        "func_number": 38,
+        "include": [".rton"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rton_encode_and_encrypt": {
+        "func_number": 39,
+        "include": [".json"],
+        "exclude": [],
+        "type": "file"
     }
 }
