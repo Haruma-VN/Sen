@@ -87,8 +87,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RTONEncrypt(string inFile, string outFile, RTONCipher crypt);
 
+        public abstract void FlashAnimationResize(string inDir, int resolution);
+
 
     }
+
 
     #endregion
 
@@ -285,6 +288,12 @@ namespace Sen.Shell.Modules.Support.PvZ2
             var buffer = new SenBuffer(inFile);
             var rton = RTONProcession.Encrypt(buffer, crypt.key);
             rton.OutFile(outFile);
+            return;
+        }
+
+        public override void FlashAnimationResize(string inDir, int resolution)
+        {
+            PAM_Animation.FlashAnimationResize(inDir, resolution);
             return;
         }
 

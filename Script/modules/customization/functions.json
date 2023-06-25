@@ -163,7 +163,7 @@
         "exclude": [],
         "type": "file"
     },
-    "popcap_rsb_unpack_by_lenient": {
+    "popcap_rsb_unpack_by_loose_constraints": {
         "func_number": 28,
         "include": [".rsb", ".obb"],
         "exclude": [],
@@ -237,6 +237,12 @@
     },
     "popcap_add_image_to_flash_animation_adobe": {
         "func_number": 40,
+        "include": [".xfl"],
+        "exclude": [],
+        "type": "directory"
+    },
+    "flash_animation_resize": {
+        "func_number": 41,
         "include": [".xfl"],
         "exclude": [],
         "type": "directory"

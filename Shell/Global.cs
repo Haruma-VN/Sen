@@ -35,6 +35,17 @@
             }
             return list;
         }
+
+        public static void forEach<T, U>(this IEnumerable<T> list, Action<T, int> action)
+        {
+            var index = 0;
+            foreach (var item in list)
+            {
+                action(item, index++);
+            }
+            return;
+        }
+
     }
 
 }

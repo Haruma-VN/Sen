@@ -137,7 +137,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rton_decrypt"
         | "popcap_rton_encode_and_encrypt"
         | "popcap_rton_decrypt_and_decode"
-        | "popcap_add_image_to_flash_animation_adobe";
+        | "popcap_add_image_to_flash_animation_adobe"
+        | "flash_animation_resize"
+        | "popcap_rsb_unpack_by_loose_constraints";
 
     /**
      *
@@ -1080,6 +1082,22 @@ namespace Sen.Script.Modules.Interface.Execute {
                             `resolution`
                         );
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimateAdobeFlashAnimation(arg, output_argument, resolution);
+                    });
+                }
+                break;
+            }
+            case "flash_animation_resize": {
+                if (!Array.isArray(argument)) {
+                    const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
+                        Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation")
+                    );
+                    PvZ2Shell.FlashAnimationResize(argument, resolution);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
+                            Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation")
+                        );
+                        PvZ2Shell.FlashAnimationResize(arg, resolution);
                     });
                 }
                 break;

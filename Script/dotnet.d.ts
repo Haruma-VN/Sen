@@ -310,6 +310,7 @@ declare interface ParsedPath {
     ext: string;
     basename: string;
     name_without_extension: string;
+    type: "directory" | "file" | "unknown";
 }
 
 /**
@@ -1694,6 +1695,15 @@ declare namespace PvZ2Shell {
         out_bnk: string,
         information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple
     ): void;
+
+    /**
+     *
+     * @param inDir - Pass directory
+     * @param resolution - Pass resolution
+     * @returns Flash animation resize
+     */
+
+    export function FlashAnimationResize(inDir: string, resolution: int): void;
 }
 
 /**

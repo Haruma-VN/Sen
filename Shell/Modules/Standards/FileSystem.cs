@@ -66,6 +66,19 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public abstract void CopyFile(string filePath, string outpath);
 
+        public abstract DateTime GetCreationTimeUTC(string path);
+
+        public abstract DateTime GetModifyTimeUTC(string path);
+
+        public abstract DateTime GetAccessTimeUTC(string path);
+
+        public abstract void SetCreationTimeUTC(string path, DateTime time);
+
+        public abstract void SetModifyTimeUTC(string path, DateTime time);
+
+        public abstract void SetAccessTimeUTC(string path, DateTime time);
+
+
     }
 
     public enum ReadDirectory
@@ -378,6 +391,36 @@ namespace Sen.Shell.Modules.Standards.IOModule
             File.Copy(filePath, outpath);
             return;
         }
+
+        public override DateTime GetCreationTimeUTC(string path)
+        {
+            return File.GetCreationTimeUtc(path);
+        }
+
+        public override DateTime GetModifyTimeUTC(string path)
+        {
+            return File.GetLastWriteTimeUtc(path);
+        }
+
+        public override DateTime GetAccessTimeUTC(string path)
+        {
+            return File.GetLastAccessTimeUtc(path);
+        }
+
+        public override void SetCreationTimeUTC(string path, DateTime time)
+        {
+            File.SetCreationTimeUtc(path, time);
+        }
+
+        public override void SetModifyTimeUTC(string path, DateTime time)
+        {
+            File.SetLastWriteTimeUtc(path, time);
+        }
+
+        public override void SetAccessTimeUTC(string path, DateTime time)
+        {
+            File.SetLastAccessTimeUtc(path, time);
+        }
     }
 
 
@@ -502,11 +545,13 @@ namespace Sen.Shell.Modules.Standards.IOModule
     {
 
         #pragma warning disable IDE1006
-        public string name { get; set; }
-        public string dir { get; set; }
-        public string ext { get; set; }
-        public string basename { get; set; }
-        public string name_without_extension { get; set; }
+        public required string name { get; set; }
+        public required string dir { get; set; }
+        public required string ext { get; set; }
+        public required string basename { get; set; }
+        public required string name_without_extension { get; set; }
+
+        public required string type { get; set; }
     }
 
     public abstract class Path_Abstract
@@ -626,6 +671,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             ext = this.Extname(filePath),
             basename = this.Basename(filePath),
             name_without_extension = this.GetFileNameWithoutExtension(filePath),
+            type = File.Exists(filePath) ? "file" : Directory.Exists(filePath) ? "directory" : "unknown",
         };
 
         public override string Relative(string from, string to) => Path.GetRelativePath(from, to);
