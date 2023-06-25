@@ -169,7 +169,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
     ): void {
         const rsb_header_structure: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead = PvZ2Shell.ProcessRSBData(inRSB);
         if (rsb_header_structure.version !== 4) {
-            throw new Sen.Script.Modules.Exceptions.UnsupportedDataType(`Does not support version other than version 4 for this function`, inRSB);
+            throw new Sen.Script.Modules.Exceptions.UnsupportedDataType(
+                Sen.Script.Modules.System.Default.Localization.GetString("unsupported_rsb_version_not_4"),
+                inRSB
+            );
         }
         const manifest_additional_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo =
             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(

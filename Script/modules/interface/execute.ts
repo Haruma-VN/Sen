@@ -448,12 +448,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                             [0, 1],
                             {
                                 "0": [
-                                    Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
-                                    Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
                                 ],
                                 "1": [
-                                    Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
-                                    Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
                                 ],
                             },
                             `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
@@ -493,12 +493,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 [0, 1],
                                 {
                                     "0": [
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
                                     ],
                                     "1": [
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
                                     ],
                                 },
                                 `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,

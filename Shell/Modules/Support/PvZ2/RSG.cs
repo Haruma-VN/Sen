@@ -249,7 +249,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                             offsetByte = offsetByte,
                         }
                         );
-                        namePath += characterByte;
                     }
                     bool typeByte = RsgFile.readInt32LE() == 1;
                     if (typeByte)
@@ -335,7 +334,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         {
             var ResInfoList = ResInfo.ToList();
             ResInfoList.Insert(0, new ResInfo { path = "" });
-            ResInfoList.Sort((a, b) => a.path.CompareTo(b.path));
+            ResInfoList.Sort(delegate (ResInfo a, ResInfo b)
+            {
+                return a.path.CompareTo(b.path);
+            });
             var ListLength = ResInfoList.Count - 1;
             var pathTemps = new List<PathTemp>();
             int w_postion = 0;
@@ -367,7 +369,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                         {
                             pathSlice = Path2.Substring(k),
                             key = k,
-                            resInfo = ResInfo[i],
+                            resInfo = ResInfoList[i + 1],
                             isAtlas = (Path2.EndsWith(".PTX") ? true : false),
                         });
                         break;

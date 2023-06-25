@@ -112,16 +112,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             );
         }
         if (option.generate_resources) {
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
+                `${inDirectory}/res.json`,
+                `${inDirectory}/resource/PROPERTIES/RESOURCES.json`
+            );
             Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
                 Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
                     /\{\}/g,
                     Sen.Script.Modules.System.Default.Localization.GetString("converted_res_json_to_resources_json")
                 )
-            );
-            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
-                `${inDirectory}/res.json`,
-                `${inDirectory}/resource/PROPERTIES/RESOURCES.json`
             );
         } else {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
