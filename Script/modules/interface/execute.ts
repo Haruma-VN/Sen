@@ -130,7 +130,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_unpack_simple"
         | "popcap_rsb_pack_simple"
         | "wwise_media_to_ogg"
-        | "popcap_rsb_obfuscate";
+        | "popcap_rsb_obfuscate"
+        | "wwise_soundbank_decode"
+        | "wwise_soundbank_encode";
 
     /**
      *
@@ -172,6 +174,34 @@ namespace Sen.Script.Modules.Interface.Execute {
                             false,
                             false
                         );
+                    });
+                }
+                break;
+            }
+            case "wwise_soundbank_encode": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.bnk`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseSoundbankEncodeBySimple(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.bnk`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseSoundbankEncodeBySimple(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "wwise_soundbank_decode": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.soundbank`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseSoundbankDecodeBySimple(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.soundbank`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseSoundbankDecodeBySimple(arg, output_argument);
                     });
                 }
                 break;

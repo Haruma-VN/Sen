@@ -95,7 +95,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             const files: Array<string> = Fs.ReadDirectory(properties, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
             let json_count: int = 0;
             files.forEach((file: string) => {
-                if (Path.Parse(file).ext === ".json") {
+                if (Path.Parse(file).ext.toUpperCase() === `.JSON`) {
                     json_count++;
                     PvZ2Shell.RTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), option.encryptRTON);
                 }

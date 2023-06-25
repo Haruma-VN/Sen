@@ -219,5 +219,7 @@
     "convert_by_automatically": "Convert res.json to resources.json",
     "use_legacy_resources_json": "Use existed resources.json",
     "wwise_media_to_ogg": "WEM to OGG",
-    "converted_resources_json_to_res_json": "Converted resources.json to res.json"
+    "converted_resources_json_to_res_json": "Converted resources.json to res.json",
+    "wwise_soundbank_decode": "WWise Soundbank Decode",
+    "wwise_soundbank_encode": "WWise Soundbank Encode"
 }

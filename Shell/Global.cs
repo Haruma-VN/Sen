@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sen.Shell
+﻿namespace Sen.Shell
 {
 
     public unsafe static class Global
@@ -18,15 +16,25 @@ namespace Sen.Shell
 
         private static U Increment<U>(ref U value)
         {
-            if(value is not null)
-            {
-                dynamic incrementedValue = value;
-                incrementedValue++;
-                return incrementedValue;
-            }
-            throw new Exception($"Cannot convert nullish value {value}");
+            #pragma warning disable CS8600
+            #pragma warning disable CS8603
+            dynamic incrementedValue = value;
+            incrementedValue++;
+            return incrementedValue;
         }
 
+        public static IEnumerable<T> RemoveNullElements<T>(this IEnumerable<T> collections)
+        {
+            var list = new List<T>() { };
+            foreach(var collection in collections)
+            {
+                if(collection is not null)
+                {
+                    list.Add(collection);
+                }
+            }
+            return list;
+        }
     }
 
 }

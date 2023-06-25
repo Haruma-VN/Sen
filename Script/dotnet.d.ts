@@ -1643,6 +1643,27 @@ declare namespace PvZ2Shell {
      */
 
     export function RSBObfuscate(inFile: string, outRsb: string): void;
+
+    /**
+     *
+     * @param bnk_in - Pass BNK in
+     * @param bnk_dir_out - Pass dir out
+     */
+
+    export function WWiseSoundBankDecode(bnk_in: string, bnk_dir_out: string): Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple;
+
+    /**
+     *
+     * @param soundbank_dir - Pass BNK dir in
+     * @param out_bnk - Pass BNK out
+     * @param information - Pass soundbank json deserialized
+     */
+
+    export function WWiseSoundBankEncode(
+        soundbank_dir: string,
+        out_bnk: string,
+        information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple
+    ): void;
 }
 
 /**
