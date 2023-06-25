@@ -3,14 +3,14 @@
     /// <summary>
     /// Wrapper around a Stream that supports reading bits
     /// </summary>
-    internal class BitStream
+    public class BitStream
     {
         private Stream _stream;
         private byte _bitBuffer;
         private int _bitsLeft;
-        internal ulong TotalBitsRead { get; private set; }
+        public ulong TotalBitsRead { get; private set; }
 
-        internal BitStream(Stream stream)
+        public BitStream(Stream stream)
         {
             this._stream = stream;
         }
@@ -18,7 +18,7 @@
         /// <summary>
         /// Reads a bit from the Stream
         /// </summary>
-        internal byte GetBit()
+        public byte GetBit()
         {
             if (this._bitsLeft == 0)
             {
@@ -36,7 +36,7 @@
         /// Read an arbitary amount of bits from the stream
         /// </summary>
         /// <param name="bitCount">Amount of bits to read</param>
-        internal uint Read(int bitCount)
+        public uint Read(int bitCount)
         {
             uint result = 0;
 
