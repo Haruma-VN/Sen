@@ -64,6 +64,8 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public abstract void RenameDirectory(string filePath, string newName);
 
+        public abstract void CopyFile(string filePath, string outpath);
+
     }
 
     public enum ReadDirectory
@@ -363,11 +365,17 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void RenameDirectory(string filePath, string newName)
         {
-#pragma warning disable CS8602
+            #pragma warning disable CS8602
             var path = new ImplementPath();
             string parentDirectoryPath = Directory.GetParent(filePath).FullName;
             string newDirectoryPath = path.Join(parentDirectoryPath, newName);
             Directory.Move(filePath, newDirectoryPath);
+            return;
+        }
+
+        public override void CopyFile(string filePath, string outpath)
+        {
+            File.Copy(filePath, outpath);
             return;
         }
     }

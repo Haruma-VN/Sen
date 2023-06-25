@@ -218,12 +218,15 @@
     "convert_res_json_to_resources_json": "Generate Resources.json with official format",
     "convert_by_automatically": "Convert res.json to resources.json",
     "use_legacy_resources_json": "Use existed resources.json",
-    "wwise_media_to_ogg": "WEM to OGG",
+    "wwise_media_to_ogg": "WWise WEM to OGG",
     "converted_resources_json_to_res_json": "Converted resources.json to res.json",
-    "wwise_soundbank_decode": "WWise Soundbank Decode",
-    "wwise_soundbank_encode": "WWise Soundbank Encode",
+    "wwise_soundbank_decode": "WWise BNK Decode",
+    "wwise_soundbank_encode": "WWise BNK Encode",
     "popcap_rton_encrypt": "PopCap RTON Encrypt",
     "popcap_rton_decrypt": "PopCap RTON Decrypt",
     "popcap_rton_encode_and_encrypt": "PopCap JSON to RTON and Encrypt RTON",
-    "popcap_rton_decrypt_and_decode": "PopCap RTON Decrypt and Convert To JSON"
+    "popcap_rton_decrypt_and_decode": "PopCap RTON Decrypt and Convert To JSON",
+    "popcap_add_image_to_flash_animation_adobe": "PopCap Animation: Add Image to Flash Animation",
+    "input_more_that_path": "Input more {} to continue or click enter to finish input...",
+    "file_assert_is_not": "File assert is not exists or not {}"
 }

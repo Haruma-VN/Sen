@@ -23,6 +23,7 @@ namespace Sen.Script {
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/atlas/resize.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/animation/encode.js`),
+            Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/animation/helper.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/argument/input.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rsg/encode.js`),
             Path.Resolve(`${MainScriptDirectory}/modules/support/popcap/pvz2/rsb/unpack.js`),

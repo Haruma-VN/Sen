@@ -2073,7 +2073,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         // Misc
         public static void FlashAnimationResize(string inFolder, int resolution) {
             var fs = new FileSystem();
-            var sourceFolder = fs.ReadDirectory($"{inFolder}/library/source", Sen.Shell.Modules.Standards.IOModule.ReadDirectory.OnlyCurrentDirectory);
+            var sourceFolder = fs.ReadDirectory($"{inFolder}/library/source", ReadDirectory.OnlyCurrentDirectory);
             for (var i = 0; i < sourceFolder.Length; i++) {
                 var sourceXml = SenBuffer.ReadXml(sourceFolder[i]);
                 var imageName = ParseSourceDocument(sourceXml, i);
@@ -2084,6 +2084,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }, resolution);
                 SenBuffer.SaveXml(sourceFolder[i], e, xflns);
             }
+            return;
         }
     }
 }

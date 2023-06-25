@@ -7,7 +7,7 @@ namespace Sen.Shell.Modules.Support.WWise
         public required BKHD bank_header { get; set; }
         public INIT[]? initialization { get; set; }
         public STMG? game_synchronization { get; set; }
-        public int[]? embedded_media { get; set; }
+        public uint[]? embedded_media { get; set; }
         public HIRC[]? hierarchy { get; set; }
         public ENVS? environments { get; set; }
         public STID? reference { get; set; }
@@ -16,14 +16,15 @@ namespace Sen.Shell.Modules.Support.WWise
 
     public class BKHD
     {
-        public required int version { get; set; }
-        public required int id { get; set; }
+        public required uint version { get; set; }
+        public required uint id { get; set; }
+        public required uint language { get; set; }
         public required string head_expand { get; set; }
     }
 
     public class INIT
     {
-        public required int id { get; set; }
+        public required uint id { get; set; }
         public required string name { get; set; }
     }
 
@@ -31,17 +32,17 @@ namespace Sen.Shell.Modules.Support.WWise
     {
         public required string volume_threshold { get; set; }
         public required string max_voice_instances { get; set; }
-        public int unknown_type_1 { get; set; }
+        public uint unknown_type_1 { get; set; }
         public required STMGStageGroup[] stage_group { get; set; }
         public required STMGSwitchGroup[] switch_group { get; set; }
         public required STMGGameParameter[] game_parameter { get; set; }
-        public int unknown_type_2 { get; set; }
+        public uint unknown_type_2 { get; set; }
 
     }
 
     public class STMGStageGroup
     {
-        public required int id { get; set; }
+        public required uint id { get; set; }
         public required STMGStageGroupData data { get; set; }
     }
 
@@ -53,27 +54,27 @@ namespace Sen.Shell.Modules.Support.WWise
 
     public class STMGSwitchGroup
     {
-        public required int id { get; set; }
+        public required uint id { get; set; }
         public required STMGSwitchGroupData data { get; set; }
     }
 
     public class STMGSwitchGroupData
     {
-        public required int parameter { get; set; }
-        public int parameter_category { get; set; }
+        public required uint parameter { get; set; }
+        public uint parameter_category { get; set; }
         public required string[] point { get; set; }
     }
 
     public class STMGGameParameter
     {
-        public required int id { get; set; }
+        public required uint id { get; set; }
         public required string data { get; set; }
     }
 
     public class HIRC
     {
-        public required int id { get; set; }
-        public required int type { get; set; }
+        public required uint id { get; set; }
+        public required uint type { get; set; }
         public required string data { get; set; }
     }
 
@@ -111,12 +112,12 @@ namespace Sen.Shell.Modules.Support.WWise
     public class STID
     {
         public required STIDData[] data { get; set; }
-        public int unknown_type { get; set; }
+        public uint unknown_type { get; set; }
     }
 
     public class STIDData
     {
-        public required int id { get; set; }
+        public required uint id { get; set; }
         public required string name { get; set; }
     }
 
@@ -127,8 +128,8 @@ namespace Sen.Shell.Modules.Support.WWise
 
     public class WEMDATATemp
     {
-        public required int offset { get; set; }
-        public required int length { get; set; }
+        public required uint offset { get; set; }
+        public required uint length { get; set; }
     }
 
     public class WwiseFunction
@@ -137,21 +138,23 @@ namespace Sen.Shell.Modules.Support.WWise
         {
             string BKHD_magic = BNKFile.readString(4);
             if (BKHD_magic != "BKHD") throw new Exception("Invalid bnk magic");
-            var BKHD_length = BNKFile.readInt32LE();
-            var version = BNKFile.readInt32LE();
+            var BKHD_length = BNKFile.readUInt32LE();
+            var version = BNKFile.readUInt32LE();
             if (version != 88 && version != 112 && version != 140)
             {
                 throw new Exception("Only support bnk version 88, 112, 140");
             }
-            var id = BNKFile.readInt32LE();
-            var dataLength = BKHD_length - 8;
-            var head_expand = CreateHexString(BNKFile.readBytes(dataLength));
+            var id = BNKFile.readUInt32LE();
+            var dataLength = BKHD_length - 12;
+            var language = BNKFile.readUInt32LE();
+            var head_expand = CreateHexString(BNKFile.readBytes((int)dataLength));
             var WwiseInfo = new WWiseInfoSimple
             {
                 bank_header = new BKHD
                 {
                     version = version,
                     id = id,
+                    language = language,
                     head_expand = head_expand,
                 }
             };
@@ -165,7 +168,7 @@ namespace Sen.Shell.Modules.Support.WWise
         private static string CreateHexString(byte[] buffer)
         {
             string hexString = BitConverter.ToString(buffer);
-            return hexString.Replace("-", "");
+            return hexString.Replace("-", " ");
         }
 
         private static void DecodeType(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo, string outFolder)
@@ -197,51 +200,46 @@ namespace Sen.Shell.Modules.Support.WWise
                 case "FXPR":
                     throw new Exception("unsupported_fxpr");
                 default:
-                    throw new Exception("invalid_bnk");
+                    throw new Exception($"invalid_bnk | offset: {BNKFile.readOffset}");
 
             }
         }
         private static void DecodeDIDX(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo, string outFolder)
         {
-            var DIDXLength = BNKFile.readInt32LE() + BNKFile.readOffset;
-            var DIDX = new int[DIDXLength];
+            var DIDXLength = BNKFile.readUInt32LE() + BNKFile.readOffset;
+            var DIDX = new List<uint>();
             var DATAList = new List<WEMDATATemp>();
             for (var i = 0; BNKFile.readOffset < DIDXLength; i++)
             {
-                DIDX[i] = BNKFile.readInt32LE();
+                DIDX.Add(BNKFile.readUInt32LE());
                 DATAList.Add(new WEMDATATemp
                 {
-                    offset = BNKFile.readInt32LE(),
-                    length = BNKFile.readInt32LE(),
+                    offset = BNKFile.readUInt32LE(),
+                    length = BNKFile.readUInt32LE(),
                 });
             }
             if (BNKFile.readString(4) != "DATA") throw new Exception("Invalid Wem Data Bank");
-            var DATALength = BNKFile.readInt32LE();
+            var DATALength = BNKFile.readUInt32LE();
             var WemDATAStartOffset = BNKFile.readOffset;
-            var WemLength = 0;
-            for (WemLength = 0; BNKFile.readOffset < DATALength; WemLength++)
+            var WEMBank = new SenBuffer(BNKFile.readBytes((int)DATALength));
+            for (var i = 0; i < DATAList.Count; i++)
             {
-                var WemFile = new SenBuffer(BNKFile.readBytes(DATAList[WemLength].length));
-                WemFile.OutFile($"{outFolder}/embedded_audio/{DIDX[WemLength]}");
-                if (BNKFile.readOffset != WemDATAStartOffset + DATAList[WemLength].offset)
-                {
-                    throw new Exception("Invalid Data Offset: {BNKFile.readOffset}");
-                }
+                var WemFile = new SenBuffer(WEMBank.readBytes((int)DATAList[i].length, DATAList[i].offset));
+                WemFile.OutFile($"{outFolder}/embedded_audio/{DIDX[i]}.wem");
             }
-            if (WemLength != DIDX.Length) throw new Exception("Invalid DIDX Items Count");
-            WwiseInfo.embedded_media = DIDX;
+            WwiseInfo.embedded_media = DIDX.ToArray();
         }
 
         private static void DecodeINIT(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo)
         {
-            BNKFile.readInt32LE(); // INITLength;
-            var INITNumber = BNKFile.readInt32LE();
+            BNKFile.readUInt32LE(); // INITLength;
+            var INITNumber = BNKFile.readUInt32LE();
             var INITList = new INIT[INITNumber];
             for (var i = 0; i < INITNumber; i++)
             {
                 INITList[i] = new INIT
                 {
-                    id = BNKFile.readInt32LE(),
+                    id = BNKFile.readUInt32LE(),
                     name = BNKFile.readStringByEmpty(),
                 };
             }
@@ -250,25 +248,25 @@ namespace Sen.Shell.Modules.Support.WWise
 
         private static void DecodeSTMG(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo)
         {
-            BNKFile.readInt32LE(); // STMGLength;
+            BNKFile.readUInt32LE(); // STMGLength;
             var volumeThresHold = CreateHexString(BNKFile.readBytes(4));
             var maxVoiceInstances = CreateHexString(BNKFile.readBytes(2));
-            var unknown_type_1 = 0;
+            uint unknown_type_1 = 0;
             if (WwiseInfo.bank_header.version == 140)
             {
-                unknown_type_1 = BNKFile.readInt16LE();
+                unknown_type_1 = BNKFile.readUInt16LE();
             }
-            var STMGStageNumber = BNKFile.readInt32LE();
+            var STMGStageNumber = BNKFile.readUInt32LE();
             var stageGroupList = new STMGStageGroup[STMGStageNumber];
             for (var i = 0; i < STMGStageNumber; i++)
             {
-                var id = BNKFile.readInt32LE();
+                var id = BNKFile.readUInt32LE();
                 var defaultTransitionTime = CreateHexString(BNKFile.readBytes(4));
-                var numberMS = BNKFile.readInt32LE();
+                var numberMS = BNKFile.readUInt32LE();
                 var customTransiton = new string[numberMS];
                 for (var k = 0; k < numberMS; k++)
                 {
-                    customTransiton[i] = CreateHexString(BNKFile.readBytes(12));
+                    customTransiton[k] = CreateHexString(BNKFile.readBytes(12));
                 }
                 stageGroupList[i] = new STMGStageGroup
                 {
@@ -280,22 +278,22 @@ namespace Sen.Shell.Modules.Support.WWise
                     }
                 };
             }
-            var STMGSwitchNumber = BNKFile.readInt32LE();
+            var STMGSwitchNumber = BNKFile.readUInt32LE();
             var switchGroupList = new STMGSwitchGroup[STMGSwitchNumber];
             for (var i = 0; i < STMGSwitchNumber; i++)
             {
-                var id = BNKFile.readInt32LE();
-                var parameter = BNKFile.readInt32LE();
-                var parameterCategoty = 0;
+                var id = BNKFile.readUInt32LE();
+                var parameter = BNKFile.readUInt32LE();
+                byte parameterCategoty = 0;
                 if (WwiseInfo.bank_header.version == 112 || WwiseInfo.bank_header.version == 140)
                 {
-                    parameterCategoty = BNKFile.readInt8();
+                    parameterCategoty = BNKFile.readUInt8();
                 }
-                var parameterNumber = BNKFile.readInt32LE();
+                var parameterNumber = BNKFile.readUInt32LE();
                 var pointList = new string[parameterNumber];
                 for (var k = 0; k < parameterNumber; k++)
                 {
-                    pointList[i] = CreateHexString(BNKFile.readBytes(12));
+                    pointList[k] = CreateHexString(BNKFile.readBytes(12));
                 }
                 switchGroupList[i] = new STMGSwitchGroup
                 {
@@ -308,7 +306,7 @@ namespace Sen.Shell.Modules.Support.WWise
                     }
                 };
             }
-            var gameParameterNumber = BNKFile.readInt32LE();
+            var gameParameterNumber = BNKFile.readUInt32LE();
             var gameParameterList = new STMGGameParameter[gameParameterNumber];
             for (var i = 0; i < gameParameterNumber; i++)
             {
@@ -316,7 +314,7 @@ namespace Sen.Shell.Modules.Support.WWise
                 {
                     gameParameterList[i] = new STMGGameParameter
                     {
-                        id = BNKFile.readInt32LE(),
+                        id = BNKFile.readUInt32LE(),
                         data = CreateHexString(BNKFile.readBytes(17)),
                     };
                 }
@@ -324,13 +322,13 @@ namespace Sen.Shell.Modules.Support.WWise
                 {
                     gameParameterList[i] = new STMGGameParameter
                     {
-                        id = BNKFile.readInt32LE(),
+                        id = BNKFile.readUInt32LE(),
                         data = CreateHexString(BNKFile.readBytes(4)),
                     };
                 }
             }
-            var unknown_type_2 = 0;
-            if (WwiseInfo.bank_header.version == 140) unknown_type_2 = BNKFile.readInt32LE();
+            uint unknown_type_2 = 0;
+            if (WwiseInfo.bank_header.version == 140) unknown_type_2 = BNKFile.readUInt32LE();
             WwiseInfo.game_synchronization = new STMG
             {
                 volume_threshold = volumeThresHold,
@@ -345,7 +343,7 @@ namespace Sen.Shell.Modules.Support.WWise
 
         private static void DecodeENVS(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo)
         {
-            BNKFile.readInt32LE(); // ENVSLength;
+            BNKFile.readUInt32LE(); // ENVSLength;
             WwiseInfo.environments = new ENVS
             {
                 obstruction = DecodeENVSItem(BNKFile, WwiseInfo),
@@ -356,14 +354,14 @@ namespace Sen.Shell.Modules.Support.WWise
         private static ENVSItem DecodeENVSItem(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo)
         {
             var volumeValue = CreateHexString(BNKFile.readBytes(2));
-            var volumeNumber = BNKFile.readInt16LE();
+            var volumeNumber = BNKFile.readUInt16LE();
             var volumePointPoint = new string[volumeNumber];
             for (var i = 0; i < volumeNumber; i++)
             {
                 volumePointPoint[i] = CreateHexString(BNKFile.readBytes(12));
             }
             var lowPassFilterValue = CreateHexString(BNKFile.readBytes(2));
-            var lowPassFilterNumber = BNKFile.readInt16LE();
+            var lowPassFilterNumber = BNKFile.readUInt16LE();
             var lowPassFilterPoint = new string[volumeNumber];
             for (var i = 0; i < volumeNumber; i++)
             {
@@ -372,7 +370,7 @@ namespace Sen.Shell.Modules.Support.WWise
             if (WwiseInfo.bank_header.version == 112 || WwiseInfo.bank_header.version == 140)
             {
                 var highPassFilterValue = CreateHexString(BNKFile.readBytes(2));
-                var highPassFilterNumber = BNKFile.readInt16LE();
+                var highPassFilterNumber = BNKFile.readUInt16LE();
                 var highPassFilterPoint = new string[volumeNumber];
                 for (var i = 0; i < volumeNumber; i++)
                 {
@@ -417,15 +415,15 @@ namespace Sen.Shell.Modules.Support.WWise
 
         private static void DecodeHIRC(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo)
         {
-            BNKFile.readInt32LE(); // HIRCLength;
-            var HIRCNumber = BNKFile.readInt32LE();
+            BNKFile.readUInt32LE(); // HIRCLength;
+            var HIRCNumber = BNKFile.readUInt32LE();
             var HIRCList = new HIRC[HIRCNumber];
             for (var i = 0; i < HIRCNumber; i++)
             {
-                var type = (int)BNKFile.readInt8();
-                var length = BNKFile.readInt32LE();
-                var id = BNKFile.readInt32LE();
-                var data = CreateHexString(BNKFile.readBytes(length - 4));
+                var type = (uint)BNKFile.readUInt8();
+                var length = BNKFile.readUInt32LE();
+                var id = BNKFile.readUInt32LE();
+                var data = CreateHexString(BNKFile.readBytes((int)(length - 4)));
                 HIRCList[i] = new HIRC
                 {
                     type = type,
@@ -438,16 +436,16 @@ namespace Sen.Shell.Modules.Support.WWise
 
         private static void DecodeSTID(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo)
         {
-            BNKFile.readInt32LE(); // STIDLength;
-            var unknown_type = BNKFile.readInt32LE();
-            var STIDNumber = BNKFile.readInt32LE();
+            BNKFile.readUInt32LE(); // STIDLength;
+            var unknown_type = BNKFile.readUInt32LE();
+            var STIDNumber = BNKFile.readUInt32LE();
             var dataList = new STIDData[STIDNumber];
             for (var i = 0; i < STIDNumber; i++)
             {
                 dataList[i] = new STIDData
                 {
-                    id = BNKFile.readInt32LE(),
-                    name = BNKFile.readString(BNKFile.readInt8()),
+                    id = BNKFile.readUInt32LE(),
+                    name = BNKFile.readString(BNKFile.readUInt8()),
                 };
             }
             WwiseInfo.reference = new STID
@@ -458,7 +456,7 @@ namespace Sen.Shell.Modules.Support.WWise
         }
         private static void DecodePLAT(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo)
         {
-            BNKFile.readInt32LE(); // PLATLength;
+            BNKFile.readUInt32LE(); // PLATLength;
             WwiseInfo.platform_setting = new PLAT
             {
                 platform = BNKFile.readStringByEmpty(),
@@ -492,7 +490,7 @@ namespace Sen.Shell.Modules.Support.WWise
                 case BKHD:
                     EncodeBKHD(BNKFile, WWiseInfo.bank_header);
                     return;
-                case int[]:
+                case uint[]:
                     EncodeDIDX(BNKFile, WWiseInfo.embedded_media!, inFolder);
                     return;
                 case INIT[]:
@@ -522,7 +520,7 @@ namespace Sen.Shell.Modules.Support.WWise
         {
 
             BNKFile.BackupWriteOffset();
-            BNKFile.writeInt32LE((int)(BNKFile.writeOffset - lengthOffset), lengthOffset);
+            BNKFile.writeUInt32LE((uint)(BNKFile.writeOffset - lengthOffset - 4), lengthOffset);
             BNKFile.RestoreWriteOffset();
         }
 
@@ -534,51 +532,43 @@ namespace Sen.Shell.Modules.Support.WWise
             }
             var head_expand = ConvertHexString(BKHDInfo.head_expand);
             BNKFile.writeString("BKHD");
-            BNKFile.writeInt32LE(BKHDInfo.version, 8);
-            BNKFile.writeInt32LE(BKHDInfo.id);
+            BNKFile.writeUInt32LE(BKHDInfo.version, 8);
+            BNKFile.writeUInt32LE(BKHDInfo.id);
+            BNKFile.writeUInt32LE(BKHDInfo.language);
             BNKFile.writeBytes(head_expand);
             InsertTypeLength(BNKFile, 4);
         }
 
-        private static void EncodeDIDX(SenBuffer BNKFile, int[] DIDXInfo, string inFolder)
+        private static void EncodeDIDX(SenBuffer BNKFile, uint[] DIDXInfo, string inFolder)
         {
             var DATABank = new SenBuffer();
             BNKFile.writeString("DIDX");
             var DIDXLengthOffset = BNKFile.writeOffset;
             BNKFile.writeNull(4);
             var DIDXLength = DIDXInfo.Length;
-            Array.Sort(DIDXInfo);
             for (var i = 0; i < DIDXLength; i++)
             {
                 var WemSen = new SenBuffer($"{inFolder}/embedded_audio/{DIDXInfo[i]}.wem");
-                BNKFile.writeInt32LE(DIDXInfo[i]);
-                BNKFile.writeInt32LE((int)DATABank.writeOffset);
-                BNKFile.writeInt32LE((int)WemSen.length);
+                BNKFile.writeUInt32LE(DIDXInfo[i]);
+                BNKFile.writeUInt32LE((uint)DATABank.writeOffset);
+                BNKFile.writeUInt32LE((uint)WemSen.length);
                 DATABank.writeBytes(WemSen.toBytes());
-                DATABank.writeNull(DATABeautifyOffset((int)WemSen.length));
+                if (i < DIDXLength -1) DATABank.writeNull(DATABeautifyOffset((int)(WemSen.length)));
                 WemSen.Close();
             }
             InsertTypeLength(BNKFile, DIDXLengthOffset);
             BNKFile.writeString("DATA");
-            BNKFile.writeInt32LE((int)DATABank.length);
+            BNKFile.writeUInt32LE((uint)DATABank.length);
             BNKFile.writeBytes(DATABank.toBytes());
             DATABank.Close();
         }
 
-        private static int DATABeautifyOffset(int length)
+        private static int DATABeautifyOffset(int BNKlength)
         {
-            if (length % 16 == 0) return 16;
+            if (BNKlength % 16 == 0) return 0;
             else
             {
-                var newLength = length % 16;
-                for (var i = 0; i < 8; i++)
-                {
-                    if ((length + newLength) % 16 != 0)
-                    {
-                        newLength += 1;
-                    }
-                }
-                return newLength;
+                return 16 - (BNKlength % 16);
             }
         }
 
@@ -588,14 +578,16 @@ namespace Sen.Shell.Modules.Support.WWise
             var INITLengthOffset = BNKFile.writeOffset;
             BNKFile.writeNull(4);
             var INITLength = INITInfo.Length;
+            BNKFile.writeUInt32LE((uint)INITLength);
             for (var i = 0; i < INITLength; i++)
             {
-                BNKFile.writeInt32LE(INITInfo[i].id);
+                BNKFile.writeUInt32LE(INITInfo[i].id);
                 BNKFile.writeStringByEmpty(INITInfo[i].name);
             }
+            InsertTypeLength(BNKFile, INITLengthOffset);
         }
 
-        private static void EncodeSTMG(SenBuffer BNKFile, STMG STMGInfo, int version)
+        private static void EncodeSTMG(SenBuffer BNKFile, STMG STMGInfo, uint version)
         {
             BNKFile.writeString("STMG");
             var STMGLengthOffset = BNKFile.writeOffset;
@@ -608,41 +600,42 @@ namespace Sen.Shell.Modules.Support.WWise
             BNKFile.writeBytes(maxVoiceInstances);
             if (version == 140)
             {
-                BNKFile.writeInt16LE((short)STMGInfo.unknown_type_1);
+                BNKFile.writeUInt16LE((ushort)STMGInfo.unknown_type_1);
             }
             var stageGroupLength = STMGInfo.stage_group.Length;
-            BNKFile.writeInt32LE(stageGroupLength);
+            BNKFile.writeUInt32LE((uint)stageGroupLength);
             for (var i = 0; i < stageGroupLength; i++)
             {
-                BNKFile.writeInt32LE(STMGInfo.stage_group[i].id);
+                BNKFile.writeUInt32LE(STMGInfo.stage_group[i].id);
                 var defaultTransitionTime = ConvertHexString(STMGInfo.stage_group[i].data.default_transition_time);
                 if (defaultTransitionTime.Length != 4) throw new Exception("Invalid default transition time");
                 BNKFile.writeBytes(defaultTransitionTime);
                 var customTransitonLength = STMGInfo.stage_group[i].data.custom_transition.Length;
-                BNKFile.writeInt32LE(customTransitonLength);
+                BNKFile.writeUInt32LE((uint)customTransitonLength);
                 for (var k = 0; k < customTransitonLength; k++)
                 {
                     BNKFile.writeBytes(ConvertHexString(STMGInfo.stage_group[i].data.custom_transition[k]));
                 }
             }
             var switchGroupLength = STMGInfo.switch_group.Length;
-            BNKFile.writeInt32LE(switchGroupLength);
+            BNKFile.writeUInt32LE((uint)switchGroupLength);
             for (var i = 0; i < switchGroupLength; i++)
             {
-                BNKFile.writeInt32LE(STMGInfo.switch_group[i].id);
-                BNKFile.writeInt32LE(STMGInfo.switch_group[i].data.parameter);
-                if (version == 112 || version == 140) BNKFile.writeInt8((sbyte)STMGInfo.switch_group[i].data.parameter_category);
+                BNKFile.writeUInt32LE(STMGInfo.switch_group[i].id);
+                BNKFile.writeUInt32LE(STMGInfo.switch_group[i].data.parameter);
+                if (version == 112 || version == 140) BNKFile.writeUInt8((byte)STMGInfo.switch_group[i].data.parameter_category);
                 var pointLength = STMGInfo.switch_group[i].data.point.Length;
+                BNKFile.writeUInt32LE((uint)pointLength);
                 for (var k = 0; k < pointLength; k++)
                 {
                     BNKFile.writeBytes(ConvertHexString(STMGInfo.switch_group[i].data.point[k]));
                 }
             }
             var gameParameterLength = STMGInfo.game_parameter.Length;
-            BNKFile.writeInt32LE(gameParameterLength);
+            BNKFile.writeUInt32LE((uint)gameParameterLength);
             for (var i = 0; i < gameParameterLength; i++)
             {
-                BNKFile.writeInt32LE(STMGInfo.game_parameter[i].id);
+                BNKFile.writeUInt32LE(STMGInfo.game_parameter[i].id);
                 var parameterData = ConvertHexString(STMGInfo.game_parameter[i].data);
                 if (version == 112 && parameterData.Length != 17 || version == 140 && parameterData.Length != 17)
                 {
@@ -651,11 +644,11 @@ namespace Sen.Shell.Modules.Support.WWise
                 if (version == 88 && parameterData.Length != 4) throw new Exception("Invalid parameter data");
                 BNKFile.writeBytes(parameterData);
             }
-            if (version == 140) BNKFile.writeInt32LE(STMGInfo.unknown_type_2);
+            if (version == 140) BNKFile.writeUInt32LE(STMGInfo.unknown_type_2);
             InsertTypeLength(BNKFile, STMGLengthOffset);
         }
 
-        private static void EncodeENVS(SenBuffer BNKFile, ENVS ENVSInfo, int version)
+        private static void EncodeENVS(SenBuffer BNKFile, ENVS ENVSInfo, uint version)
         {
             BNKFile.writeString("ENVS");
             var ENVSLengthOffset = BNKFile.writeOffset;
@@ -665,26 +658,27 @@ namespace Sen.Shell.Modules.Support.WWise
             InsertTypeLength(BNKFile, ENVSLengthOffset);
         }
 
-        private static void EncodeENVSItem(SenBuffer BNKFile, ENVSItem ENVSItemInfo, int version)
+        private static void EncodeENVSItem(SenBuffer BNKFile, ENVSItem ENVSItemInfo, uint version)
         {
             BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.volume.volume_value));
             var volumePointLength = ENVSItemInfo.volume.volume_point.Length;
-            BNKFile.writeInt16LE((short)volumePointLength);
+            BNKFile.writeUInt16LE((ushort)volumePointLength);
             for (var i = 0; i < volumePointLength; i++)
             {
                 BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.volume.volume_point[i]));
             }
-            BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.volume.volume_value));
+            BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.low_pass_filter.low_pass_filter_vaule));
             var lowPassFilterNumber = ENVSItemInfo.low_pass_filter.low_pass_filter_point.Length;
-            BNKFile.writeInt16LE((short)lowPassFilterNumber);
+            BNKFile.writeUInt16LE((ushort)lowPassFilterNumber);
             for (var i = 0; i < lowPassFilterNumber; i++)
             {
                 BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.low_pass_filter.low_pass_filter_point[i]));
             }
             if (version == 112 || version == 140)
             {
+                BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.high_pass_filter!.high_pass_filter_vaule));
                 var highPassFilterNumber = ENVSItemInfo.high_pass_filter!.high_pass_filter_point.Length;
-                BNKFile.writeInt16LE((short)highPassFilterNumber);
+                BNKFile.writeUInt16LE((ushort)highPassFilterNumber);
                 for (var i = 0; i < highPassFilterNumber; i++)
                 {
                     BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.high_pass_filter.high_pass_filter_point[i]));
@@ -698,12 +692,13 @@ namespace Sen.Shell.Modules.Support.WWise
             var HIRCLengthOffset = BNKFile.writeOffset;
             BNKFile.writeNull(4);
             var HIRCLength = HIRCInfo.Length;
+            BNKFile.writeUInt32LE((uint)HIRCLength);
             for (var i = 0; i < HIRCLength; i++)
             {
                 var data = ConvertHexString(HIRCInfo[i].data);
-                BNKFile.writeInt8((sbyte)HIRCInfo[i].type);
-                BNKFile.writeInt32LE(data.Length + 4);
-                BNKFile.writeInt32LE(HIRCInfo[i].id);
+                BNKFile.writeUInt8((byte)HIRCInfo[i].type);
+                BNKFile.writeUInt32LE((uint)(data.Length + 4));
+                BNKFile.writeUInt32LE(HIRCInfo[i].id);
                 BNKFile.writeBytes(data);
             }
             InsertTypeLength(BNKFile, HIRCLengthOffset);
@@ -714,13 +709,13 @@ namespace Sen.Shell.Modules.Support.WWise
             BNKFile.writeString("STID");
             var STIDLengthOffset = BNKFile.writeOffset;
             BNKFile.writeNull(4);
-            BNKFile.writeInt32LE(STIDInfo.unknown_type);
+            BNKFile.writeUInt32LE(STIDInfo.unknown_type);
             var STIDDataLength = STIDInfo.data.Length;
-            BNKFile.writeInt32LE(STIDDataLength);
+            BNKFile.writeUInt32LE((uint)STIDDataLength);
             for (var i = 0; i < STIDDataLength; i++)
             {
-                BNKFile.writeInt32LE(STIDInfo.data[i].id);
-                BNKFile.writeInt8((sbyte)STIDInfo.data[i].name.Length);
+                BNKFile.writeUInt32LE(STIDInfo.data[i].id);
+                BNKFile.writeUInt8((byte)STIDInfo.data[i].name.Length);
                 BNKFile.writeString(STIDInfo.data[i].name);
             }
             InsertTypeLength(BNKFile, STIDLengthOffset);

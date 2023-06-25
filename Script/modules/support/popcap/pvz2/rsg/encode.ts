@@ -43,7 +43,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
                 ptx_info: resx.ptx_info,
             });
         });
-        Sen.Script.Modules.FileSystem.Json.WriteJson<PacketInfo>(Path.Resolve(`${out_dir}/packet_info.json`), packet_info);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<PacketInfo>(Path.Resolve(`${out_dir}/packet.json`), packet_info);
         return;
     }
 
@@ -54,7 +54,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
      */
 
     export function RSGPack(rsg_directory: string, out_rsg: string): void {
-        const packet_info: PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<PacketInfo>(Path.Resolve(`${rsg_directory}/packet_info.json`));
+        const packet_info: PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<PacketInfo>(Path.Resolve(`${rsg_directory}/packet.json`));
         packet_info.res.forEach((res: ResInfo) => {
             res.path = (res.path as Array<string>).join("\\");
         });

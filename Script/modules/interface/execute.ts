@@ -136,7 +136,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rton_encrypt"
         | "popcap_rton_decrypt"
         | "popcap_rton_encode_and_encrypt"
-        | "popcap_rton_decrypt_and_decode";
+        | "popcap_rton_decrypt_and_decode"
+        | "popcap_add_image_to_flash_animation_adobe";
 
     /**
      *
@@ -158,26 +159,106 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_rton_decrypt": {
                 if (!Array.isArray(argument)) {
-                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.bin`);
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name}.bin`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.RTONDecrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 } else {
                     argument.forEach((arg: string) => {
-                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.bin`);
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.RTONDecrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     });
                 }
                 break;
             }
+            case "popcap_add_image_to_flash_animation_adobe": {
+                if (!Array.isArray(argument)) {
+                    Console.Print(
+                        Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("input_more_that_path").replace(/\{\}/g, "png")
+                        )
+                    );
+                    const png_argument: Array<string> = new Array();
+                    assert_argument: while (true) {
+                        let arg: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+                        if (arg.endsWith(` `)) {
+                            arg = arg.slice(0, -1);
+                        }
+                        if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
+                            arg = arg.slice(1, -1);
+                        }
+                        if (Fs.FileExists(arg) && /((\.json))?$/i.test(arg)) {
+                            png_argument.push(arg);
+                        } else if (arg === ``) {
+                            break assert_argument;
+                        } else {
+                            Console.Print(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                                    /\{\}/g,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("file_assert_is_not").replace(/\{\}/g, "png")
+                                )
+                            );
+                        }
+                    }
+                    const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
+                        Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
+                        `${MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                        `resolution`
+                    );
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, argument, resolution);
+                } else {
+                    argument.forEach((arg: string) => {
+                        Console.Print(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                                /\{\}/g,
+                                Sen.Script.Modules.System.Default.Localization.GetString("input_more_that_path").replace(/\{\}/g, "png")
+                            )
+                        );
+                        const png_argument: Array<string> = new Array();
+                        assert_argument: while (true) {
+                            let arg: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+                            if (arg.endsWith(` `)) {
+                                arg = arg.slice(0, -1);
+                            }
+                            if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
+                                arg = arg.slice(1, -1);
+                            }
+                            if (Fs.FileExists(arg) && /((\.json))?$/i.test(arg)) {
+                                png_argument.push(arg);
+                            } else if (arg === ``) {
+                                break assert_argument;
+                            } else {
+                                Console.Print(
+                                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                                        /\{\}/g,
+                                        Sen.Script.Modules.System.Default.Localization.GetString("file_assert_is_not").replace(/\{\}/g, "png")
+                                    )
+                                );
+                            }
+                        }
+                        const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
+                            Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
+                            `${MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                            `resolution`
+                        );
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, arg, resolution);
+                    });
+                }
+                break;
+            }
             case "popcap_rton_encrypt": {
                 if (!Array.isArray(argument)) {
-                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}.bin`);
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name}.bin`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     PvZ2Shell.RTONEncrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 } else {
                     argument.forEach((arg: string) => {
-                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}.bin`);
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         PvZ2Shell.RTONEncrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     });

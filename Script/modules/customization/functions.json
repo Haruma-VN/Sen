@@ -234,5 +234,11 @@
         "include": [".json"],
         "exclude": [],
         "type": "file"
+    },
+    "popcap_add_image_to_flash_animation_adobe": {
+        "func_number": 40,
+        "include": [".xfl"],
+        "exclude": [],
+        "type": "directory"
     }
 }

@@ -263,6 +263,14 @@ declare namespace Fs {
      */
 
     export function RenameDirectory(input: string, new_name: string): void;
+    /**
+     *
+     * @param filePath - Pass file path here
+     * @param outPath - Pass out path here
+     * @returns Copied file
+     */
+
+    export function CopyFile(filePath: string, outPath: string): void;
 }
 
 declare namespace TypeChecker {
@@ -1932,7 +1940,7 @@ namespace PvZ2XML {
      * @param outpath - Output path
      */
 
-    export function WriteSourceDocument(index: int, name: string, resolution: int, outpath: string): void;
+    export function WriteSourceDocument(index: int, name: string, size: int[], transform: double[], resolution: int, outpath: string): void;
 
     export interface DOMDocumentAddon {
         media: string[];

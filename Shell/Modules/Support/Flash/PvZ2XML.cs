@@ -100,7 +100,7 @@ namespace Sen.Shell.Modules.Support.Flash
                 size = size,
                 transform = transform
             };
-            var image_document = PAM_Animation.WriteImageDocument(index, image);
+            var image_document = PAM_Animation.WriteImageDocument(index - 1, image);
             SenBuffer.SaveXml(outpath, image_document, PAM_Animation.xflns);
             return;
         }
@@ -113,7 +113,7 @@ namespace Sen.Shell.Modules.Support.Flash
                 size = size,
                 transform = transform
             };
-            var source_document = PAM_Animation.WriteSourceDocument(index, image, resolution);
+            var source_document = PAM_Animation.WriteSourceDocument(index - 1, image, resolution);
             SenBuffer.SaveXml(outpath, source_document, PAM_Animation.xflns);
             return;
         }

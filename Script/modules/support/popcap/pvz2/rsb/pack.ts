@@ -47,7 +47,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
     export function PackPopCapRSB(inDirectory: string, outFile: string): void {
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
-                `${inDirectory}/manifest_info.json`
+                `${inDirectory}/manifest.json`
             )
         );
         PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
@@ -75,7 +75,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
     export function PackPopCapRSBBySimple(inDirectory: string, outFile: string, option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.Options): void {
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
-                `${inDirectory}/manifest_info.json`
+                `${inDirectory}/manifest.json`
             )
         );
         let manifest_group: int = -1;

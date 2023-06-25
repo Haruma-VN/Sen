@@ -132,7 +132,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
                 });
 
                 manifest_info.group[name].subgroup[name_packet] = {
-                    category: [Number(category[0]), category[1] == "" ? null : category[1]],
+                    category: [Number(category[0]), category[1] === "" ? null : category[1]],
                     packet_info: packetInfo,
                 };
             });
@@ -150,7 +150,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
     export function UnpackPopCapOfficialRSB(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
         const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = PvZ2Shell.RSBUnpack(inRSB, outDirectory);
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
-            Path.Resolve(`${outDirectory}/manifest_info.json`),
+            Path.Resolve(`${outDirectory}/manifest.json`),
             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json)
         );
         return manifest_json;
