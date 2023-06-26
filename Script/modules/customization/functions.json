@@ -246,5 +246,11 @@
         "include": [".xfl"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_rsb_unpack_resource": {
+        "func_number": 42,
+        "include": [".bundle"],
+        "exclude": [],
+        "type": "directory"
     }
 }

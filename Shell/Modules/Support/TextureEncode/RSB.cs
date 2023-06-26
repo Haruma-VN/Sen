@@ -734,37 +734,37 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
     }
 
 
-    public class TextureEncoderFast : TextureEncoderFastAbstraction
+    public unsafe sealed class TextureEncoderFast : TextureEncoderFastAbstraction
     {
 
-        public override void Create_A8_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_A8_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_A8(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ARGB1555_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_ARGB1555_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_ARGB1555(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ARGB4444_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_ARGB4444_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_ARGB4444(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ARGB8888_Decode(string input_file, string output_file, int width, int height)
+        public unsafe sealed override void Create_ARGB8888_Decode(string input_file, string output_file, int width, int height)
         {
             var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
@@ -775,88 +775,88 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             return;
         }
 
-        public override void Create_L8_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_L8_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_L8(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_LA44_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_LA44_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_LA44(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_LA88_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_LA88_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_LA88(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGB565_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_RGB565_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGB565(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGB565_Block_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_RGB565_Block_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGB565_Block(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA4444_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_RGBA4444_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA4444(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA4444_Block_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_RGBA4444_Block_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA4444_Block(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA5551_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_RGBA5551_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA5551(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA5551_Block_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_RGBA5551_Block_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Decode_RGBA5551_Block(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA8888_Decode(string input_file, string output_file, int width, int height)
+        public unsafe sealed override void Create_RGBA8888_Decode(string input_file, string output_file, int width, int height)
         {
             var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
@@ -867,82 +867,82 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             return;
         }
 
-        public override void Create_ETC1_RGB_Decode(string path, string path_out, int width, int height)
+        public unsafe sealed override void Create_ETC1_RGB_Decode(string path, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path);
             var image_decode = ETC1Encoder.Decode_ETC1_RGB(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ETC1_RGB_A8_Decode(string path_in, string path_out, int width, int height)
+        public unsafe sealed override void Create_ETC1_RGB_A8_Decode(string path_in, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = ETC1Encoder.Decode_ETC1_RGB_A8(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ETC1_RGB_A_Palette_Decode(string path_in, string path_out, int width, int height)
+        public unsafe sealed override void Create_ETC1_RGB_A_Palette_Decode(string path_in, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = ETC1Encoder.Decode_ETC1_RGB_A_Palette(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_PVRTC1_4BPP_RGB_Decode(string path_in, string path_out, int width, int height)
+        public unsafe sealed override void Create_PVRTC1_4BPP_RGB_Decode(string path_in, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = PVRTC1Encoder.Decode_PVRTC1_4BPP_RGB(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
-        public override void Create_PVRTC1_4BPP_RGBA_Decode(string path_in, string path_out, int width, int height)
+        public unsafe sealed override void Create_PVRTC1_4BPP_RGBA_Decode(string path_in, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = PVRTC1Encoder.Decode_PVRTC1_4BPP_RGBA(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
-        public override void Create_PVRTC1_4BPP_RGBA_A8_Decode(string path_in, string path_out, int width, int height)
+        public unsafe sealed override void Create_PVRTC1_4BPP_RGBA_A8_Decode(string path_in, string path_out, int width, int height)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = PVRTC1Encoder.Decode_PVRTC1_4BPP_RGBA_A8(image_bytes, width, height);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
         // Encode
 
-        public override void Create_A8_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_A8_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_A8(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ARGB1555_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_ARGB1555_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_ARGB1555(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ARGB4444_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_ARGB4444_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_ARGB4444(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ARGB8888_Encode(string input_file, string output_file)
+        public unsafe sealed override void Create_ARGB8888_Encode(string input_file, string output_file)
         {
             var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
@@ -951,88 +951,88 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             return;
         }
 
-        public override void Create_L8_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_L8_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_L8(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_LA44_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_LA44_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_LA44(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_LA88_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_LA88_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_LA88(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGB565_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_RGB565_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGB565(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGB565_Block_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_RGB565_Block_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGB565_Block(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA4444_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_RGBA4444_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA4444(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA4444_Block_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_RGBA4444_Block_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA4444_Block(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA5551_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_RGBA5551_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA5551(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA5551_Block_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_RGBA5551_Block_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var bitmap = new TextureFormatHandler();
             var image_decode = bitmap.Encode_RGBA5551_Block(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_RGBA8888_Encode(string input_file, string output_file)
+        public unsafe sealed override void Create_RGBA8888_Encode(string input_file, string output_file)
         {
             var bitmap = new TextureFormatHandler();
             var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
@@ -1041,51 +1041,51 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             return;
         }
 
-        public override void Create_ETC1_RGB_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_ETC1_RGB_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = ETC1Encoder.Encode_ETC1_RGB(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ETC1_RGB_A8_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_ETC1_RGB_A8_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = ETC1Encoder.Encode_ETC1_RGB_A8(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_ETC1_RGB_A_Palette_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_ETC1_RGB_A_Palette_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = ETC1Encoder.Encode_ETC1_RGB_A_Palette(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_PVRTC1_4BPP_RGB_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_PVRTC1_4BPP_RGB_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = PVRTC1Encoder.Encode_PVRTC1_4BPP_RGB(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_PVRTC1_4BPP_RGBA_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_PVRTC1_4BPP_RGBA_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = PVRTC1Encoder.Encode_PVRTC1_4BPP_RGBA(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
-        public override void Create_PVRTC1_4BPP_RGBA_A8_Encode(string path_in, string path_out)
+        public unsafe sealed override void Create_PVRTC1_4BPP_RGBA_A8_Encode(string path_in, string path_out)
         {
             var image_bytes = new SenBuffer(path_in);
             var image_decode = PVRTC1Encoder.Encode_PVRTC1_4BPP_RGBA_A8(image_bytes);
-            image_decode.SaveFile(path_out);
+            image_decode.OutFile(path_out);
             return;
         }
 
@@ -1254,7 +1254,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_A8(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1265,7 +1265,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_ARGB1555(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1276,7 +1276,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_ARGB4444(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1287,7 +1287,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_L8(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1298,7 +1298,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_LA44(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1308,7 +1308,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_LA88(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1318,7 +1318,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGB565(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1328,7 +1328,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGB565_Block(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1339,7 +1339,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA4444(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1349,7 +1349,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA4444_Block(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1359,7 +1359,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA5551(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1370,7 +1370,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => bitmap.Decode_RGBA5551_Block(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1398,7 +1398,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => ETC1Encoder.Decode_ETC1_RGB(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1408,7 +1408,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => ETC1Encoder.Decode_ETC1_RGB_A8(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1418,7 +1418,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => ETC1Encoder.Decode_ETC1_RGB_A_Palette(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1428,7 +1428,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => PVRTC1Encoder.Decode_PVRTC1_4BPP_RGB(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1438,7 +1438,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => PVRTC1Encoder.Decode_PVRTC1_4BPP_RGBA(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1448,7 +1448,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path);
             {
                 var image_decode = await Task.Run(() => PVRTC1Encoder.Decode_PVRTC1_4BPP_RGBA_A8(image_bytes, width, height));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1459,7 +1459,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_A8(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1470,7 +1470,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_ARGB1555(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1481,7 +1481,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_ARGB4444(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1492,7 +1492,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_L8(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1503,7 +1503,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_LA44(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1514,7 +1514,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_LA88(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1525,7 +1525,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGB565(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1536,7 +1536,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGB565_Block(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1547,7 +1547,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA4444(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1558,7 +1558,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA4444_Block(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1569,7 +1569,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA5551(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1580,7 +1580,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => bitmap.Encode_RGBA5551_Block(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1608,7 +1608,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => ETC1Encoder.Encode_ETC1_RGB(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1618,7 +1618,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => ETC1Encoder.Encode_ETC1_RGB_A8(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1628,7 +1628,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => ETC1Encoder.Encode_ETC1_RGB_A_Palette(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1638,7 +1638,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => PVRTC1Encoder.Encode_PVRTC1_4BPP_RGB(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1648,7 +1648,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => PVRTC1Encoder.Encode_PVRTC1_4BPP_RGBA(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }
@@ -1658,7 +1658,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             var image_bytes = new SenBuffer(path_in);
             {
                 var image_decode = await Task.Run(() => PVRTC1Encoder.Encode_PVRTC1_4BPP_RGBA_A8(image_bytes));
-                await image_decode.SaveFileAsync(path_out);
+                await image_decode.OutFileAsync(path_out);
             }
             return;
         }

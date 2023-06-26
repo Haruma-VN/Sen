@@ -16,7 +16,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
         public required ResInfo[] res { get; set; }
     }
-
     public class ResInfo
     {
         public required string path { get; set; }
@@ -28,7 +27,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         public int id { get; set; }
         public int width { get; set; }
         public int height { get; set; }
-        public int? format { get; set; }
     }
 
     public class RSG_head
@@ -205,7 +203,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             var Compress = new Compress();
             if (atlasInfo)
             {
-                if (HeadInfo.flags == 0 || HeadInfo.flags == 2 || (HeadInfo.part1_Size == HeadInfo.part1_Zlib && HeadInfo.part1_Size != 0) || ZlibHeaderCheck(RsgFile.getBytes(2, HeadInfo.part1_Offset)))
+                if (HeadInfo.flags == 0 || HeadInfo.flags == 2 || ZlibHeaderCheck(RsgFile.getBytes(2, HeadInfo.part1_Offset)))
                 {
                     return RsgFile.getBytes(HeadInfo.part1_Size, HeadInfo.part1_Offset);
                 }
@@ -216,7 +214,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             }
             else
             {
-                if (HeadInfo.flags < 2 || (HeadInfo.part0_Size == HeadInfo.part0_Zlib && HeadInfo.part0_Size != 0) || ZlibHeaderCheck(RsgFile.getBytes(2, HeadInfo.part0_Offset)))
+                if (HeadInfo.flags < 2 || ZlibHeaderCheck(RsgFile.getBytes(2, HeadInfo.part0_Offset)))
                 {
                     return RsgFile.getBytes(HeadInfo.part0_Size, HeadInfo.part0_Offset);
                 }
@@ -336,7 +334,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             ResInfoList.Insert(0, new ResInfo { path = "" });
             ResInfoList.Sort(delegate (ResInfo a, ResInfo b)
             {
-                return a.path.CompareTo(b.path);
+                return string.CompareOrdinal(a.path.ToUpper(), b.path.ToUpper());
             });
             var ListLength = ResInfoList.Count - 1;
             var pathTemps = new List<PathTemp>();

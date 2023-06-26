@@ -231,5 +231,19 @@
     "file_assert_is_not": "File assert is not exists or not {}",
     "unsupported_rsb_version_not_4": "Does not support version other than version 4 for this function",
     "flash_animation_resize": "Animate Adobe Flash Animation Resize",
-    "invalid_source_domtimeline_name": "Invalid source DOMTimeline name"
+    "invalid_source_domtimeline_name": "Invalid source DOMTimeline name",
+    "popcap_rsb_unpack_resource": "PopCap RSB Unpack All RSGs and Convert to Resource For Work",
+    "extract_atlas": "Extract Atlas",
+    "not_extract_atlas": "Not Extract Atlas",
+    "decode_bnk": "Decode WWise BNK",
+    "not_decode_bnk": "Not Decode WWise BNK",
+    "decode_pam": "Decode PAMs",
+    "not_decode_pam": "Not Decode PAMs",
+    "convert_pam_json_to_flash_animation": "Convert PAM JSON to Animate Adobe Flash Animation",
+    "not_convert_pam_json_to_flash_animation": "Not Convert PAM JSON to Animate Adobe Flash Animation",
+    "decode_rtons": "Decode RTONs",
+    "input_architecture": "Input Architecture",
+    "android": "Android",
+    "ios": "iOS",
+    "android_cn": "Android Chinese Version"
 }

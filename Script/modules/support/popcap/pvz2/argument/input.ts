@@ -22,18 +22,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
          * @returns Boolean input
          */
         public static InputBoolean<Generic_T extends MethodJson>(argument_message: string, json_method_path?: string, property?: string): BooleanInput {
-            Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, argument_message)
-            );
+            Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, argument_message));
             if (json_method_path) {
                 const deserialize_json: Generic_T = Sen.Script.Modules.FileSystem.Json.ReadJson<Generic_T>(json_method_path);
                 if (!property) {
-                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `${property}`),
-                        `${property}`,
-                        (json_method_path ??= "undefined")
-                    );
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `${property}`), `${property}`, (json_method_path ??= "undefined"));
                 }
                 switch (deserialize_json[property]) {
                     case "?": {
@@ -49,10 +42,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
                     }
                     default: {
                         throw new Sen.Script.Modules.Exceptions.RuntimeError(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(
-                                Sen.Script.Modules.System.Default.Localization.GetString("argument_not_found"),
-                                [`${deserialize_json[property]}`, `true, false`, `?`]
-                            ),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("argument_not_found"), [`${deserialize_json[property]}`, `true, false`, `?`]),
                             Sen.Script.Modules.Interface.Assert.function_json_location
                         ) as never;
                     }
@@ -71,17 +61,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
          * @returns
          */
 
-        public static InputInteger<Generic_T extends MethodJson>(
-            argument_message: string,
-            must_match: Array<int> | null,
-            additional_options: Record<string, [notify: string, success: string]>,
-            json_method_path?: string,
-            property?: string
-        ): int {
-            Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, argument_message)
-            );
+        public static InputInteger<Generic_T extends MethodJson>(argument_message: string, must_match: Array<int> | null, additional_options: Record<string, [notify: string, success: string]>, json_method_path?: string, property?: string): int {
+            Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, argument_message));
             const options: Array<string> = Object.keys(additional_options);
             if (options.length !== 0) {
                 options.forEach((option: string) => {
@@ -91,21 +72,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
             if (json_method_path) {
                 const deserialize_json: Generic_T = Sen.Script.Modules.FileSystem.Json.ReadJson<Generic_T>(json_method_path);
                 if (!property) {
-                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
-                        Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `${property}`),
-                        `${property}`,
-                        (json_method_path ??= "undefined")
-                    );
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `${property}`), `${property}`, (json_method_path ??= "undefined"));
                 }
                 if (typeof deserialize_json[property] === "number" && Number.isInteger(deserialize_json[property])) {
                     if (options.length !== 0) {
-                        Console.Print(
-                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument_set_as_default").replace(
-                                /\{\}/g,
-                                `${additional_options[deserialize_json[property].toString()][1]}`
-                            )}`
-                        );
+                        Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument_set_as_default").replace(/\{\}/g, `${additional_options[deserialize_json[property].toString()][1]}`)}`);
                     } else {
                         Console.Printf(null, `      ${deserialize_json[property]}`);
                     }
@@ -119,10 +90,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
                 }
                 Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                    `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
-                        /\{\}/g,
-                        Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input)
-                    )}`
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input))}`
                 );
                 input = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
             }
@@ -130,10 +98,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
             while (assert_test === null) {
                 Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                    `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
-                        /\{\}/g,
-                        Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input)
-                    )}`
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input))}`
                 );
                 input = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
                 assert_test = Sen.Script.Modules.Interface.Assert.MatchInputWithNumbers(input, must_match as Array<int>);
@@ -169,28 +134,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
             allowRotation: false,
             padding: 1,
         };
-        const width: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-            Sen.Script.Modules.System.Default.Localization.GetString("input_width"),
-            null,
-            {},
-            `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
-            `width`
-        );
-        const height: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-            Sen.Script.Modules.System.Default.Localization.GetString("input_height"),
-            null,
-            {},
-            `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
-            `height`
-        );
+        const width: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("input_width"), null, {}, `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`, `width`);
+        const height: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("input_height"), null, {}, `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`, `height`);
         destination.width = width;
         destination.height = height;
         const smart: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
-                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("smart")
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("smart")),
                 `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
                 `smart`
             ) === 1
@@ -198,10 +148,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
                 : false;
         const pot: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
-                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("pot")
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("pot")),
                 `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
                 `pot`
             ) === 1
@@ -209,10 +156,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
                 : false;
         const square: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
-                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("square")
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("square")),
                 `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
                 `square`
             ) === 1
@@ -220,22 +164,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
                 : false;
         const allowRotation: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
-                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("allowRotation")
-                ),
+                Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("allowRotation")),
                 `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
                 `allowRotation`
             ) === 1
                 ? true
                 : false;
-        const padding: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-            Sen.Script.Modules.System.Default.Localization.GetString("set_packable_padding"),
-            null,
-            {},
-            `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
-            `padding`
-        );
+        const padding: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("set_packable_padding"), null, {}, `${MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`, `padding`);
         destination.smart = smart;
         destination.pot = pot;
         destination.square = square;
@@ -293,6 +228,34 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
             }
             case TextureResolution.PopCap768: {
                 return 768;
+            }
+        }
+    }
+
+    export function InputArchitecture(addon_message: string, json_method_path?: string, property?: string): "android" | "ios" | "android_cn" {
+        const input: TextureResolution = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+            `${addon_message}`,
+            [1, 2, 3],
+            {
+                "1": [Sen.Script.Modules.System.Default.Localization.GetString("android"), `android`],
+                "2": [Sen.Script.Modules.System.Default.Localization.GetString("ios"), "ios"],
+                "3": [Sen.Script.Modules.System.Default.Localization.GetString("android_cn"), "android_cn"],
+            },
+            json_method_path,
+            property
+        ) as 1 | 2 | 3 | 4 | 5;
+        switch (input) {
+            case 1: {
+                return "android";
+            }
+            case 2: {
+                return "ios";
+            }
+            case 3: {
+                return "android_cn";
+            }
+            default: {
+                throw new Error("Not found");
             }
         }
     }
