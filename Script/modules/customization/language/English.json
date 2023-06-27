@@ -245,5 +245,6 @@
     "input_architecture": "Input Architecture",
     "android": "Android",
     "ios": "iOS",
-    "android_cn": "Android Chinese Version"
+    "android_cn": "Android Chinese Version",
+    "unpacking_all_rsgs": "Unpack all RSGs"
 }

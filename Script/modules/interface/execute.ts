@@ -1027,7 +1027,19 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 0 | 1
                         );
                     }
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGs(argument, Path.Resolve(`${argument}/unpack`));
+                    const expand_path: "array" | "string" =
+                        (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("using_popcap_resources_path"),
+                            [1, 2],
+                            {
+                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
+                            },
+                            `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                            `expand_path`
+                        ) as 1 | 2) === 1
+                            ? "array"
+                            : "string";
                     Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGDataInsideUnpackDirectory(
                         {
                             rsb_parent_directory: argument,
@@ -1043,6 +1055,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             decode_wem: false,
                             rton_encrypted: encrypted_rton,
                             resolution: resolution,
+                            expand_path: expand_path,
                         },
                         `${argument}/convert`
                     );
@@ -1150,7 +1163,19 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 ) as 0 | 1
                             );
                         }
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGs(arg, Path.Resolve(`${arg}/unpack`));
+                        const expand_path: "array" | "string" =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("using_popcap_resources_path"),
+                                [1, 2],
+                                {
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `expand_path`
+                            ) as 1 | 2) === 1
+                                ? "array"
+                                : "string";
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGDataInsideUnpackDirectory(
                             {
                                 rsb_parent_directory: arg,
@@ -1166,6 +1191,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 decode_wem: false,
                                 rton_encrypted: encrypted_rton,
                                 resolution: resolution,
+                                expand_path: expand_path,
                             },
                             `${arg}/convert`
                         );

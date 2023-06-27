@@ -6,5 +6,6 @@
     "convert_pam_json_to_flash_animation": "?",
     "decode_rtons": "?",
     "encryptedRton": "?",
-    "resolution": "?"
+    "resolution": "?",
+    "expand_path": "?"
 }
