@@ -13,7 +13,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         return;
     }
 
-    export interface RSBOption {
+    export interface RSBConvertOption {
         rsb_parent_directory: string;
         rsb_unpack_dir: string;
         extractAtlas: boolean;
@@ -40,8 +40,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         pam: string;
     };
 
-    export function UnpackAllPopCapRSGDataInsideUnpackDirectory(rsb_unpack_option: RSBOption, out_dir: string): void {
-        const packet_directory: string = Path.Resolve(`${rsb_unpack_option.rsb_parent_directory}/packet`);
+    export function UnpackAllPopCapRSGDataInsideUnpackDirectory(rsb_unpack_option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.RSBConvertOption, out_dir: string): void {
         Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("unpacking_all_rsgs")));
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGs(rsb_unpack_option.rsb_parent_directory, rsb_unpack_option.rsb_unpack_dir);
         const popcap_resource_group_resources_rton_input_destination: string = `${rsb_unpack_option.rsb_unpack_dir}/PROPERTIES/RESOURCES.RTON`;
@@ -57,7 +56,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json")));
         const manifest: string = Path.Resolve(`${rsb_unpack_option.rsb_parent_directory}/manifest.json`);
         Fs.CreateDirectory(out_dir);
-        const groups: Array<string> = Object.keys(res_json.groups);
+        // const groups: Array<string> = Object.keys(res_json.groups);
         const manifest_deserialize: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
             manifest as string
         ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation;
@@ -115,6 +114,43 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                         Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseSoundbankDecodeBySimple(input_path, output_path.replace(/((\.bnk))?$/i, `.soundbank`));
                     }
                 });
+            });
+        });
+        return;
+    }
+
+    /**
+     * RSBPackOption
+     * @param use_convert - Use convert directory
+     */
+
+    export interface RSBPackOption {
+        use_convert: boolean;
+        convert_png_to_ptx: boolean;
+        convert_res_json_to_resource_json: boolean;
+        convert_xfl_to_pam_json: boolean;
+        convert_pam_json_to_pam: boolean;
+        encode_rtons: boolean;
+        rton_encrypt: boolean;
+        encryptionKey: string;
+        encodeBNK: boolean;
+        texture_format: "android" | "ios" | "android_cn";
+        bundle_path: string;
+        rsb_output: string;
+    }
+
+    export function PackPopCapRSBInsideConvertDirectory(rsb_packing_option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.RSBPackOption): void {
+        const manifest: string = `${rsb_packing_option.bundle_path}/manifest.json`;
+        const convert_directory: string = `${rsb_packing_option.bundle_path}/convert`;
+        const manifest_deserialize: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest);
+        const converted_manifest_for_shell: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(manifest_deserialize);
+        const packet_directory: string = `${rsb_packing_option.bundle_path}/packet`;
+        const unpack_directory: string = `${rsb_packing_option.bundle_path}/unpack`;
+        if (rsb_packing_option.use_convert) {
+        }
+        converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
+            group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
+                PvZ2Shell.RSGPack(`${unpack_directory}`, `${packet_directory}/${subgroup.name_packet}.rsg`, subgroup.packet_info, false);
             });
         });
         return;

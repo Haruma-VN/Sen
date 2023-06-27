@@ -101,7 +101,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_add_image_to_flash_animation_adobe"
         | "flash_animation_resize"
         | "popcap_rsb_unpack_by_loose_constraints"
-        | "popcap_rsb_unpack_resource";
+        | "popcap_rsb_unpack_resource"
+        | "popcap_rsb_pack_resource";
 
     /**
      *
@@ -403,6 +404,33 @@ namespace Sen.Script.Modules.Interface.Execute {
                     const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                     Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_rsb_pack_resource": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name_without_extension}`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.PackPopCapRSBInsideConvertDirectory({
+                        use_convert: false,
+                        convert_pam_json_to_pam: false,
+                        convert_png_to_ptx: false,
+                        convert_res_json_to_resource_json: false,
+                        convert_xfl_to_pam_json: false,
+                        encode_rtons: false,
+                        encodeBNK: false,
+                        encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial.key,
+                        rsb_output: output_argument,
+                        rton_encrypt: false,
+                        texture_format: "android",
+                        bundle_path: argument,
+                    });
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name_without_extension}`);
@@ -925,140 +953,161 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
             case "popcap_rsb_unpack_resource": {
                 if (!Array.isArray(argument)) {
-                    const architecture: "android" | "ios" | "android_cn" = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArchitecture(
-                        Sen.Script.Modules.System.Default.Localization.GetString("input_architecture"),
-                        `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                        `architecture`
-                    );
-                    const extract_atlas: boolean =
+                    const use_convert: boolean =
                         (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                            Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("use_convert_directory"),
                             [0, 1],
                             {
-                                "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_extract_atlas")],
-                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas")],
+                                "0": [Sen.Script.Modules.System.Default.Localization.GetString("not_convert_everything_after_unpack_all_rsgs"), Sen.Script.Modules.System.Default.Localization.GetString("not_convert_everything_after_unpack_all_rsgs")],
+                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_everything_after_unpack_all_rsgs"), Sen.Script.Modules.System.Default.Localization.GetString("convert_everything_after_unpack_all_rsgs")],
                             },
                             `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                            `extract_atlas`
+                            `use_convert`
                         ) as 0 | 1) === 1
                             ? true
                             : false;
-                    const decode_bnk: boolean =
-                        (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                            Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk"),
-                            [0, 1],
-                            {
-                                "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_bnk")],
-                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk")],
-                            },
+                    if (use_convert) {
+                        const architecture: "android" | "ios" | "android_cn" = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArchitecture(
+                            Sen.Script.Modules.System.Default.Localization.GetString("input_architecture"),
                             `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                            `decode_bnk`
-                        ) as 0 | 1) === 1
-                            ? true
-                            : false;
-                    const decode_popcap_animation: boolean =
-                        (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                            Sen.Script.Modules.System.Default.Localization.GetString("decode_pam"),
-                            [0, 1],
-                            {
-                                "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_pam")],
-                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_pam")],
-                            },
-                            `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                            `decode_pam`
-                        ) as 0 | 1) === 1
-                            ? true
-                            : false;
-                    let convert_pam_to_flash_animation: boolean = false;
-                    if (decode_popcap_animation) {
-                        convert_pam_to_flash_animation =
+                            `architecture`
+                        );
+                        const extract_atlas: boolean =
                             (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                                Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
+                                Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas"),
                                 [0, 1],
                                 {
-                                    "0": [
-                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
-                                        Sen.Script.Modules.System.Default.Localization.GetString("not_convert_pam_json_to_flash_animation"),
-                                    ],
-                                    "1": [
-                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
-                                        Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
-                                    ],
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_extract_atlas")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas")],
                                 },
                                 `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                                `convert_pam_json_to_flash_animation`
+                                `extract_atlas`
                             ) as 0 | 1) === 1
                                 ? true
                                 : false;
-                    }
-                    let resolution: int = 1200;
-                    if (convert_pam_to_flash_animation) {
-                        resolution = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
-                            Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                            `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                            `resolution`
-                        );
-                    }
-                    const decode_rtons: boolean =
-                        (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                            Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons"),
-                            [0, 1],
-                            {
-                                "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_rtons")],
-                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons")],
-                            },
-                            `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                            `decode_rtons`
-                        ) as 0 | 1) === 1
-                            ? true
-                            : false;
-                    let encrypted_rton: boolean = false;
-                    if (decode_rtons) {
-                        encrypted_rton = Boolean(
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                                Sen.Script.Modules.System.Default.Localization.GetString("rton_are_encrypted"),
+                        const decode_bnk: boolean =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk"),
                                 [0, 1],
                                 {
-                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"), Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton")],
-                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"), Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt")],
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_bnk")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk")],
                                 },
                                 `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                                `encryptedRton`
-                            ) as 0 | 1
-                        );
-                    }
-                    const expand_path: "array" | "string" =
-                        (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                            Sen.Script.Modules.System.Default.Localization.GetString("using_popcap_resources_path"),
-                            [1, 2],
+                                `decode_bnk`
+                            ) as 0 | 1) === 1
+                                ? true
+                                : false;
+                        const decode_popcap_animation: boolean =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("decode_pam"),
+                                [0, 1],
+                                {
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_pam")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_pam")],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `decode_pam`
+                            ) as 0 | 1) === 1
+                                ? true
+                                : false;
+                        let convert_pam_to_flash_animation: boolean = false;
+                        if (decode_popcap_animation) {
+                            convert_pam_to_flash_animation =
+                                (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
+                                    [0, 1],
+                                    {
+                                        "0": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("not_convert_pam_json_to_flash_animation"),
+                                        ],
+                                        "1": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
+                                        ],
+                                    },
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `convert_pam_json_to_flash_animation`
+                                ) as 0 | 1) === 1
+                                    ? true
+                                    : false;
+                        }
+                        let resolution: int = 1200;
+                        if (convert_pam_to_flash_animation) {
+                            resolution = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
+                                Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `resolution`
+                            );
+                        }
+                        const decode_rtons: boolean =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons"),
+                                [0, 1],
+                                {
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_rtons")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons")],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `decode_rtons`
+                            ) as 0 | 1) === 1
+                                ? true
+                                : false;
+                        let encrypted_rton: boolean = false;
+                        if (decode_rtons) {
+                            encrypted_rton = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("rton_are_encrypted"),
+                                    [0, 1],
+                                    {
+                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"), Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton")],
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"), Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt")],
+                                    },
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `encryptedRton`
+                                ) as 0 | 1
+                            );
+                        }
+                        const expand_path: "array" | "string" =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("using_popcap_resources_path"),
+                                [1, 2],
+                                {
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
+                                },
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `expand_path`
+                            ) as 1 | 2) === 1
+                                ? "array"
+                                : "string";
+                        const output_argument: string = Path.Resolve(`${argument}/convert`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGDataInsideUnpackDirectory(
                             {
-                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
-                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
+                                rsb_parent_directory: argument,
+                                rsb_unpack_dir: `${argument}/unpack`,
+                                texture_format: architecture,
+                                extractAtlas: extract_atlas,
+                                encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key,
+                                decode_bnk: decode_bnk,
+                                decode_pam: decode_popcap_animation,
+                                pam_to_flash_animation: convert_pam_to_flash_animation,
+                                extractSprites: true,
+                                decode_rton: decode_rtons,
+                                decode_wem: false,
+                                rton_encrypted: encrypted_rton,
+                                resolution: resolution,
+                                expand_path: expand_path,
                             },
-                            `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
-                            `expand_path`
-                        ) as 1 | 2) === 1
-                            ? "array"
-                            : "string";
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGDataInsideUnpackDirectory(
-                        {
-                            rsb_parent_directory: argument,
-                            rsb_unpack_dir: `${argument}/unpack`,
-                            texture_format: architecture,
-                            extractAtlas: extract_atlas,
-                            encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key,
-                            decode_bnk: decode_bnk,
-                            decode_pam: decode_popcap_animation,
-                            pam_to_flash_animation: convert_pam_to_flash_animation,
-                            extractSprites: true,
-                            decode_rton: decode_rtons,
-                            decode_wem: false,
-                            rton_encrypted: encrypted_rton,
-                            resolution: resolution,
-                            expand_path: expand_path,
-                        },
-                        `${argument}/convert`
-                    );
+                            output_argument
+                        );
+                    } else {
+                        const output_argument: string = Path.Resolve(`${argument}/unpack`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGs(argument, output_argument);
+                    }
                 } else {
                     argument.forEach((arg: string) => {
                         const architecture: "android" | "ios" | "android_cn" = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArchitecture(
@@ -1218,21 +1267,161 @@ namespace Sen.Script.Modules.Interface.Execute {
                     PvZ2Shell.PopCapZlibUncompress(argument, use_64bit_variant, output_argument);
                 } else {
                     argument.forEach((arg: string) => {
-                        const use_64bit_variant: boolean = Boolean(
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                                Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                        const use_convert: boolean =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas"),
                                 [0, 1],
                                 {
-                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
-                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_extract_atlas")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas")],
                                 },
-                                `${MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
-                                `use_64_bit_variant`
-                            ) as 0 | 1
-                        );
-                        const output_argument: string = Path.Resolve(`${arg}.bin`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        PvZ2Shell.PopCapZlibUncompress(arg, use_64bit_variant, output_argument);
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `extract_atlas`
+                            ) as 0 | 1) === 1
+                                ? true
+                                : false;
+                        if (use_convert) {
+                            const architecture: "android" | "ios" | "android_cn" = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArchitecture(
+                                Sen.Script.Modules.System.Default.Localization.GetString("input_architecture"),
+                                `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `architecture`
+                            );
+                            const extract_atlas: boolean =
+                                (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas"),
+                                    [0, 1],
+                                    {
+                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_extract_atlas")],
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas")],
+                                    },
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `extract_atlas`
+                                ) as 0 | 1) === 1
+                                    ? true
+                                    : false;
+                            const decode_bnk: boolean =
+                                (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk"),
+                                    [0, 1],
+                                    {
+                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_bnk")],
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk")],
+                                    },
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `decode_bnk`
+                                ) as 0 | 1) === 1
+                                    ? true
+                                    : false;
+                            const decode_popcap_animation: boolean =
+                                (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("decode_pam"),
+                                    [0, 1],
+                                    {
+                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_pam")],
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_pam")],
+                                    },
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `decode_pam`
+                                ) as 0 | 1) === 1
+                                    ? true
+                                    : false;
+                            let convert_pam_to_flash_animation: boolean = false;
+                            if (decode_popcap_animation) {
+                                convert_pam_to_flash_animation =
+                                    (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                        Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
+                                        [0, 1],
+                                        {
+                                            "0": [
+                                                Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                                Sen.Script.Modules.System.Default.Localization.GetString("not_convert_pam_json_to_flash_animation"),
+                                            ],
+                                            "1": [
+                                                Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                                Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
+                                            ],
+                                        },
+                                        `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                        `convert_pam_json_to_flash_animation`
+                                    ) as 0 | 1) === 1
+                                        ? true
+                                        : false;
+                            }
+                            let resolution: int = 1200;
+                            if (convert_pam_to_flash_animation) {
+                                resolution = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `resolution`
+                                );
+                            }
+                            const decode_rtons: boolean =
+                                (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons"),
+                                    [0, 1],
+                                    {
+                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_rtons")],
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons")],
+                                    },
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `decode_rtons`
+                                ) as 0 | 1) === 1
+                                    ? true
+                                    : false;
+                            let encrypted_rton: boolean = false;
+                            if (decode_rtons) {
+                                encrypted_rton = Boolean(
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                        Sen.Script.Modules.System.Default.Localization.GetString("rton_are_encrypted"),
+                                        [0, 1],
+                                        {
+                                            "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"), Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton")],
+                                            "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"), Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt")],
+                                        },
+                                        `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                        `encryptedRton`
+                                    ) as 0 | 1
+                                );
+                            }
+                            const expand_path: "array" | "string" =
+                                (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("using_popcap_resources_path"),
+                                    [1, 2],
+                                    {
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
+                                        "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
+                                    },
+                                    `${MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `expand_path`
+                                ) as 1 | 2) === 1
+                                    ? "array"
+                                    : "string";
+                            const output_argument: string = Path.Resolve(`${arg}/convert`);
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGDataInsideUnpackDirectory(
+                                {
+                                    rsb_parent_directory: arg,
+                                    rsb_unpack_dir: `${argument}/unpack`,
+                                    texture_format: architecture,
+                                    extractAtlas: extract_atlas,
+                                    encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key,
+                                    decode_bnk: decode_bnk,
+                                    decode_pam: decode_popcap_animation,
+                                    pam_to_flash_animation: convert_pam_to_flash_animation,
+                                    extractSprites: true,
+                                    decode_rton: decode_rtons,
+                                    decode_wem: false,
+                                    rton_encrypted: encrypted_rton,
+                                    resolution: resolution,
+                                    expand_path: expand_path,
+                                },
+                                output_argument
+                            );
+                        } else {
+                            const output_argument: string = Path.Resolve(`${arg}/unpack`);
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGs(arg, output_argument);
+                        }
                     });
                 }
                 break;

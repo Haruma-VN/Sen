@@ -1,4 +1,5 @@
 {
+    "use_convert": "?",
     "architecture": "?",
     "extract_atlas": "?",
     "decode_bnk": "?",

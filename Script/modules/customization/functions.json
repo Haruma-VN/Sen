@@ -252,5 +252,11 @@
         "include": [".bundle"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_rsb_pack_resource": {
+        "func_number": 43,
+        "include": [".bundle"],
+        "exclude": [],
+        "type": "directory"
     }
 }

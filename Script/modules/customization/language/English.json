@@ -246,5 +246,9 @@
     "android": "Android",
     "ios": "iOS",
     "android_cn": "Android Chinese Version",
-    "unpacking_all_rsgs": "Unpack all RSGs"
+    "unpacking_all_rsgs": "Unpack all RSGs",
+    "popcap_rsb_pack_resource": "PopCap RSB Pack from Converted Resource",
+    "use_convert_directory": "Convert Resource from RSGs After Unpack",
+    "convert_everything_after_unpack_all_rsgs": "Convert PopCap's File Structure to Workable Structure After Unpack All RSGs",
+    "not_convert_everything_after_unpack_all_rsgs": "Use \"unpack\" directory only, this directory only contains RSGs after unpacked"
 }
