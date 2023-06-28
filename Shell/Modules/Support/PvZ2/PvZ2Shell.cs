@@ -67,7 +67,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RSBPack(string RSBDirectory, string outRSB, MainfestInfo mainfestInfo);
 
-        public abstract void RSBUnpackByLenient(string RSBin, string outRSBdirectory);
+        public abstract MainfestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory);
 
         public abstract void RSBObfuscate(string RSBin, string outRSB);
 
@@ -184,9 +184,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public unsafe sealed override void RSBUnpackByLenient(string RSBin, string outRSBdirectory)
+        public unsafe sealed override MainfestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory)
         {
-            return;
+            var buffer = new SenBuffer(RSBin);
+            var manifest = RSBFunction.UnpackByLooseConstraints(buffer, outRSBdirectory);
+            return manifest;
         }
 
         public unsafe sealed override void RSBObfuscate(string RSBin, string outRSB)

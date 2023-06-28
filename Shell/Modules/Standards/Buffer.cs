@@ -66,10 +66,14 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         /// <param name="path"> { Path } The Path to use access the file value.</param>
         /// </summary>
 
-        public SenBuffer(string path)
+        public SenBuffer(string filepath)
         {
-            filePath = path;
-            byte[] bytes = File.ReadAllBytes(path);
+            var path = new ImplementPath();
+            var newStringDir = path.GetDirectoryName(filepath).Replace(" ", "");
+            var newFilePath = path.GetFileName(filepath);
+            var newPath = path.Join(newStringDir, newFilePath);
+            filePath = newPath;
+            byte[] bytes = File.ReadAllBytes(newPath);
             baseStream = new MemoryStream(bytes);
         }
 
@@ -870,18 +874,20 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public virtual void CreateDirectory(string output_path)
         {
-            var path = new ImplementPath();
             var fs = new FileSystem();
-            if (!fs.DirectoryExists(path.GetDirectoryName(output_path)))
+            if (!fs.DirectoryExists(output_path))
             {
-                fs.CreateDirectory(path.GetDirectoryName(output_path));
+                fs.CreateDirectory(output_path);
             }
         }
 
         public virtual void OutFile(string output_path)
         {
-            CreateDirectory(output_path);
-            SaveFile(output_path);
+            var path = new ImplementPath();
+            var newStringDir = path.GetDirectoryName(output_path).Replace(" ", "");
+            var newFilePath = path.GetFileName(output_path);
+            CreateDirectory(newStringDir);
+            SaveFile(path.Join(newStringDir, newFilePath));
         }
 
         public virtual void SaveFile(string path)

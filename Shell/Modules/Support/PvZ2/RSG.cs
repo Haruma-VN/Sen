@@ -397,7 +397,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 {
                     RSGFile.writeInt24LE(pathTemps[i].positions[h].position, beginOffset + pathTemps[i].positions[h].offset * 4 + 1);
                 }
-                byte[] dataItem = fs.ReadBytes(UseResFolder ? $"{inFolder}/res/{PacketResInfo.path}" : $"{inFolder}/{PacketResInfo.path}");
+                var SenFile = new SenBuffer(UseResFolder ? $"{inFolder}/res/{PacketResInfo.path}" : $"{inFolder}/{PacketResInfo.path}");
+                byte[] dataItem = SenFile.toBytes();
+                SenFile.Close();
                 int appendLength = BeautifyLength(dataItem.Length);
                 if (pathTemps[i].isAtlas)
                 {
@@ -437,7 +439,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         private static void Compressor(SenBuffer RSGFile, SenBuffer dataGroup, SenBuffer atlasGroup, int compression_flags)
         {
             var Compress = new Compress();
-            void DataWrite(byte[] dataBytes, int flags)
+            void DataWrite(byte[] dataBytes, int flags, bool isAtlas)
             {
                 int part0_Offset = (int)RSGFile.writeOffset;
                 int part0_Size = dataBytes.Length;
@@ -447,12 +449,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     RSGFile.BackupWriteOffset();
                     RSGFile.writeInt32LE(part0_Offset, 0x18);
                     RSGFile.writeInt32LE(part0_Size);
-                    RSGFile.writeInt32LE(part0_Size);
+                    if (isAtlas) RSGFile.writeInt32LE(0);
+                    else RSGFile.writeInt32LE(part0_Size);
                     RSGFile.RestoreWriteOffset();
                 }
                 else
                 {
-                    byte[] ZlibBytes = Compress.CompressZlibBytes(dataBytes, ZlibCompressionLevel.Level9);
+                    byte[] ZlibBytes = Compress.CompressZlibBytes(dataBytes, (flags == 3 ? ZlibCompressionLevel.BestCompression : ZlibCompressionLevel.Default));
                     int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
                     RSGFile.writeBytes(ZlibBytes);
                     RSGFile.writeNull(ZlibAppendLength);
@@ -468,7 +471,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             {
                 byte[] dataBytes = dataGroup.toBytes();
                 dataGroup.Close();
-                DataWrite(dataBytes, compression_flags);
+                DataWrite(dataBytes, compression_flags, false);
             }
             if (atlasGroup.length != 0)
             {
@@ -476,11 +479,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 atlasGroup.Close();
                 int part1_Offset;
                 int part1_Size = atlasBytes.Length;
+                var dataEmpty = new SenBuffer();
+                dataEmpty.writeInt32LE(252536);
+                dataEmpty.writeInt32BE(1);
+                dataEmpty.writeNull(4088);
                 if (compression_flags == 0 || compression_flags == 2)
                 {
-                    if (dataGroup.length == 0)
+                    if (compression_flags == 2 && dataGroup.length == 0)
                     {
-                        DataWrite(new byte[4096], 3);
+                        DataWrite(dataEmpty.toBytes(), 1, true);
+                    }
+                    else {
+                         DataWrite(new byte[0], 1, true);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;
                     RSGFile.writeBytes(atlasBytes);
@@ -494,10 +504,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 {
                     if (compression_flags == 3 && dataGroup.length == 0)
                     {
-                        DataWrite(new byte[4096], 3);
+                        DataWrite(dataEmpty.toBytes(), 1, true);
+                    }
+                    else {
+                        DataWrite(new byte[0], 1, true);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;
-                    byte[] ZlibBytes = Compress.CompressZlibBytes(atlasBytes, ZlibCompressionLevel.Level9);
+                    byte[] ZlibBytes = Compress.CompressZlibBytes(atlasBytes, (compression_flags == 3 ? ZlibCompressionLevel.BestCompression : ZlibCompressionLevel.Default));
                     int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
                     RSGFile.writeBytes(ZlibBytes);
                     RSGFile.writeNull(ZlibAppendLength);
@@ -508,6 +521,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     RSGFile.writeInt32LE(part1_Size);
                     RSGFile.RestoreWriteOffset();
                 }
+                dataEmpty.Close();
             }
             else
             {
@@ -519,7 +533,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         {
             if (oriLength % 4096 == 0)
             {
-                return oriLength;
+                return 0;
             }
             else
             {

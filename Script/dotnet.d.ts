@@ -515,14 +515,7 @@ declare namespace DotNetBitmap {
      * @returns Rgba Image as Buffer
      */
 
-    export function CreateRgbaImage(
-        alphaBuffer: Uint8Array,
-        redBuffer: Uint8Array,
-        greenBuffer: Uint8Array,
-        blueBuffer: Uint8Array,
-        width: number,
-        height: number
-    ): Image<Rgba32>;
+    export function CreateRgbaImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Rgba32>;
 
     /**
      *
@@ -535,14 +528,7 @@ declare namespace DotNetBitmap {
      * @returns Argb Image as Buffer
      */
 
-    export function CreateArgbImage(
-        alphaBuffer: Uint8Array,
-        redBuffer: Uint8Array,
-        greenBuffer: Uint8Array,
-        blueBuffer: Uint8Array,
-        width: number,
-        height: number
-    ): Image<Argb32>;
+    export function CreateArgbImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Argb32>;
 
     /**
      *
@@ -1031,10 +1017,7 @@ declare namespace TextureHandlerPromise {
      * @param format - Pass encode format
      */
 
-    export function DecodeAsyncImages(
-        images: Array<DecodeDynamic>,
-        format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial
-    ): void;
+    export function DecodeAsyncImages(images: Array<DecodeDynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
 }
 
 declare interface AsyncTaskImageSplit {
@@ -1092,13 +1075,7 @@ namespace DotNetCrypto {
      * @returns encrypted Uint8Array
      */
 
-    export function RijndaelEncrypt(
-        plainText: string,
-        password: string,
-        saltValue: string,
-        rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode,
-        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding
-    ): Uint8Array;
+    export function RijndaelEncrypt(plainText: string, password: string, saltValue: string, rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode, rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding): Uint8Array;
 
     /**
      *
@@ -1110,13 +1087,7 @@ namespace DotNetCrypto {
      * @returns decrypted Uint8Array
      */
 
-    export function RijndaelDecrypt(
-        encryptedBytes: Uint8Array,
-        password: string,
-        saltValue: string,
-        rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode,
-        rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding
-    ): Uint8Array;
+    export function RijndaelDecrypt(encryptedBytes: Uint8Array, password: string, saltValue: string, rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode, rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding): Uint8Array;
 }
 
 /**
@@ -1168,10 +1139,7 @@ declare namespace DotNetCompress {
      * @returns Zlib out
      */
 
-    export function CompressZlibBytes<Generic_T, Generic_U>(
-        data: Generic_T,
-        compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel
-    ): Generic_U;
+    export function CompressZlibBytes<Generic_T, Generic_U>(data: Generic_T, compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel): Generic_U;
 
     /**
      *
@@ -1250,12 +1218,7 @@ declare namespace DotNetSystem {
     }
 
     class RTONDecodeException extends RuntimeException {
-        constructor(
-            public message: string,
-            public file_path: string,
-            public expected: string,
-            public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONListException
-        ): void;
+        constructor(public message: string, public file_path: string, public expected: string, public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONListException): void;
     }
 }
 
@@ -1566,10 +1529,7 @@ declare namespace PvZ2Shell {
      * @param outFolder - Out PAM JSON
      */
 
-    export function FlashAnimationtoPAMJSON(
-        inDirectory: string,
-        extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo
-    ): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
+    export function FlashAnimationtoPAMJSON(inDirectory: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
 
     /**
      *
@@ -1601,12 +1561,7 @@ declare namespace PvZ2Shell {
      * @param outFile - Out File
      */
 
-    export function RSGPack(
-        inDirectory: string,
-        outFile: string,
-        packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo,
-        useResDirectory: boolean = true
-    ): void;
+    export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo, useResDirectory: boolean = true): void;
     /**
      *
      * @param inFile - Pass RSB file path
@@ -1628,12 +1583,7 @@ declare namespace PvZ2Shell {
      * @param outFile - Pass outfile
      */
 
-    export function PopCapZlibCompress(
-        Ripefile: string,
-        Use64variant: boolean,
-        outFile: string,
-        zlibLevel: Sen.Script.Modules.Compression.Constraints.ZlibLevel
-    ): void;
+    export function PopCapZlibCompress(Ripefile: string, Use64variant: boolean, outFile: string, zlibLevel: Sen.Script.Modules.Compression.Constraints.ZlibLevel): void;
     /**
      *
      * @param base - Pass zlib base
@@ -1690,11 +1640,7 @@ declare namespace PvZ2Shell {
      * @param information - Pass soundbank json deserialized
      */
 
-    export function WWiseSoundBankEncode(
-        soundbank_dir: string,
-        out_bnk: string,
-        information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple
-    ): void;
+    export function WWiseSoundBankEncode(soundbank_dir: string, out_bnk: string, information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple): void;
 
     /**
      *
@@ -1704,6 +1650,13 @@ declare namespace PvZ2Shell {
      */
 
     export function FlashAnimationResize(inDir: string, resolution: int): void;
+    /**
+     *
+     * @param inFile - Pass RSB file path
+     * @param outFolder - Out directory unpacked
+     */
+
+    export function RSBUnpackByLooseConstraints(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
 }
 
 /**
@@ -1936,13 +1889,7 @@ namespace PvZ2XML {
      * @param transform - Transform
      * @param outpath - Output path
      */
-    export function WriteImageDocument(
-        index: int,
-        name: string,
-        size: [int, int],
-        transform: [double, double, double, double, double, double],
-        outpath: string
-    ): void;
+    export function WriteImageDocument(index: int, name: string, size: [int, int], transform: [double, double, double, double, double, double], outpath: string): void;
     /**
      *
      * @param index - Start index

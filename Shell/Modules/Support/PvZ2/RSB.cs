@@ -49,7 +49,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public PTXProperty? ptx_property { get; set; }
     }
 
-    public class PTXProperty {
+    public class PTXProperty
+    {
         public required int format { get; set; }
         public required int pitch { get; set; }
         public int? alpha_size { get; set; }
@@ -112,6 +113,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public required int poolIndex { get; set; }
         public required int ptxNumber { get; set; }
         public required int ptxBeforeNumber { get; set; }
+        public byte[]? packetHeadInfo { get; set; }
     }
 
     public class AutoPoolInfo
@@ -332,7 +334,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                             width = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].width,
                                             height = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].height,
                                         };
-                                        resInfo.ptx_property = new PTXProperty {
+                                        resInfo.ptx_property = new PTXProperty
+                                        {
                                             format = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].format,
                                             pitch = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].pitch,
                                             alpha_size = ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id]?.alpha_size,
@@ -718,7 +721,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     ptxInfo.alpha_size = RSBFile.readInt32LE();
                     ptxInfo.alpha_format = rsbHeadInfo.ptxInfo_EachLength == 0x18 ? RSBFile.readInt32LE() : (ptxInfo.alpha_size == 0 ? 0x0 : 0x64);
                 }
-                else {
+                else
+                {
                     ptxInfo.alpha_size = null;
                     ptxInfo.alpha_format = null;
                 }
@@ -817,10 +821,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                 ptxInfo.writeInt32LE(format);
                                 var alpha_size = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_property?.alpha_size;
                                 var alpha_format = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_property?.alpha_format;
-                                if (rsbHeadInfo.ptxInfo_EachLength != 0x10) {
+                                if (rsbHeadInfo.ptxInfo_EachLength != 0x10)
+                                {
                                     ptxInfo.writeInt32LE(alpha_size ?? 0);
                                 }
-                                if (rsbHeadInfo.ptxInfo_EachLength == 0x18) {
+                                if (rsbHeadInfo.ptxInfo_EachLength == 0x18)
+                                {
                                     ptxInfo.writeInt32LE(alpha_format ?? 0);
                                 }
                             }
@@ -1202,6 +1208,169 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 RSBFile.writeNull(64, packetOffset);
                 RSBFile.readOffset = startOffset + HeadInfo.rsgInfo_EachLength;
             }
+        }
+
+        public static MainfestInfo UnpackByLooseConstraints(SenBuffer RSBFile, string outFolder)
+        {
+            var rsbHeadInfo = ReadHead(RSBFile);
+            if (rsbHeadInfo.version == 5)
+            {
+                throw new Exception("shuttle");
+            }
+            var rsgList = new List<FileListInfo>();
+            FileListSplit(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, ref rsgList);
+            var compositeInfo = new List<CompositeInfo>();
+            ReadCompositeInfo(RSBFile, rsbHeadInfo, ref compositeInfo);
+            var rsgInfoList = new List<RSGInfo>();
+            ReadRSGInfoByLooseConstraints(RSBFile, rsbHeadInfo, ref rsgInfoList);
+            var ptxInfoList = new List<RSBPtxInfo>();
+            ReadPTXInfo(RSBFile, rsbHeadInfo, ref ptxInfoList);
+            var groupList = new List<GroupInfo>();
+            var compositeLength = compositeInfo.Count;
+            var rsgNameList = new List<string>();
+            for (var i = 0; i < compositeLength; i++)
+            {
+                var subGroupList = new List<SubGroupInfo>();
+                for (var k = 0; k < compositeInfo[i].packetNumber; k++)
+                {
+                    var packetIndex = compositeInfo[i].packetInfo![k].packetIndex;
+                    var rsgInfoCount = 0;
+                    var rsgListCount = 0;
+                    while (rsgInfoList[rsgInfoCount].poolIndex != packetIndex)
+                    {
+                        if (rsgInfoCount > rsgInfoList.Count) throw new Exception("Out of ranger 1");
+                        rsgInfoCount++;
+                    }
+                    while (rsgList[rsgListCount].poolIndex != packetIndex)
+                    {
+                        if (rsgListCount > rsgList.Count) throw new Exception("Out of ranger 2");
+                        rsgListCount++;
+                    }
+                    rsgNameList.Add(rsgList[rsgListCount].namePath);
+                    byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
+                    var RSGFile = new SenBuffer(packetFile);
+                    FixRSG(RSGFile, rsbHeadInfo.version, new SenBuffer(rsgInfoList[rsgInfoCount].packetHeadInfo!));
+                    var packetInfo = RSGFunction.Unpack(RSGFile, $"{outFolder}/unpack/", true, false);
+                    var resInfoList = new List<RSBResInfo>();
+                    var ptxBeforeNumber = rsgInfoList[rsgInfoCount].ptxBeforeNumber;
+                    for (var h = 0; h < packetInfo.res.Length; h++)
+                    {
+                        var resInfo = new RSBResInfo
+                        {
+                            path = packetInfo.res[h].path
+                        };
+                        if (packetInfo.res[h].ptx_info != null)
+                        {
+                            resInfo.ptx_info = packetInfo.res[h].ptx_info;
+                            resInfo.ptx_property = new PTXProperty
+                            {
+                                format = ptxInfoList[ptxBeforeNumber + packetInfo.res[h].ptx_info!.id].format,
+                                pitch = ptxInfoList[ptxBeforeNumber + packetInfo.res[h].ptx_info!.id].pitch,
+                                alpha_size = ptxInfoList[ptxBeforeNumber + packetInfo.res[h].ptx_info!.id]?.alpha_size,
+                                alpha_format = ptxInfoList[ptxBeforeNumber + packetInfo.res[h].ptx_info!.id]?.alpha_format,
+                            };
+                        }
+                        resInfoList.Add(resInfo);
+                    }
+                    var packetInfoList = new RSBPacketInfo
+                    {
+                        version = packetInfo.version,
+                        compression_flags = packetInfo.compression_flags,
+                        res = resInfoList.ToArray(),
+                    };
+                    subGroupList.Add(new SubGroupInfo
+                    {
+                        name_packet = rsgList[rsgListCount].namePath,
+                        category = new string[] { compositeInfo[i].packetInfo![k].category[0], compositeInfo[i].packetInfo![k].category[1] },
+                        packet_info = packetInfoList,
+                    });
+                }
+                groupList.Add(new GroupInfo
+                {
+                    name = compositeInfo[i].name,
+                    is_composite = compositeInfo[i].isComposite,
+                    subgroup = subGroupList.ToArray(),
+                });
+            }
+            var mainfest_info = new MainfestInfo
+            {
+                version = rsbHeadInfo.version,
+                ptx_info_size = rsbHeadInfo.ptxInfo_EachLength,
+                path = new RSBPathInfo
+                {
+                    rsgs = rsgNameList.ToArray(),
+                    packet_path = $"{outFolder}\\packet",
+                },
+                group = groupList.ToArray(),
+            };
+            RSBFile.Close();
+            return mainfest_info;
+        }
+
+        private static void FixRSG(SenBuffer RSGFile, int version, SenBuffer RsgInfo)
+        {
+            var rsgMagic = RSGFile.readString(4);
+            var rsgVersion = RSGFile.readInt32LE();
+            var rsgCompressionFlag = RSGFile.readInt32LE(0x10);
+            if (version == 5)
+            {
+                throw new Exception("shuttle");
+            }
+            RSGFile.readOffset = 0;
+            if (rsgMagic == "pgsr" && rsgVersion == version && rsgCompressionFlag == RsgInfo.readInt32LE())
+            {
+                return;
+            }
+            else
+            {
+                RSGFile.writeString("pgsr");
+                RSGFile.writeInt32LE(version);
+                RSGFile.writeNull(8);
+                RSGFile.writeBytes(RsgInfo.toBytes());
+                RSGFile.writeNull(16);
+                RsgInfo.Close();
+            }
+        }
+
+        private static void ReadRSGInfoByLooseConstraints(SenBuffer RSBFile, RSB_head rsbHeadInfo, ref List<RSGInfo> rsgInfoList)
+        {
+            RSBFile.readOffset = (long)rsbHeadInfo.rsgInfo_BeginOffset;
+            for (var i = 0; i < rsbHeadInfo.rsgNumber; i++)
+            {
+                var startOffset = RSBFile.readOffset;
+                var rsgOffset = RSBFile.readInt32LE(startOffset + 128);
+                if (IsNotRSG(RSBFile, rsgOffset))
+                {
+                    RSBFile.readOffset = startOffset + rsbHeadInfo.rsgInfo_EachLength;
+                    continue;
+                }
+                var rsgIndex = RSBFile.readInt32LE(startOffset + 136);
+                var packetHeadInfo = RSBFile.readBytes(32, startOffset + 140);
+                var rsgLength = RSBFile.readInt32LE(startOffset + 148) + RSBFile.readInt32LE(startOffset + 152) + RSBFile.readInt32LE(startOffset + 168);
+                var ptxNumber = RSBFile.readInt32LE(startOffset + rsbHeadInfo.rsgInfo_EachLength - 8);
+                var ptxBeforeNumber = RSBFile.readInt32LE();
+                rsgInfoList.Add(new RSGInfo
+                {
+                    name = "",
+                    rsgOffset = rsgOffset,
+                    rsgLength = rsgLength,
+                    poolIndex = rsgIndex,
+                    ptxNumber = ptxNumber,
+                    ptxBeforeNumber = ptxBeforeNumber,
+                    packetHeadInfo = packetHeadInfo,
+                });
+            }
+            var endOffset = rsbHeadInfo.rsgInfo_EachLength * rsbHeadInfo.rsgNumber + rsbHeadInfo.rsgInfo_BeginOffset;
+            CheckEndOffset(RSBFile, endOffset);
+        }
+
+        private static bool IsNotRSG(SenBuffer RSBFile, long rsgOffset)
+        {
+            RSBFile.BackupReadOffset();
+            var fileListOffset = RSBFile.readInt32LE(rsgOffset + 76);
+            RSBFile.BackupReadOffset();
+            if (fileListOffset != 0x5C) return true;
+            else return false;
         }
     }
 
