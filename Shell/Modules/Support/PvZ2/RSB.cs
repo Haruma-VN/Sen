@@ -1207,7 +1207,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 var packetOffset = RSBFile.readUInt32LE(startOffset + 128);
                 RSBFile.writeNull(64, packetOffset);
                 RSBFile.readOffset = startOffset + HeadInfo.rsgInfo_EachLength;
-            }
+            };
+            return;
         }
 
         public static MainfestInfo UnpackByLooseConstraints(SenBuffer RSBFile, string outFolder)

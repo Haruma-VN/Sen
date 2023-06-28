@@ -68,10 +68,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public SenBuffer(string filepath)
         {
-            var path = new ImplementPath();
-            var newStringDir = path.GetDirectoryName(filepath).Replace(" ", "");
-            var newFilePath = path.GetFileName(filepath);
-            var newPath = path.Join(newStringDir, newFilePath);
+            var newPath = checkPath(filepath);
             filePath = newPath;
             byte[] bytes = File.ReadAllBytes(newPath);
             baseStream = new MemoryStream(bytes);
@@ -92,6 +89,24 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 image.SaveAsPng(baseStream);
             }
         }
+
+        private string checkPath(string filepath) {
+            var path = new ImplementPath();
+            var newStringDir = path.GetDirectoryName(filepath).Replace("\\", "/").Split("/");
+            for (var i = 0; i < newStringDir.Length; i++) {
+                var oldString = newStringDir[i];
+                if (!oldString.EndsWith(" ")) continue;
+                var stringLength = oldString.Length;
+                for (var k = 1; k <= stringLength; k++) {
+                    if (oldString[^k] != 0x20) break;
+                    stringLength--;
+                }
+                if (stringLength < oldString.Length) newStringDir[i] = oldString.Substring(0, stringLength);
+            }
+            var newFilePath = path.GetFileName(filepath);
+            var newPath = path.Join(string.Join("/", newStringDir), newFilePath);
+            return newPath;
+        } 
 
         public Rgba32[] getImageData(int width = 0, int height = 0)
         {
@@ -875,19 +890,18 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public virtual void CreateDirectory(string output_path)
         {
             var fs = new FileSystem();
-            if (!fs.DirectoryExists(output_path))
+            var path = new ImplementPath();
+            if (!fs.DirectoryExists(path.GetDirectoryName(output_path)))
             {
-                fs.CreateDirectory(output_path);
+                fs.CreateDirectory(path.GetDirectoryName(output_path));
             }
         }
 
         public virtual void OutFile(string output_path)
         {
-            var path = new ImplementPath();
-            var newStringDir = path.GetDirectoryName(output_path).Replace(" ", "");
-            var newFilePath = path.GetFileName(output_path);
-            CreateDirectory(newStringDir);
-            SaveFile(path.Join(newStringDir, newFilePath));
+            var newPath = checkPath(output_path);
+            CreateDirectory(newPath);
+            SaveFile(newPath);
         }
 
         public virtual void SaveFile(string path)

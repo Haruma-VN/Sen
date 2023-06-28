@@ -1,6 +1,7 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Standards;
+using System.Text.Json;
 using System.Xml;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
@@ -1950,7 +1951,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         private static string ParseSourceDocument(XElement x_DOMSymbolItem, int index)
         {
-
+            Console.WriteLine(index);
             if (x_DOMSymbolItem.Name.LocalName != "DOMSymbolItem")
             {
                 throw new PAMException("invalid_source_domsymbolitem", x_DOMSymbolItem.Name.LocalName);
@@ -1971,7 +1972,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 throw new PAMException("invalid_source_domtimeline_length", $"Color length: {x_DOMTimeline_list.Length}");
             }
             var x_DOMTimeline = x_DOMTimeline_list[0];
-            if ((string)x_DOMTimeline.Attribute("name")! != $"image_{index + 1}")
+            if ((string)x_DOMTimeline.Attribute("name")! != $"source_{index + 1}")
             {
                 throw new PAMException("invalid_source_domtimeline_name", (string)x_DOMTimeline.Attribute("name")!);
             }
@@ -2012,7 +2013,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             var x_DOMBitmapInstance = x_DOMBitmapInstance_list[0];
             var imageName = ((string)x_DOMBitmapInstance.Attribute("libraryItemName")!);
-            if (imageName.Contains("media"))
+            if (!imageName.Contains("media"))
             {
                 throw new PAMException("invalid_source_dom_bitmap_instance_name", imageName);
             }
@@ -2071,13 +2072,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         }
 
         // Misc
-        public static void FlashAnimationResize(string inFolder, int resolution) {
+        public static void FlashAnimationResize(string inFolder, int resolution)
+        {
             var fs = new FileSystem();
-            var sourceFolder = fs.ReadDirectory($"{inFolder}/library/source", ReadDirectory.OnlyCurrentDirectory);
-            for (var i = 0; i < sourceFolder.Length; i++) {
+            var sourceFolder = fs.ReadDirectory($"{inFolder}/library/source", ReadDirectory.OnlyCurrentDirectory).ToList();
+            sourceFolder.Sort(new AlphanumericStringComparer());
+            for (var i = 0; i < sourceFolder.Count; i++)
+            {
                 var sourceXml = SenBuffer.ReadXml(sourceFolder[i]);
                 var imageName = ParseSourceDocument(sourceXml, i);
-                var e = WriteSourceDocument(i, new ImageInfo{
+                var e = WriteSourceDocument(i, new ImageInfo
+                {
                     name = imageName,
                     size = new int[2],
                     transform = new double[6],
@@ -2085,6 +2090,48 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 SenBuffer.SaveXml(sourceFolder[i], e, xflns);
             }
             return;
+        }
+    }
+    public class AlphanumericStringComparer : IComparer<string>
+    {
+        private static readonly Regex _re = new Regex(@"([0-9]+)");
+
+        public int Compare(string? x, string? y)
+        {
+            if (x == y)
+            {
+                return 0;
+            }
+
+            if (x == null)
+            {
+                return -1;
+            }
+
+            if (y == null)
+            {
+                return 1;
+            }
+
+            var maxLen = Math.Max(x.Length, y.Length);
+
+            var x1 = _re.Split(x);
+            var y1 = _re.Split(y);
+
+            for (int i = 0; i < x1.Length && i < y1.Length; i++)
+            {
+                if (x1[i] != y1[i])
+                {
+                    if (int.TryParse(x1[i], out int nx) && int.TryParse(y1[i], out int ny))
+                    {
+                        return nx.CompareTo(ny);
+                    }
+
+                    return x1[i].CompareTo(y1[i]);
+                }
+            }
+
+            return x.Length.CompareTo(y.Length);
         }
     }
 }
