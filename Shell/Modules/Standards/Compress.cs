@@ -129,12 +129,20 @@ namespace Sen.Shell.Modules.Standards
             {
                 throw new ArgumentException($"Invalid zlib. Expected byte array or byte[].");
             }
-            using var memoryStream = new MemoryStream(dataBytes);
-            using var zlibStream = new ZlibStream(memoryStream, CompressionMode.Compress, compressionLevel);
-            using var outputStream = new MemoryStream();
+            try
             {
-                zlibStream.CopyTo(outputStream);
-                return outputStream.ToArray();
+
+                using var memoryStream = new MemoryStream(dataBytes);
+                using var zlibStream = new ZlibStream(memoryStream, CompressionMode.Compress, compressionLevel);
+                using var outputStream = new MemoryStream();
+                {
+                    zlibStream.CopyTo(outputStream);
+                    return outputStream.ToArray();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ZlibException(ex.Message, $"Zlib compress error");
             }
         }
 
@@ -177,13 +185,21 @@ namespace Sen.Shell.Modules.Standards
             {
                 throw new ArgumentException($"Invalid zlib. Expected byte array or byte[].");
             }
-
-            using var inputStream = new MemoryStream(zlibBytes);
-            using var zlibStream = new ZlibStream(inputStream, CompressionMode.Decompress);
-            using var outputStream = new MemoryStream();
+            try
             {
-                zlibStream.CopyTo(outputStream);
-                return outputStream.ToArray();
+
+
+                using var inputStream = new MemoryStream(zlibBytes);
+                using var zlibStream = new ZlibStream(inputStream, CompressionMode.Decompress);
+                using var outputStream = new MemoryStream();
+                {
+                    zlibStream.CopyTo(outputStream);
+                    return outputStream.ToArray();
+                }
+            }
+
+            catch (Exception e) { 
+                throw new ZlibException(e.Message, $"Zlib uncompress error");
             }
         }
     }

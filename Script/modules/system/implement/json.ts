@@ -5,8 +5,12 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      * @returns Deserialized JSON can be used by the tool
      */
 
-    export function ParseJson<Generic_T>(jsonText: string, useTrailingCommas: boolean): Generic_T {
-        return useTrailingCommas ? JSON.parse(StripJsonTrailingCommas(jsonText)) : (JSON.parse(jsonText) as Generic_T);
+    export function ParseJson<Generic_T>(jsonText: string, useTrailingCommas: boolean, filepath: string): Generic_T {
+        try {
+            return useTrailingCommas ? JSON.parse(StripJsonTrailingCommas(jsonText)) : (JSON.parse(jsonText) as Generic_T);
+        } catch (error) {
+            throw new Sen.Script.Modules.Exceptions.JSONParseSyntaxError((error as any).message, filepath ?? "undefined");
+        }
     }
 
     /**
@@ -17,9 +21,7 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      */
 
     export function StringifyJson<Generic_T>(serializedJson: Generic_T, indent: string | number = "\t", addTrailingCommas: boolean): string {
-        return addTrailingCommas
-            ? Sen.Script.Modules.FileSystem.Implement.JsonLibrary.AddTrailingCommas(JSON.stringify(serializedJson, null, indent))
-            : JSON.stringify(serializedJson, null, indent);
+        return addTrailingCommas ? Sen.Script.Modules.FileSystem.Implement.JsonLibrary.AddTrailingCommas(JSON.stringify(serializedJson, null, indent)) : JSON.stringify(serializedJson, null, indent);
     }
 
     /**

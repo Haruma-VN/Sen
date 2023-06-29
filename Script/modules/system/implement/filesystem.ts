@@ -7,10 +7,7 @@ namespace Sen.Script.Modules.FileSystem {
          */
 
         public static ReadJson<Generic_T>(filePath: string): Generic_T {
-            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
-                Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
-                Sen.Script.Modules.System.Default.Localization.use_trailing_commas
-            );
+            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), Sen.Script.Modules.System.Default.Localization.use_trailing_commas, filePath);
         }
 
         /**
@@ -22,14 +19,7 @@ namespace Sen.Script.Modules.FileSystem {
          */
 
         public static WriteJson<Generic_T>(output_path: string, serializedJson: Generic_T, indent: string | number = "\t"): void {
-            Fs.OutFile(
-                output_path,
-                Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(
-                    serializedJson,
-                    indent,
-                    Sen.Script.Modules.System.Default.Localization.use_trailing_commas
-                )
-            );
+            Fs.OutFile(output_path, Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent, Sen.Script.Modules.System.Default.Localization.use_trailing_commas));
             return;
         }
     }
@@ -70,10 +60,7 @@ namespace Sen.Script.Modules.FileSystem {
                 }
             }
             default: {
-                throw new Sen.Script.Modules.Exceptions.MissingFileRequirement(
-                    Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(/\{\}/g, ""),
-                    filePath
-                );
+                throw new Sen.Script.Modules.Exceptions.MissingFileRequirement(Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(/\{\}/g, ""), filePath);
             }
         }
         for (const filter of filters) {

@@ -1,4 +1,8 @@
 namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
+    /**
+     * RSB Header Interface
+     */
+
     export interface RSBHead {
         readonly magic: string;
         version: int;
@@ -26,6 +30,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         part3_BeginOffset: int;
     }
 
+    /**
+     * Info for Shell
+     */
+
     export interface MainfestInfo {
         version: number;
         ptx_info_size: number;
@@ -33,10 +41,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         group: GroupInfo[];
     }
 
+    /**
+     * Path interface
+     */
+
     export interface RSBPathInfo {
         rsgs: string[];
         packet_path: string;
     }
+
+    /**
+     * Group Interface
+     */
 
     export interface GroupInfo {
         name: string;
@@ -44,11 +60,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         subgroup: SubGroupInfo[];
     }
 
+    /**
+     * Subgroup Interface
+     */
+
     export interface SubGroupInfo {
         name_packet: string;
         category: [number, string | null];
         packet_info: RSBPacketInfo;
     }
+
+    /**
+     * Packet Data Interface
+     */
 
     export interface RSBPacketInfo {
         version: number;
@@ -56,11 +80,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         res: ResInfo[];
     }
 
+    /**
+     * Resource Interface
+     */
+
     export interface ResInfo {
         path: string | string[];
         ptx_info?: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo;
         ptx_property?: PtxProperty;
     }
+
+    /**
+     * PTX Interface
+     */
 
     export interface PtxProperty {
         format: number;

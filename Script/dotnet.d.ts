@@ -271,6 +271,14 @@ declare namespace Fs {
      */
 
     export function CopyFile(filePath: string, outPath: string): void;
+
+    /**
+     *
+     * @param outpath - Pass output
+     * @param data - Pass data to write
+     */
+
+    export function WriteBytesJS(outpath: string, data: int[]): void;
 }
 
 declare namespace TypeChecker {

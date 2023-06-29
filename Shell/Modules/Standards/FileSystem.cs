@@ -78,6 +78,8 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public abstract void SetAccessTimeUTC(string path, DateTime time);
 
+        public abstract void WriteBytesJS(string outpath, int[] data);
+
 
     }
 
@@ -421,6 +423,13 @@ namespace Sen.Shell.Modules.Standards.IOModule
         {
             File.SetLastAccessTimeUtc(path, time);
         }
+
+        public override void WriteBytesJS(string outpath, int[] data)
+        {
+            byte[] bytes = data.Select<int, byte>(e => (byte)e).ToArray<byte>();
+            this.OutFile<byte[]>(outpath, bytes);
+            return;
+        }
     }
 
 
@@ -687,5 +696,6 @@ namespace Sen.Shell.Modules.Standards.IOModule
         public override string GetDirectoryName(string path) => Path.GetDirectoryName(path);
 
         public override string GetFileNameWithoutExtension(string filepath) => Path.GetFileNameWithoutExtension(filepath);
+
     }
 }
