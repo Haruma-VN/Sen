@@ -251,5 +251,6 @@
     "use_convert_directory": "Convert Resource from RSGs After Unpack",
     "convert_everything_after_unpack_all_rsgs": "Convert PopCap's File Structure to Workable Structure After Unpack All RSGs",
     "not_convert_everything_after_unpack_all_rsgs": "Use \"unpack\" directory only, this directory only contains RSGs after unpacked",
-    "popcap_rsb_unpack_with_simplified_manifest": "PopCap RSB Unpack With Simplified Manifest"
+    "popcap_rsb_unpack_with_simplified_manifest": "PopCap RSB Unpack With Simplified Manifest for PvZ2",
+    "popcap_rsb_pack_with_simplified_manifest": "PopCap RSB Pack With Simplified Manifest for PvZ2"
 }
