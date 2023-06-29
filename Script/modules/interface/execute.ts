@@ -102,7 +102,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "flash_animation_resize"
         | "popcap_rsb_unpack_by_loose_constraints"
         | "popcap_rsb_unpack_resource"
-        | "popcap_rsb_pack_resource";
+        | "popcap_rsb_pack_resource"
+        | "popcap_rsb_unpack_with_simplified_manifest";
 
     /**
      *
@@ -339,6 +340,20 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name}.bundle`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(arg, output_argument);
+                    });
+                }
+                break;
+            }
+            case "popcap_rsb_unpack_with_simplified_manifest": {
+                if (!Array.isArray(argument)) {
+                    const output_argument: string = Path.Resolve(`${Path.Dirname(argument)}/${Path.Parse(argument).name}.bundle`);
+                    Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapRSBWithSimplifiedInformation(argument, output_argument);
+                } else {
+                    argument.forEach((arg: string) => {
+                        const output_argument: string = Path.Resolve(`${Path.Dirname(arg)}/${Path.Parse(arg).name}.bundle`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapRSBWithSimplifiedInformation(arg, output_argument);
                     });
                 }
                 break;

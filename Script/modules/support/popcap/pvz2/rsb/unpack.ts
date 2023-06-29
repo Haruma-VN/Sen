@@ -191,4 +191,55 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Path.Resolve(`${outDirectory}/manifest.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json));
         return manifest_json;
     }
+
+    /**
+     * Simple Manifest Interface
+     */
+
+    export interface SimplifiedManifest<subgroup extends string> {
+        version: 4;
+        ptx_info_size: 16;
+        groups: {
+            [composite_shell: string]: Array<subgroup>;
+        };
+    }
+
+    /**
+     *
+     * @param information - Pass information for manifest
+     * @returns The simplified manifest
+     */
+
+    export function ConvertToSimplifiedManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string> {
+        const groups: Array<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo> = information.group;
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string> = {
+            version: 4,
+            ptx_info_size: 16,
+            groups: {},
+        };
+        groups.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
+            manifest.groups[group.name] = [];
+            group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
+                manifest.groups[group.name].push(subgroup.name_packet);
+            });
+        });
+        return manifest;
+    }
+
+    /**
+     *
+     * @param inRSB - Pass RSB Path (support pvz2 only)
+     * @param outDirectory - Pass output path
+     * @returns Unpacked RSB
+     */
+
+    export function UnpackPopCapRSBWithSimplifiedInformation(inRSB: string, outDirectory: string): void {
+        const rsb_header_structure: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead = PvZ2Shell.ProcessRSBData(inRSB);
+        if (rsb_header_structure.version !== 4) {
+            throw new Sen.Script.Modules.Exceptions.UnsupportedDataType(Sen.Script.Modules.System.Default.Localization.GetString("unsupported_rsb_version_not_4"), inRSB);
+        }
+        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = PvZ2Shell.RSBUnpack(inRSB, outDirectory);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>>(Path.Resolve(`${outDirectory}/pvz2.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToSimplifiedManifest(manifest_json));
+        return;
+    }
 }

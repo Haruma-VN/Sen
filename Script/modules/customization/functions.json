@@ -258,5 +258,11 @@
         "include": [".bundle"],
         "exclude": [],
         "type": "directory"
+    },
+    "popcap_rsb_unpack_with_simplified_manifest": {
+        "func_number": 44,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "type": "file"
     }
 }
