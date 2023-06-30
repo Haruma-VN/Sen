@@ -1,7 +1,7 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
-using System.Text.Json.Serialization;
 using Sen.Shell.Modules.Standards;
+using Sen.Shell.Modules.Support.PvZ2.RSB;
 
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
@@ -538,6 +538,48 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             else
             {
                 return 4096 - (oriLength % 4096);
+            }
+        }
+
+        public static RSBPacketInfo GetRSBPacketInfo(SenBuffer RSGFile) {
+            var packet_info = Unpack(RSGFile, "", false, true);
+            var resInfo = new List<RSBResInfo>();
+            for (var i = 0; i < packet_info.res.Length; i++) {
+                var rsgRsgInfo = new RSBResInfo{
+                    path = packet_info.res[i].path,
+                };
+                if (packet_info.res[i].ptx_info != null) {
+                    for (var k = 0; k < part1List.Count; k++) {
+                        if (packet_info.res[i].path == part1List[k].path) {
+                            rsgRsgInfo.ptx_info = packet_info.res[i].ptx_info;
+                            rsgRsgInfo.ptx_property = new PTXProperty{
+                                format = GetFormat(part1List[k].size, (packet_info.res[i].ptx_info!.width * packet_info.res[i].ptx_info!.height)),
+                                pitch = packet_info.res[i].ptx_info!.width * 4,
+                            };
+                        }
+                    }
+                }
+                resInfo.Add(rsgRsgInfo);
+            }
+            return new RSBPacketInfo{
+                version = packet_info.version,
+                compression_flags = packet_info.compression_flags,
+                res = resInfo.ToArray(),
+            };
+        }
+
+        private static int GetFormat(int fileLength, int square) {
+            double d = (fileLength / square) + 0.4;
+            var ratio = Math.Ceiling(d);
+            switch (ratio) {
+                case 5:
+                    return 0;
+                case 2:
+                    return 147;
+                case 1:
+                    return 30;
+                default:
+                    throw new Exception("invalid ptx format");
             }
         }
     }
