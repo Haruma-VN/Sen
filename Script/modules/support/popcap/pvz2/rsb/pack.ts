@@ -124,4 +124,15 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         return;
     }
+
+    /**
+     *
+     * @param inDirectory - Pass dir
+     * @param outFile - Pass output
+     * @returns RSB version 4 (PvZ2)
+     */
+
+    export function PackPopCapRSBUsingSimplifiedInformation(inDirectory: string, outFile: string): void {
+        return;
+    }
 }
