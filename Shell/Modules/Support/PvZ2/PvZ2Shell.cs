@@ -75,6 +75,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void WWiseSoundBankEncode(string soundbank_dir, string out_bnk, WWiseInfoSimple information);
 
+        public abstract RSBPacketInfo GetRSBPacketInfo(string infile);
+
         public abstract RSB_head ProcessRSBData(string infile);
 
         public abstract RTONHead ProcessRTONData(string infile);
@@ -240,6 +242,12 @@ namespace Sen.Shell.Modules.Support.PvZ2
         {
             var buffer = new SenBuffer(infile);
             return RSBFunction.ReadHead(buffer);
+        }
+
+        public unsafe sealed override RSBPacketInfo GetRSBPacketInfo(string infile)
+        {
+            var buffer = new SenBuffer(infile);
+            return RSGFunction.GetRSBPacketInfo(buffer);
         }
 
         public unsafe sealed override RTONHead ProcessRTONData(string infile)

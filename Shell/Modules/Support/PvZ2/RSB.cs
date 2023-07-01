@@ -1217,6 +1217,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             if (rsbHeadInfo.version == 5)
             {
                 FixFileListShuttle(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, false);
+                throw new Exception("shuttle is not support");
             }
             var rsgList = new List<FileListInfo>();
             FileListSplit(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, ref rsgList);
@@ -1252,7 +1253,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     }
                     while (rsgList[rsgListCount].poolIndex != packetIndex)
                     {
-                        Console.WriteLine(rsgList[rsgListCount].poolIndex);
                         if (rsgListCount >= rsgList.Count - 1) throw new Exception("Out of ranger 2");
                         rsgListCount++;
                     }

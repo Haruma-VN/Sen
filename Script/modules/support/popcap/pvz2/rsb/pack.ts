@@ -127,12 +127,78 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
 
     /**
      *
+     * @param packet_item_name - Pass packet name
+     * @returns ? This is not accurate
+     */
+
+    export function GetCategoryPacket(packet_item_name: string): [number, string | null] {
+        if (packet_item_name.endsWith("_1536")) {
+            return [1536, null];
+        } else if (packet_item_name.endsWith("_1200")) {
+            return [1200, null];
+        } else if (packet_item_name.endsWith("_768")) {
+            return [768, null];
+        } else if (packet_item_name.endsWith("_384")) {
+            return [384, null];
+        } else {
+            return [0, null];
+        }
+    }
+
+    /**
+     *
+     * @param information - Pass information
+     * @param inDirectory - Pass in directory
+     * @returns
+     */
+
+    export function ConvertFromSimplifedManifestGroup(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>, inDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
+        const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = {
+            version: information.version as 4,
+            ptx_info_size: information.ptx_info_size as 16,
+            group: [],
+        } satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+        Object.keys(information.groups).forEach((composite_group_name: string) => {
+            let composite_type: boolean = false;
+            const infox: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo = {
+                name: composite_group_name,
+                is_composite: false,
+                subgroup: [],
+            };
+            information.groups[composite_group_name].forEach((packet_item_name: string) => {
+                const rsb_rsg_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = PvZ2Shell.GetRSBPacketInfo(`${inDirectory}/packet/${packet_item_name}.rsg`);
+                const packet_category: [number, string | null] = GetCategoryPacket(packet_item_name.toLowerCase());
+                if (!composite_type && packet_category[0] !== 0) {
+                    composite_type = true;
+                }
+                const construct_data: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo = {
+                    name_packet: packet_item_name,
+                    category: packet_category,
+                    packet_info: rsb_rsg_packet_info,
+                };
+                infox.subgroup.push(construct_data);
+            });
+            if (composite_type) {
+                infox.is_composite = true;
+            }
+            manifest_info.group.push(infox);
+        });
+        return manifest_info;
+    }
+
+    /**
+     *
      * @param inDirectory - Pass dir
      * @param outFile - Pass output
      * @returns RSB version 4 (PvZ2)
      */
 
     export function PackPopCapRSBUsingSimplifiedInformation(inDirectory: string, outFile: string): void {
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromSimplifedManifestGroup(
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>>(`${inDirectory}/pvz2.json`),
+            inDirectory
+        );
+        PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         return;
     }
 }

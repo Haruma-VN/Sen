@@ -1601,6 +1601,13 @@ declare namespace PvZ2Shell {
     export function PopCapZlibUncompress(Ripefile: string, Use64variant: boolean, outFile: string): void;
     /**
      *
+     * @param inRSG - Pass RSG base
+     */
+
+    export function GetRSBPacketInfo(inRSG: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo;
+
+    /**
+     *
      * @param inRSB - Pass RSB base
      */
 
