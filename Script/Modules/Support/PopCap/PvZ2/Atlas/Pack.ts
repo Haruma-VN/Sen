@@ -452,7 +452,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             }
             const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`);
             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-            Sen.Script.Modules.FileSystem.Json.WriteJson<resource_atlas_and_sprites>(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`, subgroup_output);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.resource_atlas_and_sprites>(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}/${atlas_json.subgroup}.json`, subgroup_output);
             return;
         }
 
