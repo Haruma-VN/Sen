@@ -1,0 +1,13 @@
+{
+    "ios": {
+        "0": "argb_8888",
+        "30": "rgba_pvrtc4"
+    },
+    "android": {
+        "0": "rgba_8888",
+        "147": "rgb_etc1_a_8"
+    },
+    "android_cn": {
+        "147": "rgb_etc1_a_palette"
+    }
+}
