@@ -153,6 +153,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                 Sen.Shell.PvZ2Shell.RSGPack(`${unpack_directory}`, `${packet_directory}/${subgroup.name_packet}.rsg`, subgroup.packet_info, false);
             });
         });
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(rsb_packing_option.bundle_path, rsb_packing_option.rsb_output);
         return;
     }
 }

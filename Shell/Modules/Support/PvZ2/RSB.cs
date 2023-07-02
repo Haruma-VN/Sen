@@ -1291,7 +1291,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         }
                         rsgListCount++;
                     }
-                    Console.WriteLine(rsgList[rsgListCount].namePath);
                     if (rsgInfoList[rsgInfoCount].name == "break") continue;
                     rsgNameList.Add(rsgList[rsgListCount].namePath);
                     byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);

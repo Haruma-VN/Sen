@@ -46,7 +46,7 @@ namespace Sen.Script {
     export function LoadModules(scripts: Array<string>): void {
         for (const script of scripts) {
             try {
-                Sen.Shell.JavaScriptCoreEngine.Execute(Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/${script}`)}.js`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), `Scripts/${script}.js`);
+                Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/${script}`)}.js`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), `Scripts/${script}.js`);
             } catch (error: unknown) {
                 Sen.Shell.Console.Print(null, error);
             }

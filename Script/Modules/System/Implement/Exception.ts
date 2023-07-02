@@ -332,6 +332,72 @@ namespace Sen.Script.Modules.Exceptions {
         }
     }
 
+    /**
+     * JS RTON Encode Exception
+     */
+
+    export class RTONEncodeError extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("rton_encode_error");
+        }
+    }
+
+    /**
+     * JS RTON Decode Exception
+     */
+
+    export class RTONDecodeError extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("rton_decode_error");
+        }
+    }
+
+    /**
+     * JS RTON Decrypt Exception
+     */
+
+    export class RTONDecryptError extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("rton_decrypt_error");
+        }
+    }
+
+    /**
+     * JS RTON Encrypt Exception
+     */
+
+    export class RTONEncryptError extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("rton_encrypt_error");
+        }
+    }
+
+    /**
+     * JS Flash to PAM Error
+     */
+
+    export class FlashAnimationToPopCapAnimationError extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("flash_animation_to_popcap_animation_error");
+        }
+    }
+
+    /**
+     * JS Flash Resize Error
+     */
+
+    export class FlashAnimationResizeError extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("flash_animation_resize_error");
+        }
+    }
+
     export class ResizeImageError extends Error {
         protected _file_path: string;
         protected _code: string;
@@ -738,6 +804,60 @@ namespace Sen.Script.Modules.Exceptions {
                     const name: string = (error as Sen.Script.Modules.Exceptions.MissingFile).name;
                     const message: string = (error as Sen.Script.Modules.Exceptions.MissingFile).message;
                     const location: string = (error as Sen.Script.Modules.Exceptions.MissingFile).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.RTONDecodeError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.RTONDecodeError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.RTONDecodeError).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.RTONDecodeError).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.RTONEncodeError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.RTONEncryptError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.RTONDecryptError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.FlashAnimationToPopCapAnimationError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.FlashAnimationResizeError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.RTONEncodeError).file_location;
                     Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                     Sen.Script.Modules.Exceptions.ExecutionError(message);

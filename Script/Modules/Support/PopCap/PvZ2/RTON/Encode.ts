@@ -51,7 +51,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
         try {
             Sen.Shell.PvZ2Shell.RTONDecode(inFile, outFile, decryptRTON);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
+            throw new Sen.Script.Modules.Exceptions.RTONDecodeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
         return;
     }
@@ -67,7 +67,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
         try {
             Sen.Shell.PvZ2Shell.RTONEncode(inFile, outFile, encryptOption);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
+            throw new Sen.Script.Modules.Exceptions.RTONEncodeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
         return;
     }
@@ -83,7 +83,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
         try {
             Sen.Shell.PvZ2Shell.RTONDecrypt(inFile, outFile, decryptRTON);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
+            throw new Sen.Script.Modules.Exceptions.RTONDecryptError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
         return;
     }
@@ -98,7 +98,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
         try {
             Sen.Shell.PvZ2Shell.RTONEncrypt(inFile, outFile, encryptRTON);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
+            throw new Sen.Script.Modules.Exceptions.RTONEncryptError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
         return;
     }

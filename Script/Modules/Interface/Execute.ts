@@ -131,6 +131,13 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bundle`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(argument, output_argument);
+                        Sen.Shell.Console.Print(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Magenta,
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("please_use_for_more"), [
+                                Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource"),
+                                Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory"),
+                            ])
+                        );
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bundle`);
@@ -507,9 +514,22 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_rsb_pack_resource": {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}`);
+                        const use_convert: boolean =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("convert_convert_to_unpack"),
+                                [0, 1],
+                                {
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory"), Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_convert_directory_for_pack"), Sen.Script.Modules.System.Default.Localization.GetString("use_convert_directory_for_pack")],
+                                },
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_pack_resource.json`,
+                                `use_convert`
+                            ) as 0 | 1) === 1
+                                ? true
+                                : false;
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.PackPopCapRSBInsideConvertDirectory({
-                            use_convert: false,
+                            use_convert: use_convert,
                             convert_pam_json_to_pam: false,
                             convert_png_to_ptx: false,
                             convert_res_json_to_resource_json: false,
@@ -641,7 +661,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         try {
                             Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(argument, output_argument, extra);
                         } catch (error: unknown) {
-                            throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, argument);
+                            throw new Sen.Script.Modules.Exceptions.FlashAnimationToPopCapAnimationError(`${(error as any).message}`, argument);
                         }
                     } else {
                         argument.forEach((arg: string) => {
@@ -653,7 +673,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             try {
                                 Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(arg, output_argument, extra);
                             } catch (error: unknown) {
-                                throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, arg);
+                                throw new Sen.Script.Modules.Exceptions.FlashAnimationToPopCapAnimationError(`${(error as any).message}`, arg);
                             }
                         });
                     }
@@ -1014,7 +1034,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         try {
                             Sen.Shell.PvZ2Shell.FlashAnimationResize(argument, resolution);
                         } catch (error: unknown) {
-                            throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, argument);
+                            throw new Sen.Script.Modules.Exceptions.FlashAnimationResizeError(`${(error as any).message}`, argument);
                         }
                     } else {
                         argument.forEach((arg: string) => {
@@ -1022,7 +1042,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             try {
                                 Sen.Shell.PvZ2Shell.FlashAnimationResize(arg, resolution);
                             } catch (error: unknown) {
-                                throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, arg);
+                                throw new Sen.Script.Modules.Exceptions.FlashAnimationResizeError(`${(error as any).message}`, arg);
                             }
                         });
                     }

@@ -1951,7 +1951,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         private static string ParseSourceDocument(XElement x_DOMSymbolItem, int index)
         {
-            Console.WriteLine(index);
             if (x_DOMSymbolItem.Name.LocalName != "DOMSymbolItem")
             {
                 throw new PAMException("invalid_source_domsymbolitem", x_DOMSymbolItem.Name.LocalName);

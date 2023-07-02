@@ -27,4 +27,18 @@ namespace Sen.Script.Modules.System.Implement.JavaScript {
         }
         return;
     }
+
+    /**
+     *
+     * @param js_path - Pass the path to require in this project
+     * @returns Evaluate that
+     */
+
+    export function Require(js_path: string): void {
+        while (js_path.startsWith(`.`) || js_path.startsWith(`/`)) {
+            js_path = js_path.substring(1, js_path.length);
+        }
+        Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/${js_path}`));
+        return;
+    }
 }
