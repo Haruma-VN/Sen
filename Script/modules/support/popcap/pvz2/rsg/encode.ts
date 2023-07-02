@@ -35,7 +35,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
      */
 
     export function RSGUnpack(rsg_in: string, out_dir: string): void {
-        const standard: PacketInfo = PvZ2Shell.RSGUnpack(rsg_in, out_dir);
+        const standard: PacketInfo = Sen.Shell.PvZ2Shell.RSGUnpack(rsg_in, out_dir);
         const packet_info: PacketInfo = { ...standard, res: [] };
         standard.res.forEach((resx: ResInfo) => {
             packet_info.res.push({
@@ -43,7 +43,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
                 ptx_info: resx.ptx_info,
             });
         });
-        Sen.Script.Modules.FileSystem.Json.WriteJson<PacketInfo>(Path.Resolve(`${out_dir}/packet.json`), packet_info);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<PacketInfo>(Sen.Shell.Path.Resolve(`${out_dir}/packet.json`), packet_info);
         return;
     }
 
@@ -54,11 +54,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
      */
 
     export function RSGPack(rsg_directory: string, out_rsg: string): void {
-        const packet_info: PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<PacketInfo>(Path.Resolve(`${rsg_directory}/packet.json`));
+        const packet_info: PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<PacketInfo>(Sen.Shell.Path.Resolve(`${rsg_directory}/packet.json`));
         packet_info.res.forEach((res: ResInfo) => {
             res.path = (res.path as Array<string>).join("\\");
         });
-        PvZ2Shell.RSGPack(rsg_directory, out_rsg, packet_info);
+        Sen.Shell.PvZ2Shell.RSGPack(rsg_directory, out_rsg, packet_info);
         return;
     }
 }

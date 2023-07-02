@@ -19,7 +19,7 @@
 
         protected StandardsException _errorCode { get; set; }
 
-        protected string _file_path { get; set; }
+        public string _file_path { get; set; }
 
         public RuntimeException(string message, string file_path) : base(message)
         {

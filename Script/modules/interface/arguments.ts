@@ -4,31 +4,16 @@ namespace Sen.Script.Modules.Interface.Arguments {
      * @returns Input argument for boolean
      */
     export function BooleanArgument(): 0 | 1 {
-        Console.Printf(
-            null,
-            `      0. ${Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(
-                /\{\}/g,
-                Sen.Script.Modules.System.Default.Localization.GetString("False")
-            )}`
-        );
-        Console.Printf(
-            null,
-            `      1. ${Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(
-                /\{\}/g,
-                Sen.Script.Modules.System.Default.Localization.GetString("True")
-            )}`
-        );
-        let input: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        Sen.Shell.Console.Printf(null, `      0. ${Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False"))}`);
+        Sen.Shell.Console.Printf(null, `      1. ${Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True"))}`);
+        let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         let assert_test: int | null = Sen.Script.Modules.Interface.Assert.MatchInputWithNumbers(input, [0, 1]);
         while (assert_test === null) {
-            Console.Print(
+            Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input)
-                )}`
+                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input))}`
             );
-            input = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+            input = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
             assert_test = Sen.Script.Modules.Interface.Assert.MatchInputWithNumbers(input, [0, 1]);
         }
         return assert_test as 1 | 0;
@@ -41,16 +26,13 @@ namespace Sen.Script.Modules.Interface.Arguments {
      */
 
     export function TestInput(available: Array<int>): int {
-        let input: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (!Sen.Script.Modules.Interface.Assert.MatchInputWithNumbers(input, available)) {
-            Console.Print(
+            Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input)
-                )}`
+                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, input))}`
             ),
-                (input = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan));
+                (input = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan));
         }
         return parseInt(input) as int;
     }
@@ -62,17 +44,11 @@ namespace Sen.Script.Modules.Interface.Arguments {
      */
 
     export function InputInteger(msg: string): int {
-        Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, msg);
-        let input: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, msg);
+        let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (!/^\d+$/.test(input)) {
-            Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("not_a_valid_integer_input")
-                )}`
-            );
-            input = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("not_a_valid_integer_input"))}`);
+            input = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         }
         return parseInt(input);
     }
@@ -84,7 +60,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
      */
 
     export function InputPath(type: "file" | "directory" | "unknown"): string {
-        let arg: string = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (arg !== "") {
             if (arg.endsWith(" ")) {
                 arg = arg.slice(0, -1);
@@ -94,26 +70,23 @@ namespace Sen.Script.Modules.Interface.Arguments {
             }
             switch (type) {
                 case "file": {
-                    if (Fs.FileExists(arg)) {
+                    if (Sen.Shell.FileSystem.FileExists(arg)) {
                         return arg;
                     }
                 }
                 case "directory": {
-                    if (Fs.DirectoryExists(arg)) {
+                    if (Sen.Shell.FileSystem.DirectoryExists(arg)) {
                         return arg;
                     }
                 }
                 default: {
-                    if (Fs.FileExists(arg) || Fs.DirectoryExists(arg)) {
+                    if (Sen.Shell.FileSystem.FileExists(arg) || Sen.Shell.FileSystem.DirectoryExists(arg)) {
                         return arg;
                     }
                 }
             }
-            Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(/\{\}/g, arg)}`
-            );
-            arg = Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("no_such_file_or_directory").replace(/\{\}/g, arg)}`);
+            arg = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         }
         return "" as never;
     }
@@ -126,44 +99,29 @@ namespace Sen.Script.Modules.Interface.Arguments {
      */
 
     export function ArgumentPrint(argument: string, type: "file" | "directory"): void {
-        if (type === "file" && Fs.FileExists(argument)) {
+        if (type === "file" && Sen.Shell.FileSystem.FileExists(argument)) {
             if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
-                Console.Print(
+                Sen.Shell.Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
-                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
-                        /\{\}/g,
-                        Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists_remove_instantly").replace(/\{\}/g, argument)
-                    )
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists_remove_instantly").replace(/\{\}/g, argument))
                 );
-                Fs.DeleteFile(argument);
+                Sen.Shell.FileSystem.DeleteFile(argument);
             } else {
-                throw new Sen.Script.Modules.Exceptions.AlreadyExists(
-                    Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists"),
-                    argument
-                );
+                throw new Sen.Script.Modules.Exceptions.AlreadyExists(Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists"), argument);
             }
         }
-        if (type === "directory" && Fs.DirectoryExists(argument)) {
+        if (type === "directory" && Sen.Shell.FileSystem.DirectoryExists(argument)) {
             if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
-                Console.Print(
+                Sen.Shell.Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
-                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
-                        /\{\}/g,
-                        Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists_override").replace(/\{\}/g, argument)
-                    )
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists_override").replace(/\{\}/g, argument))
                 );
             } else {
-                throw new Sen.Script.Modules.Exceptions.AlreadyExists(
-                    Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists"),
-                    argument
-                );
+                throw new Sen.Script.Modules.Exceptions.AlreadyExists(Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists"), argument);
             }
         }
-        Console.Print(
-            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_receievd_as_default")
-        );
-        Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `       ${argument}`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_receievd_as_default"));
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `       ${argument}`);
         return;
     }
 }

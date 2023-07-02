@@ -1,307 +1,308 @@
-/**
- * @param args - Arguments pass from DotNet will be send to Script
- * @implements Hold arguments and do process with arguments
- */
-
-declare const args: string[];
-
-/**
- * @package Platform implementing system for DotNet using JS
- */
-
-declare namespace DotNetPlatform {
+declare namespace Sen {
     /**
-     * @returns The platform that the user is using right now
-     */
-    export function CurrentPlatform(): Sen.Script.Modules.Platform.Constraints.ShellType.Console;
-
-    /**
-     * @returns The current Sen is Console or GUI
-     */
-    export const SenShell = "console" | "gui";
-
-    /**
-     * @returns Check if the UTF8 is supported by User Console
+     * @abstract Double
      */
 
-    export function IsUTF8Support(): boolean;
+    declare type double = number;
 
     /**
-     * @returns Check if the color is supported by User Console
+     * @abstract Data type for long number
      */
 
-    export function IsColorSupport(): boolean;
+    declare type unsigned_long_long = number;
 
     /**
-     * @returns Make the User's terminal support UTF8
+     * @abstract Data type for integer number
      */
 
-    export function SupportUtf8Console(): void;
+    declare type int = number;
 
     /**
-     * @returns current user platform
+     * @abstract Data type for float number
      */
 
-    export function CurrentUserPlatform(): string;
+    declare type float = number;
 
-    /**
-     *
-     * @param message - Send message here
-     * @param title - Send title here
-     * Sending notification message through multiple platform
-     */
+    declare namespace Shell {
+        /**
+         * @param args - Arguments pass from DotNet will be send to Script
+         * @implements Hold arguments and do process with arguments
+         */
 
-    export function SendNotification(message: string, title: string): void;
+        declare const argument: string[];
 
-    /**
-     * Shell that host this tool
-     */
-    export function ShellHost(): string;
-}
+        /**
+         * @package Platform implementing system for DotNet using JS
+         */
 
-/**
- * @package Implementing for Console & MaUI project
- */
+        declare namespace DotNetPlatform {
+            /**
+             * @returns The platform that the user is using right now
+             */
+            export function CurrentPlatform(): Sen.Script.Modules.Platform.Constraints.ShellType.Console;
 
-declare namespace Console {
-    /**
-     *
-     * @param params - Pass any things here and the tool will console out the input value.
-     */
+            /**
+             * @returns The current Sen is Console or GUI
+             */
+            export const SenShell = "console" | "gui";
 
-    export function Print<T extends any>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
-    /**
-     *
-     * @param params - Pass any things here and the tool will console out the input value.
-     */
+            /**
+             * @returns Check if the UTF8 is supported by User Console
+             */
 
-    export function Printf<T extends any>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
+            export function IsUTF8Support(): boolean;
 
-    /**
-     * @returns Input argument as string
-     */
+            /**
+             * @returns Check if the color is supported by User Console
+             */
 
-    export function Input(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null): string;
+            export function IsColorSupport(): boolean;
 
-    /**
-     * @param - Console.ReadKey()
-     */
+            /**
+             * @returns Make the User's terminal support UTF8
+             */
 
-    export function TerminateProgram(): void;
-    /**
-     * @returns Test error thrown from C# Sen
-     */
+            export function SupportUtf8Console(): void;
 
-    export function TestError(): DotNetSystem.Exception;
-    /**
-     *
-     * @param params - Pass object or array here to continue
-     */
+            /**
+             * @returns current user platform
+             */
 
-    export function Debug<T extends Array<any> | object>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
-}
+            export function CurrentUserPlatform(): string;
 
-/**
- * @abstract Double
- */
+            /**
+             *
+             * @param message - Send message here
+             * @param title - Send title here
+             * Sending notification message through multiple platform
+             */
 
-declare type double = number;
+            export function SendNotification(message: string, title: string): void;
 
-/**
- * @abstract Data type for long number
- */
+            /**
+             * Shell that host this tool
+             */
+            export function ShellHost(): string;
+        }
 
-declare type unsigned_long_long = number;
+        /**
+         * @package Implementing for Console & MaUI project
+         */
 
-/**
- * @abstract Data type for integer number
- */
+        declare namespace Console {
+            /**
+             *
+             * @param params - Pass any things here and the tool will console out the input value.
+             */
 
-declare type int = number;
+            export function Print<T extends any>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
+            /**
+             *
+             * @param params - Pass any things here and the tool will console out the input value.
+             */
 
-/**
- * @abstract Data type for float number
- */
+            export function Printf<T extends any>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
 
-declare type float = number;
+            /**
+             * @returns Input argument as string
+             */
 
-/**
- * @packages Implementing File System based on C# & JS
- * @access Script can have access to File System through Sen
- */
+            export function Input(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null): string;
 
-declare namespace Fs {
-    /**
-     *
-     * @param file_path - Provide file path here, must be file path.
-     * @param encoding - Choose one encoding type.
-     */
+            /**
+             * @param - Console.ReadKey()
+             */
 
-    export function ReadText(file_path: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): string;
-    /**
-     *
-     * @param file_path - Provide file path to write.
-     * @param data - Provide file data.
-     * @param encoding - Provide encoding type (can choose from enum).
-     */
-    export function WriteText(file_path: string, data: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): void;
-    /**
-     *
-     * @param directory_path - Provide directory path to create.
-     * @returns Created Directory.
-     */
-    export function CreateDirectory(directory_path: string): void;
-    /**
-     *
-     * @param directory_path - Provide directories path to delete. should pass array
-     * @returns Deleted Directory.
-     */
-    export function DeleteDirectory(directories: Array<string>): void;
-    /**
-     *
-     * @param file_path - Provide directory to read.
-     * @param encoding - Provide encoding from const enum.
-     * @returns ASYNCHRONOUS read text file, please provide an await to make the function synchronous.
-     */
-    export async function ReadTextAsync(file_path: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): Promise<string>;
-    /**
-     *
-     * @param directory_path - Provide Directory path.
-     * @returns If exists return true, else false.
-     */
-    export function DirectoryExists(directory_path: string): boolean;
-    /**
-     *
-     * @param file_path - Provide File path.
-     * @returns If exists return true, else false.
-     */
-    export function FileExists(file_path: string): boolean;
-    /**
-     *
-     * @param file_path - Provide file path to write file.
-     * @param data - Provide data to write.
-     * @param encoding - Provide Encoding Type to Write file.
-     * @returns Asynchronous Write file, please provide ES6 async await to make the function synchronous.
-     */
-    export async function WriteTextAsync(file_path: string, data: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): Promise<void>;
-    /**
-     *
-     * @param output_path - Output file expected.
-     * @param data - Pass data to write in.
-     * @returns Writed file.
-     */
-    export function OutFile<Generic_T>(output_path: string, data: Generic_T): void;
-    /**
-     *
-     * @param output_path - Output file expected.
-     * @param data - Pass data to write in.
-     * @returns Writed file, but this function is asynchronous. You need to provide await from ES6 to handle asynchronous function.
-     */
-    export async function OutFileAsync<Generic_T>(output_path: string, data: Generic_T): Promise<void>;
-    /**
-     *
-     * @param output_file - Normal File System Write file
-     * @param data - Data to write
-     * @returns Writed data to file
-     */
-    export function WriteFile<Generic_T>(output_file: string, data: Generic_T): void;
-    /**
-     *
-     * @param output_file - Normal File System Write file
-     * @param data - Data to write
-     * @returns Writed data to file, but this function is asynchronous. You need to provide await from ES6 to handle asynchronous function.
-     */
-    export async function WriteFileAsync<Generic_T>(output_file: string, data: Generic_T): Promise<void>;
+            export function TerminateProgram(): void;
+            /**
+             * @returns Test error thrown from C# Sen
+             */
 
-    /**
-     *
-     * @param directory - Provide directory needs to read
-     * @param ReadOption - Provide read option
-     * @returns Readed directory
-     */
+            export function TestError(): DotNetSystem.Exception;
+            /**
+             *
+             * @param params - Pass object or array here to continue
+             */
 
-    export function ReadDirectory(directory: string, ReadOption: Sen.Script.Modules.FileSystem.Constraints.ReadDirectory): Array<string>;
+            export function Debug<T extends Array<any> | object>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
+        }
+        /**
+         * @packages Implementing File System based on C# & JS
+         * @access Script can have access to File System through Sen
+         */
 
-    /**
-     *
-     * @param filePath - Pass file path here
-     * @returns Deleted file
-     */
+        declare namespace FileSystem {
+            /**
+             *
+             * @param file_path - Provide file path here, must be file path.
+             * @param encoding - Choose one encoding type.
+             */
 
-    export function DeleteFile(filePath: string): void;
+            export function ReadText(file_path: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): string;
+            /**
+             *
+             * @param file_path - Provide file path to write.
+             * @param data - Provide file data.
+             * @param encoding - Provide encoding type (can choose from enum).
+             */
+            export function WriteText(file_path: string, data: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): void;
+            /**
+             *
+             * @param directory_path - Provide directory path to create.
+             * @returns Created Directory.
+             */
+            export function CreateDirectory(directory_path: string): void;
+            /**
+             *
+             * @param directory_path - Provide directories path to delete. should pass array
+             * @returns Deleted Directory.
+             */
+            export function DeleteDirectory(directories: Array<string>): void;
+            /**
+             *
+             * @param file_path - Provide directory to read.
+             * @param encoding - Provide encoding from const enum.
+             * @returns ASYNCHRONOUS read text file, please provide an await to make the function synchronous.
+             */
+            export async function ReadTextAsync(file_path: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): Promise<string>;
+            /**
+             *
+             * @param directory_path - Provide Directory path.
+             * @returns If exists return true, else false.
+             */
+            export function DirectoryExists(directory_path: string): boolean;
+            /**
+             *
+             * @param file_path - Provide File path.
+             * @returns If exists return true, else false.
+             */
+            export function FileExists(file_path: string): boolean;
+            /**
+             *
+             * @param file_path - Provide file path to write file.
+             * @param data - Provide data to write.
+             * @param encoding - Provide Encoding Type to Write file.
+             * @returns Asynchronous Write file, please provide ES6 async await to make the function synchronous.
+             */
+            export async function WriteTextAsync(file_path: string, data: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): Promise<void>;
+            /**
+             *
+             * @param output_path - Output file expected.
+             * @param data - Pass data to write in.
+             * @returns Writed file.
+             */
+            export function OutFile<Generic_T>(output_path: string, data: Generic_T): void;
+            /**
+             *
+             * @param output_path - Output file expected.
+             * @param data - Pass data to write in.
+             * @returns Writed file, but this function is asynchronous. You need to provide await from ES6 to handle asynchronous function.
+             */
+            export async function OutFileAsync<Generic_T>(output_path: string, data: Generic_T): Promise<void>;
+            /**
+             *
+             * @param output_file - Normal File System Write file
+             * @param data - Data to write
+             * @returns Writed data to file
+             */
+            export function WriteFile<Generic_T>(output_file: string, data: Generic_T): void;
+            /**
+             *
+             * @param output_file - Normal File System Write file
+             * @param data - Data to write
+             * @returns Writed data to file, but this function is asynchronous. You need to provide await from ES6 to handle asynchronous function.
+             */
+            export async function WriteFileAsync<Generic_T>(output_file: string, data: Generic_T): Promise<void>;
 
-    /**
-     *
-     * @param input - Pass file path to move
-     * @param output - Pass output path
-     * @returns Move file success
-     */
+            /**
+             *
+             * @param directory - Provide directory needs to read
+             * @param ReadOption - Provide read option
+             * @returns Readed directory
+             */
 
-    export function MoveFile(input: string, output: string): void;
-    /**
-     *
-     * @param input - Pass dir path to move
-     * @param output - Pass output path
-     * @returns Move dir success
-     */
+            export function ReadDirectory(directory: string, ReadOption: Sen.Script.Modules.FileSystem.Constraints.ReadDirectory): Array<string>;
 
-    export function MoveDirectory(input: string, output: string): void;
-    /**
-     *
-     * @param input - Pass file path to rename
-     * @param new_name - New name
-     * @returns Rename file success
-     */
+            /**
+             *
+             * @param filePath - Pass file path here
+             * @returns Deleted file
+             */
 
-    export function RenameFile(input: string, new_name: string): void;
-    /**
-     *
-     *
-     * @param input - Pass directory path to rename
-     * @param new_name - New name
-     * @returns Rename directory success
-     */
+            export function DeleteFile(filePath: string): void;
 
-    export function RenameDirectory(input: string, new_name: string): void;
-    /**
-     *
-     * @param filePath - Pass file path here
-     * @param outPath - Pass out path here
-     * @returns Copied file
-     */
+            /**
+             *
+             * @param input - Pass file path to move
+             * @param output - Pass output path
+             * @returns Move file success
+             */
 
-    export function CopyFile(filePath: string, outPath: string): void;
+            export function MoveFile(input: string, output: string): void;
+            /**
+             *
+             * @param input - Pass dir path to move
+             * @param output - Pass output path
+             * @returns Move dir success
+             */
 
-    /**
-     *
-     * @param outpath - Pass output
-     * @param data - Pass data to write
-     */
+            export function MoveDirectory(input: string, output: string): void;
+            /**
+             *
+             * @param input - Pass file path to rename
+             * @param new_name - New name
+             * @returns Rename file success
+             */
 
-    export function WriteBytesJS(outpath: string, data: int[]): void;
-}
+            export function RenameFile(input: string, new_name: string): void;
+            /**
+             *
+             *
+             * @param input - Pass directory path to rename
+             * @param new_name - New name
+             * @returns Rename directory success
+             */
 
-declare namespace TypeChecker {
-    /**
-     *
-     * @param data - Provide any variable here
-     * @returns - Variable type
-     */
-    export function GetStrictType(data: any): string;
-}
-/**
- * @package Self implement Records
- */
+            export function RenameDirectory(input: string, new_name: string): void;
+            /**
+             *
+             * @param filePath - Pass file path here
+             * @param outPath - Pass out path here
+             * @returns Copied file
+             */
 
-declare interface FormatRecords {
-    root: string;
-    name: string;
-    dir: string;
-    extname: string;
-    basename: string;
-}
+            export function CopyFile(filePath: string, outPath: string): void;
 
-/**
+            /**
+             *
+             * @param outpath - Pass output
+             * @param data - Pass data to write
+             */
+
+            export function WriteBytesJS(outpath: string, data: int[]): void;
+        }
+
+        declare namespace TypeChecker {
+            /**
+             *
+             * @param data - Provide any variable here
+             * @returns - Variable type
+             */
+            export function GetStrictType(data: any): string;
+        }
+        /**
+         * @package Self implement Records
+         */
+
+        declare interface FormatRecords {
+            root: string;
+            name: string;
+            dir: string;
+            extname: string;
+            basename: string;
+        }
+
+        /**
  * @package Path.Parse('/home/user/dir/file.txt');
 // Returns:
 // {
@@ -312,1620 +313,1624 @@ declare interface FormatRecords {
 //   @param name: 'file' }
  */
 
-declare interface ParsedPath {
-    name: string;
-    dir: string;
-    ext: string;
-    basename: string;
-    name_without_extension: string;
-    type: "directory" | "file" | "unknown";
-}
-
-/**
- * @package Self implementing Path based on NodeJS & C# Path System
- */
-
-declare namespace Path {
-    export function Basename(path: string, ...suffix: string[]): string;
-
-    /**
-     * @returns - Provides the platform-specific path delimiter:
-     * `;` for Windows
-     * `:` for POSIX
-     */
-    export function Delimiter(): string;
-
-    /**
-     * Example: "/test/st/sf/main.js" returns "/test/st/sf"
-     * @param path File path or directory path
-     * @returns Returns directory containing the file or directory
-     */
-    export function Dirname(path: string): string;
-
-    /**
-     * Example: "main.js" returns ".js"
-     * @param path File path or directory path
-     * @returns Returns file extension
-     */
-    export function Extname(path: string): string;
-
-    /**
-     *
-     * @param dir - Current Directory
-     * @param root - Root directory
-     * @param basename - Basename
-     * @param name - Current name
-     * @param ext - Current extension
-     */
-
-    export function Format(dir: string, root: string, basename: string, name: string, ext: string): FormatRecords;
-
-    /**
-     *
-     * @param path - Provide path
-     * @returns Is rooted path (true or false)
-     */
-
-    export function IsAbsolute(path: string): boolean;
-
-    /**
-     *
-     * @param paths - Provide path array
-     * @returns Joined path
-     */
-
-    export function Join(...paths: string[]): string;
-
-    /**
-     *
-     * @param path - Provide file path
-     * @returns Normalized path
-     */
-
-    export function Normalize(path: string): string;
-
-    /**
-     *
-     * @param filePath - Provide file path
-     * @returns Implemented NodeJs Parsed Path
-     */
-
-    export function Parse(filePath: string): ParsedPath;
-
-    /**
-     *
-     * @param from - From
-     * @param to - To
-     * @returns Concat from & to
-     */
-
-    export function Relative(from: string, to: string): string;
-
-    /**
-     *
-     * @param path - Input file path
-     * @returns Full file path
-     */
-
-    export function Resolve(path: string): string;
-
-    /**
-     * @returns Current platform sep
-     */
-
-    export function Sep(): string;
-
-    /**
-     *
-     * @param path - File path
-     * @returns Current file name
-     */
-
-    export function GetFileName(path: string): string;
-
-    /**
-     *
-     * @param path - Provide directory path
-     * @returns Directory name
-     */
-
-    export function GetDirectoryName(path: string): string;
-
-    /**
-     *
-     * @param path - Provide file path
-     * @returns Filename without extension
-     */
-
-    export function GetFileNameWithoutExtension(path: string): string;
-}
-
-declare type Image<Argb32> = Uint8Array;
-
-declare namespace DotNetBitmap {
-    /**
-     *
-     * @param imagePath - Provide image path
-     * @returns width & height of the provided image
-     */
-
-    export function GetDimension<Generic_T>(imagePath: string): Sen.Script.Modules.BitMap.Constraints.ImageInfo<Generic_T>;
-
-    /**
-     *
-     * @param imagePath - Provide image path
-     * @returns alpha channel
-     */
-
-    export function ExtractAlphaChannel(imagePath: string): Uint8Array;
-
-    /**
-     *
-     * @param imagePath - Provide image path
-     * @returns red channel
-     */
-
-    export function ExtractRedChannel(imagePath: string): Uint8Array;
-
-    /**
-     *
-     * @param imagePath - Provide image path
-     * @returns green channel
-     */
-
-    export function ExtractGreenChannel(imagePath: string): Uint8Array;
-
-    /**
-     *
-     * @param imagePath - Provide image path
-     * @returns blue channel
-     */
-
-    export function ExtractBlueChannel(imagePath: string): Uint8Array;
-
-    /**
-     *
-     * @param images - Provide image<RGBA32> Array
-     * @param width - Provide expected output width
-     * @param height - Provide expected output height
-     * @returns New Image as Buffer
-     */
-
-    export function JoinImages(images: Image<Rgba32>[], width: number, height: number): Image<Rgba32>;
-
-    /**
-     *
-     * @param new_width - Pass new width
-     * @param new_height - Pass new height
-     * @param file_path - Pass old file path
-     * @param outpath - Pass output path
-     */
-
-    export function ResizeImage(new_width: int, new_height: int, file_path: string, outpath: string): void;
-
-    /**
-     *
-     * @param imagePath - Pass image to save
-     * @param imageByte - Pass Byte image
-     * @returns Images saved
-     */
-
-    export function SaveImage(imagePath: string, imageByte: Image<Rgba32>): void;
-
-    /**
-     *
-     * @param alphaBuffer - Pass alpha channel
-     * @param redBuffer  - Pass red channel
-     * @param greenBuffer  - Pass green channel
-     * @param blueBuffer  - Pass blue channel
-     * @param width  - Pass image width
-     * @param height  - Pass image height
-     * @returns Rgba Image as Buffer
-     */
-
-    export function CreateRgbaImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Rgba32>;
-
-    /**
-     *
-     * @param alphaBuffer - Pass alpha channel
-     * @param redBuffer  - Pass red channel
-     * @param greenBuffer  - Pass green channel
-     * @param blueBuffer  - Pass blue channel
-     * @param width  - Pass image width
-     * @param height  - Pass image height
-     * @returns Argb Image as Buffer
-     */
-
-    export function CreateArgbImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Argb32>;
-
-    /**
-     *
-     * @param imagePath - Provide image path
-     * @param outputPath - Provide output image path
-     * @param degrees
-     */
-
-    export function RotateImage(imagePath: string, outputPath: string, degrees: number): void;
-
-    /**
-     *
-     * @param pngImagePath - Provide png in path
-     * @param jpegImagePath - Provide Jpeg out path
-     * @returns PNG TO JPEG
-     */
-
-    export function ConvertPngToJpeg(pngImagePath: string, jpegImagePath: string): void;
-
-    /**
-     *
-     * @param pngImagePath - Provide png out path
-     * @param jpegImagePath - Provide Jpeg in path
-     * @returns   JPEG TO PNG
-     */
-
-    export function ConvertJpegToPng(jpegImagePath: string, pngImagePath: string): void;
-
-    /**
-     *
-     * @param gifImagePath - Input gif path
-     * @param outputDirectory - Output directory contains images
-     * @param frameName - name for frames
-     * @returns All gif frames exported to PNGs
-     */
-
-    export function ExportGifToPngs(gifImagePath: string, outputDirectory: string, frameName: string): void;
-
-    /**
-     *
-     * @param imagePath - Provide image path
-     * @param imageByte - Provide image buffer
-     * @async Requires to handle asynchronous function
-     * @returns Asynchrnous write image
-     */
-
-    export async function SaveImageAsync(imagePath: string, imageByte: Image<Rgba32>): Promise<void>;
-
-    /**
-     *
-     * @param objArray - Send the array of JS Object with width, height, x, y and file_path
-     * @param filename - File name for composite image
-     * @param output_directory - Output directory
-     * @param width - Input width
-     * @param height - Input height
-     * @returns Written image
-     */
-
-    export function CompositeImages<
-        T extends {
-            width: number;
-            height: number;
-            x: number;
-            y: number;
-            file_path: string;
+        declare interface ParsedPath {
+            name: string;
+            dir: string;
+            ext: string;
+            basename: string;
+            name_without_extension: string;
+            type: "directory" | "file" | "unknown";
         }
-    >(objArray: Array<T>, filename: string, output_directory: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param sourceImagePath - The image to extract
-     * @param outputImagePath - Output image
-     * @param x - The coordinate x
-     * @param y - The coordinate y
-     * @param width - Width of extracted image
-     * @param height - Height of extracted image
-     * @returns Extracted image
-     */
-
-    export function CropAndSaveImage(sourceImagePath: string, outputImagePath: string, x: int, y: int, width: int, height: int): void;
-
-    /**
-     *
-     * @param sourceImagePath - The image to extract
-     * @param outputImagePath - Output image
-     * @param x - The coordinate x
-     * @param y - The coordinate y
-     * @param width - Width of extracted image
-     * @param height - Height of extracted image
-     * @async This function is a promise, please catch it with an await from ES6
-     * @returns Extracted image
-     */
-
-    export async function CropAndSaveImageAsync(sourceImagePath: string, outputImagePath: string, x: int, y: int, width: int, height: int): Promise<void>;
-
-    /**
-     *
-     * @param images - Provide the images array of JS Object
-     */
-
-    export async function CropAndSaveImagesAsync(images: Array<AsyncTaskImageSplit>): Promise<void>;
-
-    /**
-     *
-     * @param images Provide array of images
-     */
-
-    export function CropAndSaveImages(images: Array<AsyncTaskImageSplit>): void;
-}
-
-declare namespace TextureHandler {
-    // Decode
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_A8_Decode(input_file: string, output_file: string, width: number, height: number): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_ARGB1555_Decode(input_file: string, output_file: string, width: number, height: number): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_ARGB4444_Decode(input_file: string, output_file: string, width: number, height: number): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_L8_Decode(input_file: string, output_file: string, width: number, height: number): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_LA44_Decode(input_file: string, output_file: string, width: number, height: number): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_LA88_Decode(input_file: string, output_file: string, width: number, height: number): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_RGB565_Decode(input_file: string, output_file: string, width: number, height: number): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_RGB565_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_RGBA4444_Decode(input_file: string, output_file: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_RGBA4444_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_RGBA5551_Decode(input_file: string, output_file: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_RGBA5551_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_ARGB8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_RGBA8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_ETC1_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_ETC1_RGB_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_ETC1_RGB_A_Palette_Decode(path_in: string, path_out: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_PVRTC1_4BPP_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_PVRTC1_4BPP_RGBA_Decode(path_in: string, path_out: string, width: int, height: int): void;
-
-    /**
-     *
-     * @param input_file - Pass PTX in
-     * @param output_file - Pass output png
-     * @param width - Pass width
-     * @param height - Pass height
-     * @returns Decoded PNG
-     */
-    export function Create_PVRTC1_4BPP_RGBA_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
-
-    // Encode
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_A8_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_ARGB1555_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_ARGB4444_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_RGBA8888_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_L8_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_LA44_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_LA88_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_RGB565_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_RGB565_Block_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_RGBA4444_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_RGBA4444_Block_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_RGBA5551_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_RGBA5551_Block_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_ARGB8888_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_ETC1_RGB_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_ETC1_RGB_A8_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_ETC1_RGB_A_Palette_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_PVRTC1_4BPP_RGB_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_PVRTC1_4BPP_RGBA_Encode(input_file: string, output_file: string): void;
-
-    /**
-     *
-     * @param input_file - Provide file path as image in
-     * @param output_file - Provide file path out
-     */
-    export function Create_PVRTC1_4BPP_RGBA_A8_Encode(input_file: string, output_file: string): void;
-}
-
-declare namespace TextureHandlerPromise {
-    /**
-     * Dynamic interface uses in the Runtime
-     */
-
-    declare interface Dynamic {
-        source: string;
-        output: string;
-    }
-
-    /**
-     *
-     * @param images - Pass array of images need to encode
-     * @param format - Pass encode format
-     */
-
-    export function EncodeAsyncImages(images: Array<Dynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
-
-    /**
-     * Extends from Dynamic
-     */
-
-    declare interface DecodeDynamic extends TextureHandlerPromise.Dynamic {
-        width: int;
-        height: int;
-    }
-
-    /**
-     *
-     * @param images - Pass array of images need to encode
-     * @param format - Pass encode format
-     */
-
-    export function DecodeAsyncImages(images: Array<DecodeDynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
-}
-
-declare interface AsyncTaskImageSplit {
-    sourceImagePath: string;
-    outputImagePath: string;
-    x: int;
-    y: int;
-    width: int;
-    height: int;
-}
-
-namespace DotNetCrypto {
-    /**
-     *
-     * @param data - Provide data to hash as string
-     * @returns Hashed data
-     */
-    export function ComputeMD5Hash(data: string): string;
-
-    /**
-     *
-     * @param data - Provide data to hash as string
-     * @returns Hashed data
-     */
-    export function ComputeSha1Hash(data: string): string;
-
-    /**
-     *
-     * @param data - Provide data to hash as string
-     * @returns Hashed data
-     */
-    export function ComputeSha256Hash(data: string): string;
-
-    /**
-     *
-     * @param data - Provide data to hash as string
-     * @returns Hashed data
-     */
-    export function ComputeSha384Hash(data: string): string;
-
-    /**
-     *
-     * @param data - Provide data to hash as string
-     * @returns Hashed data
-     */
-    export function ComputeSha512Hash(data: string): string;
-
-    /**
-     *
-     * @param plainText - Pass plain text
-     * @param password - Pass password
-     * @param saltValue - Pass salt value
-     * @param rijndaelMode - Rijndael Mode, choose one
-     * @param rijndaelPadding - Rijndael Padding, choose one
-     * @returns encrypted Uint8Array
-     */
-
-    export function RijndaelEncrypt(plainText: string, password: string, saltValue: string, rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode, rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding): Uint8Array;
-
-    /**
-     *
-     * @param encryptedBytes - Encrypted Uint8Array
-     * @param password  - Pass password
-     * @param saltValue - Pass salt value
-     * @param rijndaelMode - Rijndael Mode, choose one
-     * @param rijndaelPadding - Rijndael Padding, choose one
-     * @returns decrypted Uint8Array
-     */
-
-    export function RijndaelDecrypt(encryptedBytes: Uint8Array, password: string, saltValue: string, rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode, rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding): Uint8Array;
-}
-
-/**
- * @package Self implement compression based on DotNetZip
- * @requires https://www.nuget.org/packages/DotNetZip/
- */
-
-declare namespace DotNetCompress {
-    /**
-     *
-     * @param zip_output - Created zip output path
-     * @param files - File array, pass an empty array if nothing were added
-     * @param directories - Directory array, pass an empty array if nothing were added
-     * @returns Created zip
-     */
-    export function CompressZip(zip_output: string, files: string[], directories: string[]): void;
-    /**
-     *
-     * @param zip_output - Created zip output path
-     * @param files - File array, pass an empty array if nothing were added
-     * @param directories - Directory array, pass an empty array if nothing were added
-     * @returns Created zip, this function is asynchronous, please provide await from ES6
-     */
-
-    export async function CompressZipAsync(zip_output: string, files?: string[], directories?: string[]): Promise<void>;
-
-    /**
-     *
-     * @param zip_input - Zip path
-     * @param extracted_directory - Extracted directory expected
-     * @returns Extracted zip
-     */
-
-    export function UncompressZip(zip_input: string, extracted_directory: string): void;
-
-    /**
-     *
-     * @param zip_input - Zip path
-     * @param extracted_directory - Extracted directory expected
-     * @returns Extracted zip as asynchronous function, please use ES6 Async/Await to make it synchronous
-     */
-
-    export async function UncompressZipAsync(zip_input: string, extracted_directory: string): Promise<void>;
-
-    /**
-     *
-     * @param data - Pass data to do compression
-     * @param compression_level - Pass Zlib Level
-     * @returns Zlib out
-     */
-
-    export function CompressZlibBytes<Generic_T, Generic_U>(data: Generic_T, compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel): Generic_U;
-
-    /**
-     *
-     * @param zlibData - Pass data to do uncompression
-     * @returns Uncompressed Zlib out
-     */
-
-    export function UncompressZlibBytes<Generic_T, Generic_U>(zlibData: Generic_T): Generic_U;
-}
-
-/**
- * @returns Current place contains Script directory
- */
-declare const MainScriptDirectory: string;
-
-/**
- * @returns All scripts loaded by the Sen program
- */
-
-declare const ScriptModules: Array<string>;
-
-/**
- * @package Dependencies Jint from DotNet
- * @requires https://github.com/sebastienros/jint
- */
-
-declare namespace JavaScriptEngine {
-    /**
-     *
-     * @param js_string_to_evaluate - Pass JS to Evaluate as string
-     * @returns Finished evaluate, can be undefined
-     */
-    export function Evaluate(js_string_to_evaluate: string, source: string): void;
-    /**
-     *
-     * @param js_string_to_execute - Pass JS to Evaluate as string
-     * @returns Add engine to the Sen
-     */
-    export function Execute(js_string_to_execute: string, source: string): void;
-    /**
-     *
-     * @param specifier - Pass specifier
-     * @param code - Pass code
-     * @returns Added module JS import/export to the Sen
-     */
-    export function AddModule(specifier: string, code: string): void;
-}
-
-declare namespace DotNetLocalization {
-    /**
-     *
-     * @param property - Property to get
-     * @param ScriptDirectory - The script directory contains "main.js"
-     * @param Language - Language to get
-     * @returns STRING if exists in Language, else returns property
-     */
-    export function Get(property: string, ScriptDirectory: string, Language: string): string;
-}
-
-declare namespace DotNetSystem {
-    class Exception {
-        constructor(message?: string);
-
-        message: string;
-        readonly stackTrace: string | null;
-        readonly innerException: Exception | null;
-        readonly source: string | null;
-        readonly helpLink: string | null;
-        readonly errorCode: Sen.Script.Modules.Exceptions.StandardsException;
-
-        toString(): string;
-    }
-
-    class RuntimeException extends Exception {
-        constructor(public message?: string, public file_path?: string): void;
-    }
-
-    class RTONDecodeException extends RuntimeException {
-        constructor(public message: string, public file_path: string, public expected: string, public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONListException): void;
-    }
-}
-
-declare const DotNetExceptionArg: any;
-
-declare type res_json = {
-    expand_path: "string" | "array";
-    groups: subgroup_parent;
-};
-
-declare type subgroup_parent = {
-    [x: string]: {
-        is_composite: boolean;
-        subgroup: subgroup_children;
-    };
-};
-
-declare type composite_object = {
-    type: "composite";
-    id: string;
-    subgroups: Array<{
-        id: string;
-        res?: string;
-    }>;
-};
-
-declare type subgroup_children = {
-    [x: string]: {
-        [x: string]: packet_data;
-    };
-};
-
-declare type sprite_data = {
-    [subgroup_children_name: string]: {
-        type: resolution;
-        packet: {
-            [parent_name: string]: {
-                dimension: {
+
+        /**
+         * @package Self implementing Path based on NodeJS & C# Path System
+         */
+
+        declare namespace Path {
+            export function Basename(path: string, ...suffix: string[]): string;
+
+            /**
+             * @returns - Provides the platform-specific path delimiter:
+             * `;` for Windows
+             * `:` for POSIX
+             */
+            export function Delimiter(): string;
+
+            /**
+             * Example: "/test/st/sf/main.js" returns "/test/st/sf"
+             * @param path File path or directory path
+             * @returns Returns directory containing the file or directory
+             */
+            export function Dirname(path: string): string;
+
+            /**
+             * Example: "main.js" returns ".js"
+             * @param path File path or directory path
+             * @returns Returns file extension
+             */
+            export function Extname(path: string): string;
+
+            /**
+             *
+             * @param dir - Current Directory
+             * @param root - Root directory
+             * @param basename - Basename
+             * @param name - Current name
+             * @param ext - Current extension
+             */
+
+            export function Format(dir: string, root: string, basename: string, name: string, ext: string): FormatRecords;
+
+            /**
+             *
+             * @param path - Provide path
+             * @returns Is rooted path (true or false)
+             */
+
+            export function IsAbsolute(path: string): boolean;
+
+            /**
+             *
+             * @param paths - Provide path array
+             * @returns Joined path
+             */
+
+            export function Join(...paths: string[]): string;
+
+            /**
+             *
+             * @param path - Provide file path
+             * @returns Normalized path
+             */
+
+            export function Normalize(path: string): string;
+
+            /**
+             *
+             * @param filePath - Provide file path
+             * @returns Implemented NodeJs Parsed Path
+             */
+
+            export function Parse(filePath: string): ParsedPath;
+
+            /**
+             *
+             * @param from - From
+             * @param to - To
+             * @returns Concat from & to
+             */
+
+            export function Relative(from: string, to: string): string;
+
+            /**
+             *
+             * @param path - Input file path
+             * @returns Full file path
+             */
+
+            export function Resolve(path: string): string;
+
+            /**
+             * @returns Current platform sep
+             */
+
+            export function Sep(): string;
+
+            /**
+             *
+             * @param path - File path
+             * @returns Current file name
+             */
+
+            export function GetFileName(path: string): string;
+
+            /**
+             *
+             * @param path - Provide directory path
+             * @returns Directory name
+             */
+
+            export function GetDirectoryName(path: string): string;
+
+            /**
+             *
+             * @param path - Provide file path
+             * @returns Filename without extension
+             */
+
+            export function GetFileNameWithoutExtension(path: string): string;
+        }
+
+        declare type Image<Argb32> = Uint8Array;
+
+        declare namespace DotNetBitmap {
+            /**
+             *
+             * @param imagePath - Provide image path
+             * @returns width & height of the provided image
+             */
+
+            export function GetDimension<Generic_T>(imagePath: string): Sen.Script.Modules.BitMap.Constraints.ImageInfo<Generic_T>;
+
+            /**
+             *
+             * @param imagePath - Provide image path
+             * @returns alpha channel
+             */
+
+            export function ExtractAlphaChannel(imagePath: string): Uint8Array;
+
+            /**
+             *
+             * @param imagePath - Provide image path
+             * @returns red channel
+             */
+
+            export function ExtractRedChannel(imagePath: string): Uint8Array;
+
+            /**
+             *
+             * @param imagePath - Provide image path
+             * @returns green channel
+             */
+
+            export function ExtractGreenChannel(imagePath: string): Uint8Array;
+
+            /**
+             *
+             * @param imagePath - Provide image path
+             * @returns blue channel
+             */
+
+            export function ExtractBlueChannel(imagePath: string): Uint8Array;
+
+            /**
+             *
+             * @param images - Provide image<RGBA32> Array
+             * @param width - Provide expected output width
+             * @param height - Provide expected output height
+             * @returns New Image as Buffer
+             */
+
+            export function JoinImages(images: Image<Rgba32>[], width: number, height: number): Image<Rgba32>;
+
+            /**
+             *
+             * @param new_width - Pass new width
+             * @param new_height - Pass new height
+             * @param file_path - Pass old file path
+             * @param outpath - Pass output path
+             */
+
+            export function ResizeImage(new_width: int, new_height: int, file_path: string, outpath: string): void;
+
+            /**
+             *
+             * @param imagePath - Pass image to save
+             * @param imageByte - Pass Byte image
+             * @returns Images saved
+             */
+
+            export function SaveImage(imagePath: string, imageByte: Image<Rgba32>): void;
+
+            /**
+             *
+             * @param alphaBuffer - Pass alpha channel
+             * @param redBuffer  - Pass red channel
+             * @param greenBuffer  - Pass green channel
+             * @param blueBuffer  - Pass blue channel
+             * @param width  - Pass image width
+             * @param height  - Pass image height
+             * @returns Rgba Image as Buffer
+             */
+
+            export function CreateRgbaImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Rgba32>;
+
+            /**
+             *
+             * @param alphaBuffer - Pass alpha channel
+             * @param redBuffer  - Pass red channel
+             * @param greenBuffer  - Pass green channel
+             * @param blueBuffer  - Pass blue channel
+             * @param width  - Pass image width
+             * @param height  - Pass image height
+             * @returns Argb Image as Buffer
+             */
+
+            export function CreateArgbImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Argb32>;
+
+            /**
+             *
+             * @param imagePath - Provide image path
+             * @param outputPath - Provide output image path
+             * @param degrees
+             */
+
+            export function RotateImage(imagePath: string, outputPath: string, degrees: number): void;
+
+            /**
+             *
+             * @param pngImagePath - Provide png in path
+             * @param jpegImagePath - Provide Jpeg out path
+             * @returns PNG TO JPEG
+             */
+
+            export function ConvertPngToJpeg(pngImagePath: string, jpegImagePath: string): void;
+
+            /**
+             *
+             * @param pngImagePath - Provide png out path
+             * @param jpegImagePath - Provide Jpeg in path
+             * @returns   JPEG TO PNG
+             */
+
+            export function ConvertJpegToPng(jpegImagePath: string, pngImagePath: string): void;
+
+            /**
+             *
+             * @param gifImagePath - Input gif path
+             * @param outputDirectory - Output directory contains images
+             * @param frameName - name for frames
+             * @returns All gif frames exported to PNGs
+             */
+
+            export function ExportGifToPngs(gifImagePath: string, outputDirectory: string, frameName: string): void;
+
+            /**
+             *
+             * @param imagePath - Provide image path
+             * @param imageByte - Provide image buffer
+             * @async Requires to handle asynchronous function
+             * @returns Asynchrnous write image
+             */
+
+            export async function SaveImageAsync(imagePath: string, imageByte: Image<Rgba32>): Promise<void>;
+
+            /**
+             *
+             * @param objArray - Send the array of JS Object with width, height, x, y and file_path
+             * @param filename - File name for composite image
+             * @param output_directory - Output directory
+             * @param width - Input width
+             * @param height - Input height
+             * @returns Written image
+             */
+
+            export function CompositeImages<
+                T extends {
                     width: number;
                     height: number;
-                };
+                    x: number;
+                    y: number;
+                    file_path: string;
+                }
+            >(objArray: Array<T>, filename: string, output_directory: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param sourceImagePath - The image to extract
+             * @param outputImagePath - Output image
+             * @param x - The coordinate x
+             * @param y - The coordinate y
+             * @param width - Width of extracted image
+             * @param height - Height of extracted image
+             * @returns Extracted image
+             */
+
+            export function CropAndSaveImage(sourceImagePath: string, outputImagePath: string, x: int, y: int, width: int, height: int): void;
+
+            /**
+             *
+             * @param sourceImagePath - The image to extract
+             * @param outputImagePath - Output image
+             * @param x - The coordinate x
+             * @param y - The coordinate y
+             * @param width - Width of extracted image
+             * @param height - Height of extracted image
+             * @async This function is a promise, please catch it with an await from ES6
+             * @returns Extracted image
+             */
+
+            export async function CropAndSaveImageAsync(sourceImagePath: string, outputImagePath: string, x: int, y: int, width: int, height: int): Promise<void>;
+
+            /**
+             *
+             * @param images - Provide the images array of JS Object
+             */
+
+            export async function CropAndSaveImagesAsync(images: Array<AsyncTaskImageSplit>): Promise<void>;
+
+            /**
+             *
+             * @param images Provide array of images
+             */
+
+            export function CropAndSaveImages(images: Array<AsyncTaskImageSplit>): void;
+        }
+
+        declare namespace TextureHandler {
+            // Decode
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_A8_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_ARGB1555_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_ARGB4444_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_L8_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_LA44_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_LA88_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_RGB565_Decode(input_file: string, output_file: string, width: number, height: number): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_RGB565_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_RGBA4444_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_RGBA4444_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_RGBA5551_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_RGBA5551_Block_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_ARGB8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_RGBA8888_Decode(input_file: string, output_file: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_ETC1_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_ETC1_RGB_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_ETC1_RGB_A_Palette_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_PVRTC1_4BPP_RGB_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_PVRTC1_4BPP_RGBA_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+            /**
+             *
+             * @param input_file - Pass PTX in
+             * @param output_file - Pass output png
+             * @param width - Pass width
+             * @param height - Pass height
+             * @returns Decoded PNG
+             */
+            export function Create_PVRTC1_4BPP_RGBA_A8_Decode(path_in: string, path_out: string, width: int, height: int): void;
+
+            // Encode
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_A8_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_ARGB1555_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_ARGB4444_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_RGBA8888_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_L8_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_LA44_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_LA88_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_RGB565_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_RGB565_Block_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_RGBA4444_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_RGBA4444_Block_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_RGBA5551_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_RGBA5551_Block_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_ARGB8888_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_ETC1_RGB_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_ETC1_RGB_A8_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_ETC1_RGB_A_Palette_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_PVRTC1_4BPP_RGB_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_PVRTC1_4BPP_RGBA_Encode(input_file: string, output_file: string): void;
+
+            /**
+             *
+             * @param input_file - Provide file path as image in
+             * @param output_file - Provide file path out
+             */
+            export function Create_PVRTC1_4BPP_RGBA_A8_Encode(input_file: string, output_file: string): void;
+        }
+
+        declare namespace TextureHandlerPromise {
+            /**
+             * Dynamic interface uses in the Runtime
+             */
+
+            declare interface Dynamic {
+                source: string;
+                output: string;
+            }
+
+            /**
+             *
+             * @param images - Pass array of images need to encode
+             * @param format - Pass encode format
+             */
+
+            export function EncodeAsyncImages(images: Array<Dynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
+
+            /**
+             * Extends from Dynamic
+             */
+
+            declare interface DecodeDynamic extends TextureHandlerPromise.Dynamic {
+                width: int;
+                height: int;
+            }
+
+            /**
+             *
+             * @param images - Pass array of images need to encode
+             * @param format - Pass encode format
+             */
+
+            export function DecodeAsyncImages(images: Array<DecodeDynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
+        }
+
+        declare interface AsyncTaskImageSplit {
+            sourceImagePath: string;
+            outputImagePath: string;
+            x: int;
+            y: int;
+            width: int;
+            height: int;
+        }
+
+        namespace DotNetCrypto {
+            /**
+             *
+             * @param data - Provide data to hash as string
+             * @returns Hashed data
+             */
+            export function ComputeMD5Hash(data: string): string;
+
+            /**
+             *
+             * @param data - Provide data to hash as string
+             * @returns Hashed data
+             */
+            export function ComputeSha1Hash(data: string): string;
+
+            /**
+             *
+             * @param data - Provide data to hash as string
+             * @returns Hashed data
+             */
+            export function ComputeSha256Hash(data: string): string;
+
+            /**
+             *
+             * @param data - Provide data to hash as string
+             * @returns Hashed data
+             */
+            export function ComputeSha384Hash(data: string): string;
+
+            /**
+             *
+             * @param data - Provide data to hash as string
+             * @returns Hashed data
+             */
+            export function ComputeSha512Hash(data: string): string;
+
+            /**
+             *
+             * @param plainText - Pass plain text
+             * @param password - Pass password
+             * @param saltValue - Pass salt value
+             * @param rijndaelMode - Rijndael Mode, choose one
+             * @param rijndaelPadding - Rijndael Padding, choose one
+             * @returns encrypted Uint8Array
+             */
+
+            export function RijndaelEncrypt(plainText: string, password: string, saltValue: string, rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode, rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding): Uint8Array;
+
+            /**
+             *
+             * @param encryptedBytes - Encrypted Uint8Array
+             * @param password  - Pass password
+             * @param saltValue - Pass salt value
+             * @param rijndaelMode - Rijndael Mode, choose one
+             * @param rijndaelPadding - Rijndael Padding, choose one
+             * @returns decrypted Uint8Array
+             */
+
+            export function RijndaelDecrypt(encryptedBytes: Uint8Array, password: string, saltValue: string, rijndaelMode: Sen.Script.Modules.Crypto.Constraints.RijndaelMode, rijndaelPadding: Sen.Script.Modules.Crypto.Constraints.RijndaelPadding): Uint8Array;
+        }
+
+        /**
+         * @package Self implement compression based on DotNetZip
+         * @requires https://www.nuget.org/packages/DotNetZip/
+         */
+
+        declare namespace DotNetCompress {
+            /**
+             *
+             * @param zip_output - Created zip output path
+             * @param files - File array, pass an empty array if nothing were added
+             * @param directories - Directory array, pass an empty array if nothing were added
+             * @returns Created zip
+             */
+            export function CompressZip(zip_output: string, files: string[], directories: string[]): void;
+            /**
+             *
+             * @param zip_output - Created zip output path
+             * @param files - File array, pass an empty array if nothing were added
+             * @param directories - Directory array, pass an empty array if nothing were added
+             * @returns Created zip, this function is asynchronous, please provide await from ES6
+             */
+
+            export async function CompressZipAsync(zip_output: string, files?: string[], directories?: string[]): Promise<void>;
+
+            /**
+             *
+             * @param zip_input - Zip path
+             * @param extracted_directory - Extracted directory expected
+             * @returns Extracted zip
+             */
+
+            export function UncompressZip(zip_input: string, extracted_directory: string): void;
+
+            /**
+             *
+             * @param zip_input - Zip path
+             * @param extracted_directory - Extracted directory expected
+             * @returns Extracted zip as asynchronous function, please use ES6 Async/Await to make it synchronous
+             */
+
+            export async function UncompressZipAsync(zip_input: string, extracted_directory: string): Promise<void>;
+
+            /**
+             *
+             * @param data - Pass data to do compression
+             * @param compression_level - Pass Zlib Level
+             * @returns Zlib out
+             */
+
+            export function CompressZlibBytes<Generic_T, Generic_U>(data: Generic_T, compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel): Generic_U;
+
+            /**
+             *
+             * @param zlibData - Pass data to do uncompression
+             * @returns Uncompressed Zlib out
+             */
+
+            export function UncompressZlibBytes<Generic_T, Generic_U>(zlibData: Generic_T): Generic_U;
+        }
+
+        /**
+         * @returns Current place contains Script directory
+         */
+        declare const MainScriptDirectory: string;
+
+        /**
+         * @returns All scripts loaded by the Sen program
+         */
+
+        declare const ScriptModules: Array<string>;
+
+        /**
+         * @package Dependencies Jint from DotNet
+         * @requires https://github.com/sebastienros/jint
+         */
+
+        declare namespace JavaScriptCoreEngine {
+            /**
+             *
+             * @param js_string_to_evaluate - Pass JS to Evaluate as string
+             * @returns Finished evaluate, can be undefined
+             */
+            export function Evaluate(js_string_to_evaluate: string, source: string): void;
+            /**
+             *
+             * @param js_string_to_execute - Pass JS to Evaluate as string
+             * @returns Add engine to the Sen
+             */
+            export function Execute(js_string_to_execute: string, source: string): void;
+            /**
+             *
+             * @param specifier - Pass specifier
+             * @param code - Pass code
+             * @returns Added module JS import/export to the Sen
+             */
+            export function AddModule(specifier: string, code: string): void;
+        }
+
+        declare namespace DotNetLocalization {
+            /**
+             *
+             * @param property - Property to get
+             * @param ScriptDirectory - The script directory contains "main.js"
+             * @param Language - Language to get
+             * @returns STRING if exists in Language, else returns property
+             */
+            export function Get(property: string, ScriptDirectory: string, Language: string): string;
+        }
+
+        declare namespace DotNetSystem {
+            class Exception {
+                constructor(message?: string);
+
+                message: string;
+                readonly stackTrace: string | null;
+                readonly innerException: Exception | null;
+                readonly source: string | null;
+                readonly helpLink: string | null;
+                readonly errorCode: Sen.Script.Modules.Exceptions.StandardsException;
+
+                toString(): string;
+            }
+
+            class RuntimeException extends Exception {
+                constructor(public message?: string, public file_path?: string): void;
+            }
+
+            class RTONDecodeException extends RuntimeException {
+                constructor(public message: string, public file_path: string, public expected: string, public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONListException): void;
+            }
+        }
+
+        declare const DotNetExceptionArg: any;
+
+        declare namespace PvZ2Shell {
+            /**
+             *
+             * @param inFile - Pass RTON
+             * @param outFile - Out RTON
+             * @param decryptRTON - RTON Cipher
+             */
+
+            export function RTONEncrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
+            /**
+             *
+             * @param inFile - Pass RTON
+             * @param outFile - Out RTON
+             * @param decryptRTON - RTON Cipher
+             */
+
+            export function RTONDecrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
+
+            /**
+             *
+             * @param inFile - Pass RTON file here
+             * @param outFile - Pass JSON output here
+             * @returns RTON2JSON
+             */
+            export function RTONDecode(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
+            /**
+             *
+             * @param inFile - Pass JSON file here
+             * @param outFile - Pass RTON output here
+             * @returns JSON2RTON
+             */
+
+            export function RTONEncode(inFile: string, outFile: string, encryptRTON: RTONCipher): void;
+            /**
+             *
+             * @param inFile - Pass PAM file here
+             * @param outFile - Pass PAM JSON output here
+             * @returns Pam to Pam Json
+             */
+
+            export function PAMtoPAMJSON(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
+            /**
+             *
+             * @param inFile - Pass JSON file here
+             * @param outFile - Pass PAM output here
+             * @returns PAM Json to Pam
+             */
+
+            export function PAMJSONtoPAM(PamJson: string, outFile: string): void;
+
+            /**
+             *
+             * @param inFile - PAM JSON
+             * @param outFolder - Out dir
+             * @param resolution - Pass resize resolution
+             */
+
+            export function PAMJSONtoFlashAnimation(PAMJson: string, outFolder: string, resolution: int): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
+
+            /**
+             *
+             * @param inFolder - .XFL
+             * @param outFolder - Out PAM JSON
+             */
+
+            export function FlashAnimationtoPAMJSON(inDirectory: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
+
+            /**
+             *
+             * @param inFile - PAM
+             * @param outFolder - Out dir
+             * @param resolution - Pass resize resolution
+             */
+
+            export function PAMtoFlashAnimation(inFile: string, outFolder: string, resolution: int): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
+            /**
+             *
+             * @param inFolder - .XFL
+             * @param outFolder - Out PAM
+             */
+
+            export function FlashAnimationtoPAM(inFolder: string, outFile: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): void;
+
+            /**
+             *
+             * @param inFile - Pass RSG file path
+             * @param outFolder - Out directory
+             * @param useResDirectory - Want to use res dir or not
+             */
+
+            export function RSGUnpack(inFile: string, outFolder: string, useResDirectory: boolean = true): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+            /**
+             *
+             * @param inDirectory - Pass RSG packet directory path
+             * @param outFile - Out File
+             */
+
+            export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo, useResDirectory: boolean = true): void;
+            /**
+             *
+             * @param inFile - Pass RSB file path
+             * @param outFolder - Out directory unpacked
+             */
+
+            export function RSBUnpack(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+            /**
+             *
+             * @param inDirectory - Pass RSB bundle directory path
+             * @param outFile - Out RSB
+             */
+
+            export function RSBPack(inDirectory: string, outFile: string, manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo): void;
+
+            /**
+             *
+             * @param base - Pass zlib base
+             * @param outFile - Pass outfile
+             */
+
+            export function PopCapZlibCompress(Ripefile: string, Use64variant: boolean, outFile: string, zlibLevel: Sen.Script.Modules.Compression.Constraints.ZlibLevel): void;
+            /**
+             *
+             * @param base - Pass zlib base
+             * @param outFile - Pass outfile
+             */
+
+            export function PopCapZlibUncompress(Ripefile: string, Use64variant: boolean, outFile: string): void;
+            /**
+             *
+             * @param inRSG - Pass RSG base
+             */
+
+            export function GetRSBPacketInfo(inRSG: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo;
+
+            /**
+             *
+             * @param inRSB - Pass RSB base
+             */
+
+            export function ProcessRSBData(inRSB: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead;
+            /**
+             *
+             * @param inRTON - Pass RTON
+             */
+
+            export function ProcessRTONData(inRTON: string): Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONHead;
+            /**
+             *
+             * @param inPAM - Pass PAM
+             */
+
+            export function ProcessPAMData(inPAM: string): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PAMHeader;
+
+            /**
+             *
+             * @param inWEM - Pass wem path
+             * @param outOGG - Pass OGG output path
+             */
+
+            export function WemToOGG(inWEM: string, outOGG: string, destination: string, inlineCodebook: boolean, inlineSetup: boolean): void;
+            /**
+             *
+             * @param inFile - Pass RSB file path
+             * @param outRsb - Out RSB
+             */
+
+            export function RSBObfuscate(inFile: string, outRsb: string): void;
+
+            /**
+             *
+             * @param bnk_in - Pass BNK in
+             * @param bnk_dir_out - Pass dir out
+             */
+
+            export function WWiseSoundBankDecode(bnk_in: string, bnk_dir_out: string): Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple;
+
+            /**
+             *
+             * @param soundbank_dir - Pass BNK dir in
+             * @param out_bnk - Pass BNK out
+             * @param information - Pass soundbank json deserialized
+             */
+
+            export function WWiseSoundBankEncode(soundbank_dir: string, out_bnk: string, information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple): void;
+
+            /**
+             *
+             * @param inDir - Pass directory
+             * @param resolution - Pass resolution
+             * @returns Flash animation resize
+             */
+
+            export function FlashAnimationResize(inDir: string, resolution: int): void;
+            /**
+             *
+             * @param inFile - Pass RSB file path
+             * @param outFolder - Out directory unpacked
+             */
+
+            export function RSBUnpackByLooseConstraints(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+        }
+
+        /**
+         * Strictly checking version
+         */
+
+        declare namespace ShellVersion {
+            /**
+             * Shell version of the current Shell
+             */
+
+            export const ShellVersion: int;
+
+            /**
+             * Script version of the current Script
+             */
+
+            export const ScriptRequirement: int;
+        }
+
+        /**
+         * Download update
+         */
+
+        declare namespace ShellUpdate {
+            /**
+             *
+             * @param url - Provide link
+             * @param user_agent - Provide User Agent
+             * @returns context string
+             */
+
+            export function SendGetRequest(url: string, user_agent: string): GitHubReleases;
+
+            /**
+             *
+             * @param save_dir - Provide shell directory
+             * @param link - Provide download link to GitHub API
+             * @param index - Provide index
+             * @param shell_name - Provide download shell: shell.exe for example
+             */
+
+            export function DownloadShell(save_dir: string, link: string, index: int, shell_name: string): void;
+
+            /**
+             * @returns If the user provide admin permission to execute
+             */
+
+            export function HasAdmin(): boolean;
+
+            /**
+             *
+             * @param fileUrl - Pass URL here
+             * @param filePath - Pass output path
+             * @param user_agent - Pass User agent
+             */
+
+            export function DownloadFromServer(fileUrl: string, filePath: string, user_agent: string): void;
+
+            /**
+             *
+             * @param fileUrls - Pass URL here
+             * @param filePaths - Pass output path
+             * @param user_agent - Pass User agent
+             */
+
+            export function DownloadFromMultipleThread(fileUrls: string[], filePaths: string[], user_agent: string): void;
+        }
+
+        declare interface GitHubReleases {
+            url: string;
+            assets_url: string;
+            upload_url: string;
+            html_url: string;
+            id: number;
+            author: {
+                login: string;
+                id: number;
+                node_id: string;
+                avatar_url: string;
+                gravatar_id: string;
+                url: string;
+                html_url: string;
+                followers_url: string;
+                following_url: string;
+                gists_url: string;
+                starred_url: string;
+                subscriptions_url: string;
+                organizations_url: string;
+                repos_url: string;
+                events_url: string;
+                received_events_url: string;
                 type: string;
-                path: Array<string>;
-                data: {
-                    [each_sprite_id: string]: {
-                        default: {
-                            ax?: number;
-                            ay?: number;
-                            ah?: number;
-                            aw?: number;
-                            x?: number;
-                            y?: number;
-                            cols?: number;
+                site_admin: boolean;
+            };
+            node_id: string;
+            tag_name: string;
+            target_commitish: string;
+            name: string;
+            draft: boolean;
+            prerelease: boolean;
+            created_at: string;
+            published_at: string;
+            assets: Array<{
+                url: string;
+                id: number;
+                node_id: string;
+                name: string;
+                label: null | string;
+                uploader: {
+                    login: string;
+                    id: number;
+                    node_id: string;
+                    avatar_url: string;
+                    gravatar_id: string;
+                    url: string;
+                    html_url: string;
+                    followers_url: string;
+                    following_url: string;
+                    gists_url: string;
+                    starred_url: string;
+                    subscriptions_url: string;
+                    organizations_url: string;
+                    repos_url: string;
+                    events_url: string;
+                    received_events_url: string;
+                    type: string;
+                    site_admin: boolean;
+                };
+                content_type: string;
+                state: string;
+                size: number;
+                download_count: number;
+                created_at: string;
+                updated_at: string;
+                browser_download_url: string;
+            }>;
+            tarball_url: string;
+            zipball_url: string;
+            body: string;
+        }
+
+        /**
+         * Buffer Compare
+         */
+
+        declare enum BufferCompare {
+            same = 0,
+            larger = 1,
+            smaller = -1,
+        }
+
+        /**
+         * Buffer implemented from .NET
+         */
+
+        declare namespace Buffer {
+            /**
+             *
+             * @param size - Pass size to allocate
+             */
+            export function Alloc(size: int): Buffer.JSBuffer;
+
+            /**
+             *
+             * @param otherBuffer - Pass other Buffer here to compare
+             */
+
+            export function Compare(otherBuffer: Buffer.JSBuffer): BufferCompare;
+
+            /**
+             *
+             * @param input - Pass string to create buffer
+             */
+
+            export function From(input: string): Buffer.JSBuffer;
+
+            /**
+             *
+             * @param otherBuffer - Check if it's included
+             */
+
+            export function Includes(otherBuffer: Buffer.JSBuffer): boolean;
+
+            /**
+             *
+             * @param value - Val find
+             * @param startIndex - Start index
+             * @param endIndex - End index
+             */
+
+            export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
+
+            /**
+             *
+             * @param value - Val find
+             * @param startIndex - Start index
+             * @param endIndex - End index
+             */
+
+            export function LastIndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
+
+            /**
+             *
+             * @param startIndex - Start slice
+             * @param endIndex - End slice
+             */
+
+            export function Slice(startIndex: int = 0, endIndex: int? = null): Buffer.JSBuffer;
+
+            /**
+             * JS Buffer
+             */
+
+            export interface JSBuffer {
+                ToString(): string;
+                readonly Length: int;
+                ToArray(): Array<byte>;
+            }
+        }
+
+        /**
+         * XML namespace for PopCap Animation Animate Adobe XML
+         */
+
+        namespace PvZ2XML {
+            /**
+             *
+             * @param index - Start index
+             * @param transform - Transform
+             * @param outpath - Output path
+             */
+            export function WriteImageDocument(index: int, name: string, size: [int, int], transform: [double, double, double, double, double, double], outpath: string): void;
+            /**
+             *
+             * @param index - Start index
+             * @param name - Name of image
+             * @param outpath - Output path
+             */
+
+            export function WriteSourceDocument(index: int, name: string, size: int[], transform: double[], resolution: int, outpath: string): void;
+
+            export interface DOMDocumentAddon {
+                media: string[];
+                sprite: string[];
+                source: string[];
+                image: string[];
+            }
+
+            export function InsertDOMDocumentData(a: PvZ2XML.DOMDocumentAddon, xml: string, outFile: string): void;
+        }
+
+        namespace XMLHelper {
+            export function Deserialize<T>(xml: string): T;
+
+            export function Serialize<T>(obj: T, out: string): string;
+        }
+    }
+
+    declare namespace Script {
+        declare type res_json = {
+            expand_path: "string" | "array";
+            groups: subgroup_parent;
+        };
+
+        declare type subgroup_parent = {
+            [x: string]: {
+                is_composite: boolean;
+                subgroup: subgroup_children;
+            };
+        };
+
+        declare type composite_object = {
+            type: "composite";
+            id: string;
+            subgroups: Array<{
+                id: string;
+                res?: string;
+            }>;
+        };
+
+        declare type subgroup_children = {
+            [x: string]: {
+                [x: string]: packet_data;
+            };
+        };
+
+        declare type sprite_data = {
+            [subgroup_children_name: string]: {
+                type: resolution;
+                packet: {
+                    [parent_name: string]: {
+                        dimension: {
+                            width: number;
+                            height: number;
                         };
                         type: string;
                         path: Array<string>;
+                        data: {
+                            [each_sprite_id: string]: {
+                                default: {
+                                    ax?: number;
+                                    ay?: number;
+                                    ah?: number;
+                                    aw?: number;
+                                    x?: number;
+                                    y?: number;
+                                    cols?: number;
+                                };
+                                type: string;
+                                path: Array<string>;
+                            };
+                        };
                     };
                 };
             };
         };
-    };
-};
 
-declare type UnofficialSubgroupStandard = {
-    type: resolution;
-    packet: {
-        [parent_name: string]: {
-            dimension: {
-                width: number;
-                height: number;
-            };
-            type: string;
-            path: Array<string>;
-            data: {
-                [each_sprite_id: string]: {
-                    default: {
-                        ax?: number;
-                        ay?: number;
-                        ah?: number;
-                        aw?: number;
-                        x?: number;
-                        y?: number;
-                        cols?: number;
+        declare type UnofficialSubgroupStandard = {
+            type: resolution;
+            packet: {
+                [parent_name: string]: {
+                    dimension: {
+                        width: number;
+                        height: number;
                     };
                     type: string;
                     path: Array<string>;
+                    data: {
+                        [each_sprite_id: string]: {
+                            default: {
+                                ax?: number;
+                                ay?: number;
+                                ah?: number;
+                                aw?: number;
+                                x?: number;
+                                y?: number;
+                                cols?: number;
+                            };
+                            type: string;
+                            path: Array<string>;
+                        };
+                    };
                 };
             };
         };
-    };
-};
 
-declare type resolution = "1536" | "768" | "384" | "1200" | "640" | null;
+        declare type resolution = "1536" | "768" | "384" | "1200" | "640" | null;
 
-declare type packet_data = {
-    [x: string]: {
-        path?: Array<string>;
-        type: string;
-        dimension?: {
-            width: number;
-            height: number;
+        declare type packet_data = {
+            [x: string]: {
+                path?: Array<string>;
+                type: string;
+                dimension?: {
+                    width: number;
+                    height: number;
+                };
+                [x: string]: children_data_inside_packet;
+                data?: children_data_inside_packet;
+            };
         };
-        [x: string]: children_data_inside_packet;
-        data?: children_data_inside_packet;
-    };
-};
 
-declare type children_data_inside_packet = {
-    [x: string]: {
-        path: Array<string>;
-        type: string;
-        default?: {
-            ax: number;
-            ay: number;
-            aw: number;
-            ah: number;
-            x: number;
-            y: number;
-            cols?: number;
-            forceOriginalVectorSymbolSize?: boolean;
+        declare type children_data_inside_packet = {
+            [x: string]: {
+                path: Array<string>;
+                type: string;
+                default?: {
+                    ax: number;
+                    ay: number;
+                    aw: number;
+                    ah: number;
+                    x: number;
+                    y: number;
+                    cols?: number;
+                    forceOriginalVectorSymbolSize?: boolean;
+                };
+            };
         };
-    };
-};
 
-declare type PopCap_Subgroup_Parent = {
-    type: string;
-    id: string;
-    subgroups: Array<{
-        id: string;
-        res?: string;
-    }>;
-};
-
-declare type Resource_Structure_Template = {
-    id: string;
-    parent: string;
-    res?: string;
-    resources: Array<{
-        slot: number;
-        id: string;
-        path: Array<string> | string;
-        type?: string;
-        atlas?: boolean;
-        width?: number;
-        height?: number;
-        runtime?: boolean;
-        parent?: string;
-        ah?: number;
-        aw?: number;
-        ax?: number;
-        ay?: number;
-        x?: number;
-        y?: number;
-        forceOriginalVectorSymbolSize?: boolean;
-        cols?: number;
-        srcpath?: string | Array<string>;
-    }>;
-    type: string;
-};
-
-declare type Resources_Group_Structure_Template = {
-    groups: Array<Resource_Structure_Template & any>;
-    slot_count: number;
-};
-
-declare type using_subgroup = {
-    type: string;
-    id: string;
-    subgroups: Array<{
-        id: string;
-        res?: string;
-    }>;
-};
-
-declare type resource_atlas_and_sprites = {
-    id: string;
-    parent: string;
-    res: string;
-    resources: Array<{
-        slot?: number;
-        id: string;
-        path: string | Array<string>;
-        type: string;
-        atlas?: boolean;
-        width?: number;
-        height?: number;
-        runtime?: boolean;
-        parent?: string;
-        ah?: number;
-        aw?: number;
-        ax?: number;
-        ay?: number;
-        x?: number;
-        y?: number;
-        cols?: number;
-    }>;
-    type: string;
-};
-
-declare type Resource_File_Bundle = {
-    id: string;
-    parent?: string;
-    resources: Array<{
-        slot: number;
-        id: string;
-        path: string;
-        type: string;
-        forceOriginalVectorSymbolSize?: boolean;
-        srcpath?: string | Array<string>;
-    }>;
-    type: string;
-};
-
-declare type blank_slot = {
-    slot: number;
-};
-
-declare type Output_Value = {
-    information: {
-        expand_path: "string" | "array";
-    };
-    groups: {
-        [x: string]: res_json_children;
-    };
-};
-
-declare type res_json_children = {
-    is_composite: boolean;
-    subgroup: subgroup_children;
-};
-
-declare type small_bundle_info_json = {
-    is_composite: boolean;
-    subgroups: Array<string>;
-};
-
-/**
- * PvZ2 functions from the Shell
- */
-
-declare interface RTONCipher {
-    crypt: boolean;
-    key: string;
-}
-
-declare namespace PvZ2Shell {
-    /**
-     *
-     * @param inFile - Pass RTON
-     * @param outFile - Out RTON
-     * @param decryptRTON - RTON Cipher
-     */
-
-    export function RTONEncrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
-    /**
-     *
-     * @param inFile - Pass RTON
-     * @param outFile - Out RTON
-     * @param decryptRTON - RTON Cipher
-     */
-
-    export function RTONDecrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
-
-    /**
-     *
-     * @param inFile - Pass RTON file here
-     * @param outFile - Pass JSON output here
-     * @returns RTON2JSON
-     */
-    export function RTONDecode(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
-    /**
-     *
-     * @param inFile - Pass JSON file here
-     * @param outFile - Pass RTON output here
-     * @returns JSON2RTON
-     */
-
-    export function RTONEncode(inFile: string, outFile: string, encryptRTON: RTONCipher): void;
-    /**
-     *
-     * @param inFile - Pass PAM file here
-     * @param outFile - Pass PAM JSON output here
-     * @returns Pam to Pam Json
-     */
-
-    export function PAMtoPAMJSON(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
-    /**
-     *
-     * @param inFile - Pass JSON file here
-     * @param outFile - Pass PAM output here
-     * @returns PAM Json to Pam
-     */
-
-    export function PAMJSONtoPAM(PamJson: string, outFile: string): void;
-
-    /**
-     *
-     * @param inFile - PAM JSON
-     * @param outFolder - Out dir
-     * @param resolution - Pass resize resolution
-     */
-
-    export function PAMJSONtoFlashAnimation(PAMJson: string, outFolder: string, resolution: int): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
-
-    /**
-     *
-     * @param inFolder - .XFL
-     * @param outFolder - Out PAM JSON
-     */
-
-    export function FlashAnimationtoPAMJSON(inDirectory: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
-
-    /**
-     *
-     * @param inFile - PAM
-     * @param outFolder - Out dir
-     * @param resolution - Pass resize resolution
-     */
-
-    export function PAMtoFlashAnimation(inFile: string, outFolder: string, resolution: int): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
-    /**
-     *
-     * @param inFolder - .XFL
-     * @param outFolder - Out PAM
-     */
-
-    export function FlashAnimationtoPAM(inFolder: string, outFile: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): void;
-
-    /**
-     *
-     * @param inFile - Pass RSG file path
-     * @param outFolder - Out directory
-     * @param useResDirectory - Want to use res dir or not
-     */
-
-    export function RSGUnpack(inFile: string, outFolder: string, useResDirectory: boolean = true): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
-    /**
-     *
-     * @param inDirectory - Pass RSG packet directory path
-     * @param outFile - Out File
-     */
-
-    export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo, useResDirectory: boolean = true): void;
-    /**
-     *
-     * @param inFile - Pass RSB file path
-     * @param outFolder - Out directory unpacked
-     */
-
-    export function RSBUnpack(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
-    /**
-     *
-     * @param inDirectory - Pass RSB bundle directory path
-     * @param outFile - Out RSB
-     */
-
-    export function RSBPack(inDirectory: string, outFile: string, manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo): void;
-
-    /**
-     *
-     * @param base - Pass zlib base
-     * @param outFile - Pass outfile
-     */
-
-    export function PopCapZlibCompress(Ripefile: string, Use64variant: boolean, outFile: string, zlibLevel: Sen.Script.Modules.Compression.Constraints.ZlibLevel): void;
-    /**
-     *
-     * @param base - Pass zlib base
-     * @param outFile - Pass outfile
-     */
-
-    export function PopCapZlibUncompress(Ripefile: string, Use64variant: boolean, outFile: string): void;
-    /**
-     *
-     * @param inRSG - Pass RSG base
-     */
-
-    export function GetRSBPacketInfo(inRSG: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo;
-
-    /**
-     *
-     * @param inRSB - Pass RSB base
-     */
-
-    export function ProcessRSBData(inRSB: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead;
-    /**
-     *
-     * @param inRTON - Pass RTON
-     */
-
-    export function ProcessRTONData(inRTON: string): Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONHead;
-    /**
-     *
-     * @param inPAM - Pass PAM
-     */
-
-    export function ProcessPAMData(inPAM: string): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PAMHeader;
-
-    /**
-     *
-     * @param inWEM - Pass wem path
-     * @param outOGG - Pass OGG output path
-     */
-
-    export function WemToOGG(inWEM: string, outOGG: string, destination: string, inlineCodebook: boolean, inlineSetup: boolean): void;
-    /**
-     *
-     * @param inFile - Pass RSB file path
-     * @param outRsb - Out RSB
-     */
-
-    export function RSBObfuscate(inFile: string, outRsb: string): void;
-
-    /**
-     *
-     * @param bnk_in - Pass BNK in
-     * @param bnk_dir_out - Pass dir out
-     */
-
-    export function WWiseSoundBankDecode(bnk_in: string, bnk_dir_out: string): Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple;
-
-    /**
-     *
-     * @param soundbank_dir - Pass BNK dir in
-     * @param out_bnk - Pass BNK out
-     * @param information - Pass soundbank json deserialized
-     */
-
-    export function WWiseSoundBankEncode(soundbank_dir: string, out_bnk: string, information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple): void;
-
-    /**
-     *
-     * @param inDir - Pass directory
-     * @param resolution - Pass resolution
-     * @returns Flash animation resize
-     */
-
-    export function FlashAnimationResize(inDir: string, resolution: int): void;
-    /**
-     *
-     * @param inFile - Pass RSB file path
-     * @param outFolder - Out directory unpacked
-     */
-
-    export function RSBUnpackByLooseConstraints(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
-}
-
-/**
- * Strictly checking version
- */
-
-declare namespace ShellVersion {
-    /**
-     * Shell version of the current Shell
-     */
-
-    export const ShellVersion: int;
-
-    /**
-     * Script version of the current Script
-     */
-
-    export const ScriptRequirement: int;
-}
-
-/**
- * Download update
- */
-
-declare namespace ShellUpdate {
-    /**
-     *
-     * @param url - Provide link
-     * @param user_agent - Provide User Agent
-     * @returns context string
-     */
-
-    export function SendGetRequest(url: string, user_agent: string): GitHubReleases;
-
-    /**
-     *
-     * @param save_dir - Provide shell directory
-     * @param link - Provide download link to GitHub API
-     * @param index - Provide index
-     * @param shell_name - Provide download shell: shell.exe for example
-     */
-
-    export function DownloadShell(save_dir: string, link: string, index: int, shell_name: string): void;
-
-    /**
-     * @returns If the user provide admin permission to execute
-     */
-
-    export function HasAdmin(): boolean;
-
-    /**
-     *
-     * @param fileUrl - Pass URL here
-     * @param filePath - Pass output path
-     * @param user_agent - Pass User agent
-     */
-
-    export function DownloadFromServer(fileUrl: string, filePath: string, user_agent: string): void;
-
-    /**
-     *
-     * @param fileUrls - Pass URL here
-     * @param filePaths - Pass output path
-     * @param user_agent - Pass User agent
-     */
-
-    export function DownloadFromMultipleThread(fileUrls: string[], filePaths: string[], user_agent: string): void;
-}
-
-declare interface GitHubReleases {
-    url: string;
-    assets_url: string;
-    upload_url: string;
-    html_url: string;
-    id: number;
-    author: {
-        login: string;
-        id: number;
-        node_id: string;
-        avatar_url: string;
-        gravatar_id: string;
-        url: string;
-        html_url: string;
-        followers_url: string;
-        following_url: string;
-        gists_url: string;
-        starred_url: string;
-        subscriptions_url: string;
-        organizations_url: string;
-        repos_url: string;
-        events_url: string;
-        received_events_url: string;
-        type: string;
-        site_admin: boolean;
-    };
-    node_id: string;
-    tag_name: string;
-    target_commitish: string;
-    name: string;
-    draft: boolean;
-    prerelease: boolean;
-    created_at: string;
-    published_at: string;
-    assets: Array<{
-        url: string;
-        id: number;
-        node_id: string;
-        name: string;
-        label: null | string;
-        uploader: {
-            login: string;
-            id: number;
-            node_id: string;
-            avatar_url: string;
-            gravatar_id: string;
-            url: string;
-            html_url: string;
-            followers_url: string;
-            following_url: string;
-            gists_url: string;
-            starred_url: string;
-            subscriptions_url: string;
-            organizations_url: string;
-            repos_url: string;
-            events_url: string;
-            received_events_url: string;
+        declare type PopCap_Subgroup_Parent = {
             type: string;
-            site_admin: boolean;
+            id: string;
+            subgroups: Array<{
+                id: string;
+                res?: string;
+            }>;
         };
-        content_type: string;
-        state: string;
-        size: number;
-        download_count: number;
-        created_at: string;
-        updated_at: string;
-        browser_download_url: string;
-    }>;
-    tarball_url: string;
-    zipball_url: string;
-    body: string;
-}
 
-/**
- * Buffer Compare
- */
+        declare type Resource_Structure_Template = {
+            id: string;
+            parent: string;
+            res?: string;
+            resources: Array<{
+                slot: number;
+                id: string;
+                path: Array<string> | string;
+                type?: string;
+                atlas?: boolean;
+                width?: number;
+                height?: number;
+                runtime?: boolean;
+                parent?: string;
+                ah?: number;
+                aw?: number;
+                ax?: number;
+                ay?: number;
+                x?: number;
+                y?: number;
+                forceOriginalVectorSymbolSize?: boolean;
+                cols?: number;
+                srcpath?: string | Array<string>;
+            }>;
+            type: string;
+        };
 
-declare enum BufferCompare {
-    same = 0,
-    larger = 1,
-    smaller = -1,
-}
+        declare type Resources_Group_Structure_Template = {
+            groups: Array<Resource_Structure_Template & any>;
+            slot_count: number;
+        };
 
-/**
- * Buffer implemented from .NET
- */
+        declare type using_subgroup = {
+            type: string;
+            id: string;
+            subgroups: Array<{
+                id: string;
+                res?: string;
+            }>;
+        };
 
-declare namespace Buffer {
-    /**
-     *
-     * @param size - Pass size to allocate
-     */
-    export function Alloc(size: int): Buffer.JSBuffer;
+        declare type resource_atlas_and_sprites = {
+            id: string;
+            parent: string;
+            res: string;
+            resources: Array<{
+                slot?: number;
+                id: string;
+                path: string | Array<string>;
+                type: string;
+                atlas?: boolean;
+                width?: number;
+                height?: number;
+                runtime?: boolean;
+                parent?: string;
+                ah?: number;
+                aw?: number;
+                ax?: number;
+                ay?: number;
+                x?: number;
+                y?: number;
+                cols?: number;
+            }>;
+            type: string;
+        };
 
-    /**
-     *
-     * @param otherBuffer - Pass other Buffer here to compare
-     */
+        declare type Resource_File_Bundle = {
+            id: string;
+            parent?: string;
+            resources: Array<{
+                slot: number;
+                id: string;
+                path: string;
+                type: string;
+                forceOriginalVectorSymbolSize?: boolean;
+                srcpath?: string | Array<string>;
+            }>;
+            type: string;
+        };
 
-    export function Compare(otherBuffer: Buffer.JSBuffer): BufferCompare;
+        declare type blank_slot = {
+            slot: number;
+        };
 
-    /**
-     *
-     * @param input - Pass string to create buffer
-     */
+        declare type Output_Value = {
+            information: {
+                expand_path: "string" | "array";
+            };
+            groups: {
+                [x: string]: res_json_children;
+            };
+        };
 
-    export function From(input: string): Buffer.JSBuffer;
+        declare type res_json_children = {
+            is_composite: boolean;
+            subgroup: subgroup_children;
+        };
 
-    /**
-     *
-     * @param otherBuffer - Check if it's included
-     */
+        declare type small_bundle_info_json = {
+            is_composite: boolean;
+            subgroups: Array<string>;
+        };
 
-    export function Includes(otherBuffer: Buffer.JSBuffer): boolean;
+        /**
+         * PvZ2 functions from the Shell
+         */
 
-    /**
-     *
-     * @param value - Val find
-     * @param startIndex - Start index
-     * @param endIndex - End index
-     */
-
-    export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
-
-    /**
-     *
-     * @param value - Val find
-     * @param startIndex - Start index
-     * @param endIndex - End index
-     */
-
-    export function LastIndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
-
-    /**
-     *
-     * @param startIndex - Start slice
-     * @param endIndex - End slice
-     */
-
-    export function Slice(startIndex: int = 0, endIndex: int? = null): Buffer.JSBuffer;
-
-    /**
-     * JS Buffer
-     */
-
-    export interface JSBuffer {
-        ToString(): string;
-        readonly Length: int;
-        ToArray(): Array<byte>;
+        declare interface RTONCipher {
+            crypt: boolean;
+            key: string;
+        }
     }
-}
-
-/**
- * XML namespace for PopCap Animation Animate Adobe XML
- */
-
-namespace PvZ2XML {
-    /**
-     *
-     * @param index - Start index
-     * @param transform - Transform
-     * @param outpath - Output path
-     */
-    export function WriteImageDocument(index: int, name: string, size: [int, int], transform: [double, double, double, double, double, double], outpath: string): void;
-    /**
-     *
-     * @param index - Start index
-     * @param name - Name of image
-     * @param outpath - Output path
-     */
-
-    export function WriteSourceDocument(index: int, name: string, size: int[], transform: double[], resolution: int, outpath: string): void;
-
-    export interface DOMDocumentAddon {
-        media: string[];
-        sprite: string[];
-        source: string[];
-        image: string[];
-    }
-
-    export function InsertDOMDocumentData(a: PvZ2XML.DOMDocumentAddon, xml: string, outFile: string): void;
-}
-
-namespace XMLHelper {
-    export function Deserialize<T>(xml: string): T;
-
-    export function Serialize<T>(obj: T, out: string): string;
 }

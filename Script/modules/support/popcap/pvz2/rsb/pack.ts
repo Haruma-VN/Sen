@@ -46,7 +46,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(`${inDirectory}/manifest.json`)
         );
-        PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
+        Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         return;
     }
 
@@ -85,43 +85,43 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const manifestgroup_save: string = `${inDirectory}/packet/${manifest.group[manifest_group].name}.rsg`;
         const packages_save: string = `${inDirectory}/packet/${manifest.group[packages].name}.rsg`;
         const properties: string = `${inDirectory}/resource/PACKAGES`;
-        if (Fs.DirectoryExists(properties)) {
-            const files: Array<string> = Fs.ReadDirectory(properties, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
+        if (Sen.Shell.FileSystem.DirectoryExists(properties)) {
+            const files: Array<string> = Sen.Shell.FileSystem.ReadDirectory(properties, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
             let json_count: int = 0;
             files.forEach((file: string) => {
-                if (Path.Parse(file).ext.toUpperCase() === `.JSON`) {
+                if (Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.JSON`) {
                     json_count++;
-                    PvZ2Shell.RTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), option.encryptRTON ? Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt : Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                    Sen.Shell.PvZ2Shell.RTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), option.encryptRTON ? Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt : Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 }
             });
-            Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs`));
         }
         if (option.generate_resources) {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(`${inDirectory}/res.json`, `${inDirectory}/resource/PROPERTIES/RESOURCES.json`);
-            Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_res_json_to_resources_json")));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_res_json_to_resources_json")));
         } else {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(`${inDirectory}/resource/PROPERTIES/RESOURCES.json`, `${inDirectory}/res.json`, Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(`${inDirectory}/res.json`).expand_path);
-            Console.Print(
+            Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json").replace(/\{\}/g, Path.Parse(manifestgroup_save).name_without_extension))
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension))
             );
         }
         if (manifest_group !== -1) {
-            PvZ2Shell.RTONEncode(`${inDirectory}/resource/PROPERTIES/RESOURCES.json`, `${inDirectory}/resource/PROPERTIES/RESOURCES.RTON`, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
-            PvZ2Shell.RSGPack(`${inDirectory}/resource/`, manifestgroup_save, manifest.group[manifest_group].subgroup[0].packet_info, false);
-            Console.Print(
+            Sen.Shell.PvZ2Shell.RTONEncode(`${inDirectory}/resource/PROPERTIES/RESOURCES.json`, `${inDirectory}/resource/PROPERTIES/RESOURCES.RTON`, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+            Sen.Shell.PvZ2Shell.RSGPack(`${inDirectory}/resource/`, manifestgroup_save, manifest.group[manifest_group].subgroup[0].packet_info, false);
+            Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Path.Parse(manifestgroup_save).name_without_extension))
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension))
             );
         }
         if (packages !== -1) {
-            PvZ2Shell.RSGPack(`${inDirectory}/resource/`, packages_save, manifest.group[packages].subgroup[0].packet_info, false);
-            Console.Print(
+            Sen.Shell.PvZ2Shell.RSGPack(`${inDirectory}/resource/`, packages_save, manifest.group[packages].subgroup[0].packet_info, false);
+            Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Path.Parse(packages_save).name_without_extension))
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension))
             );
         }
-        PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
+        Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         return;
     }
 
@@ -166,7 +166,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 subgroup: [],
             };
             information.groups[composite_group_name].forEach((packet_item_name: string) => {
-                const rsb_rsg_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = PvZ2Shell.GetRSBPacketInfo(`${inDirectory}/packet/${packet_item_name}.rsg`);
+                const rsb_rsg_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = Sen.Shell.PvZ2Shell.GetRSBPacketInfo(`${inDirectory}/packet/${packet_item_name}.rsg`);
                 const packet_category: [number, string | null] = GetCategoryPacket(packet_item_name.toLowerCase());
                 if (!composite_type && packet_category[0] !== 0) {
                     composite_type = true;
@@ -198,7 +198,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>>(`${inDirectory}/pvz2.json`),
             inDirectory
         );
-        PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
+        Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         return;
     }
 }

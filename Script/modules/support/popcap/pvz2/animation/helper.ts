@@ -127,28 +127,26 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
      */
 
     export function AddImageToAnimationAdobeFlash(argument: Array<string>, xfl_path: string, resolution: int): void {
-        const resource_element_addon_dom_document: PvZ2XML.DOMDocumentAddon = {
+        const resource_element_addon_dom_document: Sen.Shell.PvZ2XML.DOMDocumentAddon = {
             media: [],
             source: [],
             sprite: [],
             image: [],
         };
-        const extra_info: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser =
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${xfl_path}/extra.json`);
+        const extra_info: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${xfl_path}/extra.json`);
         const image: Array<string> = Object.keys(extra_info.image);
-        const animation_helper: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson =
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson>(
-                `${MainScriptDirectory}/modules/customization/methods/popcap_animation_helper.json`
-            );
+        const animation_helper: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson>(
+            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation_helper.json`
+        );
         argument
-            .map((element: string) => DotNetBitmap.GetDimension<int>(element) satisfies Sen.Script.Modules.BitMap.Constraints.ImageInfo<int>)
+            .map((element: string) => Sen.Shell.DotNetBitmap.GetDimension<int>(element) satisfies Sen.Script.Modules.BitMap.Constraints.ImageInfo<int>)
             .forEach((element: Sen.Script.Modules.BitMap.Constraints.ImageInfo<int>, index: int) => {
-                const resource_dom_document_name: string = Path.Parse(element.file_path).name_without_extension;
+                const resource_dom_document_name: string = Sen.Shell.Path.Parse(element.file_path).name_without_extension;
                 const resource_dom_document_index: int = image.length + index + 0x01;
                 const dimension_x: [double, double] = [element.width * 0.78125, element.height * 0.78125];
                 resource_element_addon_dom_document.media.push(resource_dom_document_name);
                 extra_info.image[`image_${resource_dom_document_index}`] = {
-                    name: `${resource_dom_document_name}|${animation_helper.id_replacer}${Path.Parse(element.file_path).name_without_extension.toUpperCase()}`,
+                    name: `${resource_dom_document_name}|${animation_helper.id_replacer}${Sen.Shell.Path.Parse(element.file_path).name_without_extension.toUpperCase()}`,
                     width: dimension_x[0x00] - Math.ceil(dimension_x[0x00]) < 0.5 ? Math.ceil(dimension_x[0x00]) : Math.floor(dimension_x[0x00]),
                     height: dimension_x[0x01] - Math.ceil(dimension_x[0x01]) < 0.5 ? Math.ceil(dimension_x[0x01]) : Math.floor(dimension_x[0x01]),
                 };
@@ -156,28 +154,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                 const transform: [double, double, double, double, double, double] = [0x01, 0x00, 0x00, 0x01, 0x00, ~0x01 + 0x01];
                 resource_element_addon_dom_document.image.push(`image_${resource_dom_document_index}`);
                 resource_element_addon_dom_document.source.push(`source_${resource_dom_document_index}`);
-                PvZ2XML.WriteImageDocument(
-                    resource_dom_document_index,
-                    resource_dom_document_name,
-                    dimension,
-                    transform,
-                    `${xfl_path}/LIBRARY/image/image_${resource_dom_document_index}.xml`
-                );
-                PvZ2XML.WriteSourceDocument(
-                    resource_dom_document_index,
-                    resource_dom_document_name,
-                    dimension,
-                    transform,
-                    resolution,
-                    `${xfl_path}/LIBRARY/source/source_${resource_dom_document_index}.xml`
-                );
-                Fs.CopyFile(element.file_path, `${xfl_path}/LIBRARY/media/${Path.Parse(element.file_path).name}`);
+                Sen.Shell.PvZ2XML.WriteImageDocument(resource_dom_document_index, resource_dom_document_name, dimension, transform, `${xfl_path}/LIBRARY/image/image_${resource_dom_document_index}.xml`);
+                Sen.Shell.PvZ2XML.WriteSourceDocument(resource_dom_document_index, resource_dom_document_name, dimension, transform, resolution, `${xfl_path}/LIBRARY/source/source_${resource_dom_document_index}.xml`);
+                Sen.Shell.FileSystem.CopyFile(element.file_path, `${xfl_path}/LIBRARY/media/${Sen.Shell.Path.Parse(element.file_path).name}`);
             });
-        PvZ2XML.InsertDOMDocumentData(
-            resource_element_addon_dom_document,
-            Fs.ReadText(`${xfl_path}/DOMDocument.xml`, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
-            `${xfl_path}/DOMDocument.xml`
-        );
+        Sen.Shell.PvZ2XML.InsertDOMDocumentData(resource_element_addon_dom_document, Sen.Shell.FileSystem.ReadText(`${xfl_path}/DOMDocument.xml`, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), `${xfl_path}/DOMDocument.xml`);
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${xfl_path}/extra.json`, extra_info);
         return;
     }

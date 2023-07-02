@@ -5,6 +5,7 @@ using Sen.Shell.Modules.Support.TextureEncode.RSB;
 using Sen.Shell.Modules.Support.PvZ2;
 using Jint;
 using Sen.Shell.Modules.Support.Download;
+using Jint.Native;
 
 namespace Sen.Shell.Modules.JavaScript
 {
@@ -17,74 +18,35 @@ namespace Sen.Shell.Modules.JavaScript
             var fs = new FileSystem();
             var main_js = path.Resolve($"{Script_Directory}/main.js");
             var SystemConsole = new SystemImplement();
-            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly));
-
-            engine.SetValue("Fs", fs);
-            engine.SetValue("args", args);
-            engine.SetValue("MainScriptDirectory", (Script_Directory));
-            engine.SetValue("Console", SystemConsole);
-            engine.SetValue("TypeChecker", new TypeChecker());
-            engine.SetValue("JavaScriptEngine", engine);
-            engine.SetValue("Path", path);
-            engine.SetValue("DotNetPlatform", new Platform());
-            engine.SetValue("DotNetBitmap", new Bitmap_Implement());
-            engine.SetValue("DotNetCrypto", new ImplementCrypto());
-            engine.SetValue("DotNetCompress", new Compress());
-            engine.SetValue("JsonLibrary", new JsonImplement());
-            engine.SetValue("DotNetLocalization", new Localization());
-            engine.SetValue("TextureHandler", new TextureEncoderFast());
-            engine.SetValue("TextureHandlerPromise", new TextureEncoderAsync());
-            engine.SetValue("PvZ2Shell", new PvZ2Shell());
-            engine.SetValue("ShellVersion", new Version());
-            engine.SetValue("ShellUpdate", new DownloadUpdate());
-            engine.SetValue("Buffer", typeof(Implement.Buffer));
-            engine.SetValue("PvZ2XML", new Support.Flash.PvZ2XML());
-            engine.SetValue("XMLHelper", new Support.Flash.XmlHelper());
-
-            try
+            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
+            var ns = new JsObject(engine);
+            var dictionary = new Dictionary<string, object>
             {
-                engine.Execute(fs.ReadText(main_js, EncodingType.UTF8), main_js);
-            }
-            catch(Exception ex)
-            {
-                EvaluateError(Script_Directory, ex);
-            }
-
+                {"FileSystem", fs },
+                { "argument", args },
+                { "MainScriptDirectory", Script_Directory },
+                { "Console", SystemConsole },
+                { "JavaScriptCoreEngine", engine },
+                { "Path", path },
+                {"DotNetPlatform", new Platform()},
+                {"DotNetBitmap", new Bitmap_Implement()},
+                {"DotNetCrypto", new ImplementCrypto()},
+                {"DotNetCompress", new Compress()},
+                {"JsonLibrary", new JsonImplement()},
+                {"DotNetLocalization", new Localization()},
+                {"TextureHandler", new TextureEncoderFast()},
+                {"TextureHandlerPromise", new TextureEncoderAsync()},
+                {"PvZ2Shell", new PvZ2Shell()},
+                {"ShellVersion", new Version()},
+                {"ShellUpdate", new DownloadUpdate()},
+                {"Buffer", typeof(Implement.Buffer)},
+                {"PvZ2XML", new Support.Flash.PvZ2XML()},
+                {"XMLHelper", new Support.Flash.XmlHelper()},
+            };
+            ns.Set("Shell", JsValue.FromObject(engine, dictionary));
+            engine.SetValue("Sen", ns);
+            engine.Execute(fs.ReadText(main_js, EncodingType.UTF8), main_js);
             return;
         }
-
-
-        public static void EvaluateError(in string Script_Directory, Exception ex)
-        {
-            var path = new ImplementPath();
-            var fs = new FileSystem();
-            var SystemConsole = new SystemImplement();
-            var engine = new Engine();
-            engine.SetValue("DotNetExceptionArg", ex);
-
-            engine.SetValue("Fs", fs);
-            engine.SetValue("MainScriptDirectory", (Script_Directory));
-            engine.SetValue("Console", SystemConsole);
-            engine.SetValue("TypeChecker", new TypeChecker());
-            engine.SetValue("JavaScriptEngine", engine);
-            engine.SetValue("Path", path);
-            engine.SetValue("DotNetPlatform", new Platform());
-            engine.SetValue("DotNetBitmap", new Bitmap_Implement());
-            engine.SetValue("DotNetCrypto", new ImplementCrypto());
-            engine.SetValue("DotNetCompress", new Compress());
-            engine.SetValue("JsonLibrary", new JsonImplement());
-            engine.SetValue("DotNetLocalization", new Localization());
-            engine.SetValue("TextureHandler", new TextureEncoderFast());
-            engine.SetValue("TextureHandlerPromise", new TextureEncoderAsync());
-            engine.SetValue("PvZ2Shell", new PvZ2Shell());
-            engine.SetValue("ShellVersion", new Version());
-            engine.SetValue("ShellUpdate", new DownloadUpdate());
-            engine.SetValue("Buffer", typeof(Implement.Buffer));
-            engine.SetValue("PvZ2XML", new Support.Flash.PvZ2XML());
-            engine.SetValue("XMLHelper", new Support.Flash.XmlHelper());
-            engine.Execute(
-                fs.ReadText(path.Resolve($"{Script_Directory}/modules/system/default/exception_handler.js"), EncodingType.UTF8));
-        }
-
     }
 }

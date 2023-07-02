@@ -116,11 +116,8 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
      */
 
     export function WWiseSoundbankDecodeBySimple(inFile: string, outDirectory: string): void {
-        const information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple = PvZ2Shell.WWiseSoundBankDecode(inFile, outDirectory);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple>(
-            `${outDirectory}/definition.json`,
-            information
-        );
+        const information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple = Sen.Shell.PvZ2Shell.WWiseSoundBankDecode(inFile, outDirectory);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple>(`${outDirectory}/definition.json`, information);
         return;
     }
 
@@ -132,9 +129,8 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
      */
 
     export function WWiseSoundbankEncodeBySimple(inDirectory: string, outFile: string): void {
-        const information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple =
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple>(`${inDirectory}/definition.json`);
-        PvZ2Shell.WWiseSoundBankEncode(inDirectory, outFile, information);
+        const information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple>(`${inDirectory}/definition.json`);
+        Sen.Shell.PvZ2Shell.WWiseSoundBankEncode(inDirectory, outFile, information);
         return;
     }
 }

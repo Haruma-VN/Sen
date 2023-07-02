@@ -48,12 +48,6 @@ namespace Sen.Script.Modules.Platform.Constraints {
      */
 
     export function ExitProgram(): void {
-        Console.Print(
-            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(
-                /{\}/g,
-                Sen.Script.Modules.System.Default.Localization.GetString("press_any_key_to_continue"),
-            ),
-        );
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(/{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("press_any_key_to_continue")));
     }
 }

@@ -32,10 +32,6 @@ namespace Sen.Shell
             {
                 JSEngine.Execute(Script_Directory, args);
             }
-            catch (Exception ex)
-            {
-                JSEngine.EvaluateError(Script_Directory, ex);
-            }
             finally
             {
                 SystemConsole.TerminateProgram();

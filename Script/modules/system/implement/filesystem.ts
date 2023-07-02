@@ -7,7 +7,7 @@ namespace Sen.Script.Modules.FileSystem {
          */
 
         public static ReadJson<Generic_T>(filePath: string): Generic_T {
-            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(Fs.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), Sen.Script.Modules.System.Default.Localization.use_trailing_commas, filePath);
+            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(Sen.Shell.FileSystem.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), Sen.Script.Modules.System.Default.Localization.use_trailing_commas, filePath);
         }
 
         /**
@@ -19,7 +19,7 @@ namespace Sen.Script.Modules.FileSystem {
          */
 
         public static WriteJson<Generic_T>(output_path: string, serializedJson: Generic_T, indent: string | number = "\t"): void {
-            Fs.OutFile(output_path, Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent, Sen.Script.Modules.System.Default.Localization.use_trailing_commas));
+            Sen.Shell.FileSystem.OutFile(output_path, Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent, Sen.Script.Modules.System.Default.Localization.use_trailing_commas));
             return;
         }
     }
@@ -43,19 +43,19 @@ namespace Sen.Script.Modules.FileSystem {
     export function FilterFilePath(filePath: string, filters: Array<string>, excludes: Array<string>, file_type: filter_file_type = "unknown"): boolean {
         switch (file_type) {
             case "directory": {
-                if (!Fs.DirectoryExists(filePath)) {
+                if (!Sen.Shell.FileSystem.DirectoryExists(filePath)) {
                     return false;
                 }
                 break;
             }
             case "file": {
-                if (!Fs.FileExists(filePath)) {
+                if (!Sen.Shell.FileSystem.FileExists(filePath)) {
                     return false;
                 }
                 break;
             }
             case "unknown": {
-                if (Fs.DirectoryExists(filePath) || Fs.FileExists(filePath)) {
+                if (Sen.Shell.FileSystem.DirectoryExists(filePath) || Sen.Shell.FileSystem.FileExists(filePath)) {
                     break;
                 }
             }

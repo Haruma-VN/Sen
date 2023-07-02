@@ -227,7 +227,7 @@
     "popcap_rton_encode_and_encrypt": "PopCap JSON to RTON and Encrypt RTON",
     "popcap_rton_decrypt_and_decode": "PopCap RTON Decrypt and Convert To JSON",
     "popcap_add_image_to_flash_animation_adobe": "PopCap Animation: Add Image to Flash Animation",
-    "input_more_that_path": "Input more {} to continue or click enter to finish input...",
+    "input_more_that_path": "Input one {} to continue...",
     "file_assert_is_not": "File assert is not exists or not {}",
     "unsupported_rsb_version_not_4": "Does not support version other than version 4 for this function",
     "flash_animation_resize": "Animate Adobe Flash Animation Resize",
@@ -252,5 +252,9 @@
     "convert_everything_after_unpack_all_rsgs": "Convert PopCap's File Structure to Workable Structure After Unpack All RSGs",
     "not_convert_everything_after_unpack_all_rsgs": "Use \"unpack\" directory only, this directory only contains RSGs after unpacked",
     "popcap_rsb_unpack_with_simplified_manifest": "PopCap RSB Unpack With Simplified Manifest for PvZ2",
-    "popcap_rsb_pack_with_simplified_manifest": "PopCap RSB Pack With Simplified Manifest for PvZ2"
+    "popcap_rsb_pack_with_simplified_manifest": "PopCap RSB Pack With Simplified Manifest for PvZ2",
+    "sprite_distribution": "Sprite for the input Image",
+    "add_to_existed_sprite": "Add to existed sprite",
+    "do_not_touch_sprite": "Don't touch sprite",
+    "generate_a_new_sprite": "Generate a new sprite"
 }

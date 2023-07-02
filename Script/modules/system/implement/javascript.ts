@@ -6,7 +6,7 @@ namespace Sen.Script.Modules.System.Implement.JavaScript {
      */
     export function Evaluate(js_string_to_evaluate: string, source: string): void {
         try {
-            JavaScriptEngine.Evaluate(js_string_to_evaluate, source);
+            Sen.Shell.JavaScriptCoreEngine.Evaluate(js_string_to_evaluate, source);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as Error).message, source);
         }
@@ -21,10 +21,7 @@ namespace Sen.Script.Modules.System.Implement.JavaScript {
 
     export function JSEvaluate(js_path: string): void {
         try {
-            Sen.Script.Modules.System.Implement.JavaScript.Evaluate(
-                Fs.ReadText(js_path, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
-                js_path,
-            );
+            Sen.Script.Modules.System.Implement.JavaScript.Evaluate(Sen.Shell.FileSystem.ReadText(js_path, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), js_path);
         } catch (error: any) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as Error).message, js_path);
         }
