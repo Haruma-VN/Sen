@@ -142,12 +142,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     });
                 }
                 break;
@@ -179,7 +179,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                         Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                        `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                        `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
                         `resolution`
                     );
                     const sprite_distribution: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("sprite_distribution"), [1, 2, 3], {
@@ -215,7 +215,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         }
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
                             `resolution`
                         );
                         const sprite_distribution: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("sprite_distribution"), [1, 2, 3], {
@@ -232,12 +232,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Shell.PvZ2Shell.RTONEncrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.RTONEncrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     });
                 }
                 break;
@@ -245,13 +245,33 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "wwise_media_to_ogg": {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.ogg`);
+                    const inlineCodebook: boolean = Boolean(
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("is_inline_codebook"), `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`, `inlineCodebook`)
+                    );
+                    const inlineSetup: boolean = Boolean(
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("is_inline_setup"), `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`, `inlineSetup`)
+                    );
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Shell.PvZ2Shell.WemToOGG(argument, output_argument, `${Sen.Shell.MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`, false, false);
+                    try {
+                        Sen.Shell.PvZ2Shell.WemToOGG(argument, output_argument, `${Sen.Shell.MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`, inlineCodebook, inlineSetup);
+                    } catch (error: unknown) {
+                        throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, argument);
+                    }
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.ogg`);
+                        const inlineCodebook: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("is_inline_codebook"), `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`, `inlineCodebook`)
+                        );
+                        const inlineSetup: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("is_inline_setup"), `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`, `inlineSetup`)
+                        );
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.WemToOGG(arg, output_argument, `${Sen.Shell.MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`, false, false);
+                        try {
+                            Sen.Shell.PvZ2Shell.WemToOGG(arg, output_argument, `${Sen.Shell.MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`, inlineCodebook, inlineSetup);
+                        } catch (error: unknown) {
+                            throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, arg);
+                        }
                     });
                 }
                 break;
@@ -294,7 +314,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_resources_conversion.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_resources_conversion.json`,
                             `expand_path`
                         ) as 1 | 2) === 1
                             ? "array"
@@ -312,7 +332,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
                                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_resources_conversion.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_resources_conversion.json`,
                                 `expand_path`
                             ) as 1 | 2) === 1
                                 ? "array"
@@ -390,7 +410,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                             `expand_path`
                         ) as 1 | 2) === 1
                             ? "array"
@@ -403,7 +423,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"), Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton")],
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"), Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                             `encryptedRton`
                         ) as 0 | 1
                     );
@@ -423,7 +443,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
                                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                                 `expand_path`
                             ) as 1 | 2) === 1
                                 ? "array"
@@ -436,7 +456,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"), Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"), Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                                 `encryptedRton`
                             ) as 0 | 1
                         );
@@ -515,7 +535,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "0": [Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt"), Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt")],
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c"), Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                             `encryptedRton`
                         ) as 0 | 1
                     );
@@ -527,7 +547,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically"), Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically")],
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json"), Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                             `use_res_json`
                         ) as 1 | 2) === 1
                             ? true
@@ -549,7 +569,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt"), Sen.Script.Modules.System.Default.Localization.GetString("ignore_encrypt")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c"), Sen.Script.Modules.System.Default.Localization.GetString("encrypt_pvz2_rtons_for_pvz2c")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                                 `encryptedRton`
                             ) as 0 | 1
                         );
@@ -561,7 +581,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically"), Sen.Script.Modules.System.Default.Localization.GetString("convert_by_automatically")],
                                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json"), Sen.Script.Modules.System.Default.Localization.GetString("use_legacy_resources_json")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_simple.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_simple.json`,
                                 `use_res_json`
                             ) as 1 | 2) === 1
                                 ? true
@@ -612,7 +632,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                     const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
                         Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${argument}/extra.json`)
                     );
-                    Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(argument, output_argument, extra);
+                    try {
+                        Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(argument, output_argument, extra);
+                    } catch (error: unknown) {
+                        throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, argument);
+                    }
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.pam`);
@@ -620,7 +644,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
                             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${arg}/extra.json`)
                         );
-                        Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(arg, output_argument, extra);
+                        try {
+                            Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(arg, output_argument, extra);
+                        } catch (error: unknown) {
+                            throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, arg);
+                        }
                     });
                 }
                 break;
@@ -629,12 +657,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.json`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.json`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                     });
                 }
                 break;
@@ -643,12 +671,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.json`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.json`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     });
                 }
                 break;
@@ -657,12 +685,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.rton`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Shell.PvZ2Shell.RTONEncode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.rton`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.RTONEncode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     });
                 }
                 break;
@@ -671,12 +699,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.rton`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Shell.PvZ2Shell.RTONEncode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 } else {
                     argument.forEach((arg: string) => {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.rton`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.RTONEncode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                     });
                 }
                 break;
@@ -779,7 +807,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_id"), Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_id")],
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_path"), Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_path")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_split.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_split.json`,
                             `method`
                         ) as 1 | 2) === 2
                             ? "path"
@@ -792,7 +820,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_split.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_split.json`,
                             `expand_path`
                         ) as 1 | 2) === 1
                             ? "array"
@@ -811,7 +839,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_id"), Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_id")],
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_path"), Sen.Script.Modules.System.Default.Localization.GetString("split_atlas_to_sprites_by_property_path")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_split.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_split.json`,
                             `method`
                         ) as 1 | 2) === 2
                             ? "path"
@@ -850,7 +878,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                         Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                        `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                        `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
                         `resolution`
                     );
                     const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.xfl`);
@@ -860,7 +888,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     argument.forEach((arg: string) => {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
                             `resolution`
                         );
                         const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.xfl`);
@@ -890,12 +918,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 if (!Array.isArray(argument)) {
                     const original: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                         Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_original_res"),
-                        `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_sprite_resize.json`,
+                        `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_sprite_resize.json`,
                         `original_res`
                     );
                     const modified: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                         Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_output_res"),
-                        `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_sprite_resize.json`,
+                        `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_sprite_resize.json`,
                         `output_res`
                     );
                     const output_argument: string = Sen.Shell.Path.Resolve(argument.replace(original.toString(), modified.toString()));
@@ -905,12 +933,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                     argument.forEach((arg: string) => {
                         const original: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_original_res"),
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_sprite_resize.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_sprite_resize.json`,
                             `original_res`
                         );
                         const modified: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_output_res"),
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_sprite_resize.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_sprite_resize.json`,
                             `output_res`
                         );
                         const output_argument: string = Sen.Shell.Path.Resolve(arg.replace(original.toString(), modified.toString()));
@@ -955,7 +983,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                     const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                         Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                        `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                        `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
                         `resolution`
                     );
                     Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimateAdobeFlashAnimation(argument, output_argument, resolution);
@@ -966,7 +994,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
                             `resolution`
                         );
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationJsonToAnimateAdobeFlashAnimation(arg, output_argument, resolution);
@@ -977,11 +1005,19 @@ namespace Sen.Script.Modules.Interface.Execute {
             case "flash_animation_resize": {
                 if (!Array.isArray(argument)) {
                     const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"));
-                    Sen.Shell.PvZ2Shell.FlashAnimationResize(argument, resolution);
+                    try {
+                        Sen.Shell.PvZ2Shell.FlashAnimationResize(argument, resolution);
+                    } catch (error: unknown) {
+                        throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, argument);
+                    }
                 } else {
                     argument.forEach((arg: string) => {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"));
-                        Sen.Shell.PvZ2Shell.FlashAnimationResize(arg, resolution);
+                        try {
+                            Sen.Shell.PvZ2Shell.FlashAnimationResize(arg, resolution);
+                        } catch (error: unknown) {
+                            throw new Sen.Script.Modules.Exceptions.EvaluateError(`${(error as any).message}`, arg);
+                        }
                     });
                 }
                 break;
@@ -996,13 +1032,17 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_zlib.json`,
                             `use_64_bit_variant`
                         ) as 0 | 1
                     );
                     const output_argument: string = Sen.Shell.Path.Resolve(`${argument}.bin`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Shell.PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
+                    try {
+                        Sen.Shell.PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
+                    } catch (error: unknown) {
+                        throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
+                    }
                 } else {
                     argument.forEach((arg: string) => {
                         const use_64bit_variant: boolean = Boolean(
@@ -1013,13 +1053,17 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_zlib.json`,
                                 `use_64_bit_variant`
                             ) as 0 | 1
                         );
                         const output_argument: string = Sen.Shell.Path.Resolve(`${arg}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
+                        try {
+                            Sen.Shell.PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
+                        } catch (error: unknown) {
+                            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
+                        }
                     });
                 }
                 break;
@@ -1034,7 +1078,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "0": [Sen.Script.Modules.System.Default.Localization.GetString("not_convert_everything_after_unpack_all_rsgs"), Sen.Script.Modules.System.Default.Localization.GetString("not_convert_everything_after_unpack_all_rsgs")],
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_everything_after_unpack_all_rsgs"), Sen.Script.Modules.System.Default.Localization.GetString("convert_everything_after_unpack_all_rsgs")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                             `use_convert`
                         ) as 0 | 1) === 1
                             ? true
@@ -1042,7 +1086,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (use_convert) {
                         const architecture: "android" | "ios" | "android_cn" = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArchitecture(
                             Sen.Script.Modules.System.Default.Localization.GetString("input_architecture"),
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                             `architecture`
                         );
                         const extract_atlas: boolean =
@@ -1053,7 +1097,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_extract_atlas")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `extract_atlas`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1066,7 +1110,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_bnk")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `decode_bnk`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1079,7 +1123,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_pam")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_pam")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `decode_pam`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1100,7 +1144,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
                                         ],
                                     },
-                                    `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                     `convert_pam_json_to_flash_animation`
                                 ) as 0 | 1) === 1
                                     ? true
@@ -1110,7 +1154,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         if (convert_pam_to_flash_animation) {
                             resolution = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `resolution`
                             );
                         }
@@ -1122,7 +1166,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_rtons")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `decode_rtons`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1137,7 +1181,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"), Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton")],
                                         "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"), Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt")],
                                     },
-                                    `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                     `encryptedRton`
                                 ) as 0 | 1
                             );
@@ -1150,7 +1194,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
                                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `expand_path`
                             ) as 1 | 2) === 1
                                 ? "array"
@@ -1185,7 +1229,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     argument.forEach((arg: string) => {
                         const architecture: "android" | "ios" | "android_cn" = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArchitecture(
                             Sen.Script.Modules.System.Default.Localization.GetString("input_architecture"),
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                             `architecture`
                         );
                         const extract_atlas: boolean =
@@ -1196,7 +1240,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_extract_atlas")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("extract_atlas")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `extract_atlas`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1209,7 +1253,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_bnk")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_bnk")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `decode_bnk`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1222,7 +1266,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_pam")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_pam")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `decode_pam`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1243,7 +1287,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             Sen.Script.Modules.System.Default.Localization.GetString("convert_pam_json_to_flash_animation"),
                                         ],
                                     },
-                                    `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                     `convert_pam_json_to_flash_animation`
                                 ) as 0 | 1) === 1
                                     ? true
@@ -1253,7 +1297,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         if (convert_pam_to_flash_animation) {
                             resolution = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `resolution`
                             );
                         }
@@ -1265,7 +1309,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")), Sen.Script.Modules.System.Default.Localization.GetString("not_decode_rtons")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")), Sen.Script.Modules.System.Default.Localization.GetString("decode_rtons")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `decode_rtons`
                             ) as 0 | 1) === 1
                                 ? true
@@ -1280,7 +1324,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"), Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton")],
                                         "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"), Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt")],
                                     },
-                                    `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                    `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                     `encryptedRton`
                                 ) as 0 | 1
                             );
@@ -1293,7 +1337,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_old_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_old_resources_path")],
                                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("select_this_if_you_are_modding_on_pvz2_new_resources"), Sen.Script.Modules.System.Default.Localization.GetString("using_new_resources_path")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rsb_unpack_resource.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rsb_unpack_resource.json`,
                                 `expand_path`
                             ) as 1 | 2) === 1
                                 ? "array"
@@ -1331,13 +1375,17 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_zlib.json`,
                             `use_64_bit_variant`
                         ) as 0 | 1
                     );
                     const output_argument: string = Sen.Shell.Path.Resolve(`${argument}.bin`);
                     Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                    Sen.Shell.PvZ2Shell.PopCapZlibUncompress(argument, use_64bit_variant, output_argument);
+                    try {
+                        Sen.Shell.PvZ2Shell.PopCapZlibUncompress(argument, use_64bit_variant, output_argument);
+                    } catch (error: unknown) {
+                        throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
+                    }
                 } else {
                     argument.forEach((arg: string) => {
                         const use_64bit_variant: boolean = Boolean(
@@ -1348,13 +1396,17 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_zlib.json`,
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_zlib.json`,
                                 `use_64_bit_variant`
                             ) as 0 | 1
                         );
                         const output_argument: string = Sen.Shell.Path.Resolve(`${arg}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.PopCapZlibUncompress(arg, use_64bit_variant, output_argument);
+                        try {
+                            Sen.Shell.PvZ2Shell.PopCapZlibUncompress(arg, use_64bit_variant, output_argument);
+                        } catch (error: unknown) {
+                            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
+                        }
                     });
                 }
                 break;

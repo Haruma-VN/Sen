@@ -127,7 +127,7 @@ namespace Sen.Shell.Modules.Standards
             }
             else
             {
-                throw new ArgumentException($"Invalid zlib. Expected byte array or byte[].");
+                throw new Exception($"invalid_zlib");
             }
             try
             {
@@ -142,16 +142,22 @@ namespace Sen.Shell.Modules.Standards
             }
             catch (Exception ex)
             {
-                throw new ZlibException(ex.Message, $"Zlib compress error");
+                throw new Exception(ex.Message);
             }
         }
 
 
         public override void UncompressZip(string zip_input, string extracted_directory)
         {
-            using var zip = ZipFile.Read(zip_input);
+            try{
+                using var zip = ZipFile.Read(zip_input);
+                {
+                    zip.ExtractAll(extracted_directory);
+                }
+            }
+            catch(Exception ex)
             {
-                zip.ExtractAll(extracted_directory);
+                throw new Exception($"{ex.Message}");
             }
             return;
         }
@@ -183,7 +189,7 @@ namespace Sen.Shell.Modules.Standards
             }
             else
             {
-                throw new ArgumentException($"Invalid zlib. Expected byte array or byte[].");
+                throw new Exception($"invalid_zlib");
             }
             try
             {
@@ -199,7 +205,7 @@ namespace Sen.Shell.Modules.Standards
             }
 
             catch (Exception e) { 
-                throw new ZlibException(e.Message, $"Zlib uncompress error");
+                throw new Exception(e.Message);
             }
         }
     }

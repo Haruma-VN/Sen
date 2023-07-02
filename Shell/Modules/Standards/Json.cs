@@ -109,10 +109,6 @@ namespace Sen.Shell.Modules.Standards
 
         public static string[] Keys<Generic_T>(Generic_T obj)
         {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
             var type = obj.GetType();
             var propertyInfos = type.GetProperties();
             var keys = new List<string>();
@@ -125,10 +121,6 @@ namespace Sen.Shell.Modules.Standards
 
         public static object[] Values<Generic_T>(Generic_T obj)
         {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
             var values = new List<object>();
             var type = obj.GetType();
             var propertyInfos = type.GetProperties();
@@ -143,10 +135,6 @@ namespace Sen.Shell.Modules.Standards
 
         public static object[][] Entries<Generic_T>(Generic_T obj)
         {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
             var entries = new List<object[]>();
             var keys = Object.Keys<Generic_T>(obj);
             var values = Object.Values<Generic_T>(obj);

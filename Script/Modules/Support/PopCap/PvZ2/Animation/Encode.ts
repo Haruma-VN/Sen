@@ -241,8 +241,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
      */
 
     export function PopCapAnimationToAnimationJson(inFile: string, outFile: string): void {
-        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.PAMtoPAMJSON(inFile);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
+        try {
+            const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.PAMtoPAMJSON(inFile);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+        }
         return;
     }
 
@@ -256,7 +260,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
     export function PopCapAnimationJsonToAnimation(inFile: string, outFile: string): void {
         const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
-        Sen.Shell.PvZ2Shell.PAMJSONtoPAM(inFile, outFile);
+        try {
+            Sen.Shell.PvZ2Shell.PAMJSONtoPAM(inFile, outFile);
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+        }
         return;
     }
 
@@ -272,9 +280,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
     export function PopCapAnimationJsonToAnimateAdobeFlashAnimation(inFile: string, outputDirectory: string, resolution: int): string {
         const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
-        const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMJSONtoFlashAnimation(inFile, outputDirectory, resolution);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${outputDirectory}/extra.json`), Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json));
-        return outputDirectory;
+        try {
+            const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMJSONtoFlashAnimation(inFile, outputDirectory, resolution);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${outputDirectory}/extra.json`), Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json));
+            return outputDirectory;
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+        }
     }
 
     /**
@@ -289,9 +301,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${inDirectory}/extra.json`))
         );
-        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.FlashAnimationtoPAMJSON(inDirectory, extra_json);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
-        return;
+        try {
+            const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.FlashAnimationtoPAMJSON(inDirectory, extra_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
+            return;
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inDirectory);
+        }
     }
 
     /**
@@ -303,10 +319,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
      */
 
     export function PopCapAnimationToAnimateAdobeFlashAnimation(inFile: string, outputDirectory: string, resolution: int): void {
-        const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
-        const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${outputDirectory}/extra.json`), extra);
-        return;
+        try {
+            const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
+            const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${outputDirectory}/extra.json`), extra);
+            return;
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+        }
     }
 
     /**

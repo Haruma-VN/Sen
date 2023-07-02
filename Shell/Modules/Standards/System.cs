@@ -15,8 +15,6 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract void TerminateProgram();
 
-        public abstract Exception TestError();
-
     }
 
 
@@ -213,19 +211,6 @@ namespace Sen.Shell.Modules.Standards
         {
             Console.ReadKey();
             return;
-        }
-
-        public override Exception TestError()
-        {
-            try
-            {
-                throw new Sen.Shell.Modules.Standards.RuntimeException("Test", "haruma");
-            }
-            catch(Exception ex)
-            {
-                #pragma warning disable CA2200
-                throw ex;
-            }
         }
 
         public override void Debug(ConsoleColor? color, params object[] objects)

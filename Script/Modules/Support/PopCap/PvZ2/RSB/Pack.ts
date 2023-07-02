@@ -46,7 +46,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(`${inDirectory}/manifest.json`)
         );
-        Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
+        try {
+            Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inDirectory);
+        }
         return;
     }
 
@@ -91,7 +95,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             files.forEach((file: string) => {
                 if (Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.JSON`) {
                     json_count++;
-                    Sen.Shell.PvZ2Shell.RTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), option.encryptRTON ? Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt : Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), option.encryptRTON ? Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt : Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 }
             });
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs`));
@@ -107,7 +111,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             );
         }
         if (manifest_group !== -1) {
-            Sen.Shell.PvZ2Shell.RTONEncode(`${inDirectory}/resource/PROPERTIES/RESOURCES.json`, `${inDirectory}/resource/PROPERTIES/RESOURCES.RTON`, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(`${inDirectory}/resource/PROPERTIES/RESOURCES.json`, `${inDirectory}/resource/PROPERTIES/RESOURCES.RTON`, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
             Sen.Shell.PvZ2Shell.RSGPack(`${inDirectory}/resource/`, manifestgroup_save, manifest.group[manifest_group].subgroup[0].packet_info, false);
             Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,

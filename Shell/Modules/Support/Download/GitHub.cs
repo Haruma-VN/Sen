@@ -392,7 +392,7 @@ namespace Sen.Shell.Modules.Support.Download
         {
             if(filePaths.Length != fileUrls.Length)
             {
-                throw new Exception("Does not match size of array");
+                throw new Exception("file_path_size_does_not_match_output_size");
             }
             for(var i = 0 ; i < fileUrls.Length; i++)
             {
@@ -438,7 +438,7 @@ namespace Sen.Shell.Modules.Support.Download
             var path = new ImplementPath();
             if (github_api_json.Assets == null)
             {
-                throw new Exception($"assets not found from github api");
+                throw new Exception($"assets not found from Github API");
             }
             var shell_save = path.Resolve($"{path.Dirname($"{save_dir}")}/{shell_name}");
             await GitHub.DownloadFileAsync(github_api_json.Assets[index].Browser_download_url, (shell_save), $"Sen");
@@ -473,7 +473,7 @@ namespace Sen.Shell.Modules.Support.Download
             var path = new ImplementPath();
             if(github_api_json.Assets == null)
             {
-                throw new Exception($"assets not found from github api");
+                throw new Exception($"assets not found from Github API");
             }
             var script_save = path.Resolve($"{path.Dirname($"{script_dir}")}/scripts.zip");
             await DownloadFileAsync(github_api_json.Assets[0].Browser_download_url, (script_save), $"Sen");
@@ -506,12 +506,12 @@ namespace Sen.Shell.Modules.Support.Download
                     }
                     else
                     {
-                        throw new Exception($"API request failed with status code: {response.StatusCode}");
+                        throw new Exception($"API Request failed: {response.StatusCode}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"An error occurred: {ex.Message}");
+                    throw new Exception($"{ex.Message}");
                 }
             }
         }

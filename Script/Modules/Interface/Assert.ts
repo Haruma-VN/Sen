@@ -60,7 +60,7 @@ namespace Sen.Script.Modules.Interface.Assert {
      * Function json file path
      */
 
-    export const function_json_location: string = Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/customization/functions.json`);
+    export const function_json_location: string = Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/Modules/Customization/functions.json`);
 
     /**
      * Deserialized function json

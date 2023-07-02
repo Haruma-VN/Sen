@@ -46,7 +46,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         const popcap_resource_group_resources_rton_input_destination: string = `${rsb_unpack_option.rsb_unpack_dir}/PROPERTIES/RESOURCES.RTON`;
         const popcap_resource_group_resources_json_output_destination: string = `${out_dir}/PROPERTIES/RESOURCES.JSON`;
         const res_json_destination: string = `${rsb_unpack_option.rsb_parent_directory}/res.json`;
-        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecode(popcap_resource_group_resources_rton_input_destination, popcap_resource_group_resources_json_output_destination, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(popcap_resource_group_resources_rton_input_destination, popcap_resource_group_resources_json_output_destination, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
         const res_json: res_json = Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.DoAllProcess<Resources_Group_Structure_Template, res_json>(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(popcap_resource_group_resources_json_output_destination),
             popcap_resource_group_resources_json_output_destination,
@@ -62,7 +62,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation;
         const compositeshell: Array<string> = Object.keys(manifest_deserialize.group);
         const information_host: Record<string, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat> = Sen.Script.Modules.FileSystem.Json.ReadJson<Record<string, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat>>(
-            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_ptx.json`
+            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_ptx.json`
         ) satisfies Record<string, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat>;
         const architecture: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat = information_host[rsb_unpack_option.texture_format];
         const flash_animation_destination: Array<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.FlashAnimationContainer> = new Array();
@@ -94,7 +94,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                         );
                     } else if (Sen.Shell.Path.Parse(input_path).ext.toUpperCase() === ".RTON" && rsb_unpack_option.decode_rton) {
                         if (Sen.Shell.Path.Parse(input_path).name.toUpperCase() !== "RESOURCES") {
-                            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecode(input_path, output_path.replace(/((\.rton))?$/i, `.JSON`), {
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(input_path, output_path.replace(/((\.rton))?$/i, `.JSON`), {
                                 crypt: rsb_unpack_option.rton_encrypted,
                                 key: rsb_unpack_option.encryptionKey,
                             });

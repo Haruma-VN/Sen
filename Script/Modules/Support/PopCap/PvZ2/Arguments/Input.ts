@@ -134,14 +134,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
             allowRotation: false,
             padding: 1,
         };
-        const width: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("input_width"), null, {}, `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`, `width`);
-        const height: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("input_height"), null, {}, `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`, `height`);
+        const width: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("input_width"), null, {}, `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_merge.json`, `width`);
+        const height: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("input_height"), null, {}, `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_merge.json`, `height`);
         destination.width = width;
         destination.height = height;
         const smart: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
                 Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("smart")),
-                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
+                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_merge.json`,
                 `smart`
             ) === 1
                 ? true
@@ -149,7 +149,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
         const pot: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
                 Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("pot")),
-                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
+                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_merge.json`,
                 `pot`
             ) === 1
                 ? true
@@ -157,7 +157,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
         const square: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
                 Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("square")),
-                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
+                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_merge.json`,
                 `square`
             ) === 1
                 ? true
@@ -165,7 +165,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
         const allowRotation: boolean =
             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
                 Sen.Script.Modules.System.Default.Localization.GetString("using_").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("allowRotation")),
-                `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
+                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_merge.json`,
                 `allowRotation`
             ) === 1
                 ? true
@@ -174,7 +174,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input {
             Sen.Script.Modules.System.Default.Localization.GetString("set_packable_padding"),
             null,
             {},
-            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_atlas_merge.json`,
+            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_atlas_merge.json`,
             `padding`
         );
         destination.smart = smart;

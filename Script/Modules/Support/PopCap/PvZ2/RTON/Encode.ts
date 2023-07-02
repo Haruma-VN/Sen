@@ -27,7 +27,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
      */
 
     export const RTONOfficial: RTONCipher = {
-        key: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONCrypt>(`${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_rton_cipher.json`).encryptionKey,
+        key: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONCrypt>(`${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_rton_cipher.json`).encryptionKey,
         crypt: false,
     };
 
@@ -47,9 +47,25 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
      * @returns Decode RTON
      */
 
-    export function RTONDecode(inFile: string, outFile: string, decryptRTON: RTONCipher): void {
+    export function PopCapRTONDecode(inFile: string, outFile: string, decryptRTON: RTONCipher): void {
         try {
             Sen.Shell.PvZ2Shell.RTONDecode(inFile, outFile, decryptRTON);
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
+        }
+        return;
+    }
+    /**
+     *
+     * @param inFile - Pass file path
+     * @param outFile - Pass out file
+     * @param encryptOption - Pass encrypt option
+     * @returns Encode RTON
+     */
+
+    export function PopCapRTONEncode(inFile: string, outFile: string, encryptOption: RTONCipher): void {
+        try {
+            Sen.Shell.PvZ2Shell.RTONEncode(inFile, outFile, encryptOption);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
@@ -61,11 +77,26 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
      * @param inFile - Pass file path
      * @param outFile - Pass out file
      * @param decryptRTON - Pass decrypt option
-     * @returns Decode RTON
+     * @returns Decrypt RTON
      */
-    export function RTONDecrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void {
+    export function PopCapRTONDecrypt(inFile: string, outFile: string, decryptRTON: RTONCipher): void {
         try {
             Sen.Shell.PvZ2Shell.RTONDecrypt(inFile, outFile, decryptRTON);
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
+        }
+        return;
+    }
+    /**
+     *
+     * @param inFile - Pass file path
+     * @param outFile - Pass out file
+     * @param encryptRTON - Pass encrypt option
+     * @returns Encrypt RTON
+     */
+    export function PopCapRTONEncrypt(inFile: string, outFile: string, encryptRTON: RTONCipher): void {
+        try {
+            Sen.Shell.PvZ2Shell.RTONEncrypt(inFile, outFile, encryptRTON);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }

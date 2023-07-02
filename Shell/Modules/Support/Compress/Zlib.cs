@@ -50,7 +50,7 @@ namespace Sen.Shell.Modules.Support.Compress
             var zlib_base = new ZlibBase();
             if (!testMagic.SequenceEqual<byte>(zlib_base.magic))
             {
-                throw new ZlibException($"mismatch_popcap_zlib_magic", filepath ?? "undefined");
+                throw new Exception($"mismatch_popcap_zlib_magic");
             };
         }
 
@@ -73,7 +73,7 @@ namespace Sen.Shell.Modules.Support.Compress
                     (*(byte[]*)bits_ptr) = padding.Concat(bits).ToArray();
                 }
                 if(((byte[]*)bits_ptr)->Length > 4) {
-                    throw new ZlibException($"zlib_array_unsupported", $"{options.RipeFile}");
+                    throw new Exception($"zlib_array_unsupported");
                 }
                 var bytes = options.Use64BitVariant switch
                 {
@@ -114,7 +114,7 @@ namespace Sen.Shell.Modules.Support.Compress
             }
             catch
             {
-                throw new ZlibException($"zlib_array_unsupported", $"{ripefile}");
+                throw new Exception($"zlib_array_unsupported");
             }
         }
     }

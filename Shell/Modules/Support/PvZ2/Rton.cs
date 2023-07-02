@@ -153,7 +153,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         public static SenBuffer Decrypt(SenBuffer RtonFile, string encryptionKey)
         {
             var RijndaelCheck = RtonFile.readInt16LE();
-            if (RijndaelCheck != 0x10) throw new Exception("This RTON is not encrypt");
+            if (RijndaelCheck != 0x10) 
+            {
+                throw new Exception($"rton_is_not_encrypted");
+            }
             var Crypto = new ImplementCrypto();
             var keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
             byte[] ivBytes = new byte[24];
@@ -422,7 +425,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 case 0xB9:
                 case 0xBA:
                 case 0xBB:
-                    throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+                    throw new RTONException($"not_a_rton", RtonFile.filePath ??= "undefined");
                 case 0xBC:
                     jsonWriter.WriteBooleanValue(RtonFile.readUInt8() != 0);
                     break;
@@ -467,7 +470,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                     string str1 = RtonFile.readStringByVarInt32();
                     return string.Format(Str_RTID_3, str1, str2);
                 default:
-                    throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+                    throw new RTONException($"not_a_rton", RtonFile.filePath ??= "undefined");
             }
         }
 
@@ -488,7 +491,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
         {
             jsonWriter.WriteStartArray();
             byte bytecode = RtonFile.readUInt8();
-            if (bytecode != 0xFD) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+            if (bytecode != 0xFD) 
+            {
+                throw new RTONException($"not_a_rton", RtonFile.filePath ??= "undefined");
+            }
             int number = RtonFile.readVarInt32();
             for (var i = 0; i < number; i++)
             {
@@ -496,7 +502,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 ReadBytecode(bytecode, true, RtonFile, jsonWriter);
             }
             bytecode = RtonFile.readUInt8();
-            if (bytecode != 0xFE) throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+            if (bytecode != 0xFE) 
+            {
+                throw new RTONException($"not_a_rton", RtonFile.filePath ??= "undefined");
+            }
             jsonWriter.WriteEndArray();
         }
 
@@ -773,7 +782,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                     WriteNumber(RtonFile, value);
                     break;
                 default:
-                    throw new RTONException($"Not a RTON", RtonFile.filePath ??= "undefined");
+                    throw new RTONException($"not_a_rton", RtonFile.filePath ??= "undefined");
             }
         }
 

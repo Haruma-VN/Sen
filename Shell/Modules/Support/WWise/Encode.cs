@@ -137,12 +137,15 @@ namespace Sen.Shell.Modules.Support.WWise
         public static WWiseInfoSimple DecodeSimple(SenBuffer BNKFile, string outFolder)
         {
             string BKHD_magic = BNKFile.readString(4);
-            if (BKHD_magic != "BKHD") throw new Exception("Invalid bnk magic");
+            if (BKHD_magic != "BKHD") 
+            {
+                throw new Exception("invalid_bnk_magic");
+            }
             var BKHD_length = BNKFile.readUInt32LE();
             var version = BNKFile.readUInt32LE();
             if (version != 88 && version != 112 && version != 140)
             {
-                throw new Exception("Only support bnk version 88, 112, 140");
+                throw new Exception("non_supported_bnk_version");
             }
             var id = BNKFile.readUInt32LE();
             var dataLength = BKHD_length - 12;
@@ -160,7 +163,10 @@ namespace Sen.Shell.Modules.Support.WWise
             };
             var BNKFileLength = BNKFile.length;
             while (BNKFile.readOffset < BNKFileLength) DecodeType(BNKFile, WwiseInfo, outFolder);
-            if (BNKFile.readOffset != BNKFileLength) throw new Exception("Invalid BNKFile Reader");
+            if (BNKFile.readOffset != BNKFileLength)
+            {
+                 throw new Exception($"invalid_bnk_reader");
+            }
             BNKFile.Close();
             return WwiseInfo; // definition.json;
         }
@@ -200,7 +206,7 @@ namespace Sen.Shell.Modules.Support.WWise
                 case "FXPR":
                     throw new Exception("unsupported_fxpr");
                 default:
-                    throw new Exception($"invalid_bnk | offset: {BNKFile.readOffset}");
+                    throw new Exception($"Invalid BNK | offset: {BNKFile.readOffset}");
 
             }
         }
@@ -218,7 +224,10 @@ namespace Sen.Shell.Modules.Support.WWise
                     length = BNKFile.readUInt32LE(),
                 });
             }
-            if (BNKFile.readString(4) != "DATA") throw new Exception("Invalid Wem Data Bank");
+            if (BNKFile.readString(4) != "DATA") 
+            {
+                throw new Exception("invalid_wem_data_bank");
+            }
             var DATALength = BNKFile.readUInt32LE();
             var WemDATAStartOffset = BNKFile.readOffset;
             var WEMBank = new SenBuffer(BNKFile.readBytes((int)DATALength));
@@ -528,7 +537,7 @@ namespace Sen.Shell.Modules.Support.WWise
         {
             if (BKHDInfo.version != 88 && BKHDInfo.version != 112 && BKHDInfo.version != 140)
             {
-                throw new Exception("Only support BNK version 88, 112, 140");
+                throw new Exception($"non_supported_bnk_version");
             }
             var head_expand = ConvertHexString(BKHDInfo.head_expand);
             BNKFile.writeString("BKHD");
@@ -593,9 +602,15 @@ namespace Sen.Shell.Modules.Support.WWise
             var STMGLengthOffset = BNKFile.writeOffset;
             BNKFile.writeNull(4);
             var volumeThresHold = ConvertHexString(STMGInfo.volume_threshold);
-            if (volumeThresHold.Length != 4) throw new Exception("Invalid volume threshold");
+            if (volumeThresHold.Length != 4) 
+            {
+                throw new Exception("invalid_volume_threshold");
+            }
             var maxVoiceInstances = ConvertHexString(STMGInfo.max_voice_instances);
-            if (maxVoiceInstances.Length != 2) throw new Exception("Invalid max voice instances");
+            if (maxVoiceInstances.Length != 2) 
+            {
+                throw new Exception("invalid_max_voice_instances");
+            }
             BNKFile.writeBytes(volumeThresHold);
             BNKFile.writeBytes(maxVoiceInstances);
             if (version == 140)
@@ -608,7 +623,10 @@ namespace Sen.Shell.Modules.Support.WWise
             {
                 BNKFile.writeUInt32LE(STMGInfo.stage_group[i].id);
                 var defaultTransitionTime = ConvertHexString(STMGInfo.stage_group[i].data.default_transition_time);
-                if (defaultTransitionTime.Length != 4) throw new Exception("Invalid default transition time");
+                if (defaultTransitionTime.Length != 4) 
+                {
+                    throw new Exception("invalid_default_transition_time");
+                }
                 BNKFile.writeBytes(defaultTransitionTime);
                 var customTransitonLength = STMGInfo.stage_group[i].data.custom_transition.Length;
                 BNKFile.writeUInt32LE((uint)customTransitonLength);
@@ -639,9 +657,12 @@ namespace Sen.Shell.Modules.Support.WWise
                 var parameterData = ConvertHexString(STMGInfo.game_parameter[i].data);
                 if (version == 112 && parameterData.Length != 17 || version == 140 && parameterData.Length != 17)
                 {
-                    throw new Exception("Invalid parameter data");
+                    throw new Exception("invalid_parameter_data");
                 }
-                if (version == 88 && parameterData.Length != 4) throw new Exception("Invalid parameter data");
+                if (version == 88 && parameterData.Length != 4) 
+                {
+                    throw new Exception("invalid_parameter_data");
+                }
                 BNKFile.writeBytes(parameterData);
             }
             if (version == 140) BNKFile.writeUInt32LE(STMGInfo.unknown_type_2);

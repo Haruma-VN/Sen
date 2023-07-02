@@ -30,12 +30,12 @@
                     }
                     else
                     {
-                        throw new Exception($"API request failed with status code: {response.StatusCode}");
+                        throw new Exception($"API request failed: {response.StatusCode}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"An error occurred: {ex.Message}");
+                    throw new Exception($"{ex.Message}");
                 }
             }
         }

@@ -242,9 +242,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public static MainfestInfo Unpack(SenBuffer RSBFile, string outFolder)
         {
             var rsbHeadInfo = ReadHead(RSBFile);
-            if (rsbHeadInfo.version != 3 && rsbHeadInfo.version != 4) throw new Exception("invalid RSB version");
-            if (rsbHeadInfo.version == 3 && rsbHeadInfo.fileList_BeginOffset != 0x6C) throw new Exception("Invalid File List Offset");
-            if (rsbHeadInfo.version == 4 && rsbHeadInfo.fileList_BeginOffset != 0x70) throw new Exception("Invalid File List Offset");
+            if (rsbHeadInfo.version != 3 && rsbHeadInfo.version != 4) 
+            {
+                throw new Exception("invalid_rsb_version");
+            }
+            if (rsbHeadInfo.version == 3 && rsbHeadInfo.fileList_BeginOffset != 0x6C) 
+            {
+                throw new Exception("invalid_file_list_offset");
+            }
+            if (rsbHeadInfo.version == 4 && rsbHeadInfo.fileList_BeginOffset != 0x70) 
+            {
+                throw new Exception("invalid_file_list_offset");
+            }
             var fileList = new List<FileListInfo>();
             FileListSplit(RSBFile, rsbHeadInfo.fileList_BeginOffset, rsbHeadInfo.fileListLength, ref fileList);
             var rsgList = new List<FileListInfo>();
@@ -263,7 +272,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             {
                 if (rsbHeadInfo.part1_BeginOffset == 0 && rsbHeadInfo.part2_BeginOffset == 0 && rsbHeadInfo.part3_BeginOffset == 0)
                 {
-                    throw new Exception("Invalid Resources Version 3 Offset");
+                    throw new Exception("invalid_rsb_ver_3_resource_offset");
                 }
                 ReadResoucesDescription(RSBFile, rsbHeadInfo, outFolder);
             }
@@ -285,17 +294,22 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     var rsgListCount = 0;
                     while (rsgInfoList[rsgInfoCount].poolIndex != packetIndex)
                     {
-                        if (rsgInfoCount >= rsgInfoList.Count - 1) throw new Exception("Out of ranger 1");
+                        if (rsgInfoCount >= rsgInfoList.Count - 1){
+                            throw new Exception("out_of_range");
+                        }
                         rsgInfoCount++;
                     }
                     while (rsgList[rsgListCount].poolIndex != packetIndex)
                     {
-                        if (rsgListCount >= rsgList.Count - 1) throw new Exception("Out of ranger 2");
+                        if (rsgListCount >= rsgList.Count - 1) 
+                        {
+                            throw new Exception("out_of_range");
+                        }
                         rsgListCount++;
                     }
                     if (rsgInfoList[rsgInfoCount].name.ToUpper() != rsgList[rsgListCount].namePath.ToUpper())
                     {
-                        throw new Exception($"Invalid rsg name: {rsgInfoList[rsgInfoCount].name} || {rsgList[rsgListCount].namePath} in poolIndex: {packetIndex}");
+                        throw new Exception($"Invalid RSG Name: {rsgInfoList[rsgInfoCount].name} || {rsgList[rsgListCount].namePath} in poolIndex: {packetIndex}");
                     };
                     rsgNameList.Add(rsgInfoList[rsgInfoCount].name);
                     byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
@@ -346,7 +360,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                     break;
                                 }
                             }
-                            if (!existItemPacket) throw new Exception("Invalid Item Packet");
+                            if (!existItemPacket) 
+                            {
+                                throw new Exception("invalid_item_packet");
+                            }
                             resInfoList.Add(resInfo);
                         }
                         if (fileList[h].poolIndex > packetIndex) break;
@@ -488,7 +505,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                             for (var l = 0; l < propertiesNumber; l++)
                             {
                                 var keyOffsetPart3 = RSBFile.readInt32LE();
-                                if (RSBFile.readInt32LE() != 0x0) throw new Exception("");
+                                if (RSBFile.readInt32LE() != 0x0)
+                                {
+                                    throw new Exception("rsb_is_corrupted");
+                                }
                                 var valueOffsetPart3 = RSBFile.readInt32LE();
                                 var key = RSBFile.getStringByEmpty(part3_Offset + keyOffsetPart3);
                                 var value = RSBFile.getStringByEmpty(part3_Offset + valueOffsetPart3);
@@ -700,7 +720,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             RSBFile.readOffset = (long)rsbHeadInfo.ptxInfo_BeginOffset;
             if (rsbHeadInfo.ptxInfo_EachLength != 0x10 && rsbHeadInfo.ptxInfo_EachLength != 0x14 && rsbHeadInfo.ptxInfo_EachLength != 0x18)
             {
-                throw new Exception("Invalid PTX Info EachLength");
+                throw new Exception("invalid_ptx_info_eachlength");
             }
             for (var i = 0; i < rsbHeadInfo.ptxNumber; i++)
             {
@@ -734,7 +754,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
 
         private static void CheckEndOffset(SenBuffer RSBFile, int endOffset)
         {
-            if ((int)RSBFile.readOffset != endOffset) throw new Exception($"invalid offset: {RSBFile.readOffset} | {endOffset}");
+            if ((int)RSBFile.readOffset != endOffset) 
+            {
+                throw new Exception($"invalid offset: {RSBFile.readOffset} | {endOffset}");
+            }
         }
 
         public static void Pack(string inFolder, string outFile, MainfestInfo manifestInfo)
@@ -753,7 +776,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             }
             else
             {
-                throw new Exception("Invalid RSB version");
+                throw new Exception("invalid_rsb_version");
             }
             var rsbHeadInfo = new RSB_head();
             RSBFile.writeInt32LE(version);
@@ -761,7 +784,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             rsbHeadInfo.ptxInfo_EachLength = manifestInfo.ptx_info_size;
             if (rsbHeadInfo.ptxInfo_EachLength != 0x10 && rsbHeadInfo.ptxInfo_EachLength != 0x14 && rsbHeadInfo.ptxInfo_EachLength != 0x18)
             {
-                throw new Exception("Invalid PTX Info EachLength");
+                throw new Exception("invalid_ptx_info_eachlength");
             }
             var fileList = new List<FileListInfo>();
             var rsgFileList = new List<FileListInfo>();
@@ -838,7 +861,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         compositeInfo.writeInt32LE(Int32.Parse(manifestInfo.group[i].subgroup[k].category[0]));
                         if (manifestInfo.group[i].subgroup[k].category[1] != null && manifestInfo.group[i].subgroup[k].category[1] != string.Empty)
                         {
-                            if (manifestInfo.group[i].subgroup[k].category[1].Length != 4) throw new Exception("Category out of Length");
+                            if (manifestInfo.group[i].subgroup[k].category[1].Length != 4)
+                            {
+                                throw new Exception("category_out_of_length");
+                            }
                             compositeInfo.writeString(manifestInfo.group[i].subgroup[k].category[1]);
                         }
                         else
@@ -1125,7 +1151,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         {
             void ThrowError<Generic_T>(string typeError, Generic_T oriValue, Generic_T modifyValue)
             {
-                throw new Exception($"RSG {typeError} is not same. In ManiFestInfo: {oriValue} | In RSGFile: {modifyValue}. RSG path: {RSGFile.filePath}");
+                throw new Exception($"RSG {typeError} is not same. In ManiFest: {oriValue} | In RSGFile: {modifyValue}. RSG path: {RSGFile.filePath}");
             }
             PacketInfo oriPacketInfo = RSGFunction.Unpack(RSGFile, "", false, true);
             if (oriPacketInfo.version != modifyPacketInfo.version) ThrowError("version", oriPacketInfo.version, modifyPacketInfo.version);
@@ -1160,7 +1186,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             {
                 string Path1 = fileList[i].namePath.ToUpper();
                 string Path2 = fileList[i + 1].namePath.ToUpper();
-                if (RSGFunction.IsNotASCII(Path2)) throw new Exception("Item Path must be ASCII");
+                if (RSGFunction.IsNotASCII(Path2)) 
+                {
+                    throw new Exception("item_part_must_be_ascii")
+                };
                 var strLongestLength = Path1.Length >= Path2.Length ? Path1.Length : Path2.Length;
                 for (var k = 0; k < strLongestLength; k++)
                 {
@@ -1217,7 +1246,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             if (rsbHeadInfo.version == 5)
             {
                 FixFileListShuttle(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, false);
-                throw new Exception("shuttle is not support");
+                throw new Exception("unsupported_trash_structure");
             }
             var rsgList = new List<FileListInfo>();
             FileListSplit(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, ref rsgList);
@@ -1231,7 +1260,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             {
                 if (rsbHeadInfo.part1_BeginOffset == 0 && rsbHeadInfo.part2_BeginOffset == 0 && rsbHeadInfo.part3_BeginOffset == 0)
                 {
-                    throw new Exception("Invalid Resources Version 3 Offset");
+                    throw new Exception("invalid_rsb_ver_3_resource_offset");
                 }
                 ReadResoucesDescription(RSBFile, rsbHeadInfo, outFolder);
             }
@@ -1248,12 +1277,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     var rsgListCount = 0;
                     while (rsgInfoList[rsgInfoCount].poolIndex != packetIndex)
                     {
-                        if (rsgInfoCount >= rsgInfoList.Count - 1) throw new Exception("Out of ranger 1");
+                        if (rsgInfoCount >= rsgInfoList.Count - 1) 
+                        {
+                            throw new Exception("out_of_range");
+                        }
                         rsgInfoCount++;
                     }
                     while (rsgList[rsgListCount].poolIndex != packetIndex)
                     {
-                        if (rsgListCount >= rsgList.Count - 1) throw new Exception("Out of ranger 2");
+                        if (rsgListCount >= rsgList.Count - 1) 
+                        {
+                            throw new Exception("out_of_range");
+                        }
                         rsgListCount++;
                     }
                     Console.WriteLine(rsgList[rsgListCount].namePath);

@@ -130,7 +130,7 @@ namespace Sen.Shell.Modules.Standards
                     RijndaelMode.ECB => CipherMode.ECB,
                     RijndaelMode.CFB => CipherMode.CFB,
                     RijndaelMode.CTS => CipherMode.CTS,
-                    _ => throw new InvalidOperationException($"Rijndael Mode has not been implemented"),
+                    _ => throw new Exception($"invalid_rijndael_mode"),
                 };
                 rijndael.Padding = Rijndael_Padding switch
                 {
@@ -139,7 +139,7 @@ namespace Sen.Shell.Modules.Standards
                     RijndaelPadding.PKCS7 => PaddingMode.PKCS7,
                     RijndaelPadding.ANSIX923 => PaddingMode.ANSIX923,
                     RijndaelPadding.Zeros => PaddingMode.Zeros,
-                    _ => throw new InvalidOperationException($"Rijndael Padding has not been impleemented"),
+                    _ => throw new Exception($"invalid_rijndael_padding"),
                 };
 
                 byte[] salt = Encoding.UTF8.GetBytes(salt_value);
@@ -177,7 +177,7 @@ namespace Sen.Shell.Modules.Standards
                     RijndaelMode.ECB => CipherMode.ECB,
                     RijndaelMode.CFB => CipherMode.CFB,
                     RijndaelMode.CTS => CipherMode.CTS,
-                    _ => throw new InvalidOperationException($"Rijndael Mode has not been implemented"),
+                    _ => throw new InvalidOperationException($"invalid_rijndael_mode"),
                 };
 
                 rijndael.Padding = Rijndael_Padding switch
@@ -187,7 +187,7 @@ namespace Sen.Shell.Modules.Standards
                     RijndaelPadding.PKCS7 => PaddingMode.PKCS7,
                     RijndaelPadding.ANSIX923 => PaddingMode.ANSIX923,
                     RijndaelPadding.Zeros => PaddingMode.Zeros,
-                    _ => throw new InvalidOperationException($"Rijndael Padding has not been impleemented"),
+                    _ => throw new InvalidOperationException($"invalid_rijndael_padding"),
                 };
 
                 byte[] salt = Encoding.UTF8.GetBytes(salt_value);

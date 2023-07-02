@@ -129,10 +129,12 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 readOffset = offset;
                 baseStream.Position = readOffset;
             }
+
             else if (offset == -1)
             {
                 baseStream.Position = readOffset;
             }
+            
             else
             {
                 // 

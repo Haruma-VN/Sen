@@ -178,9 +178,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      */
 
     export function UnpackPopCapOfficialRSB(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
-        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Resolve(`${outDirectory}/manifest.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json));
-        return manifest_json;
+        try {
+            const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Resolve(`${outDirectory}/manifest.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json));
+            return manifest_json;
+        } catch (error: unknown) {
+            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inRSB);
+        }
     }
 
     /**
@@ -202,7 +206,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
             const resources_rton_path: string = Sen.Shell.Path.Resolve(`${outDirectory}/resource/PROPERTIES/RESOURCES.RTON`);
             if (Sen.Shell.FileSystem.FileExists(resources_rton_path)) {
                 const resources_json_path: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(resources_rton_path)}/${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`);
-                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(resources_json_path, Sen.Shell.Path.Resolve(`${outDirectory}/res.json`), information.expand_path);
             }
         }

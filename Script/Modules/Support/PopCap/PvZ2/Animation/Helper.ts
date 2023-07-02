@@ -136,7 +136,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
         const extra_info: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(`${xfl_path}/extra.json`);
         const image: Array<string> = Object.keys(extra_info.image);
         const animation_helper: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson>(
-            `${Sen.Shell.MainScriptDirectory}/modules/customization/methods/popcap_animation_helper.json`
+            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation_helper.json`
         );
         argument
             .map((element: string) => Sen.Shell.DotNetBitmap.GetDimension<int>(element) satisfies Sen.Script.Modules.BitMap.Constraints.ImageInfo<int>)

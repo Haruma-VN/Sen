@@ -1697,7 +1697,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                     TextureEncoderUnofficial.PVRTC1_4BPP_RGBA => this.Create_PVRTC1_4BPP_RGBA_Decode_Async(sourceImagePath, outputImagePath, width, height),
                     TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8 => this.Create_PVRTC1_4BPP_RGBA_A8_Decode_Async(sourceImagePath, outputImagePath, width, height),
                     TextureEncoderUnofficial.RGBA8888 => this.Create_RGBA8888_Decode_Async(sourceImagePath, outputImagePath, width, height),
-                    _ => throw new Exception($"Have not implemented"),
+                    _ => throw new Exception($"invalid_ptx_format"),
                 };
                 tasks.Add(task);
             }
@@ -1745,7 +1745,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                     TextureEncoderUnofficial.PVRTC1_4BPP_RGBA => this.Create_PVRTC1_4BPP_RGBA_Encode_Async(sourceImagePath, outputImagePath),
                     TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8 => this.Create_PVRTC1_4BPP_RGBA_A8_Encode_Async(sourceImagePath, outputImagePath),
                     TextureEncoderUnofficial.RGBA8888 => this.Create_RGBA8888_Encode_Async(sourceImagePath, outputImagePath),
-                    _ => throw new Exception($"Have not implemented"),
+                    _ => throw new Exception($"invalid_ptx_format"),
                 };
                 tasks.Add(task);
             }

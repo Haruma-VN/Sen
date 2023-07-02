@@ -165,13 +165,22 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         {
             RSG_head HeadInfo = new RSG_head();
             string magic = RsgFile.readString(4);
-            if (magic != RSG_head.magic) throw new Exception("This is not RSG");
+            if (magic != RSG_head.magic) 
+            {
+                throw new Exception("mismatch_rsg_magic");
+            }
             int version = RsgFile.readInt32LE();
-            if (version != 3 && version != 4) throw new Exception("Invalid RSG version");
+            if (version != 3 && version != 4) 
+            {
+                throw new Exception("Invalid RSG versionunsupported_rsg_version");
+            }
             HeadInfo.version = version;
             RsgFile.readBytes(8);
             int flags = RsgFile.readInt32LE();
-            if (flags > 3 || flags < 0) throw new Exception("Invalid RSG compression flags");
+            if (flags > 3 || flags < 0) 
+            {
+                throw new Exception("invalid_rsg_compression_flag");
+            }
             HeadInfo.flags = flags;
             HeadInfo.fileOffset = RsgFile.readInt32LE();
             HeadInfo.part0_Offset = RsgFile.readInt32LE();
@@ -306,8 +315,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         // Pack RSG
         public static SenBuffer Pack(string inFolder, PacketInfo packetInfo, bool UseResFolder = true)
         {
-            if (packetInfo.version != 3 && packetInfo.version != 4) throw new Exception("RSG version out of range");
-            if (packetInfo.compression_flags < 0 || packetInfo.compression_flags > 3) throw new Exception("RSG compression flags out of range");
+            if (packetInfo.version != 3 && packetInfo.version != 4) 
+            {
+                throw new Exception($"unsupported_rsg_version");
+            }
+            if (packetInfo.compression_flags < 0 || packetInfo.compression_flags > 3) 
+            {
+                throw new Exception($"unsupported_rsg_pack_compression_flag");
+            }
             var RSGFile = new SenBuffer();
             RSGFile.writeString(RSG_head.magic);
             RSGFile.writeInt32LE(packetInfo.version);
@@ -343,7 +358,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             {
                 string Path1 = ResInfoList[i].path.ToUpper();
                 string Path2 = ResInfoList[i + 1].path.ToUpper();
-                if (IsNotASCII(Path2)) throw new Exception("Item Path must be ASCII");
+                if (IsNotASCII(Path2))
+                {
+                     throw new Exception($"item_part_must_be_ascii");
+                }
                 var strLongestLength = Path1.Length >= Path2.Length ? Path1.Length : Path2.Length;
                 for (var k = 0; k < strLongestLength; k++)
                 {
@@ -381,7 +399,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         {
             var pathTempLength = pathTemps.Count;
             var fileListBeginOffset = RSGFile.writeOffset;
-            if (fileListBeginOffset != 92) throw new Exception("Invalid fileList Offset");
+            if (fileListBeginOffset != 92) 
+            {
+                throw new Exception("invalid_file_list_offset");
+            }
             var fs = new FileSystem();
             SenBuffer dataGroup = new SenBuffer();
             SenBuffer atlasGroup = new SenBuffer();
@@ -579,7 +600,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 case 1:
                     return 30;
                 default:
-                    throw new Exception("invalid ptx format");
+                    throw new Exception($"invalid_ptx_format");
             }
         }
     }

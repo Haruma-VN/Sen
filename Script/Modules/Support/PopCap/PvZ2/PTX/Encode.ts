@@ -84,7 +84,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
         if (Array.isArray(that_in)) {
             if (Array.isArray(that_out)) {
                 if (!(that_in.length === that_out.length)) {
-                    throw new Sen.Script.Modules.Exceptions.EncodingError(Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"), `${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`);
+                    throw new Sen.Script.Modules.Exceptions.EncodingError(Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"), `${Sen.Shell.MainScriptDirectory}/Modules/support/popcap/pvz2/texture/encode.js`);
                 }
             }
         }
@@ -305,7 +305,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
         if (Array.isArray(that_in)) {
             if (Array.isArray(that_out)) {
                 if (!(that_in.length === that_out.length)) {
-                    throw new Sen.Script.Modules.Exceptions.EncodingError(Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"), `${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`);
+                    throw new Sen.Script.Modules.Exceptions.EncodingError(Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"), `${Sen.Shell.MainScriptDirectory}/Modules/support/popcap/pvz2/texture/encode.js`);
                 }
             }
         }

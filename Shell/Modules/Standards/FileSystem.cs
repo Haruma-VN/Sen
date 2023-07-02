@@ -136,7 +136,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             }
             else
             {
-                throw new Sen.Shell.Modules.Standards.RuntimeException($"Invalid data type. Expecting string or collection of bytes.", "undefined");
+                throw new Exception($"invalid_write_data");
             }
             return;
         }
@@ -163,7 +163,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
                 }
                 else
                 {
-                    throw new ArgumentException($"Invalid data type. Expecting string or collection of bytes.");
+                    throw new Exception($"invalid_write_data");
                 }
             });
             return;
@@ -172,10 +172,6 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
         public override void CreateDirectory(string path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(path);
-            }
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -336,7 +332,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             {
                 Sen.Shell.Modules.Standards.IOModule.ReadDirectory.OnlyCurrentDirectory => Directory.GetFiles(directory, "*", SearchOption.TopDirectoryOnly),
                 Sen.Shell.Modules.Standards.IOModule.ReadDirectory.AllNestedDirectory => Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
-                _ => throw new Exception(null),
+                _ => throw new Exception($"cannot_read_directory"),
             };
         }
 
