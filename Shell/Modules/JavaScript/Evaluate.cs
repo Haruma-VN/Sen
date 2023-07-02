@@ -45,7 +45,7 @@ namespace Sen.Shell.Modules.JavaScript
             };
             ns.Set("Shell", JsValue.FromObject(engine, dictionary));
             engine.SetValue("Sen", ns);
-            engine.Execute(fs.ReadText(main_js, EncodingType.UTF8), main_js);
+            engine.Execute(fs.ReadText(main_js, EncodingType.UTF8), "Scripts/main.js");
             return;
         }
     }

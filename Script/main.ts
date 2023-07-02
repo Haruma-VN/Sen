@@ -4,36 +4,36 @@ namespace Sen.Script {
      */
     export const ScriptModules: Array<string> = [
         ...new Set([
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/constraints/compression.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/constraints/crypto.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/constraints/filesystem.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/system/default/timer.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/system/implement/json.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/system/implement/javascript.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/third/maxrects-packer/maxrects-packer.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/third/fast-sort/sort.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/constraints/platform.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/system/implement/exception.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/system/implement/filesystem.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/system/default/localization.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/resources/conversion.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/resources/official.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/atlas/split.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/atlas/pack.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/atlas/resize.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/texture/encode.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/animation/encode.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/animation/helper.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/argument/input.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/rsg/encode.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/rsb/unpack.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/rsb/pack.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/rsb/convert/resource.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/popcap/pvz2/rton/encode.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/support/wwise/encode.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/interface/assert.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/interface/arguments.js`),
-            Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/modules/interface/execute.js`),
+            `/Modules/Constraints/Compression.js`,
+            `/Modules/Constraints/Crypto.js`,
+            `/Modules/Constraints/FileSystem.js`,
+            `/Modules/System/Default/timer.js`,
+            `/Modules/System/Implement/Json.js`,
+            `/Modules/System/Implement/JavaScript.js`,
+            `/Modules/Third/maxrects-packer/maxrects-packer.js`,
+            `/Modules/Third/fast-sort/sort.js`,
+            `/Modules/Constraints/Platform.js`,
+            `/Modules/System/Implement/Exception.js`,
+            `/Modules/System/Implement/FileSystem.js`,
+            `/Modules/System/Default/Localization.js`,
+            `/Modules/Support/PopCap/PvZ2/Resources/Unofficial.js`,
+            `/Modules/Support/PopCap/PvZ2/Resources/Official.js`,
+            `/Modules/Support/PopCap/PvZ2/Atlas/Split.js`,
+            `/Modules/Support/PopCap/PvZ2/Atlas/Pack.js`,
+            `/Modules/Support/PopCap/PvZ2/Atlas/Resize.js`,
+            `/Modules/Support/PopCap/PvZ2/PTX/Encode.js`,
+            `/Modules/Support/PopCap/PvZ2/Animation/Encode.js`,
+            `/Modules/Support/PopCap/PvZ2/Animation/Helper.js`,
+            `/Modules/Support/PopCap/PvZ2/Arguments/Input.js`,
+            `/Modules/Support/PopCap/PvZ2/RSG/Encode.js`,
+            `/Modules/Support/PopCap/PvZ2/RSB/Unpack.js`,
+            `/Modules/Support/PopCap/PvZ2/RSB/Pack.js`,
+            `/Modules/Support/PopCap/PvZ2/RSB/Convert/Resource.js`,
+            `/Modules/Support/PopCap/PvZ2/RTON/Encode.js`,
+            `/Modules/Support/WWise/Encode.js`,
+            `/Modules/Interface/Assert.js`,
+            `/Modules/Interface/Arguments.js`,
+            `/Modules/Interface/Execute.js`,
         ]),
     ];
 
@@ -46,7 +46,7 @@ namespace Sen.Script {
     export function LoadModules(scripts: Array<string>): void {
         for (const script of scripts) {
             try {
-                Sen.Shell.JavaScriptCoreEngine.Execute(Sen.Shell.FileSystem.ReadText(script, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), script);
+                Sen.Shell.JavaScriptCoreEngine.Execute(Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}${script}`)}`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), `Scripts${script}`);
             } catch (error) {
                 Sen.Shell.Console.Print(null, error);
             }
