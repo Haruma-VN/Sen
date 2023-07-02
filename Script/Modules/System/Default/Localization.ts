@@ -8,6 +8,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
             notification_when_finish: boolean;
             override: boolean;
             use_trailing_commas: boolean;
+            debugger: boolean;
         };
         additional: {
             packed_codebooks_aoTuV_603: string;

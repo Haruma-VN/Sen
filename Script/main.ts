@@ -4,36 +4,36 @@ namespace Sen.Script {
      */
     export const ScriptModules: Array<string> = [
         ...new Set([
-            `/Modules/Constraints/Compression.js`,
-            `/Modules/Constraints/Crypto.js`,
-            `/Modules/Constraints/FileSystem.js`,
-            `/Modules/System/Default/timer.js`,
-            `/Modules/System/Implement/Json.js`,
-            `/Modules/System/Implement/JavaScript.js`,
-            `/Modules/Third/maxrects-packer/maxrects-packer.js`,
-            `/Modules/Third/fast-sort/sort.js`,
-            `/Modules/Constraints/Platform.js`,
-            `/Modules/System/Implement/Exception.js`,
-            `/Modules/System/Implement/FileSystem.js`,
-            `/Modules/System/Default/Localization.js`,
-            `/Modules/Support/PopCap/PvZ2/Resources/Unofficial.js`,
-            `/Modules/Support/PopCap/PvZ2/Resources/Official.js`,
-            `/Modules/Support/PopCap/PvZ2/Atlas/Split.js`,
-            `/Modules/Support/PopCap/PvZ2/Atlas/Pack.js`,
-            `/Modules/Support/PopCap/PvZ2/Atlas/Resize.js`,
-            `/Modules/Support/PopCap/PvZ2/PTX/Encode.js`,
-            `/Modules/Support/PopCap/PvZ2/Animation/Encode.js`,
-            `/Modules/Support/PopCap/PvZ2/Animation/Helper.js`,
-            `/Modules/Support/PopCap/PvZ2/Arguments/Input.js`,
-            `/Modules/Support/PopCap/PvZ2/RSG/Encode.js`,
-            `/Modules/Support/PopCap/PvZ2/RSB/Unpack.js`,
-            `/Modules/Support/PopCap/PvZ2/RSB/Pack.js`,
-            `/Modules/Support/PopCap/PvZ2/RSB/Convert/Resource.js`,
-            `/Modules/Support/PopCap/PvZ2/RTON/Encode.js`,
-            `/Modules/Support/WWise/Encode.js`,
-            `/Modules/Interface/Assert.js`,
-            `/Modules/Interface/Arguments.js`,
-            `/Modules/Interface/Execute.js`,
+            `Modules/Constraints/Compression`,
+            `Modules/Constraints/Crypto`,
+            `Modules/Constraints/FileSystem`,
+            `Modules/System/Default/timer`,
+            `Modules/System/Implement/Json`,
+            `Modules/System/Implement/JavaScript`,
+            `Modules/Third/maxrects-packer/maxrects-packer`,
+            `Modules/Third/fast-sort/sort`,
+            `Modules/Constraints/Platform`,
+            `Modules/System/Implement/Exception`,
+            `Modules/System/Implement/FileSystem`,
+            `Modules/System/Default/Localization`,
+            `Modules/Support/PopCap/PvZ2/Resources/Unofficial`,
+            `Modules/Support/PopCap/PvZ2/Resources/Official`,
+            `Modules/Support/PopCap/PvZ2/Atlas/Split`,
+            `Modules/Support/PopCap/PvZ2/Atlas/Pack`,
+            `Modules/Support/PopCap/PvZ2/Atlas/Resize`,
+            `Modules/Support/PopCap/PvZ2/PTX/Encode`,
+            `Modules/Support/PopCap/PvZ2/Animation/Encode`,
+            `Modules/Support/PopCap/PvZ2/Animation/Helper`,
+            `Modules/Support/PopCap/PvZ2/Arguments/Input`,
+            `Modules/Support/PopCap/PvZ2/RSG/Encode`,
+            `Modules/Support/PopCap/PvZ2/RSB/Unpack`,
+            `Modules/Support/PopCap/PvZ2/RSB/Pack`,
+            `Modules/Support/PopCap/PvZ2/RSB/Convert/Resource`,
+            `Modules/Support/PopCap/PvZ2/RTON/Encode`,
+            `Modules/Support/WWise/Encode`,
+            `Modules/Interface/Assert`,
+            `Modules/Interface/Arguments`,
+            `Modules/Interface/Execute`,
         ]),
     ];
 
@@ -46,8 +46,8 @@ namespace Sen.Script {
     export function LoadModules(scripts: Array<string>): void {
         for (const script of scripts) {
             try {
-                Sen.Shell.JavaScriptCoreEngine.Execute(Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}${script}`)}`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), `Scripts${script}`);
-            } catch (error) {
+                Sen.Shell.JavaScriptCoreEngine.Execute(Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/${script}`)}.js`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), `Scripts/${script}.js`);
+            } catch (error: unknown) {
                 Sen.Shell.Console.Print(null, error);
             }
         }
@@ -144,6 +144,7 @@ namespace Sen.Script {
         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`);
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3)));
         Sen.Script.Modules.Platform.Constraints.ExitProgram();
+        return;
     }
 }
 

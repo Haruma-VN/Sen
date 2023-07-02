@@ -11,14 +11,14 @@ namespace Sen.Shell.Modules.JavaScript
 {
     public class JSEngine
     {
-        public static void Execute(in string Script_Directory, string[] args)
+        public static void Execute(string Script_Directory, string[] args)
         {
 
             var path = new ImplementPath();
             var fs = new FileSystem();
             var main_js = path.Resolve($"{Script_Directory}/main.js");
             var SystemConsole = new SystemImplement();
-            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
+            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true).EnableModules(Script_Directory));
             var ns = new JsObject(engine);
             var dictionary = new Dictionary<string, object>
             {
@@ -45,7 +45,7 @@ namespace Sen.Shell.Modules.JavaScript
             };
             ns.Set("Shell", JsValue.FromObject(engine, dictionary));
             engine.SetValue("Sen", ns);
-            engine.Execute(fs.ReadText(main_js, EncodingType.UTF8), "Scripts/main.js");
+            engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts/main.js");
             return;
         }
     }

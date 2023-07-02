@@ -3,9 +3,10 @@
         "language": "English",
         "notification_when_finish": true,
         "override": true,
-        "use_trailing_commas": false
+        "use_trailing_commas": false,
+        "debugger": false
     },
     "additional": {
-        "packed_codebooks_aoTuV_603": "/modules/customization/additional/packed_codebooks_aoTuV_603.bin"
+        "packed_codebooks_aoTuV_603": "/Modules/Customization/Dependencies/packed_codebooks_aoTuV_603.bin"
     }
 }

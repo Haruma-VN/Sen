@@ -1188,7 +1188,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 string Path2 = fileList[i + 1].namePath.ToUpper();
                 if (RSGFunction.IsNotASCII(Path2)) 
                 {
-                    throw new Exception("item_part_must_be_ascii")
+                    throw new Exception("item_part_must_be_ascii");
                 };
                 var strLongestLength = Path1.Length >= Path2.Length ? Path1.Length : Path2.Length;
                 for (var k = 0; k < strLongestLength; k++)

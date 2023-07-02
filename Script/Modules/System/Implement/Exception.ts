@@ -972,7 +972,8 @@ namespace Sen.Script.Modules.Exceptions {
             if (Sen.Script.Modules.System.Default.Localization.notification) {
                 Sen.Shell.DotNetPlatform.SendNotification(Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, (error as Error).message), `Sen`);
             }
-            if ("stack" in (error as any)) {
+            // Debug
+            if ("stack" in (error as any) && Sen.Script.Modules.System.Default.Localization.EntryJson.default.debugger) {
                 let firstLine = (error as any).stack.split("\n")[0];
                 Sen.Script.Modules.Exceptions.CatchException(firstLine);
             }
