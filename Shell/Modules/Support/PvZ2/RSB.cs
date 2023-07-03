@@ -1291,8 +1291,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         }
                         rsgListCount++;
                     }
-                    if (rsgInfoList[rsgInfoCount].name == "break") continue;
-                    rsgNameList.Add(rsgList[rsgListCount].namePath);
+                    if (rsgInfoList[rsgInfoCount].name == "break")
+                    {
+                        continue;
+                    }
                     byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
                     var RSGFile = new SenBuffer(packetFile);
                     FixRSG(RSGFile, rsbHeadInfo.version, new SenBuffer(rsgInfoList[rsgInfoCount].packetHeadInfo!));
@@ -1442,6 +1444,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 }
                 var packetHeadInfo = RSBFile.readBytes(32, startOffset + 140);
                 var rsgLength = RSBFile.readInt32LE(startOffset + 148) + RSBFile.readInt32LE(startOffset + 152) + RSBFile.readInt32LE(startOffset + 168);
+                if (rsgLength <= 1024) rsgLength = 4096;
                 var ptxNumber = RSBFile.readInt32LE(startOffset + rsbHeadInfo.rsgInfo_EachLength - 8);
                 var ptxBeforeNumber = RSBFile.readInt32LE();
                 rsgInfoList.Add(new RSGInfo

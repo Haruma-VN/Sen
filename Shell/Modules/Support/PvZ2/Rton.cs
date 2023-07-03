@@ -209,7 +209,34 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             var JsonFile = new SenBuffer(stream);
             R0x90List.Clear();
             R0x92List.Clear();
-            return JsonFile;
+            return PrettyJson(JsonFile);
+        }
+
+        private static SenBuffer PrettyJson(SenBuffer JsonFile) {
+            var newJsonFile = new SenBuffer();
+            var isString = false;
+            while (JsonFile.readOffset < JsonFile.length) {
+                var charByte = JsonFile.readUInt8();
+                if (charByte == 0x22) {
+                    isString = !isString;
+                }
+                if (isString) {
+                    newJsonFile.writeUInt8(charByte);
+                    continue;
+                }
+                if (charByte == 0x20) {
+                    if (JsonFile.readUInt8() == 0x20) {
+                        newJsonFile.writeUInt8(0x09);
+                        continue;
+                    }
+                    else {
+                        JsonFile.readOffset = JsonFile.readOffset - 1;
+                    }
+                }
+                newJsonFile.writeUInt8(charByte);
+            }
+            JsonFile.Close();
+            return newJsonFile;
         }
 
         private static void ReadBytecode(byte bytecode, bool valueType, SenBuffer RtonFile, Utf8JsonWriter jsonWriter)

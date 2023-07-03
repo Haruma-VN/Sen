@@ -141,7 +141,7 @@ namespace Sen.Script {
         }
         const Sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, ""));
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`);
+        Sen.Shell.Console.Printf(null, `        ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`);
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3)));
         Sen.Script.Modules.Platform.Constraints.ExitProgram();
         return;

@@ -1065,7 +1065,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${argument}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
+                            Sen.Shell.PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Optimal);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -1086,7 +1086,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const output_argument: string = Sen.Shell.Path.Resolve(`${arg}.bin`);
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Level9);
+                                Sen.Shell.PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Optimal);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }

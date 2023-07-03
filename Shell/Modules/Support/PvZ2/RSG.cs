@@ -476,7 +476,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
                 else
                 {
-                    byte[] ZlibBytes = Compress.CompressZlibBytes(dataBytes, (flags == 3 ? ZlibCompressionLevel.BestCompression : ZlibCompressionLevel.Default));
+                    byte[] ZlibBytes = Compress.CompressZlibBytes(dataBytes, (flags == 3 ? ZlibCompressionLevel.SmallestSize : ZlibCompressionLevel.Optimal));
                     int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
                     RSGFile.writeBytes(ZlibBytes);
                     RSGFile.writeNull(ZlibAppendLength);
@@ -531,7 +531,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                         DataWrite(new byte[0], 1, true);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;
-                    byte[] ZlibBytes = Compress.CompressZlibBytes(atlasBytes, (compression_flags == 3 ? ZlibCompressionLevel.BestCompression : ZlibCompressionLevel.Default));
+                    byte[] ZlibBytes = Compress.CompressZlibBytes(atlasBytes, (compression_flags == 3 ? ZlibCompressionLevel.SmallestSize : ZlibCompressionLevel.Optimal));
                     int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
                     RSGFile.writeBytes(ZlibBytes);
                     RSGFile.writeNull(ZlibAppendLength);
@@ -554,7 +554,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         {
             if (oriLength % 4096 == 0)
             {
-                return 0;
+                return 4096;
             }
             else
             {

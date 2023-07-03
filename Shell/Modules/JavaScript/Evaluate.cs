@@ -18,7 +18,7 @@ namespace Sen.Shell.Modules.JavaScript
             var fs = new FileSystem();
             var main_js = path.Resolve($"{Script_Directory}/main.js");
             var SystemConsole = new SystemImplement();
-            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true).EnableModules(Script_Directory));
+            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
             var ns = new JsObject(engine);
             var dictionary = new Dictionary<string, object>
             {
