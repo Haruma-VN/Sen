@@ -211,7 +211,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
             }
         }
         if (packages) {
-            Sen.Shell.PvZ2Shell.RSGUnpack(Sen.Shell.Path.Resolve(`${outDirectory}/packet/${packages}.rsg`), Sen.Shell.Path.Resolve(`${outDirectory}/resource`), false);
+            const packages_destination: string = Sen.Shell.Path.Resolve(`${outDirectory}/resource`);
+            Sen.Shell.PvZ2Shell.RSGUnpack(Sen.Shell.Path.Resolve(`${outDirectory}/packet/${packages}.rsg`), packages_destination, false);
+            if (information.encryptedRTON) {
+                const insider: Array<string> = Sen.Shell.FileSystem.ReadDirectory(Sen.Shell.Path.Resolve(`${packages_destination}/PACKAGES`), Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
+                insider.forEach((file: string) => {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecrypt(file, file, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                });
+            }
         }
         return;
     }

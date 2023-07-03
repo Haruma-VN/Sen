@@ -39,11 +39,15 @@ namespace Sen.Shell.Modules.Support.Misc
             {
                 var progID = $"Sen.FileType";
                 var path = new ImplementPath();
-                string[] extensions = { ".rsb", ".rsg", ".pam", ".rton", ".json", ".png", ".ptx", ".js", ".obb", ".bnk" };
+                string[] extensions = { ".rsb", ".rsg", ".pam", ".rton", ".json", ".png", ".ptx", ".js", ".obb", ".bnk", ".wem" };
                 var appPath = path.Resolve($"{path.Dirname(Sen.Shell.Program.Script_Directory)}/Sen.exe");
-                if (!IsFileExtensionAssociated(progID, extensions[0]))
+                var fs = new FileSystem();
+                if(appPath is not null && fs.FileExists(appPath))
                 {
-                    AssociateFileExtensions(progID, extensions, appPath);
+                    if (!IsFileExtensionAssociated(progID, extensions[0]))
+                    {
+                        AssociateFileExtensions(progID, extensions, appPath);
+                    }
                 }
             }
             return;
