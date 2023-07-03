@@ -104,7 +104,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_unpack_resource"
         | "popcap_rsb_pack_resource"
         | "popcap_rsb_unpack_with_simplified_manifest"
-        | "popcap_rsb_pack_with_simplified_manifest";
+        | "popcap_rsb_pack_with_simplified_manifest"
+        | "ogg_to_wav";
 
     /**
      *
@@ -247,6 +248,28 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                        });
+                    }
+                    break;
+                }
+                case "ogg_to_wav": {
+                    if (!Array.isArray(argument)) {
+                        try {
+                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.wav`);
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.PvZ2Shell.ConvertOGGtoWAV(argument, output_argument);
+                        } catch (error: unknown) {
+                            throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, argument);
+                        }
+                    } else {
+                        argument.forEach((arg: string) => {
+                            try {
+                                const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.wav`);
+                                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                                Sen.Shell.PvZ2Shell.ConvertOGGtoWAV(arg, output_argument);
+                            } catch (error: unknown) {
+                                throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, arg);
+                            }
                         });
                     }
                     break;

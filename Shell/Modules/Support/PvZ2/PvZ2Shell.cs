@@ -9,6 +9,8 @@ using Sen.Shell.Modules.Standards;
 using WEMSharp;
 using Sen.Shell.Modules.Support.WWise;
 using static Sen.Shell.Modules.Support.PvZ2.RTON.RTONProcession;
+using NAudio.Vorbis;
+using NAudio.Wave;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -91,6 +93,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void FlashAnimationResize(string inDir, int resolution);
 
+        public abstract void ConvertOGGtoWAV(string inFile, string outFile);
 
     }
 
@@ -304,6 +307,15 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public unsafe sealed override void FlashAnimationResize(string inDir, int resolution)
         {
             PAM_Animation.FlashAnimationResize(inDir, resolution);
+            return;
+        }
+
+        public override void ConvertOGGtoWAV(string inFile, string outFile)
+        {
+            using var vorbis = new VorbisWaveReader(inFile);
+            {
+                WaveFileWriter.CreateWaveFile(outFile, vorbis);
+            }
             return;
         }
 

@@ -5,12 +5,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      * @returns Workaround manifest (Only for for the shell)
      */
 
-    export function ConvertFromManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
-        const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = {
+    export function ConvertFromManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
+        const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = {
             version: information.version as 3 | 4,
             ptx_info_size: information.ptx_info_size as 16 | 20 | 24,
             group: [],
-        } satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+        } satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
         const groups: Array<string> = Object.keys(information.group);
         for (const group of groups) {
             const infox: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo = {
@@ -43,7 +43,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      */
 
     export function PackPopCapRSB(inDirectory: string, outFile: string): void {
-        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(`${inDirectory}/manifest.json`)
         );
         try {
@@ -73,7 +73,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      */
 
     export function PackPopCapRSBBySimple(inDirectory: string, outFile: string, option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.Options): void {
-        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(`${inDirectory}/manifest.json`)
         );
         let manifest_group: int = -1;
@@ -159,12 +159,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      * @returns
      */
 
-    export function ConvertFromSimplifedManifestGroup(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>, inDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
-        const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = {
+    export function ConvertFromSimplifedManifestGroup(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>, inDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
+        const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = {
             version: information.version as 4,
             ptx_info_size: information.ptx_info_size as 16,
             group: [],
-        } satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+        } satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
         Object.keys(information.groups).forEach((composite_group_name: string) => {
             let composite_type: boolean = false;
             const infox: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo = {
@@ -201,7 +201,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      */
 
     export function PackPopCapRSBUsingSimplifiedInformation(inDirectory: string, outFile: string): void {
-        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromSimplifedManifestGroup(
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromSimplifedManifestGroup(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>>(`${inDirectory}/pvz2.json`),
             inDirectory
         );

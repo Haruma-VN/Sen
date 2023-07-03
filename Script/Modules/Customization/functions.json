@@ -270,5 +270,11 @@
         "include": [".bundle"],
         "exclude": [],
         "type": "directory"
+    },
+    "ogg_to_wav": {
+        "func_number": 46,
+        "include": [".ogg"],
+        "exclude": [],
+        "type": "file"
     }
 }

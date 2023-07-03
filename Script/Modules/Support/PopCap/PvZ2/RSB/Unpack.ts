@@ -34,7 +34,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      * Info for Shell
      */
 
-    export interface MainfestInfo {
+    export interface ManifestInfo {
         version: number;
         ptx_info_size: number;
         path?: RSBPathInfo;
@@ -135,7 +135,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      * @returns Workaround manifest (Only for Output)
      */
 
-    export function ConvertToManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation {
+    export function ConvertToManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation {
         const manifest_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = {
             version: information.version as 3 | 4,
             ptx_info_size: information.ptx_info_size as 16 | 20 | 24,
@@ -177,9 +177,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      * @returns RSB Unpack
      */
 
-    export function UnpackPopCapOfficialRSB(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
+    export function UnpackPopCapOfficialRSB(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
         try {
-            const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
+            const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Resolve(`${outDirectory}/manifest.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json));
             return manifest_json;
         } catch (error: unknown) {
@@ -198,7 +198,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         if (rsb_header_structure.version !== 4) {
             throw new Sen.Script.Modules.Exceptions.UnsupportedDataType(Sen.Script.Modules.System.Default.Localization.GetString("unsupported_rsb_version_not_4"), inRSB);
         }
-        const manifest_additional_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(inRSB, outDirectory) as Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+        const manifest_additional_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(inRSB, outDirectory) as Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
         const manifest_group: string | undefined = manifest_additional_information.path?.rsgs.find((rsg: string) => /__MANIFESTGROUP__(.+)?/i.test(rsg));
         const packages: string | undefined = manifest_additional_information.path?.rsgs.find((rsg: string) => /Packages(.+)?/i.test(rsg) && rsg.toUpperCase() === "PACKAGES");
         if (manifest_group) {
@@ -239,8 +239,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      * @returns RSB Unpack
      */
 
-    export function UnpackAbnormalRSBByLooseConstraints(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo {
-        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Shell.PvZ2Shell.RSBUnpackByLooseConstraints(inRSB, outDirectory);
+    export function UnpackAbnormalRSBByLooseConstraints(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
+        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.PvZ2Shell.RSBUnpackByLooseConstraints(inRSB, outDirectory);
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Resolve(`${outDirectory}/manifest.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json));
         return manifest_json;
     }
@@ -263,7 +263,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      * @returns The simplified manifest
      */
 
-    export function ConvertToSimplifiedManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string> {
+    export function ConvertToSimplifiedManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string> {
         const groups: Array<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo> = information.group;
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string> = {
             version: 4,
@@ -291,7 +291,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         if (rsb_header_structure.version !== 4) {
             throw new Sen.Script.Modules.Exceptions.UnsupportedDataType(Sen.Script.Modules.System.Default.Localization.GetString("unsupported_rsb_version_not_4"), inRSB);
         }
-        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
+        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>>(Sen.Shell.Path.Resolve(`${outDirectory}/pvz2.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToSimplifiedManifest(manifest_json));
         return;
     }

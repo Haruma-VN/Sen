@@ -143,7 +143,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         const manifest: string = `${rsb_packing_option.bundle_path}/manifest.json`;
         const convert_directory: string = `${rsb_packing_option.bundle_path}/convert`;
         const manifest_deserialize: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest);
-        const converted_manifest_for_shell: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(manifest_deserialize);
+        const converted_manifest_for_shell: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(manifest_deserialize);
         const packet_directory: string = `${rsb_packing_option.bundle_path}/packet`;
         const unpack_directory: string = `${rsb_packing_option.bundle_path}/unpack`;
         if (rsb_packing_option.use_convert) {

@@ -1337,14 +1337,14 @@ declare namespace Sen {
              * @param outFolder - Out directory unpacked
              */
 
-            export function RSBUnpack(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+            export function RSBUnpack(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
             /**
              *
              * @param inDirectory - Pass RSB bundle directory path
              * @param outFile - Out RSB
              */
 
-            export function RSBPack(inDirectory: string, outFile: string, manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo): void;
+            export function RSBPack(inDirectory: string, outFile: string, manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo): void;
 
             /**
              *
@@ -1432,7 +1432,14 @@ declare namespace Sen {
              * @param outFolder - Out directory unpacked
              */
 
-            export function RSBUnpackByLooseConstraints(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.MainfestInfo;
+            export function RSBUnpackByLooseConstraints(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function ConvertOGGtoWAV(inFile: string, outFile: string): void;
         }
 
         /**
