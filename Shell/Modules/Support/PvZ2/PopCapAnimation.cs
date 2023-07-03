@@ -2016,7 +2016,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 throw new PAMException("invalid_source_dom_bitmap_instance_name", imageName);
             }
-            return imageName;
+            return imageName.Substring(6);
         }
 
         private static double[] StandardToVariant(double[] data)

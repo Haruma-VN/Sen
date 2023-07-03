@@ -92,7 +92,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         private string checkPath(string filepath) {
             var path = new ImplementPath();
-            var newStringDir = path.GetDirectoryName(filepath).Replace("\\", "/").Split("/");
+            var newStringDir = path.GetDirectoryName(filepath.Replace("\\", "/")).Split("/");
             for (var i = 0; i < newStringDir.Length; i++) {
                 var oldString = newStringDir[i];
                 if (!oldString.EndsWith(" ")) continue;
@@ -103,7 +103,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 }
                 if (stringLength < oldString.Length) newStringDir[i] = oldString.Substring(0, stringLength);
             }
-            var newFilePath = path.GetFileName(filepath);
+            var newFilePath = path.GetFileName(filepath.Replace("\\", "/"));
             var newPath = path.Join(string.Join("/", newStringDir), newFilePath);
             return newPath;
         } 
