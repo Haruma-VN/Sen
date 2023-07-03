@@ -203,8 +203,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         const packages: string | undefined = manifest_additional_information.path?.rsgs.find((rsg: string) => /Packages(.+)?/i.test(rsg) && rsg.toUpperCase() === "PACKAGES");
         if (manifest_group) {
             Sen.Shell.PvZ2Shell.RSGUnpack(Sen.Shell.Path.Resolve(`${outDirectory}/packet/${manifest_group}.rsg`), Sen.Shell.Path.Resolve(`${outDirectory}/resource`), false);
-            const resources_rton_path: string = Sen.Shell.Path.Resolve(`${outDirectory}/resource/PROPERTIES/RESOURCES.RTON`);
-            if (Sen.Shell.FileSystem.FileExists(resources_rton_path)) {
+            let resources_rton_path: string;
+            // PVZ2 International
+            if (Sen.Shell.FileSystem.FileExists(Sen.Shell.Path.Resolve(`${outDirectory}/resource/PROPERTIES/RESOURCES.RTON`))) {
+                resources_rton_path = Sen.Shell.Path.Resolve(`${outDirectory}/resource/PROPERTIES/RESOURCES.RTON`);
+            }
+            // PVZ2C CONFIG.RSB
+            else if (Sen.Shell.FileSystem.FileExists(Sen.Shell.Path.Resolve(`${outDirectory}/resource/PROPERTIES/RESOURCESCONFIG.RTON`))) {
+                resources_rton_path = Sen.Shell.Path.Resolve(`${outDirectory}/resource/PROPERTIES/RESOURCESCONFIG.RTON`);
+            } else {
+                resources_rton_path = "";
+            }
+            if (resources_rton_path !== "") {
                 const resources_json_path: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(resources_rton_path)}/${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`);
                 Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(resources_json_path, Sen.Shell.Path.Resolve(`${outDirectory}/res.json`), information.expand_path);

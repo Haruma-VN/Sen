@@ -95,7 +95,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             files.forEach((file: string) => {
                 if (Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.JSON`) {
                     json_count++;
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), option.encryptRTON ? Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt : Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                }
+                if (option.encryptRTON && Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.RTON`) {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(file, file, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 }
             });
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs`));
