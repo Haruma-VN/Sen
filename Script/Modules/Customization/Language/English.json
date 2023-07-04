@@ -306,5 +306,6 @@
     "use_unpack_directory": "Use \"unpack\" directory, pack all RSGs to \"packet\" with information inside \"manifest\" then pack RSB",
     "convert_convert_to_unpack": "Use \"convert\" directory for pack",
     "please_use_for_more": "Please use \"{1}\" after unpack to pack RSB, option is:\n       {2}",
-    "ogg_to_wav": "OGG to WAV"
+    "ogg_to_wav": "OGG to WAV",
+    "total_time_spent": "Total Time Spent: {}s"
 }
