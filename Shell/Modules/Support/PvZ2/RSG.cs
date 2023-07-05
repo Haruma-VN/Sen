@@ -218,7 +218,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
                 else
                 {
-                    return Compress.UncompressZlibBytes(RsgFile.getBytes(HeadInfo.part1_Zlib, HeadInfo.part1_Offset));
+                    return Compress.UncompressZlib(RsgFile.getBytes(HeadInfo.part1_Zlib, HeadInfo.part1_Offset));
                 }
             }
             else
@@ -229,7 +229,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
                 else
                 {
-                    return Compress.UncompressZlibBytes(RsgFile.getBytes(HeadInfo.part0_Zlib, HeadInfo.part0_Offset));
+                    return Compress.UncompressZlib(RsgFile.getBytes(HeadInfo.part0_Zlib, HeadInfo.part0_Offset));
                 }
             }
         }
@@ -476,7 +476,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
                 else
                 {
-                    byte[] ZlibBytes = Compress.CompressZlibBytes(dataBytes, (flags == 3 ? ZlibCompressionLevel.SmallestSize : ZlibCompressionLevel.Optimal));
+                    byte[] ZlibBytes = Compress.CompressZlib(dataBytes, (flags == 3 ? ZlibCompressionLevel.BEST_COMPRESSION : ZlibCompressionLevel.DEFAULT_COMPRESSION));
                     int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
                     RSGFile.writeBytes(ZlibBytes);
                     RSGFile.writeNull(ZlibAppendLength);
@@ -531,7 +531,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                         DataWrite(new byte[0], 1, true);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;
-                    byte[] ZlibBytes = Compress.CompressZlibBytes(atlasBytes, (compression_flags == 3 ? ZlibCompressionLevel.SmallestSize : ZlibCompressionLevel.Optimal));
+                    byte[] ZlibBytes = Compress.CompressZlib(atlasBytes, (compression_flags == 3 ? ZlibCompressionLevel.BEST_COMPRESSION : ZlibCompressionLevel.DEFAULT_COMPRESSION));
                     int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
                     RSGFile.writeBytes(ZlibBytes);
                     RSGFile.writeNull(ZlibAppendLength);

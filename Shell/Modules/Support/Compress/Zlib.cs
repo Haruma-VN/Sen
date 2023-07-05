@@ -84,7 +84,7 @@ namespace Sen.Shell.Modules.Support.Compress
                 var buffer = Buffer.From(bytes).ToArray();
                 var compress = new Compress();
                 void* compress_ptr = &compress;
-                var zlib_data = ((Compress*)compress_ptr)->CompressZlibBytes<byte[]>(ripe_data, options.ZlibLevel);
+                var zlib_data = ((Compress*)compress_ptr)->CompressZlib(ripe_data, options.ZlibLevel);
                 return options.Use64BitVariant ? Buffer.Concat(buffer, ((ZlibBase*)zlib_base_ptr)->blank, zlib_data)
                     : Buffer.Concat(buffer, zlib_data);
             }
@@ -109,7 +109,7 @@ namespace Sen.Shell.Modules.Support.Compress
             void* uncompress_ptr = &uncompress;
             try
             {
-                var zlib_uncompress_data = ((Compress*)uncompress_ptr)->UncompressZlibBytes<byte[]>(*(byte[]*)buffer_ptr);
+                var zlib_uncompress_data = ((Compress*)uncompress_ptr)->UncompressZlib(*(byte[]*)buffer_ptr);
                 return zlib_uncompress_data;
             }
             catch

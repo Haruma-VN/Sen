@@ -325,11 +325,23 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public unsafe override sealed void ZlibCompress(string inFile, string outFile)
         {
+            var buffer = new SenBuffer(inFile);
+            var fs = new FileSystem();
+            var compression = new Sen.Shell.Modules.Standards.Compress();
+            
+            byte[] file = compression.CompressZlib(buffer.toBytes(), ZlibCompressionLevel.BEST_COMPRESSION);
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
             return;
         }
 
         public unsafe override sealed void ZlibUncompress(string inFile, string outFile)
         {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Sen.Shell.Modules.Standards.Compress();
+            byte[] file = compression.UncompressZlib(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
             return;
         }
 

@@ -1,6 +1,7 @@
 ﻿
 using ICSharpCode.SharpZipLib.Core;
-using System.IO.Compression;
+using ICSharpCode.SharpZipLib.Zip.Compression;
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace Sen.Shell.Modules.Standards
@@ -16,84 +17,61 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract Task UncompressZipAsync(string zip_input, string extracted_directory);
 
-        public abstract byte[] CompressZlibBytes<Generic_T>(Generic_T data, ZlibCompressionLevel compression_level);
+        public abstract byte[] CompressZlib(byte[] dataStream, ZlibCompressionLevel compression_level);
 
-        public abstract byte[] UncompressZlibBytes<Generic_T>(Generic_T zlibData) where Generic_T : IList<byte>;
+        public abstract byte[] UncompressZlib(byte[] zlibData);
 
     }
     public enum ZlibCompressionLevel
     {
-        Optimal,
-        Fastest,
-        NoCompression,
-        SmallestSize,
+        NO_COMPRESSION,
+        DEFAULT_COMPRESSION,
+        BEST_SPEED,
+        BEST_COMPRESSION,
+        DEFLATED,
     }
 
 
     public class Compress : Abstract_Compress
     {
 
-
-
-        public override byte[] UncompressZlibBytes<Generic_T>(Generic_T zlibData)
+        public override byte[] UncompressZlib(byte[] zlibData)
         {
-            byte[] dataBytes;
-            if (zlibData is byte[] byteArray)
+            using var outputStream = new MemoryStream();
             {
-                dataBytes = byteArray;
-            }
-            else if (zlibData is Array array && array.GetType().GetElementType() == typeof(byte))
-            {
-                dataBytes = array.Cast<byte>().ToArray();
-            }
-            else
-            {
-                throw new Exception($"invalid_zlib");
-            }
-            using var zlibStream = new ZLibStream(new MemoryStream(dataBytes), CompressionMode.Decompress, true);
-            {
-                using var outputStream = new MemoryStream();
+                using (InflaterInputStream zlibStream = new InflaterInputStream(new MemoryStream(zlibData)))
                 {
+                    zlibStream.IsStreamOwner = false;
                     zlibStream.CopyTo(outputStream);
-                    return outputStream.ToArray();
                 }
+                return outputStream.ToArray();
             }
         }
 
 
-        public override byte[] CompressZlibBytes<Generic_T>(Generic_T data, ZlibCompressionLevel compression_level)
+        public override byte[] CompressZlib(byte[] dataStream, ZlibCompressionLevel compression_level)
         {
 
             var compressionLevel = compression_level switch
             {
-                ZlibCompressionLevel.Optimal => CompressionLevel.Optimal,
-                ZlibCompressionLevel.Fastest => CompressionLevel.Fastest,
-                ZlibCompressionLevel.NoCompression => CompressionLevel.NoCompression,
-                ZlibCompressionLevel.SmallestSize => CompressionLevel.SmallestSize,
-                _ => CompressionLevel.Optimal,
+                ZlibCompressionLevel.NO_COMPRESSION => Deflater.NO_COMPRESSION,
+                ZlibCompressionLevel.DEFAULT_COMPRESSION => Deflater.DEFAULT_COMPRESSION,
+                ZlibCompressionLevel.BEST_SPEED => Deflater.BEST_SPEED,
+                ZlibCompressionLevel.BEST_COMPRESSION => Deflater.BEST_COMPRESSION,
+                ZlibCompressionLevel.DEFLATED => Deflater.DEFLATED,
+                _ => Deflater.DEFAULT_COMPRESSION,
 
             };
-            byte[] dataBytes;
-
-            if (data is byte[] byteArray)
-            {
-                dataBytes = byteArray;
-            }
-            else
-            {
-                throw new Exception($"invalid_zlib");
-            }
-            byte[] compressedData;
             using var outputStream = new MemoryStream();
             {
-                using var compressionStream = new ZLibStream(outputStream, compressionLevel, true);
+                using (DeflaterOutputStream zlibStream = new DeflaterOutputStream(new MemoryStream(dataStream), new Deflater(compressionLevel)))
                 {
-                    compressionStream.Write(dataBytes, 0, dataBytes.Length);
+                    zlibStream.IsStreamOwner = false;
+                    zlibStream.CopyTo(outputStream);
                 }
-
-                compressedData = outputStream.ToArray();
+                return outputStream.ToArray();
             }
-            return compressedData;
+
         }
 
         public override void CompressZip(string zip_output, string[] files, string[] directories)
