@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MaUIShell
+namespace MauiShell
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

@@ -1440,6 +1440,20 @@ declare namespace Sen {
              */
 
             export function ConvertOGGtoWAV(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function ZlibCompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function ZlibUncompress(inFile: string, outFile: string): void;
         }
 
         /**

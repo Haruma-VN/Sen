@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace MaUIShell
+namespace MauiShell
 {
     [Application]
     public class MainApplication : MauiApplication

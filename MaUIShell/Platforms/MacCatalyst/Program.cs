@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace MaUIShell
+namespace MauiShell
 {
     public class Program
     {

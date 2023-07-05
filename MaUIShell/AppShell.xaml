@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="MaUIShell.AppShell"
+    x:Class="MauiShell.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MaUIShell"
+    xmlns:local="clr-namespace:MauiShell"
     Shell.FlyoutBehavior="Disabled"
-    Title="MaUIShell">
+    Title="MauiShell">
 
     <ShellContent
-        Title="Shell"
+        Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
+
 </Shell>

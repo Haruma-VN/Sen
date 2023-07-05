@@ -276,5 +276,17 @@
         "include": [".ogg"],
         "exclude": [],
         "type": "file"
+    },
+    "zlib_compress": {
+        "func_number": 47,
+        "include": [],
+        "exclude": [],
+        "type": "file"
+    },
+    "zlib_uncompress": {
+        "func_number": 48,
+        "include": [],
+        "exclude": [],
+        "type": "file"
     }
 }

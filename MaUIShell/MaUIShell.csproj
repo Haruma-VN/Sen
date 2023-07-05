@@ -14,19 +14,16 @@
 		<!-- ex. <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
 		<OutputType>Exe</OutputType>
-		<RootNamespace>MaUIShell</RootNamespace>
+		<RootNamespace>MauiShell</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<PublishSingleFile>true</PublishSingleFile>
-		<SelfContained>true</SelfContained>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
 		<!-- Display name -->
-		<ApplicationTitle>MaUIShell</ApplicationTitle>
+		<ApplicationTitle>MauiShell</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.vn.haruma.mauishell</ApplicationId>
+		<ApplicationId>com.companyname.mauishell</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -74,6 +71,4 @@
     <CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Release.plist</CodesignEntitlements>
     <UseHardenedRuntime>true</UseHardenedRuntime>
   </PropertyGroup>
-	
-	
 </Project>

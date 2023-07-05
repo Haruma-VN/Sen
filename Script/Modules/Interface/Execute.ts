@@ -105,7 +105,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_pack_resource"
         | "popcap_rsb_unpack_with_simplified_manifest"
         | "popcap_rsb_pack_with_simplified_manifest"
-        | "ogg_to_wav";
+        | "ogg_to_wav"
+        | "zlib_compress"
+        | "zlib_uncompress";
 
     /**
      *
@@ -124,6 +126,34 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(argument);
                     } else {
                         argument.forEach((arg: string) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                    }
+                    break;
+                }
+                case "zlib_compress": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.PvZ2Shell.ZlibCompress(argument, output_argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.PvZ2Shell.ZlibCompress(arg, output_argument);
+                        });
+                    }
+                    break;
+                }
+                case "zlib_uncompress": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.PvZ2Shell.ZlibUncompress(argument, output_argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.PvZ2Shell.ZlibUncompress(arg, output_argument);
+                        });
                     }
                     break;
                 }

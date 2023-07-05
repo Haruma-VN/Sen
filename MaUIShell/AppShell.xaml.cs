@@ -1,4 +1,4 @@
-﻿namespace MaUIShell
+﻿namespace MauiShell
 {
     public partial class AppShell : Shell
     {

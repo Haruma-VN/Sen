@@ -95,6 +95,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void ConvertOGGtoWAV(string inFile, string outFile);
 
+        public abstract void ZlibCompress(string inFile, string outFile);
+
+        public abstract void ZlibUncompress(string inFile, string outFile);
+
     }
 
 
@@ -310,12 +314,22 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public override void ConvertOGGtoWAV(string inFile, string outFile)
+        public unsafe sealed override void ConvertOGGtoWAV(string inFile, string outFile)
         {
             using var vorbis = new VorbisWaveReader(inFile);
             {
                 WaveFileWriter.CreateWaveFile(outFile, vorbis);
             }
+            return;
+        }
+
+        public unsafe override sealed void ZlibCompress(string inFile, string outFile)
+        {
+            return;
+        }
+
+        public unsafe override sealed void ZlibUncompress(string inFile, string outFile)
+        {
             return;
         }
 
