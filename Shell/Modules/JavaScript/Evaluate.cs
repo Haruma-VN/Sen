@@ -42,6 +42,7 @@ namespace Sen.Shell.Modules.JavaScript
                 {"Buffer", typeof(Implement.Buffer)},
                 {"PvZ2XML", new Support.Flash.PvZ2XML()},
                 {"XMLHelper", new Support.Flash.XmlHelper()},
+                {"ChatGPT", new Sen.Modules.Support.Misc.ChatGPT()},
             };
             ns.Set("Shell", JsValue.FromObject(engine, dictionary));
             engine.SetValue("Sen", ns);

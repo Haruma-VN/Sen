@@ -37,12 +37,11 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] UncompressZlib(byte[] zlibData)
         {
-            using var outputStream = new MemoryStream();
+            using (var outputStream = new MemoryStream())
             {
-                using (InflaterInputStream zlibStream = new InflaterInputStream(new MemoryStream(zlibData)))
+                using (InflaterInputStream inflaterStream = new InflaterInputStream(new MemoryStream(zlibData)))
                 {
-                    zlibStream.IsStreamOwner = false;
-                    zlibStream.CopyTo(outputStream);
+                    inflaterStream.CopyTo(outputStream);
                 }
                 return outputStream.ToArray();
             }
@@ -62,12 +61,11 @@ namespace Sen.Shell.Modules.Standards
                 _ => Deflater.DEFAULT_COMPRESSION,
 
             };
-            using var outputStream = new MemoryStream();
+            using (var outputStream = new MemoryStream())
             {
-                using (DeflaterOutputStream zlibStream = new DeflaterOutputStream(new MemoryStream(dataStream), new Deflater(compressionLevel)))
+                using (var deflaterStream = new DeflaterOutputStream(outputStream, new Deflater(compressionLevel)))
                 {
-                    zlibStream.IsStreamOwner = false;
-                    zlibStream.CopyTo(outputStream);
+                    deflaterStream.Write(dataStream, 0, dataStream.Length);
                 }
                 return outputStream.ToArray();
             }

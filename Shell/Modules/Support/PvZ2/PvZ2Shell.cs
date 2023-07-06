@@ -11,6 +11,7 @@ using Sen.Shell.Modules.Support.WWise;
 using static Sen.Shell.Modules.Support.PvZ2.RTON.RTONProcession;
 using NAudio.Vorbis;
 using NAudio.Wave;
+using System.Threading;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -169,13 +170,15 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public unsafe sealed override PacketInfo RSGUnpack(string inFile, string outFolder, bool useResDirectory = true) {
+        public unsafe sealed override PacketInfo RSGUnpack(string inFile, string outFolder, bool useResDirectory = true)
+        {
             var RsgFile = new SenBuffer(inFile);
             var PacketInfo = RSGFunction.Unpack(RsgFile, outFolder, useResDirectory);
             return PacketInfo;
         }
 
-        public unsafe sealed override void RSGPack(string inFolder, string outFile, PacketInfo packet_info, bool useResDirectory = true) {
+        public unsafe sealed override void RSGPack(string inFolder, string outFile, PacketInfo packet_info, bool useResDirectory = true)
+        {
             var RSGFile = RSGFunction.Pack(inFolder, packet_info, useResDirectory);
             RSGFile.OutFile(outFile);
             return;
@@ -226,10 +229,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public unsafe sealed override void PopCapZlibCompress(string ripefile, bool use64bitvariant, string outFile, ZlibCompressionLevel zlib_level)
         {
             var zlib = new PopCapZlib();
-            var zlib_data = zlib.ZlibCompress(new ZlibCompress() { 
+            var zlib_data = zlib.ZlibCompress(new ZlibCompress()
+            {
                 RipeFile = ripefile,
-                Use64BitVariant = use64bitvariant, 
-                ZlibLevel = zlib_level 
+                Use64BitVariant = use64bitvariant,
+                ZlibLevel = zlib_level
             });
             var fs = new FileSystem();
             fs.OutFile<byte[]>(outFile, zlib_data);
@@ -316,19 +320,45 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public unsafe sealed override void ConvertOGGtoWAV(string inFile, string outFile)
         {
-            using var vorbis = new VorbisWaveReader(inFile);
+            using (var vorbisTemp = new VorbisWaveReader(inFile))
             {
-                WaveFileWriter.CreateWaveFile(outFile, vorbis);
+                long Position = 0;
+                void VorbisWorker()
+                {
+                    var buffer = new byte[vorbisTemp.WaveFormat.AverageBytesPerSecond / 8];
+                    while (vorbisTemp.Read(buffer, 0, buffer.Length) > 0)
+                    {
+                        Position = vorbisTemp.Position;
+                    };
+                }
+                if (vorbisTemp.Length == 0)
+                {
+                    Thread workerThread = new Thread(VorbisWorker);
+                    workerThread.Start();
+                    Thread.Sleep(30);
+                }
+                using (var vorbis = new VorbisWaveReader(inFile))
+                {
+                    using (var wavFileWriter = new WaveFileWriter(outFile, vorbis.WaveFormat))
+                    {
+                        var bufferFile = new byte[vorbis.WaveFormat.AverageBytesPerSecond / 8];
+                        while (vorbis.Position < (vorbisTemp.Length > 0 ? vorbisTemp.Length : Position))
+                        {
+                            var cnt = vorbis.Read(bufferFile, 0, bufferFile.Length);
+                            if (cnt == 0) break;
+                            wavFileWriter.Write(bufferFile);
+                        }
+                    }
+                }
+
             }
             return;
         }
-
         public unsafe override sealed void ZlibCompress(string inFile, string outFile)
         {
             var buffer = new SenBuffer(inFile);
             var fs = new FileSystem();
             var compression = new Sen.Shell.Modules.Standards.Compress();
-            
             byte[] file = compression.CompressZlib(buffer.toBytes(), ZlibCompressionLevel.BEST_COMPRESSION);
             var wr = new SenBuffer(file);
             wr.OutFile(outFile);
