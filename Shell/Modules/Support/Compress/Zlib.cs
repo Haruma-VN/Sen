@@ -1,7 +1,5 @@
-﻿using Jint;
-using Sen.Shell.Modules.Standards;
+﻿using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule;
-using System.Collections;
 using System.Runtime.InteropServices;
 
 namespace Sen.Shell.Modules.Support.Compress
