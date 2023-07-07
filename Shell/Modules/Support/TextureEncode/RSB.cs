@@ -1863,8 +1863,8 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                 }
 
             }
-            var square = width * height;
-            var bitPostion = 0;
+            int square = width * height;
+            int bitPostion = 0;
             byte buffer = 0;
             int readOneBit()
             {
@@ -1873,14 +1873,14 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
                     buffer = image_bytes.readUInt8();
                 }
                 bitPostion = (bitPostion + 7) & 7;
-                return (buffer >> bitPostion) & 0b1;
+                return ((int)buffer >> bitPostion) & 0b1;
             }
             int readBits(int bits)
             {
-                var ans = 0;
+                int ans = 0;
                 for (var i = bits - 1; i >= 0; i--)
                 {
-                    ans |= readOneBit() << 1;
+                    ans |= readOneBit() << i;
                 }
                 return ans;
             }

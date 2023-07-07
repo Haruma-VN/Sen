@@ -5,6 +5,8 @@ using System.Text.Json;
 using System.Xml;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Sen.Shell.Modules.Support.PvZ2.PAM
 {
@@ -436,7 +438,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     main_sprite.frame_rate = frame_rate;
                 }
             }
-            var PamJson = new PAMInfo
+            var AnimationJson = new PAMInfo
             {
                 version = version,
                 frame_rate = frame_rate,
@@ -446,7 +448,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 sprite = sprite,
                 main_sprite = main_sprite,
             };
-            return PamJson;
+            return AnimationJson;
         }
         private static ImageInfo ReadImageInfo(SenBuffer PamFile, int version)
         {
@@ -595,80 +597,80 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return frameInfo;
         }
         //Encode
-        public static SenBuffer Encode(PAMInfo PamJson)
+        public static SenBuffer Encode(PAMInfo AnimationJson)
         {
             SenBuffer PamBinary = new SenBuffer();
-            int version = PamJson.version;
+            int version = AnimationJson.version;
             PamBinary.writeUInt32LE(Magic.MagicNumber);
             PamBinary.writeInt32LE(version);
             if (version > 6 || version < 1)
             {
                 throw new PAMException("pam_version_out_of_range", "undefined");
             }
-            PamBinary.writeUInt8((byte)(PamJson.frame_rate));
-            if (PamJson.position == null || PamJson.position.Length < 2)
+            PamBinary.writeUInt8((byte)(AnimationJson.frame_rate));
+            if (AnimationJson.position == null || AnimationJson.position.Length < 2)
             {
                 PamBinary.writeInt16LE(0);
                 PamBinary.writeInt16LE(0);
             }
             else
             {
-                PamBinary.writeInt16LE((short)(PamJson.position[0] * 20));
-                PamBinary.writeInt16LE((short)(PamJson.position[1] * 20));
+                PamBinary.writeInt16LE((short)(AnimationJson.position[0] * 20));
+                PamBinary.writeInt16LE((short)(AnimationJson.position[1] * 20));
             }
-            if (PamJson.size == null || PamJson.size.Length < 2)
+            if (AnimationJson.size == null || AnimationJson.size.Length < 2)
             {
                 PamBinary.writeInt16LE(-1);
                 PamBinary.writeInt16LE(-1);
             }
             else
             {
-                PamBinary.writeInt16LE((short)(PamJson.size[0] * 20));
-                PamBinary.writeInt16LE((short)(PamJson.size[1] * 20));
+                PamBinary.writeInt16LE((short)(AnimationJson.size[0] * 20));
+                PamBinary.writeInt16LE((short)(AnimationJson.size[1] * 20));
             }
-            if (PamJson.image == null || PamJson.image.Length == 0)
+            if (AnimationJson.image == null || AnimationJson.image.Length == 0)
             {
                 PamBinary.writeInt16LE(0);
             }
             else
             {
-                int imagesCount = PamJson.image.Length;
+                int imagesCount = AnimationJson.image.Length;
                 PamBinary.writeInt16LE((short)imagesCount);
                 for (var i = 0; i < imagesCount; i++)
                 {
-                    ImageInfo image = PamJson.image[i];
+                    ImageInfo image = AnimationJson.image[i];
                     WriteImageInfo(PamBinary, version, image);
                 }
             }
-            if (PamJson.sprite == null || PamJson.sprite.Length == 0)
+            if (AnimationJson.sprite == null || AnimationJson.sprite.Length == 0)
             {
                 PamBinary.writeInt16LE(0);
             }
             else
             {
-                int spritesCount = PamJson.sprite.Length;
+                int spritesCount = AnimationJson.sprite.Length;
                 PamBinary.writeInt16LE((short)spritesCount);
                 for (var i = 0; i < spritesCount; i++)
                 {
-                    SpriteInfo sprite = PamJson.sprite[i];
+                    SpriteInfo sprite = AnimationJson.sprite[i];
                     WriteSpriteInfo(PamBinary, version, sprite);
                 }
             }
             if (version <= 3)
             {
-                SpriteInfo mainSprite = PamJson.main_sprite ?? new SpriteInfo();
+                SpriteInfo mainSprite = AnimationJson.main_sprite ?? new SpriteInfo();
                 WriteSpriteInfo(PamBinary, version, mainSprite);
             }
             else
             {
-                if (PamJson.main_sprite == null)
+                if (AnimationJson.main_sprite == null)
                 {
                     PamBinary.writeBool(false);
                 }
                 else
                 {
                     PamBinary.writeBool(true);
-                    WriteSpriteInfo(PamBinary, version, PamJson.main_sprite);
+                    WriteSpriteInfo(PamBinary, version, AnimationJson.main_sprite);
                 }
             }
             return PamBinary;
@@ -946,64 +948,193 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         public static readonly double[] k_initial_color = { 1.0, 1.0, 1.0, 1.0 };
 
-        public static ExtraInfo Decode(PAMInfo PamJson, string outFolder, int resolution)
+        public static ExtraInfo Decode(PAMInfo AnimationJson, string outFolder, int resolution, bool splitLabel = true)
         {
             var fs = new FileSystem();
-            fs.CreateDirectory($"{outFolder}/library/media");
-            fs.CreateDirectory($"{outFolder}/library/image");
-            fs.CreateDirectory($"{outFolder}/library/sprite");
-            fs.CreateDirectory($"{outFolder}/library/source");
-            FlashPackage PamRipe = new FlashPackage
+            fs.CreateDirectory($"{outFolder}/library/source/");
+            fs.CreateDirectory($"{outFolder}/library/image/");
+            fs.CreateDirectory($"{outFolder}/library/sprite/");
+            fs.CreateDirectory($"{outFolder}/library/media/");
+            var imageLength = AnimationJson.image.Length;
+            for (var i = 0; i < imageLength; i++)
             {
-                extra = new()
-                {
-                    version = PamJson.version,
-                    position = PamJson.position,
-                    image = PamJson.image.Select((e) => new ExtraImageInfo
-                    {
-                        name = e.name,
-                        size = e.size,
-                    }).ToArray(),
-                    sprite = PamJson.sprite.Select((e) => new ExtraSpriteInfo
-                    {
-                        name = e.name,
-                    }).ToArray(),
-                    main_sprite = new()
-                    {
-                        name = PamJson.main_sprite.name,
-                    },
-                },
-                document = WriteDomDocument(PamJson),
-                library = new()
-                {
-                    image = PamJson.image.Select((e, i) => WriteImageDocument(i, e)).ToArray(),
-                    sprite = PamJson.sprite.Select((e, i) => WriteSpriteDocument(i, e, PamJson.sprite)).ToArray(),
-                    main_sprite = WriteSpriteDocument(-1, PamJson.main_sprite, PamJson.sprite)
-                }
-            };
-            SenBuffer.SaveXml($"{outFolder}/DOMDocument.xml", PamRipe.document, xflns);
-            PamRipe.library.image.Select((e, i) =>
+                var sourceDocument = WriteSourceDocument(i, AnimationJson.image[i], resolution);
+                var imageDocument = WriteImageDocument(i, AnimationJson.image[i]);
+                SenBuffer.SaveXml($"{outFolder}/library/source/source_{i + 1}.xml", sourceDocument, xflns);
+                SenBuffer.SaveXml($"{outFolder}/library/image/image_{i + 1}.xml", imageDocument, xflns);
+            }
+            var spriteLength = AnimationJson.sprite.Length;
+            for (var i = 0; i < spriteLength; i++)
             {
-                SenBuffer.SaveXml($"{outFolder}/LIBRARY/image/image_{i + 1}.xml", e, xflns);
-                return string.Empty;
-            }).ToArray();
-            PamRipe.library.sprite.Select((e, i) =>
-            {
-                SenBuffer.SaveXml($"{outFolder}/LIBRARY/sprite/sprite_{i + 1}.xml", e, xflns);
-                return string.Empty;
-            }).ToArray();
-            XElement[] sourceDocument = PamJson.image.Select((e, i) => WriteSourceDocument(i, e, resolution)).ToArray();
-            sourceDocument.Select((e, i) =>
-            {
-                SenBuffer.SaveXml($"{outFolder}/LIBRARY/source/source_{i + 1}.xml", e, xflns);
-                return string.Empty;
-            }).ToArray();
-            SenBuffer.SaveXml($"{outFolder}/LIBRARY/main_sprite.xml", PamRipe.library.main_sprite, xflns);
+                var spriteDocument = WriteSpriteDocument(i, DecodeFrameNodeList(i, AnimationJson.sprite[i], AnimationJson.sprite));
+                SenBuffer.SaveXml($"{outFolder}/library/sprite/sprite_{i + 1}.xml", spriteDocument, xflns);
+            }
+            SenBuffer.SaveXml($"{outFolder}/library/main_sprite.xml", WriteSpriteDocument(-1, DecodeFrameNodeList(-1, AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
+            SenBuffer.SaveXml($"{outFolder}/DomDocument.xml", WriteDomDocument(AnimationJson), xflns);
             fs.WriteText($"{outFolder}/main.xfl", k_xfl_content, EncodingType.ASCII);
-            return PamRipe.extra;
+            var extraInfo = new ExtraInfo()
+            {
+                version = AnimationJson.version,
+                position = AnimationJson.position,
+                image = AnimationJson.image.Select((e) => new ExtraImageInfo
+                {
+                    name = e.name,
+                    size = e.size,
+                }).ToArray(),
+                sprite = AnimationJson.sprite.Select((e) => new ExtraSpriteInfo
+                {
+                    name = e.name,
+                }).ToArray(),
+                main_sprite = new()
+                {
+                    name = AnimationJson.main_sprite.name,
+                },
+            };
+            return extraInfo;
         }
 
-        private static XElement WriteDomDocument(PAMInfo PamJson)
+        public static Dictionary<int, List<XElement>> DecodeFrameNodeList(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite)
+        {
+            Dictionary<int, Model> model = new();
+            Dictionary<int, List<XElement>> frame_node_list = new();
+            var frameLength = sprite.frame!.Length;
+            for (var i = 0; i < frameLength; i++)
+            {
+                foreach (var remove in sprite.frame[i].remove!)
+                {
+                    model[remove.index].state = false;
+                }
+                foreach (var append in sprite.frame[i].append!)
+                {
+                    model[append.index] = new()
+                    {
+                        state = null,
+                        resource = append.resource,
+                        sprite = append.sprite,
+                        transform = k_initial_transform,
+                        color = k_initial_color,
+                        frame_start = i,
+                        frame_duration = i,
+                    };
+                    frame_node_list[append.index] = new();
+                    if (i > 0)
+                    {
+                        frame_node_list[append.index].Add(
+                            new XElement("DOMFrame",
+                                new XAttribute("index", "0"),
+                                new XAttribute("duration", i),
+                                new XElement("elements")
+                            )
+                        );
+                    }
+                }
+                foreach (var change in sprite.frame[i].change!)
+                {
+                    var layer = model[change.index];
+                    layer.state = true;
+                    layer.transform = VariantToStandard(change.transform, change.index);
+                    if (change.color != null && change.color[0] != 0 && change.color[1] != 0)
+                    {
+                        layer.color = change.color;
+                    }
+                }
+                foreach (var layer_index in model.Keys)
+                {
+                    var layer = model[layer_index];
+                    var frame_node = frame_node_list[layer_index];
+                    if (layer.state != null)
+                    {
+                        if (frame_node.Count > 0)
+                        {
+                            (frame_node[frame_node.Count - 1] as XElement).SetAttributeValue("duration", layer.frame_duration);
+                        }
+                    }
+                    if (layer.state == true)
+                    {
+                        frame_node.Add(
+                            new XElement("DOMFrame",
+                                new XAttribute("index", i),
+                                    new XAttribute("duration", ""),
+                                    new XElement("elements",
+                                        new XElement("DOMSymbolInstance",
+                                            !layer.sprite ?
+                                            new XAttribute[]
+                                            {
+                                                new XAttribute("libraryItemName", $"image/image_{layer.resource + 1}"),
+                                                new XAttribute("symbolType", "graphic"),
+                                                new XAttribute("loop", "loop"),
+                                            }
+                                            :
+                                            new XAttribute[]
+                                            {
+                                                new XAttribute("libraryItemName", $"sprite/sprite_{layer.resource + 1}"),
+                                                new XAttribute("symbolType", "graphic"),
+                                                new XAttribute("loop", "loop"),
+                                                new XAttribute("firstFrame", (i - (layer.frame_start)) % (sub_sprite[(layer.resource)].frame!.Length)),
+                                            },
+                                            new XElement("matrix",
+                                                new XElement("Matrix",
+                                                    new XAttribute("a", layer.transform[0].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("b", layer.transform[1].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("c", layer.transform[2].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("d", layer.transform[3].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("tx", layer.transform[4].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("ty", layer.transform[5].ToString("N6").Replace(",", ""))
+                                                )
+                                            ),
+                                            new XElement("color",
+                                                new XElement("Color",
+                                                    new XAttribute("redMultiplier", layer.color[0].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("greenMultiplier", layer.color[1].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("blueMultiplier", layer.color[2].ToString("N6").Replace(",", "")),
+                                                    new XAttribute("alphaMultiplier", layer.color[3].ToString("N6").Replace(",", ""))
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            );
+                        layer.state = null;
+                        layer.frame_duration = 0;
+                    }
+                    if (layer.state == false)
+                    {
+                        model.Remove(layer_index);
+                    }
+                    layer.frame_duration++;
+                }
+            }
+            foreach (var layer_index in model.Keys)
+            {
+                var layer = model[layer_index];
+                var frame_node = frame_node_list[layer_index];
+                frame_node[frame_node.Count - 1].SetAttributeValue("duration", layer.frame_duration);
+                model.Remove(layer_index);
+            }
+            return frame_node_list;
+        }
+
+        private static XElement WriteSpriteDocument(int index, Dictionary<int, List<XElement>> frame_node_list)
+        {
+            return new XElement("DOMSymbolItem",
+                k_xmlns_attribute,
+                new XAttribute("name", index == -1 ? "main_sprite" : $"sprite/sprite_{index + 1}"),
+                new XAttribute("symbolType", "graphic"),
+                new XElement("timeline",
+                    new XElement("DOMTimeline",
+                        new XAttribute("name", index == -1 ? "main_sprite" : $"sprite_{index + 1}"),
+                        new XElement("layers", frame_node_list.Keys.OrderByDescending(i => i).Select((layer_index) =>
+                            new XElement("DOMLayer",
+                                new XAttribute("name", layer_index + 1),
+                                new XElement("frames", frame_node_list[layer_index].ToArray())
+                            )
+                        ).ToArray())
+                    )
+                )
+            );
+        }
+
+        private static XElement WriteDomDocument(PAMInfo AnimationJson)
         {
             PrevEnd prev_end = new()
             {
@@ -1012,7 +1143,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             };
             List<XElement> flow_node = new();
             List<XElement> command_node = new();
-            PamJson.main_sprite.frame!.Select((frame, frame_index) =>
+            AnimationJson.main_sprite.frame!.Select((frame, frame_index) =>
             {
                 if (frame.label != null || frame.stop)
                 {
@@ -1066,25 +1197,25 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 return string.Empty;
             }).ToArray();
-            if (prev_end.flow + 1 < PamJson.main_sprite.frame!.Length)
+            if (prev_end.flow + 1 < AnimationJson.main_sprite.frame!.Length)
             {
                 flow_node.Add(new XElement("DOMFrame",
                 new XAttribute("index", prev_end.flow + 1),
-                            new XAttribute("duration", PamJson.main_sprite.frame.Length - (prev_end.flow + 1))
+                            new XAttribute("duration", AnimationJson.main_sprite.frame.Length - (prev_end.flow + 1))
                         ));
             }
-            if (prev_end.command + 1 < PamJson.main_sprite.frame.Length)
+            if (prev_end.command + 1 < AnimationJson.main_sprite.frame.Length)
             {
                 command_node.Add(new XElement("DOMFrame",
                 new XAttribute("index", prev_end.command + 1),
-                            new XAttribute("duration", PamJson.main_sprite.frame.Length - (prev_end.command + 1))
+                            new XAttribute("duration", AnimationJson.main_sprite.frame.Length - (prev_end.command + 1))
                         ));
             }
             return new XElement("DOMDocument",
                 k_xmlns_attribute,
-                new XAttribute("frameRate", PamJson.main_sprite.frame_rate),
-                new XAttribute("width", PamJson.size[0]),
-                new XAttribute("height", PamJson.size[1]),
+                new XAttribute("frameRate", AnimationJson.main_sprite.frame_rate),
+                new XAttribute("width", AnimationJson.size[0]),
+                new XAttribute("height", AnimationJson.size[1]),
                 new XAttribute("xflVersion", k_xfl_version),
                 new XElement("folders",
                     new[] { "media", "source", "image", "sprite" }.Select((e) => new XElement("DOMFolderItem",
@@ -1092,24 +1223,24 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         new XAttribute("isExpanded", "true")
                     )).ToArray()
                 ),
-                new XElement("media", PamJson.image.Select((e) =>
+                new XElement("media", AnimationJson.image.Select((e) =>
                     new XElement("DOMBitmapItem",
                     new XAttribute("name", $"media/{e.name.Split("|")[0]}"),
                     new XAttribute("href", $"media/{e.name.Split("|")[0]}.png")
                 )).ToArray()
                 ),
                 new XElement("symbols",
-                    PamJson.image.Select((e, i) =>
+                    AnimationJson.image.Select((e, i) =>
                         new XElement("Include",
                             new XAttribute("href", $"source/source_{i + 1}.xml")
                         )
                     ).ToArray(),
-                    PamJson.image.Select((e, i) =>
+                    AnimationJson.image.Select((e, i) =>
                         new XElement("Include",
                             new XAttribute("href", $"image/image_{i + 1}.xml")
                         )
                     ).ToArray(),
-                    PamJson.sprite.Select((e, i) =>
+                    AnimationJson.sprite.Select((e, i) =>
                         new XElement("Include",
                             new XAttribute("href", $"sprite/sprite_{i + 1}.xml")
                         )
@@ -1135,7 +1266,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                 new XElement("frames",
                                     new XElement("DOMFrame",
                                         new XAttribute("index", "0"),
-                                        new XAttribute("duration", PamJson.main_sprite.frame.Length),
+                                        new XAttribute("duration", AnimationJson.main_sprite.frame.Length),
                                         new XElement("elements",
                                             new XElement("DOMSymbolInstance",
                                                 new XAttribute("libraryItemName", "main_sprite"),
@@ -1204,18 +1335,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                                 new XAttribute("loop", "loop"),
                                              new XElement("matrix",
                                                     new XElement("Matrix",
-                                                        new XAttribute("a", image.transform[0].ToString("N6")),
-                                                        new XAttribute("b", image.transform[1].ToString("N6")),
-                                                        new XAttribute("c", image.transform[2].ToString("N6")),
-                                                        new XAttribute("d", image.transform[3].ToString("N6")),
-                                                        new XAttribute("tx", image.transform[4].ToString("N6")),
-                                                        new XAttribute("ty", image.transform[5].ToString("N6"))
-                                                    )
-                                                ),
-                                                new XElement("transformationPoint",
-                                                    new XElement("Point",
-                                                        new XAttribute("x", (-image.transform[4]).ToString("N6")),
-                                                        new XAttribute("y", (-image.transform[5]).ToString("N6"))
+                                                        new XAttribute("a", image.transform[0].ToString("N6").Replace(",", "")),
+                                                        new XAttribute("b", image.transform[1].ToString("N6").Replace(",", "")),
+                                                        new XAttribute("c", image.transform[2].ToString("N6").Replace(",", "")),
+                                                        new XAttribute("d", image.transform[3].ToString("N6").Replace(",", "")),
+                                                        new XAttribute("tx", image.transform[4].ToString("N6").Replace(",", "")),
+                                                        new XAttribute("ty", image.transform[5].ToString("N6").Replace(",", ""))
                                                     )
                                                 )
                                             )
@@ -1229,182 +1354,48 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             );
             return imageDocument;
         }
-        public static XElement WriteSpriteDocument(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite)
+
+        private static double[] VariantToStandard(double[] transform, int index)
         {
-            Dictionary<int, Model> model = new();
-            Dictionary<int, List<XElement>> frame_node_list = new();
-            sprite.frame!.Select((frame, frame_index) =>
-            {
-                foreach (var e in frame.remove!)
-                {
-                    model[e.index].state = false;
-                }
-                foreach (var e in frame.append!)
-                {
-                    model[e.index] = new()
-                    {
-                        state = null,
-                        resource = e.resource,
-                        sprite = e.sprite,
-                        transform = k_initial_transform,
-                        color = k_initial_color,
-                        frame_start = frame_index,
-                        frame_duration = frame_index,
-                    };
-                    frame_node_list[e.index] = new();
-                    if (frame_index > 0)
-                    {
-                        frame_node_list[e.index].Add(
-                            new XElement("DOMFrame",
-                                new XAttribute("index", "0"),
-                                new XAttribute("duration", frame_index),
-                                new XElement("elements")
-                            )
-                        );
-                    }
-                }
-                foreach (var e in frame.change!)
-                {
-                    var layer = model[e.index];
-                    layer.state = true;
-                    layer.transform = VariantToStandard(e.transform);
-                    if (e.color != null)
-                    {
-                        layer.color = e.color;
-                    }
-                }
-                foreach (var layer_index in model.Keys)
-                {
-                    var layer = model[layer_index];
-                    var frame_node = frame_node_list[layer_index];
-                    if (layer.state != null)
-                    {
-                        if (frame_node.Count > 0)
-                        {
-                            (frame_node[frame_node.Count - 1] as XElement).SetAttributeValue("duration", layer.frame_duration);
-                        }
-                    }
-                    if (layer.state == true)
-                    {
-                        frame_node.Add(
-                            new XElement("DOMFrame",
-                                new XAttribute("index", frame_index),
-                                    new XAttribute("duration", ""),
-                                    new XElement("elements",
-                                        new XElement("DOMSymbolInstance",
-                                            !layer.sprite ?
-                                            new XAttribute[]
-                                            {
-                                                new XAttribute("libraryItemName", $"image/image_{layer.resource + 1}"),
-                                                new XAttribute("symbolType", "graphic"),
-                                                new XAttribute("loop", "loop"),
-                                            }
-                                            :
-                                            new XAttribute[]
-                                            {
-                                                new XAttribute("libraryItemName", $"sprite/sprite_{layer.resource + 1}"),
-                                                new XAttribute("symbolType", "graphic"),
-                                                new XAttribute("loop", "loop"),
-                                                new XAttribute("firstFrame", (frame_index - (layer.frame_start)) % (sub_sprite[(layer.resource)].frame!.Length)),
-                                            },
-                                            new XElement("matrix",
-                                                new XElement("Matrix",
-                                                    new XAttribute("a", layer.transform[0].ToString("N6")),
-                                                    new XAttribute("b", layer.transform[1].ToString("N6")),
-                                                    new XAttribute("c", layer.transform[2].ToString("N6")),
-                                                    new XAttribute("d", layer.transform[3].ToString("N6")),
-                                                    new XAttribute("tx", layer.transform[4].ToString("N6")),
-                                                    new XAttribute("ty", layer.transform[5].ToString("N6"))
-                                                )
-                                            ),
-                                            new XElement("color",
-                                                new XElement("Color",
-                                                    new XAttribute("redMultiplier", layer.color[0].ToString("N6")),
-                                                    new XAttribute("greenMultiplier", layer.color[1].ToString("N6")),
-                                                    new XAttribute("blueMultiplier", layer.color[2].ToString("N6")),
-                                                    new XAttribute("alphaMultiplier", layer.color[3].ToString("N6"))
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            );
-                        layer.state = null;
-                        layer.frame_duration = 0;
-                    }
-                    if (layer.state == false)
-                    {
-                        model.Remove(layer_index);
-                    }
-                    ++layer.frame_duration;
-                }
-                return string.Empty;
-            }).ToArray();
-            foreach (var layer_index in model.Keys)
-            {
-                var layer = model[layer_index];
-                var frame_node = frame_node_list[layer_index];
-                frame_node[frame_node.Count - 1].SetAttributeValue("duration", layer.frame_duration);
-                model.Remove(layer_index);
-            }
-            return new XElement("DOMSymbolItem",
-                k_xmlns_attribute,
-                new XAttribute("name", index == -1 ? "main_sprite" : $"sprite/sprite_{index + 1}"),
-                new XAttribute("symbolType", "graphic"),
-                new XElement("timeline",
-                    new XElement("DOMTimeline",
-                        new XAttribute("name", index == -1 ? "main_sprite" : $"sprite_{index + 1}"),
-                        new XElement("layers", frame_node_list.Keys.OrderByDescending(i => i).Select((layer_index) =>
-                            new XElement("DOMLayer",
-                                new XAttribute("name", layer_index + 1),
-                                new XElement("frames", frame_node_list[layer_index])
-                            )
-                        ).ToArray())
-                    )
-                )
-            );
-        }
-        private static double[] VariantToStandard(double[] transform)
-        {
-            double[] result;
             if (transform.Length == 2)
             {
-                result = new double[] {
+
+                return new double[] {
                     1.0, 0.0, 0.0, 1.0,
-                    transform[1 - 1],
-                    transform[2 - 1]
+                    transform[0],
+                    transform[1]
                 };
             }
             else if (transform.Length == 6)
             {
-                result = (double[])transform.Clone();
+
+                return (double[])transform.Clone();
             }
             else if (transform.Length == 3)
             {
-                double cos_value = Math.Cos(transform[1 - 1]);
-                double sin_value = Math.Sin(transform[1 - 1]);
-                result = new double[] {
+                double cos_value = Math.Cos(transform[0]);
+                double sin_value = Math.Sin(transform[0]);
+                return new double[] {
                     cos_value,
                     sin_value,
                     -sin_value,
                     cos_value,
-                    transform[2 - 1],
-                    transform[3 - 1],
+                    transform[1],
+                    transform[2],
                 };
             }
             else
             {
                 throw new PAMException("invalid_transform_size", "undefined");
             }
-            return result;
         }
 
         private static XAttribute[] ScaleMatrix(int resolution)
         {
             double scale = (double)(k_standard_resolution) / resolution;
             return new XAttribute[] {
-                new XAttribute("a", scale.ToString("N6")),
-                new XAttribute("d", scale.ToString("N6"))
+                new XAttribute("a", scale.ToString("N6").Replace(",", "")),
+                new XAttribute("d", scale.ToString("N6").Replace(",", ""))
             };
         }
 
@@ -1424,8 +1415,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     main_sprite = SenBuffer.ReadXml($"{inFolder}/library/main_sprite.xml")
                 }
             };
-            PAMInfo PAMJson = ParseMainDocument(PAMRipe);
-            return PAMJson;
+            PAMInfo AnimationJson = ParseMainDocument(PAMRipe);
+            return AnimationJson;
         }
 
         private static PAMInfo ParseMainDocument(FlashPackage PAMRipe)
@@ -1928,24 +1919,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 throw new PAMException("invalid_image_matrix_length", $"Matrix length: {x_Matrix_list.Length}");
             }
             var x_Matrix = x_Matrix_list[0];
-            var x_transformationPoint_list = x_DOMSymbolInstance.Elements("transformationPoint").ToArray();
-            if (x_transformationPoint_list.Length != 1)
-            {
-                throw new PAMException("invalid_image_transformationpoint_length", $"TransformationPoint length: {x_transformationPoint_list.Length}");
-            }
-            var x_transformationPoint = x_transformationPoint_list[0];
-            var x_Point_list = x_transformationPoint.Elements("Point").ToArray();
-            if (x_Point_list.Length != 1)
-            {
-                throw new PAMException("invalid_image_point_length", $"Point length: {x_Point_list.Length}");
-            }
-            var x_Point = x_Point_list[0];
             double[] transform = ParseTransform(x_Matrix);
-            double[] transform_origin = ParseTransformOriginal(x_Point);
-            if (transform[4] != -transform_origin[0] || transform[5] != -transform_origin[1])
-            {
-                throw new PAMException("invalid_image_transform", "undefined");
-            }
             return transform;
         }
 
@@ -2019,7 +1993,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return imageName.Substring(6);
         }
 
-        private static double[] StandardToVariant(double[] data)
+        public static double[] StandardToVariant(double[] data)
         {
             if (data[0] == data[3] && data[1] == -data[2])
             {
@@ -2045,7 +2019,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             };
         }
 
-        private static double[] ParseTransform(XElement x_Matrix)
+        public static double[] ParseTransform(XElement x_Matrix)
         {
             return new double[] {
                 double.Parse((string?)x_Matrix!.Attribute("a") ?? "1"),
@@ -2060,7 +2034,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             return Math.Max(0, Math.Min(255, double.Parse(multiplier_s ?? "1") * 255 + double.Parse(offset_s ?? "0"))) / 255;
         }
-        private static double[] ParseColor(XElement x_Matrix)
+        public static double[] ParseColor(XElement x_Matrix)
         {
             return new double[] {
                 ParseColorCompute((string?)x_Matrix!.Attribute("redMultiplier"), (string?)x_Matrix!.Attribute("redOffset")),
@@ -2131,6 +2105,179 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
 
             return x.Length.CompareTo(y.Length);
+        }
+    }
+
+    public class AnimationHelperSetting
+    {
+        public bool imageByPath = false;
+        public int appendWidth = 0;
+        public int appendHeight = 0;
+        public int posX = 0;
+        public int posY = 0;
+        public int[] disableSprite = new int[0];
+    }
+
+    public class ImageSequenceList
+    {
+        public int imageWidth { get; set; }
+        public int imageHeight { get; set; }
+        public required double[] matrix { get; set; }
+        public required string imageName { get; set; }
+        public required int imageIndex { get; set; }
+        public bool disableSprite { get; set; }
+        public List<double[]> transform = new List<double[]>();
+        public List<double[]> color = new List<double[]>();
+    }
+
+    public class AnimationHelper
+    {
+
+        public static void GenerateImageSequence(PAMInfo AnimationJson, string outFolder, string mediaPath, int resolution, AnimationHelperSetting setting)
+        {
+            var imageSequenceList = new Dictionary<int, List<ImageSequenceList>>();
+            var imageList = new Image[AnimationJson.image.Length];
+            for (var i = 0; i < AnimationJson.image.Length; i++)
+            {
+                var imageInfo = ReadImage(AnimationJson.image[i], i, resolution, setting.imageByPath);
+                var SixLaborsImage = LoadImage(imageInfo, mediaPath);
+                imageSequenceList[i].Add(imageInfo);
+                imageList[i] = SixLaborsImage;
+            }
+            var spriteList = new Dictionary<int, List<ImageSequenceList>>();
+            for (var i = 0; i < AnimationJson.sprite.Length; i++) {
+               var spriteImageList = ReadSprite(i, AnimationJson.sprite[i], AnimationJson.sprite, imageSequenceList, spriteList, setting.disableSprite);
+               spriteList[i] = spriteImageList;
+            }
+        }
+
+        private static ImageSequenceList ReadImage(ImageInfo image, int index, int resolution, bool imageByPath)
+        {
+            var imageName = imageByPath ? image.name.Split("|")[0] : image.name.Split("|")[1];
+            var scale = 1200 / resolution;
+            var imageWidth = (int)(scale * image.size[0]);
+            var imageHeight = (int)(scale * image.size[1]);
+            return new ImageSequenceList
+            {
+                imageWidth = imageWidth,
+                imageHeight = imageHeight,
+                matrix = image.transform,
+                imageName = imageName,
+                imageIndex = index,
+            };
+        }
+
+        private static Image LoadImage(ImageSequenceList imageInfo, string mediaPath)
+        {
+            using (var SixLaborsImage = Image.Load($"{mediaPath}/{imageInfo.imageName}.png"))
+            {
+                SixLaborsImage.Mutate(x => x.Resize(imageInfo.imageWidth, imageInfo.imageHeight));
+                return SixLaborsImage;
+            }
+        }
+
+        private static List<ImageSequenceList> ReadSprite(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite, Dictionary<int, List<ImageSequenceList>> imageSequenceList, Dictionary<int, List<ImageSequenceList>> spriteList, int[] disableSprite)
+        {
+            var frame_node_list = PAM_Animation.DecodeFrameNodeList(index, sprite, sub_sprite);
+            var spriteImageList = new List<ImageSequenceList>();
+            foreach (var layer_index in frame_node_list.Keys)
+            {
+                var DOMLayer = frame_node_list[layer_index];
+                foreach (var frameElement in DOMLayer)
+                {
+                    var frame_index = (int)frameElement.Attribute("index")!;
+                    var frame_duration = int.Parse((string)frameElement.Attribute("duration")! ?? "1");
+                    for (var i = 0; i < frame_duration; i++)
+                    {
+                        var x_elements_list = frameElement.Elements("elements").ToArray();
+                        if (x_elements_list.Length != 1)
+                        {
+                            throw new PAMException("invalid_sprite_domframe_elements_length", $"Elements length: {x_elements_list.Length}");
+                        }
+                        var x_elements = x_elements_list[0];
+                        var x_DOMSymbolInstance_list = x_elements.Elements("DOMSymbolInstance").ToArray();
+                        if (x_DOMSymbolInstance_list.Length == 0)
+                        {
+                            continue;
+                        }
+                        if (x_DOMSymbolInstance_list.Length != 1)
+                        {
+                            throw new PAMException("invalid_sprite_dom_symbol_instance_length", $"DOMSymbolInstance length: {x_DOMSymbolInstance_list.Length}");
+                        }
+                        var x_DOMSymbolInstance = x_DOMSymbolInstance_list[0];
+                        var name_match = Regex.Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!, "(image|sprite)/(image|sprite)_([0-9]+)").First();
+                        if (name_match == null)
+                        {
+                            throw new PAMException("invalid_dom_symbol_instance", "undefined");
+                        }
+                        if (name_match.Groups[1].Value != name_match.Groups[2].Value)
+                        {
+                            throw new PAMException("invalid_sprite_dom_symbol_instance_x", "undefined");
+                        }
+                        var resourceIndex = int.Parse(name_match.Groups[3].Value) - 1;
+                        var isSprite = name_match.Groups[1].Value == "sprite";
+                        double[] transform;
+                        double[] color;
+                        var x_matrix_list = x_DOMSymbolInstance.Elements("matrix").ToArray();
+                        {
+                            if (x_matrix_list.Length == 0)
+                            {
+                                transform = new double[] { 0.0, 0.0 };
+                            }
+                            else if (x_matrix_list.Length == 1)
+                            {
+                                var x_matrix = x_matrix_list[0];
+                                var x_Matrix_list = x_matrix.Elements("Matrix").ToArray();
+                                if (x_Matrix_list.Length != 1)
+                                {
+                                    throw new PAMException("invalid_sprite_matrix_length", $"Matrix length: {x_Matrix_list.Length}");
+                                }
+                                var x_Matrix = x_Matrix_list[0];
+                                transform = PAM_Animation.StandardToVariant(PAM_Animation.ParseTransform(x_Matrix));
+                            }
+                            else
+                            {
+                                throw new PAMException("invalid_sprite_dom_symbol_instance_matrix_length", $"Matrix length: {x_matrix_list.Length}");
+                            }
+                        }
+                        {
+                            var x_color_list = x_DOMSymbolInstance.Elements("color").ToArray();
+                            if (x_color_list.Length == 0)
+                            {
+                                color = (double[])PAM_Animation.k_initial_color.Clone();
+                            }
+                            else if (x_color_list.Length == 1)
+                            {
+                                var x_color = x_color_list[0];
+                                var x_Color_list = x_color.Elements("Color").ToArray();
+                                if (x_Color_list.Length != 1)
+                                {
+                                    throw new PAMException("invalid_sprite_color_length", $"Color length: {x_Color_list.Length}");
+                                }
+                                var x_Color = x_Color_list[0];
+                                color = PAM_Animation.ParseColor(x_Color);
+                            }
+                            else
+                            {
+                                throw new PAMException("invalid_sprite_dom_symbol_instance_color_length", $"Color length: {x_color_list.Length}");
+                            }
+                        };
+                        var frameSpriteList = isSprite ? spriteList[resourceIndex] : imageSequenceList[resourceIndex];
+                        for (var k = 0; k < frameSpriteList.Count; k++)
+                        {
+                            var frameSprite = frameSpriteList[k];
+                            if (isSprite && disableSprite.Contains(resourceIndex + 1) && disableSprite.Length > 0)
+                            {
+                                frameSprite.disableSprite = true;
+                            }
+                            frameSprite.transform.Add(transform);
+                            frameSprite.color.Add(color);
+                            spriteImageList.Add(frameSprite);
+                        }
+                    }
+                }
+            }
+            return spriteImageList;
         }
     }
 }
