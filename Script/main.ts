@@ -57,12 +57,12 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 0;
+    export const ScriptVersion: int = 1;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 0;
+    export const ShellRequirement: int = 1;
 
     /**
      *
@@ -117,14 +117,14 @@ namespace Sen.Script {
         Sen.Shell.Console.Print(null, `Sen ~ 1.0.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`);
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`);
-            Sen.Script.Modules.Platform.Constraints.ExitProgram();
+            Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
             return;
         }
         if (Sen.Script.ShellRequirement > Sen.Shell.ShellVersion.ShellVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Shell outdated, please update the shell to continue`);
             Sen.Shell.Console.Print(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Download link:`);
             Sen.Shell.Console.Printf(null, `      https://github.com/Haruma-VN/Sen/releases/tag/shell`);
-            Sen.Script.Modules.Platform.Constraints.ExitProgram();
+            Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
             return;
         }
         Sen.Script.TestShell();
