@@ -23,7 +23,7 @@ $movePath = "./bin/Release/net8.0/"
 
 
 
-$platforms = @("win-x64", "win-x86", "win-arm", "win-arm64", "osx-x64", "osx-arm64", "linux-x64", "linux-arm", "linux-arm64")
+$platforms = @("win-x64", "win-x86", "win-arm64", "osx-x64", "osx-arm64", "linux-x64", "linux-arm", "linux-arm64")
 
 
 foreach ($platform in $platforms) {

@@ -419,7 +419,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         const sprites: Array<string> = Object.keys(information.sprite);
         for (let i: int = 0; i < sprites.length; ++i) {
             (extra.sprite as Array<ExtraSpriteInfo>).push({
-                name: sprites[i],
+                name: information.sprite[sprites[i]],
             });
         }
         return extra;
