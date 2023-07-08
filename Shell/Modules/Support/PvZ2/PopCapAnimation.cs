@@ -2133,6 +2133,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     public class AnimationHelper
     {
 
+
         public static void GenerateImageSequence(PAMInfo AnimationJson, string outFolder, string mediaPath, int resolution, AnimationHelperSetting setting)
         {
             var imageSequenceList = new Dictionary<int, List<ImageSequenceList>>();
@@ -2206,7 +2207,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         }
                         var x_DOMSymbolInstance = x_DOMSymbolInstance_list[0];
                         var name_match = Regex.Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!, "(image|sprite)/(image|sprite)_([0-9]+)").First();
-                        if (name_match == null)
+                        if (name_match is null)
                         {
                             throw new PAMException("invalid_dom_symbol_instance", "undefined");
                         }

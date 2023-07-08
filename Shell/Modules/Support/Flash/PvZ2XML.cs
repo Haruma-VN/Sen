@@ -9,10 +9,13 @@ using System.Xml.Linq;
 using System.Collections;
 using System.Linq;
 using System.Reflection.Metadata;
+using System;
+using System.Data.SqlTypes;
 
 namespace Sen.Shell.Modules.Support.Flash
 {
     using Object = Shell.Modules.Standards.Object;
+    using FileSystem = Shell.Modules.Standards.IOModule.FileSystem;
     #region Abstract XML Class
 
     public abstract class XMLWrite
@@ -22,6 +25,10 @@ namespace Sen.Shell.Modules.Support.Flash
         public abstract void WriteSourceDocument(int index, string name, int[] size, double[] transform, int resolution, string outpath);
 
         public abstract void InsertDOMDocumentData(DOMDocument a, string xml, string outFile);
+
+        public abstract void WriteSpriteDocument(int sprite_index, int duration, int image_index, double[] transform, double[] color, string outFile);
+
+        public abstract void AddImageToSpriteDocument(string inFile, double[] transform, double[] color, int image_index);
     }
 
     #endregion
@@ -46,7 +53,7 @@ namespace Sen.Shell.Modules.Support.Flash
     {
         public PvZ2XML() { }
 
-        public override void InsertDOMDocumentData(DOMDocument dom, string xml, string outFile)
+        public unsafe sealed override void InsertDOMDocumentData(DOMDocument dom, string xml, string outFile)
         {
             var domdocument_deserialize = XDocument.Parse(xml);
             var domdocument_namespace = domdocument_deserialize!.Root!.GetDefaultNamespace();
@@ -92,7 +99,49 @@ namespace Sen.Shell.Modules.Support.Flash
             return;
         }
 
-        public override void WriteImageDocument(int index, string name, int[] size, double[] transform, string outpath)
+        public struct MatrixInformation
+        {
+            public required double[] transform { get; set; }
+            public required double[] color { get; set; }
+
+        }
+
+        private unsafe static void AddDomFrame(XElement framesElement, int sprite_children_index, int duration, string libraryItemName, string symbolType, string loop, MatrixInformation Matrix, XNamespace g_namespace)
+        {
+            var newDomFrame = new XElement(g_namespace + "DOMFrame",
+                new XAttribute("index", sprite_children_index),
+                new XAttribute("duration", duration),
+                new XElement(g_namespace + "elements",
+                    new XElement(g_namespace + "DOMSymbolInstance",
+                        new XAttribute("libraryItemName", libraryItemName),
+                        new XAttribute("symbolType", symbolType),
+                        new XAttribute("loop", loop),
+                        new XElement(g_namespace + "matrix",
+                            new XElement(g_namespace + "Matrix",
+                                new XAttribute("a", Matrix.transform[0]),
+                                new XAttribute("b", Matrix.transform[1]),
+                                new XAttribute("c", Matrix.transform[2]),
+                                new XAttribute("d", Matrix.transform[3]),
+                                new XAttribute("tx", Matrix.transform[4]),
+                                new XAttribute("ty", Matrix.transform[5])
+                            )
+                        ),
+                        new XElement(g_namespace + "color",
+                            new XElement(g_namespace + "Color",
+                                new XAttribute("redMultiplier", Matrix.color[0]),
+                                new XAttribute("greenMultiplier", Matrix.transform[1]),
+                                new XAttribute("blueMultiplier", Matrix.color[2]),
+                                new XAttribute("alphaMultiplier", Matrix.color[3])
+                            )
+                        )
+                    )
+                )
+            );
+            framesElement.Add(newDomFrame);
+            return;
+        }
+
+        public unsafe sealed override void WriteImageDocument(int index, string name, int[] size, double[] transform, string outpath)
         {
             var image = new ImageInfo()
             {
@@ -105,7 +154,7 @@ namespace Sen.Shell.Modules.Support.Flash
             return;
         }
 
-        public override void WriteSourceDocument(int index, string name, int[] size, double[] transform, int resolution, string outpath)
+        public unsafe sealed override void WriteSourceDocument(int index, string name, int[] size, double[] transform, int resolution, string outpath)
         {
             var image = new ImageInfo()
             {
@@ -117,20 +166,44 @@ namespace Sen.Shell.Modules.Support.Flash
             SenBuffer.SaveXml(outpath, source_document, PAM_Animation.xflns);
             return;
         }
+
+        public unsafe sealed override void WriteSpriteDocument(int sprite_index, int duration, int image_index, double[] transform, double[] color, string outFile)
+        {
+            var document = $"<DOMSymbolItem xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" name=\"sprite/sprite_{sprite_index}\" symbolType=\"graphic\" xmlns=\"http://ns.adobe.com/xfl/2008/\">\r\n\t<timeline>\r\n\t\t<DOMTimeline name=\"sprite_{sprite_index}\">\r\n\t\t\t<layers>\r\n\t\t\t\t<DOMLayer name=\"1\">\r\n\t\t\t\t\t<frames>\r\n\t\t\t\t\t\t<DOMFrame index=\"0\" duration=\"{duration}\">\r\n\t\t\t\t\t\t\t<elements>\r\n\t\t\t\t\t\t\t\t<DOMSymbolInstance libraryItemName=\"image/image_{image_index}\" symbolType=\"graphic\" loop=\"loop\">\r\n\t\t\t\t\t\t\t\t\t<matrix>\r\n\t\t\t\t\t\t\t\t\t\t<Matrix a=\"{transform[0]}.000000\" b=\"{transform[1]}.000000\" c=\"{transform[2]}.000000\" d=\"{transform[3]}.000000\" tx=\"{transform[4]}.000000\" ty=\"{transform[5]}.000000\" />\r\n\t\t\t\t\t\t\t\t\t</matrix>\r\n\t\t\t\t\t\t\t\t\t<color>\r\n\t\t\t\t\t\t\t\t\t\t<Color redMultiplier=\"{color[0]}.000000\" greenMultiplier=\"{color[1]}.000000\" blueMultiplier=\"{color[2]}.000000\" alphaMultiplier=\"{color[3]}.000000\" />\r\n\t\t\t\t\t\t\t\t\t</color>\r\n\t\t\t\t\t\t\t\t</DOMSymbolInstance>\r\n\t\t\t\t\t\t\t</elements>\r\n\t\t\t\t\t\t</DOMFrame>\r\n\t\t\t\t\t</frames>\r\n\t\t\t\t</DOMLayer>\r\n\t\t\t</layers>\r\n\t\t</DOMTimeline>\r\n\t</timeline>\r\n</DOMSymbolItem>";
+            var fs = new FileSystem();
+            fs.OutFile<string>(outFile, document);
+            return;
+        }
+
+        public unsafe sealed override void AddImageToSpriteDocument(string inFile, double[] transform, double[] color, int image_index)
+        {
+            var fs = new FileSystem();
+            var doc = XDocument.Parse(fs.ReadText(inFile, Standards.IOModule.EncodingType.UTF8));
+            var document_namespace = doc!.Root!.GetDefaultNamespace();
+            var framesElement = doc.Descendants(document_namespace + "frames").First();
+            AddDomFrame(framesElement, 1, 1, $"image/image_{image_index}", "graphic", "loop", new MatrixInformation() { 
+                color = color, 
+                transform = transform, 
+            }, 
+            g_namespace: document_namespace);
+            SenBuffer.SaveXml(inFile, framesElement, PAM_Animation.xflns);
+            return;
+        }
     }
     #endregion
 
 
     public static class ExpandoObjectExtensions
     {
-        public static XElement ToXElement(this ExpandoObject expando, string elementName)
+        public unsafe static XElement ToXElement(this ExpandoObject expando, string elementName)
         {
+            #pragma warning disable CS8604
             var element = new XElement(elementName);
             foreach (var item in expando)
             {
-                if (item.Value is ExpandoObject)
+                if (item.Value is ExpandoObject @object)
                 {
-                    element.Add(ToXElement((ExpandoObject)item.Value, item.Key));
+                    element.Add(ToXElement(@object, item.Key));
                 }
                 else
                 {
@@ -141,10 +214,13 @@ namespace Sen.Shell.Modules.Support.Flash
         }
     }
 
+
     public class XmlHelper
     {
-        public static ExpandoObject Deserialize(string xmlString)
+        public unsafe static ExpandoObject Deserialize(string xmlString)
         {
+            #pragma warning disable CS8602
+            #pragma warning disable CS8619
             var document = XDocument.Parse(xmlString);
             var expando = new ExpandoObject();
             var dictionary = (IDictionary<string, object>)expando;
@@ -152,8 +228,9 @@ namespace Sen.Shell.Modules.Support.Flash
             return expando;
         }
 
-        private static dynamic Deserialize(XElement element)
+        private unsafe static dynamic Deserialize(XElement element)
         {
+            #pragma warning disable CS8619
             var expando = new ExpandoObject();
             var dictionary = (IDictionary<string, object>)expando;
             foreach (var attribute in element.Attributes())
@@ -169,17 +246,16 @@ namespace Sen.Shell.Modules.Support.Flash
             }
             foreach (var childElement in element.Elements())
             {
-                if (dictionary.ContainsKey(childElement.Name.LocalName))
+                if (dictionary.TryGetValue(childElement.Name.LocalName, out object? value))
                 {
-                    if (dictionary[childElement.Name.LocalName] is List<dynamic> list)
+                    if (value is List<dynamic> list)
                     {
                         list.Add(Deserialize(childElement));
                     }
                     else
                     {
                         dictionary[childElement.Name.LocalName] = new List<dynamic>
-                {
-                    dictionary[childElement.Name.LocalName],
+                { value,
                     Deserialize(childElement)
                 };
                     }
@@ -198,7 +274,7 @@ namespace Sen.Shell.Modules.Support.Flash
 
 
 
-        public static void Serialize(ExpandoObject expando, string outpath)
+        public unsafe static void Serialize(ExpandoObject expando, string outpath)
         {
             #pragma warning disable CS8619
             SenBuffer.SaveXml(outpath, expando.ToXElement("root"), "");
@@ -206,7 +282,7 @@ namespace Sen.Shell.Modules.Support.Flash
         }
 
 
-        private static void CreateSerialize(XmlWriter xmlWriter, ExpandoObject expando)
+        private unsafe static void CreateSerialize(XmlWriter xmlWriter, ExpandoObject expando)
         {
             var dictionary = (IDictionary<string, object>)expando;
             foreach (var keyValuePair in dictionary)
@@ -221,7 +297,7 @@ namespace Sen.Shell.Modules.Support.Flash
                     CreateSerialize(xmlWriter, (ExpandoObject)keyValuePair.Value);
                     xmlWriter.WriteEndElement();
                 }
-                else if (keyValuePair.Value is IEnumerable && !(keyValuePair.Value is string))
+                else if (keyValuePair.Value is IEnumerable and not string)
                 {
                     foreach (var item in (IEnumerable)keyValuePair.Value)
                     {

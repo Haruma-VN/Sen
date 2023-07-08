@@ -1696,6 +1696,10 @@ declare namespace Sen {
 
             export function WriteSourceDocument(index: int, name: string, size: int[], transform: double[], resolution: int, outpath: string): void;
 
+            /**
+             * Structure
+             */
+
             export interface DOMDocumentAddon {
                 media: string[];
                 sprite: string[];
@@ -1703,21 +1707,73 @@ declare namespace Sen {
                 image: string[];
             }
 
-            export function InsertDOMDocumentData(a: PvZ2XML.DOMDocumentAddon, xml: string, outFile: string): void;
+            /**
+             *
+             * @param data - Pass data to insert (media, sprite, source, image)
+             * @param xml - Pass xml read as string
+             * @param outFile - Pass output file
+             */
+
+            export function InsertDOMDocumentData(data: PvZ2XML.DOMDocumentAddon, xml: string, outFile: string): void;
+
+            /**
+             *
+             * @param sprite_index - Sprite index
+             * @param duration - Pass duration (should always be 1)
+             * @param image_index - Image index
+             * @param transform - Transformation
+             * @param color - Color
+             * @param outFile - File output
+             */
+
+            export function WriteSpriteDocument(sprite_index: int, duration: int, image_index: int, transform: [double, double, double, double, double, double], color: [double, double, double, double], outFile: string): void;
+
+            /**
+             *
+             * @param inFile - Pass file path
+             * @param transform - Pass transformation
+             * @param color - Pass color information
+             * @param image_index - Pass image index to insert
+             */
+
+            export function AddImageToSpriteDocument(inFile: string, transform: [double, double, double, double, double, double], color: [double, double, double, double], image_index: int): void;
         }
 
+        /**
+         * XML Helper
+         */
+
         namespace XMLHelper {
+            /**
+             *
+             * @param xml - Pass XML string
+             */
             export function Deserialize<T>(xml: string): T;
+
+            /**
+             *
+             * @param obj - Pass obj
+             * @param out - Pass output path
+             */
 
             export function Serialize<T>(obj: T, out: string): string;
         }
     }
 
+    // Script
+
     declare namespace Script {
+        /**
+         * Structure
+         */
         declare type res_json = {
             expand_path: "string" | "array";
             groups: subgroup_parent;
         };
+
+        /**
+         * Structure
+         */
 
         declare type subgroup_parent = {
             [x: string]: {
@@ -1725,6 +1781,10 @@ declare namespace Sen {
                 subgroup: subgroup_children;
             };
         };
+
+        /**
+         * Structure
+         */
 
         declare type composite_object = {
             type: "composite";
@@ -1735,11 +1795,19 @@ declare namespace Sen {
             }>;
         };
 
+        /**
+         * Structure
+         */
+
         declare type subgroup_children = {
             [x: string]: {
                 [x: string]: packet_data;
             };
         };
+
+        /**
+         * Structure
+         */
 
         declare type sprite_data = {
             [subgroup_children_name: string]: {
@@ -1772,6 +1840,10 @@ declare namespace Sen {
             };
         };
 
+        /**
+         * Structure
+         */
+
         declare type UnofficialSubgroupStandard = {
             type: resolution;
             packet: {
@@ -1801,7 +1873,15 @@ declare namespace Sen {
             };
         };
 
+        /**
+         * Structure
+         */
+
         declare type resolution = "1536" | "768" | "384" | "1200" | "640" | null;
+
+        /**
+         * Structure
+         */
 
         declare type packet_data = {
             [x: string]: {
@@ -1815,6 +1895,10 @@ declare namespace Sen {
                 data?: children_data_inside_packet;
             };
         };
+
+        /**
+         * Structure
+         */
 
         declare type children_data_inside_packet = {
             [x: string]: {
@@ -1833,6 +1917,10 @@ declare namespace Sen {
             };
         };
 
+        /**
+         * Structure
+         */
+
         declare type PopCap_Subgroup_Parent = {
             type: string;
             id: string;
@@ -1841,6 +1929,10 @@ declare namespace Sen {
                 res?: string;
             }>;
         };
+
+        /**
+         * Structure
+         */
 
         declare type Resource_Structure_Template = {
             id: string;
@@ -1869,10 +1961,18 @@ declare namespace Sen {
             type: string;
         };
 
+        /**
+         * Structure
+         */
+
         declare type Resources_Group_Structure_Template = {
             groups: Array<Resource_Structure_Template & any>;
             slot_count: number;
         };
+
+        /**
+         * Structure
+         */
 
         declare type using_subgroup = {
             type: string;
@@ -1882,6 +1982,10 @@ declare namespace Sen {
                 res?: string;
             }>;
         };
+
+        /**
+         * Structure
+         */
 
         declare type resource_atlas_and_sprites = {
             id: string;
@@ -1908,6 +2012,10 @@ declare namespace Sen {
             type: string;
         };
 
+        /**
+         * Structure
+         */
+
         declare type Resource_File_Bundle = {
             id: string;
             parent?: string;
@@ -1922,9 +2030,17 @@ declare namespace Sen {
             type: string;
         };
 
+        /**
+         * Structure
+         */
+
         declare type blank_slot = {
             slot: number;
         };
+
+        /**
+         * Structure
+         */
 
         declare type Output_Value = {
             information: {
@@ -1935,10 +2051,18 @@ declare namespace Sen {
             };
         };
 
+        /**
+         * Structure
+         */
+
         declare type res_json_children = {
             is_composite: boolean;
             subgroup: subgroup_children;
         };
+
+        /**
+         * Structure
+         */
 
         declare type small_bundle_info_json = {
             is_composite: boolean;
