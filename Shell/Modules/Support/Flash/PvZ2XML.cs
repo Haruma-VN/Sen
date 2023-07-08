@@ -15,7 +15,9 @@ using System.Data.SqlTypes;
 namespace Sen.Shell.Modules.Support.Flash
 {
     using Object = Shell.Modules.Standards.Object;
+
     using FileSystem = Shell.Modules.Standards.IOModule.FileSystem;
+
     #region Abstract XML Class
 
     public abstract class XMLWrite
@@ -24,7 +26,7 @@ namespace Sen.Shell.Modules.Support.Flash
 
         public abstract void WriteSourceDocument(int index, string name, int[] size, double[] transform, int resolution, string outpath);
 
-        public abstract void InsertDOMDocumentData(DOMDocument a, string xml, string outFile);
+        public abstract void InsertDOMDocumentData(DOMDocument data, string xml, string outFile);
 
         public abstract void WriteSpriteDocument(int sprite_index, int duration, int image_index, double[] transform, double[] color, string outFile);
 

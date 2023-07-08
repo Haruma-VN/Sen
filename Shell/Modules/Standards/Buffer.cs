@@ -770,29 +770,23 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public void writeVarInt32(int number, long offset = -1)
         {
             uint num;
-            var bytes = new List<byte>();
+            fixWriteOffset(offset);
             for (num = (uint)number; num >= 128; num >>= 7)
             {
-                bytes.Add((byte)(num | 0x80));
+                writeUInt8((byte)(num | 0x80));
             }
-            bytes.Add((byte)num);
-            m_buffer = bytes.ToArray();
-            fixWriteOffset(offset);
-            writeBytes(m_buffer);
+            writeUInt8((byte)num);
         }
 
         public void writeVarInt64(long number, long offset = -1)
         {
             ulong num;
-            var bytes = new List<byte>();
+            fixWriteOffset(offset);
             for (num = (ulong)number; num >= 128; num >>= 7)
             {
-                bytes.Add((byte)(num | 0x80));
+                writeUInt8((byte)(num | 0x80));
             }
-            bytes.Add((byte)num);
-            m_buffer = bytes.ToArray();
-            fixWriteOffset(offset);
-            writeBytes(m_buffer);
+            writeUInt8((byte)num);
         }
 
         public void writeBool(bool value, long offset = -1)
@@ -832,8 +826,9 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 writeVarInt32(0);
                 return;
             }
-            writeVarInt32(str!.Length);
-            writeString(str!);
+            byte[] ary =  Encode.GetBytes(str!);
+            writeVarInt32(ary.Length);
+            writeBytes(ary);
         }
 
         public void writeSenBuffer(SenBuffer input, long offset = -1)
