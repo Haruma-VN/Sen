@@ -207,7 +207,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
                                 arg = arg.slice(1, -1);
                             }
-                            if (Sen.Shell.FileSystem.FileExists(arg) && /((\.json))?$/i.test(arg)) {
+                            if (Sen.Shell.FileSystem.FileExists(arg) && /((\.png))$/i.test(arg)) {
                                 png_argument.push(arg);
                                 break assert_argument;
                             } else {
@@ -227,7 +227,21 @@ namespace Sen.Script.Modules.Interface.Execute {
                             "2": [Sen.Script.Modules.System.Default.Localization.GetString("add_to_existed_sprite"), Sen.Script.Modules.System.Default.Localization.GetString("add_to_existed_sprite")],
                             "3": [Sen.Script.Modules.System.Default.Localization.GetString("generate_a_new_sprite"), Sen.Script.Modules.System.Default.Localization.GetString("generate_a_new_sprite")],
                         }) as 1 | 2 | 3;
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, argument, resolution);
+                        let option: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.Option = {
+                            generate_sprite: "none",
+                        };
+                        switch (sprite_distribution) {
+                            case 1:
+                                option.generate_sprite = "none";
+                                break;
+                            case 2:
+                                option.generate_sprite = "old";
+                                break;
+                            case 3:
+                                option.generate_sprite = "new";
+                                break;
+                        }
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, argument, resolution, option);
                     } else {
                         argument.forEach((arg: string) => {
                             Sen.Shell.Console.Print(
@@ -263,7 +277,21 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("add_to_existed_sprite"), Sen.Script.Modules.System.Default.Localization.GetString("add_to_existed_sprite")],
                                 "3": [Sen.Script.Modules.System.Default.Localization.GetString("generate_a_new_sprite"), Sen.Script.Modules.System.Default.Localization.GetString("generate_a_new_sprite")],
                             }) as 1 | 2 | 3;
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, arg, resolution);
+                            let option: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.Option = {
+                                generate_sprite: "none",
+                            };
+                            switch (sprite_distribution) {
+                                case 1:
+                                    option.generate_sprite = "none";
+                                    break;
+                                case 2:
+                                    option.generate_sprite = "old";
+                                    break;
+                                case 3:
+                                    option.generate_sprite = "new";
+                                    break;
+                            }
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, arg, resolution, option);
                         });
                     }
                     break;

@@ -307,5 +307,10 @@
     "convert_convert_to_unpack": "Use \"convert\" directory for pack",
     "please_use_for_more": "Please use \"{1}\" after unpack to pack RSB, option is:\n       {2}",
     "ogg_to_wav": "OGG to WAV",
-    "total_time_spent": "Total Time Spent: {}s"
+    "total_time_spent": "Total Time Spent: {}s",
+    "generated": "Generated {}",
+    "choose_one": "Please choose one {} in the displayed below:",
+    "please_choose_correct_input": "Please choose one being displayed above",
+    "input_sprite_name": "Input sprite name",
+    "name_set_as_default": "Name set as default: "
 }

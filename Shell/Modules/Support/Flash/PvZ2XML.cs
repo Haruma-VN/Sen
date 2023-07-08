@@ -120,20 +120,20 @@ namespace Sen.Shell.Modules.Support.Flash
                         new XAttribute("loop", loop),
                         new XElement(g_namespace + "matrix",
                             new XElement(g_namespace + "Matrix",
-                                new XAttribute("a", Matrix.transform[0]),
-                                new XAttribute("b", Matrix.transform[1]),
-                                new XAttribute("c", Matrix.transform[2]),
-                                new XAttribute("d", Matrix.transform[3]),
-                                new XAttribute("tx", Matrix.transform[4]),
-                                new XAttribute("ty", Matrix.transform[5])
+                                new XAttribute("a", Matrix.transform[0].ToString("N6").Replace(",", "")),
+                                new XAttribute("b", Matrix.transform[1].ToString("N6").Replace(",", "")),
+                                new XAttribute("c", Matrix.transform[2].ToString("N6").Replace(",", "")),
+                                new XAttribute("d", Matrix.transform[3].ToString("N6").Replace(",", "")),
+                                new XAttribute("tx", Matrix.transform[4].ToString("N6").Replace(",", "")),
+                                new XAttribute("ty", Matrix.transform[5].ToString("N6").Replace(",", ""))
                             )
                         ),
                         new XElement(g_namespace + "color",
                             new XElement(g_namespace + "Color",
-                                new XAttribute("redMultiplier", Matrix.color[0]),
-                                new XAttribute("greenMultiplier", Matrix.transform[1]),
-                                new XAttribute("blueMultiplier", Matrix.color[2]),
-                                new XAttribute("alphaMultiplier", Matrix.color[3])
+                                new XAttribute("redMultiplier", Matrix.color[0].ToString("N6").Replace(",", "")),
+                                new XAttribute("greenMultiplier", Matrix.transform[1].ToString("N6").Replace(",", "")),
+                                new XAttribute("blueMultiplier", Matrix.color[2].ToString("N6").Replace(",", "")),
+                                new XAttribute("alphaMultiplier", Matrix.color[3].ToString("N6").Replace(",", ""))
                             )
                         )
                     )
@@ -171,7 +171,7 @@ namespace Sen.Shell.Modules.Support.Flash
 
         public unsafe sealed override void WriteSpriteDocument(int sprite_index, int duration, int image_index, double[] transform, double[] color, string outFile)
         {
-            var document = $"<DOMSymbolItem xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" name=\"sprite/sprite_{sprite_index}\" symbolType=\"graphic\" xmlns=\"http://ns.adobe.com/xfl/2008/\">\r\n\t<timeline>\r\n\t\t<DOMTimeline name=\"sprite_{sprite_index}\">\r\n\t\t\t<layers>\r\n\t\t\t\t<DOMLayer name=\"1\">\r\n\t\t\t\t\t<frames>\r\n\t\t\t\t\t\t<DOMFrame index=\"0\" duration=\"{duration}\">\r\n\t\t\t\t\t\t\t<elements>\r\n\t\t\t\t\t\t\t\t<DOMSymbolInstance libraryItemName=\"image/image_{image_index}\" symbolType=\"graphic\" loop=\"loop\">\r\n\t\t\t\t\t\t\t\t\t<matrix>\r\n\t\t\t\t\t\t\t\t\t\t<Matrix a=\"{transform[0]}.000000\" b=\"{transform[1]}.000000\" c=\"{transform[2]}.000000\" d=\"{transform[3]}.000000\" tx=\"{transform[4]}.000000\" ty=\"{transform[5]}.000000\" />\r\n\t\t\t\t\t\t\t\t\t</matrix>\r\n\t\t\t\t\t\t\t\t\t<color>\r\n\t\t\t\t\t\t\t\t\t\t<Color redMultiplier=\"{color[0]}.000000\" greenMultiplier=\"{color[1]}.000000\" blueMultiplier=\"{color[2]}.000000\" alphaMultiplier=\"{color[3]}.000000\" />\r\n\t\t\t\t\t\t\t\t\t</color>\r\n\t\t\t\t\t\t\t\t</DOMSymbolInstance>\r\n\t\t\t\t\t\t\t</elements>\r\n\t\t\t\t\t\t</DOMFrame>\r\n\t\t\t\t\t</frames>\r\n\t\t\t\t</DOMLayer>\r\n\t\t\t</layers>\r\n\t\t</DOMTimeline>\r\n\t</timeline>\r\n</DOMSymbolItem>";
+            var document = $"<DOMSymbolItem xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" name=\"sprite/sprite_{sprite_index}\" symbolType=\"graphic\" xmlns=\"http://ns.adobe.com/xfl/2008/\">\r\n\t<timeline>\r\n\t\t<DOMTimeline name=\"sprite_{sprite_index}\">\r\n\t\t\t<layers>\r\n\t\t\t\t<DOMLayer name=\"1\">\r\n\t\t\t\t\t<frames>\r\n\t\t\t\t\t\t<DOMFrame index=\"0\" duration=\"{duration}\">\r\n\t\t\t\t\t\t\t<elements>\r\n\t\t\t\t\t\t\t\t<DOMSymbolInstance libraryItemName=\"image/image_{image_index}\" symbolType=\"graphic\" loop=\"loop\">\r\n\t\t\t\t\t\t\t\t\t<matrix>\r\n\t\t\t\t\t\t\t\t\t\t<Matrix a=\"{transform[0].ToString("N6").Replace(",", "")}\" b=\"{transform[1].ToString("N6").Replace(",", "")}\" c=\"{transform[2]}.000000\" d=\"{transform[3].ToString("N6").Replace(",", "")}\" tx=\"{transform[4].ToString("N6").Replace(",", "")}\" ty=\"{transform[5].ToString("N6").Replace(",", "")}\" />\r\n\t\t\t\t\t\t\t\t\t</matrix>\r\n\t\t\t\t\t\t\t\t\t<color>\r\n\t\t\t\t\t\t\t\t\t\t<Color redMultiplier=\"{color[0].ToString("N6").Replace(",", "")}\" greenMultiplier=\"{color[1].ToString("N6").Replace(",", "")}\" blueMultiplier=\"{color[2].ToString("N6").Replace(",", "")}\" alphaMultiplier=\"{color[3].ToString("N6").Replace(",", "")}\" />\r\n\t\t\t\t\t\t\t\t\t</color>\r\n\t\t\t\t\t\t\t\t</DOMSymbolInstance>\r\n\t\t\t\t\t\t\t</elements>\r\n\t\t\t\t\t\t</DOMFrame>\r\n\t\t\t\t\t</frames>\r\n\t\t\t\t</DOMLayer>\r\n\t\t\t</layers>\r\n\t\t</DOMTimeline>\r\n\t</timeline>\r\n</DOMSymbolItem>";
             var fs = new FileSystem();
             fs.OutFile<string>(outFile, document);
             return;
