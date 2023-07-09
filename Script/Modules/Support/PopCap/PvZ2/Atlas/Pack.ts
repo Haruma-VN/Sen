@@ -470,7 +470,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             this.CheckAtlasJsonStructure(atlas_json);
             const is_path: boolean = atlas_json.method === "path";
             const group_members: Array<string> = Object.keys(atlas_json.groups);
-            Sen.Shell.Console.Print(null, Sen.Script.Modules.System.Default.Localization.GetString("total_sprites_count").replace(/\{\}/g, `${group_members.length}`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("total_sprites_count").replace(/\{\}/g, `${group_members.length}`));
             const images_name: Array<string> = is_path ? group_members.map((member) => atlas_json.groups[member].path.at(-1) as string) : group_members;
             this.CheckWholeMemberIfExists(media_path, images_name);
             const packable_datas = this.AutoConversionToPackableData(atlas_json, atlas_json_path);

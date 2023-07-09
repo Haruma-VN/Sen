@@ -790,7 +790,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             }
             Sen.Shell.DotNetBitmap.CropAndSaveImages(async_task);
             Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(`${directory_contains}/atlas.json`), this.CreateAtlasJsonFromUnofficial(resources_used, method, json));
-            Sen.Shell.Console.Print(null, Sen.Script.Modules.System.Default.Localization.GetString("total_sprites_count").replace(/\{\}/g, `${async_task.length}`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("total_sprites_count").replace(/\{\}/g, `${async_task.length}`));
             return;
         }
 
