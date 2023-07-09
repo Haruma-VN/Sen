@@ -279,7 +279,7 @@
     },
     "popcap_official_resource_path_convert": {
         "func_number": 47,
-        "include": [".json"],
+        "include": ["resources.json"],
         "exclude": [],
         "type": "file"
     }

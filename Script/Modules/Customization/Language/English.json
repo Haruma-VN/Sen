@@ -312,5 +312,8 @@
     "choose_one": "Please choose one {} in the displayed below:",
     "please_choose_correct_input": "Please choose one being displayed above",
     "input_sprite_name": "Input sprite name",
-    "name_set_as_default": "Name set as default: "
+    "name_set_as_default": "Name set as default: ",
+    "popcap_official_resource_path_convert": "PopCap Official Resources Path Convert",
+    "convert_resources_path_to_array": "Convert resources's path to array",
+    "convert_resources_path_to_string": "Convert resources's path to string"
 }

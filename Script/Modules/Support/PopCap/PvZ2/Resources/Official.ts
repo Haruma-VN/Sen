@@ -251,14 +251,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
 
         public static ConvertOfficialPathToArray<Generic_T extends Resources_Group_Structure_Template>(resources_json: Generic_T, file_path?: string): Generic_T {
             this.CheckOfficial<Generic_T>(resources_json, (file_path ??= "undefined"));
-            const check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType = this.CheckOfficialPathType<Generic_T>(resources_json);
-            Sen.Shell.Console.Print(null, check_resources_path);
-            if (check_resources_path === Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array) {
-                throw new Sen.Script.Modules.Exceptions.EvaluateError(
-                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("already_being_type_of"), [`"path"`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`]),
-                    (file_path ??= "undefined")
-                );
-            }
             resources_json.groups.forEach((subgroup: Resource_Structure_Template) => {
                 if (`resources` in subgroup) {
                     subgroup.resources.forEach((subgroup_children) => {

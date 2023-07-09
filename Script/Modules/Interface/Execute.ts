@@ -106,8 +106,7 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_unpack_with_simplified_manifest"
         | "popcap_rsb_pack_with_simplified_manifest"
         | "ogg_to_wav"
-        | "zlib_compress"
-        | "zlib_uncompress";
+        | "popcap_official_resource_path_convert";
 
     /**
      *
@@ -129,30 +128,54 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "zlib_compress": {
+                case "popcap_official_resource_path_convert": {
                     if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
+                        const convert: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("popcap_official_resource_path_convert"),
+                            [1, 2],
+                            {
+                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string")],
+                            },
+                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/Methods/popcap_resources_path_convert.json`,
+                            `convert`
+                        ) as 1 | 2;
+                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.convert.json`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.ZlibCompress(argument, output_argument);
+                        switch (convert) {
+                            case 1: {
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToArray(argument, output_argument);
+                                break;
+                            }
+                            case 2: {
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array);
+                                break;
+                            }
+                        }
                     } else {
                         argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
+                            const convert: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("popcap_official_resource_path_convert"),
+                                [1, 2],
+                                {
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string")],
+                                },
+                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/Methods/popcap_resources_path_convert.json`,
+                                `convert`
+                            ) as 1 | 2;
+                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.convert.json`);
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.ZlibCompress(arg, output_argument);
-                        });
-                    }
-                    break;
-                }
-                case "zlib_uncompress": {
-                    if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.ZlibUncompress(argument, output_argument);
-                    } else {
-                        argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
-                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.ZlibUncompress(arg, output_argument);
+                            switch (convert) {
+                                case 1: {
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToArray(arg, output_argument);
+                                    break;
+                                }
+                                case 2: {
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array);
+                                    break;
+                                }
+                            }
                         });
                     }
                     break;
