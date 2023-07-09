@@ -841,12 +841,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_unofficial_resources_merge": {
                     if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.json`);
+                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeUnofficialJson.CreateConversion(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.json`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}`);
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(arg, output_argument);
                         });
@@ -1056,7 +1056,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_sprite_resize.json`,
                             `output_res`
                         );
-                        const output_argument: string = Sen.Shell.Path.Resolve(argument.replace(original.toString(), modified.toString()));
+                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name.replace(original.toString(), modified.toString())}`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(argument, original, modified, output_argument);
                     } else {
@@ -1071,7 +1071,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_sprite_resize.json`,
                                 `output_res`
                             );
-                            const output_argument: string = Sen.Shell.Path.Resolve(arg.replace(original.toString(), modified.toString()));
+                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name.replace(original.toString(), modified.toString())}`);
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(arg, original, modified, output_argument);
                         });
