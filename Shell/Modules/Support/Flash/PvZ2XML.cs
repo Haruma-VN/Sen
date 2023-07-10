@@ -1,16 +1,10 @@
 ﻿using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Support.PvZ2.PAM;
-using System.Xml.Serialization;
 using System.Xml;
 using ImageInfo = Sen.Shell.Modules.Support.PvZ2.PAM.ImageInfo;
-using SpriteInfo = Sen.Shell.Modules.Support.PvZ2.PAM.SpriteInfo;
 using System.Dynamic;
 using System.Xml.Linq;
 using System.Collections;
-using System.Linq;
-using System.Reflection.Metadata;
-using System;
-using System.Data.SqlTypes;
 
 namespace Sen.Shell.Modules.Support.Flash
 {
@@ -293,10 +287,10 @@ namespace Sen.Shell.Modules.Support.Flash
                 {
                     xmlWriter.WriteAttributeString("xmlns", keyValuePair.Value.ToString());
                 }
-                else if (keyValuePair.Value is ExpandoObject)
+                else if (keyValuePair.Value is ExpandoObject @object)
                 {
                     xmlWriter.WriteStartElement(keyValuePair.Key);
-                    CreateSerialize(xmlWriter, (ExpandoObject)keyValuePair.Value);
+                    CreateSerialize(xmlWriter, @object);
                     xmlWriter.WriteEndElement();
                 }
                 else if (keyValuePair.Value is IEnumerable and not string)
