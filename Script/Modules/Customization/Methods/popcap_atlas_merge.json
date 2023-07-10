@@ -1,7 +1,7 @@
 {
     "smart": true,
-    "pot": false,
-    "square": true,
+    "pot": true,
+    "square": false,
     "allowRotation": false,
     "padding": 1,
     "width": "?",
