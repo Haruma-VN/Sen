@@ -1074,20 +1074,20 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                             },
                                             new XElement("matrix",
                                                 new XElement("Matrix",
-                                                    new XAttribute("a", layer.transform[0].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("b", layer.transform[1].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("c", layer.transform[2].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("d", layer.transform[3].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("tx", layer.transform[4].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("ty", layer.transform[5].ToString("N6").Replace(",", ""))
+                                                    new XAttribute("a", ExchangeFloaterFixed(layer.transform[0])),
+                                                    new XAttribute("b", ExchangeFloaterFixed(layer.transform[1])),
+                                                    new XAttribute("c", ExchangeFloaterFixed(layer.transform[2])),
+                                                    new XAttribute("d", ExchangeFloaterFixed(layer.transform[3])),
+                                                    new XAttribute("tx", ExchangeFloaterFixed(layer.transform[4])),
+                                                    new XAttribute("ty", ExchangeFloaterFixed(layer.transform[5]))
                                                 )
                                             ),
                                             new XElement("color",
                                                 new XElement("Color",
-                                                    new XAttribute("redMultiplier", layer.color[0].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("greenMultiplier", layer.color[1].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("blueMultiplier", layer.color[2].ToString("N6").Replace(",", "")),
-                                                    new XAttribute("alphaMultiplier", layer.color[3].ToString("N6").Replace(",", ""))
+                                                    new XAttribute("redMultiplier", ExchangeFloaterFixed(layer.color[0])),
+                                                    new XAttribute("greenMultiplier", ExchangeFloaterFixed(layer.color[1])),
+                                                    new XAttribute("blueMultiplier", ExchangeFloaterFixed(layer.color[2])),
+                                                    new XAttribute("alphaMultiplier", ExchangeFloaterFixed(layer.color[3]))
                                                 )
                                             )
                                         )
@@ -1335,12 +1335,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                                 new XAttribute("loop", "loop"),
                                              new XElement("matrix",
                                                     new XElement("Matrix",
-                                                        new XAttribute("a", image.transform[0].ToString("N6").Replace(",", "")),
-                                                        new XAttribute("b", image.transform[1].ToString("N6").Replace(",", "")),
-                                                        new XAttribute("c", image.transform[2].ToString("N6").Replace(",", "")),
-                                                        new XAttribute("d", image.transform[3].ToString("N6").Replace(",", "")),
-                                                        new XAttribute("tx", image.transform[4].ToString("N6").Replace(",", "")),
-                                                        new XAttribute("ty", image.transform[5].ToString("N6").Replace(",", ""))
+                                                        new XAttribute("a", ExchangeFloaterFixed(image.transform[0])),
+                                                        new XAttribute("b", ExchangeFloaterFixed(image.transform[1])),
+                                                        new XAttribute("c", ExchangeFloaterFixed(image.transform[2])),
+                                                        new XAttribute("d", ExchangeFloaterFixed(image.transform[3])),
+                                                        new XAttribute("tx", ExchangeFloaterFixed(image.transform[4])),
+                                                        new XAttribute("ty", ExchangeFloaterFixed(image.transform[5]))
                                                     )
                                                 )
                                             )
@@ -1353,6 +1353,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 )
             );
             return imageDocument;
+        }
+
+        public static string ExchangeFloaterFixed(double num) {
+            return num.ToString("F6", System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private static double[] VariantToStandard(double[] transform, int index)
@@ -1394,8 +1398,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             double scale = (double)(k_standard_resolution) / resolution;
             return new XAttribute[] {
-                new XAttribute("a", scale.ToString("N6").Replace(",", "")),
-                new XAttribute("d", scale.ToString("N6").Replace(",", ""))
+                new XAttribute("a", ExchangeFloaterFixed(scale)),
+                new XAttribute("d", ExchangeFloaterFixed(scale))
             };
         }
 
@@ -2110,6 +2114,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
     public class AnimationHelperSetting
     {
+        public required string frameName = "frame";
         public bool imageByPath = false;
         public int appendWidth = 0;
         public int appendHeight = 0;

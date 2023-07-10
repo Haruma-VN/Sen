@@ -120,20 +120,20 @@ namespace Sen.Shell.Modules.Support.Flash
                         new XAttribute("loop", loop),
                         new XElement(g_namespace + "matrix",
                             new XElement(g_namespace + "Matrix",
-                                new XAttribute("a", Matrix.transform[0].ToString("N6").Replace(",", "")),
-                                new XAttribute("b", Matrix.transform[1].ToString("N6").Replace(",", "")),
-                                new XAttribute("c", Matrix.transform[2].ToString("N6").Replace(",", "")),
-                                new XAttribute("d", Matrix.transform[3].ToString("N6").Replace(",", "")),
-                                new XAttribute("tx", Matrix.transform[4].ToString("N6").Replace(",", "")),
-                                new XAttribute("ty", Matrix.transform[5].ToString("N6").Replace(",", ""))
+                                new XAttribute("a", PAM_Animation.ExchangeFloaterFixed(Matrix.transform[0])),
+                                new XAttribute("b", PAM_Animation.ExchangeFloaterFixed(Matrix.transform[1])),
+                                new XAttribute("c", PAM_Animation.ExchangeFloaterFixed(Matrix.transform[2])),
+                                new XAttribute("d", PAM_Animation.ExchangeFloaterFixed(Matrix.transform[3])),
+                                new XAttribute("tx", PAM_Animation.ExchangeFloaterFixed(Matrix.transform[4])),
+                                new XAttribute("ty", PAM_Animation.ExchangeFloaterFixed(Matrix.transform[5]))
                             )
                         ),
                         new XElement(g_namespace + "color",
                             new XElement(g_namespace + "Color",
-                                new XAttribute("redMultiplier", Matrix.color[0].ToString("N6").Replace(",", "")),
-                                new XAttribute("greenMultiplier", Matrix.transform[1].ToString("N6").Replace(",", "")),
-                                new XAttribute("blueMultiplier", Matrix.color[2].ToString("N6").Replace(",", "")),
-                                new XAttribute("alphaMultiplier", Matrix.color[3].ToString("N6").Replace(",", ""))
+                                new XAttribute("redMultiplier", PAM_Animation.ExchangeFloaterFixed(Matrix.color[0])),
+                                new XAttribute("greenMultiplier", PAM_Animation.ExchangeFloaterFixed(Matrix.color[1])),
+                                new XAttribute("blueMultiplier", PAM_Animation.ExchangeFloaterFixed(Matrix.color[2])),
+                                new XAttribute("alphaMultiplier", PAM_Animation.ExchangeFloaterFixed(Matrix.color[3]))
                             )
                         )
                     )
