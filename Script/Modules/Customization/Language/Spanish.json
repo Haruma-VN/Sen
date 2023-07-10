@@ -312,5 +312,8 @@
     "choose_one": "Escoga un {} de lo mostrado debajo:",
     "please_choose_correct_input": "Solo escoga alguno de los mostrados encima",
     "input_sprite_name": "Escriba el nombre del sprite",
-    "name_set_as_default": "Nombre establecido como predeterminado: "
+    "name_set_as_default": "Nombre establecido como predeterminado: ",
+    "popcap_official_resource_path_convert": "Recursos oficiales de PopCap Path Convert",
+    "convert_resources_path_to_array": "Convertir la ruta de los recursos en una matriz",
+    "convert_resources_path_to_string": "Convertir la ruta de los recursos en una cadena"
 }
