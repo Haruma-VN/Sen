@@ -183,7 +183,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Resolve(`${outDirectory}/manifest.json`), Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json));
             return manifest_json;
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inRSB);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inRSB);
         }
     }
 

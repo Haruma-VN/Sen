@@ -282,7 +282,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
         try {
             const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMJSONtoFlashAnimation(inFile, outputDirectory, resolution);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${outputDirectory}/extra.json`), Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `extra.json`)), Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json));
             return outputDirectory;
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
@@ -299,7 +299,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
     // FlashAnimationtoPAMJSON
     export function AnimateAdobeFlashAnimationToPopCapAnimationJson(inDirectory: string, outFile: string): void {
         const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${inDirectory}/extra.json`))
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `extra.json`)))
         );
         try {
             const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.FlashAnimationtoPAMJSON(inDirectory, extra_json);
@@ -322,7 +322,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         try {
             const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
             const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(`${outputDirectory}/extra.json`), extra);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `extra.json`)), extra);
             return;
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);

@@ -114,7 +114,7 @@ namespace Sen.Script {
         if (Sen.Shell.DotNetPlatform.SenShell === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)) {
             Sen.Shell.DotNetPlatform.SupportUtf8Console();
         }
-        Sen.Shell.Console.Print(null, `Sen ~ 1.2.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`);
+        Sen.Shell.Console.Print(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `Sen ~ 1.2.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`);
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`);
             Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
@@ -123,7 +123,7 @@ namespace Sen.Script {
         if (Sen.Script.ShellRequirement > Sen.Shell.ShellVersion.ShellVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Shell outdated, please update the shell to continue`);
             Sen.Shell.Console.Print(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Download link:`);
-            Sen.Shell.Console.Printf(null, `      https://github.com/Haruma-VN/Sen/releases/tag/shell`);
+            Sen.Shell.Console.Printf(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      https://github.com/Haruma-VN/Sen/releases/tag/shell`);
             Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
             return;
         }
@@ -141,7 +141,7 @@ namespace Sen.Script {
         }
         const Sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, ""));
-        Sen.Shell.Console.Printf(null, `       ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`);
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("total_time_spent").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3)));
         Sen.Script.Modules.Platform.Constraints.ExitProgram();
         return;
