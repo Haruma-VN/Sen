@@ -211,6 +211,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
             }
             case TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8: {
                 if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+                    Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGBA_A8_Decode(that_in, that_out, width as int, height as int);
                 } else {
                     (that_in as Array<string>).forEach((element: string, index: number) => {
                         Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGBA_A8_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
