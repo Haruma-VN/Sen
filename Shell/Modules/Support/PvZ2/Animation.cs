@@ -951,27 +951,29 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public static ExtraInfo Decode(PAMInfo AnimationJson, string outFolder, int resolution, bool splitLabel = true)
         {
             var fs = new FileSystem();
-            fs.CreateDirectory($"{outFolder}/library/source/");
-            fs.CreateDirectory($"{outFolder}/library/image/");
-            fs.CreateDirectory($"{outFolder}/library/sprite/");
-            fs.CreateDirectory($"{outFolder}/library/media/");
+            var path = new ImplementPath();
+            fs.CreateDirectory(path.Resolve(path.Join(outFolder, "library", "source")));
+            fs.CreateDirectory(path.Resolve(path.Join(outFolder, "library", "image")));
+            fs.CreateDirectory(path.Resolve(path.Join(outFolder, "library", "sprite")));
+            fs.CreateDirectory(path.Resolve(path.Join(outFolder, "library", "media")));
             var imageLength = AnimationJson.image.Length;
             for (var i = 0; i < imageLength; i++)
             {
                 var sourceDocument = WriteSourceDocument(i, AnimationJson.image[i], resolution);
                 var imageDocument = WriteImageDocument(i, AnimationJson.image[i]);
-                SenBuffer.SaveXml($"{outFolder}/library/source/source_{i + 1}.xml", sourceDocument, xflns);
-                SenBuffer.SaveXml($"{outFolder}/library/image/image_{i + 1}.xml", imageDocument, xflns);
+                
+                SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "source", $"source_{i + 1}.xml")), sourceDocument, xflns);
+                SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "image", $"image_{i + 1}.xml")), imageDocument, xflns);
             }
             var spriteLength = AnimationJson.sprite.Length;
             for (var i = 0; i < spriteLength; i++)
             {
                 var spriteDocument = WriteSpriteDocument(i, DecodeFrameNodeList(i, AnimationJson.sprite[i], AnimationJson.sprite));
-                SenBuffer.SaveXml($"{outFolder}/library/sprite/sprite_{i + 1}.xml", spriteDocument, xflns);
+                SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "sprite", $"sprite_{i + 1}.xml")), spriteDocument, xflns);
             }
-            SenBuffer.SaveXml($"{outFolder}/library/main_sprite.xml", WriteSpriteDocument(-1, DecodeFrameNodeList(-1, AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
-            SenBuffer.SaveXml($"{outFolder}/DomDocument.xml", WriteDomDocument(AnimationJson), xflns);
-            fs.WriteText($"{outFolder}/main.xfl", k_xfl_content, EncodingType.ASCII);
+            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main_sprite.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(-1, AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
+            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "DomDocument.xml")), WriteDomDocument(AnimationJson), xflns);
+            fs.WriteText(path.Resolve(path.Join(outFolder, "main.xfl")), k_xfl_content, EncodingType.ASCII);
             var extraInfo = new ExtraInfo()
             {
                 version = AnimationJson.version,
@@ -1407,16 +1409,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             var json = new JsonImplement();
             var fs = new FileSystem();
-            XElement document = SenBuffer.ReadXml($"{inFolder}/DOMDocument.xml");
+            var path = new ImplementPath();
+            XElement document = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "DomDocument.xml")));
             FlashPackage PAMRipe = new FlashPackage
             {
                 extra = extra,
                 document = document,
                 library = new FlashPackage.Library
                 {
-                    image = extra.image!.Select((e, i) => (SenBuffer.ReadXml($"{inFolder}/library/image/image_{i + 1}.xml"))).ToArray(),
-                    sprite = extra.sprite!.Select((e, i) => (SenBuffer.ReadXml($"{inFolder}/library/sprite/sprite_{i + 1}.xml"))).ToArray(),
-                    main_sprite = SenBuffer.ReadXml($"{inFolder}/library/main_sprite.xml")
+                    image = extra.image!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "image", $"image_{i + 1}.xml"))))).ToArray(),
+                    sprite = extra.sprite!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "sprite", $"sprite_{i + 1}.xml"))))).ToArray(),
+                    main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main_sprite.xml")))
                 }
             };
             PAMInfo AnimationJson = ParseMainDocument(PAMRipe);
@@ -2052,7 +2055,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public static void FlashAnimationResize(string inFolder, int resolution)
         {
             var fs = new FileSystem();
-            var sourceFolder = fs.ReadDirectory($"{inFolder}/library/source", ReadDirectory.OnlyCurrentDirectory).ToList();
+            var path = new ImplementPath();
+            var sourceFolder = fs.ReadDirectory(path.Resolve(path.Join(inFolder, "library", "source")), ReadDirectory.OnlyCurrentDirectory).ToList();
             sourceFolder.Sort(new AlphanumericStringComparer());
             for (var i = 0; i < sourceFolder.Count; i++)
             {

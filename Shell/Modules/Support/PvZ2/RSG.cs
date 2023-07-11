@@ -100,6 +100,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             part0List.Clear();
             part1List.Clear();
             FileListSplit(RsgFile, HeadInfo);
+            var path = new ImplementPath();
             var fileData = new SenBuffer();
             var part0RawData = new SenBuffer();
             var part1RawData = new SenBuffer();
@@ -114,7 +115,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     if (!GetPacketInfo)
                     {
                         fileData = new SenBuffer(part0RawData.getBytes(part0List[i].size, part0List[i].offset));
-                        fileData.OutFile(UseResFolder ? $"{outFolder}/res/{part0List[i].path}" : $"{outFolder}/{part0List[i].path}");
+                        fileData.OutFile(UseResFolder ? path.Resolve(path.Join(outFolder, "res", part0List[i].path)) : path.Resolve(path.Join(outFolder, part0List[i].path)));
                     }
                     resInfo.Add(new ResInfo
                     {
@@ -132,7 +133,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     if (!GetPacketInfo)
                     {
                         fileData = new SenBuffer(part1RawData.getBytes(part1List[i].size, part1List[i].offset));
-                        fileData.OutFile(UseResFolder ? $"{outFolder}/res/{part1List[i].path}" : $"{outFolder}/{part1List[i].path}");
+                        fileData.OutFile(UseResFolder ? path.Resolve(path.Join(outFolder, "res", part1List[i].path)) : path.Resolve(path.Join(outFolder, part1List[i].path)));
                     }
                     resInfo.Add(new ResInfo
                     {
@@ -404,6 +405,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 throw new Exception("invalid_file_list_offset");
             }
             var fs = new FileSystem();
+            var path = new ImplementPath();
             SenBuffer dataGroup = new SenBuffer();
             SenBuffer atlasGroup = new SenBuffer();
             int dataPos = 0;
@@ -418,14 +420,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 {
                     RSGFile.writeInt24LE(pathTemps[i].positions[h].position, beginOffset + pathTemps[i].positions[h].offset * 4 + 1);
                 }
-                var SenFile = new SenBuffer(UseResFolder ? $"{inFolder}/res/{PacketResInfo.path}" : $"{inFolder}/{PacketResInfo.path}");
+                
+                var SenFile = new SenBuffer(UseResFolder ? path.Resolve(path.Join(inFolder, "res", PacketResInfo.path)) : path.Resolve(path.Join(inFolder, PacketResInfo.path)));
                 byte[] dataItem = SenFile.toBytes();
                 SenFile.Close();
-                int appendLength = BeautifyLength(dataItem.Length);
                 if (pathTemps[i].isAtlas)
                 {
                     atlasGroup.writeBytes(dataItem);
-                    atlasGroup.writeNull(appendLength);
                     RSGFile.RestoreWriteOffset();
                     RSGFile.writeInt32LE(1);
                     RSGFile.writeInt32LE(atlasPos);
@@ -434,17 +435,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     RSGFile.writeNull(8);
                     RSGFile.writeInt32LE(PacketResInfo.ptx_info!.width);
                     RSGFile.writeInt32LE(PacketResInfo.ptx_info!.height);
-                    atlasPos += dataItem.Length + appendLength;
+                    atlasPos += dataItem.Length;
                 }
                 else
                 {
                     dataGroup.writeBytes(dataItem);
-                    dataGroup.writeNull(appendLength);
                     RSGFile.RestoreWriteOffset();
                     RSGFile.writeInt32LE(0);
                     RSGFile.writeInt32LE(dataPos);
                     RSGFile.writeInt32LE(dataItem.Length);
-                    dataPos += dataItem.Length + appendLength;
+                    dataPos += dataItem.Length;
                 }
             }
             var fileListLength = RSGFile.writeOffset - fileListBeginOffset;

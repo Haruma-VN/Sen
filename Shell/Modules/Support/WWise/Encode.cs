@@ -1,4 +1,5 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Modules.Standards.IOModule;
 
 namespace Sen.Shell.Modules.Support.WWise
 {
@@ -212,6 +213,7 @@ namespace Sen.Shell.Modules.Support.WWise
         }
         private static void DecodeDIDX(SenBuffer BNKFile, WWiseInfoSimple WwiseInfo, string outFolder)
         {
+            var path = new ImplementPath();
             var DIDXLength = BNKFile.readUInt32LE() + BNKFile.readOffset;
             var DIDX = new List<uint>();
             var DATAList = new List<WEMDATATemp>();
@@ -234,7 +236,7 @@ namespace Sen.Shell.Modules.Support.WWise
             for (var i = 0; i < DATAList.Count; i++)
             {
                 var WemFile = new SenBuffer(WEMBank.readBytes((int)DATAList[i].length, DATAList[i].offset));
-                WemFile.OutFile($"{outFolder}/embedded_audio/{DIDX[i]}.wem");
+                WemFile.OutFile(path.Resolve(path.Join(outFolder, "embedded_audio", $"{DIDX[i]}.wem")));
             }
             WwiseInfo.embedded_media = DIDX.ToArray();
         }
@@ -551,13 +553,14 @@ namespace Sen.Shell.Modules.Support.WWise
         private static void EncodeDIDX(SenBuffer BNKFile, uint[] DIDXInfo, string inFolder)
         {
             var DATABank = new SenBuffer();
+            var path = new ImplementPath();
             BNKFile.writeString("DIDX");
             var DIDXLengthOffset = BNKFile.writeOffset;
             BNKFile.writeNull(4);
             var DIDXLength = DIDXInfo.Length;
             for (var i = 0; i < DIDXLength; i++)
             {
-                var WemSen = new SenBuffer($"{inFolder}/embedded_audio/{DIDXInfo[i]}.wem");
+                var WemSen = new SenBuffer(path.Resolve(path.Join(inFolder, "embedded_audio", $"{DIDXInfo[i]}.wem")));
                 BNKFile.writeUInt32LE(DIDXInfo[i]);
                 BNKFile.writeUInt32LE((uint)DATABank.writeOffset);
                 BNKFile.writeUInt32LE((uint)WemSen.length);

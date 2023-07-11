@@ -1,14 +1,47 @@
 {
     "ios": {
         "0": "argb_8888",
+        "1": "argb_4444",
+        "2": "rgb_565",
+        "3": "argb_1555",
+        "21": "rgb_4444_tiled",
+        "22": "rgb_565_tiled",
+        "23": "rgba5551_tiled",
         "30": "rgba_pvrtc4",
-        "148": "rgb_pvrtc4_a_8"
+        "32": "rgb_etc1",
+        "147": "rgb_etc1_a_8",
+        "148": "rgb_pvrtc4_a_8",
+        "149": "argb_8888",
+        "150": "rgb_etc1"
     },
     "android": {
         "0": "rgba_8888",
-        "147": "rgb_etc1_a_8"
+        "1": "rgba_4444",
+        "2": "rgb_565",
+        "3": "rgba_5551",
+        "21": "rgb_4444_tiled",
+        "22": "rgb_565_tiled",
+        "23": "rgba5551_tiled",
+        "30": "rgba_pvrtc4",
+        "32": "rgb_etc1",
+        "147": "rgb_etc1_a_8",
+        "148": "rgb_pvrtc4_a_8",
+        "149": "argb_8888",
+        "150": "rgb_etc1"
     },
     "android_cn": {
-        "147": "rgb_etc1_a_palette"
+        "0": "rgba_8888",
+        "1": "rgba_4444",
+        "2": "rgb_565",
+        "3": "rgba_5551",
+        "21": "rgb_4444_tiled",
+        "22": "rgb_565_tiled",
+        "23": "rgba5551_tiled",
+        "30": "rgba_pvrtc4",
+        "32": "rgb_etc1",
+        "147": "rgb_etc1_a_palette",
+        "148": "rgb_pvrtc4_a_8",
+        "149": "argb_8888",
+        "150": "rgb_etc1"
     }
 }

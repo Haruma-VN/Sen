@@ -241,6 +241,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
 
         public static MainfestInfo Unpack(SenBuffer RSBFile, string outFolder)
         {
+            var path = new ImplementPath();
             var rsbHeadInfo = ReadHead(RSBFile);
             if (rsbHeadInfo.version != 3 && rsbHeadInfo.version != 4) 
             {
@@ -368,7 +369,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         }
                         if (fileList[h].poolIndex > packetIndex) break;
                     };
-                    RSGFile.OutFile($"{outFolder}/packet/{rsgInfoList[rsgInfoCount].name}.rsg");
+                    RSGFile.OutFile(path.Resolve(path.Join(outFolder, "packet", $"{rsgInfoList[rsgInfoCount].name}.rsg")));
                     var packetInfoList = new RSBPacketInfo
                     {
                         version = RSBFile.readInt32LE((long)rsgInfoList[rsgInfoCount].rsgOffset + 4),
@@ -533,7 +534,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 groups = DescriptionGroup.ToArray()
             };
             var fs = new FileSystem();
-            fs.WriteJson($"{outFolder}/description.json", resourcesDescription);
+            var path = new ImplementPath();
+            fs.WriteJson(path.Resolve(path.Join(outFolder, "description.json")), resourcesDescription);
         }
 
         public static RSB_head ReadHead(SenBuffer RSBFile)
@@ -763,6 +765,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public static void Pack(string inFolder, string outFile, MainfestInfo manifestInfo)
         {
             var RSBFile = new SenBuffer();
+            var path = new ImplementPath();
             RSBFile.writeString(RSB_head.magic);
             var version = manifestInfo.version;
             int fileList_BeginOffset;
@@ -817,7 +820,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         namePath = rsgName.ToUpper(),
                         poolIndex = rsgPacketIndex,
                     });
-                    SenBuffer RSGFile = new SenBuffer($"{inFolder}/packet/{rsgName}.rsg");
+                    SenBuffer RSGFile = new SenBuffer(path.Resolve(path.Join(inFolder, "packet", $"{rsgName}.rsg")));
                     ComparePacketInfo(manifestInfo.group[i].subgroup[k].packet_info, RSGFile);
                     var ptxNumber = 0;
                     var resInfoLength = manifestInfo.group[i].subgroup[k].packet_info.res.Length;
@@ -995,7 +998,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         private static void WriteResourcesDescription(SenBuffer RSBFile, RSB_head rsbHeadInfo, string inFolder)
         {
             var fs = new FileSystem();
-            var resourcesDescription = fs.ReadJson<ResourcesDescription>($"{inFolder}/description.json");
+            var path = new ImplementPath();
+            var resourcesDescription = fs.ReadJson<ResourcesDescription>(path.Resolve(path.Join(inFolder, "description.json")));
             var groupsLength = resourcesDescription.groups.Length;
             var part1_Res = new SenBuffer();
             var part2_Res = new SenBuffer();
@@ -1243,6 +1247,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public static MainfestInfo UnpackByLooseConstraints(SenBuffer RSBFile, string outFolder)
         {
             var rsbHeadInfo = ReadHead(RSBFile);
+            var path = new ImplementPath();
             if (rsbHeadInfo.version == 5)
             {
                 FixFileListShuttle(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, false);
@@ -1298,7 +1303,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
                     var RSGFile = new SenBuffer(packetFile);
                     FixRSG(RSGFile, rsbHeadInfo.version, new SenBuffer(rsgInfoList[rsgInfoCount].packetHeadInfo!));
-                    var packetInfo = RSGFunction.Unpack(RSGFile, $"{outFolder}/unpack/", false, false);
+                    var packetInfo = RSGFunction.Unpack(RSGFile, path.Resolve(path.Join(outFolder, "unpack")), false, false);
                     var resInfoList = new List<RSBResInfo>();
                     var ptxBeforeNumber = rsgInfoList[rsgInfoCount].ptxBeforeNumber;
                     for (var h = 0; h < packetInfo.res.Length; h++)
