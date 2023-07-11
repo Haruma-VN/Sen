@@ -137,10 +137,10 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array")],
                                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string")],
                             },
-                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/Methods/popcap_resources_path_convert.json`,
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_resources_path_convert.json`)),
                             `convert`
                         ) as 1 | 2;
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.convert.json`);
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.convert.json`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         switch (convert) {
                             case 1: {
@@ -161,10 +161,10 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_array")],
                                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string"), Sen.Script.Modules.System.Default.Localization.GetString("convert_resources_path_to_string")],
                                 },
-                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/Methods/popcap_resources_path_convert.json`,
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_resources_path_convert.json`)),
                                 `convert`
                             ) as 1 | 2;
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.convert.json`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.convert.json`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             switch (convert) {
                                 case 1: {
@@ -182,7 +182,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_rsb_unpack_by_loose_constraints": {
                     if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bundle`);
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bundle`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(argument, output_argument);
                         Sen.Shell.Console.Print(
@@ -194,21 +194,28 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                     } else {
                         argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bundle`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bundle`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(arg, output_argument);
+                            Sen.Shell.Console.Print(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Magenta,
+                                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("please_use_for_more"), [
+                                    Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource"),
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory"),
+                                ])
+                            );
                         });
                     }
                     break;
                 }
                 case "popcap_rton_decrypt": {
                     if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     } else {
                         argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                         });
@@ -242,7 +249,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         }
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)),
                             `resolution`
                         );
                         const sprite_distribution: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("sprite_distribution"), [1, 2, 3], {
@@ -292,7 +299,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             }
                             const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
-                                `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_animation.json`,
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)),
                                 `resolution`
                             );
                             const sprite_distribution: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("sprite_distribution"), [1, 2, 3], {
@@ -321,12 +328,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_rton_encrypt": {
                     if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name}.bin`);
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(argument, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                     } else {
                         argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name}.bin`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(arg, output_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                         });
@@ -336,7 +343,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "ogg_to_wav": {
                     if (!Array.isArray(argument)) {
                         try {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.wav`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.wav`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Shell.PvZ2Shell.ConvertOGGtoWAV(argument, output_argument);
                         } catch (error: unknown) {
@@ -345,7 +352,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     } else {
                         argument.forEach((arg: string) => {
                             try {
-                                const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.wav`);
+                                const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.wav`));
                                 Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                                 Sen.Shell.PvZ2Shell.ConvertOGGtoWAV(arg, output_argument);
                             } catch (error: unknown) {
@@ -357,35 +364,47 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "wwise_media_to_ogg": {
                     if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}.ogg`);
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.ogg`));
                         const inlineCodebook: boolean = Boolean(
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("is_inline_codebook"), `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`, `inlineCodebook`)
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                Sen.Script.Modules.System.Default.Localization.GetString("is_inline_codebook"),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `wwise_encoded_media.json`)),
+                                `inlineCodebook`
+                            )
                         );
                         const inlineSetup: boolean = Boolean(
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("is_inline_setup"), `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`, `inlineSetup`)
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                Sen.Script.Modules.System.Default.Localization.GetString("is_inline_setup"),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `wwise_encoded_media.json`)),
+                                `inlineSetup`
+                            )
                         );
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.WemToOGG(argument, output_argument, `${Sen.Shell.MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`, inlineCodebook, inlineSetup);
+                            Sen.Shell.PvZ2Shell.WemToOGG(argument, output_argument, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`)), inlineCodebook, inlineSetup);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, argument);
                         }
                     } else {
                         argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}.ogg`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.ogg`));
                             const inlineCodebook: boolean = Boolean(
                                 Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
                                     Sen.Script.Modules.System.Default.Localization.GetString("is_inline_codebook"),
-                                    `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`,
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `wwise_encoded_media.json`)),
                                     `inlineCodebook`
                                 )
                             );
                             const inlineSetup: boolean = Boolean(
-                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("is_inline_setup"), `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/wwise_encoded_media.json`, `inlineSetup`)
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("is_inline_setup"),
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `wwise_encoded_media.json`)),
+                                    `inlineSetup`
+                                )
                             );
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.WemToOGG(arg, output_argument, `${Sen.Shell.MainScriptDirectory}/${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`, inlineCodebook, inlineSetup);
+                                Sen.Shell.PvZ2Shell.WemToOGG(arg, output_argument, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`)), inlineCodebook, inlineSetup);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, arg);
                             }

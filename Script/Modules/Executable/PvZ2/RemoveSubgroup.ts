@@ -84,9 +84,9 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup {
     export function Evaluate(): void {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Input rsb.bundle path as simple unpack to continue`);
         const dir_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
-        const res_json_destination: string = Sen.Shell.Path.Resolve(`${dir_in}/res.json`);
-        const manifest_json_destination: string = Sen.Shell.Path.Resolve(`${dir_in}/manifest.json`);
-        const packet_directory: string = Sen.Shell.Path.Resolve(`${dir_in}/packet`);
+        const res_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `res.json`));
+        const manifest_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `manifest.json`));
+        const packet_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `packet`));
         const keyword: string = `384`;
         if (!Sen.Shell.FileSystem.FileExists(res_json_destination)) {
             throw new Sen.Script.Modules.Exceptions.MissingFile(`No such file`, res_json_destination);

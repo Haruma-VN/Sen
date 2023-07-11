@@ -46,7 +46,7 @@ namespace Sen.Script {
     export function LoadModules(scripts: Array<string>): void {
         for (const script of scripts) {
             try {
-                Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/${script}`)}.js`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), `Scripts/${script}.js`);
+                Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(Sen.Shell.MainScriptDirectory, script))}.js`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), Sen.Shell.Path.Join(`Scripts`, `${script}.js`));
             } catch (error: unknown) {
                 Sen.Shell.Console.Print(null, error);
             }
@@ -77,7 +77,7 @@ namespace Sen.Script {
             for (let i: number = 0; i < assets.length; ++i) {
                 const k_index: int = i + 1;
                 available.push(k_index);
-                Sen.Shell.Console.Printf(null, `      ${k_index}. ${assets[i].name}`);
+                Sen.Shell.Console.Printf(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${k_index}. ${assets[i].name}`);
             }
             let input: string = Sen.Shell.Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
             while (!available.includes(parseInt(input))) {

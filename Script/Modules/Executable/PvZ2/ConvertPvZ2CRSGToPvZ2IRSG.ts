@@ -5,7 +5,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.ConvertPvZ2ChineseResourceStreamGro
         const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`));
         let count: int = 0;
         information.res.forEach((resource: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo) => {
-            let home: string = Sen.Shell.Path.Resolve(`${packet_directory}/res`);
+            let home: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `res`));
             create_nested_directory: for (let i: int = 0; i < (resource.path as Array<string>).length; ++i) {
                 if (i === resource.path.length - 1) {
                     break create_nested_directory;
@@ -33,7 +33,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.ConvertPvZ2ChineseResourceStreamGro
     export function Evaluate(): void {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Input RSG path of PvZ2C to continue`);
         const file_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
-        const output_file: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(file_in)}/${Sen.Shell.Path.Parse(file_in).name_without_extension}.converted.rsg`);
+        const output_file: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.converted.rsg`));
         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_file, "file");
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, `Execution Set By Default: Convert PvZ2C Texture Format to RGB_ETC1_A8`);
         Sen.Script.Modules.Executable.PvZ2.ConvertPvZ2ChineseResourceStreamGroupToPvZ2InternationalResourceStreamGroup.ConvertInsideRSG(file_in, output_file);
