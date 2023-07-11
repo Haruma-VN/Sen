@@ -60,7 +60,7 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 4;
+    export const ScriptVersion: int = 5;
 
     /**
      * Requirement version for Shell
