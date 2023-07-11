@@ -80,12 +80,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize {
                 Sen.Shell.FileSystem.DeleteDirectory([output_directory]);
             }
             Sen.Shell.FileSystem.CreateDirectory(output_directory);
-            const new_media_path: string = Sen.Shell.Path.Resolve(`${output_directory}/media`);
-            const new_atlas_json_path: string = Sen.Shell.Path.Resolve(`${output_directory}/atlas.json`);
+            const new_media_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${output_directory}`, `media`));
+            const new_atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${output_directory}`, `atlas.json`));
             Sen.Shell.FileSystem.CreateDirectory(new_media_path);
             this.CheckWholeDirectory(directory_path);
-            const atlas_json_path: string = Sen.Shell.Path.Resolve(`${directory_path}/atlas.json`);
-            const media_path: string = Sen.Shell.Path.Resolve(`${directory_path}/media`);
+            const atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `atlas.json`));
+            const media_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `media`));
             const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(atlas_json_path) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
             this.CheckAtlasJsonStructure(atlas_json);
             const is_path: boolean = atlas_json.method === "path";
@@ -95,12 +95,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize {
             const packable_datas: (Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackableData | Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData)[] = this.AutoConversionToPackableData(atlas_json, atlas_json_path);
             for (const data of packable_datas) {
                 if (is_path) {
-                    const dimension: BitMap.Constraints.ImageInfo<int> = Sen.Shell.DotNetBitmap.GetDimension<int>(Sen.Shell.Path.Resolve(`${media_path}/${data.path.at(-1)}.png`));
+                    const dimension: BitMap.Constraints.ImageInfo<int> = Sen.Shell.DotNetBitmap.GetDimension<int>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${media_path}`, `${data.path.at(-1)}.png`)));
                     (data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).width = dimension.width;
                     (data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).height = dimension.height;
                     (data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).file_path = Sen.Shell.Path.Resolve(dimension.file_path);
                 } else {
-                    const dimension: BitMap.Constraints.ImageInfo<int> = Sen.Shell.DotNetBitmap.GetDimension<int>(Sen.Shell.Path.Resolve(`${media_path}/${data.id}.png`));
+                    const dimension: BitMap.Constraints.ImageInfo<int> = Sen.Shell.DotNetBitmap.GetDimension<int>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${media_path}`, `${data.id}.png`)));
                     (data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).width = dimension.width;
                     (data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).height = dimension.height;
                     (data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).file_path = Sen.Shell.Path.Resolve(dimension.file_path);
@@ -111,7 +111,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize {
                 Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizeAutomatically(
                     (data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).file_path,
                     calculate,
-                    Sen.Shell.Path.Resolve(`${new_media_path}/${Sen.Shell.Path.Parse((data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).file_path).name}`),
+                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${new_media_path}`, `${Sen.Shell.Path.Parse((data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData).file_path).name}`)),
                     data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData
                 );
             }

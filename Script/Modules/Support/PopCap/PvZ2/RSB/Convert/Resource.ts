@@ -5,7 +5,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
      * @returns Unpacked all
      */
     export function UnpackAllPopCapRSGs(rsb_dir: string, out_dir: string): void {
-        const packet_directory: string = Sen.Shell.Path.Resolve(`${rsb_dir}/packet`);
+        const packet_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_dir}`, `packet`));
         const rsgs: Array<string> = Sen.Shell.FileSystem.ReadDirectory(packet_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
         rsgs.forEach((rsg: string) => {
             Sen.Shell.PvZ2Shell.RSGUnpack(rsg, `${out_dir}`, false);
@@ -43,9 +43,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
     export function UnpackAllPopCapRSGDataInsideUnpackDirectory(rsb_unpack_option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.RSBConvertOption, out_dir: string): void {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("unpacking_all_rsgs")));
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.UnpackAllPopCapRSGs(rsb_unpack_option.rsb_parent_directory, rsb_unpack_option.rsb_unpack_dir);
-        const popcap_resource_group_resources_rton_input_destination: string = `${rsb_unpack_option.rsb_unpack_dir}/PROPERTIES/RESOURCES.RTON`;
-        const popcap_resource_group_resources_json_output_destination: string = `${out_dir}/PROPERTIES/RESOURCES.JSON`;
-        const res_json_destination: string = `${rsb_unpack_option.rsb_parent_directory}/res.json`;
+        const popcap_resource_group_resources_rton_input_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_unpack_option.rsb_unpack_dir}`, `PROPERTIES`, `RESOURCES.RTON`));
+        const popcap_resource_group_resources_json_output_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `PROPERTIES`, `RESOURCES.JSON`));
+        const res_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_unpack_option.rsb_parent_directory}`, `res.json`));
         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(popcap_resource_group_resources_rton_input_destination, popcap_resource_group_resources_json_output_destination, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
         const res_json: res_json = Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.DoAllProcess<Resources_Group_Structure_Template, res_json>(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(popcap_resource_group_resources_json_output_destination),
@@ -54,7 +54,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         );
         Sen.Script.Modules.FileSystem.Json.WriteJson<res_json>(res_json_destination, res_json);
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json")));
-        const manifest: string = Sen.Shell.Path.Resolve(`${rsb_unpack_option.rsb_parent_directory}/manifest.json`);
+        const manifest: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_unpack_option.rsb_parent_directory}`, `manifest.json`));
         Sen.Shell.FileSystem.CreateDirectory(out_dir);
         // const groups: Array<string> = Object.keys(res_json.groups);
         const manifest_deserialize: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
@@ -62,7 +62,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation;
         const compositeshell: Array<string> = Object.keys(manifest_deserialize.group);
         const information_host: Record<string, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat> = Sen.Script.Modules.FileSystem.Json.ReadJson<Record<string, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat>>(
-            `${Sen.Shell.MainScriptDirectory}/Modules/Customization/methods/popcap_ptx.json`
+            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_ptx.json`))
         ) satisfies Record<string, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat>;
         const architecture: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.TextureFormat = information_host[rsb_unpack_option.texture_format];
         const flash_animation_destination: Array<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.FlashAnimationContainer> = new Array();
@@ -82,8 +82,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                     const resource_unpack_path: string = `${Sen.Shell.Path.Join(...(worker.path as Array<string>))}`;
                     const resource_popcap_texture_format_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.PtxProperty = worker.ptx_property as Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.PtxProperty;
                     const resource_popcap_texture_dimension_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo = worker.ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo;
-                    const input_path: string = `${rsb_unpack_option.rsb_unpack_dir}/${resource_unpack_path}`;
-                    const output_path: string = `${out_dir}/${resource_unpack_path}`;
+                    const input_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_unpack_option.rsb_unpack_dir}`, `${resource_unpack_path}`));
+                    const output_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `${resource_unpack_path}`));
                     if (resource_popcap_texture_format_information !== null && resource_popcap_texture_dimension_information !== null && rsb_unpack_option.extractAtlas) {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
                             `${input_path}`,
@@ -140,17 +140,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
     }
 
     export function PackPopCapRSBInsideConvertDirectory(rsb_packing_option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.RSBPackOption): void {
-        const manifest: string = `${rsb_packing_option.bundle_path}/manifest.json`;
-        const convert_directory: string = `${rsb_packing_option.bundle_path}/convert`;
+        const manifest: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_packing_option.bundle_path}`, `manifest.json`));
+        const convert_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_packing_option.bundle_path}`, `convert`));
         const manifest_deserialize: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest);
         const converted_manifest_for_shell: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(manifest_deserialize);
-        const packet_directory: string = `${rsb_packing_option.bundle_path}/packet`;
-        const unpack_directory: string = `${rsb_packing_option.bundle_path}/unpack`;
+        const packet_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_packing_option.bundle_path}`, `packet`));
+        const unpack_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_packing_option.bundle_path}`, `unpack`));
         if (rsb_packing_option.use_convert) {
         }
         converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
             group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
-                Sen.Shell.PvZ2Shell.RSGPack(`${unpack_directory}`, `${packet_directory}/${subgroup.name_packet}.rsg`, subgroup.packet_info, false);
+                Sen.Shell.PvZ2Shell.RSGPack(`${unpack_directory}`, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`)), subgroup.packet_info, false);
             });
         });
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(rsb_packing_option.bundle_path, rsb_packing_option.rsb_output);

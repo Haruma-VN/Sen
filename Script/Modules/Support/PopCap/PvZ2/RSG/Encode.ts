@@ -43,7 +43,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
                 ptx_info: resx.ptx_info,
             });
         });
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Resolve(`${out_dir}/packet.json`), packet_info);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `packet.json`)), packet_info);
         return;
     }
 
@@ -54,7 +54,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
      */
 
     export function RSGPack(rsg_directory: string, out_rsg: string): void {
-        const packet_info: PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Resolve(`${rsg_directory}/packet.json`));
+        const packet_info: PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsg_directory}`, `packet.json`)));
         packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo) => {
             res.path = (res.path as Array<string>).join("\\");
         });

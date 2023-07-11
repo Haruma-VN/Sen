@@ -1105,7 +1105,7 @@ namespace Sen.Script.Modules.Exceptions {
             );
             try {
                 Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(
-                    Sen.Shell.Path.Resolve(`${Sen.Script.Modules.Interface.Assert.debug_directory}/${Date.now()}.json`),
+                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Script.Modules.Interface.Assert.debug_directory}`, `${Date.now()}.json`)),
                     (error as Error).stack !== null && (error as Error).stack !== undefined && (error as Error).stack !== void 0 && "stack" in (error as Error)
                         ? error
                         : ({

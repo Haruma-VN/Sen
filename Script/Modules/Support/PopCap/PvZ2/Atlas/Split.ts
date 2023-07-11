@@ -661,7 +661,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 resources: [],
             };
             const directory_contains: string = (output_directory ??= json.replace(/((.json))?$/i, `.sprite`));
-            const directory_contains_sprite: string = Sen.Shell.Path.Resolve(`${directory_contains}/media`);
+            const directory_contains_sprite: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `media`));
             Sen.Shell.FileSystem.CreateDirectory(directory_contains);
             Sen.Shell.FileSystem.CreateDirectory(directory_contains_sprite);
             const async_task: Array<Sen.Shell.AsyncTaskImageSplit> = new Array();
@@ -678,7 +678,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                             subgroup_children.path = expand_path === "array" ? subgroup_children.path : (subgroup_children.path as string).split("\\");
                             async_task.push({
                                 sourceImagePath: file,
-                                outputImagePath: Sen.Shell.Path.Resolve(`${directory_contains_sprite}/${method === "path" ? subgroup_children.path[subgroup_children.path.length - 1] : subgroup_children.id}.png`),
+                                outputImagePath: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains_sprite}`, `${method === "path" ? subgroup_children.path[subgroup_children.path.length - 1] : subgroup_children.id}.png`)),
                                 x: subgroup_children.ax as number,
                                 y: subgroup_children.ay as number,
                                 width: subgroup_children.aw as number,
@@ -700,7 +700,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 throw new Sen.Script.Modules.Exceptions.CannotWriteFile(Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(/\{\}/g, (async_task.length - output_images.length).toString()), json);
             }
             Sen.Shell.DotNetBitmap.CropAndSaveImages(async_task);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(`${directory_contains}/atlas.json`), this.ConvertAtlasJsonFromOfficial(resources_used, method, expand_path, json));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `atlas.json`)), this.ConvertAtlasJsonFromOfficial(resources_used, method, expand_path, json));
             return;
         }
 
@@ -744,7 +744,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             };
             const parents: Array<string> = Object.keys(unofficial_subgroup.packet);
             const directory_contains: string = (output_directory ??= json.replace(/((.json))?$/i, `.sprite`));
-            const directory_contains_sprite: string = Sen.Shell.Path.Resolve(`${directory_contains}/media`);
+            const directory_contains_sprite: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `media`));
             Sen.Shell.FileSystem.CreateDirectory(directory_contains);
             Sen.Shell.FileSystem.CreateDirectory(directory_contains_sprite);
             const async_task: Array<Sen.Shell.AsyncTaskImageSplit> = new Array();
@@ -760,7 +760,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                             if (parent?.endsWith(Sen.Shell.Path.Parse(file).name.replace(/((.png))?$/i, ""))) {
                                 async_task.push({
                                     sourceImagePath: file,
-                                    outputImagePath: Sen.Shell.Path.Resolve(`${directory_contains_sprite}/${method === "path" ? unofficial_subgroup.packet[parent].data[id].path[unofficial_subgroup.packet[parent].data[id].path.length - 1] : id}.png`),
+                                    outputImagePath: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains_sprite}`, `${method === "path" ? unofficial_subgroup.packet[parent].data[id].path[unofficial_subgroup.packet[parent].data[id].path.length - 1] : id}.png`)),
                                     x: unofficial_subgroup.packet[parent].data[id].default.ax as number,
                                     y: unofficial_subgroup.packet[parent].data[id].default.ay as number,
                                     width: unofficial_subgroup.packet[parent].data[id].default.aw as number,
@@ -789,7 +789,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 throw new Sen.Script.Modules.Exceptions.CannotWriteFile(Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(/\{\}/g, (async_task.length - output_images.length).toString()), json);
             }
             Sen.Shell.DotNetBitmap.CropAndSaveImages(async_task);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(`${directory_contains}/atlas.json`), this.CreateAtlasJsonFromUnofficial(resources_used, method, json));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `atlas.json`)), this.CreateAtlasJsonFromUnofficial(resources_used, method, json));
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("total_sprites_count").replace(/\{\}/g, `${async_task.length}`));
             return;
         }

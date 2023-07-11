@@ -575,18 +575,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             };
             return info_json;
         }
-        public static DoWholeProcess<Template extends res_json>(file_path: string, save_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(file_path)}/${Sen.Shell.Path.Parse(file_path).name}.info`)): void {
-            const groups_directory: string = Sen.Shell.Path.Resolve(`${save_directory}/groups`);
+        public static DoWholeProcess<Template extends res_json>(file_path: string, save_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_path)}`, `${Sen.Shell.Path.Parse(file_path).name}.info`))): void {
+            const groups_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${save_directory}`, `groups`));
             const res_json: Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Template>(file_path) as Template;
             const info_json: Output_Value = this.SetDefaultInfo<Template, Output_Value>(res_json, file_path);
             Sen.Shell.FileSystem.CreateDirectory(Sen.Shell.Path.Resolve(`${save_directory}`));
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(Sen.Shell.Path.Resolve(`${save_directory}/info.json`), info_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${save_directory}`, `info.json`)), info_json);
             Sen.Shell.FileSystem.CreateDirectory(groups_directory);
             const info_json_groups_keys: Array<string> = Object.keys(info_json.groups);
             for (let index: number = 0; index < info_json_groups_keys.length; ++index) {
                 const subgroup_keys: Array<string> = Object.keys(res_json.groups[info_json_groups_keys[index]].subgroup);
                 for (let j_index: number = 0; j_index < subgroup_keys.length; ++j_index) {
-                    Sen.Script.Modules.FileSystem.Json.WriteJson(Sen.Shell.Path.Resolve(`${groups_directory}/${subgroup_keys[j_index]}.json`), res_json.groups[info_json_groups_keys[index]].subgroup[subgroup_keys[j_index]]);
+                    Sen.Script.Modules.FileSystem.Json.WriteJson(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${groups_directory}`, `${subgroup_keys[j_index]}.json`)), res_json.groups[info_json_groups_keys[index]].subgroup[subgroup_keys[j_index]]);
                 }
             }
             return;
@@ -638,11 +638,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             if (!Sen.Shell.FileSystem.DirectoryExists(directory_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, directory_path);
             }
-            const info_json: string = Sen.Shell.Path.Resolve(`${directory_path}/info.json`);
+            const info_json: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `info.json`));
             if (!Sen.Shell.FileSystem.FileExists(info_json)) {
                 throw new Sen.Script.Modules.Exceptions.MissingFile(``, info_json);
             }
-            const groups: string = Sen.Shell.Path.Resolve(`${directory_path}/groups`);
+            const groups: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `groups`));
             if (!Sen.Shell.FileSystem.DirectoryExists(groups)) {
                 throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, groups);
             }
@@ -650,22 +650,22 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         }
         private static CheckGroups(directory_path: string, collections: Array<string>): void {
             for (const file of collections) {
-                const file_path: string = Sen.Shell.Path.Resolve(`${directory_path}/${file}.json`);
+                const file_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `${file}.json`));
                 if (!Sen.Shell.FileSystem.FileExists(file_path)) {
                     throw new Sen.Script.Modules.Exceptions.MissingFile(``, file_path);
                 }
             }
             return;
         }
-        public static DoAllProcess<Template extends Output_Value>(directory_path: string, output_file: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(directory_path)}/${Sen.Shell.Path.Parse(directory_path).name}.json`)): void {
+        public static DoAllProcess<Template extends Output_Value>(directory_path: string, output_file: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name}.json`))): void {
             this.CheckDirectoryInformation(directory_path);
-            const info_json_information: Template = Sen.Script.Modules.FileSystem.Json.ReadJson(Sen.Shell.Path.Resolve(`${directory_path}/info.json`)) as Template;
+            const info_json_information: Template = Sen.Script.Modules.FileSystem.Json.ReadJson(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `info.json`))) as Template;
             this.CheckInfoJson<Output_Value>(info_json_information);
             const res_json: res_json = {
                 expand_path: info_json_information.information.expand_path as "array" | "string",
                 groups: {},
             };
-            const group_directory: string = Sen.Shell.Path.Resolve(`${directory_path}/groups`);
+            const group_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `groups`));
             const groups_inventory: Array<ResourcesForWork> = new Array();
             const groups_collection: Array<string> = Object.keys(info_json_information.groups);
             this.CheckGroups(
@@ -678,7 +678,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             for (let index: number = 0; index < groups_collection.length; ++index) {
                 const group: string = groups_collection[index];
                 const data_json: small_bundle_info_json = info_json_information.groups[groups_collection[index]] as small_bundle_info_json & any;
-                this.CheckDataJson<small_bundle_info_json>(data_json, Sen.Shell.Path.Resolve(`${directory_path}/info.json`));
+                this.CheckDataJson<small_bundle_info_json>(data_json, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `info.json`)));
                 groups_inventory.push({
                     ...data_json,
                     group_parent: group,
@@ -690,7 +690,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     subgroup: {},
                 };
                 for (let j_index: number = 0; j_index < groups_inventory[index].subgroups.length; ++j_index) {
-                    res_json.groups[groups_inventory[index].group_parent].subgroup[groups_inventory[index].subgroups[j_index]] = Sen.Script.Modules.FileSystem.Json.ReadJson(Sen.Shell.Path.Resolve(`${group_directory}/${groups_inventory[index].subgroups[j_index]}.json`));
+                    res_json.groups[groups_inventory[index].group_parent].subgroup[groups_inventory[index].subgroups[j_index]] = Sen.Script.Modules.FileSystem.Json.ReadJson(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${group_directory}`, `${groups_inventory[index].subgroups[j_index]}.json`)));
                 }
             }
             Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, res_json);

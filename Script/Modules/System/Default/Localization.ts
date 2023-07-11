@@ -15,7 +15,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
         };
     };
 
-    export const EntryJson: Sen.Script.Modules.System.Default.Localization.entry_json = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(`${Sen.Shell.MainScriptDirectory}/Modules/Customization/entry.json`);
+    export const EntryJson: Sen.Script.Modules.System.Default.Localization.entry_json = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `entry.json`)));
 
     /**
      * Destination
@@ -53,7 +53,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
      */
 
     export function GetString(property: string): string {
-        return Sen.Shell.DotNetLocalization.Get(property, Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}/Modules/Customization/language`), `${Sen.Script.Modules.System.Default.Localization.language}`);
+        return Sen.Shell.DotNetLocalization.Get(property, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `language`)), `${Sen.Script.Modules.System.Default.Localization.language}`);
     }
 
     /**

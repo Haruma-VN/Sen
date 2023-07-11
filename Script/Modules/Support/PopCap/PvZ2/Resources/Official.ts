@@ -35,7 +35,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
             const resources_json: Resources_Group_Structure_Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_path);
             this.CheckOfficial<Resources_Group_Structure_Template>(resources_json, file_path);
             Sen.Shell.FileSystem.CreateDirectory(output_directory);
-            const subgroup_directory: string = Sen.Shell.Path.Resolve(`${output_directory}/subgroup`);
+            const subgroup_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${output_directory}`, `subgroup`));
             Sen.Shell.FileSystem.CreateDirectory(subgroup_directory);
             const subgroup_json: official_subgroup_json = {};
             for (const resource of resources_json.groups) {
@@ -43,7 +43,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                     resource.resources.forEach((element: { slot?: int }, index: number) => delete resource.resources[index].slot);
                 }
                 if ("resources" in resource && "parent" in resource) {
-                    Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(`${subgroup_directory}/${resource.id}.json`), resource);
+                    Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_directory}`, `${resource.id}.json`)), resource);
                 }
                 if ("subgroups" in resource || ("resources" in resource && !("parent" in resource))) {
                     if ("subgroups" in resource) {
@@ -65,11 +65,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                                 },
                             },
                         };
-                        Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(`${subgroup_directory}/${resource.id}.json`), resource);
+                        Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_directory}`, `${resource.id}.json`)), resource);
                     }
                 }
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<official_subgroup_json>(Sen.Shell.Path.Resolve(`${output_directory}/content.json`), subgroup_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<official_subgroup_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${output_directory}`, `content.json`)), subgroup_json);
             return;
         }
 
@@ -120,7 +120,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                 // handle
                 const subgroups: Array<string> = Object.keys(content_json[contents[i]].subgroups);
                 for (let j_index: number = 0; j_index < subgroups.length; ++j_index) {
-                    const subgroup_path: string = Sen.Shell.Path.Resolve(`${subgroup_dir}/${subgroups[j_index]}.json`);
+                    const subgroup_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_dir}`, `${subgroups[j_index]}.json`));
                     if (!Sen.Shell.FileSystem.FileExists(subgroup_path)) {
                         throw new Sen.Script.Modules.Exceptions.MissingFile(Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(/\{\}/g, subgroup_path), subgroup_path);
                     }
@@ -137,12 +137,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          */
 
         public static MergePopCapResources<Generic_T extends Resources_Group_Structure_Template>(directory_path: string, output_file: string): void {
-            const content_json_path: string = Sen.Shell.Path.Resolve(`${directory_path}/content.json`);
+            const content_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `content.json`));
             if (!Sen.Shell.FileSystem.FileExists(content_json_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingFile(Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(/\{\}/g, content_json_path), content_json_path);
             }
             const subgroup_json: official_subgroup_json = Sen.Script.Modules.FileSystem.Json.ReadJson<official_subgroup_json>(content_json_path);
-            const subgroup_dir: string = Sen.Shell.Path.Resolve(`${directory_path}/subgroup`);
+            const subgroup_dir: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `subgroup`));
             this.CheckDirectoryContainsSubgroups<official_subgroup_json>(subgroup_json, subgroup_dir);
             const directory_files: Array<string> = Sen.Shell.FileSystem.ReadDirectory(subgroup_dir, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory);
             const resources_json: Generic_T = {
@@ -179,7 +179,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                     resources_json.groups.push(composite_object);
                 }
                 for (const subgroup of subgroups) {
-                    const subgroup_json_path: string = Sen.Shell.Path.Resolve(`${subgroup_dir}/${subgroup}.json`);
+                    const subgroup_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_dir}`, `${subgroup}.json`));
                     const deserialized_subgroup: resource_atlas_and_sprites = Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(subgroup_json_path) satisfies resource_atlas_and_sprites;
                     if (!("resources" in deserialized_subgroup)) {
                         throw new Sen.Script.Modules.Exceptions.MissingProperty(`${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, "resources")}`, "resources", subgroup_json_path);
