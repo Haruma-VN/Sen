@@ -23,7 +23,7 @@ namespace Sen.Shell
             var SystemConsole = new SystemImplement();
             var path = new ImplementPath();
             var fs = new FileSystem();
-            if (!fs.DirectoryExists(Script_Directory) || !fs.FileExists(path.Resolve($"{Script_Directory}/main.js")))
+            if (!fs.DirectoryExists(Script_Directory) || !fs.FileExists(path.Resolve(path.Join($"{Script_Directory}","main.js"))))
             {
                 SystemConsole.Print(null, $"Scripts not found, redownloading scripts from github");
                 await GitHub.DownloadScript(Script_Directory, $"https://api.github.com/repos/Haruma-VN/Sen/releases/tags/scripts");

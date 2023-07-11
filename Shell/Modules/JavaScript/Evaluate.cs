@@ -16,7 +16,7 @@ namespace Sen.Shell.Modules.JavaScript
 
             var path = new ImplementPath();
             var fs = new FileSystem();
-            var main_js = path.Resolve($"{Script_Directory}/main.js");
+            var main_js = path.Resolve(path.Join($"{Script_Directory}","main.js"));
             var SystemConsole = new SystemImplement();
             var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
             var ns = new JsObject(engine);
@@ -46,7 +46,7 @@ namespace Sen.Shell.Modules.JavaScript
             };
             ns.Set("Shell", JsValue.FromObject(engine, dictionary));
             engine.SetValue("Sen", ns);
-            engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts/main.js");
+            engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts\\main.js");
             return;
         }
     }

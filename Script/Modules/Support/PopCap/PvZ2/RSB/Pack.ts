@@ -91,17 +91,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const properties: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PACKAGES`));
         if (Sen.Shell.FileSystem.DirectoryExists(properties)) {
             const files: Array<string> = Sen.Shell.FileSystem.ReadDirectory(properties, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
-            let json_count: bigint = 0n;
+            let json_count: int = 0;
             files.forEach((file: string) => {
                 if (Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.JSON`) {
-                    json_count += 1n;
+                    json_count++;
                     Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
                 }
                 if (option.encryptRTON && Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.RTON`) {
                     Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(file, file, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
                 }
             });
-            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${Number(json_count)} JSONs`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs`));
         }
         if (option.generate_resources) {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)), Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`)));
