@@ -1233,6 +1233,10 @@ declare namespace Sen {
 
         declare const DotNetExceptionArg: any;
 
+        /**
+         * PvZ2 Shell
+         */
+
         declare namespace PvZ2Shell {
             /**
              *
@@ -1454,6 +1458,17 @@ declare namespace Sen {
              */
 
             export function ZlibUncompress(inFile: string, outFile: string): void;
+
+            /**
+             *
+             * @param AnimationJson - Pass animation json as deserialize
+             * @param outFolder - out dir
+             * @param mediaPath - media path
+             * @param resolution - resolution
+             * @param setting - settings
+             */
+
+            export function GenerateImageSequence(AnimationJson: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson, outFolder: string, mediaPath: string, resolution: int, setting: Sen.Shell.AnimationHelperSetting): void;
         }
 
         /**
@@ -1673,6 +1688,20 @@ declare namespace Sen {
                 readonly Length: int;
                 ToArray(): Array<byte>;
             }
+        }
+
+        /**
+         * Animation Helper
+         */
+
+        export interface AnimationHelperSetting {
+            frameName: string = "frame";
+            imageByPath: bool = false;
+            appendWidth: int = 0;
+            appendHeight: int = 0;
+            posX: int = 0;
+            posY: int = 0;
+            disableSprite: Array<int> = new Array<int>(0);
         }
 
         /**

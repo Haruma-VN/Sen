@@ -106,7 +106,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_unpack_with_simplified_manifest"
         | "popcap_rsb_pack_with_simplified_manifest"
         | "ogg_to_wav"
-        | "popcap_official_resource_path_convert";
+        | "popcap_official_resource_path_convert"
+        | "popcap_animation_render";
 
     /**
      *
@@ -1583,6 +1584,9 @@ namespace Sen.Script.Modules.Interface.Execute {
                             }
                         });
                     }
+                    break;
+                }
+                case "popcap_animation_render": {
                     break;
                 }
                 default: {
