@@ -36,9 +36,16 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                 },
             },
         };
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      Converted for RSG: STREAMINGWAVE to GLOBAL_DATA`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_streaming_wave_to_global_data")));
         return;
     }
+
+    /**
+     *
+     * @param manifest_rsg_bundle_directory - pass bundle
+     * @param subgroup_content_json - pass json
+     * @returns
+     */
 
     export function ConvertStreamingWavetoGlobalDataforResouces(manifest_rsg_bundle_directory: string, subgroup_content_json: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.official_subgroup_json): void {
         const streaming_wave_res_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, `subgroup`, `StreamingWave.json`));
@@ -60,6 +67,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         };
         return;
     }
+
+    /**
+     * Structure
+     */
 
     export const IOSRequireFormat30AtlasList: Array<string> = [];
 
@@ -126,13 +137,20 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                         rsg_packetinfo.res.forEach((res) => {
                             res.path = (res.path as string).split("\\");
                         });
-                        const atlas_format: string = information.group[group].subgroup[subgroup].packet_info.res[0].ptx_property!.format === 148 ? `PVRTC1_4BPP_RGBA_A8 (148)` : `ARGB8888 (0)`;
-                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      Converted for RSG: ${subgroup} to ${atlas_format}`);
+                        Sen.Shell.Console.Print(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_rsg").replace(/\{\}/g, `${subgroup}`))}`
+                        );
                     } else {
                         delete information.group[group].subgroup[subgroup];
                     }
                 }
-                if (!check_contain_atlas) throw new Sen.Script.Modules.Exceptions.MissingProperty(`${atlas_res_bundle[input_resolution - 1]} does not contain in this RSB`, `Missing res resolution`, `${file_in}`);
+                if (!check_contain_atlas)
+                    throw new Sen.Script.Modules.Exceptions.MissingProperty(
+                        Sen.Script.Modules.System.Default.Localization.GetString("does_not_contains_in_rsb").replace(/\{\}/g, `${atlas_res_bundle[input_resolution - 1]}`),
+                        Sen.Script.Modules.System.Default.Localization.GetString("missing_resolution"),
+                        `${file_in}`
+                    );
             }
         }
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(`${bundle_directory}`, `manifest.json`), information);
@@ -182,6 +200,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(output_argument, res_json_argument);
         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(res_json_argument, res_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
         Sen.Shell.PvZ2Shell.RSGPack(`${manifest_rsg_bundle_directory}`, `${manifest_rsg_path}`, manifest_packet_info, false);
+        return;
     }
 
     /**
@@ -190,25 +209,22 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
      */
 
     export function Evaluate(): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Input RSB path of PvZ2 International Android to continue`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_rsb_path")));
         const file_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
         const bundle_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.bundle`)}`);
-        if (Sen.Shell.FileSystem.DirectoryExists(bundle_directory)) {
-            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow, `Execution Warning: Directory ${bundle_directory} already exists, files with same name will be overwritten`);
-            Sen.Shell.FileSystem.DeleteDirectory([bundle_directory]);
-        }
+        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(bundle_directory, "file");
         const output_file: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(file_in)}/${Sen.Shell.Path.Parse(file_in).name_without_extension}.converted.rsb`);
         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_file, "file");
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Compress PTX`);
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      1. Use ARGB8888 (0) for all images`);
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      2. Auto convert RGB_ETC_1_A8 (147) to PVRTC1_4BPP_RGBA_A8 (148). Probably only works with 768 res resolution`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_encode")));
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      1. argb_8888`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      2. pvrtc1_4bpp_rgba_a8`);
         const compress_ptx: boolean = Sen.Script.Modules.Interface.Arguments.TestInput([1, 2]) == 2;
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Select resolution for IOS Device`);
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      1. Ipad and Iphone Plus with high resolution (1536)`);
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      2. Iphone with low resolution (768)`);
-        const input_resolution: number = Sen.Script.Modules.Interface.Arguments.TestInput([1, 2]);
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, `Execution Working: Please wait, conversion it may take a few minutes... `);
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, `Execution Status: Converting... RSG's finish list: `);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("popcap_texture_resolution")));
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      1. ${Sen.Script.Modules.System.Default.Localization.GetString("popcap_res_1536")}`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      2. ${Sen.Script.Modules.System.Default.Localization.GetString("popcap_res_768")}`);
+        const input_resolution: int = Sen.Script.Modules.Interface.Arguments.TestInput([1, 2]);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("please_wait_for_few_minutes_to_finish_conversion")));
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("rsg_list")));
         const manifest_packet_name: string = Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB.UnpackRSBAndConvertPTX(file_in, bundle_directory, input_resolution, compress_ptx);
         RewriteResources(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${bundle_directory}`, `packet`)), manifest_packet_name, input_resolution);
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(bundle_directory, output_file);

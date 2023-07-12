@@ -40,7 +40,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels {
      */
 
     export function Evaluate(): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Input json path to continue`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_json_path")));
         const file_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
         Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.EraseLevels(file_in, file_in.replace(/((\.json))?$/i, ".patch.json"));
         return;

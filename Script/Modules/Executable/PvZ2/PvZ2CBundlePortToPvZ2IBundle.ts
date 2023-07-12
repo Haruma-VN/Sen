@@ -92,7 +92,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
         const bundle_list = new Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.BundleList();
         const chinese_groups: Array<string> = Object.keys(option.chinese_manifest.group);
         const available: Array<int> = new Array();
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Choose 1 or more group that displayed, click enter to finish...`);
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("choose_one_or_more_group_that_displayed_and_click_enter_to_finish"))
+        );
         chinese_groups.forEach((group: string, index: int) => {
             const valid_option: int = index + 1;
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `        ${valid_option}. ${group}`);
@@ -104,15 +107,15 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                 const data: Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure = option.chinese_manifest.group[chinese_groups[available[parseInt(input)] - 2]] as any & Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure;
                 bundle_list.AppendArgument(chinese_groups[available[parseInt(input)] - 2], data);
             } else {
-                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Please Reinput`);
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, `${input}`));
             }
             input = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         }
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, `Execution Finish: These are what you decided to add`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("list_of_added_content")));
         bundle_list.PrintArgument();
-        const confirm: boolean = Boolean(Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(`Would you like to confirm?`));
+        const confirm: boolean = Boolean(Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("confirm_your_choice")));
         if (!confirm) {
-            // request implementation
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString("user_refused_to_continue"), `undefined`);
         }
         return bundle_list.argument;
     }
@@ -200,9 +203,12 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
             const second_keys: Array<string> = Object.keys((option.watch[key] as any).subgroup);
             second_keys.forEach((rsg_name: string) => {
                 const rsg_entry: string = `${rsg_name}.rsg`;
-                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, `Converted RSG for ${rsg_entry}`);
-                const entry: string = Sen.Shell.Path.Join(option.cn_bundle, `packet`, rsg_entry);
-                const output: string = Sen.Shell.Path.Join(option.int_bundle, `packet`, rsg_entry);
+                Sen.Shell.Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_rsg").replace(/\{\}/g, `${rsg_entry}`))
+                );
+                const entry: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.cn_bundle, `packet`, rsg_entry));
+                const output: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.int_bundle, `packet`, rsg_entry));
                 (option.watch[key] as any).subgroup[rsg_name].packet_info.compression_flags = 0b0011;
                 switch ((option.watch[key] as any).subgroup[rsg_name].category[0]) {
                     case 0: {
@@ -252,9 +258,9 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
      */
 
     export function Evaluate(): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Input international bundle to continue...`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle")));
         const international_bundle: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Input chinese bundle to continue...`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_chinese_bundle")));
         const chinese_bundle: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         const option: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.Option = {
             int_bundle: international_bundle,

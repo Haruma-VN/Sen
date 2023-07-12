@@ -82,20 +82,20 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup {
      */
 
     export function Evaluate(): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Input rsb.bundle path as simple unpack to continue`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle")));
         const dir_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         const res_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `res.json`));
         const manifest_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `manifest.json`));
         const packet_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `packet`));
         const keyword: string = `384`;
         if (!Sen.Shell.FileSystem.FileExists(res_json_destination)) {
-            throw new Sen.Script.Modules.Exceptions.MissingFile(`No such file`, res_json_destination);
+            throw new Sen.Script.Modules.Exceptions.MissingFile(Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(/\{\}/g, res_json_destination), res_json_destination);
         }
         if (!Sen.Shell.FileSystem.FileExists(manifest_json_destination)) {
-            throw new Sen.Script.Modules.Exceptions.MissingFile(`No such file`, manifest_json_destination);
+            throw new Sen.Script.Modules.Exceptions.MissingFile(Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(/\{\}/g, manifest_json_destination), manifest_json_destination);
         }
         if (!Sen.Shell.FileSystem.DirectoryExists(packet_directory)) {
-            throw new Sen.Script.Modules.Exceptions.MissingDirectory(`No such directory`, packet_directory);
+            throw new Sen.Script.Modules.Exceptions.MissingDirectory(Sen.Script.Modules.System.Default.Localization.GetString("no_such_directory").replace(/\{\}/g, packet_directory), packet_directory);
         }
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
             manifest_json_destination,
@@ -106,4 +106,5 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup {
         return;
     }
 }
+
 Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.Evaluate();
