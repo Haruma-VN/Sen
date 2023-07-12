@@ -1,66 +1,66 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace ChatGPT.Net.DTO.ChatGPT;
 
 public class ChatGptResponse
 {
-    [JsonPropertyName("id")]
+    [JsonProperty("id")]
     public string Id { get; set; }
 
-    [JsonPropertyName("object")]
+    [JsonProperty("object")]
     public string Object { get; set; }
 
-    [JsonPropertyName("created")]
+    [JsonProperty("created")]
     public long Created { get; set; }
 
-    [JsonPropertyName("model")]
+    [JsonProperty("model")]
     public string Model { get; set; }
 
-    [JsonPropertyName("usage")]
+    [JsonProperty("usage")]
     public Usage Usage { get; set; }
 
-    [JsonPropertyName("choices")]
+    [JsonProperty("choices")]
     public List<Choice> Choices { get; set; }
 
-    [JsonPropertyName("error")]
+    [JsonProperty("error")]
     public Error? Error { get; set; }
 }
 
 public class Choice
 {
-    [JsonPropertyName("message")]
+    [JsonProperty("message")]
     public ChatGptMessage Message { get; set; }
 
-    [JsonPropertyName("finish_reason")]
+    [JsonProperty("finish_reason")]
     public string FinishReason { get; set; }
 
-    [JsonPropertyName("index")]
+    [JsonProperty("index")]
     public long Index { get; set; }
 }
 
 public class Usage
 {
-    [JsonPropertyName("prompt_tokens")]
+    [JsonProperty("prompt_tokens")]
     public long PromptTokens { get; set; }
 
-    [JsonPropertyName("completion_tokens")]
+    [JsonProperty("completion_tokens")]
     public long CompletionTokens { get; set; }
 
-    [JsonPropertyName("total_tokens")]
+    [JsonProperty("total_tokens")]
     public long TotalTokens { get; set; }
 }
 
 public class Error
 {
-    [JsonPropertyName("message")]
+    [JsonProperty("message")]
     public string Message { get; set; }
 
-    [JsonPropertyName("type")]
+    [JsonProperty("type")]
     public string Type { get; set; }
 
-    [JsonPropertyName("param")]
+    [JsonProperty("param")]
     public object Param { get; set; }
 
-    [JsonPropertyName("code")]
+    [JsonProperty("code")]
     public string Code { get; set; }
 }

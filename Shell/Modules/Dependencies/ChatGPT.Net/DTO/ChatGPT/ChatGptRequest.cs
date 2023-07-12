@@ -1,35 +1,35 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace ChatGPT.Net.DTO.ChatGPT;
 
 public partial class ChatGptRequest
 {
-    [JsonPropertyName("model")]
+    [JsonProperty("model")]
     public string Model { get; set; } = "gpt-3.5-turbo";
 
-    [JsonPropertyName("temperature")]
+    [JsonProperty("temperature")]
     public double Temperature { get; set; } = 0.7;
 
-    [JsonPropertyName("max_tokens")]
+    [JsonProperty("max_tokens")]
     public long MaxTokens { get; set; } = 256;
 
-    [JsonPropertyName("n")]
+    [JsonProperty("n")]
     private long N { get; set; } = 1;
 
-    [JsonPropertyName("stop")]
+    [JsonProperty("stop")]
     public string[]? Stop { get; set; }
 
-    [JsonPropertyName("top_p")]
+    [JsonProperty("top_p")]
     public double TopP { get; set; } = 0.9;
-    [JsonPropertyName("presence_penalty")]
+    [JsonProperty("presence_penalty")]
     public double PresencePenalty { get; set; } = 0.0;
 
-    [JsonPropertyName("frequency_penalty")]
+    [JsonProperty("frequency_penalty")]
     public double FrequencyPenalty { get; set; } = 0.0;
 
-    [JsonPropertyName("stream")]
+    [JsonProperty("stream")]
     public bool Stream { get; set; } = false;
 
-    [JsonPropertyName("messages")]
+    [JsonProperty("messages")]
     public List<ChatGptMessage> Messages { get; set; } = new();
 }

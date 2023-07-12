@@ -5,6 +5,7 @@ using System.Text.Json;
 using ChatGPT.Net.DTO;
 using ChatGPT.Net.DTO.ChatGPT;
 using ChatGPT.Net.DTO.ChatGPTUnofficial;
+using Newtonsoft.Json;
 
 namespace ChatGPT.Net;
 
@@ -192,7 +193,6 @@ public class ChatGpt
     public async Task<ChatGptResponse> SendMessage(ChatGptRequest requestBody, Action<ChatGptStreamChunkResponse>? callback = null)
     {
         var client = new HttpClient();
-        var json = new Sen.Shell.Modules.Standards.JsonImplement();
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
@@ -201,7 +201,7 @@ public class ChatGpt
             {
                 {"Authorization", $"Bearer {APIKey}" }
             },
-            Content = new StringContent(json.StringifyJson<ChatGptRequest>(requestBody, null))
+            Content = new StringContent(JsonConvert.SerializeObject(requestBody))
             {
                 Headers =
                 {
@@ -231,10 +231,8 @@ public class ChatGpt
             {
                 var jsonString = data.Replace("data: ", "");
                 if (string.IsNullOrWhiteSpace(jsonString)) continue;
-                if (jsonString == "[DONE]") {
-                    break;
-                }
-                reply = json.ParseJson<ChatGptStreamChunkResponse>(jsonString);
+                if(jsonString == "[DONE]") break;
+                reply = JsonConvert.DeserializeObject<ChatGptStreamChunkResponse>(jsonString);
                 if (reply is null) continue;
                 concatMessages += reply.Choices.FirstOrDefault()?.Delta.Content;
                 callback?.Invoke(reply);

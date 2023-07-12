@@ -1,38 +1,38 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace ChatGPT.Net.DTO.ChatGPTUnofficial;
 
 public class ChatGptUnofficialProfile
 {
-    [JsonPropertyName("user")]
+    [JsonProperty("user")]
     public ChatGPTUnofficialUser User { get; set; }
 
-    [JsonPropertyName("expires")]
+    [JsonProperty("expires")]
     public DateTimeOffset Expires { get; set; }
 
-    [JsonPropertyName("accessToken")]
+    [JsonProperty("accessToken")]
     public string AccessToken { get; set; }
-    [JsonPropertyName("error")]
+    [JsonProperty("error")]
     public string? Error { get; set; }
 }
 
 public class ChatGPTUnofficialUser
 {
-    [JsonPropertyName("id")]
+    [JsonProperty("id")]
     public string Id { get; set; }
 
-    [JsonPropertyName("name")]
+    [JsonProperty("name")]
     public string Name { get; set; }
 
-    [JsonPropertyName("email")]
+    [JsonProperty("email")]
     public string Email { get; set; }
 
-    [JsonPropertyName("image")]
+    [JsonProperty("image")]
     public Uri Image { get; set; }
 
-    [JsonPropertyName("picture")]
+    [JsonProperty("picture")]
     public Uri Picture { get; set; }
 
-    [JsonPropertyName("groups")]
+    [JsonProperty("groups")]
     public List<string> Groups { get; set; }
 }

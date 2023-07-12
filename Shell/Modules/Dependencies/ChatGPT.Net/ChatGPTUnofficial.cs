@@ -5,6 +5,7 @@ using System.Text.Json;
 using ChatGPT.Net.DTO;
 using ChatGPT.Net.DTO.ChatGPT;
 using ChatGPT.Net.DTO.ChatGPTUnofficial;
+using Newtonsoft.Json;
 
 namespace ChatGPT.Net;
 
@@ -244,7 +245,6 @@ public class ChatGptUnofficial
         }
 
         var client = new HttpClient();
-        var json = new Sen.Shell.Modules.Standards.JsonImplement();
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
@@ -253,7 +253,7 @@ public class ChatGptUnofficial
             {
                 {"Authorization", $"Bearer {AccessToken}" }
             },
-            Content = new StringContent(json.StringifyJson<ChatGptUnofficialMessageRequest>(requestData, null))
+            Content = new StringContent(JsonConvert.SerializeObject(requestData))
             {
                 Headers =
                 {
@@ -285,7 +285,7 @@ public class ChatGptUnofficial
             //Try Deserialize
             try
             {
-                var replyNew = json.ParseJson<ChatGptUnofficialMessageResponse>(dataJson);
+                var replyNew = JsonConvert.DeserializeObject<ChatGptUnofficialMessageResponse>(dataJson);
                 if (replyNew == null)
                     continue;
                 reply = replyNew;

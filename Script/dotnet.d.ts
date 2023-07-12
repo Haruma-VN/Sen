@@ -31,6 +31,10 @@ declare namespace Sen {
 
         declare const argument: string[];
 
+        declare namespace ChatGPT {
+            export function AskChatGPT(api: string, question: string): string;
+        }
+
         /**
          * @package Platform implementing system for DotNet using JS
          */

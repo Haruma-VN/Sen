@@ -1,59 +1,59 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace ChatGPT.Net.DTO.ChatGPTUnofficial;
 
 
 public class ChatGptUnofficialMessageResponse
 {
-    [JsonPropertyName("message")]
+    [JsonProperty("message")]
     public MessageClass Message { get; set; }
 
-    [JsonPropertyName("conversation_id")]
+    [JsonProperty("conversation_id")]
     public string ConversationId { get; set; }
 
-    [JsonPropertyName("error")]
+    [JsonProperty("error")]
     public object Error { get; set; }
 }
 
 public class MessageClass
 {
-    [JsonPropertyName("id")]
+    [JsonProperty("id")]
     public string Id { get; set; }
 
-    [JsonPropertyName("author")]
+    [JsonProperty("author")]
     public ResponseAuthor Author { get; set; }
 
-    [JsonPropertyName("create_time")]
+    [JsonProperty("create_time")]
     public double CreateTime { get; set; }
 
-    [JsonPropertyName("update_time")]
+    [JsonProperty("update_time")]
     public object UpdateTime { get; set; }
 
-    [JsonPropertyName("content")]
+    [JsonProperty("content")]
     public ResponseContent Content { get; set; }
 
-    [JsonPropertyName("end_turn")]
+    [JsonProperty("end_turn")]
     public object EndTurn { get; set; }
 
-    [JsonPropertyName("weight")]
+    [JsonProperty("weight")]
     public long Weight { get; set; }
 
-    [JsonPropertyName("metadata")]
+    [JsonProperty("metadata")]
     public MessageMetadata Metadata { get; set; }
 
-    [JsonPropertyName("recipient")]
+    [JsonProperty("recipient")]
     public string Recipient { get; set; }
 }
 
 public class ResponseAuthor
 {
-    [JsonPropertyName("role")]
+    [JsonProperty("role")]
     public string Role { get; set; }
 
-    [JsonPropertyName("name")]
+    [JsonProperty("name")]
     public object Name { get; set; }
 
-    [JsonPropertyName("metadata")]
+    [JsonProperty("metadata")]
     public AuthorMetadata Metadata { get; set; }
 }
 
@@ -63,18 +63,18 @@ public class AuthorMetadata
 
 public class ResponseContent
 {
-    [JsonPropertyName("content_type")]
+    [JsonProperty("content_type")]
     public string ContentType { get; set; }
 
-    [JsonPropertyName("parts")]
+    [JsonProperty("parts")]
     public List<string> Parts { get; set; }
 }
 
 public class MessageMetadata
 {
-    [JsonPropertyName("message_type")]
+    [JsonProperty("message_type")]
     public string MessageType { get; set; }
 
-    [JsonPropertyName("model_slug")]
+    [JsonProperty("model_slug")]
     public string ModelSlug { get; set; }
 }

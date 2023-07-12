@@ -1,39 +1,39 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace ChatGPT.Net.DTO.ChatGPT;
 
 public class ChatGptStreamChunkResponse
 {
-    [JsonPropertyName("id")]
+    [JsonProperty("id")]
     public string Id { get; set; }
 
-    [JsonPropertyName("object")]
+    [JsonProperty("object")]
     public string Object { get; set; }
 
-    [JsonPropertyName("created")]
+    [JsonProperty("created")]
     public long Created { get; set; }
 
-    [JsonPropertyName("model")]
+    [JsonProperty("model")]
     public string Model { get; set; }
 
-    [JsonPropertyName("choices")]
+    [JsonProperty("choices")]
     public List<ChunkChoice> Choices { get; set; }
 }
 
 public class ChunkChoice
 {
-    [JsonPropertyName("delta")]
+    [JsonProperty("delta")]
     public Delta Delta { get; set; }
 
-    [JsonPropertyName("index")]
+    [JsonProperty("index")]
     public long Index { get; set; }
 
-    [JsonPropertyName("finish_reason")]
+    [JsonProperty("finish_reason")]
     public object FinishReason { get; set; }
 }
 
 public class Delta
 {
-    [JsonPropertyName("content")]
+    [JsonProperty("content")]
     public string Content { get; set; }
 }

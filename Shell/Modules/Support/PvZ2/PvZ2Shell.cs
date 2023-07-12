@@ -12,6 +12,7 @@ using static Sen.Shell.Modules.Support.PvZ2.RTON.RTONProcession;
 using NAudio.Vorbis;
 using NAudio.Wave;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -382,6 +383,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
             AnimationHelper.GenerateImageSequence(AnimationJson, mediaPath, outFolder, resolution, setting);
             return;
         }
+
+        [DllImport("core")]
+        public static extern void RealEsrganUpscale();
 
         #endregion
     }
