@@ -424,9 +424,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 var SenFile = new SenBuffer(UseResFolder ? path.Resolve(path.Join(inFolder, "res", PacketResInfo.path)) : path.Resolve(path.Join(inFolder, PacketResInfo.path)));
                 byte[] dataItem = SenFile.toBytes();
                 SenFile.Close();
+                var appendBytes = BeautifyLengthForFile(dataItem.Length);
                 if (pathTemps[i].isAtlas)
                 {
                     atlasGroup.writeBytes(dataItem);
+                    atlasGroup.writeNull(appendBytes);
                     RSGFile.RestoreWriteOffset();
                     RSGFile.writeInt32LE(1);
                     RSGFile.writeInt32LE(atlasPos);
@@ -435,16 +437,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     RSGFile.writeNull(8);
                     RSGFile.writeInt32LE(PacketResInfo.ptx_info!.width);
                     RSGFile.writeInt32LE(PacketResInfo.ptx_info!.height);
-                    atlasPos += dataItem.Length;
+                    atlasPos += (dataItem.Length + appendBytes);
                 }
                 else
                 {
                     dataGroup.writeBytes(dataItem);
+                    dataGroup.writeNull(appendBytes);
                     RSGFile.RestoreWriteOffset();
                     RSGFile.writeInt32LE(0);
                     RSGFile.writeInt32LE(dataPos);
                     RSGFile.writeInt32LE(dataItem.Length);
-                    dataPos += dataItem.Length;
+                    dataPos += (dataItem.Length + appendBytes);
                 }
             }
             var fileListLength = RSGFile.writeOffset - fileListBeginOffset;
@@ -555,6 +558,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             if (oriLength % 4096 == 0)
             {
                 return 4096;
+            }
+            else
+            {
+                return 4096 - (oriLength % 4096);
+            }
+        }
+
+        public static int BeautifyLengthForFile(int oriLength)
+        {
+            if (oriLength % 4096 == 0)
+            {
+                return 0;
             }
             else
             {
