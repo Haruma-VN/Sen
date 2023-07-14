@@ -334,5 +334,9 @@
     "popcap_texture_resolution": "PopCap Texture Resolution",
     "please_wait_for_few_minutes_to_finish_conversion": "Please wait for few minutes to finish conversion...",
     "rsg_list": "RSG List",
-    "input_rsb_path": "Input RSB Path"
+    "input_rsb_path": "Input RSB Path",
+    "non-standard": "Non-standards",
+    "standard": "standard",
+    "shell": "shell",
+    "please_delete_script_directory": "Please delete script directory to update..."
 }
