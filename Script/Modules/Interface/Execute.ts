@@ -1587,6 +1587,34 @@ namespace Sen.Script.Modules.Interface.Execute {
                     break;
                 }
                 case "popcap_animation_render": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(Sen.Shell.Path.Parse(argument).name_without_extension).name_without_extension}.frame`));
+                        Sen.Shell.Console.Print(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_image_path"))
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        try {
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render.GenerateImageSequence(argument, output_argument);
+                        } catch (error: unknown) {
+                            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
+                        }
+                    }
+                    else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(Sen.Shell.Path.Parse(arg).name_without_extension).name_without_extension}.frame`));
+                            Sen.Shell.Console.Print(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_image_path"))
+                            );
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            try {
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render.GenerateImageSequence(arg, output_argument);
+                            } catch (error: unknown) {
+                                throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
+                            }
+                        });
+                    }
                     break;
                 }
                 default: {

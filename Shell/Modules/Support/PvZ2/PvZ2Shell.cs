@@ -101,7 +101,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void ZlibUncompress(string inFile, string outFile);
 
-        public abstract void GenerateImageSequence(PAMInfo AnimationJson, string outFolder, string mediaPath, int resolution, AnimationHelperSetting setting);
+        public abstract void GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting);
 
     }
 
@@ -378,9 +378,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public unsafe override sealed void GenerateImageSequence(PAMInfo AnimationJson, string outFolder, string mediaPath, int resolution, AnimationHelperSetting setting)
+        public unsafe override sealed void GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting)
         {
-            AnimationHelper.GenerateImageSequence(AnimationJson, mediaPath, outFolder, resolution, setting);
+            var fs = new FileSystem();
+            AnimationHelper.GenerateImageSequence(fs.ReadJson<PAMInfo>(AnimationJsonPath), outFolder, mediaPath, setting);
             return;
         }
 

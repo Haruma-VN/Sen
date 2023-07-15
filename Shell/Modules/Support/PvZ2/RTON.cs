@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Sen.Shell.Modules.Standards;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
@@ -617,58 +618,30 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                     return true;
                 }
                 string newstr = str[5..^1];
-                int index;
-                if ((index = newstr.IndexOf('@')) > -1)
+                if (newstr.IndexOf("@") != -1)
                 {
+                    var name_str = newstr.Split("@");
+                    int dotCount = Regex.Matches(name_str[0], "\\.").Count;
                     RtonFile.writeUInt8(0x83);
-                    string str1 = newstr[..index];
-                    string str2 = newstr[(index + 1)..];
-                    bool isr8302 = true;
-                    int dot1index = 0, dot2index = 0, dindex = 0;
-                    for (var i = 0; i < str1.Length; i++)
+                    if (dotCount == 2)
                     {
-                        if (str1[i] == '.')
-                        {
-                            switch (dindex)
-                            {
-                                case 0:
-                                    dot1index = i;
-                                    break;
-                                case 1:
-                                    dot2index = i;
-                                    break;
-                                default:
-                                    isr8302 = false;
-                                    break;
-                            }
-                            dindex++;
-                        }
-                        else if (str1[i] > '9' && str1[i] < '0' && (!(dindex == 2 && ((str1[i] >= 'a' && str1[i] <= 'f') || (str1[i] >= 'A' && str1[i] <= 'F')))))
-                        {
-                            isr8302 = false;
-                        }
-                        if (!isr8302) break;
-                    }
-                    if (dindex != 2)
-                    {
-                        isr8302 = false;
-                    }
-                    if (isr8302)
-                    {
+                        var intStr = name_str[0].Split(".");
                         RtonFile.writeUInt8(0x02);
-                        RtonFile.writeVarInt32(str2.Length);
-                        RtonFile.writeStringByVarInt32(str2);
-                        RtonFile.writeVarInt32(Convert.ToInt32(str1[(dot1index + 1)..dot2index]));
-                        RtonFile.writeVarInt32(Convert.ToInt32(str1[..dot1index]));
-                        RtonFile.writeUVarInt32(Convert.ToUInt32(str1[(dot2index + 1)..]));
+                        RtonFile.writeVarInt32(name_str[1].Length);
+                        RtonFile.writeStringByVarInt32(name_str[1]);
+                        RtonFile.writeVarInt32(Convert.ToInt32(intStr[1]));
+                        RtonFile.writeVarInt32(Convert.ToInt32(intStr[0]));
+                        var hexBytes = Convert.FromHexString(intStr[2]);
+                        Array.Reverse(hexBytes);
+                        RtonFile.writeBytes(hexBytes);
                     }
                     else
                     {
                         RtonFile.writeUInt8(0x03);
-                        RtonFile.writeVarInt32(str2.Length);
-                        RtonFile.writeStringByVarInt32(str2);
-                        RtonFile.writeVarInt32(str1.Length);
-                        RtonFile.writeStringByVarInt32(str1);
+                        RtonFile.writeVarInt32(name_str[1].Length);
+                        RtonFile.writeStringByVarInt32(name_str[1]);
+                        RtonFile.writeVarInt32(name_str[0].Length);
+                        RtonFile.writeStringByVarInt32(name_str[0]);
                     }
                     return true;
                 }
