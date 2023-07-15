@@ -1250,7 +1250,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var path = new ImplementPath();
             if (rsbHeadInfo.version == 5)
             {
-                FixFileListShuttle(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, false);
                 throw new Exception("unsupported_trash_structure");
             }
             var rsgList = new List<FileListInfo>();
@@ -1472,7 +1471,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             RSBFile.BackupReadOffset();
             var fileListOffset = RSBFile.readInt32LE(rsgOffset + 76);
             RSBFile.BackupReadOffset();
-            if (fileListOffset != 0x5C) return true;
+            if (fileListOffset != 0x5C && fileListOffset != 0x1000) return true;
             else return false;
         }
 

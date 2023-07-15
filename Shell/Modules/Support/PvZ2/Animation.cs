@@ -2139,8 +2139,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public required string imageName { get; set; }
         public required int imageIndex { get; set; }
         public bool disableSprite { get; set; }
-        public List<double[]> transform = new List<double[]>();
-        public List<double[]> color = new List<double[]>();
+        public required List<double[]>? transform { get; set; }
+        public required List<double[]>? color { get; set; }
     }
 
     public class AnimationHelper
@@ -2149,8 +2149,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         public static void GenerateImageSequence(PAMInfo AnimationJson, string outFolder, string mediaPath, AnimationHelperSetting setting)
         {
+
+            var fs = new FileSystem();
+            if (!fs.DirectoryExists(outFolder)) fs.CreateDirectory(outFolder);
             var imageSequenceList = new Dictionary<int, List<ImageSequenceList>>();
-            var imageList = new Image[AnimationJson.image.Length];
+            var imageList = new Image<Rgba32>[AnimationJson.image.Length];
             for (var i = 0; i < AnimationJson.image.Length; i++)
             {
                 var imageInfo = ReadImage(AnimationJson.image[i], i, setting.imageByPath);
@@ -2162,22 +2165,46 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             var spriteList = new Dictionary<int, List<ImageSequenceList>>();
             var mainSpriteFrame = new Dictionary<int, List<ImageSequenceList>>();
-            var imageSqure = new Dictionary<int, List<double>>();
-            imageSqure.Add(0, new List<double>());
-            imageSqure.Add(1, new List<double>());
             for (var i = 0; i < AnimationJson.sprite.Length; i++)
             {
-                var spriteImageList = ReadSprite(i, AnimationJson.sprite[i], AnimationJson.sprite, imageSequenceList, spriteList, setting.disableSprite, mainSpriteFrame, imageSqure);
+                var spriteImageList = ReadSprite(i, AnimationJson.sprite[i], AnimationJson.sprite, imageSequenceList, spriteList, setting.disableSprite, mainSpriteFrame);
                 spriteList.Add(i, spriteImageList);
             }
-            ReadSprite(-1, AnimationJson.main_sprite, AnimationJson.sprite, imageSequenceList, spriteList, setting.disableSprite, mainSpriteFrame, imageSqure);
-            var fs = new FileSystem();
-            if (!fs.DirectoryExists(outFolder)) fs.CreateDirectory(outFolder);
-            var maxPos = PositionCalculator(AnimationJson);
-            var maxWidth = (int)(imageSqure[0].AsQueryable().Max() + maxPos[0]) + setting.appendWidth;
-            var maxHeight = (int)(imageSqure[1].AsQueryable().Max() + maxPos[1]) + setting.appendWidth;
-            Console.WriteLine("Your image has width: {0}, height: {1}", maxWidth, maxHeight);
-            WriteImage(mainSpriteFrame, setting, imageList, maxWidth, maxHeight, maxPos, outFolder);
+            ReadSprite(-1, AnimationJson.main_sprite, AnimationJson.sprite, imageSequenceList, spriteList, setting.disableSprite, mainSpriteFrame);
+            var maxPos = new double[2];
+            var imageSqure = FindImageSquare(mainSpriteFrame, maxPos);
+            Console.WriteLine("      All frames: {0}, Image width: {1}, Image heigth: {2}", mainSpriteFrame.Count, imageSqure[0], imageSqure[1]);
+            WriteImage(mainSpriteFrame, setting, imageList, imageSqure[0], imageSqure[1], maxPos, outFolder);
+        }
+
+        private static int[] FindImageSquare(Dictionary<int, List<ImageSequenceList>> mainSpriteFrame, double[] maxPos)
+        {
+            var imageGlobalWidth = new List<double>();
+            var imageGlobalHeight = new List<double>();
+            var imageGlobalPosX = new List<double>();
+            var imageGlobalPosY = new List<double>();
+            foreach (var frameIndex in mainSpriteFrame.Keys)
+            {
+                foreach (var layerSprite in mainSpriteFrame[frameIndex])
+                {
+                    for (var i = 0; i < layerSprite.transform!.Count; i++)
+                    {
+                        layerSprite.matrix = MixTransform(layerSprite.matrix, layerSprite.transform[i]);
+                    }
+                    imageGlobalWidth.Add(layerSprite.matrix[4] + (double)layerSprite.imageWidth);
+                    imageGlobalHeight.Add(layerSprite.matrix[5] + (double)layerSprite.imageHeight);
+                    imageGlobalPosX.Add(layerSprite.matrix[4]);
+                    imageGlobalPosY.Add(layerSprite.matrix[5]);
+                }
+            }
+            var posX = imageGlobalPosX.AsQueryable().Min();
+            var posY = imageGlobalPosY.AsQueryable().Min();
+            maxPos[0] = posX >= 0 ? 0 : -posX;
+            maxPos[1] = posY >= 0 ? 0 : -posY;
+            return new int[] {
+                (int)(imageGlobalWidth.AsQueryable().Max() + (posX >= 0 ? posX : maxPos[0])),
+                (int)(imageGlobalHeight.AsQueryable().Max() + (posY >= 0 ? posY : maxPos[1])),
+            };
         }
 
         private static ImageSequenceList ReadImage(ImageInfo image, int index, bool imageByPath)
@@ -2190,50 +2217,18 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 matrix = image.transform,
                 imageName = imageName,
                 imageIndex = index,
+                transform = new List<double[]>(),
+                color = new List<double[]>(),
             };
         }
 
-        private static Image LoadImage(ImageSequenceList imageInfo, string mediaPath)
+        private static Image<Rgba32> LoadImage(ImageSequenceList imageInfo, string mediaPath)
         {
             var path = new ImplementPath();
             var imagePath = path.Resolve(path.Join(mediaPath, $"{imageInfo.imageName}.png"));
-            var SixLaborsImage = Image.Load(imagePath);
+            var SixLaborsImage = Image.Load<Rgba32>(imagePath);
             SixLaborsImage.Mutate(x => x.Resize(imageInfo.imageWidth, imageInfo.imageHeight));
             return SixLaborsImage;
-        }
-
-        private static double[] PositionCalculator(PAMInfo AnimationJson)
-        {
-            var xPostList = new List<double>();
-            var yPostList = new List<double>();
-            foreach (var image in AnimationJson.image)
-            {
-                xPostList.Add(image.transform[^2]);
-                yPostList.Add(image.transform[^1]);
-            }
-            foreach (var sprite in AnimationJson.sprite)
-            {
-                foreach (var frame in sprite.frame!)
-                {
-                    foreach (var change in frame.change!)
-                    {
-                        xPostList.Add(change.transform[^2]);
-                        yPostList.Add(change.transform[^1]);
-                    }
-                }
-            }
-            foreach (var frame in AnimationJson.main_sprite.frame!)
-            {
-                foreach (var change in frame.change!)
-                {
-                    xPostList.Add(change.transform[^2]);
-                    yPostList.Add(change.transform[^1]);
-                }
-            }
-            return new double[] {
-                Math.Abs(xPostList.AsQueryable().Min()),
-                Math.Abs(yPostList.AsQueryable().Min())
-            };
         }
 
         public static T DeepCopyJSON<T>(T input)
@@ -2242,11 +2237,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return JsonSerializer.Deserialize<T>(jsonString)!;
         }
 
-        private static List<ImageSequenceList> ReadSprite(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite, Dictionary<int, List<ImageSequenceList>> imageSequenceList, Dictionary<int, List<ImageSequenceList>> spriteList, int[] disableSprite, Dictionary<int, List<ImageSequenceList>> mainSpriteFrame, Dictionary<int, List<double>> imageSqure)
+        private static List<ImageSequenceList> ReadSprite(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite, Dictionary<int, List<ImageSequenceList>> imageSequenceList, Dictionary<int, List<ImageSequenceList>> spriteList, int[] disableSprite, Dictionary<int, List<ImageSequenceList>> mainSpriteFrame)
         {
             var frame_node_list = PAM_Animation.DecodeFrameNodeList(index, sprite, sub_sprite);
+            var frame_keys = frame_node_list.Keys.OrderBy(key => key).ToList();
             var spriteImageList = new List<ImageSequenceList>();
-            foreach (var layer_index in frame_node_list.Keys)
+            foreach (var layer_index in frame_keys)
             {
                 var DOMLayer = frame_node_list[layer_index];
                 foreach (var frameElement in DOMLayer)
@@ -2325,7 +2321,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                 throw new PAMException("invalid_sprite_dom_symbol_instance_color_length", $"Color length: {x_color_list.Length}");
                             }
                         };
-                        var frameSpriteList = isSprite ? spriteList[resourceIndex] : imageSequenceList[resourceIndex];
+                        var frameSpriteList = (isSprite ? spriteList[resourceIndex] : imageSequenceList[resourceIndex]);
                         if (!mainSpriteFrame.ContainsKey(frame_index_duration))
                         {
                             mainSpriteFrame.Add(frame_index_duration, new List<ImageSequenceList>());
@@ -2337,16 +2333,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                             {
                                 frameSprite.disableSprite = true;
                             }
-                            frameSprite.transform.Add(transform);
-                            frameSprite.color.Add(color);
+                            frameSprite.transform!.Add(transform);
+                            frameSprite.color!.Add(color);
                             if (index != -1)
                             {
                                 spriteImageList.Add(frameSprite);
                             }
                             else
                             {
-                                imageSqure[0].Add(frameSprite.imageWidth + transform[4]);
-                                imageSqure[1].Add(frameSprite.imageHeight + transform[5]);
                                 mainSpriteFrame[frame_index_duration].Add(frameSprite);
                             }
                         }
@@ -2356,12 +2350,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return spriteImageList;
         }
 
-        private static void WriteImage(Dictionary<int, List<ImageSequenceList>> mainSpriteFrame, AnimationHelperSetting setting, Image[] imageList, int width, int height, double[] maxPos, string outFolder)
+        private static void WriteImage(Dictionary<int, List<ImageSequenceList>> mainSpriteFrame, AnimationHelperSetting setting, Image<Rgba32>[] imageList, int width, int height, double[] maxPos, string outFolder)
         {
             var path = new ImplementPath();
             var mainSpriteFramelength = mainSpriteFrame.Keys.Count;
-            Console.WriteLine($"Start gererating images....");
-            foreach (var frameIndex in mainSpriteFrame.Keys)
+            Console.WriteLine("      Start gererating images....");
+            var mainSpriteFrameKeys = mainSpriteFrame.Keys.OrderBy(key => key).ToList();
+            foreach (var frameIndex in mainSpriteFrameKeys)
             {
                 using (var image = new Image<Rgba32>(width, height))
                 {
@@ -2375,20 +2370,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     var imageOutFilePath = path.Resolve(path.Join(outFolder, $"{setting.frameName}_{frameIndex}.png"));
                     image.SaveAsPng(imageOutFilePath);
                 }
-                Console.SetCursorPosition(0, Console.CursorTop);
-                Console.Write(new string(' ', Console.WindowWidth));
-                Console.Write($"Finished: {frameIndex}/{mainSpriteFramelength}");
             }
         }
 
-        private static void CompositeImages(Image<Rgba32> sourceImage, ImageSequenceList layerSprite, Image spriteImage, double[] maxPos)
+        private static void CompositeImages(Image<Rgba32> sourceImage, ImageSequenceList layerSprite, Image<Rgba32> spriteImage, double[] maxPos)
         {
 
             var imageMatrix = layerSprite.matrix;
-            for (var i = 0; i < layerSprite.transform!.Count; i++)
-            {
-                imageMatrix = MixTransform(imageMatrix, layerSprite.transform[i]);
-            }
             imageMatrix[4] += maxPos[0];
             imageMatrix[5] += maxPos[1];
             var imageColor = new double[4];
@@ -2400,10 +2388,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 imageColor[3] += color[3];
             }
             {
-                imageColor[0] += layerSprite.color.Count;
-                imageColor[1] += layerSprite.color.Count;
-                imageColor[2] += layerSprite.color.Count;
-                imageColor[3] += layerSprite.color.Count;
+                imageColor[0] /= layerSprite.color.Count;
+                imageColor[1] /= layerSprite.color.Count;
+                imageColor[2] /= layerSprite.color.Count;
+                imageColor[3] /= layerSprite.color.Count;
             }
             var matrix = new Matrix3x2(
                 (float)imageMatrix[0], (float)imageMatrix[1],
@@ -2412,7 +2400,23 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             );
             var affine = new AffineTransformBuilder();
             var spriteImageNew = spriteImage.Clone(ctx => ctx.Transform(affine.AppendMatrix(matrix)));
+            if (imageColor[0] != 1 || imageColor[1] != 1 || imageColor[2] != 1 || imageColor[3] != 1) {
+                ApplyColor(spriteImageNew, imageColor);
+            }
             sourceImage.Mutate(ctx => ctx.DrawImage(spriteImageNew, new Point(0, 0), 1f));
+        }
+
+        private static void ApplyColor(Image<Rgba32> sourceImage, double[] imageColor) {
+            for (var x = 0; x < sourceImage.Width; x++) {
+                for (var y = 0; y < sourceImage.Height; y++) {
+                    var color = sourceImage[x, y];
+                    color.R = (byte)(color.R * imageColor[0]);
+                    color.G = (byte)(color.G * imageColor[1]);
+                    color.B = (byte)(color.B * imageColor[2]);
+                    color.A = (byte)(color.A * imageColor[3]);
+                    sourceImage[x, y] = color;
+                }
+            }
         }
 
         private static double[] MixTransform(double[] source, double[] change)

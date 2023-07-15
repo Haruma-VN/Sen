@@ -338,5 +338,14 @@
     "non-standard": "Non-standards",
     "standard": "standard",
     "shell": "shell",
-    "please_delete_script_directory": "Please delete script directory to update..."
+    "please_delete_script_directory": "Please delete script directory to update...",
+    "provide_media_folder": "Provide media folder",
+    "all_sprites_loaded": "All sprites loaded",
+    "animation_render_use_image_by_path": "Sprite name set by media option",
+    "use_image_by_id": "Import media with property \"id\"",
+    "use_image_by_path": "Import media with property \"path\"",
+    "animation_render_disable_sprite_method": "Disable Sprite",
+    "enable_all_sprites": "Enable all sprites",
+    "disable_all_sprites": "Disable all sprites",
+    "choose_sprite_to_disable": "Select sprites to disable"
 }

@@ -24,6 +24,7 @@ namespace Sen.Script {
             `Modules/Support/PopCap/PvZ2/PTX/Encode`,
             `Modules/Support/PopCap/PvZ2/Animation/Encode`,
             `Modules/Support/PopCap/PvZ2/Animation/Helper`,
+            `Modules/Support/PopCap/PvZ2/Animation/Render`,
             `Modules/Support/PopCap/PvZ2/Arguments/Input`,
             `Modules/Support/PopCap/PvZ2/RSG/Encode`,
             `Modules/Support/PopCap/PvZ2/RSB/Unpack`,
@@ -47,7 +48,10 @@ namespace Sen.Script {
         for (const script of scripts) {
             try {
                 Sen.Shell.JavaScriptCoreEngine.Evaluate(
-                    Sen.Shell.FileSystem.ReadText(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(Sen.Shell.MainScriptDirectory, script))}.js`, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                    Sen.Shell.FileSystem.ReadText(
+                        `${Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(Sen.Shell.MainScriptDirectory, script))}.js`,
+                        0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8
+                    ),
                     Sen.Shell.Path.Join(`Scripts`, `${script}.js`).replaceAll(`/`, `\\`)
                 );
             } catch (error: unknown) {
@@ -76,7 +80,10 @@ namespace Sen.Script {
         if (Sen.Shell.ShellUpdate.HasAdmin()) {
             const available: Array<number> = new Array();
             const assets = Sen.Shell.ShellUpdate.SendGetRequest(`https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`, "Sen").assets;
-            Sen.Shell.Console.Print(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Please select one Shell below to download`);
+            Sen.Shell.Console.Print(
+                2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                `Execution Argument: Please select one Shell below to download`
+            );
             for (let i: number = 0; i < assets.length; ++i) {
                 const k_index: int = i + 1;
                 available.push(k_index);
@@ -87,9 +94,17 @@ namespace Sen.Script {
                 Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Does not included in the list`);
                 input = Sen.Shell.Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
             }
-            Sen.Shell.ShellUpdate.DownloadShell(Sen.Shell.MainScriptDirectory, `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`, parseInt(input) - 1, `shell_new`);
+            Sen.Shell.ShellUpdate.DownloadShell(
+                Sen.Shell.MainScriptDirectory,
+                `https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`,
+                parseInt(input) - 1,
+                `shell_new`
+            );
         } else {
-            Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: You need to run as adminstrator to download new update`);
+            Sen.Shell.Console.Print(
+                13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `Execution Failed: You need to run as adminstrator to download new update`
+            );
             throw new Error("Cannot download update");
         }
         return;
@@ -117,16 +132,28 @@ namespace Sen.Script {
         if (Sen.Shell.DotNetPlatform.SenShell === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)) {
             Sen.Shell.DotNetPlatform.SupportUtf8Console();
         }
-        Sen.Shell.Console.Print(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `Sen ~ 1.4.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`);
+        Sen.Shell.Console.Print(
+            14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+            `Sen ~ 1.4.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`
+        );
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
-            Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`);
+            Sen.Shell.Console.Print(
+                13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`
+            );
             Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
             return;
         }
         if (Sen.Script.ShellRequirement > Sen.Shell.ShellVersion.ShellVersion) {
-            Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Shell outdated, please update the shell to continue`);
+            Sen.Shell.Console.Print(
+                13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `Execution Failed: Shell outdated, please update the shell to continue`
+            );
             Sen.Shell.Console.Print(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Download link:`);
-            Sen.Shell.Console.Printf(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      https://github.com/Haruma-VN/Sen/releases/tag/shell`);
+            Sen.Shell.Console.Printf(
+                14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                `      https://github.com/Haruma-VN/Sen/releases/tag/shell`
+            );
             Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
             return;
         }
@@ -134,8 +161,20 @@ namespace Sen.Script {
         const time_start: number = Date.now();
         Sen.Script.LoadModules(Sen.Script.ScriptModules);
         const time_end: number = Date.now();
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("all_modules_have_been_loaded")));
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3)));
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                /{\}/g,
+                Sen.Script.Modules.System.Default.Localization.GetString("all_modules_have_been_loaded")
+            )
+        );
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3)
+            )
+        );
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
             Sen.Script.Modules.Interface.Assert.Evaluate(argument);
@@ -143,9 +182,21 @@ namespace Sen.Script {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }
         const Sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, ""));
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`);
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("total_time_spent").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3)));
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, "")
+        );
+        Sen.Shell.Console.Printf(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+            `      ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`
+        );
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("total_time_spent").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3)
+            )
+        );
         Sen.Script.Modules.Platform.Constraints.ExitProgram();
         return;
     }
