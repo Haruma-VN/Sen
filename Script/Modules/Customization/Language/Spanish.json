@@ -334,5 +334,18 @@
     "popcap_texture_resolution": "Resolución de texturas PopCap",
     "please_wait_for_few_minutes_to_finish_conversion": "Por favor, espere unos minutos para terminar la conversión...",
     "rsg_list": "Lista RSG",
-    "input_rsb_path": "Entrada Ruta RSB"
+    "input_rsb_path": "Entrada Ruta RSB",
+    "non-standard": "No estándar",
+"standard": "estándar",
+"shell": "shell",
+"please_delete_script_directory": "Por favor, elimine el directorio del script para actualizar...",
+"provide_media_folder": "Proporcione la carpeta de medios",
+"all_sprites_loaded": "Todos los sprites cargados",
+"animation_render_use_image_by_path": "Nombre del sprite configurado por opción de media",
+"use_image_by_id": "Importar medios con la propiedad \"id\"",
+"use_image_by_path": "Importar medios con la propiedad \"ruta\"",
+"animation_render_disable_sprite_method": "Desactivar Sprite",
+"enable_all_sprites": "Habilitar todos los sprites",
+"disable_all_sprites": "Desactivar todos los sprites",
+"choose_sprite_to_disable": "Seleccionar sprites para desactivar"
 }
