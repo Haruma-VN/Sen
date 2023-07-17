@@ -271,20 +271,14 @@
         "exclude": [],
         "type": "directory"
     },
-    "ogg_to_wav": {
-        "func_number": 46,
-        "include": [".ogg"],
-        "exclude": [],
-        "type": "file"
-    },
     "popcap_official_resource_path_convert": {
-        "func_number": 47,
+        "func_number": 46,
         "include": ["resources.json"],
         "exclude": [],
         "type": "file"
     },
     "popcap_animation_render": {
-        "func_number": 48,
+        "func_number": 47,
         "include": [".pam.json"],
         "exclude": [],
         "type": "file"
