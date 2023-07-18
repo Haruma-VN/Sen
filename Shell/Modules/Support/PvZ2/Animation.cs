@@ -10,6 +10,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using System.Linq;
 using SixLabors.ImageSharp.Processing;
 using System.Numerics;
+using Newtonsoft.Json.Linq;
 
 namespace Sen.Shell.Modules.Support.PvZ2.PAM
 {
@@ -2143,6 +2144,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public required List<double[]>? color { get; set; }
     }
 
+    public class AnimationHelperLabelsInfo
+    {
+        public Dictionary<string, int[]>? frameInfo { get; set; }
+    }
+
     public class AnimationHelper
     {
 
@@ -2173,8 +2179,29 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             ReadSprite(-1, AnimationJson.main_sprite, AnimationJson.sprite, imageSequenceList, spriteList, setting.disableSprite, mainSpriteFrame);
             var maxPos = new double[2];
             var imageSqure = FindImageSquare(mainSpriteFrame, maxPos);
-            Console.WriteLine("      All frames: {0}, Image width: {1}, Image heigth: {2}", mainSpriteFrame.Count, imageSqure[0], imageSqure[1]);
+            WriteLabelInfo(AnimationJson, outFolder);
             WriteImage(mainSpriteFrame, setting, imageList, imageSqure[0], imageSqure[1], maxPos, outFolder);
+        }
+
+        private static void WriteLabelInfo(PAMInfo AnimationJson, string outFolder)
+        {
+            var labelInfo = new JObject();
+            var Info = new AnimationHelperLabelsInfo();
+            var endFrameIndex = AnimationJson.main_sprite.frame!.Length - 1;
+            for (var i = AnimationJson.main_sprite.frame!.Length - 1; i >= 0; i--)
+            {
+                if (AnimationJson.main_sprite.frame[i].label != null)
+                {
+                    var newFrameLabel = new JProperty(AnimationJson.main_sprite.frame[i].label!, new int[] { i, endFrameIndex });
+                    labelInfo.AddFirst(newFrameLabel);
+                    endFrameIndex = i - 1;
+                }
+            };
+
+            string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(labelInfo, new Newtonsoft.Json.JsonSerializerSettings() {Formatting = Newtonsoft.Json.Formatting.Indented});
+            var fs = new FileSystem();
+            var path = new ImplementPath();
+            fs.WriteText(path.Resolve(path.Join(outFolder, "label_info.json")), jsonText, EncodingType.UTF8);
         }
 
         private static int[] FindImageSquare(Dictionary<int, List<ImageSequenceList>> mainSpriteFrame, double[] maxPos)
@@ -2354,11 +2381,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             var path = new ImplementPath();
             var mainSpriteFramelength = mainSpriteFrame.Keys.Count;
-            Console.WriteLine("      Start gererating images....");
             var mainSpriteFrameKeys = mainSpriteFrame.Keys.OrderBy(key => key).ToList();
             foreach (var frameIndex in mainSpriteFrameKeys)
             {
-                using (var image = new Image<Rgba32>(width, height))
+                using var image = new Image<Rgba32>(width, height);
                 {
                     foreach (var layerSprite in mainSpriteFrame[frameIndex])
                     {
@@ -2400,15 +2426,19 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             );
             var affine = new AffineTransformBuilder();
             var spriteImageNew = spriteImage.Clone(ctx => ctx.Transform(affine.AppendMatrix(matrix)));
-            if (imageColor[0] != 1 || imageColor[1] != 1 || imageColor[2] != 1 || imageColor[3] != 1) {
+            if (imageColor[0] != 1 || imageColor[1] != 1 || imageColor[2] != 1 || imageColor[3] != 1)
+            {
                 ApplyColor(spriteImageNew, imageColor);
             }
             sourceImage.Mutate(ctx => ctx.DrawImage(spriteImageNew, new Point(0, 0), 1f));
         }
 
-        private static void ApplyColor(Image<Rgba32> sourceImage, double[] imageColor) {
-            for (var x = 0; x < sourceImage.Width; x++) {
-                for (var y = 0; y < sourceImage.Height; y++) {
+        private static void ApplyColor(Image<Rgba32> sourceImage, double[] imageColor)
+        {
+            for (var x = 0; x < sourceImage.Width; x++)
+            {
+                for (var y = 0; y < sourceImage.Height; y++)
+                {
                     var color = sourceImage[x, y];
                     color.R = (byte)(color.R * imageColor[0]);
                     color.G = (byte)(color.G * imageColor[1]);
