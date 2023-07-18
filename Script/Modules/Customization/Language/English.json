@@ -347,5 +347,11 @@
     "animation_render_disable_sprite_method": "Disable Sprite",
     "enable_all_sprites": "Enable all sprites",
     "disable_all_sprites": "Disable all sprites",
-    "choose_sprite_to_disable": "Select sprites to disable"
+    "choose_sprite_to_disable": "Select sprites to disable",
+    "provide_sprite_directory": "Provide splitted sprite directory obtained by split atlas",
+    "enter_number_of_sprite_to_disable": "Input sprite index to disable, input 0 if finish...",
+    "sprite_already_selected": "Sprite already selected",
+    "command_executed_success": "Command executed success!",
+    "popcap_animation_render": "PopCap Animation Render",
+    "execution_loaded": "Execution loaded: {}"
 }

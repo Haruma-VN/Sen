@@ -384,9 +384,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             AnimationHelper.GenerateImageSequence(fs.ReadJson<PAMInfo>(AnimationJsonPath), outFolder, mediaPath, setting);
             return;
         }
-
-        [DllImport("core")]
-        public static extern void RealEsrganUpscale();
+        
 
         #endregion
     }
