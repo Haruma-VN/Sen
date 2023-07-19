@@ -352,6 +352,6 @@
     "enter_number_of_sprite_to_disable": "Input sprite index to disable, input 0 if finish...",
     "sprite_already_selected": "Sprite already selected",
     "command_executed_success": "Command executed success!",
-    "popcap_animation_render": "PopCap Animation Render",
+    "popcap_animation_render": "PopCap Animation Render from PAM Json",
     "execution_loaded": "Execution loaded: {}"
 }
