@@ -1,5 +1,8 @@
 namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
-    // AnimationRenderMethodJson
+    /**
+     * Structure
+     */
+
     export interface PopcapAnimationRenderMethodJson {
         frame_name: string;
         append_width: int;
@@ -8,6 +11,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
         image_position_append_y: int;
         disable_all_sprites: string | boolean;
     }
+
+    /**
+     *
+     * @param pam_json - Deserialize pam json
+     * @param sprites_to_disable - Sprite to disable list
+     * @param use_media_images_by_path - Use media by path property?
+     * @returns
+     */
 
     export function LoadAnimationSpirte(
         pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson,
@@ -50,6 +61,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
         return;
     }
 
+    /**
+     *
+     * @param sprites_to_disable - Sprite to disable list
+     * @param sprite_length - Length of sprite
+     * @returns
+     */
+
     export function InputSprite(sprites_to_disable: Array<int>, sprite_length: int): void {
         let input: int = -1;
         while (input != 0) {
@@ -86,12 +104,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
         return;
     }
 
+    /**
+     *
+     * @param pam_json - Deserialize pam json
+     * @param use_media_images_by_path - Use path property?
+     * @returns
+     */
+
     export function LoadSetting(
         pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson,
         use_media_images_by_path: boolean
-    ): Shell.AnimationHelperSetting {
+    ): Sen.Shell.AnimationHelperSetting {
         const default_setting_path: string = Sen.Shell.Path.Resolve(
-            Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation_render.json`)
+            Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)
         );
         const animation_render_method_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render.PopcapAnimationRenderMethodJson =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render.PopcapAnimationRenderMethodJson>(
@@ -116,7 +141,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                 ],
             },
             Sen.Shell.Path.Resolve(
-                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation_render.json`)
+                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)
             ),
             `disable_all_sprites`
         ) as 1 | 2 | 3;
@@ -155,17 +180,67 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                 );
                 break;
         }
-        const animation_setting: Shell.AnimationHelperSetting = {
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("output_frame_name_set_as_default").replace(
+                /\{\}/g,
+                animation_render_method_json.frame_name
+            )
+        );
+        const append_width: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+            Sen.Script.Modules.System.Default.Localization.GetString("append_width_input"),
+            [],
+            {},
+            Sen.Shell.Path.Resolve(
+                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)
+            ),
+            `append_width`
+        ) as int;
+        const append_height: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+            Sen.Script.Modules.System.Default.Localization.GetString("append_height_input"),
+            [],
+            {},
+            Sen.Shell.Path.Resolve(
+                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)
+            ),
+            `append_height`
+        ) as int;
+        const image_position_append_x: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+            Sen.Script.Modules.System.Default.Localization.GetString("posx_input"),
+            [],
+            {},
+            Sen.Shell.Path.Resolve(
+                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)
+            ),
+            `image_position_append_x`
+        ) as int;
+        const image_position_append_y: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+            Sen.Script.Modules.System.Default.Localization.GetString("posy_input"),
+            [],
+            {},
+            Sen.Shell.Path.Resolve(
+                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)
+            ),
+            `image_position_append_y`
+        ) as int;
+        const animation_setting: Sen.Shell.AnimationHelperSetting = {
             frameName: animation_render_method_json.frame_name,
             imageByPath: use_media_images_by_path,
-            appendWidth: animation_render_method_json.append_width,
-            appendHeight: animation_render_method_json.append_height,
-            posX: animation_render_method_json.image_position_append_x,
-            posY: animation_render_method_json.image_position_append_y,
+            appendWidth: append_width,
+            appendHeight: append_height,
+            posX: image_position_append_x,
+            posY: image_position_append_y,
             disableSprite: sprites_to_disable,
         };
         return animation_setting;
     }
+
+    /**
+     *
+     * @param file_input - Pass file
+     * @param out_folder - Out dir
+     * @returns
+     */
 
     export function GenerateImageSequence(file_input: string, out_folder: string): void {
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(
@@ -204,6 +279,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
         const setting: Sen.Shell.AnimationHelperSetting = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render.LoadSetting(
             pam_json,
             use_media_images_by_path
+        );
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen,
+            Sen.Script.Modules.System.Default.Localization.GetString("please_wait_for_few_minutes_to_finish_conversion")
         );
         Sen.Shell.PvZ2Shell.GenerateImageSequence(file_input, out_folder, media_path, setting);
         return;

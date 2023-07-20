@@ -354,5 +354,10 @@
     "sprite_already_selected": "已选择雪碧",
     "command_executed_success": "命令执行成功!",
     "popcap_animation_render": "PopCap Animation: 从 PAM Json 渲染动画",
-    "execution_loaded": "已加载执行: {}"
+    "execution_loaded": "已加载执行: {}",
+    "append_width_input": "输入附加宽度",
+    "append_height_input": "输入附加高度",
+    "posx_input": "输入位置 x",
+    "posy_input": "输入位置 y",
+    "output_frame_name_set_as_default": "输出帧名称设置为默认值: {}"
 }

@@ -165,7 +165,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
         const animation_helper: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson>(
                 Sen.Shell.Path.Resolve(
-                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation_helper.json`)
+                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_helper.json`)
                 )
             );
         argument

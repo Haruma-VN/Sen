@@ -354,5 +354,10 @@
     "sprite_already_selected": "Sprite đã được chọn",
     "command_executed_success": "Lệnh thực thi hoàn tất!",
     "popcap_animation_render": "PopCap Animation: Xuất Animation từ PAM Json",
-    "execution_loaded": "Thực Thi Đã Tải: {}"
+    "execution_loaded": "Thực Thi Đã Tải: {}",
+    "append_width_input": "Nhập append width",
+    "append_height_input": "Nhập append height",
+    "posx_input": "Nhập position x",
+    "posy_input": "Nhập positition y",
+    "output_frame_name_set_as_default": "Tên frame đặt mặc định: {}"
 }

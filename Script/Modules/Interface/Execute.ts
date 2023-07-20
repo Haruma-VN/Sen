@@ -364,7 +364,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                             Sen.Shell.Path.Resolve(
-                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)
+                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)
                             ),
                             `resolution`
                         );
@@ -435,7 +435,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)
                                 ),
                                 `resolution`
                             );
@@ -537,7 +537,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
                                 Sen.Script.Modules.System.Default.Localization.GetString("is_inline_codebook"),
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `wwise_encoded_media.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `wwise_encoded_media.json`)
                                 ),
                                 `inlineCodebook`
                             )
@@ -546,7 +546,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
                                 Sen.Script.Modules.System.Default.Localization.GetString("is_inline_setup"),
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `wwise_encoded_media.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `wwise_encoded_media.json`)
                                 ),
                                 `inlineSetup`
                             )
@@ -581,7 +581,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `wwise_encoded_media.json`
                                         )
                                     ),
@@ -596,7 +596,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `wwise_encoded_media.json`
                                         )
                                     ),
@@ -681,7 +681,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_resources_conversion.json`
                                     )
                                 ),
@@ -717,7 +717,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_resources_conversion.json`
                                         )
                                     ),
@@ -829,7 +829,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_unpack_simple.json`
                                     )
                                 ),
@@ -856,7 +856,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_unpack_simple.json`
                                     )
                                 ),
@@ -892,7 +892,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_simple.json`
                                         )
                                     ),
@@ -919,7 +919,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_simple.json`
                                         )
                                     ),
@@ -998,7 +998,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_pack_resource.json`
                                     )
                                 ),
@@ -1045,7 +1045,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_pack_resource.json`
                                         )
                                     ),
@@ -1093,7 +1093,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_unpack_simple.json`
                                     )
                                 ),
@@ -1119,7 +1119,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_unpack_simple.json`
                                     )
                                 ),
@@ -1157,7 +1157,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_simple.json`
                                         )
                                     ),
@@ -1183,7 +1183,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_simple.json`
                                         )
                                     ),
@@ -1523,7 +1523,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     ],
                                 },
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_atlas_split.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_split.json`)
                                 ),
                                 `method`
                             ) as 1 | 2) === 2
@@ -1544,7 +1544,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     ],
                                 },
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_atlas_split.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_split.json`)
                                 ),
                                 `expand_path`
                             ) as 1 | 2) === 1
@@ -1575,7 +1575,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     ],
                                 },
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_atlas_split.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_split.json`)
                                 ),
                                 `method`
                             ) as 1 | 2) === 2
@@ -1622,7 +1622,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                             Sen.Shell.Path.Resolve(
-                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)
+                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)
                             ),
                             `resolution`
                         );
@@ -1636,7 +1636,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)
                                 ),
                                 `resolution`
                             );
@@ -1688,14 +1688,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const original: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_original_res"),
                             Sen.Shell.Path.Resolve(
-                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_sprite_resize.json`)
+                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_sprite_resize.json`)
                             ),
                             `original_res`
                         );
                         const modified: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_output_res"),
                             Sen.Shell.Path.Resolve(
-                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_sprite_resize.json`)
+                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_sprite_resize.json`)
                             ),
                             `output_res`
                         );
@@ -1717,14 +1717,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const original: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_original_res"),
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_sprite_resize.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_sprite_resize.json`)
                                 ),
                                 `original_res`
                             );
                             const modified: 1536 | 768 | 384 | 640 | 1200 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_sprite_resize_output_res"),
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_sprite_resize.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_sprite_resize.json`)
                                 ),
                                 `output_res`
                             );
@@ -1795,7 +1795,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                             Sen.Shell.Path.Resolve(
-                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)
+                                Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)
                             ),
                             `resolution`
                         );
@@ -1809,7 +1809,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                                 Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_animation.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)
                                 ),
                                 `resolution`
                             );
@@ -1859,7 +1859,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     ],
                                 },
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_zlib.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)
                                 ),
                                 `use_64_bit_variant`
                             ) as 0 | 1
@@ -1896,7 +1896,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         ],
                                     },
                                     Sen.Shell.Path.Resolve(
-                                        Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_zlib.json`)
+                                        Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)
                                     ),
                                     `use_64_bit_variant`
                                 ) as 0 | 1
@@ -1941,7 +1941,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_unpack_resource.json`
                                     )
                                 ),
@@ -1957,7 +1957,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_unpack_resource.json`
                                     )
                                 ),
@@ -1988,7 +1988,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2021,7 +2021,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2054,7 +2054,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2089,7 +2089,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                                 `${Sen.Shell.MainScriptDirectory}`,
                                                 `Modules`,
                                                 `Customization`,
-                                                `methods`,
+                                                `Methods`,
                                                 `popcap_rsb_unpack_resource.json`
                                             )
                                         ),
@@ -2107,7 +2107,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2139,7 +2139,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2168,7 +2168,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                                 `${Sen.Shell.MainScriptDirectory}`,
                                                 `Modules`,
                                                 `Customization`,
-                                                `methods`,
+                                                `Methods`,
                                                 `popcap_rsb_unpack_resource.json`
                                             )
                                         ),
@@ -2195,7 +2195,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2238,7 +2238,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `${Sen.Shell.MainScriptDirectory}`,
                                         `Modules`,
                                         `Customization`,
-                                        `methods`,
+                                        `Methods`,
                                         `popcap_rsb_unpack_resource.json`
                                     )
                                 ),
@@ -2269,7 +2269,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2302,7 +2302,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2335,7 +2335,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2370,7 +2370,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                                 `${Sen.Shell.MainScriptDirectory}`,
                                                 `Modules`,
                                                 `Customization`,
-                                                `methods`,
+                                                `Methods`,
                                                 `popcap_rsb_unpack_resource.json`
                                             )
                                         ),
@@ -2388,7 +2388,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2420,7 +2420,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2449,7 +2449,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                                 `${Sen.Shell.MainScriptDirectory}`,
                                                 `Modules`,
                                                 `Customization`,
-                                                `methods`,
+                                                `Methods`,
                                                 `popcap_rsb_unpack_resource.json`
                                             )
                                         ),
@@ -2476,7 +2476,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `${Sen.Shell.MainScriptDirectory}`,
                                             `Modules`,
                                             `Customization`,
-                                            `methods`,
+                                            `Methods`,
                                             `popcap_rsb_unpack_resource.json`
                                         )
                                     ),
@@ -2524,7 +2524,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     ],
                                 },
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_zlib.json`)
+                                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)
                                 ),
                                 `use_64_bit_variant`
                             ) as 0 | 1
@@ -2556,7 +2556,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         ],
                                     },
                                     Sen.Shell.Path.Resolve(
-                                        Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_zlib.json`)
+                                        Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)
                                     ),
                                     `use_64_bit_variant`
                                 ) as 0 | 1
