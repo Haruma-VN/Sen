@@ -7,7 +7,7 @@ namespace Sen.Script {
             `Modules/Constraints/Compression`,
             `Modules/Constraints/Crypto`,
             `Modules/Constraints/FileSystem`,
-            `Modules/System/Default/timer`,
+            `Modules/System/Default/Timer`,
             `Modules/System/Implement/Json`,
             `Modules/System/Implement/JavaScript`,
             `Modules/Third/maxrects-packer/maxrects-packer`,

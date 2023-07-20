@@ -27,7 +27,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode {
      */
 
     export const RTONOfficial: RTONCipher = {
-        key: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONCrypt>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `methods`, `popcap_rton_cipher.json`))).encryptionKey,
+        key: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONCrypt>(
+            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rton_cipher.json`))
+        ).encryptionKey,
         crypt: false,
     };
 
