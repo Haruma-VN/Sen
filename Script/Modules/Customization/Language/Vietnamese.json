@@ -316,7 +316,7 @@
     "popcap_official_resource_path_convert": "PopCap Đường dẫn Resources Chính thức: Chuyển đổi",
     "convert_resources_path_to_array": "Chuyển đổi đường dẫn của Resources sang Array (sử dụng cho 10.3 hoặc thấp hơn)",
     "convert_resources_path_to_string": "Chuyển đổi đường dẫn của Resources sang String (sử dụng cho 10.4 hoặc cao hơn)",
-    "execute_again": "Nhấn Enter để thực thi lại chức năng lần nữa",
+    "execute_again": "Thực thi chức năng một lần nữa với cùng đối số",
     "choose_one_or_more_group_that_displayed_and_click_enter_to_finish": "Chọn một hoặc nhiều nhóm để tiếp tục, ấn Enter để hoàn tất...",
     "list_of_added_content": "Danh sách những nội dung thêm",
     "user_refused_to_continue": "Người dùng từ chối tiếp tục...",

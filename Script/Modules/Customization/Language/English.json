@@ -316,7 +316,7 @@
     "popcap_official_resource_path_convert": "PopCap Official Resources Path: Convert",
     "convert_resources_path_to_array": "Convert Resources's path to Array (using for 10.3 and below)",
     "convert_resources_path_to_string": "Convert Resources's path to String (using for 10.4 and above)",
-    "execute_again": "Press Enter to execute the function again",
+    "execute_again": "Execute function again with the same argument",
     "choose_one_or_more_group_that_displayed_and_click_enter_to_finish": "Choose 1 or more group that displayed, click enter to finish...",
     "list_of_added_content": "List of added content",
     "user_refused_to_continue": "User refused to continue...",

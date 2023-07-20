@@ -64,7 +64,7 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 7;
+    export const ScriptVersion: int = 8;
 
     /**
      * Requirement version for Shell
@@ -134,7 +134,7 @@ namespace Sen.Script {
         }
         Sen.Shell.Console.Print(
             14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
-            `Sen ~ 1.4.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`
+            `Sen ~ 1.5.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`
         );
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(

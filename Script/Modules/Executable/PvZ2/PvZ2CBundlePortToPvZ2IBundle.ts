@@ -88,13 +88,18 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
      * @param option - pass option
      */
 
-    export function Watch(option: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.Option): Record<string, Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure> {
+    export function Watch(
+        option: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.Option
+    ): Record<string, Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure> {
         const bundle_list = new Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.BundleList();
         const chinese_groups: Array<string> = Object.keys(option.chinese_manifest.group);
         const available: Array<int> = new Array();
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("choose_one_or_more_group_that_displayed_and_click_enter_to_finish"))
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Localization.GetString("choose_one_or_more_group_that_displayed_and_click_enter_to_finish")
+            )
         );
         chinese_groups.forEach((group: string, index: int) => {
             const valid_option: int = index + 1;
@@ -104,18 +109,36 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
         let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (input !== "") {
             if (available.includes(parseInt(input))) {
-                const data: Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure = option.chinese_manifest.group[chinese_groups[available[parseInt(input)] - 2]] as any & Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure;
+                const data: Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure = option.chinese_manifest.group[
+                    chinese_groups[available[parseInt(input)] - 2]
+                ] as any & Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure;
                 bundle_list.AppendArgument(chinese_groups[available[parseInt(input)] - 2], data);
             } else {
-                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, `${input}`));
+                Sen.Shell.Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                    Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, `${input}`)
+                );
             }
             input = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         }
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("list_of_added_content")));
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Localization.GetString("list_of_added_content")
+            )
+        );
         bundle_list.PrintArgument();
-        const confirm: boolean = Boolean(Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("confirm_your_choice")));
+        const confirm: boolean = Boolean(
+            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                Sen.Script.Modules.System.Default.Localization.GetString("confirm_your_choice")
+            )
+        );
         if (!confirm) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString("user_refused_to_continue"), `undefined`);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(
+                Sen.Script.Modules.System.Default.Localization.GetString("user_refused_to_continue"),
+                `undefined`
+            );
         }
         return bundle_list.argument;
     }
@@ -141,9 +164,14 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
      */
 
     export function ConvertTextureRSG(file_in: string, file_out: string, format: bigint): void {
-        const packet_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`);
+        const packet_directory: string = Sen.Shell.Path.Resolve(
+            `${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`
+        );
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(file_in, packet_directory);
-        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`));
+        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(
+                Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`)
+            );
         information.res.forEach((resource: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo) => {
             let home: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `res`));
             create_nested_directory: for (let i: int = 0; i < (resource.path as Array<string>).length; ++i) {
@@ -158,17 +186,28 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
             Sen.Shell.FileSystem.DeleteFile(ptx_path);
             switch (format) {
                 case 147n: {
-                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A8);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
+                        png_path,
+                        ptx_path,
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A8
+                    );
                     break;
                 }
                 case 0n: {
-                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(
+                        png_path,
+                        ptx_path,
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888
+                    );
                 }
             }
             Sen.Shell.FileSystem.DeleteFile(png_path);
         });
         information.compression_flags = 0b0011;
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(
+            Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`),
+            information
+        );
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
         return;
@@ -182,11 +221,19 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
      */
 
     export function ConvertCommonRSG(file_in: string, file_out: string): void {
-        const packet_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`);
+        const packet_directory: string = Sen.Shell.Path.Resolve(
+            `${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`
+        );
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(file_in, packet_directory);
-        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`));
+        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(
+                Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`)
+            );
         information.compression_flags = 0b0011;
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(
+            Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`),
+            information
+        );
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
         return;
@@ -205,7 +252,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                 const rsg_entry: string = `${rsg_name}.rsg`;
                 Sen.Shell.Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                    Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_rsg").replace(/\{\}/g, `${rsg_entry}`))
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                        /\{\}/g,
+                        Sen.Script.Modules.System.Default.Localization.GetString("converted_rsg").replace(/\{\}/g, `${rsg_entry}`)
+                    )
                 );
                 const entry: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.cn_bundle, `packet`, rsg_entry));
                 const output: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.int_bundle, `packet`, rsg_entry));
@@ -242,13 +292,20 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
     export function AppendUnofficialResources(option: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AddRSGOption): void {
         const res_json_international: string = Sen.Shell.Path.Join(option.int_bundle, `res.json`);
         const res_json_chinese: string = Sen.Shell.Path.Join(option.cn_bundle, `res.json`);
-        const deserialized_international_res_json: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate>(res_json_international);
-        const deserialized_chinese_res_json: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate>(res_json_chinese);
+        const deserialized_international_res_json: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate>(
+                res_json_international
+            );
+        const deserialized_chinese_res_json: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate>(res_json_chinese);
         const keys: Array<string> = Object.keys(option.watch);
         keys.forEach((key: string) => {
             deserialized_international_res_json.groups[key] = deserialized_chinese_res_json.groups[key];
         });
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate>(res_json_international, deserialized_international_res_json);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ResJsonTemplate>(
+            res_json_international,
+            deserialized_international_res_json
+        );
         return;
     }
 
@@ -258,17 +315,34 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
      */
 
     export function Evaluate(): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle")));
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle")
+            )
+        );
         const international_bundle: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_chinese_bundle")));
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Localization.GetString("input_chinese_bundle")
+            )
+        );
         const chinese_bundle: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         const option: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.Option = {
             int_bundle: international_bundle,
             cn_bundle: chinese_bundle,
-            chinese_manifest: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(chinese_bundle, `manifest.json`)),
-            international_manifest: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(international_bundle, `manifest.json`)),
+            chinese_manifest: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
+                Sen.Shell.Path.Join(chinese_bundle, `manifest.json`)
+            ),
+            international_manifest: Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
+                Sen.Shell.Path.Join(international_bundle, `manifest.json`)
+            ),
         };
-        const argument: Record<string, Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure> = Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.Watch(option);
+        const argument: Record<string, Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure> =
+            Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.Watch(option);
         const executable_option: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AddRSGOption = {
             ...option,
             watch: argument,
@@ -280,7 +354,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
         };
         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AddsRSGToOfficialPacketBundle(executable_option);
         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AppendUnofficialResources(executable_option);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(`${option.int_bundle}`, `manifest.json`), option.international_manifest);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
+            Sen.Shell.Path.Join(`${option.int_bundle}`, `manifest.json`),
+            option.international_manifest
+        );
         return;
     }
 }

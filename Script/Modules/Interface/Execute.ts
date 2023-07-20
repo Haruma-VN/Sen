@@ -2623,6 +2623,14 @@ namespace Sen.Script.Modules.Interface.Execute {
         } catch (error: unknown) {
             notify = false;
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
+            const confirm: boolean = Boolean(
+                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                    Sen.Script.Modules.System.Default.Localization.GetString("execute_again")
+                )
+            );
+            if (confirm) {
+                Evaluate(function_name, argument);
+            }
         }
         const func_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         const time_spent: string = Sen.Script.Modules.System.Default.Timer.CalculateTime(func_time_start, func_time_end, 3);
