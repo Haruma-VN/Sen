@@ -4,7 +4,8 @@
         "notification_when_finish": true,
         "override": true,
         "use_trailing_commas": false,
-        "debugger": true
+        "debugger": true,
+        "execute_again_after_error": true
     },
     "additional": {
         "packed_codebooks_aoTuV_603": "/Modules/Customization/Dependencies/packed_codebooks_aoTuV_603.bin"

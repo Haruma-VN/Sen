@@ -9,13 +9,16 @@ namespace Sen.Script.Modules.System.Default.Localization {
             override: boolean;
             use_trailing_commas: boolean;
             debugger: boolean;
+            execute_again_after_error: boolean;
         };
         additional: {
             packed_codebooks_aoTuV_603: string;
         };
     };
 
-    export const EntryJson: Sen.Script.Modules.System.Default.Localization.entry_json = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `entry.json`)));
+    export const EntryJson: Sen.Script.Modules.System.Default.Localization.entry_json = Sen.Script.Modules.FileSystem.Json.ReadJson<entry_json>(
+        Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `entry.json`))
+    );
 
     /**
      * Destination
@@ -53,7 +56,11 @@ namespace Sen.Script.Modules.System.Default.Localization {
      */
 
     export function GetString(property: string): string {
-        return Sen.Shell.DotNetLocalization.Get(property, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `language`)), `${Sen.Script.Modules.System.Default.Localization.language}`);
+        return Sen.Shell.DotNetLocalization.Get(
+            property,
+            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `language`)),
+            `${Sen.Script.Modules.System.Default.Localization.language}`
+        );
     }
 
     /**

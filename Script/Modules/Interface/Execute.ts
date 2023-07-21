@@ -162,9 +162,17 @@ namespace Sen.Script.Modules.Interface.Execute {
             switch (function_name) {
                 case "js_evaluate": {
                     if (!Array.isArray(argument)) {
-                        Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(argument);
+                        Sen.Shell.JavaScriptCoreEngine.Evaluate(
+                            Sen.Shell.FileSystem.ReadText(argument, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                            argument.replaceAll(`/`, `\\`)
+                        );
                     } else {
-                        argument.forEach((arg: string) => Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(arg));
+                        argument.forEach((arg: string) =>
+                            Sen.Shell.JavaScriptCoreEngine.Evaluate(
+                                Sen.Shell.FileSystem.ReadText(arg, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                                arg.replaceAll(`/`, `\\`)
+                            )
+                        );
                     }
                     break;
                 }
@@ -2623,13 +2631,15 @@ namespace Sen.Script.Modules.Interface.Execute {
         } catch (error: unknown) {
             notify = false;
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
-            const confirm: boolean = Boolean(
-                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
-                    Sen.Script.Modules.System.Default.Localization.GetString("execute_again")
-                )
-            );
-            if (confirm) {
-                Evaluate(function_name, argument);
+            if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.execute_again_after_error) {
+                const confirm: boolean = Boolean(
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                        Sen.Script.Modules.System.Default.Localization.GetString("execute_again")
+                    )
+                );
+                if (confirm) {
+                    Evaluate(function_name, argument);
+                }
             }
         }
         const func_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
