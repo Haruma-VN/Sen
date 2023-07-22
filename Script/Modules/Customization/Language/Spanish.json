@@ -354,7 +354,7 @@
     "command_executed_success": "Comando ejecutado correctamente!",
     "popcap_animation_render": "Animación PopCap: Animación Renderizada desde PAM Json",
     "execution_loaded": "Ejecución cargada: {}",
-    "execute_again": "Pulse Intro para volver a ejecutar la función",
+    "execute_again": "Ejecutar la función de nuevo con el mismo argumento",
     "append_width_input": "Anchura del anexo de entrada",
     "append_height_input": "Entrada añadir altura",
     "posx_input": "Posición de entrada x",

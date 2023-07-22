@@ -335,7 +335,7 @@
     "zlib_array_unsupported": "不支持Zlib数组",
     "zlib_compress_error": "Zlib压缩错误",
     "zlib_uncompress_error": "Zlib解压缩错误",
-    "execute_again": "按 Enter 再次执行功能",
+    "execute_again": "使用相同参数再次执行函数",
     "non-standard": "非标准",
     "standard": "标准",
     "shell": "shell",
