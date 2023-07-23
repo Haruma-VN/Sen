@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sen.Assistant.MainPage">
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Load WorldMap"
+                            Command="{Binding LoadCommand}" />
+            <MenuFlyoutItem Text="Exit"
+                            Command="{Binding ExitCommand}" />
+        </MenuBarItem>
+        <MenuBarItem Text="Textures">
+            <MenuFlyoutItem Text="Add Path"
+                            Command="{Binding AddLocationCommand}" />
+            <MenuFlyoutItem Text="Edit Path"
+                            Command="{Binding EditLocationCommand}" />
+        </MenuBarItem>
+        <MenuBarItem Text="About">
+            <MenuFlyoutItem Text="Map Editor"
+                            Command="{Binding RefreshCommand}" />
+            <MenuFlyoutItem Text="Sen"
+                            Command="{Binding ChangeThemeCommand}" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+    <Grid RowDefinitions="*, Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="80*, 0.5*, 20*">
+            <Frame Grid.Column="0" BackgroundColor="Transparent" CornerRadius="10" Margin="10">
+                <Image Source="spiral.png"></Image>
+            </Frame>
+
+            <Frame Grid.Column="2" BackgroundColor="Transparent" CornerRadius="10" Margin="10">
+                <Label Text="Properties" TextColor="White" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Frame>
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="80*, 0.5*, 20*">
+            <Frame Grid.Column="0" BackgroundColor="Transparent" CornerRadius="10" Margin="10">
+                <StackLayout>
+                    <Label BackgroundColor="Transparent" FontSize="Large" FontFamily="FiraCode" HorizontalOptions="Center" Grid.Column="0" Text="Map Editor"/>
+                    <Grid ColumnSpacing="20" ColumnDefinitions="Auto, *">
+                        <Image Grid.Column="0" WidthRequest="40" Source="map.png"/>
+                        <Slider Grid.Column="1" MinimumTrackColor="Cyan" MaximumTrackColor="Transparent"/>
+                    </Grid>
+                    <Grid ColumnSpacing="20" ColumnDefinitions="Auto, *">
+                        <Image Grid.Column="0" WidthRequest="40" Source="map.png"/>
+                        <Slider Grid.Column="1" MinimumTrackColor="Cyan" MaximumTrackColor="Transparent"/>
+                    </Grid>
+                    <Grid ColumnSpacing="20" ColumnDefinitions="Auto, *">
+                        <Image Grid.Column="0" WidthRequest="40" Source="map.png"/>
+                        <Slider Grid.Column="1" MinimumTrackColor="Cyan" MaximumTrackColor="Transparent"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+        </Grid>
+
+    </Grid>
+
+
+
+
+
+</ContentPage>
