@@ -8,7 +8,7 @@
     Shell.FlyoutWidth="400"
     Shell.FlyoutHeight="200"
 
-    Title="Sen.Assistant">
+    Title="Sen: Assistant">
 
     <ShellContent
         ContentTemplate="{DataTemplate local:MainPage}"

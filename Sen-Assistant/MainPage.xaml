@@ -13,6 +13,10 @@
             <MenuFlyoutItem Text="Add Path"
                             Command="{Binding AddLocationCommand}" />
         </MenuBarItem>
+        <MenuBarItem Text="Configuration">
+            <MenuFlyoutItem Text="Edit Worldmap Setting"
+                    Command="{Binding AddLocationCommand}" />
+        </MenuBarItem>
         <MenuBarItem Text="About">
             <MenuFlyoutItem Text="Map Editor"
                             Command="{Binding RefreshCommand}" />
@@ -21,39 +25,40 @@
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
+
     <Grid RowDefinitions="*, Auto">
-        <Grid Grid.Row="0" ColumnDefinitions="80*, 0.5*, 20*">
-            <Frame Grid.Column="0" BackgroundColor="Transparent" CornerRadius="10" Margin="10">
+        <Grid Margin="1" Grid.Row="0" ColumnDefinitions="80*, 0.5*, 20*">
+            <Frame Grid.Column="0" BackgroundColor="Transparent" CornerRadius="10" BorderColor="{AppThemeBinding Light=Black, Dark=White}" Margin="10">
                 <Image Source="spiral.png"></Image>
             </Frame>
 
-            <Frame Grid.Column="2" BackgroundColor="Transparent" CornerRadius="10" Margin="10">
-                <Label Text="Properties" TextColor="White" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Frame Grid.Column="2" BackgroundColor="Transparent" CornerRadius="10" BorderColor="{AppThemeBinding Light=Black, Dark=White}" Margin="10">
+                <Label  FontFamily="PvZ2-Font" Text="Properties" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
             </Frame>
         </Grid>
 
-        <Grid Grid.Row="1" ColumnDefinitions="80*, 0.5*, 20*">
-            <Frame Grid.Column="0" BackgroundColor="Transparent" CornerRadius="10" Margin="10">
+        <Grid Margin="1" Grid.Row="1" ColumnDefinitions="80*, 0.5*, 20*">
+            <Frame BorderColor="{AppThemeBinding Light=Black, Dark=White}" Grid.Column="0" BackgroundColor="Transparent" CornerRadius="10" Margin="10">
                 <StackLayout>
-                    <Label BackgroundColor="Transparent" FontSize="Large" FontFamily="FiraCode" HorizontalOptions="Center" Grid.Column="0" Text="Map Editor"/>
+                    <Label BackgroundColor="Transparent" FontSize="Large" FontFamily="PvZ2-Font" HorizontalOptions="Center" Grid.Column="0" Text="Map Editor"/>
                     <Grid ColumnSpacing="20" ColumnDefinitions="Auto, *">
                         <Image Grid.Column="0" WidthRequest="40" Source="map.png"/>
-                        <Slider Grid.Column="1" MinimumTrackColor="Cyan" MaximumTrackColor="Transparent"/>
+                        <Slider Grid.Column="1" MinimumTrackColor="{AppThemeBinding Light=Black, Dark=DarkGreen}" MaximumTrackColor="{AppThemeBinding Light=Cyan, Dark=White}"/>
                     </Grid>
                     <Grid ColumnSpacing="20" ColumnDefinitions="Auto, *">
                         <Image Grid.Column="0" WidthRequest="40" Source="map.png"/>
-                        <Slider Grid.Column="1" MinimumTrackColor="Cyan" MaximumTrackColor="Transparent"/>
+                        <Slider Grid.Column="1" MinimumTrackColor="{AppThemeBinding Light=Black, Dark=DarkGreen}" MaximumTrackColor="{AppThemeBinding Light=Cyan, Dark=White}"/>
                     </Grid>
                     <Grid ColumnSpacing="20" ColumnDefinitions="Auto, *">
                         <Image Grid.Column="0" WidthRequest="40" Source="map.png"/>
-                        <Slider Grid.Column="1" MinimumTrackColor="Cyan" MaximumTrackColor="Transparent"/>
+                        <Slider Grid.Column="1" MinimumTrackColor="{AppThemeBinding Light=Black, Dark=DarkGreen}" MaximumTrackColor="{AppThemeBinding Light=Cyan, Dark=White}"/>
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Column="2" BackgroundColor="Transparent"  CornerRadius="10" Margin="10">
+            <Frame BorderColor="{AppThemeBinding Light=Black, Dark=White}" Grid.Column="2" BackgroundColor="Transparent"  CornerRadius="10" Margin="10">
                 <StackLayout >
                     <Image HorizontalOptions="Center" Source="icon.png" MaximumWidthRequest="125" MaximumHeightRequest="125"></Image>
-                    <Label BackgroundColor="Transparent" FontSize="Medium" FontFamily="FiraCode" HorizontalOptions="CenterAndExpand" Grid.Column="0" Text="Powered by Sen: Assistant"/>
+                    <Label BackgroundColor="Transparent" FontSize="Medium" FontFamily="PvZ2-Font" HorizontalOptions="CenterAndExpand" Grid.Column="0" Text="Powered by Sen"/>
                 </StackLayout>
             </Frame>
         </Grid>
