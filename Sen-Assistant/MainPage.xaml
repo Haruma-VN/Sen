@@ -5,23 +5,23 @@
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
             <MenuFlyoutItem Text="Load WorldMap"
-                            Command="{Binding LoadCommand}" />
+                            Command="{Binding LoadWorldMapCommand}" />
             <MenuFlyoutItem Text="Exit"
                             Command="{Binding ExitCommand}" />
         </MenuBarItem>
         <MenuBarItem Text="Sprite">
             <MenuFlyoutItem Text="Add Path"
-                            Command="{Binding AddLocationCommand}" />
+                            Command="{Binding LoadSpriteCommand}" />
         </MenuBarItem>
         <MenuBarItem Text="Configuration">
             <MenuFlyoutItem Text="Edit Worldmap Setting"
-                    Command="{Binding AddLocationCommand}" />
+                    Command="{Binding LoadSettingCommand}" />
         </MenuBarItem>
         <MenuBarItem Text="About">
             <MenuFlyoutItem Text="Map Editor"
-                            Command="{Binding RefreshCommand}" />
+                            Command="{Binding OpenAboutPageCommand}" />
             <MenuFlyoutItem Text="Sen"
-                            Command="{Binding ChangeThemeCommand}" />
+                            Command="{Binding OpenSenCommand}" />
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
@@ -29,7 +29,7 @@
     <Grid RowDefinitions="*, Auto">
         <Grid Margin="1" Grid.Row="0" ColumnDefinitions="80*, 0.5*, 20*">
             <Frame Grid.Column="0" BackgroundColor="Transparent" CornerRadius="10" BorderColor="{AppThemeBinding Light=Black, Dark=White}" Margin="10">
-                <Image Source="spiral.png"></Image>
+                <Image Aspect="AspectFit" Source="spiral.png"></Image>
             </Frame>
 
             <Frame Grid.Column="2" BackgroundColor="Transparent" CornerRadius="10" BorderColor="{AppThemeBinding Light=Black, Dark=White}" Margin="10">

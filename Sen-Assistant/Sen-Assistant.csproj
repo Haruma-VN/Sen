@@ -17,6 +17,7 @@
 		<RootNamespace>Sen.Assistant</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
