@@ -9,11 +9,9 @@
             <MenuFlyoutItem Text="Exit"
                             Command="{Binding ExitCommand}" />
         </MenuBarItem>
-        <MenuBarItem Text="Textures">
+        <MenuBarItem Text="Sprite">
             <MenuFlyoutItem Text="Add Path"
                             Command="{Binding AddLocationCommand}" />
-            <MenuFlyoutItem Text="Edit Path"
-                            Command="{Binding EditLocationCommand}" />
         </MenuBarItem>
         <MenuBarItem Text="About">
             <MenuFlyoutItem Text="Map Editor"
@@ -50,6 +48,12 @@
                         <Image Grid.Column="0" WidthRequest="40" Source="map.png"/>
                         <Slider Grid.Column="1" MinimumTrackColor="Cyan" MaximumTrackColor="Transparent"/>
                     </Grid>
+                </StackLayout>
+            </Frame>
+            <Frame Grid.Column="2" BackgroundColor="Transparent"  CornerRadius="10" Margin="10">
+                <StackLayout >
+                    <Image HorizontalOptions="Center" Source="icon.png" MaximumWidthRequest="125" MaximumHeightRequest="125"></Image>
+                    <Label BackgroundColor="Transparent" FontSize="Medium" FontFamily="FiraCode" HorizontalOptions="CenterAndExpand" Grid.Column="0" Text="Powered by Sen: Assistant"/>
                 </StackLayout>
             </Frame>
         </Grid>
