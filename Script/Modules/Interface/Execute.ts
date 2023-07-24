@@ -1102,7 +1102,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `Modules`,
                                         `Customization`,
                                         `Methods`,
-                                        `popcap_rsb_unpack_simple.json`
+                                        `popcap_rsb_pack_simple.json`
                                     )
                                 ),
                                 `encryptedRton`
@@ -1128,7 +1128,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                         `Modules`,
                                         `Customization`,
                                         `Methods`,
-                                        `popcap_rsb_unpack_simple.json`
+                                        `popcap_rsb_pack_simple.json`
                                     )
                                 ),
                                 `use_res_json`
@@ -1166,7 +1166,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `Modules`,
                                             `Customization`,
                                             `Methods`,
-                                            `popcap_rsb_unpack_simple.json`
+                                            `popcap_rsb_pack_simple.json`
                                         )
                                     ),
                                     `encryptedRton`
@@ -1192,7 +1192,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                             `Modules`,
                                             `Customization`,
                                             `Methods`,
-                                            `popcap_rsb_unpack_simple.json`
+                                            `popcap_rsb_pack_simple.json`
                                         )
                                     ),
                                     `use_res_json`

@@ -58,7 +58,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
     export function GetString(property: string): string {
         return Sen.Shell.DotNetLocalization.Get(
             property,
-            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `language`)),
+            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Language`)),
             `${Sen.Script.Modules.System.Default.Localization.language}`
         );
     }
