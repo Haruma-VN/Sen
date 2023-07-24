@@ -10,6 +10,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
             use_trailing_commas: boolean;
             debugger: boolean;
             execute_again_after_error: boolean;
+            format_time: boolean;
         };
         additional: {
             packed_codebooks_aoTuV_603: string;

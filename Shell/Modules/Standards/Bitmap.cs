@@ -1,5 +1,12 @@
 ﻿using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Gif;
+using Org.BouncyCastle.Pqc.Crypto.Sike;
+using static System.Net.Mime.MediaTypeNames;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace Sen.Shell.Modules.Standards.Bitmap
 {
@@ -131,12 +138,50 @@ namespace Sen.Shell.Modules.Standards.Bitmap
 
         public abstract Task CropAndSaveImagesAsync(dynamic[] images);
 
+        public abstract void ExportAnimatedGif(AnimatedGifOption option);
+
+
+    }
+
+
+    public struct AnimatedGifOption
+    {
+        public int width;
+
+        public int height;
+
+        public string[] images;
+
+        public string outputPath;
+
+        public int frame_delay;
 
     }
 
     public class Bitmap_Implement : Abstract_Bitmap
     {
-        public override ImageInfo<int> GetDimension(string imagePath)
+
+
+        public unsafe override sealed void ExportAnimatedGif(AnimatedGifOption option)
+        {
+            var animated = new Image<Rgba32>(option.width, option.height);
+
+            foreach (var imagePath in option.images)
+            {
+                using var img = SixLabors.ImageSharp.Image.Load(imagePath);
+                {
+                    animated.Frames.AddFrame(img.Frames[0]);
+                }
+            }
+            for (var i = 0; i < animated.Frames.Count; i++)
+            {
+                animated.Frames[i].Metadata.GetFormatMetadata(GifFormat.Instance).FrameDelay = option.frame_delay;
+            }
+            animated.SaveAsGif(option.outputPath);
+            return;
+        }
+
+        public unsafe sealed override ImageInfo<int> GetDimension(string imagePath)
         {
             using var image = Image.Load<Rgba32>(imagePath);
             return new ImageInfo<int>(image.Width, image.Height, imagePath);

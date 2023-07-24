@@ -7,7 +7,6 @@ namespace Sen.Script {
             `Modules/Constraints/Compression`,
             `Modules/Constraints/Crypto`,
             `Modules/Constraints/FileSystem`,
-            `Modules/System/Default/Timer`,
             `Modules/System/Implement/Json`,
             `Modules/System/Implement/JavaScript`,
             `Modules/Third/maxrects-packer/maxrects-packer`,
@@ -16,6 +15,7 @@ namespace Sen.Script {
             `Modules/System/Implement/Exception`,
             `Modules/System/Implement/FileSystem`,
             `Modules/System/Default/Localization`,
+            `Modules/System/Default/Timer`,
             `Modules/Support/PopCap/PvZ2/Resources/Unofficial`,
             `Modules/Support/PopCap/PvZ2/Resources/Official`,
             `Modules/Support/PopCap/PvZ2/Atlas/Split`,
@@ -64,12 +64,12 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 9;
+    export const ScriptVersion: int = 10;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 4;
+    export const ShellRequirement: int = 5;
 
     /**
      *
@@ -134,7 +134,7 @@ namespace Sen.Script {
         }
         Sen.Shell.Console.Print(
             14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
-            `Sen ~ 1.5.2 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`
+            `Sen ~ 2.0.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`
         );
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(

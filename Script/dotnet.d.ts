@@ -675,6 +675,26 @@ declare namespace Sen {
              */
 
             export function CropAndSaveImages(images: Array<AsyncTaskImageSplit>): void;
+
+            /**
+             * Structure
+             */
+
+            export interface AnimatedGifOption {
+                width: bigint;
+                height: bigint;
+                images: Array<string>;
+                outputPath: string;
+                frame_delay: bigint;
+            }
+
+            /**
+             *
+             * @param option - Pass option
+             * @returns Splitted GIF
+             */
+
+            export function ExportAnimatedGif(option: AnimatedGifOption): void;
         }
 
         declare namespace TextureHandler {

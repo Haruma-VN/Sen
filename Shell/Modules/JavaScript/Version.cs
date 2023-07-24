@@ -4,10 +4,10 @@
     {
         public Version() { }
 
-        public readonly int ShellVersion = 4;
+        public readonly int ShellVersion = 5;
 
 
-        public readonly int ScriptRequirement = 6;
+        public readonly int ScriptRequirement = 10;
 
     }
 
