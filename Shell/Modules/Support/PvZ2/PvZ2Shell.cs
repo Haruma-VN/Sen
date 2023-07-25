@@ -95,7 +95,6 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void FlashAnimationResize(string inDir, int resolution);
 
-        public abstract void ConvertOGGtoWAV(string inFile, string outFile);
 
         public abstract void ZlibCompress(string inFile, string outFile);
 
@@ -306,7 +305,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public unsafe sealed override void RTONDecrypt(string inFile, string outFile, RTONCipher crypt)
         {
             var buffer = new SenBuffer(inFile);
-            var rton = RTONProcession.Decrypt(buffer, crypt.key);
+            var rton = Decrypt(buffer, crypt.key);
             rton.OutFile(outFile);
             return;
         }
@@ -314,7 +313,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public unsafe sealed override void RTONEncrypt(string inFile, string outFile, RTONCipher crypt)
         {
             var buffer = new SenBuffer(inFile);
-            var rton = RTONProcession.Encrypt(buffer, crypt.key);
+            var rton = Encrypt(buffer, crypt.key);
             rton.OutFile(outFile);
             return;
         }
@@ -324,48 +323,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
             PAM_Animation.FlashAnimationResize(inDir, resolution);
             return;
         }
-
-        public unsafe sealed override void ConvertOGGtoWAV(string inFile, string outFile)
-        {
-            using (var vorbisTemp = new VorbisWaveReader(inFile))
-            {
-                long Position = 0;
-                void VorbisWorker()
-                {
-                    var buffer = new byte[vorbisTemp.WaveFormat.AverageBytesPerSecond / 8];
-                    while (vorbisTemp.Read(buffer, 0, buffer.Length) > 0)
-                    {
-                        Position = vorbisTemp.Position;
-                    };
-                }
-                if (vorbisTemp.Length == 0)
-                {
-                    Thread workerThread = new Thread(VorbisWorker);
-                    workerThread.Start();
-                    Thread.Sleep(30);
-                }
-                using (var vorbis = new VorbisWaveReader(inFile))
-                {
-                    using (var wavFileWriter = new WaveFileWriter(outFile, vorbis.WaveFormat))
-                    {
-                        var bufferFile = new byte[vorbis.WaveFormat.AverageBytesPerSecond / 8];
-                        while (vorbis.Position < (vorbisTemp.Length > 0 ? vorbisTemp.Length : Position))
-                        {
-                            var cnt = vorbis.Read(bufferFile, 0, bufferFile.Length);
-                            if (cnt == 0) break;
-                            wavFileWriter.Write(bufferFile);
-                        }
-                    }
-                }
-
-            }
-            return;
-        }
         public unsafe override sealed void ZlibCompress(string inFile, string outFile)
         {
             var buffer = new SenBuffer(inFile);
-            var fs = new FileSystem();
-            var compression = new Sen.Shell.Modules.Standards.Compress();
+            var compression = new Standards.Compress();
             byte[] file = compression.CompressZlib(buffer.toBytes(), ZlibCompressionLevel.BEST_COMPRESSION);
             var wr = new SenBuffer(file);
             wr.OutFile(outFile);
