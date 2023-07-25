@@ -103,6 +103,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting);
 
+        public abstract void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile);
+
+        public abstract void ApplyRSBPatch(string RSBOriginalFilePath, string RSBPatchFilePath, string RSBOutFilePath);
+
     }
 
 
@@ -382,6 +386,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
         {
             var fs = new FileSystem();
             AnimationHelper.GenerateImageSequence(fs.ReadJson<PAMInfo>(AnimationJsonPath), outFolder, mediaPath, setting);
+            return;
+        }
+
+        public unsafe override sealed void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile) {
+            RSBFunction.RSBPatchEncode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBModFilePath), RSBPatchOutFile);
+            return;
+        }
+
+        public unsafe override sealed void ApplyRSBPatch(string RSBOriginalFilePath, string RSBPatchFilePath, string RSBOutFilePath) {
+            RSBFunction.RSBPatchDecode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBPatchFilePath), RSBOutFilePath);
             return;
         }
         

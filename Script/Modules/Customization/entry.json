@@ -6,7 +6,8 @@
         "use_trailing_commas": false,
         "debugger": true,
         "execute_again_after_error": true,
-        "format_time": true
+        "format_time": true,
+        "execute_function_if_exists_one": true
     },
     "additional": {
         "packed_codebooks_aoTuV_603": "/Modules/Customization/Dependencies/packed_codebooks_aoTuV_603.bin"

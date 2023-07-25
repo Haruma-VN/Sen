@@ -282,5 +282,17 @@
         "include": [".pam.json"],
         "exclude": [],
         "type": "file"
+    },
+    "popcap_rsb_patch_decode": {
+        "func_number": 48,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "type": "file"
+    },
+    "popcap_rsb_patch_encode": {
+        "func_number": 49,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "type": "file"
     }
 }

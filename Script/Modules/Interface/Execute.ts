@@ -72,6 +72,16 @@ namespace Sen.Script.Modules.Interface.Execute {
             );
             return;
         }
+        if (available.length === 1 && Sen.Script.Modules.System.Default.Localization.EntryJson.default.execute_function_if_exists_one) {
+            const function_name_m: function_name = Sen.Script.Modules.Interface.Execute.GetFunctionName(available[0]);
+            Sen.Shell.Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                Sen.Script.Modules.System.Default.Localization.GetString("command_executed")
+            );
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString(function_name_m)}`);
+            Sen.Script.Modules.Interface.Execute.Evaluate(function_name_m, argument);
+            return;
+        }
         const func_name: function_name = Sen.Script.Modules.Interface.Execute.GetFunctionName(Sen.Script.Modules.Interface.Arguments.TestInput(available));
         Sen.Script.Modules.Interface.Execute.Evaluate(func_name, argument);
         return;
@@ -146,7 +156,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_pack_with_simplified_manifest"
         | "ogg_to_wav"
         | "popcap_official_resource_path_convert"
-        | "popcap_animation_render";
+        | "popcap_animation_render"
+        | "popcap_rsb_patch_decode"
+        | "popcap_rsb_patch_encode";
 
     /**
      *
@@ -2619,6 +2631,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                             }
                         });
                     }
+                    break;
+                }
+                case "popcap_rsb_patch_decode": {
+                    break;
+                }
+                case "popcap_rsb_patch_encode": {
                     break;
                 }
                 default: {

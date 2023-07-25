@@ -6,7 +6,7 @@
     "no_function_were_found": "No functions were found to be applied",
     "press_any_key_to_continue": "Press any key to continue...",
     "execution_loaded": "Execution Loaded: {}",
-    "execution_time": "Execution Time: {} seconds",
+    "execution_time": "Execution Time: {} Seconds",
     "execution_size": "Execution size: {}",
     "execute_all_argument_in_queue": "Execute all arguments in queue",
     "execution_in_progress": "Execution in progress: ({})",
@@ -308,7 +308,7 @@
     "convert_convert_to_unpack": "Use \"convert\" directory for packing",
     "please_use_for_more": "Please use \"{1}\" after unpack to pack RSB, option is:\n       {2}",
     "ogg_to_wav": "OGG to WAV",
-    "total_time_spent": "Total Time Spent: {} seconds",
+    "total_time_spent": "Total Time Spent: {} Seconds",
     "generated": "Generated {}",
     "choose_one": "Please choose one {} in the displayed below:",
     "please_choose_correct_input": "Please choose one being displayed above",
@@ -365,5 +365,8 @@
     "second": "Second",
     "seconds": "Seconds",
     "minute": "Minute",
-    "minutes": "Minutes"
+    "minutes": "Minutes",
+    "command_executed": "Command executed:",
+    "popcap_rsb_patch_decode": "PopCap RSB-Patch: Decode",
+    "popcap_rsb_patch_encode": "PopCap RSB-Patch: Encode"
 }

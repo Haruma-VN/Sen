@@ -1572,6 +1572,25 @@ declare namespace Sen {
              */
 
             export function GenerateImageSequence(AnimationJson: string, outFolder: string, mediaPath: string, setting: Sen.Shell.AnimationHelperSetting): void;
+
+            /**
+             *
+             * @param RSBOriginalFilePath - RSB Original
+             * @param RSBModFilePath - RSB Mod
+             * @param RSBPatchOutFile - After compare
+             * @returns RSB Patch Decode
+             */
+
+            export function CreateRSBPatch(RSBOriginalFilePath: string, RSBModFilePath: string, RSBPatchOutFile: string): void;
+
+            /**
+             *
+             * @param RSBOriginalFilePath - RSB Original
+             * @param RSBPatchFilePath - Patch file
+             * @param RSBOutFilePath - After Patch
+             */
+
+            export function ApplyRSBPatch(RSBOriginalFilePath: string, RSBPatchFilePath: string, RSBOutFilePath: string): void;
         }
 
         /**

@@ -1,6 +1,10 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
+using VCDiff.Encoders;
+using VCDiff.Decoders;
+using VCDiff.Shared;
+
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSB
 {
@@ -243,15 +247,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         {
             var path = new ImplementPath();
             var rsbHeadInfo = ReadHead(RSBFile);
-            if (rsbHeadInfo.version != 3 && rsbHeadInfo.version != 4) 
+            if (rsbHeadInfo.version != 3 && rsbHeadInfo.version != 4)
             {
                 throw new Exception("invalid_rsb_version");
             }
-            if (rsbHeadInfo.version == 3 && rsbHeadInfo.fileList_BeginOffset != 0x6C) 
+            if (rsbHeadInfo.version == 3 && rsbHeadInfo.fileList_BeginOffset != 0x6C)
             {
                 throw new Exception("invalid_file_list_offset");
             }
-            if (rsbHeadInfo.version == 4 && rsbHeadInfo.fileList_BeginOffset != 0x70) 
+            if (rsbHeadInfo.version == 4 && rsbHeadInfo.fileList_BeginOffset != 0x70)
             {
                 throw new Exception("invalid_file_list_offset");
             }
@@ -295,14 +299,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     var rsgListCount = 0;
                     while (rsgInfoList[rsgInfoCount].poolIndex != packetIndex)
                     {
-                        if (rsgInfoCount >= rsgInfoList.Count - 1){
+                        if (rsgInfoCount >= rsgInfoList.Count - 1)
+                        {
                             throw new Exception("out_of_range");
                         }
                         rsgInfoCount++;
                     }
                     while (rsgList[rsgListCount].poolIndex != packetIndex)
                     {
-                        if (rsgListCount >= rsgList.Count - 1) 
+                        if (rsgListCount >= rsgList.Count - 1)
                         {
                             throw new Exception("out_of_range");
                         }
@@ -361,7 +366,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                     break;
                                 }
                             }
-                            if (!existItemPacket) 
+                            if (!existItemPacket)
                             {
                                 throw new Exception("invalid_item_packet");
                             }
@@ -756,7 +761,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
 
         private static void CheckEndOffset(SenBuffer RSBFile, int endOffset)
         {
-            if ((int)RSBFile.readOffset != endOffset) 
+            if ((int)RSBFile.readOffset != endOffset)
             {
                 throw new Exception($"invalid offset: {RSBFile.readOffset} | {endOffset}");
             }
@@ -1190,7 +1195,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             {
                 string Path1 = fileList[i].namePath.ToUpper();
                 string Path2 = fileList[i + 1].namePath.ToUpper();
-                if (RSGFunction.IsNotASCII(Path2)) 
+                if (RSGFunction.IsNotASCII(Path2))
                 {
                     throw new Exception("item_part_must_be_ascii");
                 };
@@ -1281,7 +1286,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     var rsgListCount = 0;
                     while (rsgInfoList[rsgInfoCount].poolIndex != packetIndex)
                     {
-                        if (rsgInfoCount >= rsgInfoList.Count - 1) 
+                        if (rsgInfoCount >= rsgInfoList.Count - 1)
                         {
                             throw new Exception("out_of_range");
                         }
@@ -1289,7 +1294,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     }
                     while (rsgList[rsgListCount].poolIndex != packetIndex)
                     {
-                        if (rsgListCount >= rsgList.Count - 1) 
+                        if (rsgListCount >= rsgList.Count - 1)
                         {
                             throw new Exception("out_of_range");
                         }
@@ -1473,6 +1478,44 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             RSBFile.BackupReadOffset();
             if (fileListOffset != 0x5C && fileListOffset != 0x1000) return true;
             else return false;
+        }
+        //Create RSBPatch
+        public static void RSBPatchEncode(SenBuffer RSBBeforeFile, SenBuffer RSBAfterFile, string RSBPatchOutFile)
+        {
+            var RSBBeforeStream = RSBBeforeFile.toStream();
+            var RSBAfterStream = RSBAfterFile.toStream();
+            var outPutStream = new MemoryStream();
+            var coder = new VCCoder(RSBBeforeStream, RSBAfterStream, outPutStream);
+            var result = coder.Encode();
+            if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
+            {
+                throw new Exception("Invaild vcdiff encode");
+            }
+            var SenWriter = new SenBuffer(outPutStream);
+            SenWriter.OutFile(RSBPatchOutFile);
+        }
+        //Apply RSBPatch
+        public static void RSBPatchDecode(SenBuffer RSBBeforeFile, SenBuffer RSBPatchFile, string RSBOutFilePath)
+        {
+            var RSBBeforeStream = RSBBeforeFile.toStream();
+            var RSBPatchStream = RSBPatchFile.toStream();
+            var outPutStream = new MemoryStream();
+            var decoder = new VCDecoder(RSBBeforeStream, RSBPatchStream, outPutStream);
+            var result = decoder.Start();
+            if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
+            {
+                throw new Exception("Invaild vcdiff decode");
+            }
+
+            long bytesWritten = 0;
+            result = decoder.Decode(out bytesWritten);
+
+            if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
+            {
+                throw new Exception("Invaild vcdiff decode");
+            }
+            var SenWriter = new SenBuffer(outPutStream);
+            SenWriter.OutFile(RSBOutFilePath);
         }
 
     }

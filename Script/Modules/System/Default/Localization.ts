@@ -11,6 +11,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
             debugger: boolean;
             execute_again_after_error: boolean;
             format_time: boolean;
+            execute_function_if_exists_one: boolean;
         };
         additional: {
             packed_codebooks_aoTuV_603: string;
