@@ -78,7 +78,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
                 Sen.Script.Modules.System.Default.Localization.GetString("command_executed")
             );
-            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString(function_name_m)}`);
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString(function_name_m)} | ${function_name_m}`);
             Sen.Script.Modules.Interface.Execute.Evaluate(function_name_m, argument);
             return;
         }
@@ -577,10 +577,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 argument,
                                 output_argument,
                                 Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(
-                                        `${Sen.Shell.MainScriptDirectory}`,
-                                        `${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`
-                                    )
+                                    `${Sen.Shell.MainScriptDirectory}${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`
                                 ),
                                 inlineCodebook,
                                 inlineSetup
@@ -629,10 +626,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     arg,
                                     output_argument,
                                     Sen.Shell.Path.Resolve(
-                                        Sen.Shell.Path.Join(
-                                            `${Sen.Shell.MainScriptDirectory}`,
-                                            `${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`
-                                        )
+                                        `${Sen.Shell.MainScriptDirectory}${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`
                                     ),
                                     inlineCodebook,
                                     inlineSetup
@@ -857,38 +851,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 1 | 2) === 1
                                 ? "array"
                                 : "string";
-                        const encrypted_rton: boolean = Boolean(
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                                Sen.Script.Modules.System.Default.Localization.GetString("rton_are_encrypted"),
-                                [0, 1],
-                                {
-                                    "0": [
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
-                                    ],
-                                    "1": [
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
-                                        Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
-                                    ],
-                                },
-                                Sen.Shell.Path.Resolve(
-                                    Sen.Shell.Path.Join(
-                                        `${Sen.Shell.MainScriptDirectory}`,
-                                        `Modules`,
-                                        `Customization`,
-                                        `Methods`,
-                                        `popcap_rsb_unpack_simple.json`
-                                    )
-                                ),
-                                `encryptedRton`
-                            ) as 0 | 1
-                        );
                         const output_argument: string = Sen.Shell.Path.Resolve(
                             Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bundle`)
                         );
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSBBySimple(argument, output_argument, {
-                            encryptedRTON: encrypted_rton,
                             expand_path: expand_path,
                         });
                     } else {
@@ -920,38 +887,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 ) as 1 | 2) === 1
                                     ? "array"
                                     : "string";
-                            const encrypted_rton: boolean = Boolean(
-                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                                    Sen.Script.Modules.System.Default.Localization.GetString("rton_are_encrypted"),
-                                    [0, 1],
-                                    {
-                                        "0": [
-                                            Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
-                                            Sen.Script.Modules.System.Default.Localization.GetString("use_normal_rton"),
-                                        ],
-                                        "1": [
-                                            Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
-                                            Sen.Script.Modules.System.Default.Localization.GetString("use_encrypted_rton_decrypt"),
-                                        ],
-                                    },
-                                    Sen.Shell.Path.Resolve(
-                                        Sen.Shell.Path.Join(
-                                            `${Sen.Shell.MainScriptDirectory}`,
-                                            `Modules`,
-                                            `Customization`,
-                                            `Methods`,
-                                            `popcap_rsb_unpack_simple.json`
-                                        )
-                                    ),
-                                    `encryptedRton`
-                                ) as 0 | 1
-                            );
                             const output_argument: string = Sen.Shell.Path.Resolve(
                                 Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bundle`)
                             );
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSBBySimple(arg, output_argument, {
-                                encryptedRTON: encrypted_rton,
                                 expand_path: expand_path,
                             });
                         });

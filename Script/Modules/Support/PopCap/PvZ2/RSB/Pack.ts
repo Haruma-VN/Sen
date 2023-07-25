@@ -73,9 +73,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      */
 
     export function PackPopCapRSBBySimple(inDirectory: string, outFile: string, option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.Options): void {
-        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`))
-        );
+        const manifest_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`));
+        const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_path);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 4n, string>(original_manifest, 4n, manifest_path);
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(original_manifest);
         let manifest_group: int = -1;
         let packages: int = -1;
         for (let i: int = 0; i < manifest.group.length; ++i) {
@@ -95,17 +97,24 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             files.forEach((file: string) => {
                 if (Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.JSON`) {
                     json_count++;
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(file, file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
-                }
-                if (option.encryptRTON && Sen.Shell.Path.Parse(file).ext.toUpperCase() === `.RTON`) {
-                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncrypt(file, file, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
+                        file,
+                        file.replace(/((\.json))?$/i, ".RTON"),
+                        option.encryptRTON ? Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt : Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
+                    );
                 }
             });
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs`));
         }
         if (option.generate_resources) {
-            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)), Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`)));
-            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_res_json_to_resources_json")));
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
+                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)),
+                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`))
+            );
+            Sen.Shell.Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_res_json_to_resources_json"))
+            );
         } else {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`)),
@@ -114,7 +123,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             );
             Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension))
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)
+                )
             );
         }
         if (manifest_group !== -1) {
@@ -126,14 +138,20 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.PvZ2Shell.RSGPack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)), manifestgroup_save, manifest.group[manifest_group].subgroup[0].packet_info, false);
             Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension))
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)
+                )
             );
         }
         if (packages !== -1) {
             Sen.Shell.PvZ2Shell.RSGPack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)), packages_save, manifest.group[packages].subgroup[0].packet_info, false);
             Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension))
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)
+                )
             );
         }
         Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
@@ -181,7 +199,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 subgroup: [],
             };
             information.groups[composite_group_name].forEach((packet_item_name: string) => {
-                const rsb_rsg_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = Sen.Shell.PvZ2Shell.GetRSBPacketInfo(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`, `${packet_item_name}.rsg`)));
+                const rsb_rsg_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = Sen.Shell.PvZ2Shell.GetRSBPacketInfo(
+                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`, `${packet_item_name}.rsg`))
+                );
                 const packet_category: [number, string | null] = GetCategoryPacket(packet_item_name.toLowerCase());
                 if (!composite_type && packet_category[0] !== 0) {
                     composite_type = true;
@@ -215,5 +235,59 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         );
         Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         return;
+    }
+
+    /**
+     *
+     * @param information - Manifest
+     * @param version - Version number
+     * @param manifest_path - Manifest path
+     * @returns
+     */
+
+    export function StrictlyHandlePitch<safe extends Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, CompositeShell extends string, Subgroup extends string, Version extends 3n | 4n, ManifestPath extends string>(
+        information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation,
+        version: Version,
+        manifest_path?: ManifestPath
+    ): information is safe {
+        const composite_shell_list: Array<CompositeShell> = Object.keys(information.group) as Array<CompositeShell>;
+        const assert_version_4: boolean = version === 4n;
+        composite_shell_list.forEach((composite_shell: CompositeShell) => {
+            const subgroup_list: Array<Subgroup> = Object.keys(information.group[composite_shell].subgroup) as Array<Subgroup>;
+            subgroup_list.forEach((subgroup: Subgroup) => {
+                information.group[composite_shell].subgroup[subgroup].packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ResInfo) => {
+                    if (res.ptx_info && res.ptx_property) {
+                        if (assert_version_4) {
+                            if (!(res.ptx_property.pitch === res.ptx_info.width * 4)) {
+                                throw new Sen.Script.Modules.Exceptions.PitchError(
+                                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("pitch_at_subgroup_is_wrong"), [
+                                        subgroup,
+                                        composite_shell,
+                                        `${res.ptx_info.width * 4}`,
+                                        `${res.ptx_property.pitch}`,
+                                    ]),
+                                    manifest_path ?? "undefined",
+                                    `${res.ptx_info.width * 4}`
+                                );
+                            }
+                        } else {
+                            if (!(res.ptx_property.pitch === res.ptx_info.width * 4) && !(res.ptx_property.pitch === res.ptx_info.width * 2)) {
+                                throw new Sen.Script.Modules.Exceptions.PitchError(
+                                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("pitch_at_subgroup_is_wrong"), [
+                                        subgroup,
+                                        composite_shell,
+                                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_or_that"), [`${res.ptx_info.width * 4}`, `${res.ptx_info.width * 2}`]),
+                                        `${res.ptx_property.pitch}`,
+                                    ]),
+                                    manifest_path ?? "undefined",
+                                    `${res.ptx_info.width * 4}`
+                                );
+                            }
+                        }
+                    }
+                });
+            });
+        });
+        return true;
     }
 }

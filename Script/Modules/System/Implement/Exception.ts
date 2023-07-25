@@ -618,6 +618,20 @@ namespace Sen.Script.Modules.Exceptions {
         }
     }
 
+    export class PitchError extends MissingFile {
+        private _should_be: string;
+
+        get should_be(): string {
+            return this._should_be;
+        }
+
+        public constructor(message: string, file_path: string, should_be: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("pitch_error");
+            this._should_be = should_be;
+        }
+    }
+
     export class JoinImageError extends MissingFile {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
@@ -710,7 +724,9 @@ namespace Sen.Script.Modules.Exceptions {
                     if ((error as Sen.Script.Modules.Exceptions.DimensionError).additional_message) {
                         const property_error: string = (error as Sen.Script.Modules.Exceptions.DimensionError).dimension_type_error;
                         const additional_message: string = (error as Sen.Script.Modules.Exceptions.DimensionError).additional_message as string;
-                        Sen.Script.Modules.Exceptions.ExecutionError(Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("property_is_oversized"), [`"${property_error}"`, `${additional_message}`]));
+                        Sen.Script.Modules.Exceptions.ExecutionError(
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("property_is_oversized"), [`"${property_error}"`, `${additional_message}`])
+                        );
                     }
                     break;
                 }
@@ -749,7 +765,10 @@ namespace Sen.Script.Modules.Exceptions {
                     Sen.Script.Modules.Exceptions.ExecutionExceptionType(name);
                     Sen.Shell.Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                        `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, `${Sen.Script.Modules.System.Default.Localization.GetString("expected_variable_type").replace(/\{\}/g, expected_data_type)}`)}`
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                            /\{\}/g,
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("expected_variable_type").replace(/\{\}/g, expected_data_type)}`
+                        )}`
                     );
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                     Sen.Script.Modules.Exceptions.ExecutionError(message);
@@ -1004,6 +1023,13 @@ namespace Sen.Script.Modules.Exceptions {
                 case Sen.Script.Modules.Exceptions.ModuleNotFound: {
                     const name: string = (error as Sen.Script.Modules.Exceptions.ModuleNotFound).name;
                     const message: string = (error as Sen.Script.Modules.Exceptions.ModuleNotFound).message;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.PitchError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.PitchError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.PitchError).message;
                     Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                     Sen.Script.Modules.Exceptions.ExecutionError(message);
                     break;

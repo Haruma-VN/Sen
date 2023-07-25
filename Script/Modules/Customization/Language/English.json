@@ -366,7 +366,10 @@
     "seconds": "Seconds",
     "minute": "Minute",
     "minutes": "Minutes",
-    "command_executed": "Command executed:",
+    "command_executed": "Command Executed As Default:",
     "popcap_rsb_patch_decode": "PopCap RSB-Patch: Decode",
-    "popcap_rsb_patch_encode": "PopCap RSB-Patch: Encode"
+    "popcap_rsb_patch_encode": "PopCap RSB-Patch: Encode",
+    "pitch_error": "Pitch Error",
+    "the_pitch_should_be": "Should change to {}",
+    "pitch_at_subgroup_is_wrong": "Pitch at subgroup {1} in composite {2} is wrong. Should be {3}, received {4}"
 }

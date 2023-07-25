@@ -1752,7 +1752,7 @@ declare namespace Sen {
              *
              * @param size - Pass size to allocate
              */
-            export function Alloc(size: int): Buffer.JSBuffer;
+            export function Alloc(size: bigint): Buffer.JSBuffer;
 
             /**
              *
@@ -1782,7 +1782,7 @@ declare namespace Sen {
              * @param endIndex - End index
              */
 
-            export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
+            export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: bigint? = null): bigint;
 
             /**
              *
@@ -1791,7 +1791,7 @@ declare namespace Sen {
              * @param endIndex - End index
              */
 
-            export function LastIndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: int? = null): int;
+            export function LastIndexOf(value: Buffer.JSBuffer, startIndex: bigint = 0, endIndex: bigint? = null): bigint;
 
             /**
              *
@@ -1799,7 +1799,7 @@ declare namespace Sen {
              * @param endIndex - End slice
              */
 
-            export function Slice(startIndex: int = 0, endIndex: int? = null): Buffer.JSBuffer;
+            export function Slice(startIndex: bigint = 0, endIndex: bigint? = null): Buffer.JSBuffer;
 
             /**
              * JS Buffer
@@ -1807,8 +1807,8 @@ declare namespace Sen {
 
             export interface JSBuffer {
                 ToString(): string;
-                readonly Length: int;
-                ToArray(): Array<byte>;
+                readonly Length: bigint;
+                ToArray(): Array<bigint>;
             }
         }
 
