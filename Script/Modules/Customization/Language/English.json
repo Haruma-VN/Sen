@@ -371,5 +371,6 @@
     "popcap_rsb_patch_encode": "PopCap RSB-Patch: Encode",
     "pitch_error": "Pitch Error",
     "the_pitch_should_be": "Should change to {}",
-    "pitch_at_subgroup_is_wrong": "Pitch at subgroup {1} in composite {2} is wrong. Should be {3}, received {4}"
+    "pitch_at_subgroup_is_wrong": "Pitch at subgroup {1} in composite {2} is wrong. Should be {3}, received {4}",
+    "not_a_subgroup": "Not a subgroup"
 }

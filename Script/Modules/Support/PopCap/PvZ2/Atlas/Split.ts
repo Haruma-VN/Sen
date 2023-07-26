@@ -51,7 +51,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             }
             if (typeof official_subgroup.id !== "string") {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`id`, `this.json()`, `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`, `${typeof official_subgroup.id}`]),
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                        `id`,
+                        `this.json()`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`,
+                        `${typeof official_subgroup.id}`,
+                    ]),
                     `id`,
                     (file_path ??= "undefined"),
                     `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`
@@ -113,7 +118,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("id" in res) {
                     if (typeof res.id !== "string") {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`id`, `${index}`, `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`, `${typeof res.id}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `id`,
+                                `${index}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`,
+                                `${typeof res.id}`,
+                            ]),
                             `id`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`
@@ -123,7 +133,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("parent" in res) {
                     if (typeof res.parent !== "string") {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`parent`, `${index}`, `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`, `${typeof res.parent}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `parent`,
+                                `${index}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`,
+                                `${typeof res.parent}`,
+                            ]),
                             `parent`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`
@@ -133,7 +148,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("type" in res) {
                     if (typeof res.type !== "string") {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`type`, `${index}`, `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`, `${typeof res.type}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `type`,
+                                `${index}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`,
+                                `${typeof res.type}`,
+                            ]),
                             `type`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`
@@ -158,7 +178,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("atlas" in res) {
                     if (typeof res.atlas !== "boolean") {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`atlas`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("boolean")}`, `${typeof res.atlas}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `atlas`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("boolean")}`,
+                                `${typeof res.atlas}`,
+                            ]),
                             `atlas`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("boolean")}`
@@ -168,7 +193,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("width" in res) {
                     if (!Number.isInteger(res.width)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`width`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.width}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `width`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.width}`,
+                            ]),
                             `width`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -178,7 +208,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("height" in res) {
                     if (!Number.isInteger(res.height)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`height`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.height}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `height`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.height}`,
+                            ]),
                             `height`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -188,7 +223,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("ax" in res) {
                     if (!Number.isInteger(res.ax)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`ax`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.ax}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `ax`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.ax}`,
+                            ]),
                             `ax`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -198,7 +238,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("ay" in res) {
                     if (!Number.isInteger(res.ay)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`ay`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.ay}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `ay`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.ay}`,
+                            ]),
                             `ay`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -208,7 +253,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("aw" in res) {
                     if (!Number.isInteger(res.aw)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`aw`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.aw}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `aw`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.aw}`,
+                            ]),
                             `aw`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -218,7 +268,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("ah" in res) {
                     if (!Number.isInteger(res.ah)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`ah`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.ah}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `ah`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.ah}`,
+                            ]),
                             `ah`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -228,7 +283,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("x" in res) {
                     if (!Number.isInteger(res.x)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`x`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.x}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `x`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.x}`,
+                            ]),
                             `x`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -238,7 +298,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("y" in res) {
                     if (!Number.isInteger(res.y)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`y`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.y}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `y`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.y}`,
+                            ]),
                             `y`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -248,7 +313,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 if ("cols" in res) {
                     if (!Number.isInteger(res.cols)) {
                         throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`cols`, `${res.id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof res.cols}`]),
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `cols`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.cols}`,
+                            ]),
                             `cols`,
                             (file_path ??= "undefined"),
                             `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -306,7 +376,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                             ? ({
                                   default: {
                                       x: (subgroup.x ??= 0),
-                                      y: (subgroup.x ??= 0),
+                                      y: (subgroup.y ??= 0),
                                       cols: subgroup.cols,
                                   },
                                   path: subgroup.path,
@@ -314,7 +384,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                             : {
                                   default: {
                                       x: (subgroup.x ??= 0),
-                                      y: (subgroup.x ??= 0),
+                                      y: (subgroup.y ??= 0),
                                   },
                                   path: subgroup.path,
                               };
@@ -332,7 +402,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
          */
 
         public static CreateAtlasJsonFromOfficial(file_input: string, file_output: string, method: "id" | "path", expand_path: "string" | "array"): void {
-            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(file_output, this.ConvertAtlasJsonFromOfficial<resource_atlas_and_sprites>(Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(file_input), method, expand_path, file_input));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(
+                file_output,
+                this.ConvertAtlasJsonFromOfficial<resource_atlas_and_sprites>(Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(file_input), method, expand_path, file_input)
+            );
             return;
         }
 
@@ -381,10 +454,20 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                         Sen.Script.Modules.System.Default.Localization.GetString("string")
                     );
                 }
-                if (!("dimension" in unofficial_subgroup.packet[parent]) || unofficial_subgroup.packet[parent].dimension === null || unofficial_subgroup.packet[parent].dimension === undefined || unofficial_subgroup.packet[parent].dimension === void 0) {
+                if (
+                    !("dimension" in unofficial_subgroup.packet[parent]) ||
+                    unofficial_subgroup.packet[parent].dimension === null ||
+                    unofficial_subgroup.packet[parent].dimension === undefined ||
+                    unofficial_subgroup.packet[parent].dimension === void 0
+                ) {
                     throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `dimension`), `dimension`, (file_path ??= "undefined"));
                 }
-                if (!("width" in unofficial_subgroup.packet[parent].dimension) || unofficial_subgroup.packet[parent].dimension.width === null || unofficial_subgroup.packet[parent].dimension.width === undefined || unofficial_subgroup.packet[parent].dimension.width === void 0) {
+                if (
+                    !("width" in unofficial_subgroup.packet[parent].dimension) ||
+                    unofficial_subgroup.packet[parent].dimension.width === null ||
+                    unofficial_subgroup.packet[parent].dimension.width === undefined ||
+                    unofficial_subgroup.packet[parent].dimension.width === void 0
+                ) {
                     throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `width`), `width`, (file_path ??= "undefined"));
                 }
                 if (!Number.isInteger(unofficial_subgroup.packet[parent].dimension.width)) {
@@ -400,7 +483,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                         Sen.Script.Modules.System.Default.Localization.GetString("integer")
                     );
                 }
-                if (!("height" in unofficial_subgroup.packet[parent].dimension) || unofficial_subgroup.packet[parent].dimension.height === null || unofficial_subgroup.packet[parent].dimension.height === undefined || unofficial_subgroup.packet[parent].dimension.height === void 0) {
+                if (
+                    !("height" in unofficial_subgroup.packet[parent].dimension) ||
+                    unofficial_subgroup.packet[parent].dimension.height === null ||
+                    unofficial_subgroup.packet[parent].dimension.height === undefined ||
+                    unofficial_subgroup.packet[parent].dimension.height === void 0
+                ) {
                     throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `height`), `height`, (file_path ??= "undefined"));
                 }
                 if (!Number.isInteger(unofficial_subgroup.packet[parent].dimension.height)) {
@@ -421,7 +509,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 }
                 if (!Array.isArray(unofficial_subgroup.packet[parent].path)) {
                     throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`path`, parent, Sen.Script.Modules.System.Default.Localization.GetString("array"), typeof unofficial_subgroup.packet[parent].path]),
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                            `path`,
+                            parent,
+                            Sen.Script.Modules.System.Default.Localization.GetString("array"),
+                            typeof unofficial_subgroup.packet[parent].path,
+                        ]),
                         `path`,
                         (file_path ??= "undefined"),
                         Sen.Script.Modules.System.Default.Localization.GetString("path")
@@ -524,7 +617,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                             Sen.Script.Modules.System.Default.Localization.GetString("integer")
                         );
                     }
-                    if (!("path" in unofficial_subgroup.packet[parent].data[children]) || unofficial_subgroup.packet[parent].data[children].path === null || unofficial_subgroup.packet[parent].data[children].path === undefined || unofficial_subgroup.packet[parent].data[children].path === void 0) {
+                    if (
+                        !("path" in unofficial_subgroup.packet[parent].data[children]) ||
+                        unofficial_subgroup.packet[parent].data[children].path === null ||
+                        unofficial_subgroup.packet[parent].data[children].path === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].path === void 0
+                    ) {
                         throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `path`), `path`, (file_path ??= "undefined"));
                     }
                     if (!Array.isArray(unofficial_subgroup.packet[parent].data[children].path)) {
@@ -540,7 +638,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                             Sen.Script.Modules.System.Default.Localization.GetString("path")
                         );
                     }
-                    if (!("type" in unofficial_subgroup.packet[parent].data[children]) || unofficial_subgroup.packet[parent].data[children].type === null || unofficial_subgroup.packet[parent].data[children].type === undefined || unofficial_subgroup.packet[parent].data[children].type === void 0) {
+                    if (
+                        !("type" in unofficial_subgroup.packet[parent].data[children]) ||
+                        unofficial_subgroup.packet[parent].data[children].type === null ||
+                        unofficial_subgroup.packet[parent].data[children].type === undefined ||
+                        unofficial_subgroup.packet[parent].data[children].type === void 0
+                    ) {
                         throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `type`), `type`, (file_path ??= "undefined"));
                     }
                     if ("cols" in unofficial_subgroup.packet[parent].data[children]) {
@@ -694,7 +797,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 this.FindDuplicates(async_task.map((task) => task.outputImagePath)).forEach((file: string) => {
                     Sen.Shell.Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("id_is_duplicated").replace(/\{\}/g, Sen.Shell.Path.Parse(file).basename))
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("id_is_duplicated").replace(/\{\}/g, Sen.Shell.Path.Parse(file).basename)
+                        )
                     );
                 });
                 throw new Sen.Script.Modules.Exceptions.CannotWriteFile(Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(/\{\}/g, (async_task.length - output_images.length).toString()), json);
@@ -755,12 +861,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                     data: {},
                 };
                 for (const id of ids_collection) {
-                    if (`ax` in unofficial_subgroup.packet[parent].data[id].default && `ay` in unofficial_subgroup.packet[parent].data[id].default && `ah` in unofficial_subgroup.packet[parent].data[id].default && `aw` in unofficial_subgroup.packet[parent].data[id].default) {
+                    if (
+                        `ax` in unofficial_subgroup.packet[parent].data[id].default &&
+                        `ay` in unofficial_subgroup.packet[parent].data[id].default &&
+                        `ah` in unofficial_subgroup.packet[parent].data[id].default &&
+                        `aw` in unofficial_subgroup.packet[parent].data[id].default
+                    ) {
                         pngs.forEach((file: string) => {
                             if (parent?.endsWith(Sen.Shell.Path.Parse(file).name.replace(/((.png))?$/i, ""))) {
                                 async_task.push({
                                     sourceImagePath: file,
-                                    outputImagePath: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains_sprite}`, `${method === "path" ? unofficial_subgroup.packet[parent].data[id].path[unofficial_subgroup.packet[parent].data[id].path.length - 1] : id}.png`)),
+                                    outputImagePath: Sen.Shell.Path.Resolve(
+                                        Sen.Shell.Path.Join(`${directory_contains_sprite}`, `${method === "path" ? unofficial_subgroup.packet[parent].data[id].path[unofficial_subgroup.packet[parent].data[id].path.length - 1] : id}.png`)
+                                    ),
                                     x: unofficial_subgroup.packet[parent].data[id].default.ax as number,
                                     y: unofficial_subgroup.packet[parent].data[id].default.ay as number,
                                     width: unofficial_subgroup.packet[parent].data[id].default.aw as number,
@@ -783,7 +896,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 this.FindDuplicates(async_task.map((task) => task.outputImagePath)).forEach((file: string) => {
                     Sen.Shell.Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("id_is_duplicated").replace(/\{\}/g, Sen.Shell.Path.Parse(file).basename))
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
+                            /\{\}/g,
+                            Sen.Script.Modules.System.Default.Localization.GetString("id_is_duplicated").replace(/\{\}/g, Sen.Shell.Path.Parse(file).basename)
+                        )
                     );
                 });
                 throw new Sen.Script.Modules.Exceptions.CannotWriteFile(Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(/\{\}/g, (async_task.length - output_images.length).toString()), json);
