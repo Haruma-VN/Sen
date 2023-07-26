@@ -267,6 +267,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                             if (!(res.ptx_property.pitch === res.ptx_info.width * 4)) {
                                 throw new Sen.Script.Modules.Exceptions.PitchError(
                                     Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("pitch_at_subgroup_is_wrong"), [
+                                        `${res.ptx_info.id}`,
+                                        (res.path as Array<string>).at(-1)!,
                                         subgroup,
                                         composite_shell,
                                         `${res.ptx_info.width * 4}`,
@@ -280,6 +282,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                             if (!(res.ptx_property.pitch === res.ptx_info.width * 4) && !(res.ptx_property.pitch === res.ptx_info.width * 2)) {
                                 throw new Sen.Script.Modules.Exceptions.PitchError(
                                     Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("pitch_at_subgroup_is_wrong"), [
+                                        `${res.ptx_info.id}`,
+                                        (res.path as Array<string>).at(-1)!,
                                         subgroup,
                                         composite_shell,
                                         Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_or_that"), [`${res.ptx_info.width * 4}`, `${res.ptx_info.width * 2}`]),

@@ -235,7 +235,7 @@
     "input_more_that_path": "Input one {} to continue...",
     "file_assert_is_not": "File assert is not exists or not {}",
     "unsupported_rsb_version_not_4": "Does not support version other than version 4 for this function",
-    "flash_animation_resize": " Adobe Animate Flash Animation: Resize",
+    "flash_animation_resize": "Adobe Animate Flash Animation: Resize",
     "invalid_source_domtimeline_name": "Invalid DOMTimeline source name",
     "extract_atlas": "Extract Atlas",
     "not_extract_atlas": "Not Extract Atlas",
@@ -371,6 +371,6 @@
     "popcap_rsb_patch_encode": "PopCap RSB-Patch: Encode",
     "pitch_error": "Pitch Error",
     "the_pitch_should_be": "Should change to {}",
-    "pitch_at_subgroup_is_wrong": "Pitch at subgroup {1} in composite {2} is wrong. Should be {3}, received {4}",
+    "pitch_at_subgroup_is_wrong": "Pitch located in id {1} of {2} at subgroup {3} in composite {4} is wrong. Should be {5}, received {6}",
     "not_a_subgroup": "Not a subgroup"
 }
