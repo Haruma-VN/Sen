@@ -43,9 +43,15 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      */
 
     export function PackPopCapRSB(inDirectory: string, outFile: string): void {
-        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`))
+        const manifest_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`));
+        const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_path);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 3n | 4n, string>(
+            original_manifest,
+            BigInt(original_manifest.version) as 3n | 4n,
+            manifest_path
         );
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(original_manifest);
         try {
             Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         } catch (error: unknown) {
