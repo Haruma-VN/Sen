@@ -13,6 +13,7 @@ using VCDiff.Includes;
 using VCDiff.Encoders;
 using VCDiff.Decoders;
 using VCDiff.Shared;
+using Newtonsoft.Json.Linq;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -100,7 +101,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void ZlibUncompress(string inFile, string outFile);
 
-        public abstract void GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting);
+        public abstract Dictionary<string, uint[]> GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting);
 
         public abstract void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile);
 
@@ -347,11 +348,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public unsafe override sealed void GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting)
+        public unsafe override sealed Dictionary<string, uint[]> GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting)
         {
             var fs = new FileSystem();
-            AnimationHelper.GenerateImageSequence(fs.ReadJson<PAMInfo>(AnimationJsonPath), outFolder, mediaPath, setting);
-            return;
+            var frame_label = AnimationHelper.GenerateImageSequence(fs.ReadJson<PAMInfo>(AnimationJsonPath), outFolder, mediaPath, setting);
+            return frame_label;
         }
 
         public unsafe override sealed void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile)

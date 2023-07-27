@@ -2153,7 +2153,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
     {
 
 
-        public static void GenerateImageSequence(PAMInfo AnimationJson, string outFolder, string mediaPath, AnimationHelperSetting setting)
+        public static Dictionary<string, uint[]> GenerateImageSequence(PAMInfo AnimationJson, string outFolder, string mediaPath, AnimationHelperSetting setting)
         {
 
             var fs = new FileSystem();
@@ -2164,8 +2164,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 var imageInfo = ReadImage(AnimationJson.image[i], i, setting.imageByPath);
                 var SixLaborsImage = LoadImage(imageInfo, mediaPath);
-                var imageInfoSubGroupList = new List<ImageSequenceList>();
-                imageInfoSubGroupList.Add(imageInfo);
+                var imageInfoSubGroupList = new List<ImageSequenceList>
+                {
+                    imageInfo
+                };
                 imageSequenceList.Add(i, imageInfoSubGroupList);
                 imageList[i] = SixLaborsImage;
             }
@@ -2179,29 +2181,24 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             ReadSprite(-1, AnimationJson.main_sprite, AnimationJson.sprite, imageSequenceList, spriteList, setting.disableSprite, mainSpriteFrame);
             var maxPos = new double[2];
             var imageSqure = FindImageSquare(mainSpriteFrame, maxPos);
-            WriteLabelInfo(AnimationJson, outFolder);
             WriteImage(mainSpriteFrame, setting, imageList, imageSqure[0], imageSqure[1], maxPos, outFolder);
+            return WriteLabelInfo(AnimationJson, outFolder);
         }
 
-        private static void WriteLabelInfo(PAMInfo AnimationJson, string outFolder)
+        private static Dictionary<string, uint[]> WriteLabelInfo(PAMInfo AnimationJson, string outFolder)
         {
-            var labelInfo = new JObject();
+            var labelInfo = new Dictionary<string, uint[]>() { };
             var Info = new AnimationHelperLabelsInfo();
             var endFrameIndex = AnimationJson.main_sprite.frame!.Length - 1;
             for (var i = AnimationJson.main_sprite.frame!.Length - 1; i >= 0; i--)
             {
                 if (AnimationJson.main_sprite.frame[i].label != null)
                 {
-                    var newFrameLabel = new JProperty(AnimationJson.main_sprite.frame[i].label!, new int[] { i, endFrameIndex });
-                    labelInfo.AddFirst(newFrameLabel);
+                    labelInfo.Add(AnimationJson.main_sprite.frame[i].label!, new uint[] { (uint)i, (uint)endFrameIndex });
                     endFrameIndex = i - 1;
                 }
             };
-
-            string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(labelInfo, new Newtonsoft.Json.JsonSerializerSettings() {Formatting = Newtonsoft.Json.Formatting.Indented});
-            var fs = new FileSystem();
-            var path = new ImplementPath();
-            fs.WriteText(path.Resolve(path.Join(outFolder, "label_info.json")), jsonText, EncodingType.UTF8);
+            return labelInfo.ToList().OrderBy(pair => pair.Value[0]).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         private static int[] FindImageSquare(Dictionary<int, List<ImageSequenceList>> mainSpriteFrame, double[] maxPos)
