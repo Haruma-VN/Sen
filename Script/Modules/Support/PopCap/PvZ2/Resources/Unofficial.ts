@@ -6,7 +6,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         protected static CheckIntegerNumber(num: number, property: string, id: string, file_path: string): boolean {
             if (!Number.isInteger(num)) {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`${property}`, `${id}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${num}`])}`,
+                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                        `${property}`,
+                        `${id}`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                        `${num}`,
+                    ])}`,
                     property,
                     file_path,
                     Sen.Script.Modules.System.Default.Localization.GetString("integer")
@@ -267,7 +272,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         }
         public static CreateConversion<Required_Template extends Resources_Group_Structure_Template, Res_JSON_Structure extends res_json>(file_input: string, output_file: string, expand_path: "array" | "string"): void {
             const resource_json: Required_Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Required_Template>(file_input) as Required_Template;
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Res_JSON_Structure>(output_file, this.DoAllProcess<Required_Template, Res_JSON_Structure>(resource_json, file_input, expand_path));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Res_JSON_Structure>(output_file, this.DoAllProcess<Required_Template, Res_JSON_Structure>(resource_json, file_input, expand_path), false);
         }
     }
     export class ConvertToOfficial extends CheckOfficialResources {
@@ -278,7 +283,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
          * @param subgroup_default_parent - Pass default parent which contains whole subgroups
          * @returns
          */
-        private static ConvertSubgroupUnofficialToOfficial<Template extends packet_data>(packet: Template, subgroup_parent_name: string, subgroup_default_parent: string, res_type: resolution, expand_path_for_array: boolean, file_path: string): resource_atlas_and_sprites {
+        private static ConvertSubgroupUnofficialToOfficial<Template extends packet_data>(
+            packet: Template,
+            subgroup_parent_name: string,
+            subgroup_default_parent: string,
+            res_type: resolution,
+            expand_path_for_array: boolean,
+            file_path: string
+        ): resource_atlas_and_sprites {
             const manifest_group_for_atlas_and_sprite: resource_atlas_and_sprites = {
                 id: subgroup_parent_name,
                 parent: subgroup_default_parent,
@@ -321,7 +333,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax, `ax`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax,
+                                          `ax`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax),
@@ -329,7 +346,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay, `ay`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay,
+                                          `ay`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay),
@@ -337,7 +359,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw, `aw`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw,
+                                          `aw`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw),
@@ -345,7 +372,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah, `ah`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah,
+                                          `ah`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah),
@@ -377,7 +409,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax, `ax`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax,
+                                          `ax`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax),
@@ -385,7 +422,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay, `ay`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay,
+                                          `ay`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay),
@@ -393,7 +435,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw, `aw`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw,
+                                          `aw`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw),
@@ -401,7 +448,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== undefined &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== null &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah, `ah`, resource_atlas_children_sprites_id[j_index], file_path) &&
+                                      this.CheckIntegerNumber(
+                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah,
+                                          `ah`,
+                                          resource_atlas_children_sprites_id[j_index],
+                                          file_path
+                                      ) &&
                                       (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah > 0
                                           ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah
                                           : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah),
@@ -425,7 +477,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return manifest_group_for_atlas_and_sprite;
         }
-        private static ConvertUnofficialToOfficialFile<Template extends packet_data, Value_Return extends Resource_File_Bundle>(res_subgroup_children: Template, subgroup_id: string, expand_path_for_array: boolean, file_path: string, subgroup_parent?: string): Value_Return | Resource_File_Bundle {
+        private static ConvertUnofficialToOfficialFile<Template extends packet_data, Value_Return extends Resource_File_Bundle>(
+            res_subgroup_children: Template,
+            subgroup_id: string,
+            expand_path_for_array: boolean,
+            file_path: string,
+            subgroup_parent?: string
+        ): Value_Return | Resource_File_Bundle {
             const template_resource_build: Value_Return | Resource_File_Bundle = subgroup_parent
                 ? {
                       id: subgroup_id,
@@ -449,15 +507,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                         ? {
                               slot: 0,
                               id: resource_data[index],
-                              path: expand_path_for_array ? (res_subgroup_children.packet.data as any)[resource_data[index]].path : (((res_subgroup_children.packet.data as any)[resource_data[index]].path as Array<string> & any).join("\\") as string & any),
+                              path: expand_path_for_array
+                                  ? (res_subgroup_children.packet.data as any)[resource_data[index]].path
+                                  : (((res_subgroup_children.packet.data as any)[resource_data[index]].path as Array<string> & any).join("\\") as string & any),
                               type: (res_subgroup_children.packet.data as any)[resource_data[index]].type as string & any,
                               forceOriginalVectorSymbolSize: (res_subgroup_children.packet.data as any)[resource_data[index]].forceOriginalVectorSymbolSize,
-                              srcpath: expand_path_for_array ? (res_subgroup_children.packet.data as any)[resource_data[index]].srcpath : (((res_subgroup_children.packet.data as any)[resource_data[index]].srcpath as Array<string> & any).join("\\") as string & any),
+                              srcpath: expand_path_for_array
+                                  ? (res_subgroup_children.packet.data as any)[resource_data[index]].srcpath
+                                  : (((res_subgroup_children.packet.data as any)[resource_data[index]].srcpath as Array<string> & any).join("\\") as string & any),
                           }
                         : {
                               slot: 0,
                               id: resource_data[index],
-                              path: expand_path_for_array ? (res_subgroup_children.packet.data as any)[resource_data[index]].path : (((res_subgroup_children.packet.data as any)[resource_data[index]].path as Array<string> & any).join("\\") as string & any),
+                              path: expand_path_for_array
+                                  ? (res_subgroup_children.packet.data as any)[resource_data[index]].path
+                                  : (((res_subgroup_children.packet.data as any)[resource_data[index]].path as Array<string> & any).join("\\") as string & any),
                               type: (res_subgroup_children.packet.data as any)[resource_data[index]].type as string & any,
                               forceOriginalVectorSymbolSize: (res_subgroup_children.packet.data as any)[resource_data[index]].forceOriginalVectorSymbolSize,
                           }
@@ -533,7 +597,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     const create_subgroup_placeholder: Array<string> = Object.keys(res_json.groups[subgroups_key[index]].subgroup);
                     for (let j_index: number = 0; j_index < create_subgroup_placeholder.length; ++j_index) {
                         (resources_json as any).groups.push(
-                            this.ConvertUnofficialToOfficialFile<packet_data, Resource_File_Bundle>(res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]] as any, create_subgroup_placeholder[j_index], res_json.expand_path === "array", file_path)
+                            this.ConvertUnofficialToOfficialFile<packet_data, Resource_File_Bundle>(
+                                res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]] as any,
+                                create_subgroup_placeholder[j_index],
+                                res_json.expand_path === "array",
+                                file_path
+                            )
                         );
                     }
                 }
@@ -550,7 +619,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         }
         public static CreateConversion(file_input: string, output_file: string): void {
             const res_json: res_json = Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(file_input) as res_json;
-            Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, this.DoAllProcess<res_json, Resources_Group_Structure_Template>(res_json, file_input));
+            Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, this.DoAllProcess<res_json, Resources_Group_Structure_Template>(res_json, file_input), false);
         }
     }
     export class SplitUnofficialResources extends CheckOfficialResources {
@@ -575,18 +644,25 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             };
             return info_json;
         }
-        public static DoWholeProcess<Template extends res_json>(file_path: string, save_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_path)}`, `${Sen.Shell.Path.Parse(file_path).name}.info`))): void {
+        public static DoWholeProcess<Template extends res_json>(
+            file_path: string,
+            save_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_path)}`, `${Sen.Shell.Path.Parse(file_path).name}.info`))
+        ): void {
             const groups_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${save_directory}`, `groups`));
             const res_json: Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Template>(file_path) as Template;
             const info_json: Output_Value = this.SetDefaultInfo<Template, Output_Value>(res_json, file_path);
             Sen.Shell.FileSystem.CreateDirectory(Sen.Shell.Path.Resolve(`${save_directory}`));
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${save_directory}`, `info.json`)), info_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Output_Value>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${save_directory}`, `info.json`)), info_json, false);
             Sen.Shell.FileSystem.CreateDirectory(groups_directory);
             const info_json_groups_keys: Array<string> = Object.keys(info_json.groups);
             for (let index: number = 0; index < info_json_groups_keys.length; ++index) {
                 const subgroup_keys: Array<string> = Object.keys(res_json.groups[info_json_groups_keys[index]].subgroup);
                 for (let j_index: number = 0; j_index < subgroup_keys.length; ++j_index) {
-                    Sen.Script.Modules.FileSystem.Json.WriteJson(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${groups_directory}`, `${subgroup_keys[j_index]}.json`)), res_json.groups[info_json_groups_keys[index]].subgroup[subgroup_keys[j_index]]);
+                    Sen.Script.Modules.FileSystem.Json.WriteJson(
+                        Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${groups_directory}`, `${subgroup_keys[j_index]}.json`)),
+                        res_json.groups[info_json_groups_keys[index]].subgroup[subgroup_keys[j_index]],
+                        false
+                    );
                 }
             }
             return;
@@ -657,7 +733,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return;
         }
-        public static DoAllProcess<Template extends Output_Value>(directory_path: string, output_file: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name}.json`))): void {
+        public static DoAllProcess<Template extends Output_Value>(
+            directory_path: string,
+            output_file: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name}.json`))
+        ): void {
             this.CheckDirectoryInformation(directory_path);
             const info_json_information: Template = Sen.Script.Modules.FileSystem.Json.ReadJson(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `info.json`))) as Template;
             this.CheckInfoJson<Output_Value>(info_json_information);
@@ -690,10 +769,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     subgroup: {},
                 };
                 for (let j_index: number = 0; j_index < groups_inventory[index].subgroups.length; ++j_index) {
-                    res_json.groups[groups_inventory[index].group_parent].subgroup[groups_inventory[index].subgroups[j_index]] = Sen.Script.Modules.FileSystem.Json.ReadJson(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${group_directory}`, `${groups_inventory[index].subgroups[j_index]}.json`)));
+                    res_json.groups[groups_inventory[index].group_parent].subgroup[groups_inventory[index].subgroups[j_index]] = Sen.Script.Modules.FileSystem.Json.ReadJson(
+                        Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${group_directory}`, `${groups_inventory[index].subgroups[j_index]}.json`))
+                    );
                 }
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, res_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, res_json, false);
             return;
         }
         /**

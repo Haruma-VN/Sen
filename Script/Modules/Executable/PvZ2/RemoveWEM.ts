@@ -46,10 +46,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveWEM {
      * @returns
      */
 
-    export function RemoveFromManifest(
-        information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation,
-        IDs: Array<string>
-    ): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation {
+    export function RemoveFromManifest(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, IDs: Array<string>): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation {
         information.group[`StreamingWave`][`subgroup`][`StreamingWave`][`packet_info`][`res`].forEach((res: any, index: int) => {
             if (IDs.includes(res.path.at(-1).toLowerCase())) {
                 delete information.group[`StreamingWave`][`subgroup`][`StreamingWave`][`packet_info`][`res`][index];
@@ -70,8 +67,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveWEM {
         if (Sen.Shell.FileSystem.FileExists(streamingwave_rsg)) {
             Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(streamingwave_rsg, streamingwave_dir);
             const packet_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${streamingwave_dir}`, `packet.json`));
-            const packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo =
-                Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(packet_path);
+            const packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(packet_path);
             packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo, index: int) => {
                 if (option.removeID.includes(res.path.at(-1)?.toLowerCase() as string)) {
                     delete packet_info.res[index];
@@ -89,21 +85,18 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveWEM {
             const manifest_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${option.bundle}`, `manifest.json`));
             Sen.Script.Modules.FileSystem.Json.WriteJson<res_json>(
                 res_json_destination,
-                Sen.Script.Modules.Executable.PvZ2.RemoveWEM.RemoveFromResJson(
-                    Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(res_json_destination),
-                    option.removeID
-                )
+                Sen.Script.Modules.Executable.PvZ2.RemoveWEM.RemoveFromResJson(Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(res_json_destination), option.removeID),
+                false
             );
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
                 manifest_json_destination,
                 Sen.Script.Modules.Executable.PvZ2.RemoveWEM.RemoveFromManifest(
-                    Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
-                        manifest_json_destination
-                    ),
+                    Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_json_destination),
                     option.removeID
-                )
+                ),
+                false
             );
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(packet_path, packet_info);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(packet_path, packet_info, false);
             Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(streamingwave_dir, streamingwave_rsg);
             Sen.Shell.FileSystem.DeleteDirectory([streamingwave_dir]);
         }
@@ -118,10 +111,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveWEM {
     export function Evaluate(): void {
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
-                /\{\}/g,
-                Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle")
-            )
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle"))
         );
         const dir_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         Sen.Script.Modules.Executable.PvZ2.RemoveWEM.RemoveFromStreamingWave({

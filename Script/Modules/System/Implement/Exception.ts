@@ -1126,10 +1126,10 @@ namespace Sen.Script.Modules.Exceptions {
             Sen.Shell.Console.Printf(
                 null,
                 (error as Error).stack !== null && (error as Error).stack !== undefined && (error as Error).stack !== void 0 && "stack" in (error as Error)
-                    ? (error as Error).stack?.replace(/(\s)at(\s)/g, Sen.Shell.DotNetPlatform.IsUTF8Support() ? "    ▶ " : "     > ")
+                    ? (error as Error).stack?.replace(/(\s)at(\s)/g, `    ${Sen.Script.Modules.System.Default.Localization.GetString("at")} `)
                     : (error as Sen.Shell.DotNetSystem.Exception).stackTrace
                           ?.replace(/\n\s*--- End of stack trace from previous location ---[\s\S]*$/, "")
-                          ?.replace(/(\s)at(\s)/g, Sen.Shell.DotNetPlatform.IsUTF8Support() ? "    ▶ " : "     > ")
+                          ?.replace(/(\s)at(\s)/g, `    ${Sen.Script.Modules.System.Default.Localization.GetString("at")} `)
             );
             try {
                 Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(
@@ -1139,7 +1139,8 @@ namespace Sen.Script.Modules.Exceptions {
                         : ({
                               message: (error as Sen.Shell.DotNetSystem.Exception).message,
                               stack: (error as Sen.Shell.DotNetSystem.Exception).stackTrace,
-                          } as any)
+                          } as any),
+                    false
                 );
             } catch (error: any) {
                 Sen.Shell.Console.Print(null, error.message);

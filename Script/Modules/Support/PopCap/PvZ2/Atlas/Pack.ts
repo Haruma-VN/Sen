@@ -122,7 +122,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             }
             if (typeof atlas_json.method !== "string") {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`method`, atlas_json.subgroup, Sen.Script.Modules.System.Default.Localization.GetString("string"), typeof atlas_json.method]),
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                        `method`,
+                        atlas_json.subgroup,
+                        Sen.Script.Modules.System.Default.Localization.GetString("string"),
+                        typeof atlas_json.method,
+                    ]),
                     `method`,
                     (file_path ??= "undefined"),
                     Sen.Script.Modules.System.Default.Localization.GetString("string")
@@ -146,7 +151,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             }
             if (typeof atlas_json.trim !== "boolean") {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`trim`, atlas_json.subgroup, Sen.Script.Modules.System.Default.Localization.GetString("boolean"), typeof atlas_json.trim]),
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                        `trim`,
+                        atlas_json.subgroup,
+                        Sen.Script.Modules.System.Default.Localization.GetString("boolean"),
+                        typeof atlas_json.trim,
+                    ]),
                     `trim`,
                     (file_path ??= "undefined"),
                     Sen.Script.Modules.System.Default.Localization.GetString("boolean")
@@ -229,7 +239,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 }
                 if (!Array.isArray(atlas_json.groups[member].path)) {
                     throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`path`, member, Sen.Script.Modules.System.Default.Localization.GetString("array"), typeof atlas_json.groups[member].path]),
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                            `path`,
+                            member,
+                            Sen.Script.Modules.System.Default.Localization.GetString("array"),
+                            typeof atlas_json.groups[member].path,
+                        ]),
                         `path`,
                         (file_path ??= "undefined"),
                         Sen.Script.Modules.System.Default.Localization.GetString("array")
@@ -240,7 +255,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 }
                 if (!Number.isInteger(atlas_json.groups[member].default.x)) {
                     throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`x`, member, Sen.Script.Modules.System.Default.Localization.GetString("integer"), atlas_json.groups[member].default.x.toString()]),
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                            `x`,
+                            member,
+                            Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                            atlas_json.groups[member].default.x.toString(),
+                        ]),
                         `x`,
                         (file_path ??= "undefined"),
                         Sen.Script.Modules.System.Default.Localization.GetString("integer")
@@ -251,7 +271,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 }
                 if (!Number.isInteger(atlas_json.groups[member].default.y)) {
                     throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`y`, member, Sen.Script.Modules.System.Default.Localization.GetString("integer"), atlas_json.groups[member].default.y.toString()]),
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                            `y`,
+                            member,
+                            Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                            atlas_json.groups[member].default.y.toString(),
+                        ]),
                         `y`,
                         (file_path ??= "undefined"),
                         Sen.Script.Modules.System.Default.Localization.GetString("integer")
@@ -348,7 +373,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             this.CheckWholeDirectory(directory_path);
             const atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `atlas.json`));
             const media_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `media`));
-            const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(atlas_json_path) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
+            const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
+                atlas_json_path
+            ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
             this.CheckAtlasJsonStructure(atlas_json);
             const is_path: boolean = atlas_json.method === "path";
             const group_members: Array<string> = Object.keys(atlas_json.groups);
@@ -393,17 +420,25 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             RectsPacker.bins.forEach((bin) => max_rects_collections.push(bin.rects as any));
             this.CheckOversizedImages(max_rects_collections, pack_data.width, pack_data.height);
             for (let i: int = 0; i < max_rects_collections.length; ++i) {
-                const dimension_output_test: Dimension = trim ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i]) : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
+                const dimension_output_test: Dimension = trim
+                    ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i])
+                    : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
                 if (dimension_output_test.width !== pack_data.width) {
                     Sen.Shell.Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [Sen.Script.Modules.System.Default.Localization.GetString("width"), `${dimension_output_test.width}`])
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [
+                            Sen.Script.Modules.System.Default.Localization.GetString("width"),
+                            `${dimension_output_test.width}`,
+                        ])
                     );
                 }
                 if (dimension_output_test.height !== pack_data.height) {
                     Sen.Shell.Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [Sen.Script.Modules.System.Default.Localization.GetString("height"), `${dimension_output_test.height}`])
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [
+                            Sen.Script.Modules.System.Default.Localization.GetString("height"),
+                            `${dimension_output_test.height}`,
+                        ])
                     );
                 }
                 const parent_name: string = `${subgroup_output.id}_${i < 10 ? `0${i}` : `${i}`}`;
@@ -452,7 +487,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             }
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`));
             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.resource_atlas_and_sprites>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`)), subgroup_output);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.resource_atlas_and_sprites>(
+                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`)),
+                subgroup_output,
+                false
+            );
             return;
         }
 
@@ -466,7 +505,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             this.CheckWholeDirectory(directory_path);
             const atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `atlas.json`));
             const media_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `media`));
-            const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(atlas_json_path) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
+            const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
+                atlas_json_path
+            ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
             this.CheckAtlasJsonStructure(atlas_json);
             const is_path: boolean = atlas_json.method === "path";
             const group_members: Array<string> = Object.keys(atlas_json.groups);
@@ -510,17 +551,25 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             }
             this.CheckOversizedImages(max_rects_collections, pack_data.width, pack_data.height);
             for (let i: int = 0; i < max_rects_collections.length; ++i) {
-                const dimension_output_test: Dimension = trim ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i]) : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
+                const dimension_output_test: Dimension = trim
+                    ? Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ReducerTrim(max_rects_collections[i])
+                    : Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.SquareTrim(max_rects_collections[i]);
                 if (dimension_output_test.width !== pack_data.width) {
                     Sen.Shell.Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [Sen.Script.Modules.System.Default.Localization.GetString("width"), `${dimension_output_test.width}`])
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [
+                            Sen.Script.Modules.System.Default.Localization.GetString("width"),
+                            `${dimension_output_test.width}`,
+                        ])
                     );
                 }
                 if (dimension_output_test.height !== pack_data.height) {
                     Sen.Shell.Console.Print(
                         Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [Sen.Script.Modules.System.Default.Localization.GetString("height"), `${dimension_output_test.height}`])
+                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("resized_dimension"), [
+                            Sen.Script.Modules.System.Default.Localization.GetString("height"),
+                            `${dimension_output_test.height}`,
+                        ])
                     );
                 }
                 const parent_name: string = `${atlas_json.subgroup}_${i < 10 ? `0${i}` : `${i}`}`;
@@ -551,7 +600,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 }
                 Sen.Shell.DotNetBitmap.CompositeImages(max_rects_collections[i], `${parent_name}.png`, `${Sen.Shell.Path.Dirname(directory_path)}`, dimension_output_test.width, dimension_output_test.height);
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<sprite_data>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`)), subgroup_output[atlas_json.subgroup] as any);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<sprite_data>(
+                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`)),
+                subgroup_output[atlas_json.subgroup] as any,
+                false
+            );
             return;
         }
     }

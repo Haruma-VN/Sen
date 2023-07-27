@@ -20,7 +20,8 @@ namespace Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels {
      * @returns Erased
      */
     export function EraseLevels(file_in: string, file_out: string): void {
-        const deserialize_json: Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.PlantLevelsEraseDataOnly = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.PlantLevelsEraseDataOnly>(file_in);
+        const deserialize_json: Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.PlantLevelsEraseDataOnly =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.PlantLevelsEraseDataOnly>(file_in);
         for (let obj of deserialize_json.objects) {
             obj.objdata.LevelCap = 1;
             obj.objdata.LevelCoins = [];
@@ -30,7 +31,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels {
                 (obj.objdata.PlantTier as Array<int>).length = 1;
             }
         }
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.PlantLevelsEraseDataOnly>(file_out, deserialize_json);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.PlantLevelsEraseDataOnly>(file_out, deserialize_json, false);
         return;
     }
 
@@ -40,7 +41,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels {
      */
 
     export function Evaluate(): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_json_path")));
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_json_path"))
+        );
         const file_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
         Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.EraseLevels(file_in, file_in.replace(/((\.json))?$/i, ".patch.json"));
         return;

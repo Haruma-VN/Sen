@@ -46,9 +46,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const manifest_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`));
         const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_path);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 3n | 4n, string>(
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 3n | 4n, 16n | 20n | 24n, string>(
             original_manifest,
             BigInt(original_manifest.version) as 3n | 4n,
+            BigInt(original_manifest.ptx_info_size) as 16n | 24n | 20n,
             manifest_path
         );
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(original_manifest);
@@ -82,7 +83,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const manifest_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`));
         const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_path);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 4n, string>(original_manifest, 4n, manifest_path);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 4n, 16n, string>(original_manifest, 4n, 16n, manifest_path);
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(original_manifest);
         let manifest_group: int = -1;
         let packages: int = -1;
@@ -251,19 +252,22 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
      * @returns
      */
 
-    export function StrictlyHandlePitch<safe extends Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, CompositeShell extends string, Subgroup extends string, Version extends 3n | 4n, ManifestPath extends string>(
-        information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation,
-        version: Version,
-        manifest_path?: ManifestPath
-    ): information is safe {
+    export function StrictlyHandlePitch<
+        safe extends Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation,
+        CompositeShell extends string,
+        Subgroup extends string,
+        Version extends 3n | 4n,
+        PTXInfomation extends 16n | 20n | 24n,
+        ManifestPath extends string
+    >(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, version: Version, ptx_info: PTXInfomation, manifest_path?: ManifestPath): information is safe {
         const composite_shell_list: Array<CompositeShell> = Object.keys(information.group) as Array<CompositeShell>;
-        const assert_version_4: boolean = version === 4n;
+        const is_pvz2: boolean = version === 4n && ptx_info === 16n;
         composite_shell_list.forEach((composite_shell: CompositeShell) => {
             const subgroup_list: Array<Subgroup> = Object.keys(information.group[composite_shell].subgroup) as Array<Subgroup>;
             subgroup_list.forEach((subgroup: Subgroup) => {
                 information.group[composite_shell].subgroup[subgroup].packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ResInfo) => {
                     if (res.ptx_info && res.ptx_property) {
-                        if (assert_version_4) {
+                        if (is_pvz2) {
                             if (!(res.ptx_property.pitch === res.ptx_info.width * 4)) {
                                 throw new Sen.Script.Modules.Exceptions.PitchError(
                                     Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("pitch_at_subgroup_is_wrong"), [

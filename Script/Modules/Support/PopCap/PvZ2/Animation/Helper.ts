@@ -144,29 +144,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
      * @returns
      */
 
-    export function AddImageToAnimationAdobeFlash(
-        argument: Array<string>,
-        xfl_path: string,
-        resolution: int,
-        option: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.Option
-    ): void {
+    export function AddImageToAnimationAdobeFlash(argument: Array<string>, xfl_path: string, resolution: int, option: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.Option): void {
         const resource_element_addon_dom_document: Sen.Shell.PvZ2XML.DOMDocumentAddon = {
             media: [],
             source: [],
             sprite: [],
             image: [],
         };
-        const extra_info: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser =
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
-                Sen.Shell.Path.Join(`${xfl_path}`, `extra.json`)
-            );
+        const extra_info: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
+            Sen.Shell.Path.Join(`${xfl_path}`, `extra.json`)
+        );
         const image: Array<string> = Object.keys(extra_info.image);
         const calculate_resolution: double = CalculateResolution(resolution);
         const animation_helper: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.PopCapAnimationHelperMethodJson>(
-                Sen.Shell.Path.Resolve(
-                    Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_helper.json`)
-                )
+                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_helper.json`))
             );
         argument
             .map((element: string) => Sen.Shell.DotNetBitmap.GetDimension<int>(element) satisfies Sen.Script.Modules.BitMap.Constraints.ImageInfo<int>)
@@ -175,14 +167,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                 const resource_dom_document_index: int = image.length + index + 0x01;
                 const dimension_x: [double, double] = [element.width * calculate_resolution, element.height * calculate_resolution];
                 const sprite_index: int = Object.keys(extra_info.sprite).length + 0x01;
-                const typename: string = `${resource_dom_document_name}|${animation_helper.id_replacer}${Sen.Shell.Path.Parse(
-                    element.file_path
-                ).name_without_extension.toUpperCase()}`;
+                const typename: string = `${resource_dom_document_name}|${animation_helper.id_replacer}${Sen.Shell.Path.Parse(element.file_path).name_without_extension.toUpperCase()}`;
                 resource_element_addon_dom_document.media.push(resource_dom_document_name);
-                Sen.Shell.Console.Print(
-                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                    Sen.Script.Modules.System.Default.Localization.GetString("name_set_as_default")
-                );
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("name_set_as_default"));
                 Sen.Shell.Console.Printf(null, `        ${typename}`);
                 extra_info.image[`image_${resource_dom_document_index}`] = {
                     name: typename,
@@ -208,17 +195,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                     resolution,
                     Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `LIBRARY`, `source`, `source_${resource_dom_document_index}.xml`))
                 );
-                Sen.Shell.FileSystem.CopyFile(
-                    element.file_path,
-                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `LIBRARY`, `media`, `${Sen.Shell.Path.Parse(element.file_path).name}`))
-                );
+                Sen.Shell.FileSystem.CopyFile(element.file_path, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `LIBRARY`, `media`, `${Sen.Shell.Path.Parse(element.file_path).name}`)));
                 switch (option.generate_sprite) {
                     case "new": {
                         const sprite_destination: string = `sprite_${sprite_index}`;
-                        Sen.Shell.Console.Print(
-                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                            Sen.Script.Modules.System.Default.Localization.GetString("generated").replace(/\{\}/g, `${sprite_destination}`)
-                        );
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("generated").replace(/\{\}/g, `${sprite_destination}`));
                         Sen.Shell.PvZ2XML.WriteSpriteDocument(
                             sprite_index,
                             1,
@@ -229,10 +210,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                         );
                         Sen.Shell.Console.Print(
                             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
-                                /\{\}/g,
-                                Sen.Script.Modules.System.Default.Localization.GetString("input_sprite_name")
-                            )
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_sprite_name"))
                         );
                         const sprite_name: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
                         extra_info.sprite[`sprite_${sprite_index}`] = sprite_name;
@@ -243,10 +221,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                         const available: Array<int> = [];
                         Sen.Shell.Console.Print(
                             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(
-                                /\{\}/g,
-                                Sen.Script.Modules.System.Default.Localization.GetString("choose_one").replace(/\{\}/g, `sprite`)
-                            )
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("choose_one").replace(/\{\}/g, `sprite`))
                         );
                         Object.keys(extra_info.sprite).forEach((sprite: string, index: int) => {
                             const k_index: int = index + 0x01;
@@ -257,10 +232,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                         while (!available.includes(parseInt(input))) {
                             Sen.Shell.Console.Print(
                                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                                Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(
-                                    /\{\}/g,
-                                    Sen.Script.Modules.System.Default.Localization.GetString("please_choose_correct_input")
-                                )
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("please_choose_correct_input"))
                             );
                             input = Sen.Shell.Console.Input(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
                         }
@@ -282,16 +254,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
             });
         Sen.Shell.PvZ2XML.InsertDOMDocumentData(
             resource_element_addon_dom_document,
-            Sen.Shell.FileSystem.ReadText(
-                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `DOMDocument.xml`)),
-                Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8
-            ),
+            Sen.Shell.FileSystem.ReadText(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `DOMDocument.xml`)), Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `DOMDocument.xml`))
         );
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
-            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `extra.json`)),
-            extra_info
-        );
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `extra.json`)), extra_info, false);
         return;
     }
 }

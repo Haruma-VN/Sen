@@ -43,7 +43,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                     resource.resources.forEach((element: { slot?: int }, index: number) => delete resource.resources[index].slot);
                 }
                 if ("resources" in resource && "parent" in resource) {
-                    Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_directory}`, `${resource.id}.json`)), resource);
+                    Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_directory}`, `${resource.id}.json`)), resource, false);
                 }
                 if ("subgroups" in resource || ("resources" in resource && !("parent" in resource))) {
                     if ("subgroups" in resource) {
@@ -65,11 +65,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                                 },
                             },
                         };
-                        Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_directory}`, `${resource.id}.json`)), resource);
+                        Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${subgroup_directory}`, `${resource.id}.json`)), resource, false);
                     }
                 }
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<official_subgroup_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${output_directory}`, `content.json`)), subgroup_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<official_subgroup_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${output_directory}`, `content.json`)), subgroup_json, false);
             return;
         }
 
@@ -191,7 +191,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
                     resources_json.groups.push(deserialized_subgroup);
                 }
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(Sen.Shell.Path.Resolve(`${output_file}`), resources_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(Sen.Shell.Path.Resolve(`${output_file}`), resources_json, false);
             return;
         }
 
@@ -225,11 +225,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          * @returns Path becomes \ like "images\popcap\test\haruma"
          */
 
-        public static ConvertOfficialPathToString<Generic_T extends Resources_Group_Structure_Template>(resources_json: Generic_T, check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType, file_path?: string): Generic_T {
+        public static ConvertOfficialPathToString<Generic_T extends Resources_Group_Structure_Template>(
+            resources_json: Generic_T,
+            check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType,
+            file_path?: string
+        ): Generic_T {
             this.CheckOfficial<Generic_T>(resources_json, (file_path ??= "undefined"));
             if (check_resources_path === Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.string) {
                 throw new Sen.Script.Modules.Exceptions.EvaluateError(
-                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("already_being_type_of"), [`"path"`, `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`]),
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("already_being_type_of"), [
+                        `"path"`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("string")}`,
+                    ]),
                     (file_path ??= "undefined")
                 );
             }
@@ -275,7 +282,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          */
 
         public static ConvertResourcesOfficialPathToString(file_in: string, file_out: string, path: PopCapResourcesPathType): void {
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(file_out, this.ConvertOfficialPathToString<Resources_Group_Structure_Template>(Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_in), path, file_in));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
+                file_out,
+                this.ConvertOfficialPathToString<Resources_Group_Structure_Template>(Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_in), path, file_in),
+                false
+            );
             return;
         }
 
@@ -287,7 +298,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          */
 
         public static ConvertResourcesOfficialPathToArray(file_in: string, file_out: string): void {
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(file_out, this.ConvertOfficialPathToArray<Resources_Group_Structure_Template>(Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_in), file_in));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Resources_Group_Structure_Template>(
+                file_out,
+                this.ConvertOfficialPathToArray<Resources_Group_Structure_Template>(Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_in), file_in),
+                false
+            );
             return;
         }
     }

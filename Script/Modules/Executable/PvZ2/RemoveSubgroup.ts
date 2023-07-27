@@ -82,7 +82,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup {
      */
 
     export function Evaluate(): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle")));
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle"))
+        );
         const dir_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         const res_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `res.json`));
         const manifest_json_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${dir_in}`, `manifest.json`));
@@ -99,9 +102,14 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup {
         }
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
             manifest_json_destination,
-            Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.RemoveFromManifest(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_json_destination), keyword)
+            Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.RemoveFromManifest(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_json_destination), keyword),
+            false
         );
-        Sen.Script.Modules.FileSystem.Json.WriteJson<res_json>(res_json_destination, Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.RemoveFromResJson(Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(res_json_destination), keyword));
+        Sen.Script.Modules.FileSystem.Json.WriteJson<res_json>(
+            res_json_destination,
+            Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.RemoveFromResJson(Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(res_json_destination), keyword),
+            false
+        );
         Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.RemoveFromPacket(keyword, packet_directory);
         return;
     }

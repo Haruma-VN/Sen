@@ -7,7 +7,11 @@ namespace Sen.Script.Modules.FileSystem {
          */
 
         public static ReadJson<Generic_T>(filePath: string): Generic_T {
-            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(Sen.Shell.FileSystem.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), Sen.Script.Modules.System.Default.Localization.use_trailing_commas, filePath);
+            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
+                Sen.Shell.FileSystem.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
+                Sen.Script.Modules.System.Default.Localization.use_trailing_commas,
+                filePath
+            );
         }
 
         /**
@@ -18,8 +22,8 @@ namespace Sen.Script.Modules.FileSystem {
          * @returns Writted JSON
          */
 
-        public static WriteJson<Generic_T>(output_path: string, serializedJson: Generic_T, indent: string | number = "\t"): void {
-            Sen.Shell.FileSystem.OutFile(output_path, Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, indent, Sen.Script.Modules.System.Default.Localization.use_trailing_commas));
+        public static WriteJson<Generic_T>(output_path: string, serializedJson: Generic_T, handle_bigint: boolean, indent: string | number = "\t"): void {
+            Sen.Shell.FileSystem.OutFile(output_path, Sen.Script.Modules.FileSystem.Implement.JsonLibrary.StringifyJson<Generic_T>(serializedJson, handle_bigint, indent, Sen.Script.Modules.System.Default.Localization.use_trailing_commas));
             return;
         }
     }

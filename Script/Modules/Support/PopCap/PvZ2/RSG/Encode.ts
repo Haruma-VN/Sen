@@ -43,7 +43,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
                 ptx_info: resx.ptx_info,
             });
         });
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `packet.json`)), packet_info);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `packet.json`)), packet_info, false);
         return;
     }
 

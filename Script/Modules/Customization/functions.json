@@ -306,5 +306,17 @@
         "include": [".bin"],
         "exclude": [],
         "type": "file"
+    },
+    "manifest_split": {
+        "func_number": 52,
+        "include": ["manifest.json"],
+        "exclude": [],
+        "type": "file"
+    },
+    "manifest_merge": {
+        "func_number": 53,
+        "include": [".package"],
+        "exclude": [],
+        "type": "directory"
     }
 }

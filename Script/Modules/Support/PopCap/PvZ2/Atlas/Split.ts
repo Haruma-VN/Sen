@@ -404,7 +404,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
         public static CreateAtlasJsonFromOfficial(file_input: string, file_output: string, method: "id" | "path", expand_path: "string" | "array"): void {
             Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(
                 file_output,
-                this.ConvertAtlasJsonFromOfficial<resource_atlas_and_sprites>(Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(file_input), method, expand_path, file_input)
+                this.ConvertAtlasJsonFromOfficial<resource_atlas_and_sprites>(Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(file_input), method, expand_path, file_input),
+                false
             );
             return;
         }
@@ -806,7 +807,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 throw new Sen.Script.Modules.Exceptions.CannotWriteFile(Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(/\{\}/g, (async_task.length - output_images.length).toString()), json);
             }
             Sen.Shell.DotNetBitmap.CropAndSaveImages(async_task);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `atlas.json`)), this.ConvertAtlasJsonFromOfficial(resources_used, method, expand_path, json));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `atlas.json`)), this.ConvertAtlasJsonFromOfficial(resources_used, method, expand_path, json), false);
             return;
         }
 
@@ -905,7 +906,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                 throw new Sen.Script.Modules.Exceptions.CannotWriteFile(Sen.Script.Modules.System.Default.Localization.GetString("contains_duplicated").replace(/\{\}/g, (async_task.length - output_images.length).toString()), json);
             }
             Sen.Shell.DotNetBitmap.CropAndSaveImages(async_task);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `atlas.json`)), this.CreateAtlasJsonFromUnofficial(resources_used, method, json));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<AtlasJson>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `atlas.json`)), this.CreateAtlasJsonFromUnofficial(resources_used, method, json), false);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("total_sprites_count").replace(/\{\}/g, `${async_task.length}`));
             return;
         }

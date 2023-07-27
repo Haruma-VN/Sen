@@ -86,7 +86,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize {
             this.CheckWholeDirectory(directory_path);
             const atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `atlas.json`));
             const media_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `media`));
-            const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(atlas_json_path) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
+            const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
+                atlas_json_path
+            ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
             this.CheckAtlasJsonStructure(atlas_json);
             const is_path: boolean = atlas_json.method === "path";
             const group_members: Array<string> = Object.keys(atlas_json.groups);
@@ -115,7 +117,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize {
                     data as Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MaxRectsPackableData
                 );
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(new_atlas_json_path, this.RenamePathForAtlasJson(atlas_json, original, modified));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(new_atlas_json_path, this.RenamePathForAtlasJson(atlas_json, original, modified), false);
             return;
         }
     }

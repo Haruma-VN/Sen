@@ -125,7 +125,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         }
         if (!Number.isInteger(pam_json.version)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`version`, `${pam_json.version}`, `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`, `${typeof pam_json.version}`]),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `version`,
+                    `${pam_json.version}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                    `${typeof pam_json.version}`,
+                ]),
                 `version`,
                 (file_path ??= "undefined"),
                 `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
@@ -160,7 +165,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         }
         if (!Array.isArray(pam_json.position)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`position`, `${pam_json.position}`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`, `${typeof pam_json.position}`]),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `position`,
+                    `${pam_json.position}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.position}`,
+                ]),
                 `position`,
                 (file_path ??= "undefined"),
                 `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
@@ -179,21 +189,36 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         }
         if (!Array.isArray(pam_json.size)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`size`, `${pam_json.size}`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`, `${typeof pam_json.size}`]),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `size`,
+                    `${pam_json.size}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.size}`,
+                ]),
                 `size`,
                 (file_path ??= "undefined"),
                 `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
             );
         }
         if (pam_json.size.length !== 2) {
-            throw new Sen.Script.Modules.Exceptions.WrongDataType(Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("size_of_array_does_not_match"), [`size`, `2`]), `size`, (file_path ??= "undefined"), `this.size.size() == 2`);
+            throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("size_of_array_does_not_match"), [`size`, `2`]),
+                `size`,
+                (file_path ??= "undefined"),
+                `this.size.size() == 2`
+            );
         }
         if (!("image" in pam_json)) {
             throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, `image`), `image`, (file_path ??= "undefined"));
         }
         if (!Array.isArray(pam_json.image)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`image`, `${pam_json.image}`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`, `${typeof pam_json.image}`]),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `image`,
+                    `${pam_json.image}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.image}`,
+                ]),
                 `image`,
                 (file_path ??= "undefined"),
                 `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
@@ -206,14 +231,24 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             }
             if (!Array.isArray(image.size)) {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`size`, `${image.size}`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`, `${typeof image.size}`]),
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                        `size`,
+                        `${image.size}`,
+                        `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                        `${typeof image.size}`,
+                    ]),
                     `size`,
                     (file_path ??= "undefined"),
                     `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
                 );
             }
             if (image.size.length !== 2) {
-                throw new Sen.Script.Modules.Exceptions.WrongDataType(Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("size_of_array_does_not_match"), [`size`, `2`]), `size`, (file_path ??= "undefined"), `this.size.size() == 2`);
+                throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                    Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("size_of_array_does_not_match"), [`size`, `2`]),
+                    `size`,
+                    (file_path ??= "undefined"),
+                    `this.size.size() == 2`
+                );
             }
         }
         if (!("sprite" in pam_json)) {
@@ -221,7 +256,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         }
         if (!Array.isArray(pam_json.sprite)) {
             throw new Sen.Script.Modules.Exceptions.WrongDataType(
-                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [`sprite`, `${pam_json.sprite}`, `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`, `${typeof pam_json.sprite}`]),
+                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                    `sprite`,
+                    `${pam_json.sprite}`,
+                    `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`,
+                    `${typeof pam_json.sprite}`,
+                ]),
                 `sprite`,
                 (file_path ??= "undefined"),
                 `${Sen.Script.Modules.System.Default.Localization.GetString("array")}`
@@ -243,7 +283,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
     export function PopCapAnimationToAnimationJson(inFile: string, outFile: string): void {
         try {
             const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.PAMtoPAMJSON(inFile);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json, false);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
         }
@@ -258,7 +298,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
      */
 
     export function PopCapAnimationJsonToAnimation(inFile: string, outFile: string): void {
-        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
+        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
         try {
             Sen.Shell.PvZ2Shell.PAMJSONtoPAM(inFile, outFile);
@@ -278,11 +319,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
 
     // PAMJSONtoFlashAnimation
     export function PopCapAnimationJsonToAnimateAdobeFlashAnimation(inFile: string, outputDirectory: string, resolution: int): string {
-        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
+        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
         try {
             const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMJSONtoFlashAnimation(inFile, outputDirectory, resolution);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `extra.json`)), Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json));
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
+                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `extra.json`)),
+                Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json),
+                false
+            );
             return outputDirectory;
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
@@ -303,7 +349,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         );
         try {
             const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.FlashAnimationtoPAMJSON(inDirectory, extra_json);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json, false);
             return;
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inDirectory);
@@ -322,7 +368,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         try {
             const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
             const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `extra.json`)), extra);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `extra.json`)), extra, false);
             return;
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);

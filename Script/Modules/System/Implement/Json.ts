@@ -20,8 +20,16 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      * @returns Stringify JSON as string
      */
 
-    export function StringifyJson<Generic_T>(serializedJson: Generic_T, indent: string | number = "\t", addTrailingCommas: boolean): string {
-        return addTrailingCommas ? Sen.Script.Modules.FileSystem.Implement.JsonLibrary.AddTrailingCommas(JSON.stringify(serializedJson, null, indent)) : JSON.stringify(serializedJson, null, indent);
+    export function StringifyJson<Generic_T>(serializedJson: Generic_T, handle_bigint: boolean, indent: string | number = "\t", addTrailingCommas: boolean): string {
+        return addTrailingCommas
+            ? Sen.Script.Modules.FileSystem.Implement.JsonLibrary.AddTrailingCommas(handle_bigint ? JSON.stringify(serializedJson, SerializeBigInt, indent) : JSON.stringify(serializedJson, null, indent))
+            : handle_bigint
+            ? JSON.stringify(serializedJson, SerializeBigInt, indent)
+            : JSON.stringify(serializedJson, null, indent);
+    }
+
+    export function SerializeBigInt(key: string, value: any): any {
+        return typeof value === "bigint" ? Number(value) : value;
     }
 
     /**

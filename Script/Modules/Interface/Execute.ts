@@ -126,7 +126,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_patch_encode"
         | "popcap_rsb_patch_decode"
         | "vcdiff_encode"
-        | "vcdiff_decode";
+        | "vcdiff_decode"
+        | "manifest_split"
+        | "manifest_merge";
 
     /**
      *
@@ -145,6 +147,34 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(argument, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), argument.replaceAll(`/`, `\\`));
                     } else {
                         argument.forEach((arg: string) => Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(arg, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), arg.replaceAll(`/`, `\\`)));
+                    }
+                    break;
+                }
+                case "manifest_split": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.package`));
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.SplitManifest<string, string>(argument, output_argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.package`));
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.SplitManifest<string, string>(arg, output_argument);
+                        });
+                    }
+                    break;
+                }
+                case "manifest_merge": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`));
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.MergeManifest<string, string>(argument, output_argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`));
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.MergeManifest<string, string>(arg, output_argument);
+                        });
                     }
                     break;
                 }

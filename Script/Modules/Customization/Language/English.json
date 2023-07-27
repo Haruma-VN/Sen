@@ -374,5 +374,9 @@
     "pitch_at_subgroup_is_wrong": "Pitch located in id {1} of {2} at subgroup {3} in composite {4} is wrong. Should be {5}, received {6}",
     "not_a_subgroup": "Not a subgroup",
     "vcdiff_encode": "VCDiff: Encode",
-    "vcdiff_decode": "VCDiff: Decode"
+    "vcdiff_decode": "VCDiff: Decode",
+    "at": "at",
+    "manifest_split": "PopCap RSB-Bundle Manifest: Split",
+    "manifest_merge": "PopCap RSB-Bundle Manifest: Merge",
+    "popcap_localization_convert": "PopCap Localization: Convert"
 }
