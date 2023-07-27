@@ -188,11 +188,7 @@ declare namespace Sen {
              * @param encoding - Provide Encoding Type to Write file.
              * @returns Asynchronous Write file, please provide ES6 async await to make the function synchronous.
              */
-            export async function WriteTextAsync(
-                file_path: string,
-                data: string,
-                encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType
-            ): Promise<void>;
+            export async function WriteTextAsync(file_path: string, data: string, encoding: Sen.Script.Modules.FileSystem.Constraints.EncodingType): Promise<void>;
             /**
              *
              * @param output_path - Output file expected.
@@ -532,14 +528,7 @@ declare namespace Sen {
              * @returns Rgba Image as Buffer
              */
 
-            export function CreateRgbaImage(
-                alphaBuffer: Uint8Array,
-                redBuffer: Uint8Array,
-                greenBuffer: Uint8Array,
-                blueBuffer: Uint8Array,
-                width: number,
-                height: number
-            ): Image<Rgba32>;
+            export function CreateRgbaImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Rgba32>;
 
             /**
              *
@@ -552,14 +541,7 @@ declare namespace Sen {
              * @returns Argb Image as Buffer
              */
 
-            export function CreateArgbImage(
-                alphaBuffer: Uint8Array,
-                redBuffer: Uint8Array,
-                greenBuffer: Uint8Array,
-                blueBuffer: Uint8Array,
-                width: number,
-                height: number
-            ): Image<Argb32>;
+            export function CreateArgbImage(alphaBuffer: Uint8Array, redBuffer: Uint8Array, greenBuffer: Uint8Array, blueBuffer: Uint8Array, width: number, height: number): Image<Argb32>;
 
             /**
              *
@@ -653,14 +635,7 @@ declare namespace Sen {
              * @returns Extracted image
              */
 
-            export async function CropAndSaveImageAsync(
-                sourceImagePath: string,
-                outputImagePath: string,
-                x: int,
-                y: int,
-                width: int,
-                height: int
-            ): Promise<void>;
+            export async function CropAndSaveImageAsync(sourceImagePath: string, outputImagePath: string, x: int, y: int, width: int, height: int): Promise<void>;
 
             /**
              *
@@ -1058,10 +1033,7 @@ declare namespace Sen {
              * @param format - Pass encode format
              */
 
-            export function EncodeAsyncImages(
-                images: Array<Dynamic>,
-                format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial
-            ): void;
+            export function EncodeAsyncImages(images: Array<Dynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
 
             /**
              * Extends from Dynamic
@@ -1078,10 +1050,7 @@ declare namespace Sen {
              * @param format - Pass encode format
              */
 
-            export function DecodeAsyncImages(
-                images: Array<DecodeDynamic>,
-                format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial
-            ): void;
+            export function DecodeAsyncImages(images: Array<DecodeDynamic>, format: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void;
         }
 
         declare interface AsyncTaskImageSplit {
@@ -1215,10 +1184,7 @@ declare namespace Sen {
              * @returns Zlib out
              */
 
-            export function CompressZlibBytes<Generic_T, Generic_U>(
-                data: Generic_T,
-                compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel
-            ): Generic_U;
+            export function CompressZlibBytes<Generic_T, Generic_U>(data: Generic_T, compression_level: Sen.Script.Modules.Compression.Constraints.ZlibLevel): Generic_U;
 
             /**
              *
@@ -1297,12 +1263,7 @@ declare namespace Sen {
             }
 
             class RTONDecodeException extends RuntimeException {
-                constructor(
-                    public message: string,
-                    public file_path: string,
-                    public expected: string,
-                    public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONListException
-                ): void;
+                constructor(public message: string, public file_path: string, public expected: string, public exception: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONListException): void;
             }
         }
 
@@ -1369,11 +1330,7 @@ declare namespace Sen {
              * @param resolution - Pass resize resolution
              */
 
-            export function PAMJSONtoFlashAnimation(
-                PAMJson: string,
-                outFolder: string,
-                resolution: int
-            ): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
+            export function PAMJSONtoFlashAnimation(PAMJson: string, outFolder: string, resolution: int): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
 
             /**
              *
@@ -1381,10 +1338,7 @@ declare namespace Sen {
              * @param outFolder - Out PAM JSON
              */
 
-            export function FlashAnimationtoPAMJSON(
-                inDirectory: string,
-                extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo
-            ): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
+            export function FlashAnimationtoPAMJSON(inDirectory: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson;
 
             /**
              *
@@ -1400,11 +1354,7 @@ declare namespace Sen {
              * @param outFolder - Out PAM
              */
 
-            export function FlashAnimationtoPAM(
-                inFolder: string,
-                outFile: string,
-                extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo
-            ): void;
+            export function FlashAnimationtoPAM(inFolder: string, outFile: string, extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo): void;
 
             /**
              *
@@ -1413,23 +1363,14 @@ declare namespace Sen {
              * @param useResDirectory - Want to use res dir or not
              */
 
-            export function RSGUnpack(
-                inFile: string,
-                outFolder: string,
-                useResDirectory: boolean = true
-            ): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+            export function RSGUnpack(inFile: string, outFolder: string, useResDirectory: boolean = true): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
             /**
              *
              * @param inDirectory - Pass RSG packet directory path
              * @param outFile - Out File
              */
 
-            export function RSGPack(
-                inDirectory: string,
-                outFile: string,
-                packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo,
-                useResDirectory: boolean = true
-            ): void;
+            export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo, useResDirectory: boolean = true): void;
             /**
              *
              * @param inFile - Pass RSB file path
@@ -1451,12 +1392,7 @@ declare namespace Sen {
              * @param outFile - Pass outfile
              */
 
-            export function PopCapZlibCompress(
-                Ripefile: string,
-                Use64variant: boolean,
-                outFile: string,
-                zlibLevel: Sen.Script.Modules.Compression.Constraints.ZlibLevel
-            ): void;
+            export function PopCapZlibCompress(Ripefile: string, Use64variant: boolean, outFile: string, zlibLevel: Sen.Script.Modules.Compression.Constraints.ZlibLevel): void;
             /**
              *
              * @param base - Pass zlib base
@@ -1520,11 +1456,7 @@ declare namespace Sen {
              * @param information - Pass soundbank json deserialized
              */
 
-            export function WWiseSoundBankEncode(
-                soundbank_dir: string,
-                out_bnk: string,
-                information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple
-            ): void;
+            export function WWiseSoundBankEncode(soundbank_dir: string, out_bnk: string, information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple): void;
 
             /**
              *
@@ -1591,6 +1523,18 @@ declare namespace Sen {
              */
 
             export function ApplyRSBPatch(RSBOriginalFilePath: string, RSBPatchFilePath: string, RSBOutFilePath: string): void;
+
+            /**
+             *
+             * @param OldFile - Old file
+             * @param NewFile - New file
+             * @param PatchOutFile - Output patch
+             * @param interleaved
+             */
+
+            export function VCDiffEncode(OldFile: string, NewFile: string, PatchOutFile: string, interleaved: boolean): void;
+
+            export function VCDiffDecode(OldFile: string, PatchFile: string, NewFile: string): void;
         }
 
         /**
@@ -1837,13 +1781,7 @@ declare namespace Sen {
              * @param transform - Transform
              * @param outpath - Output path
              */
-            export function WriteImageDocument(
-                index: int,
-                name: string,
-                size: [int, int],
-                transform: [double, double, double, double, double, double],
-                outpath: string
-            ): void;
+            export function WriteImageDocument(index: int, name: string, size: [int, int], transform: [double, double, double, double, double, double], outpath: string): void;
             /**
              *
              * @param index - Start index
@@ -1883,14 +1821,7 @@ declare namespace Sen {
              * @param outFile - File output
              */
 
-            export function WriteSpriteDocument(
-                sprite_index: int,
-                duration: int,
-                image_index: int,
-                transform: [double, double, double, double, double, double],
-                color: [double, double, double, double],
-                outFile: string
-            ): void;
+            export function WriteSpriteDocument(sprite_index: int, duration: int, image_index: int, transform: [double, double, double, double, double, double], color: [double, double, double, double], outFile: string): void;
 
             /**
              *
@@ -1900,12 +1831,7 @@ declare namespace Sen {
              * @param image_index - Pass image index to insert
              */
 
-            export function AddImageToSpriteDocument(
-                inFile: string,
-                transform: [double, double, double, double, double, double],
-                color: [double, double, double, double],
-                image_index: int
-            ): void;
+            export function AddImageToSpriteDocument(inFile: string, transform: [double, double, double, double, double, double], color: [double, double, double, double], image_index: int): void;
         }
 
         /**

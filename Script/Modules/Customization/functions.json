@@ -294,5 +294,17 @@
         "include": [".rsb", ".obb"],
         "exclude": [],
         "type": "file"
+    },
+    "vcdiff_encode": {
+        "func_number": 50,
+        "include": [".bin"],
+        "exclude": [],
+        "type": "file"
+    },
+    "vcdiff_decode": {
+        "func_number": 51,
+        "include": [".bin"],
+        "exclude": [],
+        "type": "file"
     }
 }

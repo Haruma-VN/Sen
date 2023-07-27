@@ -372,5 +372,7 @@
     "pitch_error": "Pitch Error",
     "the_pitch_should_be": "Should change to {}",
     "pitch_at_subgroup_is_wrong": "Pitch located in id {1} of {2} at subgroup {3} in composite {4} is wrong. Should be {5}, received {6}",
-    "not_a_subgroup": "Not a subgroup"
+    "not_a_subgroup": "Not a subgroup",
+    "vcdiff_encode": "VCDiff: Encode",
+    "vcdiff_decode": "VCDiff: Decode"
 }
