@@ -9,10 +9,10 @@ using Sen.Shell.Modules.Standards;
 using WEMSharp;
 using Sen.Shell.Modules.Support.WWise;
 using static Sen.Shell.Modules.Support.PvZ2.RTON.RTONProcession;
-using NAudio.Vorbis;
-using NAudio.Wave;
-using System.Threading;
-using System.Runtime.InteropServices;
+using VCDiff.Includes;
+using VCDiff.Encoders;
+using VCDiff.Decoders;
+using VCDiff.Shared;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -354,24 +354,49 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public unsafe override sealed void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile) {
+        public unsafe override sealed void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile)
+        {
             RSBFunction.RSBPatchEncode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBModFilePath), RSBPatchOutFile);
             return;
         }
 
-        public unsafe override sealed void ApplyRSBPatch(string RSBOriginalFilePath, string RSBPatchFilePath, string RSBOutFilePath) {
+        public unsafe override sealed void ApplyRSBPatch(string RSBOriginalFilePath, string RSBPatchFilePath, string RSBOutFilePath)
+        {
             RSBFunction.RSBPatchDecode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBPatchFilePath), RSBOutFilePath);
             return;
         }
 
 
-        public unsafe override sealed void VCDiffEncode(string OldFile, string NewFile, string PatchOutFile, bool interleaved) {
-
+        public unsafe override sealed void VCDiffEncode(string OldFile, string NewFile, string PatchOutFile, bool interleaved)
+        {
+            using (FileStream output = new FileStream(PatchOutFile, FileMode.Create, FileAccess.Write))
+            using (FileStream dict = new FileStream(PatchOutFile, FileMode.Open, FileAccess.Read))
+            using (FileStream target = new FileStream(NewFile, FileMode.Open, FileAccess.Read))
+            {
+                var coder = new VcEncoder(dict, target, output);
+                var result = coder.Encode(interleaved: interleaved);
+                if (result != VCDiffResult.SUCCESS)
+                {
+                    throw new Exception("Invaild VCDiffEncode");
+                }
+            }
             return;
         }
 
-        public unsafe override sealed void VCDiffDecode(string OldFile, string PatchFile, string NewFile) {
-
+        public unsafe override sealed void VCDiffDecode(string OldFile, string PatchFile, string NewFile)
+        {
+            using (FileStream output = new FileStream(NewFile, FileMode.Create, FileAccess.Write))
+            using (FileStream dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read))
+            using (FileStream target = new FileStream(PatchFile, FileMode.Open, FileAccess.Read))
+            {
+                var decoder = new VcDecoder(dict, target, output);
+                long bytesWritten = 0;
+                var result = decoder.Decode(out bytesWritten);
+                if (result != VCDiffResult.SUCCESS)
+                {
+                    throw new Exception("Invaild VCDiffDecode");
+                }
+            }
             return;
         }
 

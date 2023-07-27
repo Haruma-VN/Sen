@@ -1637,8 +1637,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         private static byte[] RSBVCDiff(byte[] RSBBeforeHeaderSectionByte, byte[] RSBAfterHeaderSectionByte)
         {
             var outPutStream = new MemoryStream();
-            var coder = new VCCoder(new MemoryStream(RSBBeforeHeaderSectionByte), new MemoryStream(RSBAfterHeaderSectionByte), outPutStream, 64);
-            var result = coder.Encode(true, false);
+            var coder = new VcEncoder(new MemoryStream(RSBBeforeHeaderSectionByte), new MemoryStream(RSBAfterHeaderSectionByte), outPutStream, 64);
+            var result = coder.Encode(interleaved: true);
             if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
             {
                 throw new Exception("Invaild vcdiff encode");
@@ -1672,16 +1672,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var RSBBeforeStream = RSBBeforeFile.toStream();
             var RSBPatchStream = RSBPatchFile.toStream();
             var outPutStream = new MemoryStream();
-            var decoder = new VCDecoder(RSBBeforeStream, RSBPatchStream, outPutStream);
-            var result = decoder.Start();
-            if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
-            {
-                throw new Exception("Invaild vcdiff decode");
-            }
-
+            var decoder = new VcDecoder(RSBBeforeStream, RSBPatchStream, outPutStream);
             long bytesWritten = 0;
-            result = decoder.Decode(out bytesWritten);
-
+            var result = decoder.Decode(out bytesWritten);
             if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
             {
                 throw new Exception("Invaild vcdiff decode");
