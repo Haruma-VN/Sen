@@ -127,8 +127,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_patch_decode"
         | "vcdiff_encode"
         | "vcdiff_decode"
-        | "manifest_split"
-        | "manifest_merge";
+        | "popcap_rsb_bundle_manifest_split"
+        | "popcap_rsb_bundle_manifest_merge"
+        | "popcap_lawnstrings_convert";
 
     /**
      *
@@ -150,7 +151,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "manifest_split": {
+                case "popcap_rsb_bundle_manifest_split": {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.package`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
@@ -164,7 +165,93 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "manifest_merge": {
+                case "popcap_lawnstrings_convert": {
+                    if (!Array.isArray(argument)) {
+                        const input_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("input_lawnstring_structure"),
+                            [
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
+                            ],
+                            {
+                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                            },
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
+                            `convert`
+                        ) as Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option;
+                        const output_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("output_lawnstring_structure"),
+                            [
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
+                            ],
+                            {
+                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                            },
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
+                            `output`
+                        ) as Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option;
+                        const option: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Parameter = {
+                            input: input_structure,
+                            output: output_structure,
+                        };
+                        const output_argument: string = Sen.Shell.Path.Resolve(
+                            Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.convert.${Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.ExportExtension(option)}`)
+                        );
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.ConvertOfficialLawnstrings(argument, output_argument, option);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const input_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("input_lawnstring_structure"),
+                                [
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
+                                ],
+                                {
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
+                                `convert`
+                            ) as Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option;
+                            const output_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("output_lawnstring_structure"),
+                                [
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
+                                ],
+                                {
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
+                                `output`
+                            ) as Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option;
+                            const option: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Parameter = {
+                                input: input_structure,
+                                output: output_structure,
+                            };
+                            const output_argument: string = Sen.Shell.Path.Resolve(
+                                Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.convert.${Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.ExportExtension(option)}`)
+                            );
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.ConvertOfficialLawnstrings(arg, output_argument, option);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_rsb_bundle_manifest_merge": {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");

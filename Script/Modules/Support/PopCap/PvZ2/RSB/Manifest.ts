@@ -62,6 +62,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest {
         return;
     }
 
+    /**
+     *
+     * @param input_directory - Input directory
+     * @param outfile - Outfile
+     * @returns
+     */
+
     export function MergeManifest<CompositeShell extends string, Subgroup extends string>(input_directory: string, outfile: string): void {
         const description: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.ResourceManager<string> = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.ResourceManager<string>>(
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${input_directory}`, `description.json`))

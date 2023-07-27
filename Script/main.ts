@@ -30,6 +30,7 @@ namespace Sen.Script {
             `Modules/Support/PopCap/PvZ2/RSG/Encode`,
             `Modules/Support/PopCap/PvZ2/RSB/Unpack`,
             `Modules/Support/PopCap/PvZ2/RSB/Pack`,
+            `Modules/Support/PopCap/PvZ2/Lawnstrings/Convert`,
             `Modules/Support/PopCap/PvZ2/RSB/Manifest`,
             `Modules/Support/PopCap/PvZ2/RSB/Convert/Resource`,
             `Modules/Support/WWise/Encode`,

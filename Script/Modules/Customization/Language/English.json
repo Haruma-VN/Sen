@@ -376,7 +376,15 @@
     "vcdiff_encode": "VCDiff: Encode",
     "vcdiff_decode": "VCDiff: Decode",
     "at": "at",
-    "manifest_split": "PopCap RSB-Bundle Manifest: Split",
-    "manifest_merge": "PopCap RSB-Bundle Manifest: Merge",
-    "popcap_localization_convert": "PopCap Localization: Convert"
+    "popcap_rsb_bundle_manifest_split": "PopCap RSB-Bundle Manifest: Split",
+    "popcap_rsb_bundle_manifest_merge": "PopCap RSB-Bundle Manifest: Merge",
+    "popcap_lawnstrings_convert": "PopCap Lawnstrings: Convert",
+    "lawnstrings_map_contains_invalid_size": "Lawnstrings Map contains invalid size, received {1} but should be {2} or {3}",
+    "lawnstrings_map_error": "Lawnstrings Map Checking Error",
+    "cannot_convert_the_same_lawnstrings_type": "Cannot convert the same lawnstrings type",
+    "input_lawnstring_structure": "Input Lawnstrings Structure",
+    "output_lawnstring_structure": "Output Lawnstrings Structure",
+    "lawnstring_text": "TXT: From version 1.4 to 6.7",
+    "lawnstring_json_map": "JSON Map: From version 6.8 to 8.5",
+    "lawnstring_json_text": "JSON Text: From 8.5 above"
 }

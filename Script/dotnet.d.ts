@@ -1770,6 +1770,63 @@ declare namespace Sen {
             disableSprite: Array<int> = new Array<int>(0);
         }
 
+        namespace PvZ2Lawnstrings {
+            /**
+             * Structure
+             */
+            export interface JsonMap {
+                objects: [
+                    {
+                        aliases: ["LawnStringsData"];
+                        objclass: "LawnStringsData";
+                        objdata: {
+                            LocStringValues: Record<string, string>;
+                        };
+                    }
+                ];
+                version: 1n;
+            }
+            /**
+             * Structure
+             */
+            export interface JsonText {
+                objects: [
+                    {
+                        aliases: ["LawnStringsData"];
+                        objclass: "LawnStringsData";
+                        objdata: {
+                            LocStringValues: Array<string>;
+                        };
+                    }
+                ];
+                version: 1n;
+            }
+            /**
+             *
+             * @param filepath - Pass file path
+             * @returns Stream read file
+             */
+            export function ReadUTF16Le(filepath: string): string;
+            /**
+             *
+             * @param filepath - Out path to write
+             * @param data - Data to write
+             */
+            export function WriteUTF16Le(filepath: string, data: string): void;
+            /**
+             *
+             * @param inpath - Input file path
+             * @returns Json Map Object
+             */
+            export function ConvertJsonTextToJsonMap(inpath: string): Sen.Shell.PvZ2Lawnstrings.JsonMap;
+            /**
+             *
+             * @param inpath - Input file path
+             * @returns Json Text Object
+             */
+            export function ConvertJsonMapToJsonText(inpath: string): Sen.Shell.PvZ2Lawnstrings.JsonText;
+        }
+
         /**
          * XML namespace for PopCap Animation Animate Adobe XML
          */

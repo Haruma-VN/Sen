@@ -63,6 +63,7 @@ namespace Sen.Modules.Support.PvZ2
         public abstract JsonMap ConvertJsonTextToJsonMap(string inpath);
 
         public abstract JsonText ConvertJsonMapToJsonText(string inpath);
+
     }
 
 
@@ -123,7 +124,6 @@ namespace Sen.Modules.Support.PvZ2
                 json_text.objects[0].objdata.LocStringValues.Add((string)values[i]);
             }
             return json_text;
-
         }
 
         public unsafe override sealed string ReadUTF16Le(string filepath)

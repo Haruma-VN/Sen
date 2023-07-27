@@ -325,10 +325,21 @@ namespace Sen.Script.Modules.Exceptions {
         }
     }
 
+    /**
+     * Extends
+     */
+
     export class MissingDirectory extends MissingFile {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
             this.name = Sen.Script.Modules.System.Default.Localization.GetString("missing_directory");
+        }
+    }
+
+    export class LawnstringsMapError extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("lawnstrings_map_error");
         }
     }
 
@@ -1106,7 +1117,15 @@ namespace Sen.Script.Modules.Exceptions {
                     Sen.Script.Modules.Exceptions.ExecutionError(message);
                     break;
                 }
-
+                case Sen.Script.Modules.Exceptions.LawnstringsMapError: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.LawnstringsMapError).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.LawnstringsMapError).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.LawnstringsMapError).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
                 default: {
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((error as any).file_path ??= "undefined"));
                     (error as any).message = Sen.Script.Modules.System.Default.Localization.GetString((error as Sen.Shell.DotNetSystem.Exception).message);
