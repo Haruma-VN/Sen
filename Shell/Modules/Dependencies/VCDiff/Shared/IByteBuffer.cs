@@ -1,35 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+#pragma warning disable 1591
 
 namespace VCDiff.Shared
 {
-    public abstract class IByteBuffer : IDisposable
+    public interface IByteBuffer : IDisposable
     {
-        public abstract long Length
+        int Length
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get; 
+        }
+
+        int Position
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set; 
         }
 
-        public abstract long Position
+        bool CanRead
         {
-            get; set;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get; 
         }
 
-        public abstract bool CanRead
-        {
-            get;
-        }
-        public abstract byte[] ReadBytes(int len);
-        public abstract byte ReadByte();
-        public abstract byte[] PeekBytes(int len);
-        public abstract byte PeekByte();
-        public abstract void Skip(int len);
-        public abstract void Next();
-        public abstract void BufferAll();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        Memory<byte> ReadBytes(int len);
 
-        public abstract void Dispose();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        Span<byte> ReadBytesAsSpan(int len);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        Span<byte> ReadBytesToSpan(Span<byte> data);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        byte ReadByte();
+
+        byte PeekByte();
+
+        void Next();
     }
 }

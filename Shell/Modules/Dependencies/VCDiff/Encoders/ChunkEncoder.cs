@@ -1,36 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VCDiff.Includes;
+using System.IO;
 using VCDiff.Shared;
+
+#if NET5_0 || NET5_0_OR_GREATER
+using System.Runtime.CompilerServices;
+#endif
 
 namespace VCDiff.Encoders
 {
-    public class ChunkEncoder : IDisposable
+    internal class ChunkEncoder : IDisposable
     {
-        static int minBlockSize = 32;
-        public static int MinBlockSize
-        {
-            get
-            {
-                return minBlockSize;
-            }
-            set
-            {
-                if (value < 2 || value < BlockHash.BlockSize) return;
-                minBlockSize = value;
-            }
-        }
+        private readonly int minBlockSize;
 
-        BlockHash dictionary;
-        IByteBuffer oldData;
-        IByteBuffer newData;
-        WindowEncoder windowEncoder;
-        RollingHash hasher;
-        bool interleaved;
-        bool hasChecksum;
+        private BlockHash dictionary;
+        private ByteBuffer oldData;
+        private WindowEncoder? windowEncoder;
+        private RollingHash hasher;
+        private bool interleaved;
+        private ChecksumFormat checksumFormat;
 
         /// <summary>
         /// Performs the actual encoding of a chunk of data into the VCDiff format
@@ -39,61 +26,62 @@ namespace VCDiff.Encoders
         /// <param name="oldData">The data for the dictionary hash table</param>
         /// <param name="hash">The rolling hash object</param>
         /// <param name="interleaved">Whether to interleave the data or not</param>
-        /// <param name="checksum">Whether to include checksums for each window</param>
-        public ChunkEncoder(BlockHash dictionary, IByteBuffer oldData, RollingHash hash, bool interleaved = false, bool checksum = false)
+        /// <param name="checksumFormat">The format of the checksums for each window.</param>
+        /// <param name="minBlockSize">The minimum block size to use. Defaults to 32, and must be a power of 2.
+        ///     This value must also be smaller than the block size of the dictionary.</param>
+        public ChunkEncoder(BlockHash dictionary, ByteBuffer oldData, 
+            RollingHash hash, ChecksumFormat checksumFormat, bool interleaved = false, int minBlockSize = 32)
         {
-            this.hasChecksum = checksum;
+            this.checksumFormat = checksumFormat;
             this.hasher = hash;
             this.oldData = oldData;
             this.dictionary = dictionary;
+            this.minBlockSize = minBlockSize;
             this.interleaved = interleaved;
+        }
+
+        ~ChunkEncoder()
+        {
+            Dispose();
         }
 
         /// <summary>
         /// Encodes the data using the settings from initialization
         /// </summary>
         /// <param name="newData">the target data</param>
-        /// <param name="sout">the out stream</param>
-        public void EncodeChunk(IByteBuffer newData, ByteStreamWriter sout)
+        /// <param name="outputStream">the out stream</param>
+        public unsafe void EncodeChunk(ByteBuffer newData, Stream outputStream)
         {
-            uint checksum = 0;
+            newData.Position = 0;
+            var checksumBytes = newData.ReadBytesAsSpan((int)newData.Length);
 
-            ///If checksum needed
-            ///Generate Adler32 checksum for the incoming bytes
-            if(hasChecksum)
+            uint checksum = this.checksumFormat switch
             {
-                newData.Position = 0;
-                byte[] bytes = newData.ReadBytes((int)newData.Length);
-                checksum = Checksum.ComputeAdler32(bytes);
+                ChecksumFormat.SDCH => Checksum.ComputeGoogleAdler32(checksumBytes),
+                ChecksumFormat.Xdelta3 => Checksum.ComputeXdelta3Adler32(checksumBytes),
+                ChecksumFormat.None => 0,
+                _ => 0
+            };
 
-                bytes = null;
-                System.GC.Collect();
-            }
-
-            windowEncoder = new WindowEncoder(oldData.Length, checksum, this.interleaved, hasChecksum);
+            windowEncoder = new WindowEncoder(oldData.Length, checksum, this.checksumFormat, this.interleaved);
 
             oldData.Position = 0;
             newData.Position = 0;
 
-            this.newData = newData;
             long nextEncode = newData.Position;
-            long targetEnd = newData.Length;
-            long startOfLastBlock = targetEnd - BlockHash.BlockSize;
+            long targetEnd  = newData.Length;
+            long startOfLastBlock = targetEnd - this.dictionary.blockSize;
             long candidatePos = nextEncode;
 
-            //create the first hash
-            ulong hash = hasher.Hash(newData.PeekBytes(BlockHash.BlockSize));
+            // Create the first hash
+            ulong hash = hasher.Hash(newData.DangerousGetBytePointerAtCurrentPositionAndIncreaseOffsetAfter(0), this.dictionary.blockSize);
+            byte* newDataPtr = newData.DangerousGetBytePointer();
 
-            while (true)
+            // If less than block size exit and then write as an ADD
+            while (newData.Length - nextEncode >= this.dictionary.blockSize)
             {
-                //if less than block size exit and then write as an ADD
-                if (newData.Length - nextEncode < BlockHash.BlockSize)
-                {
-                    break;
-                }
-
                 //try and encode the copy and add instructions that best match
-                long bytesEncoded = EncodeCopyForBestMatch(hash, candidatePos, nextEncode, targetEnd);
+                var bytesEncoded = EncodeCopyForBestMatch(hash, candidatePos, nextEncode, targetEnd, newDataPtr, newData);
 
                 if (bytesEncoded > 0)
                 {
@@ -101,26 +89,22 @@ namespace VCDiff.Encoders
                     candidatePos = nextEncode;
 
                     if (candidatePos > startOfLastBlock)
-                    {
                         break;
-                    }
 
-                    newData.Position = candidatePos;
+                    newData.Position = (int) candidatePos;
                     //cannot use rolling hash since we skipped so many
-                    hash = hasher.Hash(newData.ReadBytes(BlockHash.BlockSize));
+                    hash = hasher.Hash(newData.DangerousGetBytePointerAtCurrentPositionAndIncreaseOffsetAfter(this.dictionary.blockSize), this.dictionary.blockSize);
                 }
                 else
                 {
                     if (candidatePos + 1 > startOfLastBlock)
-                    {
                         break;
-                    }
 
                     //update hash requires the first byte of the last hash as well as the byte that is first byte pos + blockSize
                     //in order to properly calculate the rolling hash
-                    newData.Position = candidatePos;
+                    newData.Position = (int) candidatePos;
                     byte peek0 = newData.ReadByte();
-                    newData.Position = candidatePos + BlockHash.BlockSize;
+                    newData.Position = (int)(candidatePos + this.dictionary.blockSize);
                     byte peek1 = newData.ReadByte();
                     hash = hasher.UpdateHash(hash, peek0, peek1);
                     candidatePos++;
@@ -131,52 +115,45 @@ namespace VCDiff.Encoders
             if (nextEncode < newData.Length)
             {
                 int len = (int)(newData.Length - nextEncode);
-                newData.Position = nextEncode;
-                windowEncoder.Add(newData.ReadBytes(len));
+                newData.Position = (int) nextEncode;
+                windowEncoder.Add(newData.ReadBytesAsSpan(len));
             }
 
             //output the final window
-            windowEncoder.Output(sout);
+            windowEncoder.Output(outputStream);
         }
 
         //currently does not support looking in target
         //only the dictionary
-        long EncodeCopyForBestMatch(ulong hash, long candidateStart, long unencodedStart, long unencodedSize)
+#if NET5_0 || NET5_0_OR_GREATER
+        [SkipLocalsInit]
+#endif
+        private unsafe long EncodeCopyForBestMatch(ulong hash, long candidateStart, long unencodedStart, long unencodedSize, byte* newDataPtr, ByteBuffer newData)
         {
             BlockHash.Match bestMatch = new BlockHash.Match();
 
-            dictionary.FindBestMatch(hash, candidateStart, unencodedStart, unencodedSize, newData, bestMatch);
-
-            if (bestMatch.Size < MinBlockSize)
+            dictionary.FindBestMatch(hash, candidateStart, unencodedStart, unencodedSize, newDataPtr, newData, ref bestMatch);
+            if (bestMatch.size < minBlockSize)
             {
                 return 0;
             }
 
-            if (bestMatch.TargetOffset > 0)
+            if (bestMatch.tOffset > 0)
             {
-                newData.Position = unencodedStart;
-                windowEncoder.Add(newData.ReadBytes((int)bestMatch.TargetOffset));
+                newData.Position = (int) unencodedStart;
+                windowEncoder?.Add(newData.ReadBytesAsSpan((int)bestMatch.tOffset));
             }
 
-            windowEncoder.Copy((int)bestMatch.SourceOffset, (int)bestMatch.Size);
+            windowEncoder?.Copy((int)bestMatch.sOffset, (int)bestMatch.size);
 
-            return bestMatch.Size + bestMatch.TargetOffset;
+            return bestMatch.size + bestMatch.tOffset;
         }
 
         public void Dispose()
         {
-            if(oldData != null)
-            {
-                oldData.Dispose();
-            }
-            if(newData != null)
-            {
-                newData.Dispose();
-            }
-            if(windowEncoder != null)
-            {
-                windowEncoder = null;
-            }
+            dictionary?.Dispose();
+            windowEncoder?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

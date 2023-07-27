@@ -1,34 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using VCDiff.Includes;
 using VCDiff.Shared;
-using VCDiff.Includes;
 
 namespace VCDiff.Decoders
 {
-    public class InstructionDecoder
+    internal class InstructionDecoder
     {
-        CodeTable table;
-        ByteBuffer source;
-        int pendingSecond;
+        private CodeTable table;
+        private ByteBuffer source;
+        private int pendingSecond;
 
         /// <summary>
         /// Decodes the incoming instruction from the buffer
         /// </summary>
         /// <param name="sin">the instruction buffer</param>
         /// <param name="customTable">custom code table if any. Default is null.</param>
-        public InstructionDecoder(ByteBuffer sin, CustomCodeTableDecoder customTable = null)
+        public InstructionDecoder(ByteBuffer sin, CustomCodeTableDecoder? customTable = null)
         {
-            if (customTable != null)
-            {
-                table = customTable.CustomTable;
-            }
-            else
-            {
-                table = CodeTable.DefaultTable;
-            }
+            table = customTable?.CustomTable ?? CodeTable.DefaultTable;
             source = sin;
             pendingSecond = CodeTable.kNoOpcode;
         }
@@ -39,7 +27,7 @@ namespace VCDiff.Decoders
         /// <param name="size">the size</param>
         /// <param name="mode">the mode</param>
         /// <returns></returns>
-        public VCDiffInstructionType Next(out int size, out byte mode)
+        public unsafe VCDiffInstructionType Next(out int size, out byte mode)
         {
             byte opcode = 0;
             byte instructionType = CodeTable.N;
@@ -52,9 +40,9 @@ namespace VCDiff.Decoders
                 {
                     opcode = (byte)pendingSecond;
                     pendingSecond = CodeTable.kNoOpcode;
-                    instructionType = table.inst2[opcode];
-                    instructionSize = table.size2[opcode];
-                    instructionMode = table.mode2[opcode];
+                    instructionType = table.inst2.Pointer[opcode];
+                    instructionSize = table.size2.Pointer[opcode];
+                    instructionMode = table.mode2.Pointer[opcode];
                     break;
                 }
 
@@ -66,24 +54,25 @@ namespace VCDiff.Decoders
                 }
 
                 opcode = source.PeekByte();
-                if (table.inst2[opcode] != CodeTable.N)
+                if (table.inst2.Pointer[opcode] != CodeTable.N)
                 {
                     pendingSecond = source.PeekByte();
                 }
                 source.Next();
-                instructionType = table.inst1[opcode];
-                instructionSize = table.size1[opcode];
-                instructionMode = table.mode1[opcode];
+                instructionType = table.inst1.Pointer[opcode];
+                instructionSize = table.size1.Pointer[opcode];
+                instructionMode = table.mode1.Pointer[opcode];
             } while (instructionType == CodeTable.N);
 
             if (instructionSize == 0)
             {
                 switch (size = VarIntBE.ParseInt32(source))
                 {
-                    case (int)VCDiffResult.ERRROR:
+                    case (int)VCDiffResult.ERROR:
                         mode = 0;
                         size = 0;
                         return VCDiffInstructionType.ERROR;
+
                     case (int)VCDiffResult.EOD:
                         mode = 0;
                         size = 0;
@@ -91,11 +80,10 @@ namespace VCDiff.Decoders
                         //otherwise when parsing interleave we will miss data
                         source.Position = start;
                         return VCDiffInstructionType.EOD;
-                    default:
-                        break;
                 }
             }
-            else { 
+            else
+            {
                 size = instructionSize;
             }
             mode = instructionMode;

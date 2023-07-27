@@ -1,229 +1,153 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace VCDiff.Shared
 {
     //Wrapper Class for any stream that supports Position
     //and Length to make reading bytes easier
     //also has a helper function for reading all the bytes in at once
-    public class ByteStreamReader : IByteBuffer, IDisposable
+    public class ByteStreamReader : IByteBuffer
     {
-        Stream buffer;
-        int lastLenRead;
-        bool readAll;
-        List<byte> internalBuffer;
-        long offset;
+        private const int CACHE_SIZE = 8192;
+
+        private readonly Stream buffer;
+        private int lastLenRead;
+        private byte[] cache;
+        private bool _isDisposed = false;
 
         public ByteStreamReader(Stream stream)
         {
+            cache  = ArrayPool<byte>.Shared.Rent(CACHE_SIZE);
             buffer = stream;
         }
 
-        public override long Position
+        ~ByteStreamReader() => Dispose();
+
+        public int Position
         {
-            get
-            {
-                if(readAll)
-                {
-                    return offset;
-                }
-                return buffer.Position;
-            }
-            set
-            {
-                if(readAll)
-                {
-                    if(value >= 0)
-                        offset = value;
-                }
-                if(buffer.CanRead && value >= 0)
-                    buffer.Position = value;
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => (int) buffer.Position;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set => buffer.Seek(value, SeekOrigin.Begin);
         }
 
-        public override long Length
+        public int Length
         {
-            get
-            {
-                if(readAll)
-                {
-                    return internalBuffer.Count;
-                }
-
-                if (buffer.CanRead)
-                    return buffer.Length;
-
-                return 0;
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => (int)(buffer.CanRead ? buffer.Length : 0);
         }
 
-        public override bool CanRead
+        public bool CanRead
         {
-            get
-            {
-                if (readAll)
-                {
-                    return offset < internalBuffer.Count;
-                }
-
-                return buffer.CanRead && buffer.Position < buffer.Length;
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => buffer.CanRead && buffer.Position < buffer.Length;
         }
 
-        public override void BufferAll()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Span<byte> ReadBytesToSpan(Span<byte> data)
         {
-            if (!readAll)
-            {
-                offset = 0;
-                internalBuffer = new List<byte>();
-                readAll = true;
-
-                byte[] buff = new byte[1024 * 8];
-
-                lastLenRead = buffer.Read(buff, 0, buff.Length);
-
-                while (lastLenRead > 0 && buffer.CanRead)
-                {
-                    for (int i = 0; i < lastLenRead; i++)
-                    {
-                        internalBuffer.Add(buff[i]);
-                    }
-
-                    lastLenRead = buffer.Read(buff, 0, buff.Length);
-                }
-            }
+            int bytesRead = buffer.Read(data);
+            return data.Slice(0, bytesRead);
         }
 
-        public override byte[] PeekBytes(int len)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public byte ReadByte()
         {
-            if(readAll)
-            {
-                
-                int end = (int)offset + len > internalBuffer.Count ? internalBuffer.Count : (int)offset + len;
-                int realLen = (int)offset + len > internalBuffer.Count ? (int)internalBuffer.Count - (int)offset : len;
-
-                byte[] rbuff = new byte[realLen];
-                int rcc = 0;
-                for(int i = (int)offset; i < end; i++)
-                {
-                    rbuff[rcc] = internalBuffer[i];
-                    rcc++;
-                }
-                return rbuff;
-            }
-
-            long oldPos = buffer.Position;
-            byte[] buf = new byte[len];
-
-            int actualRead = buffer.Read(buf, 0, len);
-            lastLenRead = actualRead;
-            if (actualRead > 0)
-            {
-                if (actualRead == len)
-                {
-                    buffer.Position = oldPos;
-                    return buf;
-                }
-
-                byte[] actualData = new byte[actualRead];
-                for (int i = 0; i < actualRead; i++)
-                {
-                    actualData[i] = buf[i];
-                }
-
-                buffer.Position = oldPos;
-                return actualData;
-            }
-
-            buffer.Position = oldPos;
-            return new byte[0];
-        }
-
-        public override byte ReadByte()
-        {
-            if (!CanRead) throw new Exception("Trying to read past end of buffer");
-            if(readAll)
-            {
-                return internalBuffer[(int)offset++];
-            }
             lastLenRead = buffer.ReadByte();
             if (lastLenRead > -1)
                 return (byte)lastLenRead;
             return 0;
         }
 
-        public override byte[] ReadBytes(int len)
+#if NET5_0 || NET5_0_OR_GREATER
+        [SkipLocalsInit]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        public Span<byte> ReadBytesAsSpan(int len)
         {
-            if (readAll)
-            {
-                int end = (int)offset + len > internalBuffer.Count ? internalBuffer.Count : (int)offset + len;
-                int realLen = (int)offset + len > internalBuffer.Count ? (int)internalBuffer.Count - (int)offset : len;
-
-                byte[] rbuff = new byte[realLen];
-                int rcc = 0;
-                for (int i = (int)offset; i < end; i++)
-                {
-                    rbuff[rcc] = internalBuffer[i];
-                    rcc++;
-                }
-                offset += len;
-                return rbuff;
-            }
-
-            byte[] buf = new byte[len];
-
-            int actualRead = buffer.Read(buf, 0, len);
+            byte[] buf = GetCachedBuffer(len);
+            int actualRead = buffer.Read(buf.AsSpanFast(len));
             lastLenRead = actualRead;
-            if(actualRead > 0)
-            {
-                if(actualRead == len)
-                {
-                    return buf;
-                }
-
-                byte[] actualData = new byte[actualRead];
-                for(int i = 0; i < actualRead; i++)
-                {
-                    actualData[i] = buf[i];
-                }
-
-                return actualData;
-            }
-
-            return new byte[0];
+            return actualRead > 0 ? buf.AsSpanFast(actualRead) : Span<byte>.Empty;
         }
 
-        public override byte PeekByte()
+#if NET5_0 || NET5_0_OR_GREATER
+        [SkipLocalsInit]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        public Memory<byte> ReadBytes(int len)
         {
-            if (!CanRead) throw new Exception("Trying to read past end of buffer");
-            if(readAll)
-            {
-                return internalBuffer[(int)offset];
-            }
-            long lastPos = buffer.Position;
+            byte[] buf = GetCachedBuffer(len);
+            int actualRead = buffer.Read(buf.AsSpanFast(len));
+            lastLenRead = actualRead;
+            return actualRead > 0 ? buf.AsMemory(0, actualRead) : Memory<byte>.Empty;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int ReadBytesIntoBuf(Span<byte> buf)
+        {
+            int actualRead = buffer.Read(buf);
+            lastLenRead = actualRead;
+            return actualRead;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public async Task<int> ReadBytesIntoBufAsync(Memory<byte> buf)
+        {
+            int actualRead = await buffer.ReadAsync(buf);
+            lastLenRead = actualRead;
+            return actualRead;
+        }
+
+        public byte PeekByte()
+        {
             byte b = ReadByte();
-            buffer.Position = lastPos;
+            buffer.Seek(-1, SeekOrigin.Current);
             return b;
         }
 
         //increases the offset by 1
-        public override void Next()
+        public void Next()
         {
-            buffer.Position++;
+            buffer.Seek(1, SeekOrigin.Current);
         }
 
-        public override void Skip(int len)
+        public void Dispose()
         {
-            buffer.Position += len;
+            if (!_isDisposed)
+            {
+                ArrayPool<byte>.Shared.Return(cache, false);
+                _isDisposed = true;
+            }
+
+            GC.SuppressFinalize(this);
         }
 
-        public override void Dispose()
+#if NET5_0 || NET5_0_OR_GREATER
+        [SkipLocalsInit]
+        [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
+#else
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        private byte[] GetCachedBuffer(int len)
         {
-            buffer.Dispose();
+            if (len <= CACHE_SIZE)
+                return cache;
+
+#if NET5_0 || NET5_0_OR_GREATER
+            return GC.AllocateUninitializedArray<byte>(len);
+#else
+            return new byte[len];
+#endif
         }
     }
 }

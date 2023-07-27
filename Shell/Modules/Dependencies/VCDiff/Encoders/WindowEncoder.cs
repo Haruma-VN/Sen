@@ -1,161 +1,137 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.CompilerServices;
 using VCDiff.Includes;
 using VCDiff.Shared;
 
 namespace VCDiff.Encoders
 {
-    public class WindowEncoder
+    internal class WindowEncoder : IDisposable
     {
-        bool interleaved;
-        int maxMode;
-        long dictionarySize;
-        long targetLength;
-        CodeTable table;
-        int lastOpcodeIndex;
-        AddressCache addrCache;
-        InstructionMap instrMap;
-        List<byte> instructionAndSizes;
-        List<byte> dataForAddAndRun;
-        List<byte> addressForCopy;
-        bool hasChecksum;
-        uint checksum;
+        private int maxMode;
+        private long dictionarySize;
+        private long targetLength;
+        private CodeTable table;
+        private int lastOpcodeIndex;
+        private AddressCache addrCache;
+        private InstructionMap instrMap;
+        private MemoryStream instructionAndSizes;
+        private MemoryStream dataForAddAndRun;
+        private MemoryStream addressForCopy;
 
-        public bool HasChecksum
-        {
-            get
-            {
-                return hasChecksum;
-            }
-        }
+        public ChecksumFormat ChecksumFormat { get; }
 
-        public bool IsInterleaved
-        {
-            get
-            {
-                return interleaved;
-            }
-        }
+        public bool IsInterleaved { get; }
 
-        public uint Checksum
-        {
-            get
-            {
-                return checksum;
-            }
-        }
+        public uint Checksum { get; }
 
         //This is a window encoder for the VCDIFF format
         //if you are not including a checksum simply pass 0 to checksum
         //it will be ignored
-        public WindowEncoder(long dictionarySize, uint checksum, bool interleaved = false, bool hasChecksum = false)
+        public WindowEncoder(long dictionarySize, uint checksum, ChecksumFormat checksumFormat, bool interleaved)
         {
-            this.checksum = checksum;
-            this.hasChecksum = hasChecksum;
-            this.interleaved = interleaved;
+            this.Checksum = checksum;
+            this.ChecksumFormat = checksumFormat;
+            this.IsInterleaved = interleaved;
             this.dictionarySize = dictionarySize;
 
-            //The encoder currently doesn't support encoding with a custom table
-            //will be added in later since it will be easy as decoding is already implemented
+            // The encoder currently doesn't support encoding with a custom table
+            // will be added in later since it will be easy as decoding is already implemented
             maxMode = AddressCache.DefaultLast;
             table = CodeTable.DefaultTable;
             addrCache = new AddressCache();
             targetLength = 0;
             lastOpcodeIndex = -1;
-            instrMap = new InstructionMap();
+            instrMap = InstructionMap.Instance;
 
             //Separate buffers for each type if not interleaved
             if (!interleaved)
             {
-                instructionAndSizes = new List<byte>();
-                dataForAddAndRun = new List<byte>();
-                addressForCopy = new List<byte>();
+                instructionAndSizes = new MemoryStream();
+                dataForAddAndRun = new MemoryStream();
+                addressForCopy = new MemoryStream();
             }
             else
             {
-                instructionAndSizes = dataForAddAndRun = addressForCopy = new List<byte>();
+                instructionAndSizes = dataForAddAndRun = addressForCopy = new MemoryStream();
             }
         }
 
-        void EncodeInstruction(VCDiffInstructionType inst, int size, byte mode = 0)
+#if NETCOREAPP3_1 || NET5_0 || NET5_0_OR_GREATER
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+#endif
+        private void EncodeInstruction(VCDiffInstructionType inst, int size, byte mode = 0)
         {
-            if(lastOpcodeIndex >= 0)
+            if (lastOpcodeIndex >= 0)
             {
-                int lastOp = instructionAndSizes[lastOpcodeIndex];
+                int lastOp = instructionAndSizes.GetBuffer()[lastOpcodeIndex];
 
-                if(inst == VCDiffInstructionType.ADD && (table.inst1[lastOp] == CodeTable.A))
-                {
-                    //warning adding two in a row
-                    Console.WriteLine("Warning: performing two ADD instructions in a row.");
-                }
-                int compoundOp = CodeTable.kNoOpcode;
-                if(size <= byte.MaxValue)
+                int compoundOp;
+                if (size <= byte.MaxValue)
                 {
                     compoundOp = instrMap.LookSecondOpcode((byte)lastOp, (byte)inst, (byte)size, mode);
-                    if(compoundOp != CodeTable.kNoOpcode)
+                    if (compoundOp != CodeTable.kNoOpcode)
                     {
-                        instructionAndSizes[lastOpcodeIndex] = (byte)compoundOp;
+                        instructionAndSizes.GetBuffer()[lastOpcodeIndex] = (byte)compoundOp;
                         lastOpcodeIndex = -1;
                         return;
                     }
                 }
 
-                compoundOp = instrMap.LookSecondOpcode((byte)lastOp, (byte)inst, (byte)0, mode);
-                if(compoundOp != CodeTable.kNoOpcode)
+                compoundOp = instrMap.LookSecondOpcode((byte)lastOp, (byte)inst, 0, mode);
+                if (compoundOp != CodeTable.kNoOpcode)
                 {
-                    instructionAndSizes[lastOpcodeIndex] = (byte)compoundOp;
+                    instructionAndSizes.GetBuffer()[lastOpcodeIndex] = (byte)compoundOp;
                     //append size to instructionAndSizes
                     VarIntBE.AppendInt32(size, instructionAndSizes);
                     lastOpcodeIndex = -1;
                 }
             }
 
-            int opcode = CodeTable.kNoOpcode;
-            if(size <= byte.MaxValue)
+            int opcode;
+            if (size <= byte.MaxValue)
             {
                 opcode = instrMap.LookFirstOpcode((byte)inst, (byte)size, mode);
 
-                if(opcode != CodeTable.kNoOpcode)
+                if (opcode != CodeTable.kNoOpcode)
                 {
-                    instructionAndSizes.Add((byte)opcode);
-                    lastOpcodeIndex = instructionAndSizes.Count - 1;
+                    instructionAndSizes.WriteByte((byte)opcode);
+                    lastOpcodeIndex = (int)instructionAndSizes.Length - 1;
                     return;
                 }
             }
             opcode = instrMap.LookFirstOpcode((byte)inst, 0, mode);
-            if(opcode == CodeTable.kNoOpcode)
+            if (opcode == CodeTable.kNoOpcode)
             {
                 return;
             }
 
-            instructionAndSizes.Add((byte)opcode);
-            lastOpcodeIndex = instructionAndSizes.Count - 1;
+            instructionAndSizes.WriteByte((byte)opcode);
+            lastOpcodeIndex = (int)instructionAndSizes.Length - 1;
             VarIntBE.AppendInt32(size, instructionAndSizes);
         }
 
-        public void Add(byte[] data)
+        public void Add(ReadOnlySpan<byte> data)
         {
             EncodeInstruction(VCDiffInstructionType.ADD, data.Length);
-            dataForAddAndRun.AddRange(data);
+            dataForAddAndRun.Write(data);
             targetLength += data.Length;
         }
 
+#if NET5_0 || NET5_0_OR_GREATER
+        [SkipLocalsInit]
+#endif
         public void Copy(int offset, int length)
         {
-            long encodedAddr = 0;
-            byte mode = addrCache.EncodeAddress(offset, dictionarySize + targetLength, out encodedAddr);
+            byte mode = addrCache.EncodeAddress(offset, dictionarySize + targetLength, out long encodedAddr);
             EncodeInstruction(VCDiffInstructionType.COPY, length, mode);
-            if(addrCache.WriteAddressAsVarint(mode))
+            if (addrCache.WriteAddressAsVarint(mode))
             {
                 VarIntBE.AppendInt64(encodedAddr, addressForCopy);
             }
             else
             {
-                addressForCopy.Add((byte)encodedAddr);
+                addressForCopy.WriteByte((byte)encodedAddr);
             }
             targetLength += length;
         }
@@ -163,128 +139,137 @@ namespace VCDiff.Encoders
         public void Run(int size, byte b)
         {
             EncodeInstruction(VCDiffInstructionType.RUN, size);
-            dataForAddAndRun.Add(b);
+            dataForAddAndRun.WriteByte(b);
             targetLength += size;
         }
 
-        int CalculateLengthOfTheDeltaEncoding()
+        private int CalculateLengthOfTheDeltaEncoding()
         {
-            int extraLength = 0;
-
-            if(hasChecksum)
+            if (IsInterleaved)
             {
-                extraLength += VarIntBE.CalcInt64Length(checksum);
-            }
-
-            if (!interleaved)
-            {
-                int lengthOfDelta = VarIntBE.CalcInt32Length((int)targetLength) +
-                1 +
-                VarIntBE.CalcInt32Length(dataForAddAndRun.Count) +
-                VarIntBE.CalcInt32Length(instructionAndSizes.Count) +
-                VarIntBE.CalcInt32Length(addressForCopy.Count) +
-                dataForAddAndRun.Count +
-                instructionAndSizes.Count +
-                addressForCopy.Count;
-
-                lengthOfDelta += extraLength;
-
-                return lengthOfDelta;
-            }
-            else
-            {
-                int lengthOfDelta = VarIntBE.CalcInt32Length((int)targetLength) +
+                return VarIntBE.CalcInt32Length((int)targetLength) +
                 1 +
                 VarIntBE.CalcInt32Length(0) +
-                VarIntBE.CalcInt32Length(instructionAndSizes.Count) +
+                VarIntBE.CalcInt32Length((int)instructionAndSizes.Length) +
                 VarIntBE.CalcInt32Length(0) +
                 0 +
-                instructionAndSizes.Count;
-
-                lengthOfDelta += extraLength;
-
-                return lengthOfDelta;
+                (int)instructionAndSizes.Length
+                // interleaved implies SDCH checksum if any.
+                + (this.ChecksumFormat == ChecksumFormat.SDCH ? VarIntBE.CalcInt64Length(Checksum) : 0);
             }
+
+            int lengthOfDelta = VarIntBE.CalcInt32Length((int)targetLength) +
+            1 +
+            VarIntBE.CalcInt32Length((int)dataForAddAndRun.Length) +
+            VarIntBE.CalcInt32Length((int)instructionAndSizes.Length) +
+            VarIntBE.CalcInt32Length((int)addressForCopy.Length) +
+            (int)dataForAddAndRun.Length +
+            (int)instructionAndSizes.Length +
+            (int)addressForCopy.Length;
+
+            if (this.ChecksumFormat == ChecksumFormat.SDCH)
+            {
+                lengthOfDelta += VarIntBE.CalcInt64Length(Checksum);
+            }
+            else if (this.ChecksumFormat == ChecksumFormat.Xdelta3)
+            {
+                lengthOfDelta += 4;
+            }
+
+            return lengthOfDelta;
+
         }
 
-        public void Output(ByteStreamWriter sout)
+        public void Output(Stream outputStream)
         {
             int lengthOfDelta = CalculateLengthOfTheDeltaEncoding();
-            int windowSize = lengthOfDelta +
-            1 +
-            VarIntBE.CalcInt32Length((int)dictionarySize) +
-            VarIntBE.CalcInt32Length(0);
-            VarIntBE.CalcInt32Length(lengthOfDelta);
 
             //Google's Checksum Implementation Support
-            if (hasChecksum)
+            if (this.ChecksumFormat != ChecksumFormat.None)
             {
-                sout.writeByte((byte)VCDiffWindowFlags.VCDSOURCE | (byte)VCDiffWindowFlags.VCDCHECKSUM); //win indicator
+                outputStream.WriteByte((byte)VCDiffWindowFlags.VCDSOURCE | (byte)VCDiffWindowFlags.VCDCHECKSUM); //win indicator
             }
             else
             {
-                sout.writeByte((byte)VCDiffWindowFlags.VCDSOURCE); //win indicator
+                outputStream.WriteByte((byte)VCDiffWindowFlags.VCDSOURCE); //win indicator
             }
-            VarIntBE.AppendInt32((int)dictionarySize, sout); //dictionary size
-            VarIntBE.AppendInt32(0, sout); //dictionary start position 0 is default aka encompass the whole dictionary
+            VarIntBE.AppendInt32((int)dictionarySize, outputStream); //dictionary size
+            VarIntBE.AppendInt32(0, outputStream); //dictionary start position 0 is default aka encompass the whole dictionary
 
-            VarIntBE.AppendInt32(lengthOfDelta, sout); //length of delta
+            VarIntBE.AppendInt32(lengthOfDelta, outputStream); //length of delta
 
             //begin of delta encoding
-            Int64 sizeBeforeDelta = sout.Position;
-            VarIntBE.AppendInt32((int)targetLength, sout); //final target length after decoding
-            sout.writeByte(0x00); //uncompressed
+            long sizeBeforeDelta = outputStream.Position;
+            VarIntBE.AppendInt32((int)targetLength, outputStream); //final target length after decoding
+            outputStream.WriteByte(0x00); // uncompressed
 
             // [Here is where a secondary compressor would be used
             //  if the encoder and decoder supported that feature.]
 
-            //non interleaved then it is separata areas for each type
-            if (!interleaved)
+            //non interleaved then it is separeat areas for each type
+            if (!IsInterleaved)
             {
-                VarIntBE.AppendInt32(dataForAddAndRun.Count, sout); //length of add/run
-                VarIntBE.AppendInt32(instructionAndSizes.Count, sout); //length of instructions and sizes
-                VarIntBE.AppendInt32(addressForCopy.Count, sout); //length of addresses for copys
+                VarIntBE.AppendInt32((int)dataForAddAndRun.Length, outputStream); //length of add/run
+                VarIntBE.AppendInt32((int)instructionAndSizes.Length, outputStream); //length of instructions and sizes
+                VarIntBE.AppendInt32((int)addressForCopy.Length, outputStream); //length of addresses for copys
 
-                //Google Checksum Support
-                if(hasChecksum)
+                switch (this.ChecksumFormat)
                 {
-                    VarIntBE.AppendInt64(checksum, sout);
+                    //Google Checksum Support
+                    case ChecksumFormat.SDCH:
+                        VarIntBE.AppendInt64(this.Checksum, outputStream);
+                        break;
+                    // Xdelta checksum support.
+                    case ChecksumFormat.Xdelta3:
+                    {
+                        Span<byte> checksumBytes = stackalloc [] {
+                            (byte)(this.Checksum >> 24), (byte)(this.Checksum >> 16), (byte)(this.Checksum >> 8), (byte)(this.Checksum & 0x000000FF) };
+                        outputStream.Write(checksumBytes);
+                        break;
+                    }
                 }
 
-                sout.writeBytes(dataForAddAndRun.ToArray()); //data section for adds and runs
-                sout.writeBytes(instructionAndSizes.ToArray()); //data for instructions and sizes
-                sout.writeBytes(addressForCopy.ToArray()); //data for addresses section copys
+                outputStream.Write(dataForAddAndRun.GetBuffer().AsSpanFast((int)dataForAddAndRun.Length)); //data section for adds and runs
+                outputStream.Write(instructionAndSizes.GetBuffer().AsSpanFast((int)instructionAndSizes.Length)); //data for instructions and sizes
+                outputStream.Write(addressForCopy.GetBuffer().AsSpanFast((int)addressForCopy.Length)); //data for addresses section copys
             }
             else
             {
                 //interleaved everything is woven in and out in one block
-                VarIntBE.AppendInt32(0, sout); //length of add/run
-                VarIntBE.AppendInt32(instructionAndSizes.Count, sout); //length of instructions and sizes + other data for interleaved
-                VarIntBE.AppendInt32(0, sout); //length of addresses for copys
+                VarIntBE.AppendInt32(0, outputStream); //length of add/run
+                VarIntBE.AppendInt32((int)instructionAndSizes.Length, outputStream); //length of instructions and sizes + other data for interleaved
+                VarIntBE.AppendInt32(0, outputStream); //length of addresses for copys
 
                 //Google Checksum Support
-                if (hasChecksum)
+                if (this.ChecksumFormat == ChecksumFormat.SDCH)
                 {
-                    VarIntBE.AppendInt64(checksum, sout);
+                    VarIntBE.AppendInt64(Checksum, outputStream);
                 }
 
-                sout.writeBytes(instructionAndSizes.ToArray()); //data for instructions and sizes, in interleaved it is everything
+                outputStream.Write(instructionAndSizes.GetBuffer().AsSpan(0, (int)instructionAndSizes.Length)); //data for instructions and sizes, in interleaved it is everything
             }
+
             //end of delta encoding
 
-            Int64 sizeAfterDelta = sout.Position;
-            if(lengthOfDelta != sizeAfterDelta - sizeBeforeDelta)
+            long sizeAfterDelta = outputStream.Position;
+            if (lengthOfDelta != sizeAfterDelta - sizeBeforeDelta)
             {
-                Console.WriteLine("Delta output length does not match");
+                throw new IOException("Delta output length does not match");
             }
-            dataForAddAndRun.Clear();
-            instructionAndSizes.Clear();
-            addressForCopy.Clear();
-            if(targetLength == 0)
+            dataForAddAndRun.SetLength(0);
+            instructionAndSizes.SetLength(0);
+            addressForCopy.SetLength(0);
+            if (targetLength == 0)
             {
-                Console.WriteLine("Empty target window");
+                throw new IOException("Empty target window");
             }
-            addrCache = new AddressCache();
+        }
+
+        public void Dispose()
+        {
+            instructionAndSizes.Dispose();
+            dataForAddAndRun.Dispose();
+            addressForCopy.Dispose();
         }
     }
 }

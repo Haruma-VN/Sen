@@ -1480,19 +1480,191 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             else return false;
         }
         //Create RSBPatch
-        public static void RSBPatchEncode(SenBuffer RSBBeforeFile, SenBuffer RSBAfterFile, string RSBPatchOutFile)
+        public static void RSBPatchEncode(SenBuffer RSBBeforeFile, SenBuffer RSBAfterFile, string RSBPatchOutFile, bool UseRawPacket = false)
         {
-            var RSBBeforeStream = RSBBeforeFile.toStream();
-            var RSBAfterStream = RSBAfterFile.toStream();
+
+            var RSBBeforeHeaderInfomation = ReadHead(RSBBeforeFile);
+            var RSBAfterHeaderInformation = ReadHead(RSBAfterFile);
+            if (RSBBeforeHeaderInfomation.version != 4 && RSBAfterHeaderInformation.version != 4)
+            {
+                throw new Exception("RSBPatch only support PVZ2");
+            }
+            var RSBBeforeHeaderSectionByte = RSBBeforeFile.readBytes(RSBBeforeHeaderInfomation.fileOffset, 0);
+            var RSBAfterHeaderSectionByte = RSBAfterFile.readBytes(RSBBeforeHeaderInfomation.fileOffset, 0);
+            var MD5OldRSB = System.Security.Cryptography.MD5.HashData(RSBBeforeHeaderSectionByte);
+            TestHash(RSBBeforeHeaderSectionByte, MD5OldRSB);
+            var informationSectionPatchExist = !EqualBytesLongUnrolled(RSBBeforeHeaderSectionByte, RSBAfterHeaderSectionByte);
+            var SenWriter = new SenBuffer();
+            {
+                SenWriter.writeString("PBSR");
+                SenWriter.writeInt32LE(1);
+                SenWriter.writeInt32LE(2);
+                SenWriter.writeInt32LE((int)RSBAfterFile.length);
+                SenWriter.writeNull(8);
+                SenWriter.writeBytes(MD5OldRSB);
+                SenWriter.writeInt32LE(RSBAfterFile.readInt32LE(0x28));
+                SenWriter.writeInt32LE(0);
+            }
+            if (informationSectionPatchExist)
+            {
+                var RSBHeaderVCDiff = RSBVCDiff(RSBBeforeHeaderSectionByte, RSBAfterHeaderSectionByte);
+                SenWriter.BackupWriteOffset();
+                SenWriter.writeInt32LE(RSBHeaderVCDiff.Length, 0x14);
+                SenWriter.writeInt32LE(1, 0x2C);
+                SenWriter.RestoreWriteOffset();
+                SenWriter.writeBytes(RSBHeaderVCDiff);
+            }
+            var RSBBeforeRSGInfoList = new List<RSGInfo>();
+            var RSBAfterRSGInfoList = new List<RSGInfo>();
+            ReadRSGInfo(RSBBeforeFile, RSBBeforeHeaderInfomation, ref RSBBeforeRSGInfoList);
+            ReadRSGInfo(RSBAfterFile, RSBAfterHeaderInformation, ref RSBAfterRSGInfoList);
+            var packetBeforeSubGroupIndexing = new string[RSBBeforeRSGInfoList.Count];
+            for (var i = 0; i < RSBBeforeRSGInfoList.Count; i++)
+            {
+                packetBeforeSubGroupIndexing[i] = RSBBeforeRSGInfoList[i].name;
+            }
+            foreach (var packetInfo in RSBAfterRSGInfoList)
+            {
+                var packetAfterName = packetInfo.name;
+                var packetBefore = new byte[1];
+                if (packetBeforeSubGroupIndexing.Contains(packetAfterName))
+                {
+                    var packetBeforeSubGroupIndex = Array.IndexOf(packetBeforeSubGroupIndexing, packetAfterName);
+                    Console.WriteLine("After | {0}, index: {1}, offset: {2}", packetAfterName, packetInfo.poolIndex, packetInfo.rsgOffset);
+                    Console.WriteLine("Before | {0}, index: {1}, offset: {2}", RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].name, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].poolIndex, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgOffset);
+                    if (!UseRawPacket)
+                    {
+                        packetBefore = RSBBeforeFile.readBytes(RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgLength, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgOffset);
+                    }
+                    else
+                    {
+
+                    }
+                }
+                var packetAfter = new byte[1];
+                {
+                    if (!UseRawPacket)
+                    {
+                        packetAfter = RSBAfterFile.readBytes(packetInfo.rsgLength, packetInfo.rsgOffset);
+                    }
+                    else
+                    {
+
+                    }
+                }
+                {
+                    SenWriter.writeNull(8);
+                    SenWriter.writeString(packetAfterName);
+                    SenWriter.writeNull(0x80 - packetAfterName.Length);
+                    SenWriter.writeBytes(System.Security.Cryptography.MD5.HashData(packetAfter));
+                };
+                if (!EqualBytesLongUnrolled(packetBefore, packetAfter))
+                {
+                    var subGroupVCDiff = RSBVCDiff(packetBefore, packetAfter);
+                    var SenWriterPostion = SenWriter.writeOffset;
+                    SenWriter.writeInt32LE((int)SenWriterPostion - 144);
+                    SenWriter.writeOffset = SenWriterPostion;
+                    SenWriter.writeBytes(subGroupVCDiff);
+                }
+            }
+            var file1 = new SenBuffer(RSBBeforeHeaderSectionByte);
+            var file2 = new SenBuffer(RSBAfterHeaderSectionByte);
+            file1.OutFile(RSBPatchOutFile + "1.rsbpatch");
+            file2.OutFile(RSBPatchOutFile + "2.rsbpatch");
+            SenWriter.OutFile(RSBPatchOutFile);
+        }
+
+        private static unsafe bool EqualBytesLongUnrolled(byte[] data1, byte[] data2)
+        {
+            if (data1 == data2)
+                return true;
+            if (data1.Length != data2.Length)
+                return false;
+
+            fixed (byte* bytes1 = data1, bytes2 = data2)
+            {
+                int len = data1.Length;
+                int rem = len % (sizeof(long) * 16);
+                long* b1 = (long*)bytes1;
+                long* b2 = (long*)bytes2;
+                long* e1 = (long*)(bytes1 + len - rem);
+
+                while (b1 < e1)
+                {
+                    if (*(b1) != *(b2) || *(b1 + 1) != *(b2 + 1) ||
+                        *(b1 + 2) != *(b2 + 2) || *(b1 + 3) != *(b2 + 3) ||
+                        *(b1 + 4) != *(b2 + 4) || *(b1 + 5) != *(b2 + 5) ||
+                        *(b1 + 6) != *(b2 + 6) || *(b1 + 7) != *(b2 + 7) ||
+                        *(b1 + 8) != *(b2 + 8) || *(b1 + 9) != *(b2 + 9) ||
+                        *(b1 + 10) != *(b2 + 10) || *(b1 + 11) != *(b2 + 11) ||
+                        *(b1 + 12) != *(b2 + 12) || *(b1 + 13) != *(b2 + 13) ||
+                        *(b1 + 14) != *(b2 + 14) || *(b1 + 15) != *(b2 + 15))
+                        return false;
+                    b1 += 16;
+                    b2 += 16;
+                }
+
+                for (int i = 0; i < rem; i++)
+                    if (data1[len - 1 - i] != data2[len - 1 - i])
+                        return false;
+
+                return true;
+            }
+        }
+
+        private static RSGInfo ReadSubRSGInfo(byte[] RSGInfoByte, int rsgInfo_EachLength)
+        {
+            var RSGInfoFile = new SenBuffer(RSGInfoByte);
+            var packetName = RSGInfoFile.readStringByEmpty();
+            RSGInfoFile.readOffset = 128;
+            var rsgOffset = RSGInfoFile.readInt32LE();
+            var rsgLength = RSGInfoFile.readInt32LE();
+            var rsgIndex = RSGInfoFile.readInt32LE();
+            var ptxNumber = RSGInfoFile.readInt32LE(rsgInfo_EachLength - 8);
+            var ptxBeforeNumber = RSGInfoFile.readInt32LE();
+            RSGInfoFile.Close();
+            return new RSGInfo
+            {
+                name = packetName,
+                rsgOffset = rsgOffset,
+                rsgLength = rsgLength,
+                poolIndex = rsgIndex,
+                ptxNumber = ptxNumber,
+                ptxBeforeNumber = ptxBeforeNumber,
+            };
+        }
+
+        private static byte[] RSBVCDiff(byte[] RSBBeforeHeaderSectionByte, byte[] RSBAfterHeaderSectionByte)
+        {
             var outPutStream = new MemoryStream();
-            var coder = new VCCoder(RSBBeforeStream, RSBAfterStream, outPutStream);
-            var result = coder.Encode();
+            var coder = new VCCoder(new MemoryStream(RSBBeforeHeaderSectionByte), new MemoryStream(RSBAfterHeaderSectionByte), outPutStream, 64);
+            var result = coder.Encode(true, false);
             if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
             {
                 throw new Exception("Invaild vcdiff encode");
             }
-            var SenWriter = new SenBuffer(outPutStream);
-            SenWriter.OutFile(RSBPatchOutFile);
+            return outPutStream.ToArray();
+        }
+
+        /* RSB Section Mapping
+            -FileList
+            -RSGList
+            -CompositeInfo
+            -CompositeList
+            -RSGInfo
+            -AutoPoolInfo
+            -PTXInfo
+        */
+
+        private static void TestHash(byte[] data, byte[] md5)
+        {
+            int bytesWritten;
+            var correctHash = System.Security.Cryptography.MD5.TryHashData(data, md5, out bytesWritten);
+            if (!correctHash)
+            {
+                throw new Exception("Invaild MD5 DATA");
+            }
+            return;
         }
         //Apply RSBPatch
         public static void RSBPatchDecode(SenBuffer RSBBeforeFile, SenBuffer RSBPatchFile, string RSBOutFilePath)

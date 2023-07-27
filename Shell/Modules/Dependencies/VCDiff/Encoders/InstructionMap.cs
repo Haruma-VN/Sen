@@ -1,45 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VCDiff.Shared;
 using VCDiff.Includes;
+using VCDiff.Shared;
 
 namespace VCDiff.Encoders
 {
-    public class InstructionMap
+    internal class InstructionMap
     {
-        CodeTable table;
-        OpcodeMap firstMap;
-        OpcodeMap2 secondMap;
+        public static InstructionMap Instance = new InstructionMap();
+
+        private CodeTable table;
+        private OpcodeMap firstMap;
+        private OpcodeMap2 secondMap;
 
         /// <summary>
         /// Instruction mapping for op codes and such for using in encoding
         /// </summary>
-        public InstructionMap()
+        public unsafe InstructionMap()
         {
             table = CodeTable.DefaultTable;
-            firstMap = new OpcodeMap((int)VCDiffInstructionType.LAST + AddressCache.DefaultLast + 1, FindMaxSize(table.size1));
-            secondMap = new OpcodeMap2((int)VCDiffInstructionType.LAST + AddressCache.DefaultLast + 1, FindMaxSize(table.size2));
+            var inst2 = table.inst2;
+            var inst1 = table.inst1;
+            var size2 = table.size2;
+            var size1 = table.size1;
+            var mode1 = table.mode1;
+            var mode2 = table.mode2;
+
+            // max sizes are known for the default code table (18 and 6 respectively).
+            firstMap = new OpcodeMap((int)VCDiffInstructionType.LAST + AddressCache.DefaultLast + 1, FindMaxSize(size1.AsSpan(), 18));
+            secondMap = new OpcodeMap2((int)VCDiffInstructionType.LAST + AddressCache.DefaultLast + 1, FindMaxSize(size2.AsSpan(), 6));
+            
             for (int opcode = 0; opcode < CodeTable.kCodeTableSize; ++opcode)
             {
-                if (table.inst2[opcode] == CodeTable.N)
+                if (inst2.Pointer[opcode] == CodeTable.N)
                 {
-                    firstMap.Add(table.inst1[opcode], table.size1[opcode], table.mode1[opcode], (byte)opcode);
+                    firstMap.Add(inst1.Pointer[opcode], size1.Pointer[opcode], mode1.Pointer[opcode], (byte)opcode);
                 }
-                else if(table.inst1[opcode] == CodeTable.N)
+                else if (inst1.Pointer[opcode] == CodeTable.N)
                 {
-                    firstMap.Add(table.inst1[opcode], table.size1[opcode], table.mode1[opcode], (byte)opcode);
+                    firstMap.Add(inst1.Pointer[opcode], size1.Pointer[opcode], mode1.Pointer[opcode], (byte)opcode);
                 }
             }
 
-            for(int opcode = 0; opcode < CodeTable.kCodeTableSize; ++opcode)
+            for (int opcode = 0; opcode < CodeTable.kCodeTableSize; ++opcode)
             {
-                if((table.inst1[opcode] != CodeTable.N) && (table.inst2[opcode] != CodeTable.N)) {
-                    int found = this.LookFirstOpcode(table.inst1[opcode], table.size1[opcode], table.mode1[opcode]);
+                if ((inst1.Pointer[opcode] != CodeTable.N) && (inst2.Pointer[opcode] != CodeTable.N))
+                {
+                    int found = LookFirstOpcode(inst1.Pointer[opcode], size1.Pointer[opcode], mode1.Pointer[opcode]);
                     if (found == CodeTable.kNoOpcode) continue;
-                    secondMap.Add((byte)found, table.inst2[opcode], table.size2[opcode], table.mode2[opcode], (byte)opcode);
+                    secondMap.Add((byte)found, inst2.Pointer[opcode], size2.Pointer[opcode], mode2.Pointer[opcode], (byte)opcode);
                 }
             }
         }
@@ -54,12 +62,14 @@ namespace VCDiff.Encoders
             return secondMap.LookUp(first, inst, size, mode);
         }
 
-        static byte FindMaxSize(byte[] sizes)
+        private static byte FindMaxSize(ReadOnlySpan<byte> sizes, sbyte knownMaxSize = -1)
         {
+            if (knownMaxSize > -1) return (byte)knownMaxSize;
             byte maxSize = sizes[0];
-            for(int i = 1; i < sizes.Length; i++)
+            int len = sizes.Length;
+            for (int i = 1; i < len; i++)
             {
-                if(maxSize < sizes[i])
+                if (maxSize < sizes[i])
                 {
                     maxSize = sizes[i];
                 }
@@ -67,11 +77,11 @@ namespace VCDiff.Encoders
             return maxSize;
         }
 
-        class OpcodeMap2
+        private struct OpcodeMap2
         {
-            int[][][] opcodes2;
-            int maxSize;
-            int numInstAndModes;
+            private int[][][] opcodes2;
+            private int maxSize;
+            private int numInstAndModes;
 
             public OpcodeMap2(int numInstAndModes, int maxSize)
             {
@@ -84,81 +94,68 @@ namespace VCDiff.Encoders
             {
                 int[][] instmode = opcodes2[first];
 
-                if(instmode == null)
+                if (instmode == null)
                 {
-                    instmode = new int[this.numInstAndModes][];
+                    instmode = new int[numInstAndModes][];
                     opcodes2[opcode] = instmode;
                 }
                 int[] sizeArray = instmode[inst + mode];
-                if(sizeArray == null)
+                if (sizeArray == null)
                 {
-                    sizeArray = NewSizeOpcodeArray(this.maxSize + 1);
+                    sizeArray = NewSizeOpcodeArray(maxSize + 1);
                     instmode[inst + mode] = sizeArray;
                 }
-                if(sizeArray[size] == CodeTable.kNoOpcode)
+                if (sizeArray[size] == CodeTable.kNoOpcode)
                 {
                     sizeArray[size] = opcode;
                 }
             }
 
-            int[] NewSizeOpcodeArray(int size)
+            private int[] NewSizeOpcodeArray(int size)
             {
                 int[] nn = new int[size];
-                for(int i = 0; i < size; ++i)
-                {
-                    nn[i] = CodeTable.kNoOpcode;
-                }
+                Array.Fill(nn, CodeTable.kNoOpcode);
                 return nn;
             }
 
             public int LookUp(byte first, byte inst, byte size, byte mode)
             {
-                if(size > this.maxSize)
+                if (size > maxSize)
                 {
                     return CodeTable.kNoOpcode;
                 }
 
                 int[][] instmode = opcodes2[first];
-                if(instmode == null)
+                if (instmode == null)
                 {
                     return CodeTable.kNoOpcode;
                 }
-                int instModePointer = (inst == CodeTable.C) ? (inst + mode) : inst;
-                int[] sizeArray = instmode[instModePointer];
-                if(sizeArray == null)
-                {
-                    return CodeTable.kNoOpcode;
-                }
-                return sizeArray[size];
+
+                int instModePointer = inst == CodeTable.C ? (inst + mode) : inst;
+                return instmode[instModePointer]?[size] ?? CodeTable.kNoOpcode;
             }
         }
 
-        class OpcodeMap
+        private struct OpcodeMap
         {
-            int[,] opcodes;
-            int maxSize;
-            int numInstAndModes;
+            private int[] opcodes;
+            private int maxSize;
+            private int numInstAndModes;
 
             public OpcodeMap(int numInstAndModes, int maxSize)
             {
-                this.maxSize = maxSize;
+                this.maxSize = maxSize + 1;
                 this.numInstAndModes = numInstAndModes;
-                opcodes = new int[numInstAndModes, maxSize+1];
+                opcodes = new int[numInstAndModes * this.maxSize];
 
-                for(int i = 0; i < numInstAndModes; ++i)
-                {
-                    for(int j = 0; j < maxSize + 1; j++)
-                    {
-                        opcodes[i,j] = CodeTable.kNoOpcode;
-                    }
-                }
+                Array.Fill(opcodes, CodeTable.kNoOpcode);
             }
 
             public void Add(byte inst, byte size, byte mode, byte opcode)
             {
-                if(opcodes[inst + mode,size] == CodeTable.kNoOpcode)
+                if (opcodes[(inst + mode) + numInstAndModes * size] == CodeTable.kNoOpcode)
                 {
-                    opcodes[inst + mode, size] = opcode;
+                    opcodes[(inst + mode) + numInstAndModes * size] = opcode;
                 }
             }
 
@@ -166,12 +163,12 @@ namespace VCDiff.Encoders
             {
                 int instMode = (inst == CodeTable.C) ? (inst + mode) : inst;
 
-                if(size > maxSize)
+                if (size > maxSize - 1)
                 {
                     return CodeTable.kNoOpcode;
                 }
 
-                return opcodes[instMode, size];
+                return opcodes[instMode + numInstAndModes * size];
             }
         }
     }

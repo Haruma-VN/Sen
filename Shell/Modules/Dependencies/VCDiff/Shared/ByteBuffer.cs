@@ -1,127 +1,163 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Buffers;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace VCDiff.Shared
 {
+    /// <summary>
+    /// Encapsulates a buffer that reads bytes from managed or unmanaged memory.
+    /// </summary>
     public class ByteBuffer : IByteBuffer, IDisposable
     {
-        byte[] bytes;
-        int length;
-        long offset;
+        private MemoryHandle? byteHandle;
+        private unsafe byte*  bytePtr;
+        private int length;
+        private int offset;
 
-        /// <summary>
-        /// Basically a simple wrapper for byte[] arrays
-        /// for easier reading and parsing
-        /// </summary>
-        /// <param name="bytes"></param>
-        public ByteBuffer(byte[] bytes)
+        private ByteBuffer()
+        {
+
+        }
+
+        ~ByteBuffer()
+        {
+            Dispose();
+        }
+
+        /// <summary/>
+        public unsafe ByteBuffer(byte[] bytes)
         {
             offset = 0;
-            this.bytes = bytes;
-            if (bytes != null)
-            {
-                this.length = bytes.Length;
-            }
-            else
-            {
-                this.length = 0;
-            }
+            var memory      = bytes != null ? new Memory<byte>(bytes) : Memory<byte>.Empty;
+            this.byteHandle = memory.Pin();
+            CreateFromPointer((byte*)this.byteHandle.Value.Pointer, memory.Length);
         }
 
-        public override bool CanRead
+        /// <summary/>
+        public unsafe ByteBuffer(Memory<byte> bytes)
         {
-            get
-            {
-                return offset < length;
-            }
+            offset = 0;
+            this.byteHandle = bytes.Pin();
+            CreateFromPointer((byte*)this.byteHandle.Value.Pointer, bytes.Length);
         }
 
-        public override long Position
+        /// <summary/>
+        public unsafe ByteBuffer(Span<byte> bytes)
         {
-            get
-            {
-                return offset;
-            }
-            set
-            {
-                if (value > bytes.Length || value < 0) return;
-                offset = value;
-            }
+            offset = 0;
+
+            // Using GetPinnableReference because length of 0 means out of bound exception.
+            CreateFromPointer((byte*)Unsafe.AsPointer(ref bytes.GetPinnableReference()), bytes.Length);
         }
 
-        public override void BufferAll()
+        /// <summary/>
+        public unsafe ByteBuffer(byte* bytes, int length)
         {
-           //not implemented in this one
-           //since it already contains the full buffered data
+            offset = 0;
+            CreateFromPointer(bytes, length);
         }
 
-        public override long Length
+        private unsafe void CreateFromPointer(byte* pointer, int length)
         {
-            get
-            {
-                return length;
-            }
+            this.bytePtr = pointer;
+            this.length = length;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe Span<byte> AsSpan() => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(bytePtr), length);
+
+        /// <summary>
+        /// Dangerously gets the byte pointer.
+        /// </summary>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe byte* DangerousGetBytePointer() => bytePtr;
+
+        /// <summary>
+        /// Dangerously retrieves the byte pointer at the current position and then increases the offset after.
+        /// </summary>
+        /// <param name="read"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe byte* DangerousGetBytePointerAtCurrentPositionAndIncreaseOffsetAfter(int read)
+        {
+            byte* ptr = bytePtr + offset;
+            offset += read;
+            return ptr;
         }
 
-        public override byte PeekByte()
+        public bool CanRead
         {
-            if (offset >= length) throw new Exception("Trying to read past End of Buffer");
-            return this.bytes[offset];
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => offset < length;
         }
 
-        public override byte[] PeekBytes(int len)
+        public int Position
         {
-            int end = (int)offset + len > bytes.Length ? bytes.Length : (int)offset + len;
-            int realLen = (int)offset + len > bytes.Length ? (int)bytes.Length - (int)offset : len;
-
-            byte[] rbuff = new byte[realLen];
-            int cc = 0;
-            for (long i = offset; i < end; i++)
-            {
-                rbuff[cc] = bytes[i];
-                cc++;
-            }
-            return rbuff;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => offset;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            // We used to check, but this is never true in calls. if (value > length || value < 0) return;
+            set => offset = value;
         }
 
-        public override byte ReadByte()
-        {
-            if (offset >= length) throw new Exception("Trying to read past End of Buffer");
-            return this.bytes[offset++];
+        public int Length {         
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => length;
         }
 
-        public override byte[] ReadBytes(int len)
-        {
-            int end = (int)offset + len > bytes.Length ? bytes.Length : (int)offset + len;
-            int realLen = (int)offset + len > bytes.Length ? (int)bytes.Length - (int)offset : len;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe byte PeekByte() => *((byte*)this.bytePtr + offset);
 
-            byte[] rbuff = new byte[realLen];
-            int cc = 0;
-            for (long i = offset; i < end; i++)
-            {
-                rbuff[cc] = bytes[i];
-                cc++;
-            }
+#if NET5_0 || NET5_0_OR_GREATER
+        [SkipLocalsInit]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe Span<byte> PeekBytes(int len)
+        {
+            int sliceLen = offset + len > this.length ? this.length - offset : len;
+            return MemoryMarshal.CreateSpan(ref Unsafe.AsRef<byte>(bytePtr + offset), sliceLen);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Span<byte> ReadBytesToSpan(Span<byte> data)
+        {
+            var result = PeekBytes(data.Length);
+            result.CopyTo(data);
+            return result.Slice(0, result.Length);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe byte ReadByte() => this.bytePtr[offset++];
+
+#if NET5_0 || NET5_0_OR_GREATER
+        [SkipLocalsInit]
+#endif
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Span<byte> ReadBytesAsSpan(int len)
+        {
+            var slice = PeekBytes(len);
             offset += len;
-            return rbuff;
+            return slice;
         }
 
-        public override void Next()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Memory<byte> ReadBytes(int len)
         {
-            offset++;
-        }
-
-        public override void Skip(int len)
-        {
+            var slice = PeekBytes(len);
             offset += len;
+            return slice.ToArray();
         }
 
-        public override void Dispose()
+        public void Next() => offset++;
+
+        public void Dispose()
         {
-            bytes = null;
+            this.byteHandle?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

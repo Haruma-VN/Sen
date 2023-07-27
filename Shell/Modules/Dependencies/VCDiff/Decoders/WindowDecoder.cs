@@ -1,250 +1,158 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VCDiff.Shared;
+using System.Diagnostics;
 using VCDiff.Includes;
+using VCDiff.Shared;
 
 namespace VCDiff.Decoders
 {
-    public class WindowDecoder
+    internal class WindowDecoderBase
     {
-        IByteBuffer buffer;
-        int returnCode;
-        long deltaEncodingLength;
-        long deltaEncodingStart;
-        ParseableChunk chunk;
-        byte deltaIndicator;
-        long dictionarySize;
-        byte winIndicator;
-        long sourceLength;
-        long sourcePosition;
-        long targetLength;
-        long addRunLength;
-        long instructionAndSizesLength;
-        long addressForCopyLength;
-        uint checksum;
-        bool hasChecksum;
+        /**
+         * The default maximum target file size (and target window size) 
+         */
+        public const int DefaultMaxTargetFileSize = 67108864;  // 64 MB
+    }
 
-        byte[] addRun;
-        byte[] instructionAndSizes;
-        byte[] addressesForCopy;
+    internal class WindowDecoder<TByteBuffer> : WindowDecoderBase, IDisposable where TByteBuffer : IByteBuffer
+    {
+        private int maxWindowSize;
 
-        public byte[] AddRunData
-        {
-            get
-            {
-                return addRun;
-            }
-        }
+        private TByteBuffer buffer;
+        private int returnCode;
+        private long deltaEncodingLength;
+        private long deltaEncodingStart;
+        private ParseableChunk chunk;
+        private byte deltaIndicator;
+        private readonly long dictionarySize;
+        private byte winIndicator;
+        private long sourceSegmentLength;
+        private long sourceSegmentOffset;
+        private long _targetLength;
+        private long addRunLength;
+        private long instructionAndSizesLength;
+        private long addressForCopyLength;
+        private uint checksum;
 
-        public byte[] InstructionsAndSizesData
-        {
-            get
-            {
-                return instructionAndSizes;
-            }
-        }
+        public PinnedArrayRental AddRunData;
 
-        public byte[] AddressesForCopyData
-        {
-            get
-            {
-                return addressesForCopy;
-            }
-        }
+        public PinnedArrayRental InstructionsAndSizesData;
 
-        public long AddRunLength
-        {
-            get
-            {
-                return addRunLength;
-            }
-        }
+        public PinnedArrayRental AddressesForCopyData;
 
-        public long InstructionAndSizesLength
-        {
-            get
-            {
-                return instructionAndSizesLength;
-            }
-        }
+        public long AddRunLength => addRunLength;
 
-        public long AddressesForCopyLength
-        {
-            get
-            {
-                return addressForCopyLength;
-            }
-        }
+        public long InstructionAndSizesLength => instructionAndSizesLength;
 
-        public byte WinIndicator
-        {
-            get
-            {
-                return winIndicator;
-            }
-        }
+        public long AddressesForCopyLength => addressForCopyLength;
 
-        public long SourcePosition
-        {
-            get
-            {
-                return sourcePosition;
-            }
-        }
+        public byte WinIndicator => winIndicator;
 
-        public long SourceLength
-        {
-            get
-            {
-                return sourceLength;
-            }
-        }
+        public long SourceSegmentOffset => sourceSegmentOffset;
 
-        public long DecodedDeltaLength
-        {
-            get
-            {
-                return targetLength;
-            }
-        }
+        public long SourceSegmentLength => sourceSegmentLength;
 
-        public long DeltaStart
-        {
-            get
-            {
-                return deltaEncodingStart;
-            }
-        }
+        public long TargetWindowLength => _targetLength;
 
-        public long DeltaLength
-        {
-            get
-            {
-                return deltaEncodingStart + deltaEncodingLength;
-            }
-        }
+        public uint Checksum => checksum;
 
-        public byte DeltaIndicator
-        {
-            get
-            {
-                return deltaIndicator;
-            }
-        }
+        public ChecksumFormat ChecksumFormat { get; private set; }
 
-        public uint Checksum
-        {
-            get
-            {
-                return checksum;
-            }
-        }
-
-        public bool HasChecksum
-        {
-            get
-            {
-                return hasChecksum;
-            }
-        }
-
-        public int Result
-        {
-            get
-            {
-                return returnCode;
-            }
-        }
+        public int Result => returnCode;
 
         /// <summary>
         /// Parses the window from the data
         /// </summary>
         /// <param name="dictionarySize">the dictionary size</param>
         /// <param name="buffer">the buffer containing the incoming data</param>
-        public WindowDecoder(long dictionarySize, IByteBuffer buffer)
+        /// <param name="maxWindowSize">The maximum target window size in bytes</param>
+        public WindowDecoder(long dictionarySize, TByteBuffer buffer, int maxWindowSize = DefaultMaxTargetFileSize)
         {
             this.dictionarySize = dictionarySize;
             this.buffer = buffer;
             chunk = new ParseableChunk(buffer.Position, buffer.Length);
+
+            if (maxWindowSize < 0)
+            {
+                throw new ArgumentException("maxWindowSize must be a positive value", "maxWindowSize");
+            }
+            else
+            {
+                this.maxWindowSize = maxWindowSize;
+            }
+
             returnCode = (int)VCDiffResult.SUCCESS;
         }
 
         /// <summary>
-        /// Decodes the window header - Parses it basically
+        /// Decodes the window header.
         /// </summary>
-        /// <param name="googleVersion">if true will check for checksum and if interleaved</param>
+        /// <param name="isSdch">If the delta uses SDCH extensions.</param>
         /// <returns></returns>
-        public bool Decode(bool googleVersion)
+        public bool Decode(bool isSdch)
         {
-            bool success = false;
-
-            success = ParseWindowIndicatorAndSegment(dictionarySize, 0, false, out winIndicator, out sourceLength, out sourcePosition);
-
-            if(!success)
+            if (!ParseWindowIndicatorAndSegment(dictionarySize, 0, false, out winIndicator, out sourceSegmentLength, out sourceSegmentOffset))
             {
                 return false;
             }
 
-            success = ParseWindowLengths(out targetLength);
-
-            if(!success)
+            if (!ParseWindowLengths(out _targetLength))
             {
                 return false;
             }
 
-            success = ParseDeltaIndicator();
-
-            if(!success)
+            if (!ParseDeltaIndicator())
             {
                 return false;
             }
 
-            hasChecksum = false;
-            if((winIndicator & (int)VCDiffWindowFlags.VCDCHECKSUM) != 0 && googleVersion)
+            this.ChecksumFormat = ChecksumFormat.None;
+            if ((winIndicator & (int)VCDiffWindowFlags.VCDCHECKSUM) != 0)
             {
-                hasChecksum = true;
+                this.ChecksumFormat = isSdch ? ChecksumFormat.SDCH : ChecksumFormat.Xdelta3;
             }
 
-            success = ParseSectionLengths(hasChecksum, out addRunLength, out instructionAndSizesLength, out addressForCopyLength, out checksum);
-
-            if(!success)
+            if (!ParseSectionLengths(this.ChecksumFormat, out addRunLength, out instructionAndSizesLength, out addressForCopyLength, out checksum))
             {
                 return false;
             }
 
-            if(googleVersion && addRunLength == 0 && addressForCopyLength == 0 && instructionAndSizesLength > 0)
+            if (isSdch && addRunLength == 0 && addressForCopyLength == 0 && instructionAndSizesLength > 0)
             {
                 //interleave format
                 return true;
-            }       
+            }
 
+            // Note: Copied required here due to caching behaviour.
             if (buffer.CanRead)
             {
-                addRun = buffer.ReadBytes((int)addRunLength);
+                AddRunData = new PinnedArrayRental((int)addRunLength);
+                Debug.Assert(addRunLength <= int.MaxValue);
+                buffer.ReadBytesToSpan(AddRunData.AsSpan());
             }
-            if(buffer.CanRead)
+            if (buffer.CanRead)
             {
-                instructionAndSizes = buffer.ReadBytes((int)instructionAndSizesLength);
+                InstructionsAndSizesData = new PinnedArrayRental((int)instructionAndSizesLength);
+                Debug.Assert(instructionAndSizesLength <= int.MaxValue);
+                buffer.ReadBytesToSpan(InstructionsAndSizesData.AsSpan());
             }
-            if(buffer.CanRead)
+            if (buffer.CanRead)
             {
-                addressesForCopy = buffer.ReadBytes((int)addressForCopyLength);
+                AddressesForCopyData = new PinnedArrayRental((int)addressForCopyLength);
+                Debug.Assert(addressForCopyLength <= int.MaxValue);
+                buffer.ReadBytesToSpan(AddressesForCopyData.AsSpan());
             }
 
             return true;
         }
 
-        bool ParseByte(out byte value)
+        private bool ParseByte(out byte value)
         {
-            if((int)VCDiffResult.SUCCESS != returnCode)
+            if ((int)VCDiffResult.SUCCESS != returnCode)
             {
                 value = 0;
                 return false;
             }
-            if(chunk.IsEmpty)
+            if (chunk.IsEmpty)
             {
                 value = 0;
                 returnCode = (int)VCDiffResult.EOD;
@@ -255,7 +163,7 @@ namespace VCDiff.Decoders
             return true;
         }
 
-        bool ParseInt32(out int value)
+        private bool ParseInt32(out int value)
         {
             if ((int)VCDiffResult.SUCCESS != returnCode)
             {
@@ -270,23 +178,22 @@ namespace VCDiff.Decoders
             }
 
             int parsed = VarIntBE.ParseInt32(buffer);
-            switch(parsed)
+            switch (parsed)
             {
-                case (int)VCDiffResult.ERRROR:
+                case (int)VCDiffResult.ERROR:
                     value = 0;
                     return false;
+
                 case (int)VCDiffResult.EOD:
                     value = 0;
                     return false;
-                default:
-                    break;
             }
             chunk.Position = buffer.Position;
             value = parsed;
             return true;
         }
 
-        bool ParseUInt32(out uint value)
+        private bool ParseUInt32(out uint value)
         {
             if ((int)VCDiffResult.SUCCESS != returnCode)
             {
@@ -303,18 +210,17 @@ namespace VCDiff.Decoders
             long parsed = VarIntBE.ParseInt64(buffer);
             switch (parsed)
             {
-                case (int)VCDiffResult.ERRROR:
+                case (int)VCDiffResult.ERROR:
                     value = 0;
                     return false;
+
                 case (int)VCDiffResult.EOD:
                     value = 0;
                     return false;
-                default:
-                    break;
             }
-            if(parsed > 0xFFFFFFFF)
+            if (parsed > 0xFFFFFFFF)
             {
-                returnCode = (int)VCDiffResult.ERRROR;
+                returnCode = (int)VCDiffResult.ERROR;
                 value = 0;
                 return false;
             }
@@ -323,43 +229,41 @@ namespace VCDiff.Decoders
             return true;
         }
 
-        bool ParseSourceSegmentLengthAndPosition(long from, out long sourceLength, out long sourcePosition)
+        private bool ParseSourceSegmentLengthAndPosition(long from, out long sourceLength, out long sourcePosition)
         {
-            int outLength;
-            if(!ParseInt32(out outLength))
+            if (!ParseInt32(out int outLength))
             {
                 sourceLength = 0;
                 sourcePosition = 0;
                 return false;
             }
             sourceLength = outLength;
-            if(sourceLength > from)
+            if (sourceLength > from)
             {
-                returnCode = (int)VCDiffResult.ERRROR;
+                returnCode = (int)VCDiffResult.ERROR;
                 sourceLength = 0;
                 sourcePosition = 0;
                 return false;
             }
-            int outPos;
-            if(!ParseInt32(out outPos))
+            if (!ParseInt32(out int outPos))
             {
                 sourcePosition = 0;
                 sourceLength = 0;
                 return false;
             }
             sourcePosition = outPos;
-            if(sourcePosition > from)
+            if (sourcePosition > from)
             {
-                returnCode = (int)VCDiffResult.ERRROR;
+                returnCode = (int)VCDiffResult.ERROR;
                 sourceLength = 0;
                 sourcePosition = 0;
                 return false;
             }
 
             long segmentEnd = sourcePosition + sourceLength;
-            if(segmentEnd > from)
+            if (segmentEnd > from)
             {
-                returnCode = (int)VCDiffResult.ERRROR;
+                returnCode = (int)VCDiffResult.ERROR;
                 sourceLength = 0;
                 sourcePosition = 0;
                 return false;
@@ -368,9 +272,9 @@ namespace VCDiff.Decoders
             return true;
         }
 
-        bool ParseWindowIndicatorAndSegment(long dictionarySize, long decodedTargetSize, bool allowVCDTarget, out byte winIndicator, out long sourceSegmentLength, out long sourceSegmentPosition)
+        private bool ParseWindowIndicatorAndSegment(long dictionarySize, long decodedTargetSize, bool allowVCDTarget, out byte winIndicator, out long sourceSegmentLength, out long sourceSegmentPosition)
         {
-            if(!ParseByte(out winIndicator))
+            if (!ParseByte(out winIndicator))
             {
                 winIndicator = 0;
                 sourceSegmentLength = 0;
@@ -380,20 +284,27 @@ namespace VCDiff.Decoders
 
             int sourceFlags = winIndicator & ((int)VCDiffWindowFlags.VCDSOURCE | (int)VCDiffWindowFlags.VCDTARGET);
 
-            switch(sourceFlags)
+            switch (sourceFlags)
             {
+                case 0:
+                    sourceSegmentPosition = 0;
+                    sourceSegmentLength = 0;
+                    return true;
+
                 case (int)VCDiffWindowFlags.VCDSOURCE:
                     return ParseSourceSegmentLengthAndPosition(dictionarySize, out sourceSegmentLength, out sourceSegmentPosition);
+
                 case (int)VCDiffWindowFlags.VCDTARGET:
-                    if(!allowVCDTarget)
+                    if (!allowVCDTarget)
                     {
                         winIndicator = 0;
                         sourceSegmentLength = 0;
                         sourceSegmentPosition = 0;
-                        returnCode = (int)VCDiffResult.ERRROR;
+                        returnCode = (int)VCDiffResult.ERROR;
                         return false;
                     }
                     return ParseSourceSegmentLengthAndPosition(decodedTargetSize, out sourceSegmentLength, out sourceSegmentPosition);
+
                 case (int)VCDiffWindowFlags.VCDSOURCE | (int)VCDiffWindowFlags.VCDTARGET:
                     winIndicator = 0;
                     sourceSegmentPosition = 0;
@@ -407,10 +318,9 @@ namespace VCDiff.Decoders
             return false;
         }
 
-        bool ParseWindowLengths(out long targetWindowLength)
+        private bool ParseWindowLengths(out long targetWindowLength)
         {
-            int deltaLength;
-            if(!ParseInt32(out deltaLength))
+            if (!ParseInt32(out int deltaLength))
             {
                 targetWindowLength = 0;
                 return false;
@@ -418,52 +328,63 @@ namespace VCDiff.Decoders
             deltaEncodingLength = deltaLength;
 
             deltaEncodingStart = chunk.ParsedSize;
-            int outTargetLength;
-            if(!ParseInt32(out outTargetLength))
+            if (!ParseInt32(out int outTargetLength))
             {
                 targetWindowLength = 0;
                 return false;
             }
+
             targetWindowLength = outTargetLength;
+            if (targetWindowLength > maxWindowSize)
+            {
+                targetWindowLength = 0;
+                this.returnCode = (int)VCDiffResult.ERROR;
+                throw new InvalidOperationException(String.Format("Length of target window ({0}) exceeds limit of {1} bytes", outTargetLength, maxWindowSize));
+            }
             return true;
         }
 
-        bool ParseDeltaIndicator()
+        private bool ParseDeltaIndicator()
         {
-            if(!ParseByte(out deltaIndicator))
+            if (!ParseByte(out deltaIndicator))
             {
-                returnCode = (int)VCDiffResult.ERRROR;
+                returnCode = (int)VCDiffResult.ERROR;
                 return false;
             }
-            if((deltaIndicator & ((int)VCDiffCompressFlags.VCDDATACOMP | (int)VCDiffCompressFlags.VCDINSTCOMP | (int)VCDiffCompressFlags.VCDADDRCOMP)) > 0)
+            if ((deltaIndicator & ((int)VCDiffCompressFlags.VCDDATACOMP | (int)VCDiffCompressFlags.VCDINSTCOMP | (int)VCDiffCompressFlags.VCDADDRCOMP)) > 0)
             {
-                returnCode = (int)VCDiffResult.ERRROR;
+                returnCode = (int)VCDiffResult.ERROR;
                 return false;
             }
-            return true; 
+            return true;
         }
 
-
-        public bool ParseSectionLengths(bool hasChecksum, out long addRunLength, out long instructionsLength, out long addressLength, out uint checksum)
+        public bool ParseSectionLengths(ChecksumFormat checksumFormat, out long addRunLength, out long instructionsLength, out long addressLength, out uint checksum)
         {
-            int outAdd;
-            int outInstruct;
-            int outAddress;
-            ParseInt32(out outAdd);
-            ParseInt32(out outInstruct);
-            ParseInt32(out outAddress);
+            ParseInt32(out int outAdd);
+            ParseInt32(out int outInstruct);
+            ParseInt32(out int outAddress);
             checksum = 0;
 
-            if(hasChecksum)
+            if (checksumFormat == ChecksumFormat.SDCH)
             {
                 ParseUInt32(out checksum);
+            } 
+            else if (checksumFormat == ChecksumFormat.Xdelta3)
+            {
+                // xdelta checksum is stored as a 4-part byte array
+                ParseByte(out byte chk0);
+                ParseByte(out byte chk1);
+                ParseByte(out byte chk2);
+                ParseByte(out byte chk3);
+                checksum = (uint)(chk0 << 24 | chk1 << 16 | chk2 << 8 | chk3);
             }
 
             addRunLength = outAdd;
             addressLength = outAddress;
             instructionsLength = outInstruct;
 
-            if(returnCode != (int)VCDiffResult.SUCCESS)
+            if (returnCode != (int)VCDiffResult.SUCCESS)
             {
                 return false;
             }
@@ -471,74 +392,44 @@ namespace VCDiff.Decoders
             long deltaHeaderLength = chunk.ParsedSize - deltaEncodingStart;
             long totalLen = deltaHeaderLength + addRunLength + instructionsLength + addressLength;
 
-            if(deltaEncodingLength != totalLen)
-            {
-                returnCode = (int)VCDiffResult.ERRROR;
-                return false;
-            }
+            if (deltaEncodingLength == totalLen) return true;
+            returnCode = (int)VCDiffResult.ERROR;
+            return false;
 
-            return true;
         }
 
-        public class ParseableChunk
+        public void Dispose()
         {
-            long end;
-            long position;
-            long start;
+            AddRunData.Dispose();
+            InstructionsAndSizesData.Dispose();
+            AddressesForCopyData.Dispose();
+        }
+        public struct ParseableChunk
+        {
+            private long end;
+            private long position;
+            private long start;
 
-            public long UnparsedSize
-            {
-                get
-                {
-                    return end - position;
-                }
-            }
+            public long UnparsedSize => end - position;
 
-            public long End
-            {
-                get
-                {
-                    return end;
-                }
-            }
+            public long End => end;
 
-            public bool IsEmpty
-            {
-                get
-                {
-                    return 0 == UnparsedSize;
-                }
-            }
+            public bool IsEmpty => 0 == UnparsedSize;
 
-            public long Start
-            {
-                get
-                {
-                    return start;
-                }
-            }
+            public long Start => start;
 
-            public long ParsedSize
-            {
-                get
-                {
-                    return position - start;
-                }
-            }
+            public long ParsedSize => position - start;
 
             public long Position
             {
-                get
-                {
-                    return position;
-                }
+                get => position;
                 set
                 {
-                    if(position < start)
+                    if (position < start)
                     {
                         return;
                     }
-                    if(position > end)
+                    if (position > end)
                     {
                         return;
                     }
@@ -548,9 +439,9 @@ namespace VCDiff.Decoders
 
             public ParseableChunk(long s, long len)
             {
-                this.start = s;
-                this.end = s + len;
-                this.position = s;
+                start = s;
+                end = s + len;
+                position = s;
             }
         }
     }

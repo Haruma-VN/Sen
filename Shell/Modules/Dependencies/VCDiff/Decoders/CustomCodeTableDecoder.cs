@@ -1,103 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using VCDiff.Includes;
 using VCDiff.Shared;
-using System.IO;
 
 namespace VCDiff.Decoders
 {
-    public class CustomCodeTableDecoder
+    internal class CustomCodeTableDecoder
     {
-        byte nearSize;
-        byte sameSize;
-        CodeTable table;
+        public byte NearSize { get; private set; }
 
-        public byte NearSize
+        public byte SameSize { get; private set; }
+
+        public CodeTable? CustomTable { get; private set; }
+
+        internal VCDiffResult Decode(IByteBuffer source)
         {
-            get
-            {
-                return nearSize;
-            }
-        }
-
-        public byte SameSize
-        {
-            get
-            {
-                return sameSize;
-            }
-        }
-
-        public CodeTable CustomTable
-        {
-            get
-            {
-                return table;
-            }
-        }
-
-        public CustomCodeTableDecoder()
-        {
- 
-        }
-
-        public VCDiffResult Decode(IByteBuffer source)
-        {
-            VCDiffResult result = VCDiffResult.SUCCESS;
-
             //the custom codetable itself is a VCDiff file but it is required to be encoded with the standard table
             //the length should be the first thing after the hdr_indicator if not supporting compression
             //at least according to the RFC specs.
             int lengthOfCodeTable = VarIntBE.ParseInt32(source);
 
-            if (lengthOfCodeTable == 0) return VCDiffResult.ERRROR;
+            if (lengthOfCodeTable == 0) return VCDiffResult.ERROR;
 
-            ByteBuffer codeTable = new ByteBuffer(source.ReadBytes(lengthOfCodeTable));
+            using ByteBuffer codeTable = new ByteBuffer(source.ReadBytes(lengthOfCodeTable).ToArray());
 
             //according to the RFC specifications the next two items will be the size of near and size of same
             //they are bytes in the RFC spec, but for some reason Google uses the varint to read which does
             //the same thing if it is a single byte
             //but I am going to just read in bytes because it is the RFC standard
-            nearSize = codeTable.ReadByte();
-            sameSize = codeTable.ReadByte();
+            NearSize = codeTable.ReadByte();
+            SameSize = codeTable.ReadByte();
 
-            if(nearSize == 0 || sameSize == 0 || nearSize > byte.MaxValue || sameSize > byte.MaxValue)
+            if (NearSize == 0 || SameSize == 0 || NearSize > byte.MaxValue || SameSize > byte.MaxValue)
             {
-                return VCDiffResult.ERRROR;
+                return VCDiffResult.ERROR;
             }
 
-            table = new CodeTable();
+            CustomTable = new CodeTable();
             //get the original bytes of the default codetable to use as a dictionary
-            IByteBuffer dictionary = table.GetBytes();
+            using ByteBuffer dictionary = CustomTable.GetBytes();
 
             //Decode the code table VCDiff file itself
             //stream the decoded output into a memory stream
-            using(MemoryStream sout = new MemoryStream())
+            using MemoryStream sout = new MemoryStream();
+            var decoder = new VcDecoderEx<ByteBuffer, ByteBuffer>(dictionary, codeTable, sout);
+            var result = decoder.Decode(out long bytesWritten);
+
+            if (result != VCDiffResult.SUCCESS || bytesWritten == 0)
             {
-                VCDecoder decoder = new VCDecoder(dictionary, codeTable, sout);
-                result = decoder.Start();
+                return VCDiffResult.ERROR;
+            }
 
-                if(result != VCDiffResult.SUCCESS)
-                {
-                    return result;
-                }
-
-                long bytesWritten = 0;
-                result = decoder.Decode(out bytesWritten);
-
-                if(result != VCDiffResult.SUCCESS || bytesWritten == 0)
-                {
-                    return VCDiffResult.ERRROR;
-                }
-
-                //set the new table data that was decoded
-                if(!table.SetBytes(sout.ToArray()))
-                {
-                    result = VCDiffResult.ERRROR;
-                }
+            //set the new table data that was decoded
+            if (!CustomTable.SetBytes(sout.ToArray()))
+            {
+                result = VCDiffResult.ERROR;
             }
 
             return result;

@@ -106,6 +106,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void ApplyRSBPatch(string RSBOriginalFilePath, string RSBPatchFilePath, string RSBOutFilePath);
 
+        public abstract void VCDiffEncode(string OldFile, string NewFile, string PatchOutFile, bool interleaved);
+
+        public abstract void VCDiffDecode(string OldFile, string PatchFile, string NewFile);
+
     }
 
 
@@ -359,7 +363,17 @@ namespace Sen.Shell.Modules.Support.PvZ2
             RSBFunction.RSBPatchDecode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBPatchFilePath), RSBOutFilePath);
             return;
         }
-        
+
+
+        public unsafe override sealed void VCDiffEncode(string OldFile, string NewFile, string PatchOutFile, bool interleaved) {
+
+            return;
+        }
+
+        public unsafe override sealed void VCDiffDecode(string OldFile, string PatchFile, string NewFile) {
+
+            return;
+        }
 
         #endregion
     }
