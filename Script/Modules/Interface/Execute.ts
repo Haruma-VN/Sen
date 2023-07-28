@@ -1854,10 +1854,15 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_rsb_patch_encode": {
                     if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("obtained_rsb_before"));
+                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${argument}`);
+                        Sen.Shell.Console.Print(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_after_rsb"))
+                        );
                         const rsb_after_file: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
-
-                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsb_after_file)}`, `${Sen.Shell.Path.Parse(rsb_after_file).name_without_extension}.rsbpatch`));
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsb_after_file)}`, `${Sen.Shell.Path.Parse(rsb_after_file).name_without_extension}.diff.rsbpatch`));
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
                             Sen.Shell.PvZ2Shell.CreateRSBPatch(argument, rsb_after_file, output_argument);
                         } catch (error: unknown) {
@@ -1865,10 +1870,15 @@ namespace Sen.Script.Modules.Interface.Execute {
                         }
                     } else {
                         argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("obtained_rsb_before"));
+                            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${arg}`);
+                            Sen.Shell.Console.Print(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_after_rsb"))
+                            );
                             const rsb_after_file: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
-
-                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsb_after_file)}`, `${Sen.Shell.Path.Parse(rsb_after_file).name_without_extension}.rsbpatch`));
-                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsb_after_file)}`, `${Sen.Shell.Path.Parse(rsb_after_file).name_without_extension}.diff.rsbpatch`));
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
                                 Sen.Shell.PvZ2Shell.CreateRSBPatch(arg, rsb_after_file, output_argument);
                             } catch (error: unknown) {
@@ -1880,10 +1890,13 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_rsb_patch_decode": {
                     if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_diff_rsbpatch"))
+                        );
                         const rsbpatch_filepath: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
-
-                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsbpatch_filepath)}`, `${Sen.Shell.Path.Parse(rsbpatch_filepath).name_without_extension}.rsb`));
-                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsbpatch_filepath)}`, `${Sen.Shell.Path.Parse(rsbpatch_filepath).name_without_extension}.patched.rsb`));
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
                             Sen.Shell.PvZ2Shell.ApplyRSBPatch(argument, rsbpatch_filepath, output_argument);
                         } catch (error: unknown) {
@@ -1891,10 +1904,13 @@ namespace Sen.Script.Modules.Interface.Execute {
                         }
                     } else {
                         argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_diff_rsbpatch"))
+                            );
                             const rsbpatch_filepath: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
-
-                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsbpatch_filepath)}`, `${Sen.Shell.Path.Parse(rsbpatch_filepath).name_without_extension}.rsb`));
-                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(rsbpatch_filepath)}`, `${Sen.Shell.Path.Parse(rsbpatch_filepath).name_without_extension}.patched.rsb`));
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
                                 Sen.Shell.PvZ2Shell.ApplyRSBPatch(arg, rsbpatch_filepath, output_argument);
                             } catch (error: unknown) {

@@ -13,7 +13,6 @@ using VCDiff.Includes;
 using VCDiff.Encoders;
 using VCDiff.Decoders;
 using VCDiff.Shared;
-using Newtonsoft.Json.Linq;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -101,7 +100,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void ZlibUncompress(string inFile, string outFile);
 
-        public abstract Dictionary<string, uint[]> GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting);
+        public abstract void GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting);
 
         public abstract void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile);
 
@@ -348,22 +347,24 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public unsafe override sealed Dictionary<string, uint[]> GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting)
+        public unsafe override sealed void GenerateImageSequence(string AnimationJsonPath, string outFolder, string mediaPath, AnimationHelperSetting setting)
         {
             var fs = new FileSystem();
-            var frame_label = AnimationHelper.GenerateImageSequence(fs.ReadJson<PAMInfo>(AnimationJsonPath), outFolder, mediaPath, setting);
-            return frame_label;
+            AnimationHelper.GenerateImageSequence(fs.ReadJson<PAMInfo>(AnimationJsonPath), outFolder, mediaPath, setting);
+            return;
         }
 
         public unsafe override sealed void CreateRSBPatch(string RSBOriginalFilePath, string RSBModFilePath, string RSBPatchOutFile)
         {
-            RSBFunction.RSBPatchEncode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBModFilePath), RSBPatchOutFile);
+            var SenWriter = RSBFunction.RSBPatchEncode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBModFilePath));
+            SenWriter.OutFile(RSBPatchOutFile);
             return;
         }
 
         public unsafe override sealed void ApplyRSBPatch(string RSBOriginalFilePath, string RSBPatchFilePath, string RSBOutFilePath)
         {
-            RSBFunction.RSBPatchDecode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBPatchFilePath), RSBOutFilePath);
+            var RSBAfter = RSBFunction.RSBPatchDecode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBPatchFilePath));
+            RSBAfter.OutFile(RSBOutFilePath);
             return;
         }
 
@@ -371,11 +372,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public unsafe override sealed void VCDiffEncode(string OldFile, string NewFile, string PatchOutFile, bool interleaved)
         {
             using (FileStream output = new FileStream(PatchOutFile, FileMode.Create, FileAccess.Write))
-            using (FileStream dict = new FileStream(PatchOutFile, FileMode.Open, FileAccess.Read))
+            using (FileStream dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read))
             using (FileStream target = new FileStream(NewFile, FileMode.Open, FileAccess.Read))
             {
-                var coder = new VcEncoder(dict, target, output);
-                var result = coder.Encode(interleaved: interleaved);
+                var coder = new VcEncoder(dict, target, output, 64);
+                var result = coder.Encode(interleaved: interleaved, checksumFormat: ChecksumFormat.SDCH);
                 if (result != VCDiffResult.SUCCESS)
                 {
                     throw new Exception("Invaild VCDiffEncode");
@@ -390,7 +391,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             using (FileStream dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read))
             using (FileStream target = new FileStream(PatchFile, FileMode.Open, FileAccess.Read))
             {
-                var decoder = new VcDecoder(dict, target, output);
+                var decoder = new VcDecoder(dict, target, output, 0xFFFFFFF);
                 long bytesWritten = 0;
                 var result = decoder.Decode(out bytesWritten);
                 if (result != VCDiffResult.SUCCESS)

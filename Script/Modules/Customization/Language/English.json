@@ -388,5 +388,17 @@
     "lawnstring_json_map": "JSON Map: From version 6.8 to 8.5",
     "lawnstring_json_text": "JSON Text: From 8.6 above",
     "popcap_ptx_option": "{1}. {2} ({3}, {4})",
-    "android_and_ios": "Android and iOS"
+    "android_and_ios": "Android and iOS",
+    "invalid_md5_data": "Invalid MD5 Data",
+    "invalid_vcdiff_decode": "Invalid VCDiff Decode",
+    "invalid_rsg_number": "Invalid RSG Number",
+    "raw_packet_is_not_supported": "Raw Packet is not supported",
+    "this_rsb_is_invalid": "This RSB is invalid",
+    "this_file_is_not_rsbpatch": "This file is not RSB-Patch",
+    "invalid_rsgpatch": "Invalid RSG-Patch",
+    "invalid_vcdiff_encode": "Invalid VCDiff Encode",
+    "rsbpatch_only_for_pvz2": "RSB-Patch only support PvZ2",
+    "input_diff_rsbpatch": "Input RSB-Patch Diff",
+    "input_after_rsb": "Input After RSB",
+    "obtained_rsb_before": "Obtained RSB Before Changes:"
 }

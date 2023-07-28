@@ -295,32 +295,8 @@
         "exclude": [],
         "type": "file"
     },
-    "vcdiff_encode": {
-        "func_number": 50,
-        "include": [".bin"],
-        "exclude": [],
-        "type": "file"
-    },
-    "vcdiff_decode": {
-        "func_number": 51,
-        "include": [".bin"],
-        "exclude": [],
-        "type": "file"
-    },
-    "popcap_rsb_bundle_manifest_split": {
-        "func_number": 52,
-        "include": ["manifest.json"],
-        "exclude": [],
-        "type": "file"
-    },
-    "popcap_rsb_bundle_manifest_merge": {
-        "func_number": 53,
-        "include": [".package"],
-        "exclude": [],
-        "type": "directory"
-    },
     "popcap_lawnstring_convert": {
-        "func_number": 54,
+        "func_number": 50,
         "include": [".txt", ".json"],
         "exclude": [],
         "type": "file"

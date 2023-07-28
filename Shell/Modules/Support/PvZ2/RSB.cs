@@ -238,6 +238,30 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         public List<PathPosition> positions = new List<PathPosition>();
     }
 
+    public class RSBPatchHeadExpand
+    {
+        //0xC
+        public required int RSBAfterFileSize { get; set; }
+        //0x14
+        public required int RSBHeadSectionPatchSize { get; set; }
+        //0x18
+        public required byte[] MD5RSBBefore { get; set; }
+        //0x28
+        public required int RSGNumber { get; set; }
+        //0x2C
+        public required bool RSBNeedPatch { get; set; }
+    }
+
+    public class RSBPatchSubGroupInfo
+    {
+        // 0x4
+        public required int packetPatchSize { get; set; }
+        // 0x8
+        public required string packetName { get; set; }
+        // 0x80
+        public required byte[] MD5Packet { get; set; }
+    }
+
 
 
     public class RSBFunction
@@ -1480,17 +1504,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             else return false;
         }
         //Create RSBPatch
-        public static void RSBPatchEncode(SenBuffer RSBBeforeFile, SenBuffer RSBAfterFile, string RSBPatchOutFile, bool UseRawPacket = false)
+        public static SenBuffer RSBPatchEncode(SenBuffer RSBBeforeFile, SenBuffer RSBAfterFile, bool UseRawPacket = false)
         {
 
             var RSBBeforeHeaderInfomation = ReadHead(RSBBeforeFile);
             var RSBAfterHeaderInformation = ReadHead(RSBAfterFile);
             if (RSBBeforeHeaderInfomation.version != 4 && RSBAfterHeaderInformation.version != 4)
             {
-                throw new Exception("RSBPatch only support PVZ2");
+                throw new Exception("rsbpatch_only_for_pvz2");
             }
             var RSBBeforeHeaderSectionByte = RSBBeforeFile.readBytes(RSBBeforeHeaderInfomation.fileOffset, 0);
-            var RSBAfterHeaderSectionByte = RSBAfterFile.readBytes(RSBBeforeHeaderInfomation.fileOffset, 0);
+            var RSBAfterHeaderSectionByte = RSBAfterFile.readBytes(RSBAfterHeaderInformation.fileOffset, 0);
             var MD5OldRSB = System.Security.Cryptography.MD5.HashData(RSBBeforeHeaderSectionByte);
             TestHash(RSBBeforeHeaderSectionByte, MD5OldRSB);
             var informationSectionPatchExist = !EqualBytesLongUnrolled(RSBBeforeHeaderSectionByte, RSBAfterHeaderSectionByte);
@@ -1530,15 +1554,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 if (packetBeforeSubGroupIndexing.Contains(packetAfterName))
                 {
                     var packetBeforeSubGroupIndex = Array.IndexOf(packetBeforeSubGroupIndexing, packetAfterName);
-                    Console.WriteLine("After | {0}, index: {1}, offset: {2}", packetAfterName, packetInfo.poolIndex, packetInfo.rsgOffset);
-                    Console.WriteLine("Before | {0}, index: {1}, offset: {2}", RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].name, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].poolIndex, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgOffset);
                     if (!UseRawPacket)
                     {
                         packetBefore = RSBBeforeFile.readBytes(RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgLength, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgOffset);
                     }
                     else
                     {
-
+                        throw new Exception("raw_packet_is_not_supported");
                     }
                 }
                 var packetAfter = new byte[1];
@@ -1549,7 +1571,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     }
                     else
                     {
-
+                        throw new Exception("raw_packet_is_not_supported");
                     }
                 }
                 {
@@ -1562,16 +1584,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 {
                     var subGroupVCDiff = RSBVCDiff(packetBefore, packetAfter);
                     var SenWriterPostion = SenWriter.writeOffset;
-                    SenWriter.writeInt32LE((int)SenWriterPostion - 144);
-                    SenWriter.writeOffset = SenWriterPostion;
-                    SenWriter.writeBytes(subGroupVCDiff);
+                    SenWriter.writeInt32LE(subGroupVCDiff.Length, SenWriterPostion - 148);
+                    SenWriter.writeBytes(subGroupVCDiff, SenWriterPostion);
                 }
             }
-            var file1 = new SenBuffer(RSBBeforeHeaderSectionByte);
-            var file2 = new SenBuffer(RSBAfterHeaderSectionByte);
-            file1.OutFile(RSBPatchOutFile + "1.rsbpatch");
-            file2.OutFile(RSBPatchOutFile + "2.rsbpatch");
-            SenWriter.OutFile(RSBPatchOutFile);
+            return SenWriter;
         }
 
         private static unsafe bool EqualBytesLongUnrolled(byte[] data1, byte[] data2)
@@ -1641,7 +1658,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var result = coder.Encode(interleaved: true);
             if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
             {
-                throw new Exception("Invaild vcdiff encode");
+                throw new Exception("invalid_vcdiff_encode");
             }
             return outPutStream.ToArray();
         }
@@ -1662,25 +1679,122 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var correctHash = System.Security.Cryptography.MD5.TryHashData(data, md5, out bytesWritten);
             if (!correctHash)
             {
-                throw new Exception("Invaild MD5 DATA");
+                throw new Exception("invalid_md5_data");
             }
             return;
         }
         //Apply RSBPatch
-        public static void RSBPatchDecode(SenBuffer RSBBeforeFile, SenBuffer RSBPatchFile, string RSBOutFilePath)
+        public static SenBuffer RSBPatchDecode(SenBuffer RSBBeforeFile, SenBuffer RSBPatchFile, bool UseRawPacket = false)
         {
-            var RSBBeforeStream = RSBBeforeFile.toStream();
-            var RSBPatchStream = RSBPatchFile.toStream();
-            var outPutStream = new MemoryStream();
-            var decoder = new VcDecoder(RSBBeforeStream, RSBPatchStream, outPutStream);
-            long bytesWritten = 0;
-            var result = decoder.Decode(out bytesWritten);
-            if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
+            var RSBBeforeHeaderInfomation = ReadHead(RSBBeforeFile);
+            var RSGPatchHeadInfo = ReadRSBPatchHead(RSBPatchFile);
+            var RSBBeforeHeadSectionByte = RSBBeforeFile.readBytes(RSBBeforeHeaderInfomation.fileOffset, 0);
+            TestHash(RSBBeforeHeadSectionByte, RSGPatchHeadInfo.MD5RSBBefore);
+            byte[] RSBAfterHeadSectionByte;
+            if (!RSGPatchHeadInfo.RSBNeedPatch)
             {
-                throw new Exception("Invaild vcdiff decode");
+                RSBAfterHeadSectionByte = RSBBeforeHeadSectionByte;
             }
-            var SenWriter = new SenBuffer(outPutStream);
-            SenWriter.OutFile(RSBOutFilePath);
+            else
+            {
+                var outPutStream = new MemoryStream();
+                var decoder = new VcDecoder(new MemoryStream(RSBBeforeHeadSectionByte), new MemoryStream(RSBPatchFile.readBytes(RSGPatchHeadInfo.RSBHeadSectionPatchSize)), outPutStream, 0xFFFFFFF);
+                long bytesWritten = 0;
+                Console.WriteLine("ByteWritten: {0}", bytesWritten);
+                var result = decoder.Decode(out bytesWritten);
+                if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
+                {
+                    throw new Exception("invalid_vcdiff_decode");
+                }
+                RSBAfterHeadSectionByte = outPutStream.ToArray();
+            }
+            var RSBBuilder = new SenBuffer();
+            RSBBuilder.writeBytes(RSBAfterHeadSectionByte);
+            var RSBAfterHeaderInformation = ReadHead(RSBBuilder);
+            if (RSBAfterHeaderInformation.rsgNumber != RSGPatchHeadInfo.RSGNumber)
+            {
+                throw new Exception("invalid_rsg_number");
+            }
+            var RSBBeforeRSGInfoList = new List<RSGInfo>();
+            var RSBAfterRSGInfoList = new List<RSGInfo>();
+            ReadRSGInfo(RSBBeforeFile, RSBBeforeHeaderInfomation, ref RSBBeforeRSGInfoList);
+            ReadRSGInfo(RSBBuilder, RSBAfterHeaderInformation, ref RSBAfterRSGInfoList);
+            var packetBeforeSubGroupIndexing = new string[RSBBeforeRSGInfoList.Count];
+            for (var i = 0; i < RSBBeforeRSGInfoList.Count; i++)
+            {
+                packetBeforeSubGroupIndexing[i] = RSBBeforeRSGInfoList[i].name;
+            }
+            foreach (var packetInfo in RSBAfterRSGInfoList)
+            {
+                var packetAfterName = packetInfo.name;
+                var packetBefore = new byte[1];
+                var packetAfter = new byte[1];
+                var rsbPatchPacketInfo = ReadSubGroupInfo(RSBPatchFile);
+                if (packetAfterName != rsbPatchPacketInfo.packetName) throw new Exception("Invaild packet name");
+                if (packetBeforeSubGroupIndexing.Contains(packetAfterName))
+                {
+                    var packetBeforeSubGroupIndex = Array.IndexOf(packetBeforeSubGroupIndexing, packetAfterName);
+                    packetBefore = RSBBeforeFile.readBytes(RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgLength, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgOffset);
+                    if (UseRawPacket) {
+                        throw new Exception("raw_packet_is_not_supported");
+                    }
+                }
+                if (rsbPatchPacketInfo.packetPatchSize > 0)
+                {
+                    var outPutStream = new MemoryStream();
+                    var decoder = new VcDecoder(new MemoryStream(packetBefore), new MemoryStream(RSBPatchFile.readBytes(rsbPatchPacketInfo.packetPatchSize)), outPutStream, 0xFFFFFFF);
+                    long bytesWritten = 0;
+                    var result = decoder.Decode(out bytesWritten);
+                    if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
+                    {
+                        throw new Exception("invalid_vcdiff_decode");
+                    }
+                    if (UseRawPacket) {
+                        throw new Exception("raw_packet_is_not_supported");
+                    }
+                    packetAfter = outPutStream.ToArray();
+                }
+                else
+                {
+                    packetAfter = packetBefore;
+                }
+                TestHash(packetAfter, rsbPatchPacketInfo.MD5Packet);
+                RSBBuilder.writeBytes(packetAfter);
+            }
+            if (RSGPatchHeadInfo.RSBAfterFileSize != RSBBuilder.length) {
+                throw new Exception("this_rsb_is_invalid");
+            }
+            return RSBBuilder;
+        }
+
+        private static RSBPatchHeadExpand ReadRSBPatchHead(SenBuffer RSBPatchFile)
+        {
+            var magic = RSBPatchFile.readString(4);
+            if (magic != "PBSR") throw new Exception("this_file_is_not_rsbpatch");
+            if (RSBPatchFile.readUInt32LE() != 1 || RSBPatchFile.readUInt32LE() != 2)
+            {
+                throw new Exception("invalid_rsgpatch");
+            }
+            return new RSBPatchHeadExpand
+            {
+                RSBAfterFileSize = RSBPatchFile.readInt32LE(0xC),
+                RSBHeadSectionPatchSize = RSBPatchFile.readInt32LE(0x14),
+                MD5RSBBefore = RSBPatchFile.readBytes(16),
+                RSGNumber = RSBPatchFile.readInt32LE(),
+                RSBNeedPatch = RSBPatchFile.readInt32LE() == 1
+            };
+        }
+
+        private static RSBPatchSubGroupInfo ReadSubGroupInfo(SenBuffer RSBPatchFile)
+        {
+            var startOffset = RSBPatchFile.readOffset;
+            Console.WriteLine(startOffset);
+            return new RSBPatchSubGroupInfo
+            {
+                packetPatchSize = RSBPatchFile.readInt32LE(startOffset + 4),
+                packetName = RSBPatchFile.readStringByEmpty(),
+                MD5Packet = RSBPatchFile.readBytes(16, startOffset + 136)
+            };
         }
 
     }
