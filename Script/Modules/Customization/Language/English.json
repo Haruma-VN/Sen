@@ -378,13 +378,13 @@
     "at": "at",
     "popcap_rsb_bundle_manifest_split": "PopCap RSB-Bundle Manifest: Split",
     "popcap_rsb_bundle_manifest_merge": "PopCap RSB-Bundle Manifest: Merge",
-    "popcap_lawnstring_convert": "PopCap PvZ2-Lawnstrings: Convert",
-    "lawnstrings_map_contains_invalid_size": "Lawnstrings Map contains invalid size, received {1} but should be {2} or {3}",
-    "lawnstrings_map_error": "Lawnstrings Map Checking Error",
-    "cannot_convert_the_same_lawnstrings_type": "Cannot convert the same lawnstrings type",
-    "input_lawnstring_structure": "Input Lawnstrings Structure",
-    "output_lawnstring_structure": "Output Lawnstrings Structure",
+    "popcap_lawnstring_convert": "PopCap PvZ2-Lawnstring: Convert",
+    "lawnstrings_map_contains_invalid_size": "Lawnstring Map contains invalid size, received {1} but should be {2} or {3}",
+    "lawnstrings_map_error": "Lawnstring Map Checking Error",
+    "cannot_convert_the_same_lawnstrings_type": "Cannot convert the same lawnstring structure",
+    "input_lawnstring_structure": "Input Lawnstring Structure",
+    "output_lawnstring_structure": "Output Lawnstring Structure",
     "lawnstring_text": "TXT: From version 1.4 to 6.7",
     "lawnstring_json_map": "JSON Map: From version 6.8 to 8.5",
-    "lawnstring_json_text": "JSON Text: From 8.5 above"
+    "lawnstring_json_text": "JSON Text: From 8.6 above"
 }
