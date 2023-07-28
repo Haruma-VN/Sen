@@ -536,7 +536,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             return RtonFile;
         }
 
-        private static bool IsASCII(string str)
+        public static bool IsASCII(string str)
         {
             for (var i = 0; i < str.Length; i++)
             {

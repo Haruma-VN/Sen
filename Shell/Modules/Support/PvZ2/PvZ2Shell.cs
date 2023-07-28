@@ -110,6 +110,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void VCDiffDecode(string OldFile, string PatchFile, string NewFile);
 
+        public abstract bool IsPopCapRSG(string inFile);
+
     }
 
 
@@ -379,7 +381,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 var result = coder.Encode(interleaved: interleaved, checksumFormat: ChecksumFormat.SDCH);
                 if (result != VCDiffResult.SUCCESS)
                 {
-                    throw new Exception("Invaild VCDiffEncode");
+                    throw new Exception("invalid_vcdiff_encode");
                 }
             }
             return;
@@ -396,12 +398,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 var result = decoder.Decode(out bytesWritten);
                 if (result != VCDiffResult.SUCCESS)
                 {
-                    throw new Exception("Invaild VCDiffDecode");
+                    throw new Exception("invalid_vcdiff_decode");
                 }
             }
             return;
         }
 
-        #endregion
-    }
+		public unsafe override sealed bool IsPopCapRSG(string inFile) => RSG.RSGFunction.IsPopCapRSG(new SenBuffer(inFile), true);
+
+
+
+		#endregion
+	}
 }

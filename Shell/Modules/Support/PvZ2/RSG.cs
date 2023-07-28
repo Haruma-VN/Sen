@@ -2,7 +2,7 @@ using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Support.PvZ2.RSB;
-
+using Sen.Shell.Modules.Support.PvZ2.RTON;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSG
 {
@@ -173,7 +173,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             int version = RsgFile.readInt32LE();
             if (version != 3 && version != 4) 
             {
-                throw new Exception("Invalid RSG versionunsupported_rsg_version");
+                throw new Exception("unsupported_rsg_version");
             }
             HeadInfo.version = version;
             RsgFile.readBytes(8);
@@ -618,5 +618,31 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                     throw new Exception($"invalid_ptx_format");
             }
         }
+
+        public static bool IsPopCapRSG(SenBuffer RSGFile, bool closeRSG = true) {
+            var HeadInfo = ReadRSG_Head(RSGFile);
+            if (HeadInfo.fileList_Offset != 0x5C) return false;
+            part0List.Clear();
+            part1List.Clear();
+            FileListSplit(RSGFile, HeadInfo);
+            if (closeRSG) {
+                RSGFile.Close();
+            }
+            if (part0List.Count > 0) {
+                for (var i = 0; i < part0List.Count; i++)
+                {
+                    if (!RTONProcession.IsASCII(part0List[i].path)) return false;
+                }
+            }
+            if (part1List.Count > 0) {
+                for (var i = 0; i < part1List.Count; i++)
+                {
+                    if (!RTONProcession.IsASCII(part1List[i].path)) return false;
+                }
+            }
+            return true;
+        }
+
+        
     }
 }

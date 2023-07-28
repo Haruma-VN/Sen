@@ -1184,7 +1184,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         {
             void ThrowError<Generic_T>(string typeError, Generic_T oriValue, Generic_T modifyValue)
             {
-                throw new Exception($"RSG {typeError} is not same. In ManiFest: {oriValue} | In RSGFile: {modifyValue}. RSG path: {RSGFile.filePath}");
+                throw new Exception($"RSG {typeError} is not the same. In ManiFest: {modifyValue} | In RSGFile: {oriValue}. RSG path: {RSGFile.filePath}");
             }
             PacketInfo oriPacketInfo = RSGFunction.Unpack(RSGFile, "", false, true);
             if (oriPacketInfo.version != modifyPacketInfo.version) ThrowError("version", oriPacketInfo.version, modifyPacketInfo.version);
@@ -1700,7 +1700,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 var outPutStream = new MemoryStream();
                 var decoder = new VcDecoder(new MemoryStream(RSBBeforeHeadSectionByte), new MemoryStream(RSBPatchFile.readBytes(RSGPatchHeadInfo.RSBHeadSectionPatchSize)), outPutStream, 0xFFFFFFF);
                 long bytesWritten = 0;
-                Console.WriteLine("ByteWritten: {0}", bytesWritten);
                 var result = decoder.Decode(out bytesWritten);
                 if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
                 {
@@ -1788,7 +1787,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
         private static RSBPatchSubGroupInfo ReadSubGroupInfo(SenBuffer RSBPatchFile)
         {
             var startOffset = RSBPatchFile.readOffset;
-            Console.WriteLine(startOffset);
             return new RSBPatchSubGroupInfo
             {
                 packetPatchSize = RSBPatchFile.readInt32LE(startOffset + 4),
