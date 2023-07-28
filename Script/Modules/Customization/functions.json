@@ -319,7 +319,7 @@
         "exclude": [],
         "type": "directory"
     },
-    "popcap_lawnstrings_convert": {
+    "popcap_lawnstring_convert": {
         "func_number": 54,
         "include": [".txt", ".json"],
         "exclude": [],

@@ -183,6 +183,44 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
 
     /**
      *
+     * @param information - Pass JSON Map Deserialize
+     * @returns Text
+     */
+
+    export function JsonMapToText(information: Sen.Shell.PvZ2Lawnstrings.JsonMap): string {
+        let text: string = "";
+        const keys: Array<string> = Object.keys(information.objects[0].objdata.LocStringValues);
+        keys.forEach((key: string) => {
+            text = text.concat(`[${key}]`);
+            text = text.concat(`\n`);
+            text = text.concat(`${information.objects[0].objdata.LocStringValues[key].replace(/\r/g, ``)}`);
+            text = text.concat(`\n`);
+            text = text.concat(`\n`);
+        });
+        return text;
+    }
+
+    /**
+     *
+     * @param information - Pass Json Text
+     * @returns - Text
+     */
+
+    export function JsonTextToText(information: Sen.Shell.PvZ2Lawnstrings.JsonText): string {
+        let text: string = "";
+        for (let i: int = 0; i < information.objects[0].objdata.LocStringValues.length; ++i) {
+            text = text.concat(`[${information.objects[0].objdata.LocStringValues[i]}]`);
+            text = text.concat(`\n`);
+            text = text.concat(`${information.objects[0].objdata.LocStringValues[i + 1].replace(/\r/g, ``)}`);
+            text = text.concat(`\n`);
+            text = text.concat(`\n`);
+            ++i;
+        }
+        return text;
+    }
+
+    /**
+     *
      * @param infile - Pass input file
      * @param outfile - Pass output file
      * @param option - Pass option
@@ -199,7 +237,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
         if (option.input === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map) {
             switch (option.output) {
                 case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text: {
-                    // todo
+                    Sen.Shell.PvZ2Lawnstrings.WriteUTF16Le(outfile, Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.JsonMapToText(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Shell.PvZ2Lawnstrings.JsonMap>(infile)));
                     break;
                 }
                 case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text: {
@@ -210,7 +248,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
         } else if (option.input === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text) {
             switch (option.output) {
                 case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text: {
-                    // todo
+                    Sen.Shell.PvZ2Lawnstrings.WriteUTF16Le(outfile, Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.JsonTextToText(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Shell.PvZ2Lawnstrings.JsonText>(infile)));
                     break;
                 }
                 case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map: {

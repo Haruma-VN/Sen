@@ -1503,7 +1503,7 @@ declare namespace Sen {
              * @param setting - settings
              */
 
-            export function GenerateImageSequence(AnimationJson: string, outFolder: string, mediaPath: string, setting: Sen.Shell.AnimationHelperSetting): void;
+            export function GenerateImageSequence(AnimationJson: string, outFolder: string, mediaPath: string, setting: Sen.Shell.AnimationHelperSetting): Record<string, [bigint, bigint]>;
 
             /**
              *

@@ -378,7 +378,7 @@
     "at": "at",
     "popcap_rsb_bundle_manifest_split": "PopCap RSB-Bundle Manifest: Split",
     "popcap_rsb_bundle_manifest_merge": "PopCap RSB-Bundle Manifest: Merge",
-    "popcap_lawnstrings_convert": "PopCap Lawnstrings: Convert",
+    "popcap_lawnstring_convert": "PopCap PvZ2-Lawnstrings: Convert",
     "lawnstrings_map_contains_invalid_size": "Lawnstrings Map contains invalid size, received {1} but should be {2} or {3}",
     "lawnstrings_map_error": "Lawnstrings Map Checking Error",
     "cannot_convert_the_same_lawnstrings_type": "Cannot convert the same lawnstrings type",
