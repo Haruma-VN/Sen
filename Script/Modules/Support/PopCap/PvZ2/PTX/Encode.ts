@@ -3,19 +3,37 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
      * Unofficial texture format but is fine to use inside the tool with switch case
      */
     export enum TextureEncoderUnofficial {
-        A8 = 1,
+        ARGB8888 = 1,
 
-        ARGB8888,
+        RGBA8888,
+
+        RGBA4444,
+
+        RGB565,
+
+        RGBA5551,
+
+        RGBA4444_Block,
+
+        RGB565_Block,
+
+        RGBA5551_Block,
+
+        PVRTC1_4BPP_RGBA,
+
+        ETC1_RGB_A8,
+
+        ETC1_RGB_A_Palette,
+
+        PVRTC1_4BPP_RGBA_A8,
+
+        A8,
 
         ARGB1555,
 
         ARGB4444,
 
         ETC1_RGB,
-
-        ETC1_RGB_A_Palette,
-
-        ETC1_RGB_A8,
 
         L8,
 
@@ -24,23 +42,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
         LA88,
 
         PVRTC1_4BPP_RGB,
-
-        PVRTC1_4BPP_RGBA,
-
-        PVRTC1_4BPP_RGBA_A8,
-
-        RGB565,
-
-        RGB565_Block,
-
-        RGBA4444,
-        RGBA4444_Block,
-
-        RGBA5551,
-
-        RGBA5551_Block,
-
-        RGBA8888,
     }
 
     /**
@@ -84,7 +85,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
         if (Array.isArray(that_in)) {
             if (Array.isArray(that_out)) {
                 if (!(that_in.length === that_out.length)) {
-                    throw new Sen.Script.Modules.Exceptions.EncodingError(Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"), Sen.Shell.Path.Join(`Modules`, `support`, `popcap`, `pvz2`, `texture`, `encode.js`));
+                    throw new Sen.Script.Modules.Exceptions.EncodingError(
+                        Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"),
+                        Sen.Shell.Path.Join(`Modules`, `support`, `popcap`, `pvz2`, `texture`, `encode.js`)
+                    );
                 }
             }
         }
@@ -306,7 +310,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
         if (Array.isArray(that_in)) {
             if (Array.isArray(that_out)) {
                 if (!(that_in.length === that_out.length)) {
-                    throw new Sen.Script.Modules.Exceptions.EncodingError(Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"), Sen.Shell.Path.Join(`Modules`, `support`, `popcap`, `pvz2`, `texture`, `encode.js`));
+                    throw new Sen.Script.Modules.Exceptions.EncodingError(
+                        Sen.Script.Modules.System.Default.Localization.GetString("not_enough_parameter_to_evaluate"),
+                        Sen.Shell.Path.Join(`Modules`, `support`, `popcap`, `pvz2`, `texture`, `encode.js`)
+                    );
                 }
             }
         }
@@ -522,27 +529,190 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
      */
 
     export function InputEncode(): Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("select_one_texture_format"))}`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.A8}. a_8`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB8888}. argb_8888`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB1555}. argb_1555`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB4444}. argb_4444`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB}. rgb_etc1`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A_Palette}. rgb_etc1_a_palette`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A8}. rgb_etc1_a_8`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.L8}. l_8`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA44}. la_44`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA88}. la_88`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGB}. rgb_pvrtc4`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA}. rgba_pvrtc4`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8}. rgb_pvrtc4_a_8`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGB565}. rgb_565`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGB565_Block}. rgb_565_tiled`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA4444}. rgba_4444`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA4444_Block}. rgb_4444_tiled`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA5551}. rgba_5551`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA5551_Block}. rgba5551_tiled`);
-        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888}. rgba_8888`);
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("select_one_texture_format"))}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB8888}`,
+                `argb_8888`,
+                `0`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888}`,
+                `rgba_8888`,
+                `0`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA4444}`,
+                `rgba_4444`,
+                `1`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android_and_ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGB565}`,
+                `rgb_565`,
+                `2`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA5551}`,
+                `rgba_5551`,
+                `3`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android_and_ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA4444_Block}`,
+                `rgba_4444_tiled`,
+                `21`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android_and_ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGB565_Block}`,
+                `rgb_565_tiled`,
+                `22`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA5551_Block}`,
+                `rgba5551_tiled`,
+                `23`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android_and_ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA}`,
+                `rgba_pvrtc4`,
+                `30`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A8}`,
+                `rgb_etc1_a_8`,
+                `147`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A_Palette}`,
+                `rgb_etc1_a_palette`,
+                `147`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android_cn")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8}`,
+                `rgb_pvrtc4_a_8`,
+                `148`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.A8}`,
+                `a_8`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB1555}`,
+                `argb_1555`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB4444}`,
+                `argb_4444`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB}`,
+                `rgb_etc1`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("android")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.L8}`,
+                `l_8`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA44}`,
+                `la_44`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA88}`,
+                `la_88`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+            ])}`
+        );
+        Sen.Shell.Console.Printf(
+            null,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGB}`,
+                `rgb_pvrtc4`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+            ])}`
+        );
         let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (Sen.Script.Modules.Interface.Assert.MatchInputWithNumbers(input, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodeOption) === null) {
             Sen.Shell.Console.Print(
@@ -561,7 +731,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
 
     export function InputDimension(): Sen.Script.Modules.BitMap.Constraints.DimensionInterface<int> {
         const numberRegex: RegExp = /^\d+$/;
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_width"))}`);
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_width"))}`
+        );
         let input_width: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (!numberRegex.test(input_width)) {
             Sen.Shell.Console.Print(
@@ -570,7 +743,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
             );
             input_width = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         }
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_height"))}`);
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_height"))}`
+        );
         let input_height: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (!numberRegex.test(input_height)) {
             Sen.Shell.Console.Print(
@@ -627,7 +803,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
                 return TextureEncoderUnofficial.RGB565;
             case "rgba_4444":
                 return TextureEncoderUnofficial.RGBA4444;
-            case "rgb_4444_tiled":
+            case "rgba_4444_tiled":
                 return TextureEncoderUnofficial.RGBA4444_Block;
             case "rgba_5551":
                 return TextureEncoderUnofficial.RGBA5551;

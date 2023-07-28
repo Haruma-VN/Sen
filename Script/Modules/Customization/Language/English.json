@@ -386,5 +386,7 @@
     "output_lawnstring_structure": "Output Lawnstring Structure",
     "lawnstring_text": "TXT: From version 1.4 to 6.7",
     "lawnstring_json_map": "JSON Map: From version 6.8 to 8.5",
-    "lawnstring_json_text": "JSON Text: From 8.6 above"
+    "lawnstring_json_text": "JSON Text: From 8.6 above",
+    "popcap_ptx_option": "{1}. {2} ({3}, {4})",
+    "android_and_ios": "Android and iOS"
 }

@@ -1981,7 +1981,7 @@ namespace Sen.Script.Modules.Interface.Execute {
             if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.execute_again_after_error) {
                 const confirm: boolean = Boolean(Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("execute_again")));
                 if (confirm) {
-                    Evaluate(function_name, argument);
+                    Sen.Script.Modules.Interface.Execute.Evaluate(function_name, argument);
                 }
             }
         }
