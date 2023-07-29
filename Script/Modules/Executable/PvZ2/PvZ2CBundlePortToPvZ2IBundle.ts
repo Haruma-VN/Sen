@@ -174,7 +174,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
             Sen.Shell.FileSystem.DeleteFile(png_path);
         });
         information.compression_flags = 0b0011;
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, false);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
         return;
@@ -194,7 +194,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
             Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`)
         );
         information.compression_flags = 0b0011;
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, false);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
         return;
@@ -226,7 +226,8 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                     default: {
                         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ConvertTextureRSG(entry, output, option.rsg.ptx.encode);
                         (option.watch[key] as any).subgroup[rsg_name].packet_info.res.forEach((e: any) => {
-                            e.ptx_property.format = Number(option.rsg.ptx.encode);
+                            e.ptx_property.format = option.rsg.ptx.encode;
+                            e.ptx_property.pitch = BigInt(e.ptx_info.width) * 4n;
                         });
                         break;
                     }
@@ -302,7 +303,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
         };
         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AddsRSGToOfficialPacketBundle(executable_option);
         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AppendUnofficialResources(executable_option);
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(`${option.int_bundle}`, `manifest.json`), option.international_manifest, false);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(`${option.int_bundle}`, `manifest.json`), option.international_manifest, true);
         return;
     }
 }
