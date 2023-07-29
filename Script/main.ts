@@ -14,6 +14,7 @@ namespace Sen.Script {
             `Modules/Constraints/Platform`,
             `Modules/System/Implement/Exception`,
             `Modules/System/Implement/FileSystem`,
+            `Modules/System/Implement/Number`,
             `Modules/System/Default/Localization`,
             `Modules/System/Default/Timer`,
             `Modules/Support/PopCap/PvZ2/Resources/Unofficial`,

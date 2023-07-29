@@ -400,5 +400,6 @@
     "rsbpatch_only_for_pvz2": "RSB-Patch only support PvZ2",
     "input_diff_rsbpatch": "Input RSB-Patch Diff",
     "input_after_rsb": "Input After RSB",
-    "obtained_rsb_before": "Obtained RSB Before Changes:"
+    "obtained_rsb_before": "Obtained RSB Before Changes:",
+    "chinese_lawnstring_text": "Chinese-TXT: PvZ 2 Chinese version"
 }

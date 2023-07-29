@@ -1534,7 +1534,23 @@ declare namespace Sen {
 
             export function VCDiffEncode(OldFile: string, NewFile: string, PatchOutFile: string, interleaved: boolean): void;
 
+            /**
+             *
+             * @param OldFile - Pass old file
+             * @param PatchFile - Patch file
+             * @param NewFile - Output
+             *
+             */
+
             export function VCDiffDecode(OldFile: string, PatchFile: string, NewFile: string): void;
+
+            /**
+             *
+             * @param inFile - Pass file path
+             * @returns True/false
+             */
+
+            export function IsPopCapRSG(inFile: string): boolean;
         }
 
         /**
@@ -1770,6 +1786,10 @@ declare namespace Sen {
             disableSprite: Array<int> = new Array<int>(0);
         }
 
+        /**
+         * Lawnstrings
+         */
+
         namespace PvZ2Lawnstrings {
             /**
              * Structure
@@ -1825,6 +1845,18 @@ declare namespace Sen {
              * @returns Json Text Object
              */
             export function ConvertJsonMapToJsonText(inpath: string): Sen.Shell.PvZ2Lawnstrings.JsonText;
+            /**
+             *
+             * @param filepath - Pass file path
+             * @returns Stream read file
+             */
+            export function ReadUTF8Bom(filepath: string): string;
+            /**
+             *
+             * @param filepath - Out path to write
+             * @param data - Data to write
+             */
+            export function WriteUTF8Bom(filepath: string, data: string): void;
         }
 
         /**

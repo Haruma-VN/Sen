@@ -170,14 +170,16 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const input_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
                             Sen.Script.Modules.System.Default.Localization.GetString("input_lawnstring_structure"),
                             [
-                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text,
                                 Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
                                 Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
                             ],
                             {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
-                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
-                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text")],
+                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                "4": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
                             },
                             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
                             `convert`
@@ -185,14 +187,16 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
                             Sen.Script.Modules.System.Default.Localization.GetString("output_lawnstring_structure"),
                             [
-                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text,
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text,
                                 Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
                                 Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
                             ],
                             {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
-                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
-                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text")],
+                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                "4": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
                             },
                             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstring_convert.json`)),
                             `output`
@@ -211,14 +215,16 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const input_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
                                 Sen.Script.Modules.System.Default.Localization.GetString("input_lawnstring_structure"),
                                 [
-                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text,
                                     Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
                                     Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
                                 ],
                                 {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
-                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
-                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text")],
+                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                    "4": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
                                 },
                                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
                                 `convert`
@@ -226,14 +232,16 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const output_structure: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
                                 Sen.Script.Modules.System.Default.Localization.GetString("output_lawnstring_structure"),
                                 [
-                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text,
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text,
                                     Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map,
                                     Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text,
                                 ],
                                 {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")],
-                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
-                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text"), Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text")],
+                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
+                                    "4": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
                                 },
                                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstring_convert.json`)),
                                 `output`

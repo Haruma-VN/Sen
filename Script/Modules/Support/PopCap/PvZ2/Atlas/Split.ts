@@ -768,7 +768,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             const directory_contains_sprite: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains}`, `media`));
             Sen.Shell.FileSystem.CreateDirectory(directory_contains);
             Sen.Shell.FileSystem.CreateDirectory(directory_contains_sprite);
-            const async_task: Array<Sen.Shell.AsyncTaskImageSplit> = new Array();
+            const async_task: Array<Sen.Shell.AsyncTaskImageSplit> = new Array<Sen.Shell.AsyncTaskImageSplit>();
             for (const subgroup_children of official_subgroup.resources) {
                 if (`ax` in subgroup_children && `ay` in subgroup_children && `ah` in subgroup_children && `aw` in subgroup_children && `parent` in subgroup_children) {
                     pngs.forEach((file: string) => {
@@ -869,7 +869,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                         `aw` in unofficial_subgroup.packet[parent].data[id].default
                     ) {
                         pngs.forEach((file: string) => {
-                            if (parent?.endsWith(Sen.Shell.Path.Parse(file).name.replace(/((.png))?$/i, ""))) {
+                            if (
+                                parent?.endsWith(
+                                    Sen.Shell.Path.Parse(file)
+                                        .name.toUpperCase()
+                                        .replace(/((.png))?$/i, "")
+                                )
+                            ) {
                                 async_task.push({
                                     sourceImagePath: file,
                                     outputImagePath: Sen.Shell.Path.Resolve(

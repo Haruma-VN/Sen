@@ -3,7 +3,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
      * Structure
      */
     export enum Option {
-        text = 1,
+        utf16le_text = 1,
+        utf8bom_text,
         json_map,
         json_text,
     }
@@ -51,7 +52,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
      */
 
     export function ExportExtension(option: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Parameter): Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.extension {
-        if (option.output === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text) {
+        if (option.output === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text || option.output === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text) {
             return "txt";
         }
         return "json";
@@ -63,7 +64,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
      */
 
     export function PrintOption(): void {
-        Sen.Shell.Console.Print(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text}. ${Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")}`);
+        Sen.Shell.Console.Print(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text}. ${Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_text")}`);
+        Sen.Shell.Console.Print(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text}. ${Sen.Script.Modules.System.Default.Localization.GetString("chinese_lawnstring_text")}`);
         Sen.Shell.Console.Print(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map}. ${Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")}`);
         Sen.Shell.Console.Print(null, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text}. ${Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")}`);
         return;
@@ -236,7 +238,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
         }
         if (option.input === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map) {
             switch (option.output) {
-                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text: {
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text: {
                     Sen.Shell.PvZ2Lawnstrings.WriteUTF16Le(outfile, Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.JsonMapToText(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Shell.PvZ2Lawnstrings.JsonMap>(infile)));
                     break;
                 }
@@ -244,11 +246,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
                     Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Shell.PvZ2Lawnstrings.JsonText>(outfile, Sen.Shell.PvZ2Lawnstrings.ConvertJsonMapToJsonText(infile), false);
                     break;
                 }
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text: {
+                    Sen.Shell.PvZ2Lawnstrings.WriteUTF8Bom(outfile, Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.JsonMapToText(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Shell.PvZ2Lawnstrings.JsonMap>(infile)));
+                    break;
+                }
             }
         } else if (option.input === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text) {
             switch (option.output) {
-                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.text: {
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text: {
                     Sen.Shell.PvZ2Lawnstrings.WriteUTF16Le(outfile, Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.JsonTextToText(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Shell.PvZ2Lawnstrings.JsonText>(infile)));
+                    break;
+                }
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text: {
+                    Sen.Shell.PvZ2Lawnstrings.WriteUTF8Bom(outfile, Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.JsonTextToText(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Shell.PvZ2Lawnstrings.JsonText>(infile)));
                     break;
                 }
                 case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map: {
@@ -256,7 +266,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
                     break;
                 }
             }
-        } else {
+        } else if (option.input === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text) {
             switch (option.output) {
                 case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text: {
                     Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Shell.PvZ2Lawnstrings.JsonText>(
@@ -274,8 +284,36 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
                     );
                     break;
                 }
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text: {
+                    Sen.Shell.PvZ2Lawnstrings.WriteUTF8Bom(outfile, Sen.Shell.PvZ2Lawnstrings.ReadUTF16Le(infile));
+                    break;
+                }
+            }
+        } else {
+            switch (option.output) {
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text: {
+                    Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Shell.PvZ2Lawnstrings.JsonText>(
+                        outfile,
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.ConvertTextToJsonText(Sen.Shell.PvZ2Lawnstrings.ReadUTF8Bom(infile)),
+                        true
+                    );
+                    break;
+                }
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_map: {
+                    Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Shell.PvZ2Lawnstrings.JsonMap>(
+                        outfile,
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.ConvertTextToJsonMap(Sen.Shell.PvZ2Lawnstrings.ReadUTF8Bom(infile)),
+                        true
+                    );
+                    break;
+                }
+                case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text: {
+                    Sen.Shell.PvZ2Lawnstrings.WriteUTF16Le(outfile, Sen.Shell.PvZ2Lawnstrings.ReadUTF8Bom(infile));
+                    break;
+                }
             }
         }
+
         return;
     }
 }

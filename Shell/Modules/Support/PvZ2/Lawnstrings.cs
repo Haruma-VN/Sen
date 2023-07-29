@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Sen.Shell.Modules.Standards.IOModule;
 
-namespace Sen.Modules.Support.PvZ2
+namespace Sen.Shell.Modules.Support.PvZ2
 {
 
     [JsonSerializable(typeof(JsonMap))]
@@ -64,7 +64,12 @@ namespace Sen.Modules.Support.PvZ2
 
         public abstract JsonText ConvertJsonMapToJsonText(string inpath);
 
-    }
+		public abstract string ReadUTF8Bom(string filepath);
+
+		public abstract void WriteUTF8Bom(string filepath, string data);
+        
+
+	}
 
 
     public unsafe sealed class Lawnstrings : LawnstringsRequestImplementation
@@ -139,5 +144,18 @@ namespace Sen.Modules.Support.PvZ2
             writer.Write(data);
             return;
         }
-    }
+
+		public sealed override unsafe string ReadUTF8Bom(string filepath)
+		{
+            using var reader = new StreamReader(filepath, Encoding.UTF8);
+            return (string) reader.ReadToEnd();
+		}
+
+		public sealed override unsafe void WriteUTF8Bom(string filepath, string data)
+		{
+            using var writer = new StreamWriter(filepath, false, new UTF8Encoding(true));
+			writer.Write(data);
+			return;
+		}
+	}
 }
