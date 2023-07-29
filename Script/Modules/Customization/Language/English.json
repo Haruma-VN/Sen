@@ -406,5 +406,6 @@
     "output_encoding_type": "Output File Encoding Type:",
     "utf8": "UTF-8",
     "utf16le": "UTF16-LE",
-    "utf8bom": "UTF8 Bom"
+    "utf8bom": "UTF8 Bom",
+    "method_obtained_by_default": "Method Obtained By Default:"
 }
