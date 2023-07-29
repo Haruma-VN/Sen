@@ -247,6 +247,12 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
         };
     }
 
+    /**
+     *
+     * @param option - Pass option
+     * @returns
+     */
+
     export function AppendUnofficialResources(option: Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AddRSGOption): void {
         const res_json_international: string = Sen.Shell.Path.Join(option.int_bundle, `res.json`);
         const res_json_chinese: string = Sen.Shell.Path.Join(option.cn_bundle, `res.json`);

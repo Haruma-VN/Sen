@@ -35,7 +35,7 @@ namespace Sen.Script.Modules.Interface.Assert {
         let currentArg: RequestArgument<Argument> = {
             method: null,
         };
-        for (let i = 0; i < argument.length; i++) {
+        for (let i: int = 0; i < argument.length; i++) {
             if (argument[i] !== "-method") {
                 currentArg.argument = argument[i];
                 if (i + 1 < argument.length && i + 2 < argument.length) {
@@ -83,7 +83,7 @@ namespace Sen.Script.Modules.Interface.Assert {
             } finally {
             }
         } else {
-            host.forEach((arg: RequestArgument<string>, index: number) => {
+            host.forEach((arg: RequestArgument<string>, index: int) => {
                 PrintPath(arg.argument!, {
                     current: index + 1,
                     all: host.length,

@@ -115,7 +115,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
      */
 
     export function UnpackRSBAndConvertPTX(file_in: string, bundle_directory: string, input_resolution: number, compress_ptx: boolean): string {
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(file_in, bundle_directory);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(file_in, bundle_directory, true);
         const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
             Sen.Shell.Path.Join(`${bundle_directory}`, `manifest.json`)
         );

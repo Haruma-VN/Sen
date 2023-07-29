@@ -693,12 +693,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bundle`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(argument, output_argument, true);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bundle`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(arg, output_argument, true);
                         });
                     }
                     break;
@@ -738,10 +738,23 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 1 | 2) === 1
                                 ? "array"
                                 : "string";
+                        const extends_texture_information_for_pvz2c: 0 | 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("extends_texture_information_for_pvz2c"),
+                            [0, 1, 2, 3],
+                            {
+                                "0": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_0"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_0")],
+                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_1"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_1")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_2"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_2")],
+                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_3"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_3")],
+                            },
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_unpack_simple.json`)),
+                            `extends_texture_information_for_pvz2c`
+                        ) as 0 | 1 | 2 | 3;
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bundle`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSBBySimple(argument, output_argument, {
                             expand_path: expand_path,
+                            extends_texture_information_for_pvz2c: BigInt(extends_texture_information_for_pvz2c) as unknown as 0n | 1n | 2n | 3n,
                         });
                     } else {
                         argument.forEach((arg: string) => {
@@ -764,10 +777,23 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 ) as 1 | 2) === 1
                                     ? "array"
                                     : "string";
+                            const extends_texture_information_for_pvz2c: 0 | 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("extends_texture_information_for_pvz2c"),
+                                [0, 1, 2, 3],
+                                {
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_0"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_0")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_1"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_1")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_2"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_2")],
+                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_3"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2c_extends_3")],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_unpack_simple.json`)),
+                                `extends_texture_information_for_pvz2c`
+                            ) as 0 | 1 | 2 | 3;
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bundle`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSBBySimple(arg, output_argument, {
                                 expand_path: expand_path,
+                                extends_texture_information_for_pvz2c: BigInt(extends_texture_information_for_pvz2c) as unknown as 0n | 1n | 2n | 3n,
                             });
                         });
                     }

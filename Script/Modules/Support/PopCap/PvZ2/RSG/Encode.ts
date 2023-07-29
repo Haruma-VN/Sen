@@ -28,6 +28,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode {
     }
 
     /**
+     * Structure
+     */
+
+    export enum RSGAbnormal {
+        Header,
+        NotASCIISmartpath,
+        None,
+    }
+
+    /**
      *
      * @param rsg_in - Pass RSG path
      * @param out_dir - Output directory

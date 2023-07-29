@@ -107,6 +107,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
     export interface SimpleResources {
         expand_path: "string" | "array";
+        extends_texture_information_for_pvz2c: 0n | 1n | 2n | 3n;
     }
 
     // Information
@@ -175,18 +176,28 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      * @returns RSB Unpack
      */
 
-    export function UnpackPopCapOfficialRSB(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
+    export function UnpackPopCapOfficialRSB(inRSB: string, outDirectory: string, write_manifest: boolean): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
         try {
             const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
-                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `manifest.json`)),
-                Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json),
-                false
-            );
+            if (write_manifest) {
+                Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
+                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `manifest.json`)),
+                    Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json),
+                    false
+                );
+            }
             return manifest_json;
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inRSB);
         }
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface RSBManifestInformationForSimple extends RSBManifestInformation {
+        extends_texture_information_for_pvz2c: 0n | 1n | 2n | 3n;
     }
 
     /**
@@ -202,8 +213,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         }
         const manifest_additional_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(
             inRSB,
-            outDirectory
+            outDirectory,
+            false
         ) as Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
+        const manifest_output: RSBManifestInformationForSimple = {
+            extends_texture_information_for_pvz2c: information.extends_texture_information_for_pvz2c,
+            ...Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_additional_information),
+        };
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `manifest.json`)), manifest_output, true);
         const manifest_group: string | undefined = manifest_additional_information.path?.rsgs.find((rsg: string) => /__MANIFESTGROUP__(.+)?/i.test(rsg));
         const packages: string | undefined = manifest_additional_information.path?.rsgs.find((rsg: string) => /Packages(.+)?/i.test(rsg) && rsg.toUpperCase() === "PACKAGES");
         if (manifest_group) {

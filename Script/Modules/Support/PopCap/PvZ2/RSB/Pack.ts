@@ -46,12 +46,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const manifest_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`));
         const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_path);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 3n | 4n, 16n | 20n | 24n, string>(
-            original_manifest,
-            BigInt(original_manifest.version) as 3n | 4n,
-            BigInt(original_manifest.ptx_info_size) as 16n | 24n | 20n,
-            manifest_path
-        );
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(original_manifest);
         try {
             Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
@@ -81,9 +75,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
 
     export function PackPopCapRSBBySimple(inDirectory: string, outFile: string, option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.Options): void {
         const manifest_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`));
-        const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation =
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_path);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 4n, 16n, string>(original_manifest, 4n, 16n, manifest_path);
+        const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformationForSimple =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformationForSimple>(manifest_path);
+        if (BigInt(original_manifest.extends_texture_information_for_pvz2c) === 0n && BigInt(original_manifest.version) === 4n && BigInt(original_manifest.ptx_info_size) === 16n) {
+            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 4n, 16n, string>(original_manifest, 4n, 16n, manifest_path);
+        }
         const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.ConvertFromManifest(original_manifest);
         let manifest_group: int = -1;
         let packages: int = -1;
@@ -111,7 +107,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                     );
                 }
             });
-            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs -> RTONs`));
         }
         if (option.generate_resources) {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
@@ -268,18 +264,34 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 information.group[composite_shell].subgroup[subgroup].packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ResInfo) => {
                     if (res.ptx_info && res.ptx_property) {
                         if (is_pvz2) {
-                            if (!(res.ptx_property.pitch === res.ptx_info.width * 4)) {
+                            if (BigInt(res.ptx_property.format) === 0n || BigInt(res.ptx_property.format) === 147n || BigInt(res.ptx_property.format) === 148n) {
+                                if (!(res.ptx_property.pitch === res.ptx_info.width * 4)) {
+                                    throw new Sen.Script.Modules.Exceptions.PitchError(
+                                        Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("pitch_at_subgroup_is_wrong"), [
+                                            `${res.ptx_info.id}`,
+                                            (res.path as Array<string>).at(-1)!,
+                                            subgroup,
+                                            composite_shell,
+                                            `${res.ptx_info.width * 4}`,
+                                            `${res.ptx_property.pitch}`,
+                                        ]),
+                                        manifest_path ?? "undefined",
+                                        `${res.ptx_info.width * 4}`
+                                    );
+                                }
+                            }
+                            if (BigInt(res.ptx_property.format) === 30n && !(res.ptx_property.pitch === res.ptx_info.width / 2)) {
                                 throw new Sen.Script.Modules.Exceptions.PitchError(
                                     Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("pitch_at_subgroup_is_wrong"), [
                                         `${res.ptx_info.id}`,
                                         (res.path as Array<string>).at(-1)!,
                                         subgroup,
                                         composite_shell,
-                                        `${res.ptx_info.width * 4}`,
+                                        `${res.ptx_info.width / 2}`,
                                         `${res.ptx_property.pitch}`,
                                     ]),
                                     manifest_path ?? "undefined",
-                                    `${res.ptx_info.width * 4}`
+                                    `${res.ptx_info.width / 2}`
                                 );
                             }
                         } else {

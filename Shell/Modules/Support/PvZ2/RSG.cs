@@ -619,9 +619,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             }
         }
 
-        public static bool IsPopCapRSG(SenBuffer RSGFile, bool closeRSG = true) {
+        public enum RSGAbnormal
+        {
+           Header,
+           NotASCIISmartpath,
+           None,
+        }
+
+        public static RSGAbnormal IsPopCapRSG(SenBuffer RSGFile, bool closeRSG = true) {
             var HeadInfo = ReadRSG_Head(RSGFile);
-            if (HeadInfo.fileList_Offset != 0x5C) return false;
+            if (HeadInfo.fileList_Offset != 0x5C) return RSGAbnormal.Header;
             part0List.Clear();
             part1List.Clear();
             FileListSplit(RSGFile, HeadInfo);
@@ -631,16 +638,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             if (part0List.Count > 0) {
                 for (var i = 0; i < part0List.Count; i++)
                 {
-                    if (!RTONProcession.IsASCII(part0List[i].path)) return false;
+                    if (!RTONProcession.IsASCII(part0List[i].path)) return RSGAbnormal.NotASCIISmartpath;
                 }
             }
             if (part1List.Count > 0) {
                 for (var i = 0; i < part1List.Count; i++)
                 {
-                    if (!RTONProcession.IsASCII(part1List[i].path)) return false;
+                    if (!RTONProcession.IsASCII(part1List[i].path)) return RSGAbnormal.NotASCIISmartpath;
                 }
             }
-            return true;
+            return RSGAbnormal.None;
         }
 
         

@@ -13,6 +13,7 @@ using VCDiff.Includes;
 using VCDiff.Encoders;
 using VCDiff.Decoders;
 using VCDiff.Shared;
+using static Sen.Shell.Modules.Support.PvZ2.RSG.RSGFunction;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -110,7 +111,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void VCDiffDecode(string OldFile, string PatchFile, string NewFile);
 
-        public abstract bool IsPopCapRSG(string inFile);
+        public abstract RSGAbnormal IsPopCapRSG(string inFile);
 
     }
 
@@ -404,7 +405,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-		public unsafe override sealed bool IsPopCapRSG(string inFile) => RSG.RSGFunction.IsPopCapRSG(new SenBuffer(inFile), true);
+		public unsafe override sealed RSGAbnormal IsPopCapRSG(string inFile) => RSG.RSGFunction.IsPopCapRSG(new SenBuffer(inFile), true);
 
 
 

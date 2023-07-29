@@ -1,3 +1,4 @@
 {
-    "expand_path": "?"
+    "expand_path": "?",
+    "extends_texture_information_for_pvz2c": 0
 }

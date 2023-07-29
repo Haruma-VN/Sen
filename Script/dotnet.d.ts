@@ -1550,7 +1550,7 @@ declare namespace Sen {
              * @returns True/false
              */
 
-            export function IsPopCapRSG(inFile: string): boolean;
+            export function IsPopCapRSG(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGAbnormal;
         }
 
         /**
