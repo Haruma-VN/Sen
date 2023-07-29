@@ -413,7 +413,7 @@
     "this_script_only_support_rsb_ptx_info_size_16": "This script only support RSB with ptx_info_size = 16",
     "import_type": "Import Packet Type",
     "select_composite": "Select: The tool will list an option to pick what you decide to add",
-    "import_composite": "Import: The tool will import from an overload json",
+    "import_composite": "Import: The tool will import from an information json",
     "please_edit_import_json": "Please edit \"import.json\" provided by the tool then press Enter if you finished...",
     "is_not_enter": "Please press enter without typing anything",
     "rsg_abnormal_contains_non_ascii_smartpart": "RSG Abnormal contains non ASCII Smartpath",
