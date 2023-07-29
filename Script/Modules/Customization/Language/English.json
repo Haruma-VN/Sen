@@ -401,5 +401,10 @@
     "input_diff_rsbpatch": "Input RSB-Patch Diff",
     "input_after_rsb": "Input After RSB",
     "obtained_rsb_before": "Obtained RSB Before Changes:",
-    "chinese_lawnstring_text": "Chinese-TXT: PvZ 2 Chinese version"
+    "chinese_lawnstring_text": "Chinese-TXT: PvZ 2 Chinese version",
+    "obtained_encoding_type": "Obtained File Encoding Type:",
+    "output_encoding_type": "Output File Encoding Type:",
+    "utf8": "UTF-8",
+    "utf16le": "UTF16-LE",
+    "utf8bom": "UTF8 Bom"
 }

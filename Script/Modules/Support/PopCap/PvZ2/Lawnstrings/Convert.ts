@@ -230,8 +230,38 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
      */
 
     export function ConvertOfficialLawnstrings(infile: string, outfile: string, option: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Parameter): void {
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("obtained_encoding_type"));
+        switch (option.input) {
+            case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text: {
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("utf16le")}`);
+                break;
+            }
+            case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text: {
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("utf8bom")}`);
+                break;
+            }
+            default: {
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("utf8")}`);
+                break;
+            }
+        }
         if (option.input === option.output) {
             throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString("cannot_convert_the_same_lawnstrings_type"), infile);
+        }
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("output_encoding_type"));
+        switch (option.output) {
+            case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf16le_text: {
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("utf16le")}`);
+                break;
+            }
+            case Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.utf8bom_text: {
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("utf8bom")}`);
+                break;
+            }
+            default: {
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("utf8")}`);
+                break;
+            }
         }
         if (option.input === Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option.json_text) {
             Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.TestJsonText(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Shell.PvZ2Lawnstrings.JsonText>(infile), infile);
