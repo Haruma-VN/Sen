@@ -1784,6 +1784,7 @@ declare namespace Sen {
             posX: int = 0;
             posY: int = 0;
             disableSprite: Array<int> = new Array<int>(0);
+            output_animation_render: bigint;
         }
 
         /**
