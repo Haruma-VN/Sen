@@ -426,5 +426,6 @@
     "pvz2c_extends_3": "PvZ 2 Chinese iOS after 2.5",
     "output_animation_render": "Output Animation Render",
     "output_animation_render_image": "Image: Output will be a directory contains multiple images",
-    "output_animation_render_gif": "GIF: Output will be a gif contains multiple frames"
+    "output_animation_render_gif": "GIF: Output will be a gif contains multiple frames",
+    "input_resources_json_path": "Input Resources.json path"
 }
