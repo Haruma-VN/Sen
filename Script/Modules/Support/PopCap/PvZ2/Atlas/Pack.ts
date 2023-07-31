@@ -624,7 +624,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
      * Structure
      */
 
-    export type g_dimension = Record<"width" | "height", number>;
+    export type g_dimension<Generic> = Record<"width" | "height", Generic>;
 
     /**
      *
@@ -668,7 +668,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `384`)}`));
             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 384, output_argument);
-            const dimension_k: g_dimension = {
+            const dimension_k: g_dimension<int> = {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.25)),
                 height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.25)),
             };
@@ -690,7 +690,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `768`)}`));
             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 768, output_argument);
-            const dimension_k: g_dimension = {
+            const dimension_k: g_dimension<int> = {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.5)),
                 height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.5)),
             };
@@ -712,7 +712,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `1200`)}`));
             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 1200, output_argument);
-            const dimension_k: g_dimension = {
+            const dimension_k: g_dimension<int> = {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.78125)),
                 height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.78125)),
             };
@@ -734,9 +734,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `640`)}`));
             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 640, output_argument);
-            const dimension_k: g_dimension = {
-                width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.4166666666666666)),
-                height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.4166666666666666)),
+            const dimension_k: g_dimension<int> = {
+                width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.4166666666666667)),
+                height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.4166666666666667)),
             };
             if (merge_option === `official`) {
                 Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
@@ -752,6 +752,61 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 });
             }
         }
+        return;
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface KDimension extends g_dimension<bigint> {
+        file_path: string;
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface GenerateOption {
+        subgroup_name: string;
+        id_part: string;
+        extends_version: "old" | "new";
+        extends_path: Array<string>;
+        resolution: bigint;
+    }
+
+    /**
+     * Structure
+     */
+
+    export type k_standards_resolution = "1536" | "384" | "768";
+
+    /**
+     *
+     * @param directory_path - Directory path
+     * @param output_path - Output
+     * @returns Generated Atlas Json
+     */
+
+    export function GenerateAtlasJsonFromMediaDirectory(option: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.GenerateOption, directory_path: string, output_path: string): void {
+        const media: Array<string> = Sen.Shell.FileSystem.ReadDirectory(directory_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory).filter((file: string) => file.toLowerCase().endsWith(`.png`));
+        const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = {
+            method: "path",
+            subgroup: option.subgroup_name,
+            trim: false,
+            res: option.resolution.toString() as k_standards_resolution,
+            groups: {},
+        };
+        media.forEach((g_media: string) => {
+            atlas_json.groups[`${option.id_part.toUpperCase()}_${Sen.Shell.Path.Parse(g_media).name_without_extension.toUpperCase()}`] = {
+                default: {
+                    x: 0,
+                    y: 0,
+                },
+                path: [...option.extends_path, Sen.Shell.Path.Parse(g_media).name_without_extension],
+            };
+        });
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(output_path, atlas_json, false);
         return;
     }
 }

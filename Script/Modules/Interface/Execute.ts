@@ -4,7 +4,7 @@ namespace Sen.Script.Modules.Interface.Execute {
      * @param argument - Pass argument
      */
     export function ExecuteArgument(argument: string | Array<string>): void {
-        const available: Array<int> = new Array();
+        const available: Array<int> = new Array<int>();
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("all_functions_loaded"))
@@ -12,7 +12,7 @@ namespace Sen.Script.Modules.Interface.Execute {
         if (Array.isArray(argument)) {
             for (const func of Sen.Script.Modules.Interface.Assert.FunctionCollection) {
                 if (func === "popcap_official_atlas_split" || func === "popcap_unofficial_atlas_split") {
-                    if (Sen.Script.Modules.Interface.Assert.CheckForJsonAndPng(argument)) {
+                    if (Sen.Script.Modules.Interface.Assert.CheckForJsonAndPng(argument) && Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].is_enabled) {
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number}. ${Sen.Script.Modules.System.Default.Localization.GetString(func)}`);
                         available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
                         continue;
@@ -21,14 +21,17 @@ namespace Sen.Script.Modules.Interface.Execute {
                 const assert_test: boolean = argument.every((arg: string) =>
                     Sen.Script.Modules.FileSystem.FilterFilePath(arg, Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].include, Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].exclude)
                 );
-                if (assert_test) {
+                if (assert_test && Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].is_enabled) {
                     Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number}. ${Sen.Script.Modules.System.Default.Localization.GetString(func)}`);
                     available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
                 }
             }
         } else {
             Sen.Script.Modules.Interface.Assert.FunctionCollection.forEach((func: string) => {
-                if (Sen.Script.Modules.FileSystem.FilterFilePath(argument, Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].include, Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].exclude)) {
+                if (
+                    Sen.Script.Modules.FileSystem.FilterFilePath(argument, Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].include, Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].exclude) &&
+                    Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].is_enabled
+                ) {
                     Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number}. ${Sen.Script.Modules.System.Default.Localization.GetString(func)}`);
                     available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
                 }

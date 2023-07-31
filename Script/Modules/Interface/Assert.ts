@@ -80,7 +80,6 @@ namespace Sen.Script.Modules.Interface.Assert {
                 Sen.Script.Modules.Interface.Execute.ExecuteArgument(execute_argument);
             } catch (error: unknown) {
                 Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
-            } finally {
             }
         } else {
             host.forEach((arg: RequestArgument<string>, index: int) => {
@@ -118,6 +117,7 @@ namespace Sen.Script.Modules.Interface.Assert {
             include: Array<string>;
             exclude: Array<string>;
             type: Sen.Script.Modules.FileSystem.filter_file_type;
+            is_enabled: boolean;
         };
     }
 

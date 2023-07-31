@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Alerts;
 
 namespace Sen.Assistant
 {
@@ -22,6 +23,12 @@ public sealed class MainPageViewModel : INotifyPropertyChanged
 
     public unsafe ICommand ExitCommand { get; }
     public unsafe ICommand LoadWorldMapCommand { get; }
+
+    private static readonly string[] value = new[] { "public.json" };
+    private static readonly string[] valueArray = new[] { "application/json" };
+    private static readonly string[] valueArray0 = new[] { ".json"};
+    private static readonly string[] valueArray1 = new[] { "*/*" };
+    private static readonly string[] valueArray2 = new[] { "json" };
 
     public unsafe MainPageViewModel()
     {
@@ -58,11 +65,11 @@ public sealed class MainPageViewModel : INotifyPropertyChanged
         var customFileType = new FilePickerFileType(
                 new Dictionary<DevicePlatform, IEnumerable<string>>
                 {
-                    { DevicePlatform.iOS, new[] { "public.json" } },
-                    { DevicePlatform.Android, new[] { "application/json" } }, 
-                    { DevicePlatform.WinUI, new[] { ".json"} },
-                    { DevicePlatform.Tizen, new[] { "*/*" } },
-                    { DevicePlatform.macOS, new[] { "json" } }
+                { DevicePlatform.iOS, value },
+                { DevicePlatform.Android, valueArray },
+                { DevicePlatform.WinUI, valueArray0 },
+                { DevicePlatform.Tizen, valueArray1 },
+                { DevicePlatform.macOS, valueArray2 }
                 });
 
         PickOptions options = new()
@@ -70,11 +77,17 @@ public sealed class MainPageViewModel : INotifyPropertyChanged
             PickerTitle = $"Select a json",
             FileTypes = customFileType,
         };
-        var json_text = await PickJson(options);
-        System.Console.WriteLine(json_text);
-        var worldmap_json = JsonConvert.DeserializeObject<WorldMapOfficial>(json_text);
+        var result = await FilePicker.PickAsync(options);
+        if (result != null)
+        {
+            var stream = await result.OpenReadAsync();
+            using var reader = new StreamReader(stream);
+            var json_text = await reader.ReadToEndAsync();
+            var worldmap_json = JsonConvert.DeserializeObject<WorldMapOfficial>(json_text);
+        }
         return;
     }
+
 }
 
 public class WorldMapOfficial

@@ -152,7 +152,7 @@ namespace Sen.Shell.Modules.Standards
 
         public override string? Input<T>(Sen.Shell.Modules.Standards.ConsoleColor? color)
         {
-            #pragma warning disable CS8600
+#pragma warning disable CS8600
             var platform = new Sen.Shell.Modules.Standards.Platform();
 
             if (platform.SenShell == ShellType.Console)
