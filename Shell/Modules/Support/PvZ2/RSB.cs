@@ -3,7 +3,7 @@ using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
 using VCDiff.Encoders;
 using VCDiff.Decoders;
-using VCDiff.Shared;
+using Newtonsoft.Json;
 
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSB
@@ -140,28 +140,25 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
 
     public class ResourcesDescription
     {
-        public required DescriptionGroup[] groups { get; set; }
+        public required Dictionary<string, DescriptionGroup> groups { get; set; }
     }
 
     public class DescriptionGroup
     {
-        public required string id { get; set; }
         public required bool composite { get; set; }
-        public required DescriptionSubGroup[] subgroups { get; set; }
+        public required Dictionary<string, DescriptionSubGroup> subgroups { get; set; }
     }
 
     public class DescriptionSubGroup
     {
-        public required string id { get; set; }
         public required string res { get; set; }
         public required string language { get; set; }
-        public required DescriptionResources[] resources { get; set; }
+        public required Dictionary<string, DescriptionResources> resources { get; set; }
     }
 
     public class DescriptionResources
     {
         public required int type { get; set; }
-        public required string id { get; set; }
         public required string path { get; set; }
         public PropertiesPtxInfo? ptx_info { get; set; }
         public required Dictionary<string, string> properties { get; set; }
@@ -440,13 +437,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var part2_Offset = rsbHeadInfo.part2_BeginOffset;
             var part3_Offset = rsbHeadInfo.part3_BeginOffset;
             var compositeResoucesInfo = new List<CompositeResoucesDescriptionInfo>();
-            var DescriptionGroup = new List<DescriptionGroup>();
+            var DescriptionGroup = new Dictionary<string, DescriptionGroup>();
             for (var i = 0; RSBFile.readOffset < (long)part2_Offset; i++)
             {
                 var idOffsetPart3 = RSBFile.readInt32LE();
                 var id = RSBFile.getStringByEmpty(part3_Offset + idOffsetPart3);
                 var rsgNumber = RSBFile.readInt32LE();
-                var subgroup = new List<DescriptionSubGroup>();
+                var subgroup = new Dictionary<string, DescriptionSubGroup>();
                 if (RSBFile.readInt32LE() != 0x10) throw new Exception($"Invalid RSG number | Offset: {RSBFile.readOffset}");
                 var rsgInfoList = new List<ResourcesRsgInfo>();
                 for (var k = 0; k < rsgNumber; k++)
@@ -465,12 +462,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         });
                     }
                     var rsgId = RSBFile.getStringByEmpty(part3_Offset + rsgIdOffsetPart3);
-                    subgroup.Add(new DescriptionSubGroup
+                    subgroup.Add(rsgId, new DescriptionSubGroup
                     {
-                        id = rsgId,
                         res = $"{resolutionRatio}",
                         language = language,
-                        resources = new DescriptionResources[resourcesNumber],
+                        resources = new Dictionary<string, DescriptionResources>(),
                     });
                     rsgInfoList.Add(new ResourcesRsgInfo
                     {
@@ -481,11 +477,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         resourcesInfoList = resourcesInfoList.ToArray()
                     });
                 }
-                DescriptionGroup.Add(new DescriptionGroup
+                DescriptionGroup.Add(id, new DescriptionGroup
                 {
-                    id = id,
                     composite = !id.EndsWith("_CompositeShell"),
-                    subgroups = subgroup.ToArray(),
+                    subgroups = subgroup,
                 });
                 compositeResoucesInfo.Add(new CompositeResoucesDescriptionInfo
                 {
@@ -546,13 +541,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                             }
                             var descriptionResources = new DescriptionResources
                             {
-                                id = resId,
                                 path = resPath,
                                 type = type,
                                 ptx_info = ptxInfoList,
                                 properties = propertiesInfoList,
                             };
-                            DescriptionGroup[i].subgroups[k].resources[h] = descriptionResources;
+                            DescriptionGroup.ElementAt(i).Value.subgroups.ElementAt(k).Value.resources[resId] = descriptionResources;
                         }
                     }
                 }
@@ -560,11 +554,25 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             };
             var resourcesDescription = new ResourcesDescription
             {
-                groups = DescriptionGroup.ToArray()
+                groups = DescriptionGroup
             };
             var fs = new FileSystem();
             var path = new ImplementPath();
-            fs.WriteJson(path.Resolve(path.Join(outFolder, "description.json")), resourcesDescription);
+            var json = JsonConvert.SerializeObject(resourcesDescription);
+            if (!fs.DirectoryExists(outFolder)) fs.CreateDirectory(outFolder);
+            fs.WriteText(path.Resolve(path.Join(outFolder, "description.json")), JsonPrettify(json), EncodingType.UTF8);
+        }
+
+        public static string JsonPrettify(string json)
+        {
+            using (var stringReader = new StringReader(json))
+            using (var stringWriter = new StringWriter())
+            {
+                var jsonReader = new JsonTextReader(stringReader);
+                var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented, IndentChar = '\t', Indentation = 1 };
+                jsonWriter.WriteToken(jsonReader);
+                return stringWriter.ToString();
+            }
         }
 
         public static RSB_head ReadHead(SenBuffer RSBFile)
@@ -1029,7 +1037,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var fs = new FileSystem();
             var path = new ImplementPath();
             var resourcesDescription = fs.ReadJson<ResourcesDescription>(path.Resolve(path.Join(inFolder, "description.json")));
-            var groupsLength = resourcesDescription.groups.Length;
+            var groupKeys = resourcesDescription.groups.Keys;
             var part1_Res = new SenBuffer();
             var part2_Res = new SenBuffer();
             var part3_Res = new SenBuffer();
@@ -1045,17 +1053,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             }
             part3_Res.writeNull(1);
             stringPool.Add("", 0);
-            for (var i = 0; i < groupsLength; i++)
+            foreach (var gKey in groupKeys)
             {
-                var idOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].id);
+                var idOffsetPart3 = ThrowInPool(gKey);
                 part1_Res.writeInt32LE(idOffsetPart3);
-                var rsgNumber = resourcesDescription.groups[i].subgroups.Length;
-                part1_Res.writeInt32LE(rsgNumber);
+                var subgroupKeys = resourcesDescription.groups[gKey].subgroups.Keys;
+                part1_Res.writeInt32LE(subgroupKeys.Count);
                 part1_Res.writeInt32LE(0x10);
-                for (var k = 0; k < rsgNumber; k++)
+                foreach (var gpKey in subgroupKeys)
                 {
-                    part1_Res.writeInt32LE(Int32.Parse(resourcesDescription.groups[i].subgroups[k].res));
-                    var language = resourcesDescription.groups[i].subgroups[k].language;
+                    part1_Res.writeInt32LE(Int32.Parse(resourcesDescription.groups[gKey].subgroups[gpKey].res));
+                    var language = resourcesDescription.groups[gKey].subgroups[gpKey].language;
                     if (language == string.Empty)
                     {
                         part1_Res.writeInt32LE(0x0);
@@ -1064,27 +1072,27 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         part1_Res.writeString((language + "    ")[..4]);
                     }
-                    var rsgIdOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].id);
+                    var rsgIdOffsetPart3 = ThrowInPool(gpKey);
                     part1_Res.writeInt32LE(rsgIdOffsetPart3);
-                    var resourcesNumber = resourcesDescription.groups[i].subgroups[k].resources.Length;
-                    part1_Res.writeInt32LE(resourcesNumber);
-                    for (var l = 0; l < resourcesNumber; l++)
+                    var resourcesKeys = resourcesDescription.groups[gKey].subgroups[gpKey].resources.Keys;
+                    part1_Res.writeInt32LE(resourcesKeys.Count);
+                    foreach (var rsKey in resourcesKeys)
                     {
                         var idOffsetPart2 = (int)part2_Res.writeOffset;
                         part1_Res.writeInt32LE(idOffsetPart2);
                         // Start writePart2
                         {
                             part2_Res.writeInt32LE(0x0);
-                            var type = resourcesDescription.groups[i].subgroups[k].resources[l].type;
+                            var type = resourcesDescription.groups[gKey].subgroups[gpKey].resources[rsKey].type;
                             part2_Res.writeUInt16LE((ushort)type);
                             part2_Res.writeUInt16LE(0x1C);
                             part2_Res.BackupWriteOffset();
                             part2_Res.writeOffset += (0x8);
-                            idOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].resources[l].id);
-                            var pathOffsetPart3 = ThrowInPool(resourcesDescription.groups[i].subgroups[k].resources[l].path);
+                            idOffsetPart3 = ThrowInPool(rsKey);
+                            var pathOffsetPart3 = ThrowInPool(resourcesDescription.groups[gKey].subgroups[gpKey].resources[rsKey].path);
                             part2_Res.writeInt32LE(idOffsetPart3);
                             part2_Res.writeInt32LE(pathOffsetPart3);
-                            var properties = resourcesDescription.groups[i].subgroups[k].resources[l].properties;
+                            var properties = resourcesDescription.groups[gKey].subgroups[gpKey].resources[rsKey].properties;
                             var propertiesNumber = properties.Count;
                             part2_Res.writeInt32LE(propertiesNumber);
                             if (type == 0)
@@ -1092,7 +1100,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                 var ptxInfoBeginOffsetPart2 = (int)part2_Res.writeOffset;
                                 // Write PTXInfo
                                 {
-                                    var ptx_info = resourcesDescription.groups[i].subgroups[k].resources[l].ptx_info;
+                                    var ptx_info = resourcesDescription.groups[gKey].subgroups[gpKey].resources[rsKey].ptx_info;
                                     part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.imagetype ?? "0"));
                                     part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.aflags ?? "0"));
                                     part2_Res.writeUInt16LE(UInt16.Parse(ptx_info?.x ?? "0"));
@@ -1734,7 +1742,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 {
                     var packetBeforeSubGroupIndex = Array.IndexOf(packetBeforeSubGroupIndexing, packetAfterName);
                     packetBefore = RSBBeforeFile.readBytes(RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgLength, RSBBeforeRSGInfoList[packetBeforeSubGroupIndex].rsgOffset);
-                    if (UseRawPacket) {
+                    if (UseRawPacket)
+                    {
                         throw new Exception("raw_packet_is_not_supported");
                     }
                 }
@@ -1748,7 +1757,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         throw new Exception("invalid_vcdiff_decode");
                     }
-                    if (UseRawPacket) {
+                    if (UseRawPacket)
+                    {
                         throw new Exception("raw_packet_is_not_supported");
                     }
                     packetAfter = outPutStream.ToArray();
@@ -1760,7 +1770,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 TestHash(packetAfter, rsbPatchPacketInfo.MD5Packet);
                 RSBBuilder.writeBytes(packetAfter);
             }
-            if (RSGPatchHeadInfo.RSBAfterFileSize != RSBBuilder.length) {
+            if (RSGPatchHeadInfo.RSBAfterFileSize != RSBBuilder.length)
+            {
                 throw new Exception("this_rsb_is_invalid");
             }
             return RSBBuilder;
