@@ -427,5 +427,14 @@
     "output_animation_render": "Output Animation Render",
     "output_animation_render_image": "Image: Output will be a directory contains multiple images",
     "output_animation_render_gif": "GIF: Output will be a gif contains multiple frames",
-    "input_resources_json_path": "Input Resources.json path"
+    "input_resources_json_path": "Input Resources.json path",
+    "merge_data_for_set_by_default": "Merge Data for PopCap Resolution {1} Obtained: Width = {2} & Height = {3}",
+    "merge_768": "Merge Atlas for PopCap Resolution 768",
+    "merge_384": "Merge Atlas for PopCap Resolution 384",
+    "merge_1200": "Merge Atlas for PopCap Resolution 1200",
+    "merge_640": "Merge Atlas for PopCap Resolution 640",
+    "use_official_structure": "Use Official Structure",
+    "popcap_atlas_merge_multi_resolution": "PopCap Atlas: Merge With Multi-Resolution Support",
+    "unsupported_multi_resolution": "Unsupported Multi-Resolution Merge",
+    "multi_resolution_merge_only_support_1536": "Multi-Resolution Merge only support PopCap Resolution 1536"
 }

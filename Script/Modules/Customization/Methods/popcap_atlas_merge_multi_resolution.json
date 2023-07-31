@@ -1,0 +1,8 @@
+{
+    "#comment": "Default merge option taken from atlas merge",
+    "allow_384": false,
+    "allow_768": true,
+    "allow_1200": false,
+    "allow_640": false,
+    "use_official_structure": "?"
+}

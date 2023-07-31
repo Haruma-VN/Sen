@@ -129,7 +129,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "vcdiff_decode"
         | "popcap_rsb_bundle_manifest_split"
         | "popcap_rsb_bundle_manifest_merge"
-        | "popcap_lawnstring_convert";
+        | "popcap_lawnstring_convert"
+        | "popcap_atlas_merge_multi_resolution";
 
     /**
      *
@@ -1982,6 +1983,108 @@ namespace Sen.Script.Modules.Interface.Execute {
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }
+                        });
+                    }
+                    break;
+                }
+                case "popcap_atlas_merge_multi_resolution": {
+                    if (!Array.isArray(argument)) {
+                        const destination: Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.AtlasMergeInputRequirement = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputAtlasMerge();
+                        const allow_384: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                Sen.Script.Modules.System.Default.Localization.GetString("merge_384"),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                `allow_384`
+                            )
+                        );
+                        const allow_768: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                Sen.Script.Modules.System.Default.Localization.GetString("merge_768"),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                `allow_768`
+                            )
+                        );
+                        const allow_1200: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                Sen.Script.Modules.System.Default.Localization.GetString("merge_1200"),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                `allow_1200`
+                            )
+                        );
+                        const allow_640: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                Sen.Script.Modules.System.Default.Localization.GetString("merge_640"),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                `allow_640`
+                            )
+                        );
+                        const use_official_structure: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                Sen.Script.Modules.System.Default.Localization.GetString("use_official_structure"),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                `use_official_structure`
+                            )
+                        );
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MergeWithMultipleResolution(
+                            argument,
+                            destination,
+                            {
+                                allow_768: allow_768,
+                                allow_384: allow_384,
+                                allow_1200: allow_1200,
+                                allow_640: allow_640,
+                            },
+                            use_official_structure ? "official" : "unofficial"
+                        );
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const destination: Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.AtlasMergeInputRequirement = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputAtlasMerge();
+                            const allow_384: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("merge_384"),
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                    `allow_384`
+                                )
+                            );
+                            const allow_768: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("merge_768"),
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                    `allow_768`
+                                )
+                            );
+                            const allow_1200: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("merge_1200"),
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                    `allow_1200`
+                                )
+                            );
+                            const allow_640: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("merge_640"),
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                    `allow_640`
+                                )
+                            );
+                            const use_official_structure: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_official_structure"),
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_atlas_merge_multi_resolution.json`)),
+                                    `use_official_structure`
+                                )
+                            );
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.MergeWithMultipleResolution(
+                                arg,
+                                destination,
+                                {
+                                    allow_768: allow_768,
+                                    allow_384: allow_384,
+                                    allow_1200: allow_1200,
+                                    allow_640: allow_640,
+                                },
+                                use_official_structure ? "official" : "unofficial"
+                            );
                         });
                     }
                     break;

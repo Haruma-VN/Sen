@@ -300,5 +300,11 @@
         "include": [".txt", ".json"],
         "exclude": [],
         "type": "file"
+    },
+    "popcap_atlas_merge_multi_resolution": {
+        "func_number": 51,
+        "include": [".sprite"],
+        "exclude": [],
+        "type": "directory"
     }
 }

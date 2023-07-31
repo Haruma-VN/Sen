@@ -598,14 +598,160 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                         type: `Image`,
                     };
                 }
-                Sen.Shell.DotNetBitmap.CompositeImages(max_rects_collections[i], `${parent_name}.png`, `${Sen.Shell.Path.Dirname(directory_path)}`, dimension_output_test.width, dimension_output_test.height);
+                const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${parent_name.toUpperCase()}.png`));
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                Sen.Shell.DotNetBitmap.CompositeImages(max_rects_collections[i], `${parent_name.toUpperCase()}.png`, `${Sen.Shell.Path.Dirname(directory_path)}`, dimension_output_test.width, dimension_output_test.height);
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<sprite_data>(
-                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`)),
-                subgroup_output[atlas_json.subgroup] as any,
-                false
-            );
+            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`));
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+            Sen.Script.Modules.FileSystem.Json.WriteJson<sprite_data>(output_argument, subgroup_output[atlas_json.subgroup] as any, false);
             return;
         }
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface ResolutionOutput {
+        allow_768: boolean;
+        allow_384: boolean;
+        allow_1200: boolean;
+        allow_640: boolean;
+    }
+
+    /**
+     * Structure
+     */
+
+    export type g_dimension = Record<"width" | "height", number>;
+
+    /**
+     *
+     * @param directory_path - Pass dir
+     * @returns Assertation
+     */
+
+    export function IsQualified(directory_path: string) {
+        const atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `atlas.json`));
+        const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
+            atlas_json_path
+        ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
+        if (BigInt(atlas_json.res) !== 1536n) {
+            throw new Sen.Script.Modules.Exceptions.UnsupportedMultiResolution(Sen.Script.Modules.System.Default.Localization.GetString("multi_resolution_merge_only_support_1536"), directory_path);
+        }
+        return;
+    }
+
+    /**
+     *
+     * @param directory_path - Provide directory
+     * @param pack_data - Provide pack data
+     * @param option - Provide option
+     * @param merge_option - Provide option
+     * @returns
+     */
+
+    export function MergeWithMultipleResolution(
+        directory_path: string,
+        pack_data: Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.AtlasMergeInputRequirement,
+        option: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ResolutionOutput,
+        merge_option: "official" | "unofficial"
+    ): void {
+        Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.IsQualified(directory_path);
+        if (merge_option === "official") {
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(directory_path, pack_data);
+        } else {
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(directory_path, pack_data);
+        }
+        if (option.allow_384) {
+            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `384`)}`));
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 384, output_argument);
+            const dimension_k: g_dimension = {
+                width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.25)),
+                height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.25)),
+            };
+            if (merge_option === `official`) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            } else {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            }
+        }
+        if (option.allow_768) {
+            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `768`)}`));
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 768, output_argument);
+            const dimension_k: g_dimension = {
+                width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.5)),
+                height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.5)),
+            };
+            if (merge_option === `official`) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            } else {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            }
+        }
+        if (option.allow_1200) {
+            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `1200`)}`));
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 1200, output_argument);
+            const dimension_k: g_dimension = {
+                width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.78125)),
+                height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.78125)),
+            };
+            if (merge_option === `official`) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            } else {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            }
+        }
+        if (option.allow_640) {
+            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `640`)}`));
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 640, output_argument);
+            const dimension_k: g_dimension = {
+                width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.4166666666666666)),
+                height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.4166666666666666)),
+            };
+            if (merge_option === `official`) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            } else {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(output_argument, {
+                    ...pack_data,
+                    width: dimension_k.width,
+                    height: dimension_k.height,
+                });
+            }
+        }
+        return;
     }
 }

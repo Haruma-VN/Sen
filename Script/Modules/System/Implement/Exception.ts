@@ -353,6 +353,16 @@ namespace Sen.Script.Modules.Exceptions {
             this.name = Sen.Script.Modules.System.Default.Localization.GetString("rton_encode_error");
         }
     }
+    /**
+     * Structure
+     */
+
+    export class UnsupportedMultiResolution extends MissingFile {
+        public constructor(message: string, file_path: string) {
+            super(message, file_path);
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("unsupported_multi_resolution");
+        }
+    }
 
     /**
      * JS RTON Decode Exception
@@ -843,6 +853,15 @@ namespace Sen.Script.Modules.Exceptions {
                     const name: string = (error as Sen.Script.Modules.Exceptions.RTONDecodeError).name;
                     const message: string = (error as Sen.Script.Modules.Exceptions.RTONDecodeError).message;
                     const location: string = (error as Sen.Script.Modules.Exceptions.RTONDecodeError).file_location;
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
+                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
+                    Sen.Script.Modules.Exceptions.ExecutionError(message);
+                    break;
+                }
+                case Sen.Script.Modules.Exceptions.UnsupportedMultiResolution: {
+                    const name: string = (error as Sen.Script.Modules.Exceptions.UnsupportedMultiResolution).name;
+                    const message: string = (error as Sen.Script.Modules.Exceptions.UnsupportedMultiResolution).message;
+                    const location: string = (error as Sen.Script.Modules.Exceptions.UnsupportedMultiResolution).file_location;
                     Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                     Sen.Script.Modules.Exceptions.ExecutionError(message);
