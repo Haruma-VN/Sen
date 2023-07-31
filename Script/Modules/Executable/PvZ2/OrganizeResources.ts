@@ -88,7 +88,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.OrganizeResources {
                 }
                 res.resources[i] = reorganizedObject;
             });
-            Sen.Script.Modules.Third.JavaScript.FastSort.sort(res.resources).by([{ asc: (u) => u.id }]);
+            Sen.Script.Modules.Third.JavaScript.FastSort.sort(res.resources).by([{ desc: (u) => u.id }]);
             return;
         }
 

@@ -5,6 +5,8 @@ using ImageInfo = Sen.Shell.Modules.Support.PvZ2.PAM.ImageInfo;
 using System.Dynamic;
 using System.Xml.Linq;
 using System.Collections;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Sen.Shell.Modules.Support.Flash
 {
@@ -93,6 +95,41 @@ namespace Sen.Shell.Modules.Support.Flash
             using var domdocument_serialize_xml_writer = XmlWriter.Create(outFile, domdocument_serialize_settings);
             domdocument_deserialize.Save(domdocument_serialize_xml_writer);
             return;
+        }
+
+
+        public struct SerializeOption
+        {
+            public required string json;
+        }
+
+        public string SerializeXML(SerializeOption option)
+        {
+            XmlDocument doc = JsonConvert.DeserializeXmlNode(option.json)!;
+            using var stringWriter = new StringWriter();
+            using var xmlTextWriter = new XmlTextWriter(stringWriter);
+            {
+                xmlTextWriter.Formatting = System.Xml.Formatting.Indented;
+                xmlTextWriter.Indentation = 1;
+                xmlTextWriter.IndentChar = '\t';
+                doc.WriteTo(xmlTextWriter);
+                return stringWriter.ToString();
+            }
+        }
+
+
+        public struct DeserializeOption
+        {
+            public required string xml;
+
+        }
+
+        public unsafe string DeserializeXML(DeserializeOption option)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(option.xml);
+
+            return JsonConvert.SerializeXmlNode(doc);
         }
 
         public struct MatrixInformation

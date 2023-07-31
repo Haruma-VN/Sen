@@ -390,17 +390,15 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public unsafe override sealed void VCDiffDecode(string OldFile, string PatchFile, string NewFile)
         {
-            using (FileStream output = new FileStream(NewFile, FileMode.Create, FileAccess.Write))
-            using (FileStream dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read))
-            using (FileStream target = new FileStream(PatchFile, FileMode.Open, FileAccess.Read))
+            using var output = new FileStream(NewFile, FileMode.Create, FileAccess.Write);
+            using var dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read);
+            using var target = new FileStream(PatchFile, FileMode.Open, FileAccess.Read);
+            var decoder = new VcDecoder(dict, target, output, 0xFFFFFFF);
+            long bytesWritten = 0;
+            var result = decoder.Decode(out bytesWritten);
+            if (result != VCDiffResult.SUCCESS)
             {
-                var decoder = new VcDecoder(dict, target, output, 0xFFFFFFF);
-                long bytesWritten = 0;
-                var result = decoder.Decode(out bytesWritten);
-                if (result != VCDiffResult.SUCCESS)
-                {
-                    throw new Exception("invalid_vcdiff_decode");
-                }
+               throw new Exception("invalid_vcdiff_decode");
             }
             return;
         }

@@ -1922,6 +1922,25 @@ declare namespace Sen {
              */
 
             export function AddImageToSpriteDocument(inFile: string, transform: [double, double, double, double, double, double], color: [double, double, double, double], image_index: int): void;
+
+            /**
+             * Structure
+             */
+
+            export interface SerializeOption {
+                json: string;
+            }
+
+            export function SerializeXML(option: SerializeOption): string;
+            /**
+             * Structure
+             */
+
+            export interface DeserializeOption {
+                xml: string;
+            }
+
+            export function DeserializeXML(option: DeserializeOption): string;
         }
 
         /**
