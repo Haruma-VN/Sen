@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using Color = System.Drawing.Color;
+using Image = System.Drawing.Image;
 
 namespace CMK
 {

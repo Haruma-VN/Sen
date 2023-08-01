@@ -163,10 +163,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
         ) as int;
         const output_animation_render: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
             Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render"),
-            [1, 2],
+            [1, 2, 3],
             {
                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_image"), Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_image")],
                 "2": [Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_gif"), Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_gif")],
+                "3": [Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_apng"), Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_apng")],
             },
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)),
             `output_file_type`
@@ -239,6 +240,22 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                     images: frames,
                     outputPath: option.output_path,
                     frame_delay: 0n,
+                });
+                break;
+            }
+            case 3n: {
+                const option: Record<"input_path" | "output_path", string> = {
+                    input_path: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `frames`)),
+                    output_path: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `${Sen.Shell.Path.Parse(file_input).name_without_extension}.apng`)),
+                };
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(option.output_path, "file");
+                const frames: Array<string> = Sen.Shell.FileSystem.ReadDirectory(option.input_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
+                    .filter((argument: string) => argument.toLowerCase().endsWith(`.png`))
+                    .sort((a: string, b: string) => parseInt(a) - parseInt(b));
+                Sen.Shell.DotNetBitmap.CreateAPNG({
+                    imageList: frames,
+                    outFile: option.output_path,
+                    framesPerSecond: 30n,
                 });
                 break;
             }

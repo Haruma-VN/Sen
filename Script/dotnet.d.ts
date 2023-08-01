@@ -670,6 +670,24 @@ declare namespace Sen {
              */
 
             export function ExportAnimatedGif(option: AnimatedGifOption): void;
+
+            /**
+             * Structure
+             */
+
+            export interface GenerateAPNG {
+                imageList: string[];
+                outFile: string;
+                framesPerSecond: bigint;
+            }
+
+            /**
+             *
+             * @param g_option - Pass option
+             * @returns Output APNG
+             */
+
+            export function CreateAPNG(g_option: GenerateAPNG): void;
         }
 
         declare namespace TextureHandler {

@@ -14,6 +14,7 @@ using VCDiff.Encoders;
 using VCDiff.Decoders;
 using VCDiff.Shared;
 using static Sen.Shell.Modules.Support.PvZ2.RSG.RSGFunction;
+using CMK;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -113,6 +114,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract RSGAbnormal IsPopCapRSG(string inFile);
 
+
     }
 
 
@@ -122,6 +124,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
+
+
+
         public unsafe sealed override void RTONDecode(string inFile, string outFile, RTONCipher DecryptRTON)
         {
             var RtonFile = new SenBuffer(inFile);

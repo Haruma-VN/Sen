@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static CMK.AnimatedPng;
+using Image = System.Drawing.Image;
 
 namespace CMK
 {

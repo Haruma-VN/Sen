@@ -7,6 +7,7 @@ using SixLabors.ImageSharp.Formats.Gif;
 using Org.BouncyCastle.Pqc.Crypto.Sike;
 using static System.Net.Mime.MediaTypeNames;
 using Image = SixLabors.ImageSharp.Image;
+using CMK;
 
 namespace Sen.Shell.Modules.Standards.Bitmap
 {
@@ -140,13 +141,15 @@ namespace Sen.Shell.Modules.Standards.Bitmap
 
         public abstract void ExportAnimatedGif(AnimatedGifOption option);
 
+        public abstract void CreateAPNG(GenerateAPNG g_option);
+
 
     }
 
 
     public struct AnimatedGifOption
     {
-        public int width;
+        public required int width;
 
         public int height;
 
@@ -158,8 +161,39 @@ namespace Sen.Shell.Modules.Standards.Bitmap
 
     }
 
+
+    public struct GenerateAPNG
+    {
+        public required string[] imageList;
+        public required string outFile;
+        public required uint framesPerSecond;
+    }
+
     public class Bitmap_Implement : Abstract_Bitmap
     {
+
+        #pragma warning disable CA1416
+        #pragma warning disable CS8500
+
+        public unsafe sealed override void CreateAPNG(GenerateAPNG g_option)
+        {
+            GenerateAPNG* g_ptr = &g_option;
+            var firstImage = System.Drawing.Image.FromFile(g_ptr->imageList[0]);
+            var frameDelay = (short)(1000 / g_ptr->framesPerSecond);
+            using var outputFile = File.Create(g_ptr->outFile);
+            {
+                using var apngCreator = new AnimatedPngCreator(outputFile, firstImage.Width, firstImage.Height);
+                {
+                    apngCreator.WriteFrame(firstImage, frameDelay);
+                    for (var i = 1; i < g_ptr->imageList.Length; i++)
+                    {
+                        var imageFrame = System.Drawing.Image.FromFile(g_ptr->imageList[i]);
+                        apngCreator.WriteFrame(imageFrame, frameDelay);
+                    }
+                }
+            }
+            return;
+        }
 
 
         public unsafe override sealed void ExportAnimatedGif(AnimatedGifOption option)

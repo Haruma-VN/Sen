@@ -437,5 +437,6 @@
     "popcap_atlas_merge_multi_resolution": "PopCap Atlas: Merge With Multi-Resolution Support",
     "unsupported_multi_resolution": "Unsupported Multi-Resolution Merge",
     "multi_resolution_merge_only_support_1536": "Multi-Resolution Merge only support PopCap Resolution 1536",
-    "image_sequence_to_pam_json": "PopCap Animation: Frames to Animation JSON"
+    "image_sequence_to_pam_json": "PopCap Animation: Frames to Animation JSON",
+    "output_animation_render_apng": "APNG: Output will be an apng contains multiple frames"
 }
