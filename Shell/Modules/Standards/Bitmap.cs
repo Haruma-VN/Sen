@@ -151,13 +151,13 @@ namespace Sen.Shell.Modules.Standards.Bitmap
     {
         public required int width;
 
-        public int height;
+        public required int height;
 
-        public string[] images;
+        public required string[] images;
 
-        public string outputPath;
+        public required string outputPath;
 
-        public int frame_delay;
+        public required int frame_delay;
 
     }
 
