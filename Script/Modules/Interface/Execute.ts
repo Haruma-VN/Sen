@@ -11,7 +11,7 @@ namespace Sen.Script.Modules.Interface.Execute {
         );
         if (Array.isArray(argument)) {
             for (const func of Sen.Script.Modules.Interface.Assert.FunctionCollection) {
-                if (func === "popcap_official_atlas_split" || func === "popcap_unofficial_atlas_split") {
+                if (func === "popcap_official_atlas_split" || func === "popcap_resinfo_atlas_split") {
                     if (Sen.Script.Modules.Interface.Assert.CheckForJsonAndPng(argument) && Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].is_enabled) {
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number}. ${Sen.Script.Modules.System.Default.Localization.GetString(func)}`);
                         available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
@@ -87,17 +87,17 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_official_pam_to_pam_json"
         | "popcap_official_pam_json_to_pam"
         | "popcap_official_atlas_merge"
-        | "popcap_unofficial_atlas_split"
-        | "popcap_unofficial_atlas_merge"
-        | "popcap_unofficial_resources_split"
-        | "popcap_unofficial_resources_merge"
+        | "popcap_resinfo_atlas_split"
+        | "popcap_resinfo_atlas_merge"
+        | "popcap_resinfo_resources_split"
+        | "popcap_resinfo_resources_merge"
         | "popcap_rton_to_json"
         | "popcap_json_to_rton"
         | "popcap_sprite_resize"
         | "popcap_official_pam_to_flash_animation"
         | "popcap_official_pam_from_flash_animation"
-        | "popcap_official_resources_to_unofficial_resources"
-        | "popcap_unofficial_resources_to_official_resources"
+        | "popcap_official_resources_to_resinfo_resources"
+        | "popcap_resinfo_resources_to_official_resources"
         | "popcap_rsg_unpack"
         | "popcap_rsg_pack"
         | "popcap_official_pam_json_to_flash_animation"
@@ -293,14 +293,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         switch (convert) {
                             case 1: {
-                                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToArray(argument, output_argument);
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToArray(argument, output_argument);
                                 break;
                             }
                             case 2: {
-                                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(
                                     argument,
                                     output_argument,
-                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathType.array
                                 );
                                 break;
                             }
@@ -321,14 +321,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             switch (convert) {
                                 case 1: {
-                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToArray(arg, output_argument);
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToArray(arg, output_argument);
                                     break;
                                 }
                                 case 2: {
-                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(
+                                    Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathConversion.ConvertResourcesOfficialPathToString(
                                         arg,
                                         output_argument,
-                                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array
+                                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathType.array
                                     );
                                     break;
                                 }
@@ -613,7 +613,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_official_resources_to_unofficial_resources": {
+                case "popcap_official_resources_to_resinfo_resources": {
                     if (!Array.isArray(argument)) {
                         const expand_path: "array" | "string" =
                             (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
@@ -636,7 +636,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 : "string";
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `res.json`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(argument, output_argument, expand_path);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(argument, output_argument, expand_path);
                     } else {
                         argument.forEach((arg: string) => {
                             const expand_path: "array" | "string" =
@@ -660,7 +660,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     : "string";
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `res.json`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(arg, output_argument, expand_path);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(arg, output_argument, expand_path);
                         });
                     }
                     break;
@@ -969,30 +969,30 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_unofficial_resources_to_official_resources": {
+                case "popcap_resinfo_resources_to_official_resources": {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `resources.json`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `resources.json`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(arg, output_argument);
                         });
                     }
                     break;
                 }
-                case "popcap_unofficial_resources_split": {
+                case "popcap_resinfo_resources_split": {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json.info`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitResInfoResources.CreateConversion(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.json.info`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitResInfoResources.CreateConversion(arg, output_argument);
                         });
                     }
                     break;
@@ -1081,16 +1081,16 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_unofficial_resources_merge": {
+                case "popcap_resinfo_resources_merge": {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeUnofficialJson.CreateConversion(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeResInfoJson.CreateConversion(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitUnofficialResources.CreateConversion(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.SplitResInfoResources.CreateConversion(arg, output_argument);
                         });
                     }
                     break;
@@ -1145,12 +1145,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.res`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.SplitPopCapResources(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.res`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.SplitPopCapResources(arg, output_argument);
                         });
                     }
                     break;
@@ -1159,12 +1159,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(arg, output_argument);
                         });
                     }
                     break;
@@ -1210,7 +1210,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_unofficial_atlas_split": {
+                case "popcap_resinfo_atlas_split": {
                     if (Array.isArray(argument)) {
                         const method: "id" | "path" =
                             (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
@@ -1228,11 +1228,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 1 | 2) === 2
                                 ? "path"
                                 : "id";
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractUnofficialPvZ2Atlas.ExtractPvZ2AtlasUnofficialStructure(argument, method);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.ExtractResInfoPvZ2Atlas.ExtractManyPvZ2ResInfoStructure(argument, method);
                     }
                     break;
                 }
-                case "popcap_unofficial_atlas_merge": {
+                case "popcap_resinfo_atlas_merge": {
                     if (!Array.isArray(argument)) {
                         const destination: Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.AtlasMergeInputRequirement = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputAtlasMerge();
                         Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(argument, destination);
@@ -2037,7 +2037,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 allow_1200: allow_1200,
                                 allow_640: allow_640,
                             },
-                            use_official_structure ? "official" : "unofficial"
+                            use_official_structure ? "resourcegroup" : "resinfo"
                         );
                     } else {
                         argument.forEach((arg: string) => {
@@ -2086,7 +2086,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     allow_1200: allow_1200,
                                     allow_640: allow_640,
                                 },
-                                use_official_structure ? "official" : "unofficial"
+                                use_official_structure ? "resourcegroup" : "resinfo"
                             );
                         });
                     }

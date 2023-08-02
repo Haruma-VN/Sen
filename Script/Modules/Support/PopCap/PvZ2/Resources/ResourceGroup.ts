@@ -1,6 +1,6 @@
-namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
+namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup {
     /**
-     * PopCap Resources Path enum
+     * PopCap ResourceGroup Path enum
      */
 
     export enum PopCapResourcesPathType {
@@ -23,7 +23,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
         };
     };
 
-    export class PopCapResources extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.CheckOfficialResources {
+    export class PopCapResources extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.CheckResourceGroupResources {
         /**
          *
          * @param file_path - Pass resources.json file path here
@@ -33,7 +33,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
 
         public static SplitPopCapResources(file_path: string, output_directory: string): void {
             const resources_json: Resources_Group_Structure_Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(file_path);
-            this.CheckOfficial<Resources_Group_Structure_Template>(resources_json, file_path);
+            this.CheckResourceGroup<Resources_Group_Structure_Template>(resources_json, file_path);
             Sen.Shell.FileSystem.CreateDirectory(output_directory);
             const subgroup_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${output_directory}`, `subgroup`));
             Sen.Shell.FileSystem.CreateDirectory(subgroup_directory);
@@ -200,16 +200,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          * @param resource_json - Pass parsed resources json here
          * @returns "array" or string
          */
-        private static CheckOfficialPathType<Template extends Resources_Group_Structure_Template>(resource_json: Template): Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType {
+        private static CheckOfficialPathType<Template extends Resources_Group_Structure_Template>(resource_json: Template): Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathType {
             for (let index: number = 0; index < resource_json.groups.length; ++index) {
                 if ("resources" in resource_json.groups[index]) {
                     for (let j_index: number = 0; j_index < resource_json.groups[index].resources.length; ++j_index) {
                         if ("path" in resource_json.groups[index].resources[j_index]) {
                             try {
                                 (resource_json.groups[index].resources[j_index] as Array<string>).join("\\");
-                                return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.array;
+                                return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathType.array;
                             } catch {
-                                return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.string;
+                                return Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathType.string;
                             }
                         }
                     }
@@ -227,11 +227,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
 
         public static ConvertOfficialPathToString<Generic_T extends Resources_Group_Structure_Template>(
             resources_json: Generic_T,
-            check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType,
+            check_resources_path: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathType,
             file_path?: string
         ): Generic_T {
-            this.CheckOfficial<Generic_T>(resources_json, (file_path ??= "undefined"));
-            if (check_resources_path === Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResourcesPathType.string) {
+            this.CheckResourceGroup<Generic_T>(resources_json, (file_path ??= "undefined"));
+            if (check_resources_path === Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResourcesPathType.string) {
                 throw new Sen.Script.Modules.Exceptions.EvaluateError(
                     Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("already_being_type_of"), [
                         `"path"`,
@@ -257,7 +257,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
          */
 
         public static ConvertOfficialPathToArray<Generic_T extends Resources_Group_Structure_Template>(resources_json: Generic_T, file_path?: string): Generic_T {
-            this.CheckOfficial<Generic_T>(resources_json, (file_path ??= "undefined"));
+            this.CheckResourceGroup<Generic_T>(resources_json, (file_path ??= "undefined"));
             resources_json.groups.forEach((subgroup: Resource_Structure_Template) => {
                 if (`resources` in subgroup) {
                     subgroup.resources.forEach((subgroup_children) => {
@@ -273,7 +273,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
      * Implemented class, only for write file
      */
 
-    export class PopCapResourcesPathConversion extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources {
+    export class PopCapResourcesPathConversion extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources {
         /**
          *
          * @param file_in - File input
@@ -305,5 +305,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official {
             );
             return;
         }
+    }
+
+    // libLawnApp :: 10.6.2
+
+    export function DebugDump(sub_resource_data: Resource_Structure_Template, file_path: string, is_test: boolean): void {
+        if (is_test) {
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.CheckResourceGroupResources.CheckWholeData(sub_resource_data, file_path);
+        }
+        return;
     }
 }

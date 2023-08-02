@@ -239,7 +239,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
             if (resources_rton_path !== "") {
                 const resources_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_rton_path)}`, `${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`));
                 Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
-                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
+                Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(
                     resources_json_path,
                     Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `res.json`)),
                     information.expand_path

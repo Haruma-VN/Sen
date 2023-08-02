@@ -50,7 +50,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
      * @returns
      */
 
-    export function ConvertStreamingWavetoGlobalDataforResouces(manifest_rsg_bundle_directory: string, subgroup_content_json: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.official_subgroup_json): void {
+    export function ConvertStreamingWavetoGlobalDataforResouces(manifest_rsg_bundle_directory: string, subgroup_content_json: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json): void {
         const streaming_wave_res_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, `subgroup`, `StreamingWave.json`));
         const global_data_res_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, `subgroup`, `Global_Data.json`));
         const deserialized_subgroup: resource_atlas_and_sprites = Sen.Script.Modules.FileSystem.Json.ReadJson<resource_atlas_and_sprites>(streaming_wave_res_path) satisfies resource_atlas_and_sprites;
@@ -192,10 +192,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         const res_json_argument: string = res_argument.replace(/((\.rton))?$/i, `.json`);
         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(res_argument, res_json_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(res_argument)}`, `${Sen.Shell.Path.Parse(res_argument).name_without_extension}.res`));
-        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.SplitPopCapResources(res_json_argument, output_argument);
+        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.SplitPopCapResources(res_json_argument, output_argument);
         const content_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(output_argument, `content.json`));
-        const subgroup_content_json: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.official_subgroup_json =
-            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.official_subgroup_json>(content_json_path);
+        const subgroup_content_json: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json =
+            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json>(content_json_path);
         const parents: Array<string> = Object.keys(subgroup_content_json);
         const atlas_res_bundle: Array<number> = [1536, 768, 384];
         const type_res_subgroup: string = `${atlas_res_bundle[input_resolution - 1]}`;
@@ -218,8 +218,8 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                 }
             }
         }
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.official_subgroup_json>(content_json_path, subgroup_content_json, false);
-        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Official.PopCapResources.MergePopCapResources(output_argument, res_json_argument);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json>(content_json_path, subgroup_content_json, false);
+        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(output_argument, res_json_argument);
         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(res_json_argument, res_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
         Sen.Shell.PvZ2Shell.RSGPack(`${manifest_rsg_bundle_directory}`, `${manifest_rsg_path}`, manifest_packet_info, false);
         return;

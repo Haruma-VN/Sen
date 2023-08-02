@@ -54,7 +54,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
             popcap_resource_group_resources_json_output_destination,
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
         );
-        const res_json: res_json = Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.DoAllProcess<Resources_Group_Structure_Template, res_json>(
+        const res_json: res_json = Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.DoAllProcess<Resources_Group_Structure_Template, res_json>(
             Sen.Script.Modules.FileSystem.Json.ReadJson<Resources_Group_Structure_Template>(popcap_resource_group_resources_json_output_destination),
             popcap_resource_group_resources_json_output_destination,
             rsb_unpack_option.expand_path as "array" | "string"

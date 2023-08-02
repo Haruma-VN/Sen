@@ -48,7 +48,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
 
         public PrintArgument(): void {
             Object.keys(this._argument).forEach((arg: string, index: int) => {
-                Sen.Shell.Console.Printf(null, `        ${index + 1}. ${arg}`);
+                Sen.Shell.Console.Printf(null, `      ${index + 1}. ${arg}`);
             });
             return;
         }

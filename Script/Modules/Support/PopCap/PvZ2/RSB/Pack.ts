@@ -110,16 +110,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs -> RTONs`));
         }
         if (option.generate_resources) {
-            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToOfficial.CreateConversion(
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)),
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`))
             );
             Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_res_json_to_resources_json"))
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_resinfo_to_resourcegroup"))
             );
         } else {
-            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.UnofficialResourceConversion.CreateConversion(
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`)),
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)),
                 Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`))).expand_path

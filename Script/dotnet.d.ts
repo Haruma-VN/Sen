@@ -2066,7 +2066,7 @@ declare namespace Sen {
          * Structure
          */
 
-        declare type UnofficialSubgroupStandard = {
+        declare type ResInfoSubgroupStandard = {
             type: resolution;
             packet: {
                 [parent_name: string]: {

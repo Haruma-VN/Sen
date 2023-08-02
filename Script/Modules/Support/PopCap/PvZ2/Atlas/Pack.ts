@@ -656,10 +656,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
         directory_path: string,
         pack_data: Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.AtlasMergeInputRequirement,
         option: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.ResolutionOutput,
-        merge_option: "official" | "unofficial"
+        merge_option: "resourcegroup" | "resinfo"
     ): void {
         Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.IsQualified(directory_path);
-        if (merge_option === "official") {
+        if (merge_option === "resourcegroup") {
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(directory_path, pack_data);
         } else {
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForUnofficialSubgroupStructure(directory_path, pack_data);
@@ -672,7 +672,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.25)),
                 height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.25)),
             };
-            if (merge_option === `official`) {
+            if (merge_option === `resourcegroup`) {
                 Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
                     ...pack_data,
                     width: dimension_k.width,
@@ -694,7 +694,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.5)),
                 height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.5)),
             };
-            if (merge_option === `official`) {
+            if (merge_option === `resourcegroup`) {
                 Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
                     ...pack_data,
                     width: dimension_k.width,
@@ -716,7 +716,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.78125)),
                 height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.78125)),
             };
-            if (merge_option === `official`) {
+            if (merge_option === `resourcegroup`) {
                 Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
                     ...pack_data,
                     width: dimension_k.width,
@@ -738,7 +738,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.4166666666666667)),
                 height: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.height * 0.4166666666666667)),
             };
-            if (merge_option === `official`) {
+            if (merge_option === `resourcegroup`) {
                 Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.PackFromAtlasJson.PackForOfficialSubgroupStructure(output_argument, {
                     ...pack_data,
                     width: dimension_k.width,
