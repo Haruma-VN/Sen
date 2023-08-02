@@ -14,6 +14,8 @@ using VCDiff.Encoders;
 using VCDiff.Decoders;
 using VCDiff.Shared;
 using static Sen.Shell.Modules.Support.PvZ2.RSG.RSGFunction;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -113,8 +115,87 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract RSGAbnormal IsPopCapRSG(string inFile);
 
+        public abstract ResoureGroup RewriteSlot(ResoureGroup resoureGroup, string outfile);
+
 
     }
+
+    #region Resources Writing
+
+    public unsafe class ResoureGroup
+    {
+
+        public readonly uint version = 1;
+
+        public readonly uint content_version = 1;
+
+        public required uint slot_count;
+
+        public required SubgroupData[] groups;
+    }
+
+    public unsafe class SubgroupData
+    {
+        public required string id;
+
+        public required string type;
+
+        public string? parent;
+
+        public string? res;
+
+        public SubgroupWrapper[]? subgroups;
+
+        public M_Subgroup_Wrapper[]? resources;
+
+    }
+
+    public unsafe class SubgroupWrapper
+    {
+
+        public required string id;
+
+        public string? res;
+    }
+
+    public unsafe class M_Subgroup_Wrapper
+    {
+        public required uint slot;
+
+        public required string id;
+
+        public object path;
+
+        public string type;
+
+        public string? parent;
+
+        public bool? atlas;
+
+        public bool? runtime;
+
+        public uint? ax;
+
+        public uint? ay;
+
+        public uint? aw;
+
+        public uint? ah;
+
+        public int? x;
+
+        public int? y;
+
+        public int? cols;
+
+        public int? rows;
+
+        public uint? width;
+
+        public uint? height;
+    }
+
+    #endregion
 
 
     #endregion
@@ -123,6 +204,56 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
+
+        public unsafe override ResoureGroup RewriteSlot(ResoureGroup resoureGroup, string outfile)
+        {
+            var path = new ImplementPath();
+            var fs = new FileSystem();
+            var composite_list = resoureGroup.groups.ToList().Where((e) => e.subgroups is not null).ToList();
+            composite_list.ForEach((g_composite) =>
+            {
+                var slot_id = new List<M_Subgroup_Wrapper>();
+                g_composite.subgroups!.ToList().ForEach((e) =>
+                {
+                    var resource = resoureGroup.groups.ToList().Find((resource) => resource.id == e.id)!.resources!;
+                    resource.ToList().ForEach((resx) =>
+                    {
+                        var id_possibly_null = slot_id.Find(m => m.id == resx.id);
+                        if (id_possibly_null is null)
+                        {
+                            resx.slot = resoureGroup.slot_count;
+                            resoureGroup.slot_count++;
+                            slot_id.Add(new M_Subgroup_Wrapper()
+                            {
+                                id = resx.id,
+                                slot = resx.slot,
+                            });
+                        }
+                        else
+                        {
+                            resx.slot = id_possibly_null.slot!;
+                        }
+                    });
+                });
+            });
+            foreach(var e in resoureGroup.groups)
+            {
+                if (e.resources is not null && e.resources!.All(k => k.slot == 0))
+                {
+                    e.resources!.ToList().ForEach((res) =>
+                    {
+                        res.slot = resoureGroup.slot_count;
+                        resoureGroup.slot_count++;
+                    });
+                }
+            }
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            fs.WriteText(path.Resolve(outfile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resoureGroup, settings)), EncodingType.UTF8);
+            return resoureGroup;
+        }
 
 
 
@@ -410,7 +541,6 @@ namespace Sen.Shell.Modules.Support.PvZ2
 		public unsafe override sealed RSGAbnormal IsPopCapRSG(string inFile) => RSG.RSGFunction.IsPopCapRSG(new SenBuffer(inFile), true);
 
 
-
-		#endregion
-	}
+        #endregion
+    }
 }
