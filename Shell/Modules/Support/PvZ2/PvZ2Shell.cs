@@ -115,7 +115,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract RSGAbnormal IsPopCapRSG(string inFile);
 
-        public abstract ResoureGroup RewriteSlot(ResoureGroup resoureGroup, string outfile);
+        public abstract void RewriteSlot(ResoureGroup resoureGroup, string outfile);
 
 
     }
@@ -158,6 +158,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public string? res;
     }
 
+
+    #pragma warning disable CS8618
+
     public unsafe class M_Subgroup_Wrapper
     {
         public required uint slot;
@@ -193,6 +196,12 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public uint? width;
 
         public uint? height;
+
+        public bool? forceOriginalVectorSymbolSize;
+
+        public object? srcpath;
+
+
     }
 
     #endregion
@@ -205,7 +214,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
 
-        public unsafe override ResoureGroup RewriteSlot(ResoureGroup resoureGroup, string outfile)
+        public unsafe override void RewriteSlot(ResoureGroup resoureGroup, string outfile)
         {
             var path = new ImplementPath();
             var fs = new FileSystem();
@@ -252,7 +261,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 NullValueHandling = NullValueHandling.Ignore
             };
             fs.WriteText(path.Resolve(outfile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resoureGroup, settings)), EncodingType.UTF8);
-            return resoureGroup;
+            return;
         }
 
 
