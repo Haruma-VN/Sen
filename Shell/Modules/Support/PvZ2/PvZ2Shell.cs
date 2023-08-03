@@ -247,7 +247,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             });
             foreach(var e in resoureGroup.groups)
             {
-                if (e.resources is not null && e.resources!.All(k => k.slot == 0))
+                if (e.resources is not null && e.parent is null && e.resources!.All(k => k.slot == 0))
                 {
                     e.resources!.ToList().ForEach((res) =>
                     {
