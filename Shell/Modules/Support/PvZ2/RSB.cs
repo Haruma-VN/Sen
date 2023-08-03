@@ -561,6 +561,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var json = JsonConvert.SerializeObject(resourcesDescription);
             if (!fs.DirectoryExists(outFolder)) fs.CreateDirectory(outFolder);
             fs.WriteText(path.Resolve(path.Join(outFolder, "description.json")), JsonPrettify(json), EncodingType.UTF8);
+            return;
         }
 
         public static string JsonPrettify(string json)

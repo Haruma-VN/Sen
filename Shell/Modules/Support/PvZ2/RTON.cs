@@ -4,6 +4,7 @@ using System.Text.Json;
 using Sen.Shell.Modules.Standards;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using Sen.Shell.Modules.JavaScript;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RTON
 {
@@ -179,12 +180,15 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             }
             var Rton_magic = RtonFile.readString(4);
             uint Rton_ver = RtonFile.readUInt32LE();
-            if (Rton_magic != magic) throw new RTONDecodeException(
-                $"wrong_rton_header",
-                RtonFile.filePath ??= "undefined",
-                $"begin_with_rton",
-                RTONListException.Magic
-                );
+            if (Rton_magic != magic)
+            {
+                throw new RTONDecodeException(
+                    $"wrong_rton_header",
+                    RtonFile.filePath ??= "undefined",
+                    $"begin_with_rton",
+                    RTONListException.Magic
+                    );
+            }
 
             if (Rton_ver != version) throw new RTONDecodeException(
                 $"wrong_rton_version",

@@ -11,6 +11,8 @@ namespace Sen.Shell.Modules.JavaScript
 {
     public class JSEngine
     {
+        public static Engine Engine { get; } = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
+
         public static void Execute(string Script_Directory, string[] args)
         {
 
@@ -18,15 +20,14 @@ namespace Sen.Shell.Modules.JavaScript
             var fs = new FileSystem();
             var main_js = path.Resolve(path.Join($"{Script_Directory}","main.js"));
             var SystemConsole = new SystemImplement();
-            var engine = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
-            var ns = new JsObject(engine);
+            var ns = new JsObject(Engine);
             var dictionary = new Dictionary<string, object>
             {
                 {"FileSystem", fs },
                 { "argument", args },
                 { "MainScriptDirectory", Script_Directory },
                 { "Console", SystemConsole },
-                { "JavaScriptCoreEngine", engine },
+                { "JavaScriptCoreEngine", Engine },
                 { "Path", path },
                 {"DotNetPlatform", new Platform()},
                 {"DotNetBitmap", new Bitmap_Implement()},
@@ -45,9 +46,9 @@ namespace Sen.Shell.Modules.JavaScript
                 {"PvZ2Lawnstrings", new Sen.Shell.Modules.Support.PvZ2.Lawnstrings()},
                 {"ChatGPT", new Sen.Modules.Support.Misc.ChatGPT()},
             };
-            ns.Set("Shell", JsValue.FromObject(engine, dictionary));
-            engine.SetValue("Sen", ns);
-            engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts\\main.js");
+            ns.Set("Shell", JsValue.FromObject(Engine, dictionary));
+            Engine.SetValue("Sen", ns);
+            Engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts\\main.js");
             return;
         }
     }
