@@ -840,7 +840,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             var ptxBeforeNumber = 0;
             for (var i = 0; i < groupLength; i++)
             {
-                var compositeName = manifestInfo.group[i].is_composite ? manifestInfo.group[i].name : $"{manifestInfo.group[i].name}_CompositeShell";
+                var k_first = manifestInfo.group[i];
+                var compositeName = k_first.is_composite ? k_first.name : $"{k_first.name}_CompositeShell";
                 compositeList.Add(new FileListInfo
                 {
                     namePath = compositeName.ToUpper(),
@@ -848,10 +849,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 });
                 compositeInfo.writeString(compositeName);
                 compositeInfo.writeNull(128 - compositeName.Length);
-                var subgroupLength = manifestInfo.group[i].subgroup.Length;
+                var subgroupLength = k_first.subgroup.Length;
                 for (var k = 0; k < subgroupLength; k++)
                 {
-                    var rsgName = manifestInfo.group[i].subgroup[k].name_packet;
+                    var k_second = k_first.subgroup[k];
+                    var rsgName = k_second.name_packet;
                     var rsgComposite = false;
                     rsgFileList.Add(new FileListInfo
                     {
@@ -859,32 +861,33 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         poolIndex = rsgPacketIndex,
                     });
                     SenBuffer RSGFile = new SenBuffer(path.Resolve(path.Join(inFolder, "packet", $"{rsgName}.rsg")));
-                    ComparePacketInfo(manifestInfo.group[i].subgroup[k].packet_info, RSGFile);
+                    ComparePacketInfo(k_second.packet_info, RSGFile);
                     var ptxNumber = 0;
-                    var resInfoLength = manifestInfo.group[i].subgroup[k].packet_info.res.Length;
+                    var resInfoLength = k_second.packet_info.res.Length;
                     for (var l = 0; l < resInfoLength; l++)
                     {
+                        var k_third = k_second.packet_info.res[l];
                         fileList.Add(new FileListInfo
                         {
-                            namePath = manifestInfo.group[i].subgroup[k].packet_info.res[l].path.ToUpper(),
+                            namePath = k_third.path.ToUpper(),
                             poolIndex = rsgPacketIndex,
                         });
-                        if (manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info != null)
+                        if (k_third.ptx_info is not null)
                         {
                             ptxNumber++;
                             rsgComposite = true;
                             {
                                 // Write PtxInfo
-                                var id = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.id;
+                                var id = k_third.ptx_info!.id;
                                 var ptxOffset = (ptxBeforeNumber + id) * rsbHeadInfo.ptxInfo_EachLength;
-                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.width, ptxOffset);
-                                ptxInfo.writeInt32LE(manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_info!.height);
-                                int format = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_property!.format;
-                                int pitch = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_property!.pitch;
+                                ptxInfo.writeInt32LE(k_third.ptx_info!.width, ptxOffset);
+                                ptxInfo.writeInt32LE(k_third.ptx_info!.height);
+                                int format = k_third.ptx_property!.format;
+                                int pitch = k_third.ptx_property!.pitch;
                                 ptxInfo.writeInt32LE(pitch);
                                 ptxInfo.writeInt32LE(format);
-                                var alpha_size = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_property?.alpha_size;
-                                var alpha_format = manifestInfo.group[i].subgroup[k].packet_info.res[l].ptx_property?.alpha_format;
+                                var alpha_size = k_third.ptx_property?.alpha_size;
+                                var alpha_format = k_third.ptx_property?.alpha_format;
                                 if (rsbHeadInfo.ptxInfo_EachLength != 0x10)
                                 {
                                     ptxInfo.writeInt32LE(alpha_size ?? 0);
@@ -899,14 +902,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     {
                         // Write CompositeInfo
                         compositeInfo.writeInt32LE(rsgPacketIndex);
-                        compositeInfo.writeInt32LE(Int32.Parse(manifestInfo.group[i].subgroup[k].category[0]));
-                        if (manifestInfo.group[i].subgroup[k].category[1] != null && manifestInfo.group[i].subgroup[k].category[1] != string.Empty)
+                        compositeInfo.writeInt32LE(Int32.Parse(k_second.category[0]));
+                        if (k_second.category[1] is not null && k_second.category[1] != string.Empty)
                         {
-                            if (manifestInfo.group[i].subgroup[k].category[1].Length != 4)
+                            if (k_second.category[1].Length != 4)
                             {
                                 throw new Exception("category_out_of_length");
                             }
-                            compositeInfo.writeString(manifestInfo.group[i].subgroup[k].category[1]);
+                            compositeInfo.writeString(k_second.category[1]);
                         }
                         else
                         {
