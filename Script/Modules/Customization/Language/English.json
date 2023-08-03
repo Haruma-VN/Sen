@@ -439,7 +439,7 @@
     "multi_resolution_merge_only_support_1536": "Multi-Resolution Merge only support PopCap Resolution 1536",
     "image_sequence_to_pam_json": "PopCap Animation: Frames to Animation JSON",
     "output_animation_render_apng": "APNG: Output will be an apng contains multiple frames",
-    "converted_resinfo_to_Resource-Group": "Converted Res-Info to Resource-Group",
+    "converted_resinfo_to_resourcegroup": "Converted Res-Info to Resource-Group",
     "popcap_debug_dump": "PopCap-Debug Dump:",
     "res_info_count": "Begin group: {1}, total groups count: {2}"
 }

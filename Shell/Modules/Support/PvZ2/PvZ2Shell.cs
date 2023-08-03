@@ -117,6 +117,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RewriteSlot(ResoureGroup resoureGroup, string outfile);
 
+        public abstract void RSGPackForSimple(PvZ2Thread.RSGTemplate k1, PvZ2Thread.RSGTemplate k2);
+
 
     }
 
@@ -209,10 +211,47 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     #endregion
 
+    #region Asynchronous Task
+
+    public class PvZ2Thread
+    {
+        
+        public class RSGTemplate
+        {
+            public required string inFolder;
+
+            public required string outFile;
+
+            public readonly bool useResDirectory = false;
+
+            public required PacketInfo packet;
+        };
+
+
+        public static async Task DoubleAsync(PvZ2Thread.RSGTemplate k1, PvZ2Thread.RSGTemplate k2)
+        {
+            var shell = new PvZ2Shell();
+            Task task1 = Task.Run(() => shell.RSGPack(k1.inFolder, k1.outFile, k1.packet, k1.useResDirectory));
+            Task task2 = Task.Run(() => shell.RSGPack(k2.inFolder, k2.outFile, k2.packet, k2.useResDirectory));
+            await Task.WhenAll(task1, task2);
+            return;
+        }
+    }
+
+    #endregion
+
+
     #region Functions
 
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
+
+        public unsafe sealed override void RSGPackForSimple(PvZ2Thread.RSGTemplate k1, PvZ2Thread.RSGTemplate k2)
+        {
+            var task = PvZ2Thread.DoubleAsync(k1, k2);
+            task.Wait();
+            return;
+        }
 
         public unsafe sealed override void RewriteSlot(ResoureGroup resoureGroup, string outfile)
         {

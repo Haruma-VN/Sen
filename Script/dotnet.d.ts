@@ -1576,6 +1576,30 @@ declare namespace Sen {
              */
 
             export function RewriteSlot(resource: Resources_Group_Structure_Template, outfile: string): void;
+
+            // export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo, useResDirectory: boolean = true): void;
+
+            /**
+             * Structure
+             */
+
+            export interface RSGTemplate {
+                inFolder: string;
+
+                outFile: string;
+
+                readonly useResDirectory: false;
+
+                packet: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+            }
+
+            /**
+             *
+             * @param k1 - rsg 1
+             * @param k2 - rsg 2
+             */
+
+            export function RSGPackForSimple(k1: RSGTemplate, k2: RSGTemplate): void;
         }
 
         /**

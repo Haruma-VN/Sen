@@ -650,6 +650,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             return RSGAbnormal.None;
         }
 
-        
+
     }
 }

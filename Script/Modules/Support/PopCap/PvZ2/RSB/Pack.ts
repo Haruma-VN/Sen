@@ -132,7 +132,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 )
             );
         }
-        if (manifest_group !== -1) {
+        if (manifest_group !== -1 && packages === -1) {
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`)),
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.RTON`)),
@@ -146,9 +146,37 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                     Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)
                 )
             );
-        }
-        if (packages !== -1) {
+        } else if (packages !== -1 && manifest_group === -1) {
             Sen.Shell.PvZ2Shell.RSGPack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)), packages_save, manifest.group[packages].subgroup[0].packet_info, false);
+            Sen.Shell.Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)
+                )
+            );
+        } else if (packages !== -1 && manifest_group !== -1) {
+            Sen.Shell.PvZ2Shell.RSGPackForSimple(
+                {
+                    inFolder: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)),
+                    outFile: manifestgroup_save,
+                    packet: manifest.group[manifest_group].subgroup[0].packet_info,
+                    useResDirectory: false,
+                },
+                {
+                    inFolder: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)),
+                    outFile: packages_save,
+                    packet: manifest.group[packages].subgroup[0].packet_info,
+                    useResDirectory: false,
+                }
+            );
+            Sen.Shell.Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
+                    /\{\}/g,
+                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)
+                )
+            );
             Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
                 Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
