@@ -214,10 +214,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
 
-        public unsafe override void RewriteSlot(ResoureGroup resoureGroup, string outfile)
+        public unsafe sealed override void RewriteSlot(ResoureGroup resoureGroup, string outfile)
         {
-            var path = new ImplementPath();
-            var fs = new FileSystem();
             var composite_list = resoureGroup.groups.ToList().Where((e) => e.subgroups is not null).ToList();
             composite_list.ForEach((g_composite) =>
             {
@@ -260,6 +258,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
             {
                 NullValueHandling = NullValueHandling.Ignore,
             };
+            var path = new ImplementPath();
+            var fs = new FileSystem();
             fs.WriteText(path.Resolve(outfile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resoureGroup, settings)), EncodingType.UTF8);
             return;
         }
