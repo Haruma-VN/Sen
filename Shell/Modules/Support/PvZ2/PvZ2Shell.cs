@@ -216,21 +216,20 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public unsafe sealed override void RewriteSlot(ResoureGroup resoureGroup, string outfile)
         {
-            var composite_list = resoureGroup.groups.ToList().Where((e) => e.subgroups is not null).ToList();
-            composite_list.ForEach((g_composite) =>
+            var composite_list = resoureGroup.groups.Where(e => e.subgroups is not null).ToList();
+            composite_list.ForEach(g_composite =>
             {
-                var slot_id = new List<M_Subgroup_Wrapper>();
-                g_composite.subgroups!.ToList().ForEach((e) =>
+                var slot_id = new Dictionary<string, M_Subgroup_Wrapper>();
+                foreach (var e in g_composite.subgroups!)
                 {
-                    var resource = resoureGroup.groups.ToList().Find((resource) => resource.id == e.id)!.resources!;
-                    resource.ToList().ForEach((resx) =>
+                    var resource = resoureGroup.groups.First(resource => resource.id == e.id)!.resources!;
+                    foreach (var resx in resource)
                     {
-                        var id_possibly_null = slot_id.Find(m => m.id == resx.id);
-                        if (id_possibly_null is null)
+                        if (!slot_id.TryGetValue(resx.id, out var id_possibly_null))
                         {
                             resx.slot = resoureGroup.slot_count;
                             resoureGroup.slot_count++;
-                            slot_id.Add(new M_Subgroup_Wrapper()
+                            slot_id.Add(resx.id, new M_Subgroup_Wrapper()
                             {
                                 id = resx.id,
                                 slot = resx.slot,
@@ -240,18 +239,18 @@ namespace Sen.Shell.Modules.Support.PvZ2
                         {
                             resx.slot = id_possibly_null.slot!;
                         }
-                    });
-                });
+                    }
+                }
             });
-            foreach(var e in resoureGroup.groups)
+            foreach (var e in resoureGroup.groups)
             {
-                if (e.resources is not null && e.parent is null && e.resources!.All(k => k.slot == 0))
+                if (e.resources is not null && e.parent is null && e.resources.All(k => k.slot == 0))
                 {
-                    e.resources!.ToList().ForEach((res) =>
+                    foreach (var res in e.resources)
                     {
                         res.slot = resoureGroup.slot_count;
                         resoureGroup.slot_count++;
-                    });
+                    }
                 }
             }
             var settings = new JsonSerializerSettings
@@ -263,6 +262,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             fs.WriteText(path.Resolve(outfile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resoureGroup, settings)), EncodingType.UTF8);
             return;
         }
+
 
 
 

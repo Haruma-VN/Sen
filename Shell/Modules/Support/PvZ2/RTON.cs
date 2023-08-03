@@ -721,7 +721,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             }
         }
 
-        private static void WriteVauleJson(SenBuffer RtonFile, JsonElement value, List.StringPool R0x90, List.StringPool R0x92)
+        private static void WriteValueJson(SenBuffer RtonFile, JsonElement value, List.StringPool R0x90, List.StringPool R0x92)
         {
             switch (value.ValueKind)
             {
@@ -759,7 +759,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             foreach (JsonProperty property in json.EnumerateObject())
             {
                 WriteString(RtonFile, property.Name, R0x90, R0x92);
-                WriteVauleJson(RtonFile, property.Value, R0x90, R0x92);
+                WriteValueJson(RtonFile, property.Value, R0x90, R0x92);
             }
             RtonFile.writeUInt8(0xFF);
         }
@@ -771,7 +771,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             RtonFile.writeVarInt32(arrayLength);
             for (var i = 0; i < arrayLength; i++)
             {
-                WriteVauleJson(RtonFile, json[i], R0x90, R0x92);
+                WriteValueJson(RtonFile, json[i], R0x90, R0x92);
             }
             RtonFile.writeUInt8(0xFE);
         }

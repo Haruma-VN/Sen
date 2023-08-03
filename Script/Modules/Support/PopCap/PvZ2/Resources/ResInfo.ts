@@ -1,8 +1,46 @@
 namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
+    /**
+     * Structure
+     */
+
     export interface ResourcesForWork extends small_bundle_info_json {
         group_parent: string;
     }
+
+    /**
+     * Structure
+     */
+
+    export interface M_Wrapper_Construct {
+        name: string;
+        image: null | "1536" | "768" | "384" | "640" | "1200";
+    }
+
+    /**
+     * Structure
+     */
+
+    export type SubgroupList = Array<
+        Array<{
+            name: string;
+            image: null | "1536" | "768" | "384" | "640" | "1200";
+        }>
+    >;
+
+    /**
+     * Requires
+     */
+
     export abstract class CheckResourceGroupResources {
+        /**
+         *
+         * @param num - Number
+         * @param property - Property
+         * @param id - ID
+         * @param file_path - File path
+         * @returns
+         */
+
         protected static CheckIntegerNumber(num: number, property: string, id: string, file_path: string): boolean {
             if (!Number.isInteger(num)) {
                 throw new Sen.Script.Modules.Exceptions.WrongDataType(
@@ -19,6 +57,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
+
+        /**
+         *
+         * @param sub_resource_data - Provide res
+         * @param file_path - File path
+         * @returns
+         */
+
         public static CheckWholeData(sub_resource_data: Resource_Structure_Template, file_path: string): sub_resource_data is Resource_Structure_Template {
             if (!("resources" in sub_resource_data) || sub_resource_data.resources === undefined || sub_resource_data.resources === null || sub_resource_data.resources === void 0) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(/\{\}/g, "resources"), "resources", file_path);
@@ -28,12 +74,28 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
+
+        /**
+         *
+         * @param resources_group - Provide ResourceGroup
+         * @param file_path - File path
+         * @returns
+         */
+
         protected static CheckResourceGroup<Template extends Resources_Group_Structure_Template>(resources_group: Template, file_path: string): resources_group is Template {
             if (!("groups" in resources_group)) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(/\{\}/g, "groups"), "groups", file_path);
             }
             return true;
         }
+
+        /**
+         *
+         * @param sub_resource_data - Provide subgroup resource
+         * @param file_path - Provide file path
+         * @returns
+         */
+
         protected static CheckSubgroupChildrenDataImage<Resource_Template extends Resource_Structure_Template>(sub_resource_data: Resource_Template, file_path: string): sub_resource_data is Resource_Template {
             this.CheckWholeData(sub_resource_data, file_path);
             if (!("res" in sub_resource_data) || sub_resource_data.res === undefined || sub_resource_data.res === null || sub_resource_data.res === void 0) {
@@ -41,6 +103,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
+
+        /**
+         *
+         * @param res_json - Provide Res Info
+         * @param file_path - Provide file path
+         * @returns
+         */
+
         protected static CheckResInfoJsonForWork<Template extends res_json>(res_json: Template, file_path: string): res_json is Template {
             if (!("expand_path" in res_json)) {
                 throw new Sen.Script.Modules.Exceptions.MissingProperty(Sen.Script.Modules.System.Default.Localization.GetString("property_is_null").replace(/\{\}/g, "expand_path"), "expand_path", file_path);
@@ -63,6 +133,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
+
+        /**
+         *
+         * @param assert_test - Test string
+         * @param file_path - Provide file path
+         * @returns
+         */
+
         protected static CheckString(assert_test: any, file_path: string): assert_test is string {
             if (typeof assert_test !== "string") {
                 throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("not_a").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("string")));
@@ -70,7 +148,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             return true;
         }
     }
+
+    /**
+     * Conversion
+     */
+
     export class ResInfoResourceConversion extends CheckResourceGroupResources {
+        /** Deprecated */
+
         private static CheckResourceGroupPathType<Template extends Resources_Group_Structure_Template>(resource_json: Template): "array" | "string" {
             for (let index: number = 0; index < resource_json.groups.length; ++index) {
                 if ("resources" in resource_json.groups[index]) {
@@ -88,6 +173,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("path_is_invalid"));
         }
+
+        /**
+         *
+         * @param sub_resource_data - ResInfo
+         * @param file_path - Path
+         * @returns
+         */
+
         private static ConvertResourceGroupSubgroupFile<Template extends Resource_Structure_Template, Value extends subgroup_children>(sub_resource_data: Template, file_path: string): Value {
             this.CheckWholeData(sub_resource_data, file_path);
             const res_json_conversion: Value = {
@@ -99,101 +192,66 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     },
                 },
             } as any;
-            for (let index: number = 0; index < sub_resource_data.resources?.length; ++index) {
-                (res_json_conversion[sub_resource_data.id].packet.data as any)[sub_resource_data.resources[index].id] =
-                    sub_resource_data.resources[index].srcpath !== undefined &&
-                    sub_resource_data.resources[index].srcpath !== null &&
-                    sub_resource_data.resources[index].srcpath !== void 0 &&
-                    (Array.isArray(sub_resource_data.resources[index].srcpath) || typeof sub_resource_data.resources[index].srcpath === "string")
-                        ? {
-                              type: sub_resource_data.resources[index].type as string,
-                              path: Array.isArray(sub_resource_data.resources[index].path) ? sub_resource_data.resources[index].path : ((sub_resource_data.resources[index].path as string).split("\\") as Array<string> & any),
-                              forceOriginalVectorSymbolSize: sub_resource_data.resources[index].forceOriginalVectorSymbolSize,
-                              srcpath: Array.isArray(sub_resource_data.resources[index].srcpath) ? sub_resource_data.resources[index].srcpath : ((sub_resource_data.resources[index].srcpath as string).split("\\") as Array<string> & any),
-                          }
-                        : {
-                              type: sub_resource_data.resources[index].type as string,
-                              path: Array.isArray(sub_resource_data.resources[index].path) ? sub_resource_data.resources[index].path : ((sub_resource_data.resources[index].path as string).split("\\") as Array<string> & any),
-                              forceOriginalVectorSymbolSize: sub_resource_data.resources[index].forceOriginalVectorSymbolSize,
-                          };
+            for (const resource of sub_resource_data.resources ?? []) {
+                const { id, srcpath, type, path, forceOriginalVectorSymbolSize } = resource;
+                const packetData = res_json_conversion[sub_resource_data.id].packet.data as any;
+                packetData[id] = {
+                    type,
+                    path: Array.isArray(path) ? path : path.split("\\"),
+                    forceOriginalVectorSymbolSize,
+                };
+                if (srcpath) {
+                    packetData[id].srcpath = Array.isArray(srcpath) ? srcpath : srcpath.split("\\");
+                }
             }
             return res_json_conversion;
         }
+
+        /**
+         *
+         * @param sub_resource_data - ResInfo
+         * @param file_path - File Path
+         * @returns
+         */
+
         private static ConvertResourceGroupSubgroupContainsAtlas<Template extends Resource_Structure_Template>(sub_resource_data: Template, file_path: string): sprite_data {
             this.CheckSubgroupChildrenDataImage<Resource_Structure_Template>(sub_resource_data, file_path);
             const res_json_conversion: sprite_data = {
                 [sub_resource_data.id]: {
-                    type: sub_resource_data.res !== undefined ? (sub_resource_data.res as resolution) : null,
+                    type: sub_resource_data.res ?? null,
                     packet: {},
                 },
-            };
-            for (let index: number = 0; index < sub_resource_data.resources.length; ++index) {
-                if ("atlas" in sub_resource_data.resources[index]) {
-                    this.CheckIntegerNumber(sub_resource_data.resources[index].width as number, "width", sub_resource_data.resources[index].id, file_path);
-                    this.CheckIntegerNumber(sub_resource_data.resources[index].height as number, "height", sub_resource_data.resources[index].id, file_path);
-                    res_json_conversion[sub_resource_data.id].packet[sub_resource_data.resources[index].id] = {
-                        type: sub_resource_data.resources[index].type,
-                        path: Array.isArray(sub_resource_data.resources[index].path) ? sub_resource_data.resources[index].path : ((sub_resource_data.resources[index].path as string).split("\\") as Array<string> & any),
-                        dimension: {
-                            width: sub_resource_data.resources[index].width,
-                            height: sub_resource_data.resources[index].height,
-                        },
+            } as any;
+            for (const k_current of sub_resource_data.resources) {
+                if ("atlas" in k_current) {
+                    const { id, type, path, width, height } = k_current;
+                    this.CheckIntegerNumber(width!, "width", id, file_path);
+                    this.CheckIntegerNumber(height!, "height", id, file_path);
+                    res_json_conversion[sub_resource_data.id].packet[id] = {
+                        type,
+                        path: Array.isArray(path) ? path : path.split("\\"),
+                        dimension: { width, height },
                         data: {},
                     } as any;
-                    for (let j_index: number = 0; j_index < sub_resource_data.resources.length; ++j_index) {
-                        if (sub_resource_data.resources[j_index].parent === sub_resource_data.resources[index].id) {
-                            res_json_conversion[sub_resource_data.id].packet[sub_resource_data.resources[index].id].data[sub_resource_data.resources[j_index].id] = {
+                    for (const k_struct of sub_resource_data.resources) {
+                        if (k_struct.parent === id) {
+                            const { ax, ay, aw, ah, x, y, cols } = k_struct;
+                            this.CheckIntegerNumber(ax!, "ax", k_struct.id, file_path);
+                            this.CheckIntegerNumber(ay!, "ay", k_struct.id, file_path);
+                            this.CheckIntegerNumber(aw!, "aw", k_struct.id, file_path);
+                            this.CheckIntegerNumber(ah!, "ah", k_struct.id, file_path);
+                            res_json_conversion[sub_resource_data.id].packet[id].data[k_struct.id] = {
                                 default: {
-                                    ax:
-                                        sub_resource_data.resources[j_index].ax !== undefined &&
-                                        sub_resource_data.resources[j_index].ax !== null &&
-                                        sub_resource_data.resources[j_index].ax !== void 0 &&
-                                        this.CheckIntegerNumber(sub_resource_data.resources[j_index].ax as number, "ax", sub_resource_data.resources[j_index].id, file_path) &&
-                                        (sub_resource_data.resources[j_index].ax as number) > 0
-                                            ? sub_resource_data.resources[j_index].ax
-                                            : Math.abs(sub_resource_data.resources[j_index].ax as number),
-                                    ay:
-                                        sub_resource_data.resources[j_index].ay !== undefined &&
-                                        sub_resource_data.resources[j_index].ay !== null &&
-                                        sub_resource_data.resources[j_index].ay !== void 0 &&
-                                        this.CheckIntegerNumber(sub_resource_data.resources[j_index].ay as number, "ay", sub_resource_data.resources[j_index].id, file_path) &&
-                                        (sub_resource_data.resources[j_index].ay as number) > 0
-                                            ? sub_resource_data.resources[j_index].ay
-                                            : Math.abs(sub_resource_data.resources[j_index].ay as number),
-                                    aw:
-                                        sub_resource_data.resources[j_index].aw !== undefined &&
-                                        sub_resource_data.resources[j_index].aw !== null &&
-                                        sub_resource_data.resources[j_index].aw !== void 0 &&
-                                        this.CheckIntegerNumber(sub_resource_data.resources[j_index].aw as number, "aw", sub_resource_data.resources[j_index].id, file_path) &&
-                                        (sub_resource_data.resources[j_index].aw as number) > 0
-                                            ? sub_resource_data.resources[j_index].aw
-                                            : Math.abs(sub_resource_data.resources[j_index].aw as number),
-                                    ah:
-                                        sub_resource_data.resources[j_index].ah !== undefined &&
-                                        sub_resource_data.resources[j_index].ah !== null &&
-                                        sub_resource_data.resources[j_index].ah !== void 0 &&
-                                        this.CheckIntegerNumber(sub_resource_data.resources[j_index].ah as number, "ah", sub_resource_data.resources[j_index].id, file_path) &&
-                                        (sub_resource_data.resources[j_index].ah as number) > 0
-                                            ? sub_resource_data.resources[j_index].ah
-                                            : Math.abs(sub_resource_data.resources[j_index].ah as number),
-                                    x:
-                                        sub_resource_data.resources[j_index].x !== undefined &&
-                                        sub_resource_data.resources[j_index].x !== null &&
-                                        sub_resource_data.resources[j_index].x !== void 0 &&
-                                        this.CheckIntegerNumber(sub_resource_data.resources[j_index].x as number, "x", sub_resource_data.resources[j_index].id, file_path)
-                                            ? sub_resource_data.resources[j_index].x
-                                            : 0,
-                                    y:
-                                        sub_resource_data.resources[j_index].y !== undefined &&
-                                        sub_resource_data.resources[j_index].y !== null &&
-                                        sub_resource_data.resources[j_index].y !== void 0 &&
-                                        this.CheckIntegerNumber(sub_resource_data.resources[j_index].y as number, "y", sub_resource_data.resources[j_index].id, file_path)
-                                            ? sub_resource_data.resources[j_index].y
-                                            : 0,
-                                    cols: sub_resource_data.resources[j_index].cols,
+                                    ax: Math.abs(ax!),
+                                    ay: Math.abs(ay!),
+                                    aw: Math.abs(aw!),
+                                    ah: Math.abs(ah!),
+                                    x: x ?? 0,
+                                    y: y ?? 0,
+                                    cols,
                                 },
-                                path: Array.isArray(sub_resource_data.resources[j_index].path) ? sub_resource_data.resources[j_index].path : ((sub_resource_data.resources[j_index].path as string).split("\\") as Array<string> & any),
-                                type: sub_resource_data.resources[j_index].type as string,
+                                path: Array.isArray(k_struct.path) ? k_struct.path : k_struct.path.split("\\"),
+                                type: k_struct.type!,
                             };
                         }
                     }
@@ -201,10 +259,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return res_json_conversion;
         }
+
+        /**
+         *
+         * @param resources_group - ResourceGroup
+         * @param file_path - File path
+         * @param expand_path - Extends path
+         * @returns
+         */
+
         public static DoAllProcess<Template extends Resources_Group_Structure_Template, Value_Return extends res_json>(resources_group: Template, file_path: string, expand_path: "string" | "array"): Value_Return {
             this.CheckResourceGroup<Template>(resources_group, file_path);
             const res_json: Value_Return = {
-                expand_path: expand_path,
+                expand_path,
                 groups: {},
             } as Value_Return;
             const subgroups_parent_containers: Array<{
@@ -212,69 +279,69 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     name: string;
                     image: null | "1536" | "768" | "384" | "640" | "1200";
                 }>;
-            }> = new Array();
-            const subgroups_independent_construct: Array<string> = new Array();
-            for (let index: number = 0; index < resources_group.groups.length; ++index) {
-                if ("subgroups" in resources_group.groups[index]) {
-                    const subgroup_template_container_parent: Array<{
-                        name: string;
-                        image: null | "1536" | "768" | "384" | "640" | "1200";
-                    }> = new Array();
-                    for (let j_index: number = 0; j_index < resources_group.groups[index].subgroups.length; ++j_index) {
-                        subgroup_template_container_parent.push({
-                            name: resources_group.groups[index].subgroups[j_index].id as string,
-                            image:
-                                resources_group.groups[index].subgroups[j_index].res !== undefined &&
-                                resources_group.groups[index].subgroups[j_index].res !== null &&
-                                resources_group.groups[index].subgroups[j_index].res !== void 0 &&
-                                typeof resources_group.groups[index].subgroups[j_index].res === "string"
-                                    ? (resources_group.groups[index].subgroups[j_index].res as "1536" | "768" | "384" | "640" | "1200")
-                                    : null,
-                        });
-                    }
+            }> = [];
+            const subgroups_independent_construct: string[] = [];
+            for (const M_Wrapper of resources_group.groups) {
+                if ("subgroups" in M_Wrapper) {
+                    const subgroup_template_container_parent = M_Wrapper.subgroups.map(({ id, res }: any) => ({
+                        name: id,
+                        image: typeof res === "string" ? res : null,
+                    }));
                     subgroups_parent_containers.push({
-                        [resources_group.groups[index].id]: subgroup_template_container_parent,
+                        [M_Wrapper.id]: subgroup_template_container_parent,
                     });
                 }
-                if (!("parent" in resources_group.groups[index]) && !("subgroups" in resources_group.groups[index])) {
-                    subgroups_independent_construct.push(resources_group.groups[index].id);
+                if (!("parent" in M_Wrapper) && !("subgroups" in M_Wrapper)) {
+                    subgroups_independent_construct.push(M_Wrapper.id);
                 }
             }
-            for (let index: number = 0; index < subgroups_parent_containers.length; ++index) {
-                const current_subgroup_name: string = Object.keys(subgroups_parent_containers[index])[0];
+            for (const container of subgroups_parent_containers) {
+                const current_subgroup_name = Object.keys(container)[0];
                 res_json.groups[current_subgroup_name] = {
                     is_composite: true,
                     subgroup: {},
                 };
-                const subgroup_list: Array<
-                    Array<{
-                        name: string;
-                        image: null | "1536" | "768" | "384" | "640" | "1200";
-                    }>
-                > = Object.values(subgroups_parent_containers[index]);
-                for (let j_index: number = 0; j_index < subgroup_list.length; ++j_index) {
-                    for (let k_index: number = 0; k_index < subgroup_list[j_index].length; ++k_index) {
-                        res_json.groups[current_subgroup_name].subgroup[subgroup_list[j_index][k_index].name] =
-                            subgroup_list[j_index][k_index].image !== null
-                                ? Object.values(this.ConvertResourceGroupSubgroupContainsAtlas(resources_group.groups.filter((res) => res.id === subgroup_list[j_index][k_index].name)[0] as any, file_path))[0]
-                                : (Object.values(this.ConvertResourceGroupSubgroupFile(resources_group.groups.filter((res) => res.id === subgroup_list[j_index][k_index].name)[0] as any, file_path) as any)[0] as any);
+                const subgroup_list = Object.values(container);
+                for (const subgroup of subgroup_list.flat()) {
+                    const { name, image } = subgroup;
+                    const resource = resources_group.groups.find((res) => res.id === name);
+                    if (resource) {
+                        (res_json.groups[current_subgroup_name].subgroup[name] as any) = image
+                            ? Object.values(this.ConvertResourceGroupSubgroupContainsAtlas(resource, file_path))[0]
+                            : Object.values(this.ConvertResourceGroupSubgroupFile(resource, file_path))[0];
                     }
                 }
             }
-            for (let index: number = 0; index < subgroups_independent_construct.length; ++index) {
-                res_json.groups[subgroups_independent_construct[index]] = {
+            for (const k_current of subgroups_independent_construct) {
+                res_json.groups[k_current] = {
                     is_composite: false,
                     subgroup: {},
                 };
-                res_json.groups[subgroups_independent_construct[index]].subgroup = this.ConvertResourceGroupSubgroupFile(resources_group.groups.filter((res) => res.id === subgroups_independent_construct[index])[0], file_path);
+                const resource = resources_group.groups.find((res) => res.id === k_current);
+                if (resource) {
+                    res_json.groups[k_current].subgroup = this.ConvertResourceGroupSubgroupFile(resource, file_path);
+                }
             }
             return res_json;
         }
+
+        /**
+         *
+         * @param file_input - File in
+         * @param output_file - Output
+         * @param expand_path - Extends
+         */
+
         public static CreateConversion<Required_Template extends Resources_Group_Structure_Template, Res_JSON_Structure extends res_json>(file_input: string, output_file: string, expand_path: "array" | "string"): void {
             const resource_json: Required_Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Required_Template>(file_input) as Required_Template;
             Sen.Script.Modules.FileSystem.Json.WriteJson<Res_JSON_Structure>(output_file, this.DoAllProcess<Required_Template, Res_JSON_Structure>(resource_json, file_input, expand_path), false);
         }
     }
+
+    /**
+     * Conversion
+     */
+
     export class ConvertToResourceGroup extends CheckResourceGroupResources {
         /**
          *
@@ -294,189 +361,55 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             const manifest_group_for_atlas_and_sprite: resource_atlas_and_sprites = {
                 id: subgroup_parent_name,
                 parent: subgroup_default_parent,
-                res: res_type as string,
+                res: res_type,
                 resources: [],
                 type: "simple",
-            };
-            const resource_atlas_parent: Array<string> = Object.keys(packet.packet);
-            for (let index: number = 0; index < resource_atlas_parent.length; ++index) {
-                const resource_atlas_children_sprites_id: Array<string> = Object.keys(packet.packet[resource_atlas_parent[index]].data);
+            } as any;
+            const resource_atlas_parent = Object.keys(packet.packet);
+            for (let index = 0; index < resource_atlas_parent.length; ++index) {
+                const M_Current: any = packet.packet[resource_atlas_parent[index]];
+                const resource_atlas_children_sprites_id = Object.keys(M_Current.data);
                 manifest_group_for_atlas_and_sprite.resources.push({
                     slot: 0,
                     id: resource_atlas_parent[index],
-                    path: expand_path_for_array ? packet.packet[resource_atlas_parent[index]].path : ((packet.packet[resource_atlas_parent[index]].path as Array<string> & any).join("\\") as string & any),
-                    type: (packet.packet[resource_atlas_parent[index]] as any).type,
+                    path: expand_path_for_array ? M_Current.path : M_Current.path.join("\\"),
+                    type: M_Current.type,
                     atlas: true,
-                    width: (packet.packet[resource_atlas_parent[index]].dimension as any).width,
-                    height: (packet.packet[resource_atlas_parent[index]].dimension as any).height,
+                    width: M_Current.dimension.width,
+                    height: M_Current.dimension.height,
                     runtime: true,
                 });
-                for (let j_index: number = 0; j_index < resource_atlas_children_sprites_id.length; ++j_index) {
-                    this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.ax, "ax", resource_atlas_children_sprites_id[j_index] as string, file_path);
-                    this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.ay, `ay`, resource_atlas_children_sprites_id[j_index], file_path);
-                    this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.ah, `ah`, resource_atlas_children_sprites_id[j_index], file_path);
-                    this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.aw, `aw`, resource_atlas_children_sprites_id[j_index], file_path);
-                    manifest_group_for_atlas_and_sprite.resources.push(
-                        (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.cols !== undefined &&
-                            (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.cols !== null &&
-                            (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.cols !== void 0 &&
-                            this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.cols, `cols`, resource_atlas_children_sprites_id[j_index], file_path)
-                            ? {
-                                  slot: 0,
-                                  id: resource_atlas_children_sprites_id[j_index],
-                                  path: expand_path_for_array
-                                      ? (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].path
-                                      : ((packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].path.join("\\") as string & any),
-                                  type: (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].type,
-                                  parent: resource_atlas_parent[index],
-                                  ax:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax,
-                                          `ax`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax),
-                                  ay:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay,
-                                          `ay`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay),
-                                  aw:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw,
-                                          `aw`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw),
-                                  ah:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah,
-                                          `ah`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah),
-                                  x:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x, `x`, resource_atlas_children_sprites_id[j_index], file_path)
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x
-                                          : 0,
-                                  y:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y, `y`, resource_atlas_children_sprites_id[j_index], file_path)
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y
-                                          : 0,
-                                  cols: (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].default.cols,
-                              }
-                            : {
-                                  slot: 0,
-                                  id: resource_atlas_children_sprites_id[j_index],
-                                  path: expand_path_for_array
-                                      ? (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].path
-                                      : ((packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].path.join("\\") as string & any),
-                                  type: (packet.packet[resource_atlas_parent[index]].data as any)[resource_atlas_children_sprites_id[j_index]].type,
-                                  parent: resource_atlas_parent[index],
-                                  ax:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax,
-                                          `ax`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ax),
-                                  ay:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay,
-                                          `ay`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ay),
-                                  aw:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw,
-                                          `aw`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.aw),
-                                  ah:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah !== void 0 &&
-                                      this.CheckIntegerNumber(
-                                          (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah,
-                                          `ah`,
-                                          resource_atlas_children_sprites_id[j_index],
-                                          file_path
-                                      ) &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah > 0
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah
-                                          : Math.abs((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.ah),
-                                  x:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x, `x`, resource_atlas_children_sprites_id[j_index], file_path)
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.x
-                                          : 0,
-                                  y:
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y !== undefined &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y !== null &&
-                                      (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y !== void 0 &&
-                                      this.CheckIntegerNumber((packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y, `y`, resource_atlas_children_sprites_id[j_index], file_path)
-                                          ? (packet.packet[resource_atlas_parent[index]] as any).data[resource_atlas_children_sprites_id[j_index]].default.y
-                                          : 0,
-                              }
-                    );
+                for (let j_index = 0; j_index < resource_atlas_children_sprites_id.length; ++j_index) {
+                    const k_default = M_Current.data[resource_atlas_children_sprites_id[j_index]].default;
+                    manifest_group_for_atlas_and_sprite.resources.push({
+                        slot: 0,
+                        id: resource_atlas_children_sprites_id[j_index],
+                        path: expand_path_for_array ? M_Current.data[resource_atlas_children_sprites_id[j_index]].path : M_Current.data[resource_atlas_children_sprites_id[j_index]].path.join("\\"),
+                        type: M_Current.data[resource_atlas_children_sprites_id[j_index]].type,
+                        parent: resource_atlas_parent[index],
+                        ax: k_default.ax > 0 ? k_default.ax : Math.abs(k_default.ax),
+                        ay: k_default.ay > 0 ? k_default.ay : Math.abs(k_default.ay),
+                        aw: k_default.aw > 0 ? k_default.aw : Math.abs(k_default.aw),
+                        ah: k_default.ah > 0 ? k_default.ah : Math.abs(k_default.ah),
+                        x: k_default.x ? k_default.x : 0,
+                        y: k_default.y ? k_default.y : 0,
+                        cols: M_Current.data[resource_atlas_children_sprites_id[j_index]].default.cols,
+                    });
                 }
             }
             return manifest_group_for_atlas_and_sprite;
         }
+
+        /**
+         *
+         * @param res_subgroup_children - Children
+         * @param subgroup_id - Id
+         * @param expand_path_for_array - Extends path
+         * @param file_path - File path
+         * @param subgroup_parent - Parent
+         * @returns
+         */
+
         private static ConvertResInfoToResourceGroupFile<Template extends packet_data, Value_Return extends Resource_File_Bundle>(
             res_subgroup_children: Template,
             subgroup_id: string,
@@ -484,127 +417,98 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             file_path: string,
             subgroup_parent?: string
         ): Value_Return | Resource_File_Bundle {
-            const template_resource_build: Value_Return | Resource_File_Bundle = subgroup_parent
-                ? {
-                      id: subgroup_id,
-                      parent: subgroup_parent,
-                      resources: [],
-                      type: "simple",
-                  }
-                : {
-                      id: subgroup_id,
-                      resources: [],
-                      type: "simple",
-                  };
+            const template_resource_build: Value_Return | Resource_File_Bundle = {
+                id: subgroup_id,
+                resources: [],
+                type: "simple",
+            };
+            if (subgroup_parent) {
+                template_resource_build.parent = subgroup_parent;
+            }
             const resource_data: Array<string> = Object.keys((res_subgroup_children as any).packet.data);
             for (let index: number = 0; index < resource_data.length; ++index) {
-                this.CheckString((res_subgroup_children.packet.data as any)[resource_data[index]].type as string & any, file_path);
-                template_resource_build.resources.push(
-                    (res_subgroup_children.packet.data as any)[resource_data[index]].srcpath !== undefined &&
-                        (res_subgroup_children.packet.data as any)[resource_data[index]].srcpath !== null &&
-                        (res_subgroup_children.packet.data as any)[resource_data[index]].srcpath !== void 0 &&
-                        Array.isArray((res_subgroup_children.packet.data as any)[resource_data[index]].srcpath)
-                        ? {
-                              slot: 0,
-                              id: resource_data[index],
-                              path: expand_path_for_array
-                                  ? (res_subgroup_children.packet.data as any)[resource_data[index]].path
-                                  : (((res_subgroup_children.packet.data as any)[resource_data[index]].path as Array<string> & any).join("\\") as string & any),
-                              type: (res_subgroup_children.packet.data as any)[resource_data[index]].type as string & any,
-                              forceOriginalVectorSymbolSize: (res_subgroup_children.packet.data as any)[resource_data[index]].forceOriginalVectorSymbolSize,
-                              srcpath: expand_path_for_array
-                                  ? (res_subgroup_children.packet.data as any)[resource_data[index]].srcpath
-                                  : (((res_subgroup_children.packet.data as any)[resource_data[index]].srcpath as Array<string> & any).join("\\") as string & any),
-                          }
-                        : {
-                              slot: 0,
-                              id: resource_data[index],
-                              path: expand_path_for_array
-                                  ? (res_subgroup_children.packet.data as any)[resource_data[index]].path
-                                  : (((res_subgroup_children.packet.data as any)[resource_data[index]].path as Array<string> & any).join("\\") as string & any),
-                              type: (res_subgroup_children.packet.data as any)[resource_data[index]].type as string & any,
-                              forceOriginalVectorSymbolSize: (res_subgroup_children.packet.data as any)[resource_data[index]].forceOriginalVectorSymbolSize,
-                          }
-                );
+                const k_struct = (res_subgroup_children.packet.data as any)[resource_data[index]];
+                this.CheckString(k_struct.type as string & any, file_path);
+                template_resource_build.resources.push({
+                    slot: 0,
+                    id: resource_data[index],
+                    path: expand_path_for_array ? k_struct.path : ((k_struct.path as Array<string> & any).join("\\") as string & any),
+                    type: k_struct.type as string & any,
+                    forceOriginalVectorSymbolSize: k_struct.forceOriginalVectorSymbolSize,
+                    srcpath: expand_path_for_array ? k_struct.srcpath : ((k_struct.srcpath as Array<string> & any).join("\\") as string & any),
+                });
             }
             return template_resource_build;
         }
+
+        /**
+         *
+         * @param subgroup - Pass subgroup
+         * @param subgroup_parent - Parent
+         * @param file_path - File path
+         * @returns
+         */
+
         private static GenerateResourceGroupComposite<Template extends subgroup_children>(subgroup: Template, subgroup_parent: string, file_path: string): composite_object {
             const composite_object: composite_object = {
                 id: subgroup_parent,
                 subgroups: [],
                 type: "composite",
             };
-            const subgroups_keys: Array<string> = Object.keys(subgroup);
-            for (let index: number = 0; index < subgroups_keys.length; ++index) {
-                composite_object.subgroups.push(
-                    subgroup[subgroups_keys[index]].type !== undefined && subgroup[subgroups_keys[index]].type !== null && subgroup[subgroups_keys[index]].type !== void 0 && this.CheckString(subgroup[subgroups_keys[index]].type, file_path)
-                        ? {
-                              id: subgroups_keys[index],
-                              res: subgroup[subgroups_keys[index]].type,
-                          }
-                        : ({
-                              id: subgroups_keys[index],
-                          } as any)
-                );
+            const subgroups_keys = Object.keys(subgroup);
+            for (let index = 0; index < subgroups_keys.length; ++index) {
+                const current = {
+                    id: subgroups_keys[index],
+                };
+                const k_struct = subgroup[subgroups_keys[index]];
+                if (k_struct.type && this.CheckString(k_struct.type, file_path)) {
+                    (current as any).res = k_struct.type;
+                }
+                composite_object.subgroups.push(current);
             }
             return composite_object;
         }
+
+        /**
+         *
+         * @param res_json - ResInfo
+         * @param file_path - File path
+         * @returns
+         */
+
         public static DoAllProcess<Res_Json_Template extends res_json, Resource_json_Template extends Resources_Group_Structure_Template>(res_json: Res_Json_Template, file_path: string): Resource_json_Template {
             this.CheckResourceGroup(res_json as any, file_path);
-            const resources_json: Resource_json_Template = {
+            const resources_json: any = {
                 version: 1,
                 content_version: 1,
                 slot_count: 0,
                 groups: [],
-            } as any & Resource_json_Template;
-            const res_json_groups: subgroup_parent = res_json.groups;
-            const subgroups_key: Array<string> = Object.keys(res_json_groups);
+            };
+            const res_json_groups = res_json.groups;
+            const subgroups_key = Object.keys(res_json_groups);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("popcap_debug_dump"));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("res_info_count"), [subgroups_key[0], `${subgroups_key.length}`])}`);
-            for (let index: number = 0; index < subgroups_key.length; ++index) {
-                if (res_json.groups[subgroups_key[index]].is_composite === true) {
-                    const create_subgroup_placeholder: Array<string> = Object.keys(res_json.groups[subgroups_key[index]].subgroup);
-                    (resources_json as any).groups.push(this.GenerateResourceGroupComposite<subgroup_children>(res_json.groups[subgroups_key[index]].subgroup, subgroups_key[index], file_path));
-                    for (let j_index: number = 0; j_index < create_subgroup_placeholder.length; ++j_index) {
-                        if (
-                            res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]].type !== null &&
-                            res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]].type !== undefined &&
-                            res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]].type !== void 0 &&
-                            this.CheckString(res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]].type, file_path)
-                        ) {
-                            (resources_json as any).groups.push(
-                                this.ConvertSubgroupResInfoToResourceGroup<packet_data>(
-                                    res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]] as any,
-                                    create_subgroup_placeholder[j_index],
-                                    subgroups_key[index],
-                                    res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]].type as resolution & any,
-                                    res_json.expand_path === "array",
-                                    file_path
-                                )
-                            );
+            for (let index = 0; index < subgroups_key.length; ++index) {
+                if (res_json.groups[subgroups_key[index]].is_composite) {
+                    const current: any = res_json.groups[subgroups_key[index]].subgroup;
+                    const subgroup_keys = Object.keys(current);
+                    (resources_json as any).groups.push(this.GenerateResourceGroupComposite<subgroup_children>(current, subgroups_key[index], file_path));
+                    for (let j_index = 0; j_index < subgroup_keys.length; ++j_index) {
+                        const current_k = current[subgroup_keys[j_index]];
+                        if (current_k.type && this.CheckString(current_k.type, file_path)) {
+                            (resources_json as any).groups.push(this.ConvertSubgroupResInfoToResourceGroup<packet_data>(current_k, subgroup_keys[j_index], subgroups_key[index], current_k.type, res_json.expand_path === "array", file_path));
                         } else {
                             (resources_json as any).groups.push(
-                                this.ConvertResInfoToResourceGroupFile<packet_data, Resource_File_Bundle>(
-                                    res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]] as any,
-                                    create_subgroup_placeholder[j_index],
-                                    res_json.expand_path === "array",
-                                    file_path,
-                                    subgroups_key[index]
-                                )
+                                this.ConvertResInfoToResourceGroupFile<packet_data, Resource_File_Bundle>(current_k, subgroup_keys[j_index], res_json.expand_path === "array", file_path, subgroups_key[index])
                             );
                         }
                     }
                 } else {
-                    const create_subgroup_placeholder: Array<string> = Object.keys(res_json.groups[subgroups_key[index]].subgroup);
-                    for (let j_index: number = 0; j_index < create_subgroup_placeholder.length; ++j_index) {
+                    const current = res_json.groups[subgroups_key[index]].subgroup;
+                    const subgroup_keys = Object.keys(current);
+                    for (let j_index = 0; j_index < subgroup_keys.length; ++j_index) {
                         (resources_json as any).groups.push(
-                            this.ConvertResInfoToResourceGroupFile<packet_data, Resource_File_Bundle>(
-                                res_json.groups[subgroups_key[index]].subgroup[create_subgroup_placeholder[j_index]] as any,
-                                create_subgroup_placeholder[j_index],
-                                res_json.expand_path === "array",
-                                file_path
-                            )
+                            this.ConvertResInfoToResourceGroupFile<packet_data, Resource_File_Bundle>(current[subgroup_keys[j_index]] as any, subgroup_keys[j_index], res_json.expand_path === "array", file_path)
                         );
                     }
                 }
@@ -625,7 +529,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             return;
         }
     }
+
+    /**
+     * Structure
+     */
+
     export class SplitResInfoResources extends CheckResourceGroupResources {
+        /**
+         *
+         * @param res_json - Res Info
+         * @param file_path - File path
+         * @returns
+         */
+
         private static SetDefaultInfo<Template extends res_json, Value extends Output_Value>(res_json: Template, file_path: string): Value | Output_Value {
             this.CheckResInfoJsonForWork(res_json, file_path);
             const info_json: Output_Value | Value = {
@@ -640,6 +556,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return info_json;
         }
+
+        /**
+         *
+         * @param res_json - Res Info
+         * @returns
+         */
+
         private static GenerateSubgroup<Template extends res_json_children, Value extends small_bundle_info_json>(res_json: Template): Value | small_bundle_info_json {
             const info_json: Value | small_bundle_info_json = {
                 is_composite: res_json.is_composite,
@@ -647,6 +570,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             };
             return info_json;
         }
+
+        /**
+         *
+         * @param file_path - File path
+         * @param save_directory - Save directory
+         * @returns
+         */
+
         public static DoWholeProcess<Template extends res_json>(
             file_path: string,
             save_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_path)}`, `${Sen.Shell.Path.Parse(file_path).name}.info`))
@@ -682,7 +613,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
         }
     }
 
+    /**
+     * Merge ResInfo
+     */
+
     export class MergeResInfoJson extends CheckResourceGroupResources {
+        /**
+         *
+         * @param res_json - Res Info
+         * @returns Checker
+         */
+
         private static CheckInfoJson<Template extends Output_Value>(res_json: Template): res_json is Template {
             if (!("information" in res_json)) {
                 throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("property_information_is_null"));
@@ -698,6 +639,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
+
+        /**
+         *
+         * @param res_json - Res Info
+         * @param file_path - File Path
+         * @returns
+         */
+
         private static CheckDataJson<Template extends small_bundle_info_json>(res_json: Template, file_path: string): res_json is Template {
             if (!("is_composite" in res_json)) {
                 throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("property_is_composite_is_null"));
@@ -713,6 +662,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return true;
         }
+
+        /**
+         *
+         * @param directory_path - Provide directory
+         * @returns Test
+         */
+
         private static CheckDirectoryInformation(directory_path: string): void {
             if (!Sen.Shell.FileSystem.DirectoryExists(directory_path)) {
                 throw new Sen.Script.Modules.Exceptions.MissingDirectory(``, directory_path);
@@ -727,6 +683,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return;
         }
+
+        /**
+         *
+         * @param directory_path - Provide directory
+         * @param collections - Provide list
+         * @returns
+         */
+
         private static CheckGroups(directory_path: string, collections: Array<string>): void {
             for (const file of collections) {
                 const file_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `${file}.json`));
@@ -736,6 +700,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             }
             return;
         }
+
+        /**
+         *
+         * @param directory_path - Provide directory
+         * @param output_file - Output file
+         * @returns
+         */
+
         public static DoAllProcess<Template extends Output_Value>(
             directory_path: string,
             output_file: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name}.json`))

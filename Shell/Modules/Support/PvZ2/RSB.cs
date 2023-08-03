@@ -1031,6 +1031,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 WriteHead(RSBFile, rsbHeadInfo);
             }
             RSBFile.OutFile(outFile);
+            return;
         }
 
         private static void WriteResourcesDescription(SenBuffer RSBFile, RSB_head rsbHeadInfo, string inFolder)
