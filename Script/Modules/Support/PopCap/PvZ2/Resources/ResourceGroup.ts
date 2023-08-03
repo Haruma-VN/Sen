@@ -185,13 +185,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup {
                         throw new Sen.Script.Modules.Exceptions.MissingProperty(`${Sen.Script.Modules.System.Default.Localization.GetString("property_is_undefined").replace(/\{\}/g, "resources")}`, "resources", subgroup_json_path);
                     }
                     deserialized_subgroup.resources.forEach((element) => {
-                        element.slot = resources_json.slot_count;
-                        resources_json.slot_count++;
+                        element.slot = 0;
                     });
                     resources_json.groups.push(deserialized_subgroup);
                 }
             }
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Generic_T>(Sen.Shell.Path.Resolve(`${output_file}`), resources_json, false);
+            Sen.Shell.PvZ2Shell.RewriteSlot(resources_json, output_file);
             return;
         }
 

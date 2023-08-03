@@ -158,8 +158,8 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                 }
                 home = Sen.Shell.Path.Join(home, resource.path[i]);
             }
-            const ptx_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(home, resource.path.at(-1) as string));
-            const png_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(home, resource.path.at(-1) as string).replace(/((\.ptx))?$/i, `.png`));
+            const ptx_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(home, resource.path.at(-1)! as string));
+            const png_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(home, resource.path.at(-1)! as string).replace(/((\.ptx))?$/i, `.png`));
             Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGBA_Decode(ptx_path, png_path, (resource.ptx_info as any).width, (resource.ptx_info as any).height);
             Sen.Shell.FileSystem.DeleteFile(ptx_path);
             switch (format) {

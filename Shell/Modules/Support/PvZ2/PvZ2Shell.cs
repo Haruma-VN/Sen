@@ -258,7 +258,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             }
             var settings = new JsonSerializerSettings
             {
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
             };
             fs.WriteText(path.Resolve(outfile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resoureGroup, settings)), EncodingType.UTF8);
             return;

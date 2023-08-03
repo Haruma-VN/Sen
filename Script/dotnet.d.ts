@@ -1569,6 +1569,13 @@ declare namespace Sen {
              */
 
             export function IsPopCapRSG(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGAbnormal;
+
+            /**
+             *
+             * @param resource - Pass Official
+             */
+
+            export function RewriteSlot(resource: Resources_Group_Structure_Template, outfile: string): void;
         }
 
         /**
@@ -2188,7 +2195,7 @@ declare namespace Sen {
          */
 
         declare type Resources_Group_Structure_Template = {
-            groups: Array<Resource_Structure_Template & any>;
+            groups: Array<any & Resource_Structure_Template>;
             slot_count: number;
         };
 

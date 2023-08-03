@@ -609,19 +609,20 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     }
                 }
             }
-            ((resources_json as any).groups satisfies Array<resource_atlas_and_sprites>).forEach((element: resource_atlas_and_sprites, k_lambda_index: number) => {
-                if ("resources" in element) {
-                    ((resources_json as any).groups[k_lambda_index].resources as Array<blank_slot>).forEach((resource_element: blank_slot, lambda_index: number) => {
-                        ((resources_json as any).groups[k_lambda_index].resources as Array<blank_slot>)[lambda_index].slot = (resources_json as any).slot_count;
-                        (resources_json as any).slot_count++;
-                    });
-                }
-            });
             return resources_json;
         }
+
+        /**
+         *
+         * @param file_input - Pass file in
+         * @param output_file - Outfile
+         * @returns Converted
+         */
+
         public static CreateConversion(file_input: string, output_file: string): void {
             const res_json: res_json = Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(file_input) as res_json;
-            Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, this.DoAllProcess<res_json, Resources_Group_Structure_Template>(res_json, file_input), false);
+            Sen.Shell.PvZ2Shell.RewriteSlot(this.DoAllProcess<res_json, Resources_Group_Structure_Template>(res_json, file_input), output_file);
+            return;
         }
     }
     export class SplitResInfoResources extends CheckResourceGroupResources {

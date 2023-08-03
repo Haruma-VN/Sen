@@ -441,5 +441,5 @@
     "output_animation_render_apng": "APNG: Output will be an apng contains multiple frames",
     "converted_resinfo_to_resourcegroup": "Converted ResInfo to ResourceGroup",
     "popcap_debug_dump": "PopCap-Debug Dump:",
-    "res_info_count": "Begin group {1}, total groups count {2}"
+    "res_info_count": "Begin group: {1}, total groups count: {2}"
 }
