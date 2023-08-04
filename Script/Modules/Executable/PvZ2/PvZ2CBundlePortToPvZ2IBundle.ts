@@ -94,7 +94,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
         const available: Array<int> = new Array();
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("choose_one_or_more_group_that_displayed_and_click_enter_to_finish"))
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("name_one_or_more_resourcegroup_and_click_enter_to_finish"))
         );
         let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (input !== "") {
