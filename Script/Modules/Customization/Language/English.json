@@ -441,5 +441,11 @@
     "output_animation_render_apng": "APNG: Output will be an apng contains multiple frames",
     "converted_resinfo_to_resourcegroup": "Converted Res-Info to Resource-Group",
     "popcap_debug_dump": "PopCap-Debug Dump:",
-    "res_info_count": "Begin group: {1}, total groups count: {2}"
+    "res_info_count": "Begin group: {1}, total groups count: {2}",
+    "md5_hash": "MD5 Hash",
+    "sha1_hash": "Sha1 Hash",
+    "sha256_hash": "Sha256 Hash",
+    "sha384_hash": "Sha384 Hash",
+    "sha512_hash": "Sha512 Hash",
+    "hash_result_obtained": "Hash Result Obtained:"
 }

@@ -36,7 +36,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public struct PAMHeader
     {
         public uint magic;
+
         public int version;
+
         public int frame_rate;
     }
 
@@ -236,7 +238,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
             await Task.WhenAll(task1, task2);
             return;
         }
+
     }
+
 
     #endregion
 
@@ -557,9 +561,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public unsafe override sealed void VCDiffEncode(string OldFile, string NewFile, string PatchOutFile, bool interleaved)
         {
-            using (FileStream output = new FileStream(PatchOutFile, FileMode.Create, FileAccess.Write))
-            using (FileStream dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read))
-            using (FileStream target = new FileStream(NewFile, FileMode.Open, FileAccess.Read))
+            using var output = new FileStream(PatchOutFile, FileMode.Create, FileAccess.Write);
+            using var dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read);
+            using var target = new FileStream(NewFile, FileMode.Open, FileAccess.Read);
             {
                 var coder = new VcEncoder(dict, target, output, 64);
                 var result = coder.Encode(interleaved: interleaved, checksumFormat: ChecksumFormat.SDCH);

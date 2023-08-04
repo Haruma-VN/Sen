@@ -133,7 +133,12 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rsb_bundle_manifest_split"
         | "popcap_rsb_bundle_manifest_merge"
         | "popcap_lawnstring_convert"
-        | "popcap_atlas_merge_multi_resolution";
+        | "popcap_atlas_merge_multi_resolution"
+        | "md5_hash"
+        | "sha1_hash"
+        | "sha256_hash"
+        | "sha384_hash"
+        | "sha512_hash";
 
     /**
      *
@@ -2120,6 +2125,96 @@ namespace Sen.Script.Modules.Interface.Execute {
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }
+                        });
+                    }
+                    break;
+                }
+                case "md5_hash": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                        Sen.Shell.Console.Printf(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                            `      ${Sen.Shell.DotNetCrypto.ComputeMD5Hash(Sen.Shell.FileSystem.ReadText(argument, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                        );
+                    } else {
+                        argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                            Sen.Shell.Console.Printf(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                                `      ${Sen.Shell.DotNetCrypto.ComputeMD5Hash(Sen.Shell.FileSystem.ReadText(arg, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                            );
+                        });
+                    }
+                    break;
+                }
+                case "sha1_hash": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                        Sen.Shell.Console.Printf(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                            `      ${Sen.Shell.DotNetCrypto.ComputeSha1Hash(Sen.Shell.FileSystem.ReadText(argument, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                        );
+                    } else {
+                        argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                            Sen.Shell.Console.Printf(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                                `      ${Sen.Shell.DotNetCrypto.ComputeSha1Hash(Sen.Shell.FileSystem.ReadText(arg, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                            );
+                        });
+                    }
+                    break;
+                }
+                case "sha256_hash": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                        Sen.Shell.Console.Printf(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                            `      ${Sen.Shell.DotNetCrypto.ComputeSha256Hash(Sen.Shell.FileSystem.ReadText(argument, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                        );
+                    } else {
+                        argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                            Sen.Shell.Console.Printf(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                                `      ${Sen.Shell.DotNetCrypto.ComputeSha256Hash(Sen.Shell.FileSystem.ReadText(arg, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                            );
+                        });
+                    }
+                    break;
+                }
+                case "sha384_hash": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                        Sen.Shell.Console.Printf(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                            `      ${Sen.Shell.DotNetCrypto.ComputeSha384Hash(Sen.Shell.FileSystem.ReadText(argument, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                        );
+                    } else {
+                        argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                            Sen.Shell.Console.Printf(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                                `      ${Sen.Shell.DotNetCrypto.ComputeSha384Hash(Sen.Shell.FileSystem.ReadText(arg, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                            );
+                        });
+                    }
+                    break;
+                }
+                case "sha512_hash": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                        Sen.Shell.Console.Printf(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                            `      ${Sen.Shell.DotNetCrypto.ComputeSha512Hash(Sen.Shell.FileSystem.ReadText(argument, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                        );
+                    } else {
+                        argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("hash_result_obtained"));
+                            Sen.Shell.Console.Printf(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                                `      ${Sen.Shell.DotNetCrypto.ComputeSha512Hash(Sen.Shell.FileSystem.ReadText(arg, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8))}`
+                            );
                         });
                     }
                     break;
