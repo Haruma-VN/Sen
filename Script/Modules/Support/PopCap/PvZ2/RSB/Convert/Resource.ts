@@ -5,10 +5,24 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
      * @returns Unpacked all
      */
     export function UnpackAllPopCapRSGs(rsb_dir: string, out_dir: string): void {
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("mode_selected").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("unpack_all_rsg"))
+        );
         const packet_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_dir}`, `packet`));
-        const rsgs: Array<string> = Sen.Shell.FileSystem.ReadDirectory(packet_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
-        rsgs.forEach((rsg: string) => {
+        const rsgs: Array<string> = Sen.Shell.FileSystem.ReadDirectory(packet_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory);
+        // rsgs.filter((rsg) => rsg.toLowerCase().endsWith(".rsg")).forEach((rsg: string) => {
+        //     async_task.push({
+        //         inFile: rsg,
+        //         outFolder: `${out_dir}`,
+        //         useResDirectory: false,
+        //     });
+        // });
+        // Sen.Shell.PvZ2Shell.RSGUnpackAsync(...async_task);
+        rsgs.filter((rsg: string) => rsg.toLowerCase().endsWith(".rsg")).forEach((rsg: string) => {
             Sen.Shell.PvZ2Shell.RSGUnpack(rsg, `${out_dir}`, false);
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("now_processing_rsg"));
+            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
         });
         return;
     }

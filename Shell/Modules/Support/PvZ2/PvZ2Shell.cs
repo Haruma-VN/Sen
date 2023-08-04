@@ -16,6 +16,8 @@ using VCDiff.Shared;
 using static Sen.Shell.Modules.Support.PvZ2.RSG.RSGFunction;
 using System.IO;
 using Newtonsoft.Json;
+using static Sen.Shell.Modules.Support.PvZ2.PvZ2Thread;
+using System.Collections.Concurrent;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -119,7 +121,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RewriteSlot(ResoureGroup resoureGroup, string outfile);
 
-        public abstract void RSGPackForSimple(PvZ2Thread.RSGTemplate k1, PvZ2Thread.RSGTemplate k2);
+        public abstract void RSGPackAsync(params RSGPackTemplate[] kn);
+
+        public abstract void RSGUnpackAsync(params RSGUnpackTemplate[] kn);
 
 
     }
@@ -218,7 +222,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public class PvZ2Thread
     {
         
-        public class RSGTemplate
+        public class RSGPackTemplate
         {
             public required string inFolder;
 
@@ -229,15 +233,59 @@ namespace Sen.Shell.Modules.Support.PvZ2
             public required PacketInfo packet;
         };
 
+        public class RSGUnpackTemplate
+        {
+            public required string inFile;
 
-        public static async Task DoubleAsync(PvZ2Thread.RSGTemplate k1, PvZ2Thread.RSGTemplate k2)
+            public required string outFolder;
+
+            public readonly bool useResDirectory = false;
+
+        };
+
+
+        public static async Task RSGPackAsync(params RSGPackTemplate[] kn)
         {
             var shell = new PvZ2Shell();
-            Task task1 = Task.Run(() => shell.RSGPack(k1.inFolder, k1.outFile, k1.packet, k1.useResDirectory));
-            Task task2 = Task.Run(() => shell.RSGPack(k2.inFolder, k2.outFile, k2.packet, k2.useResDirectory));
-            await Task.WhenAll(task1, task2);
+            var tasks = new List<Task>();
+            foreach (var ki in kn)
+            {
+                tasks.Add(Task.Run(() => { shell.RSGPack(ki.inFolder, ki.outFile, ki.packet, ki.useResDirectory); }));
+            }
+            await Task.WhenAll(tasks);
             return;
         }
+
+        public static async Task RSGUnpackAsync(params RSGUnpackTemplate[] kn)
+        {
+            var shell = new PvZ2Shell();
+            var tasks = new List<Task>();
+            var exceptions = new ConcurrentBag<Exception>();
+            foreach (var ki in kn)
+            {
+                tasks.Add(Task.Run(() => {
+                    try
+                    {
+                        shell.RSGUnpack(ki.inFile, ki.outFolder, ki.useResDirectory);
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                }));
+            }
+            await Task.WhenAll(tasks);
+
+            if (exceptions.Count > 0)
+            {
+                // Handle exceptions here
+                foreach (var ex in exceptions)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
 
     }
 
@@ -250,9 +298,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
 
-        public unsafe sealed override void RSGPackForSimple(PvZ2Thread.RSGTemplate k1, PvZ2Thread.RSGTemplate k2)
+        public unsafe sealed override void RSGPackAsync(params RSGPackTemplate[] kn)
         {
-            var task = PvZ2Thread.DoubleAsync(k1, k2);
+            var task = PvZ2Thread.RSGPackAsync(kn);
+            task.Wait();
+            return;
+        }
+
+        public unsafe sealed override void RSGUnpackAsync(params RSGUnpackTemplate[] kn)
+        {
+            var task = PvZ2Thread.RSGUnpackAsync(kn);
             task.Wait();
             return;
         }

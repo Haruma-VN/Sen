@@ -156,7 +156,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 )
             );
         } else if (packages !== -1 && manifest_group !== -1) {
-            Sen.Shell.PvZ2Shell.RSGPackForSimple(
+            Sen.Shell.PvZ2Shell.RSGPackAsync(
                 {
                     inFolder: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)),
                     outFile: manifestgroup_save,

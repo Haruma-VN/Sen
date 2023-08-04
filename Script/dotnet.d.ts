@@ -1583,7 +1583,7 @@ declare namespace Sen {
              * Structure
              */
 
-            export interface RSGTemplate {
+            export interface RSGPackTemplate {
                 inFolder: string;
 
                 outFile: string;
@@ -1595,11 +1595,29 @@ declare namespace Sen {
 
             /**
              *
-             * @param k1 - rsg 1
-             * @param k2 - rsg 2
+             * @param kn - RSG n
              */
 
-            export function RSGPackForSimple(k1: RSGTemplate, k2: RSGTemplate): void;
+            export function RSGPackAsync(...kn: Array<RSGPackTemplate>): void;
+
+            /**
+             * Structure
+             */
+
+            export interface RSGUnpackTemplate {
+                inFile: string;
+
+                outFolder: string;
+
+                readonly useResDirectory: false;
+            }
+
+            /**
+             *
+             * @param kn - RSG n
+             */
+
+            export function RSGUnpackAsync(...kn: Array<RSGUnpackTemplate>): void;
         }
 
         /**
