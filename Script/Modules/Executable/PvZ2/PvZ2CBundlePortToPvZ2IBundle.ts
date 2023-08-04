@@ -96,17 +96,12 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("choose_one_or_more_group_that_displayed_and_click_enter_to_finish"))
         );
-        chinese_groups.forEach((group: string, index: int) => {
-            const valid_option: int = index + 1;
-            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `        ${valid_option}. ${group}`);
-            available.push(valid_option);
-        });
         let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (input !== "") {
-            if (available.includes(parseInt(input))) {
-                const data: Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure = option.chinese_manifest.group[chinese_groups[available[parseInt(input)] - 2]] as any &
+            if (chinese_groups.includes(input)) {
+                const data: Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure = option.chinese_manifest.group[chinese_groups[input]] as any &
                     Sen.Script.Modules.Executable.PvZ2.RemoveSubgroup.SubgroupChildrenStructure;
-                bundle_list.AppendArgument(chinese_groups[available[parseInt(input)] - 2], data);
+                bundle_list.AppendArgument(chinese_groups[input], data);
             } else {
                 Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, `${input}`));
             }
