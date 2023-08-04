@@ -260,30 +260,14 @@ namespace Sen.Shell.Modules.Support.PvZ2
         {
             var shell = new PvZ2Shell();
             var tasks = new List<Task>();
-            var exceptions = new ConcurrentBag<Exception>();
             foreach (var ki in kn)
             {
                 tasks.Add(Task.Run(() => {
-                    try
-                    {
-                        shell.RSGUnpack(ki.inFile, ki.outFolder, ki.useResDirectory);
-                    }
-                    catch (Exception ex)
-                    {
-                        exceptions.Add(ex);
-                    }
+                    shell.RSGUnpack(ki.inFile, ki.outFolder, ki.useResDirectory);
                 }));
             }
             await Task.WhenAll(tasks);
-
-            if (exceptions.Count > 0)
-            {
-                // Handle exceptions here
-                foreach (var ex in exceptions)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
+            return;
         }
 
 
