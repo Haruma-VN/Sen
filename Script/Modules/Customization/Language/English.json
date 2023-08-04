@@ -450,5 +450,6 @@
     "hash_result_obtained": "Hash Result Obtained:",
     "mode_selected": "Mode Selected: {}",
     "now_processing_rsg": "Processing RSG in Progress:",
-    "unpack_all_rsg": "Unpack All RSGs"
+    "unpack_all_rsg": "Unpack All RSGs",
+    "name_one_or_more_resourcegroup_and_click_enter_to_finish": "Name 1 or more ResourceGroup, then click enter to finish...",
 }
