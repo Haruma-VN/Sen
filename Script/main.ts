@@ -70,7 +70,7 @@ namespace Sen.Script {
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 6;
+    export const ShellRequirement: int = 7;
 
     /**
      *
