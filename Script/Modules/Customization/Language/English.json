@@ -451,5 +451,8 @@
     "mode_selected": "Mode Selected: {}",
     "now_processing_rsg": "Processing RSG in Progress:",
     "unpack_all_rsg": "Unpack All RSGs",
-    "rsg_pack_as_result": "RSG Pack As Result:"
+    "rsg_pack_as_result": "RSG Pack As Result:",
+    "use_thread_limit_for_rsb_pack": "Allow Sen to use all machine processors",
+    "high_performance_pack": "High Performance: Take RAM and Memory for higher processor",
+    "slow_performance_pack": "Slow Performance: Allocate Sen a small range of memory"
 }

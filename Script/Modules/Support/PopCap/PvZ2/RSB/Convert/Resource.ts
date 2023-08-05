@@ -9,10 +9,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("mode_selected").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("unpack_all_rsg"))
         );
-        const packet_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_dir}`, `packet`));
-        const rsgs: Array<string> = Sen.Shell.FileSystem.ReadDirectory(packet_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory).filter((rsg) => rsg.toLowerCase().endsWith(".rsg"));
+        const manifest_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_dir}`, `manifest.json`));
+        const manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest_destination);
+        const rsgs: Array<string> = Array.from([...Object.keys(manifest.group).map((composite: string) => Object.keys(manifest.group[composite].subgroup))])
+            .reduce((k1: Array<string>, k2: Array<string>) => k1.concat(k2), [])
+            .map((e: string) => Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(rsb_dir, `packet`, `${e}.rsg`)));
         rsgs.forEach((rsg: string) => {
-            Sen.Shell.PvZ2Shell.RSGUnpack(rsg, `${out_dir}`, false);
+            Sen.Shell.PvZ2Shell.RSGUnpack(rsg, out_dir, false);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("now_processing_rsg"));
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
         });
@@ -185,7 +188,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
      * @returns Packed RSB
      */
 
-    export function PackPopCapRSBInsideConvertDirectory(rsb_packing_option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.RSBPackOption): void {
+    export function PackPopCapRSBInsideConvertDirectory(rsb_packing_option: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.RSBPackOption, use_high_thread: boolean): void {
         const manifest: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_packing_option.bundle_path}`, `manifest.json`));
         const convert_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_packing_option.bundle_path}`, `convert`));
         const manifest_deserialize: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(manifest);
@@ -194,24 +197,42 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         const unpack_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_packing_option.bundle_path}`, `unpack`));
         if (rsb_packing_option.use_convert) {
         }
-        converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
+        if (use_high_thread) {
             const async_tasks: Array<Sen.Shell.PvZ2Shell.RSGPackTemplate> = new Array<Sen.Shell.PvZ2Shell.RSGPackTemplate>();
-            // group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
-            //     Sen.Shell.PvZ2Shell.RSGPack(`${unpack_directory}`, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`)), subgroup.packet_info, false);
-            // });
-            group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
-                const rsg: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`));
-                async_tasks.push({
-                    inFolder: unpack_directory,
-                    outFile: rsg,
-                    useResDirectory: false,
-                    packet: subgroup.packet_info,
+            converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
+                group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
+                    const rsg: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`));
+                    async_tasks.push({
+                        inFolder: unpack_directory,
+                        outFile: rsg,
+                        useResDirectory: false,
+                        packet: subgroup.packet_info,
+                    });
+                    Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("rsg_pack_as_result"));
+                    Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
                 });
-                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("rsg_pack_as_result"));
-                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
             });
             Sen.Shell.PvZ2Shell.RSGPackAsync(...async_tasks);
-        });
+        } else {
+            converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
+                const async_tasks: Array<Sen.Shell.PvZ2Shell.RSGPackTemplate> = new Array<Sen.Shell.PvZ2Shell.RSGPackTemplate>();
+                // group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
+                //     Sen.Shell.PvZ2Shell.RSGPack(`${unpack_directory}`, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`)), subgroup.packet_info, false);
+                // });
+                group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
+                    const rsg: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`));
+                    async_tasks.push({
+                        inFolder: unpack_directory,
+                        outFile: rsg,
+                        useResDirectory: false,
+                        packet: subgroup.packet_info,
+                    });
+                    Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("rsg_pack_as_result"));
+                    Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
+                });
+                Sen.Shell.PvZ2Shell.RSGPackAsync(...async_tasks);
+            });
+        }
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(rsb_packing_option.bundle_path, rsb_packing_option.rsb_output);
         return;
     }

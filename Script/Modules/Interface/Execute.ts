@@ -852,21 +852,37 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 0 | 1) === 1
                                 ? true
                                 : false;
+                        const use_high_thread: boolean =
+                            (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("use_thread_limit_for_rsb_pack"),
+                                [1, 2],
+                                {
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("high_performance_pack"), Sen.Script.Modules.System.Default.Localization.GetString("high_performance_pack")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("slow_performance_pack"), Sen.Script.Modules.System.Default.Localization.GetString("slow_performance_pack")],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_pack_resource.json`)),
+                                `use_high_thread`
+                            ) as 1 | 2) === 1
+                                ? true
+                                : false;
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.PackPopCapRSBInsideConvertDirectory({
-                            use_convert: use_convert,
-                            convert_pam_json_to_pam: false,
-                            convert_png_to_ptx: false,
-                            convert_res_json_to_resource_json: false,
-                            convert_xfl_to_pam_json: false,
-                            encode_rtons: false,
-                            encodeBNK: false,
-                            encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial.key,
-                            rsb_output: output_argument,
-                            rton_encrypt: false,
-                            texture_format: "android",
-                            bundle_path: argument,
-                        });
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.PackPopCapRSBInsideConvertDirectory(
+                            {
+                                use_convert: use_convert,
+                                convert_pam_json_to_pam: false,
+                                convert_png_to_ptx: false,
+                                convert_res_json_to_resource_json: false,
+                                convert_xfl_to_pam_json: false,
+                                encode_rtons: false,
+                                encodeBNK: false,
+                                encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial.key,
+                                rsb_output: output_argument,
+                                rton_encrypt: false,
+                                texture_format: "android",
+                                bundle_path: argument,
+                            },
+                            use_high_thread
+                        );
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`));
@@ -883,21 +899,37 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 ) as 0 | 1) === 1
                                     ? true
                                     : false;
+                            const use_high_thread: boolean =
+                                (Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_thread_limit_for_rsb_pack"),
+                                    [1, 2],
+                                    {
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("high_performance_pack"), Sen.Script.Modules.System.Default.Localization.GetString("high_performance_pack")],
+                                        "2": [Sen.Script.Modules.System.Default.Localization.GetString("slow_performance_pack"), Sen.Script.Modules.System.Default.Localization.GetString("slow_performance_pack")],
+                                    },
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_pack_resource.json`)),
+                                    `use_high_thread`
+                                ) as 1 | 2) === 1
+                                    ? true
+                                    : false;
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.PackPopCapRSBInsideConvertDirectory({
-                                use_convert: use_convert,
-                                convert_pam_json_to_pam: false,
-                                convert_png_to_ptx: false,
-                                convert_res_json_to_resource_json: false,
-                                convert_xfl_to_pam_json: false,
-                                encode_rtons: false,
-                                encodeBNK: false,
-                                encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial.key,
-                                rsb_output: output_argument,
-                                rton_encrypt: false,
-                                texture_format: "android",
-                                bundle_path: arg,
-                            });
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.PackPopCapRSBInsideConvertDirectory(
+                                {
+                                    use_convert: use_convert,
+                                    convert_pam_json_to_pam: false,
+                                    convert_png_to_ptx: false,
+                                    convert_res_json_to_resource_json: false,
+                                    convert_xfl_to_pam_json: false,
+                                    encode_rtons: false,
+                                    encodeBNK: false,
+                                    encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial.key,
+                                    rsb_output: output_argument,
+                                    rton_encrypt: false,
+                                    texture_format: "android",
+                                    bundle_path: arg,
+                                },
+                                use_high_thread
+                            );
                         });
                     }
                     break;
