@@ -251,7 +251,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                 Sen.Script.Modules.Interface.Arguments.ArgumentPrint(option.output_path, "file");
                 const frames: Array<string> = Sen.Shell.FileSystem.ReadDirectory(option.input_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
                     .filter((argument: string) => argument.toLowerCase().endsWith(`.png`))
-                    .sort((a: string, b: string) => parseInt(a) - parseInt(b));
+                    .sort((a, b) => {
+                        const numA = parseInt(Sen.Shell.Path.Parse(a).name_without_extension.split("_")[1]);
+                        const numB = parseInt(Sen.Shell.Path.Parse(b).name_without_extension.split("_")[1]);
+                        return numA - numB;
+                    });
                 Sen.Shell.DotNetBitmap.CreateAPNG({
                     imageList: frames,
                     outFile: option.output_path,

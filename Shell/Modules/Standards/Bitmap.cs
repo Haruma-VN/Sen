@@ -171,13 +171,13 @@ namespace Sen.Shell.Modules.Standards.Bitmap
 
         public unsafe sealed override void CreateAPNG(GenerateAPNG g_option)
         {
-            g_option.imageList.ToList().Sort(new AlphanumericStringComparer());
             var APNGMaker = new APNGMaker();
             var dels = new uint[g_option.imageList.Length];
             for (var i = 0; i < g_option.imageList.Length; i++)
             {
                 dels[i] = 33;
             }
+            g_option.imageList.ToList().ForEach((k) => Console.WriteLine(k));
             APNGMaker.CreateAPNG(g_option.imageList.ToArray(), g_option.outFile, dels);
             return;
         }

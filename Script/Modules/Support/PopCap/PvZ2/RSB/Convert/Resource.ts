@@ -185,6 +185,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
     /**
      *
      * @param rsb_packing_option - Provide option
+     * @param use_high_thread - High Thread Packing Performance
      * @returns Packed RSB
      */
 
