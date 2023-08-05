@@ -450,5 +450,6 @@
     "hash_result_obtained": "Hash Result Obtained:",
     "mode_selected": "Mode Selected: {}",
     "now_processing_rsg": "Processing RSG in Progress:",
-    "unpack_all_rsg": "Unpack All RSGs"
+    "unpack_all_rsg": "Unpack All RSGs",
+    "rsg_pack_as_result": "RSG Pack As Result:"
 }
