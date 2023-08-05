@@ -1,5 +1,6 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using NullFX.CRC;
+using System.Text.RegularExpressions;
 
 namespace Sen.Shell.Modules.Helper
 {
@@ -24,15 +25,15 @@ namespace Sen.Shell.Modules.Helper
         }
         public class ImageHeader
         {
-            public uint width { get; set; }
-            public uint height { get; set; }
-            public uint x { get; set; }
-            public uint y { get; set; }
-            public byte depth { get; set; }
-            public byte ctype { get; set; }
-            public byte compress { get; set; }
-            public byte filter { get; set; }
-            public byte interlace { get; set; }
+            public required uint width { get; set; }
+            public required uint height { get; set; }
+            public required uint x { get; set; }
+            public required uint y { get; set; }
+            public required byte depth { get; set; }
+            public required byte ctype { get; set; }
+            public required byte compress { get; set; }
+            public required byte filter { get; set; }
+            public required byte interlace { get; set; }
 
         }
         public override void CreateAPNG(string[] imagePath, string outFile, uint[] delayFrames, uint loop = 0, uint width = 0, uint height = 0, bool trimSize = false)
@@ -220,6 +221,53 @@ namespace Sen.Shell.Modules.Helper
             return new Rectangle(left, top, right - left + 1, bottom - top + 1);
         }
 
+
+    }
+
+    public partial class AlphanumericStringComparer : IComparer<string>
+    {
+        private static readonly Regex _re = MyRegex();
+
+        public int Compare(string? x, string? y)
+        {
+            if (x == y)
+            {
+                return 0;
+            }
+
+            if (x == null)
+            {
+                return -1;
+            }
+
+            if (y == null)
+            {
+                return 1;
+            }
+
+            var maxLen = Math.Max(x.Length, y.Length);
+
+            var x1 = _re.Split(x);
+            var y1 = _re.Split(y);
+
+            for (int i = 0; i < x1.Length && i < y1.Length; i++)
+            {
+                if (x1[i] != y1[i])
+                {
+                    if (int.TryParse(x1[i], out int nx) && int.TryParse(y1[i], out int ny))
+                    {
+                        return nx.CompareTo(ny);
+                    }
+
+                    return x1[i].CompareTo(y1[i]);
+                }
+            }
+
+            return x.Length.CompareTo(y.Length);
+        }
+
+        [GeneratedRegex(@"([0-9]+)")]
+        private static partial Regex MyRegex();
 
     }
 }

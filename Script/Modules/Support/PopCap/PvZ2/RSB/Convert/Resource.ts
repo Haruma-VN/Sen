@@ -10,22 +10,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
             Sen.Script.Modules.System.Default.Localization.GetString("mode_selected").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("unpack_all_rsg"))
         );
         const packet_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_dir}`, `packet`));
-        const rsgs: Array<string> = Sen.Shell.FileSystem.ReadDirectory(packet_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory);
-        // rsgs.filter((rsg) => rsg.toLowerCase().endsWith(".rsg")).forEach((rsg: string) => {
-        //     async_task.push({
-        //         inFile: rsg,
-        //         outFolder: `${out_dir}`,
-        //         useResDirectory: false,
-        //     });
-        // });
-        // Sen.Shell.PvZ2Shell.RSGUnpackAsync(...async_task);
-        rsgs.filter((rsg: string) => rsg.toLowerCase().endsWith(".rsg")).forEach((rsg: string) => {
+        const rsgs: Array<string> = Sen.Shell.FileSystem.ReadDirectory(packet_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory).filter((rsg) => rsg.toLowerCase().endsWith(".rsg"));
+        rsgs.forEach((rsg: string) => {
             Sen.Shell.PvZ2Shell.RSGUnpack(rsg, `${out_dir}`, false);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("now_processing_rsg"));
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
         });
         return;
     }
+
+    /**
+     * Structure
+     */
 
     export interface RSBConvertOption {
         rsb_parent_directory: string;
@@ -44,9 +40,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         expand_path: "string" | "array";
     }
 
+    /**
+     * Structure
+     */
+
     export interface TextureFormat {
         [child: string]: "string";
     }
+
+    /**
+     * Structure
+     */
 
     export type FlashAnimationContainer = {
         subgroup: string;
@@ -178,6 +182,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         if (rsb_packing_option.use_convert) {
         }
         converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
+            const async_tasks: Array<Sen.Shell.PvZ2Shell.RSGPackTemplate> = new Array<Sen.Shell.PvZ2Shell.RSGPackTemplate>();
             group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
                 Sen.Shell.PvZ2Shell.RSGPack(`${unpack_directory}`, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`)), subgroup.packet_info, false);
             });

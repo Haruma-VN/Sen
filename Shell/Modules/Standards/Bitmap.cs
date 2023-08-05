@@ -1,13 +1,8 @@
 ﻿using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Gif;
-using Org.BouncyCastle.Pqc.Crypto.Sike;
-using static System.Net.Mime.MediaTypeNames;
 using Image = SixLabors.ImageSharp.Image;
-using PngParser;
+using Sen.Shell.Modules.Helper;
 
 namespace Sen.Shell.Modules.Standards.Bitmap
 {
@@ -176,13 +171,14 @@ namespace Sen.Shell.Modules.Standards.Bitmap
 
         public unsafe sealed override void CreateAPNG(GenerateAPNG g_option)
         {
-            GenerateAPNG* g_ptr = &g_option;
-            var frames = new Png[g_option.imageList.Length - 1];
-            for (var i = 1; i < frames.Length; i++)
+            g_option.imageList.ToList().Sort(new AlphanumericStringComparer());
+            var APNGMaker = new APNGMaker();
+            var dels = new uint[g_option.imageList.Length];
+            for (var i = 0; i < g_option.imageList.Length; i++)
             {
-                frames[i] = new Png(g_ptr->imageList[i]);
+                dels[i] = 33;
             }
-            new Png(g_ptr->imageList[0]).SaveApng(g_ptr->outFile, frames, 0, (ushort)(1000 / g_ptr->framesPerSecond));
+            APNGMaker.CreateAPNG(g_option.imageList.ToArray(), g_option.outFile, dels);
             return;
         }
 
