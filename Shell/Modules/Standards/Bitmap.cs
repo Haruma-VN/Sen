@@ -177,7 +177,6 @@ namespace Sen.Shell.Modules.Standards.Bitmap
             {
                 dels[i] = 33;
             }
-            g_option.imageList.ToList().ForEach((k) => Console.WriteLine(k));
             APNGMaker.CreateAPNG(g_option.imageList.ToArray(), g_option.outFile, dels);
             return;
         }
