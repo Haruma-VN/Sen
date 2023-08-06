@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Sen": {
-      "commandName": "Project",
-      "commandLineArgs": "\"D:\\Haruma-VN\\Sen\\Shell\\bin\\Debug\\net8.0\\win-x64\\Scripts\\test.js\" \"-method\" \"js_evaluate\""
+      "commandName": "Project"
     }
   }
 }

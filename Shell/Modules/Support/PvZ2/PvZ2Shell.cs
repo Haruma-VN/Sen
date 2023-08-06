@@ -333,9 +333,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public required uint ah;
 
-        public required int x;
+        public required int? x;
 
-        public required int y;
+        public required int? y;
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 
@@ -442,8 +442,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
                                     ay = (uint)k!.ay!,
                                     ah = (uint)k!.ah!,
                                     aw = (uint)k!.aw!,
-                                    x = (int)k!.x!,
-                                    y = (int)k!.y!,
+                                    x = (k.x ??= 0),
+                                    y = (k.y ??= 0),
                                     cols = (k.cols ??= null),
                                     rows = (k.rows ??= null),
                                 }
@@ -538,7 +538,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                     height = (uint)value["dimension"]!["height"]!,
                 });
 
-                foreach (var subProperty in ((JObject)value["data"]).Properties())
+                foreach (var subProperty in ((JObject)value["data"]!).Properties())
                 {
                     string subKey = subProperty.Name;
                     JObject subValue = (JObject)subProperty.Value;
@@ -692,6 +692,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             });
             return res_info;
         }
+        
         private unsafe static MResourceGroup RewriteSlot(MResourceGroup resoureGroup)
         {
             var composite_list = resoureGroup.groups.Where(e => e.subgroups is not null).ToList();
