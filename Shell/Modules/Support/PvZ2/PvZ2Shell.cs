@@ -18,6 +18,8 @@ using System.IO;
 using Newtonsoft.Json;
 using static Sen.Shell.Modules.Support.PvZ2.PvZ2Thread;
 using System.Collections.Concurrent;
+using System.Text.Json.Serialization;
+using Org.BouncyCastle.Asn1.Cmp;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -130,6 +132,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     #region Resources Writing
 
+    [JsonSerializable(typeof(ResoureGroup))]
+
     public unsafe class ResoureGroup
     {
 
@@ -141,6 +145,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public required SubgroupData[] groups;
     }
+
+    [JsonSerializable(typeof(SubgroupData))]
 
     public unsafe class SubgroupData
     {
@@ -154,9 +160,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public SubgroupWrapper[]? subgroups;
 
-        public M_Subgroup_Wrapper[]? resources;
+        public MSubgroupWrapper[]? resources;
 
     }
+
+    [JsonSerializable(typeof(SubgroupWrapper))]
 
     public unsafe class SubgroupWrapper
     {
@@ -169,7 +177,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     #pragma warning disable CS8618
 
-    public unsafe class M_Subgroup_Wrapper
+    [JsonSerializable(typeof(MSubgroupWrapper))]
+
+    public unsafe class MSubgroupWrapper
     {
         public required uint slot;
 
@@ -212,6 +222,265 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     }
 
+    [JsonSerializable(typeof(ResInfo))]
+
+    public unsafe class ResInfo
+    {
+
+        public required string expand_path;
+
+        public required Dictionary<string, GroupDictionary> groups;
+    }
+
+    [JsonSerializable(typeof(GroupDictionary))]
+
+    public unsafe class GroupDictionary
+    {
+
+        public required bool is_composite;
+
+        public required Dictionary<string, MSubgroupData> subgroup; 
+
+    }
+
+    [JsonSerializable(typeof(MSubgroupData))]
+
+    public unsafe class MSubgroupData
+    {
+
+        public required string? type;
+
+        public required object packet; 
+    }
+
+    public unsafe class AtlasWrapper
+    {
+        public required string type;
+
+        public required object path;
+
+        public required Dimension dimension;
+
+        public required object data;
+    }
+
+    public unsafe class Dimension
+    {
+
+        public required uint width;
+
+        public required uint height;
+    }
+
+    public unsafe class SpriteData
+    {
+        public required string type;
+
+        public required object path;
+
+        public required DefaultProperty @default;
+    }
+
+    public unsafe class DefaultProperty
+    {
+        public required uint ax;
+
+        public required uint ay;
+
+        public required uint aw;
+
+        public required uint ah;
+
+        public required int x;
+
+        public required int y;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+
+        public required int? cols;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+
+        public required int? rows;
+    }
+
+    public enum ExpandPath
+    {
+        String,
+        Array,
+    }
+
+    public unsafe class CommonWrapper
+    {
+
+        public required string? type;
+
+        public required object data;
+    }
+
+    public unsafe class CommonDataWrapper
+    {
+        public required string type;
+
+        public required object path;
+
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+
+        public bool? forceOriginalVectorSymbolSize;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+
+        public object? srcpath;
+    }
+
+
+    public unsafe static class PvZ2ResourceConversion
+    {
+
+        private static MSubgroupData ConvertAtlasSubgroupData(SubgroupData subgroup, ExpandPath version)
+        {
+            var entry = new MSubgroupData()
+            {
+                type = subgroup.type,
+                packet = new Dictionary<string, AtlasWrapper>()
+            };
+            var version_k = version == ExpandPath.Array;
+            var resources = subgroup!.resources!.ToList();
+            var childrenByParentId = new Dictionary<string, List<MSubgroupWrapper>>();
+            foreach (var resource in resources)
+            {
+                if (resource.parent is not null)
+                {
+                    if (!childrenByParentId.TryGetValue(resource.parent, out List<MSubgroupWrapper>? value))
+                    {
+                        value = new List<MSubgroupWrapper>();
+                        childrenByParentId[resource.parent] = value;
+                    }
+
+                    value.Add(resource);
+                }
+            }
+
+            resources.Where((e) => e.atlas is not null && (bool)e.atlas).ToList().ForEach((e) =>
+            {
+                if ((bool)e.atlas!)
+                {
+                    var k_current_id = e.id;
+                    var atlas = new AtlasWrapper()
+                    {
+                        type = e.type,
+                        path = (version_k ? e.path : (e.path as string)!.Split('\\')),
+                        dimension = new Dimension()
+                        {
+                            height = (uint)e!.height!,
+                            width = (uint)e!.width!,
+                        },
+                        data = new Dictionary<string, SpriteData>(),
+                    };
+                    if (childrenByParentId.TryGetValue(k_current_id, out List<MSubgroupWrapper>? value))
+                    {
+                        foreach (var k in value)
+                        {
+                            (atlas.data as Dictionary<string, SpriteData>)!.Add(k.id, new SpriteData()
+                            {
+                                type = k.type,
+                                path = (version_k ? k.path : (k.path as string)!.Split('\\')),
+                                @default = new DefaultProperty()
+                                {
+                                    ax = (uint)k!.ax!,
+                                    ay = (uint)k!.ay!,
+                                    ah = (uint)k!.ah!,
+                                    aw = (uint)k!.aw!,
+                                    x = (int)k!.x!,
+                                    y = (int)k!.y!,
+                                    cols = (k.cols ??= null),
+                                    rows = (k.rows ??= null),
+                                }
+                            });
+                        }
+                    }
+                    (entry.packet as Dictionary<string, AtlasWrapper>)!.Add(k_current_id, atlas);
+                }
+            });
+            return entry;
+        }
+
+
+        private static MSubgroupData ConvertCommonSubgroupData(SubgroupData subgroup, ExpandPath version)
+        {
+            var entry = new MSubgroupData()
+            {
+                type = null,
+                packet = new CommonWrapper()
+                {
+                    type = "File",
+                    data = new Dictionary<string, CommonDataWrapper>(),
+                }
+            };
+            var version_k = version == ExpandPath.Array;
+            foreach (var e in subgroup!.resources!)
+            {
+                object? src_path = e.srcpath is not null ? (version_k) ? e.srcpath : (e.srcpath as string)!.Split('\\') : null;
+                ((entry.packet as CommonWrapper)!.data as Dictionary<string, CommonDataWrapper>)!.Add(e.id, new CommonDataWrapper()
+                {
+                    type = e.type,
+                    path = (version_k ? e.path : (e.path as string)!.Split('\\')),
+                    forceOriginalVectorSymbolSize = e.forceOriginalVectorSymbolSize ??= null,
+                    srcpath = src_path,
+                });
+            }
+            return entry;
+        }
+
+
+        public static ResInfo ConvertResourceGroupToResInfo(ResoureGroup resourceGroup, ExpandPath version)
+        {
+            var res_info = new ResInfo()
+            {
+                expand_path = version == ExpandPath.String ? "string" : "array",
+                groups = new Dictionary<string, GroupDictionary>()
+            };
+            resourceGroup.groups.ToList().ForEach((e) =>
+            {
+                if (e.subgroups is not null)
+                {
+                    var subgroup = new Dictionary<string, MSubgroupData>();
+                    foreach (var k in e.subgroups)
+                    {
+                        if (k.res is not null)
+                        {
+                            subgroup.Add(k.id, ConvertAtlasSubgroupData(resourceGroup.groups.First((m) => m.id == k.id), version));
+                        }
+                        else
+                        {
+                            subgroup.Add(k.id, ConvertCommonSubgroupData(resourceGroup.groups.First((m) => m.id == k.id), version));
+                        }
+                    }
+                    (res_info.groups as Dictionary<string, GroupDictionary>).Add(e.id, new GroupDictionary()
+                    {
+                        is_composite = true,
+                        subgroup = subgroup,
+                    });
+                }
+                if (e.parent is null && e.resources is not null)
+                {
+                    var subgroup = new Dictionary<string, MSubgroupData>();
+                    subgroup.Add(e.id, ConvertCommonSubgroupData(e, version));
+                    (res_info.groups as Dictionary<string, GroupDictionary>).Add(e.id, new GroupDictionary()
+                    {
+                        is_composite = false,
+                        subgroup = subgroup,
+                    });
+                }
+            });
+            return res_info;
+        }
+
+
+    }
+
+
     #endregion
 
 
@@ -221,6 +490,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public class PvZ2Thread
     {
+
         
         public class RSGPackTemplate
         {
@@ -271,6 +541,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
         }
 
 
+
     }
 
 
@@ -281,6 +552,15 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
+
+        public unsafe void ConvertResourceGroupToResInfo(ResoureGroup resoureGroup, ExpandPath version, string outFile)
+        {
+            var res_info = PvZ2ResourceConversion.ConvertResourceGroupToResInfo(resoureGroup, version);
+            var path = new ImplementPath();
+            var fs = new FileSystem();
+            fs.WriteText(path.Resolve(outFile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(res_info)), EncodingType.UTF8);
+            return;
+        }
 
         public unsafe sealed override void RSGPackAsync(params RSGPackTemplate[] kn)
         {
@@ -301,7 +581,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             var composite_list = resoureGroup.groups.Where(e => e.subgroups is not null).ToList();
             composite_list.ForEach(g_composite =>
             {
-                var slot_id = new Dictionary<string, M_Subgroup_Wrapper>();
+                var slot_id = new Dictionary<string, MSubgroupWrapper>();
                 foreach (var e in g_composite.subgroups!)
                 {
                     var resource = resoureGroup.groups.First(resource => resource.id == e.id)!.resources!;
@@ -311,7 +591,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                         {
                             resx.slot = resoureGroup.slot_count;
                             resoureGroup.slot_count++;
-                            slot_id.Add(resx.id, new M_Subgroup_Wrapper()
+                            slot_id.Add(resx.id, new MSubgroupWrapper()
                             {
                                 id = resx.id,
                                 slot = resx.slot,
