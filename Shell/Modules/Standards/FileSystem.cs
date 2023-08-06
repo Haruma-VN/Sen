@@ -118,10 +118,10 @@ namespace Sen.Shell.Modules.Standards.IOModule
         {
             if (data is string)
             {
-#pragma warning disable CS8600
+                #pragma warning disable CS8600
                 string dataString = data as string;
 
-#pragma warning disable CS8604
+                #pragma warning disable CS8604
                 byte[] buffer = Encoding.UTF8.GetBytes(dataString);
                 this.WriteBufferToFile(filePath, buffer);
             }

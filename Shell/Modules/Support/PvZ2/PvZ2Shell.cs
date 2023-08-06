@@ -20,6 +20,9 @@ using static Sen.Shell.Modules.Support.PvZ2.PvZ2Thread;
 using System.Collections.Concurrent;
 using System.Text.Json.Serialization;
 using Org.BouncyCastle.Asn1.Cmp;
+using System.Linq;
+using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -121,7 +124,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract RSGAbnormal IsPopCapRSG(string inFile);
 
-        public abstract void RewriteSlot(ResoureGroup resoureGroup, string outfile);
+        public abstract void RewriteSlot(ResourceGroup resoureGroup, string outfile);
 
         public abstract void RSGPackAsync(params RSGPackTemplate[] kn);
 
@@ -132,9 +135,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     #region Resources Writing
 
-    [JsonSerializable(typeof(ResoureGroup))]
+    [JsonSerializable(typeof(ResourceGroup))]
 
-    public unsafe class ResoureGroup
+    public unsafe class ResourceGroup
     {
 
         public readonly uint version = 1;
@@ -144,6 +147,37 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public required uint slot_count;
 
         public required SubgroupData[] groups;
+    }
+
+    [JsonSerializable(typeof(MResourceGroup))]
+    public unsafe class MResourceGroup
+    {
+
+        public readonly uint version = 1;
+
+        public readonly uint content_version = 1;
+
+        public required uint slot_count;
+
+        public required List<ShellSubgroupData> groups;
+    }
+
+    [JsonSerializable(typeof(ShellSubgroupData))]
+
+    public unsafe class ShellSubgroupData
+    {
+        public required string id;
+
+        public required string type;
+
+        public string? parent;
+
+        public string? res;
+
+        public List<SubgroupWrapper>? subgroups;
+
+        public List<MSubgroupWrapper>? resources;
+
     }
 
     [JsonSerializable(typeof(SubgroupData))]
@@ -175,7 +209,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
     }
 
 
-    #pragma warning disable CS8618
+#pragma warning disable CS8618
 
     [JsonSerializable(typeof(MSubgroupWrapper))]
 
@@ -239,7 +273,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public required bool is_composite;
 
-        public required Dictionary<string, MSubgroupData> subgroup; 
+        public required Dictionary<string, MSubgroupData> subgroup;
 
     }
 
@@ -250,8 +284,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public required string? type;
 
-        public required object packet; 
+        public required object packet;
     }
+
+    [JsonSerializable(typeof(AtlasWrapper))]
 
     public unsafe class AtlasWrapper
     {
@@ -264,6 +300,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public required object data;
     }
 
+    [JsonSerializable(typeof(Dimension))]
+
     public unsafe class Dimension
     {
 
@@ -271,6 +309,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public required uint height;
     }
+
+    [JsonSerializable(typeof(SpriteData))]
 
     public unsafe class SpriteData
     {
@@ -280,6 +320,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public required DefaultProperty @default;
     }
+
+    [JsonSerializable(typeof(DefaultProperty))]
 
     public unsafe class DefaultProperty
     {
@@ -310,13 +352,21 @@ namespace Sen.Shell.Modules.Support.PvZ2
         Array,
     }
 
+    public unsafe class GBase
+    {
+    }
+
+    [JsonSerializable(typeof(CommonWrapper))]
+
     public unsafe class CommonWrapper
     {
 
         public required string? type;
 
-        public required object data;
+        public required Dictionary<string, CommonDataWrapper> data;
     }
+
+    [JsonSerializable(typeof(CommonDataWrapper))]
 
     public unsafe class CommonDataWrapper
     {
@@ -433,8 +483,172 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return entry;
         }
 
+        private static ShellSubgroupData GenerateComposite(string id, GroupDictionary composite)
+        {
+            var composite_k = new ShellSubgroupData() { 
+                id = id,
+                type = "composite",
+                subgroups = new List<SubgroupWrapper>()
+            };
+            composite.subgroup.Keys.ToList().ForEach((k) =>
+            {
+                composite_k.subgroups.Add(new SubgroupWrapper() { 
+                    id = k, 
+                    res = composite.subgroup[k].type,
+                });
+            });
+            return composite_k;
+        }
 
-        public static ResInfo ConvertResourceGroupToResInfo(ResoureGroup resourceGroup, ExpandPath version)
+        private struct ExtraInformation
+        {
+
+            public required string id;
+
+            public required string? parent;
+
+        }
+
+        private static ShellSubgroupData GenerateImageInfo(ExtraInformation k_data, MSubgroupData image_info, bool use_array)
+        {
+            var composite_k = new ShellSubgroupData()
+            {
+                id = k_data.id,
+                parent = k_data.parent,
+                res = image_info.type,
+                type = "simple",
+                resources = new List<MSubgroupWrapper>(),
+            };
+
+            var list = (JObject)(image_info.packet as dynamic);
+            foreach (var property in list.Properties())
+            {
+                string key = property.Name;
+                JObject value = (JObject)property.Value;
+
+                composite_k.resources.Add(new MSubgroupWrapper()
+                {
+                    slot = 0,
+                    id = key,
+                    path = use_array ? value["path"]! : String.Join('\\', value["path"]!),
+                    type = (string)value["type"]!,
+                    atlas = true,
+                    runtime = true,
+                    width = (uint)value["dimension"]!["width"]!,
+                    height = (uint)value["dimension"]!["height"]!,
+                });
+
+                foreach (var subProperty in ((JObject)value["data"]).Properties())
+                {
+                    string subKey = subProperty.Name;
+                    JObject subValue = (JObject)subProperty.Value;
+
+                    composite_k.resources.Add(new MSubgroupWrapper()
+                    {
+                        slot = 0,
+                        id = subKey,
+                        path = use_array ? subValue["path"]! : String.Join('\\', subValue["path"]!),
+                        type = (string)subValue["type"]!,
+                        parent = key,
+                        ax = (uint)subValue["default"]!["ax"]!,
+                        ay = (uint)subValue["default"]!["ay"]!,
+                        aw = (uint)subValue["default"]!["aw"]!,
+                        ah = (uint)subValue["default"]!["ah"]!,
+                        x = (int)subValue["default"]!["x"]!,
+                        y = (int)subValue["default"]!["y"]!,
+                        cols = (int?)(subValue["default"]!["cols"] ??= null),
+                        rows = (int?)(subValue["default"]!["rows"] ??= null),
+                    });
+                }
+            }
+
+            return composite_k;
+        }
+
+
+        private static ShellSubgroupData GenerateFileInfo(ExtraInformation k_data, MSubgroupData image_info, bool use_array)
+        {
+            var composite_k = new ShellSubgroupData()
+            {
+                id = k_data.id,
+                parent = k_data.parent,
+                type = "simple",
+                resources = new List<MSubgroupWrapper>(),
+            };
+
+            var list = (JObject)((image_info.packet as dynamic).data);
+            foreach (var property in list.Properties())
+            {
+                string key = property.Name;
+                JObject value = (JObject)property.Value;
+
+                composite_k.resources.Add(new MSubgroupWrapper()
+                {
+                    slot = 0,
+                    id = key,
+                    path = use_array ? value["path"]! : String.Join('\\', value["path"]!),
+                    type = (string)value["type"]!,
+                    srcpath = (value["srcpath"] is not null ? use_array ? value["srcpath"]! : String.Join('\\', value["srcpath"]!) : null),
+                    forceOriginalVectorSymbolSize = (bool?)(value["forceOriginalVectorSymbolSize"] ??= null),
+                });
+            }
+
+            return composite_k;
+        }
+
+
+        public static MResourceGroup ConvertResInfoToResourceGroup(ResInfo res_info)
+        {
+            var resourceGroup = new MResourceGroup()
+            {
+                slot_count = 0,
+                groups = new List<ShellSubgroupData>()
+            };
+            var use_array = res_info.expand_path == "array";
+            foreach (var composite_name in res_info.groups.Keys)
+            {
+                if (res_info.groups[composite_name].is_composite)
+                {
+                    resourceGroup.groups.Add(GenerateComposite(composite_name, res_info.groups[composite_name]));
+                    foreach (var subgroup_name in res_info.groups[composite_name].subgroup.Keys)
+                    {
+                        if (res_info.groups[composite_name].subgroup[subgroup_name].type is not null)
+                        {
+                            resourceGroup.groups.Add(GenerateImageInfo(new ExtraInformation()
+                            {
+                                id = subgroup_name,
+                                parent = composite_name,
+                            }, res_info.groups[composite_name].subgroup[subgroup_name], use_array));
+                        }
+                        else
+                        {
+                            resourceGroup.groups.Add(GenerateFileInfo(new ExtraInformation()
+                            {
+                                id = subgroup_name,
+                                parent = composite_name,
+                            }, res_info.groups[composite_name].subgroup[subgroup_name], use_array));
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var subgroup_name in res_info.groups[composite_name].subgroup.Keys)
+                    {
+                        resourceGroup.groups.Add(GenerateFileInfo(new ExtraInformation()
+                        {
+                            id = subgroup_name,
+                            parent = null,
+                        }, res_info.groups[composite_name].subgroup[subgroup_name], use_array));
+                    }
+                }
+            }
+            RewriteSlot(resourceGroup);
+            return resourceGroup;
+        }
+
+
+
+        public static ResInfo ConvertResourceGroupToResInfo(ResourceGroup resourceGroup, ExpandPath version)
         {
             var res_info = new ResInfo()
             {
@@ -465,8 +679,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 }
                 if (e.parent is null && e.resources is not null)
                 {
-                    var subgroup = new Dictionary<string, MSubgroupData>();
-                    subgroup.Add(e.id, ConvertCommonSubgroupData(e, version));
+                    var subgroup = new Dictionary<string, MSubgroupData>
+                    {
+                        { e.id, ConvertCommonSubgroupData(e, version) }
+                    };
                     (res_info.groups as Dictionary<string, GroupDictionary>).Add(e.id, new GroupDictionary()
                     {
                         is_composite = false,
@@ -476,8 +692,47 @@ namespace Sen.Shell.Modules.Support.PvZ2
             });
             return res_info;
         }
-
-
+        private unsafe static MResourceGroup RewriteSlot(MResourceGroup resoureGroup)
+        {
+            var composite_list = resoureGroup.groups.Where(e => e.subgroups is not null).ToList();
+            composite_list.ForEach(g_composite =>
+            {
+                var slot_id = new Dictionary<string, MSubgroupWrapper>();
+                foreach (var e in g_composite.subgroups!)
+                {
+                    var resource = resoureGroup.groups.First(resource => resource.id == e.id)!.resources!;
+                    foreach (var resx in resource)
+                    {
+                        if (!slot_id.TryGetValue(resx.id, out var id_possibly_null))
+                        {
+                            resx.slot = resoureGroup.slot_count;
+                            resoureGroup.slot_count++;
+                            slot_id.Add(resx.id, new MSubgroupWrapper()
+                            {
+                                id = resx.id,
+                                slot = resx.slot,
+                            });
+                        }
+                        else
+                        {
+                            resx.slot = id_possibly_null.slot!;
+                        }
+                    }
+                }
+            });
+            foreach (var e in resoureGroup.groups)
+            {
+                if (e.resources is not null && e.parent is null && e.resources.All(k => k.slot == 0))
+                {
+                    foreach (var res in e.resources)
+                    {
+                        res.slot = resoureGroup.slot_count;
+                        resoureGroup.slot_count++;
+                    }
+                }
+            }
+            return resoureGroup;
+        }
     }
 
 
@@ -553,9 +808,22 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public unsafe sealed class PvZ2Shell : PvZ2ShellAbstract
     {
 
-        public unsafe void ConvertResourceGroupToResInfo(ResoureGroup resoureGroup, ExpandPath version, string outFile)
+        public unsafe void ConvertResInfoToResourceGroup(string outFile, string inFile)
         {
-            var res_info = PvZ2ResourceConversion.ConvertResourceGroupToResInfo(resoureGroup, version);
+            var fs = new FileSystem();
+            var resourceGroup = PvZ2ResourceConversion.ConvertResInfoToResourceGroup(JsonConvert.DeserializeObject<ResInfo>(fs.ReadText(inFile, EncodingType.UTF8))!);
+            var path = new ImplementPath();
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+            fs.WriteText(path.Resolve(outFile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resourceGroup, settings)), EncodingType.UTF8);
+            return;
+        }
+
+        public unsafe void ConvertResourceGroupToResInfo(ResourceGroup ResourceGroup, ExpandPath version, string outFile)
+        {
+            var res_info = PvZ2ResourceConversion.ConvertResourceGroupToResInfo(ResourceGroup, version);
             var path = new ImplementPath();
             var fs = new FileSystem();
             fs.WriteText(path.Resolve(outFile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(res_info)), EncodingType.UTF8);
@@ -576,7 +844,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return;
         }
 
-        public unsafe sealed override void RewriteSlot(ResoureGroup resoureGroup, string outfile)
+        public unsafe sealed override void RewriteSlot(ResourceGroup resoureGroup, string outfile)
         {
             var composite_list = resoureGroup.groups.Where(e => e.subgroups is not null).ToList();
             composite_list.ForEach(g_composite =>
