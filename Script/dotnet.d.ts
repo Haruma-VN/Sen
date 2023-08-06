@@ -1618,6 +1618,14 @@ declare namespace Sen {
              */
 
             export function RSGUnpackAsync(...kn: Array<RSGUnpackTemplate>): void;
+            /**
+             *
+             * @param resource - Pass Official
+             */
+
+            export function ConvertResourceGroupToResInfo(resource: Resources_Group_Structure_Template, version: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ExpandPath, outFile: string): void;
+
+            export function ConvertResInfoToResourceGroup(outFile: string, inFile: string): void;
         }
 
         /**

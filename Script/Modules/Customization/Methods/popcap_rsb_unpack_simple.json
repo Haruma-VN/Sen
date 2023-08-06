@@ -1,4 +1,6 @@
 {
     "expand_path": "?",
-    "extends_texture_information_for_pvz2c": "?"
+    "extends_texture_information_for_pvz2c": "?",
+    "decode_rtons": false,
+    "rton_is_encrypted": "?"
 }

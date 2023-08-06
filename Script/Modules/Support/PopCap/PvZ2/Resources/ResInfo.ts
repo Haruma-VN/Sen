@@ -3,6 +3,15 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
      * Structure
      */
 
+    export enum ExpandPath {
+        String,
+        Array,
+    }
+
+    /**
+     * Structure
+     */
+
     export interface ResourcesForWork extends small_bundle_info_json {
         group_parent: string;
     }
@@ -333,8 +342,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
          */
 
         public static CreateConversion<Required_Template extends Resources_Group_Structure_Template, Res_JSON_Structure extends res_json>(file_input: string, output_file: string, expand_path: "array" | "string"): void {
-            const resource_json: Required_Template = Sen.Script.Modules.FileSystem.Json.ReadJson<Required_Template>(file_input) as Required_Template;
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Res_JSON_Structure>(output_file, this.DoAllProcess<Required_Template, Res_JSON_Structure>(resource_json, file_input, expand_path), false);
+            Sen.Shell.PvZ2Shell.ConvertResourceGroupToResInfo(Sen.Script.Modules.FileSystem.Json.ReadJson(file_input), expand_path === "array" ? ExpandPath.Array : ExpandPath.String, output_file);
+            return;
         }
     }
 
@@ -429,14 +438,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
             for (let index: number = 0; index < resource_data.length; ++index) {
                 const k_struct = (res_subgroup_children.packet.data as any)[resource_data[index]];
                 this.CheckString(k_struct.type as string & any, file_path);
-                template_resource_build.resources.push({
+                const m_data: any = {
                     slot: 0,
                     id: resource_data[index],
                     path: expand_path_for_array ? k_struct.path : ((k_struct.path as Array<string> & any).join("\\") as string & any),
                     type: k_struct.type as string & any,
-                    forceOriginalVectorSymbolSize: k_struct.forceOriginalVectorSymbolSize,
-                    srcpath: expand_path_for_array ? k_struct.srcpath : ((k_struct.srcpath as Array<string> & any).join("\\") as string & any),
-                });
+                };
+                if (k_struct.forceOriginalVectorSymbolSize) {
+                    m_data.forceOriginalVectorSymbolSize = k_struct.forceOriginalVectorSymbolSize;
+                }
+                if (k_struct.srcpath) {
+                    m_data.srcpath = expand_path_for_array ? k_struct.srcpath : ((k_struct.srcpath as Array<string> & any).join("\\") as string & any);
+                }
+                template_resource_build.resources.push(m_data);
             }
             return template_resource_build;
         }
@@ -524,8 +538,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
          */
 
         public static CreateConversion(file_input: string, output_file: string): void {
-            const res_json: res_json = Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(file_input) as res_json;
-            Sen.Shell.PvZ2Shell.RewriteSlot(this.DoAllProcess<res_json, Resources_Group_Structure_Template>(res_json, file_input), output_file);
+            Sen.Shell.PvZ2Shell.ConvertResInfoToResourceGroup(output_file, file_input);
             return;
         }
     }

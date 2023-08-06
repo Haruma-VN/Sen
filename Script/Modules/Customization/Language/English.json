@@ -308,7 +308,7 @@
     "use_convert_directory_for_pack": "Use \"convert\" directory, from \"convert\" directory convert to \"unpack\" then pack RSGs for \"packet\"",
     "use_unpack_directory": "Use \"unpack\" directory, pack all RSGs to \"packet\" with information inside \"manifest\" then pack RSB",
     "convert_convert_to_unpack": "Use \"convert\" directory for packing",
-    "please_use_for_more": "Please use \"{1}\" after unpack to pack RSB, option is:\n       {2}",
+    "please_use_for_more": "Please use \"{1}\" after unpack to pack RSB, option is:\r\n      {2}",
     "ogg_to_wav": "OGG to WAV",
     "total_time_spent": "Total Time Spent: {} Seconds",
     "generated": "Generated {}",
@@ -454,5 +454,11 @@
     "rsg_pack_as_result": "RSG Pack As Result:",
     "use_thread_limit_for_rsb_pack": "Allow Sen to use all machine processors",
     "high_performance_pack": "High Performance: Take RAM and Memory for higher processor",
-    "slow_performance_pack": "Slow Performance: Allocate Sen a small range of processor"
+    "slow_performance_pack": "Slow Performance: Allocate Sen a small range of processor",
+    "no_packages_found": "No Packages Found",
+    "unpacking_packages": "Unpacking Packages...",
+    "converting_resource_to_resinfo": "Converting Resource-Group to Res-Info",
+    "decode_rton": "Decode All RTONs inside Packages",
+    "rton_is_encrypted": "RTONs are PvZ2 Chinese RTONs (Encrypted RTONs)",
+    "pvz2_chinese_encryption_key_obtained": "PvZ2 Chinese Encryption Key Obtained:"
 }
