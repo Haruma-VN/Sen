@@ -16,6 +16,7 @@ namespace Sen.Script {
             `Modules/System/Implement/FileSystem`,
             `Modules/System/Implement/XML`,
             `Modules/System/Implement/Number`,
+            `Modules/System/Implement/ADBHelper`,
             `Modules/System/Default/Localization`,
             `Modules/System/Default/Timer`,
             `Modules/Support/PopCap/PvZ2/Resources/ResInfo`,

@@ -467,5 +467,11 @@
     "decoding_popcap_pam": "Decoding PopCap Animation:",
     "popcap_animation_to_flash": "PopCap Animation: Convert To Flash",
     "decoding_popcap_animation_to_flash": "{1}: {2}",
-    "decode_wwise_bnk": "Decoding WWise Soundbank:"
+    "decode_wwise_bnk": "Decoding WWise Soundbank:",
+    "cannot_find_adb_directory": "Cannot Find ADB Directory",
+    "pvz2_remote_android_helper": "PvZ2 Remote Android Helper: Connect Android Device",
+    "android_file_obtained": "Android File Obtained:",
+    "machine_file_obtained": "Machine File Obtained:",
+    "now_installing_application": "Now Installing Application:",
+    "android_obtained_connection": "Android Connection Obtained:"
 }

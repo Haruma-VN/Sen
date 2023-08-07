@@ -1625,6 +1625,12 @@ declare namespace Sen {
 
             export function ConvertResourceGroupToResInfo(resource: Resources_Group_Structure_Template, version: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ExpandPath, outFile: string): void;
 
+            /**
+             *
+             * @param outFile - Output file
+             * @param inFile - Input file
+             */
+
             export function ConvertResInfoToResourceGroup(outFile: string, inFile: string): void;
         }
 
@@ -1644,6 +1650,28 @@ declare namespace Sen {
              */
 
             export const ScriptRequirement: int;
+        }
+
+        /**
+         * ADB Helper
+         */
+
+        declare namespace ADBHelper {
+            /**
+             * Structure
+             */
+
+            export interface SendADBCommand {
+                Command: string;
+                Path: string;
+            }
+
+            /**
+             *
+             * @param adb - Send ADB Command
+             */
+
+            export function ADBSendConnect(fileName: string, Command: string): string;
         }
 
         /**
