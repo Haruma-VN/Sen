@@ -1606,9 +1606,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     var x_DOMLayer_sprite = x_DOMLayer_list[2];
                 }
             }
-            int frame_rate = int.Parse(x_DOMDocument.Attribute("frameRate")!.Value);
-            int width = int.Parse(x_DOMDocument.Attribute("width")!.Value);
-            int height = int.Parse(x_DOMDocument.Attribute("height")!.Value);
+            var frame_rate = int.Parse(x_DOMDocument.Attribute("frameRate")!.Value);
+            var width = double.Parse(x_DOMDocument.Attribute("width")!.Value);
+            var height = double.Parse(x_DOMDocument.Attribute("height")!.Value);
             PAMInfo PamInfo = new PAMInfo
             {
                 version = PAMRipe.extra.version,

@@ -101,11 +101,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             part1List.Clear();
             FileListSplit(RsgFile, HeadInfo);
             var path = new ImplementPath();
-            var fileData = new SenBuffer();
+            _ = new SenBuffer();
             var part0RawData = new SenBuffer();
             var part1RawData = new SenBuffer();
-            List<ResInfo> resInfo = new List<ResInfo>();
+            var resInfo = new List<ResInfo>();
             int part0_Length = part0List.Count;
+            SenBuffer? fileData;
             if (part0_Length > 0)
             {
 
@@ -124,7 +125,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
                 part0RawData.Close();
             }
-            int part1_Length = part1List.Count;
+            var part1_Length = part1List.Count;
             if (part1_Length > 0)
             {
                 if (!GetPacketInfo) part1RawData = new SenBuffer(CheckZlib(RsgFile, HeadInfo, true));
@@ -148,7 +149,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
                 part1RawData.Close();
             }
-            PacketInfo packetInfo = new PacketInfo
+            var packetInfo = new PacketInfo
             {
                 version = HeadInfo.version,
                 compression_flags = HeadInfo.flags,
@@ -339,7 +340,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
         {
             for (int i = 0; i < str.Length; i++)
             {
-                if (str[i] > 127) return true;
+                if (str[i] > 127)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -387,7 +391,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                             pathSlice = Path2.Substring(k),
                             key = k,
                             resInfo = ResInfoList[i + 1],
-                            isAtlas = (Path2.EndsWith(".PTX") ? true : false),
+                            isAtlas = (Path2.EndsWith(".PTX")),
                         });
                         break;
                     }
@@ -404,10 +408,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
             {
                 throw new Exception("invalid_file_list_offset");
             }
-            var fs = new FileSystem();
             var path = new ImplementPath();
-            SenBuffer dataGroup = new SenBuffer();
-            SenBuffer atlasGroup = new SenBuffer();
+            var dataGroup = new SenBuffer();
+            var atlasGroup = new SenBuffer();
             int dataPos = 0;
             int atlasPos = 0;
             for (var i = 0; i < pathTempLength; i++)
@@ -514,7 +517,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                         DataWrite(dataEmpty.toBytes(), 1, true);
                     }
                     else {
-                         DataWrite(new byte[0], 1, true);
+                         DataWrite(Array.Empty<byte>(), 1, true);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;
                     RSGFile.writeBytes(atlasBytes);
@@ -531,7 +534,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                         DataWrite(dataEmpty.toBytes(), 1, true);
                     }
                     else {
-                        DataWrite(new byte[0], 1, true);
+                        DataWrite(Array.Empty<byte>(), 1, true);
                     }
                     part1_Offset = (int)RSGFile.writeOffset;
                     byte[] ZlibBytes = Compress.CompressZlib(atlasBytes, (compression_flags == 3 ? ZlibCompressionLevel.BEST_COMPRESSION : ZlibCompressionLevel.DEFAULT_COMPRESSION));

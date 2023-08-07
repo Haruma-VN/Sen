@@ -45,6 +45,7 @@ namespace Sen.Shell.Modules.JavaScript
                 {"XMLHelper", new Support.Flash.XmlHelper()},
                 {"PvZ2Lawnstrings", new Sen.Shell.Modules.Support.PvZ2.Lawnstrings()},
                 {"ChatGPT", new Sen.Modules.Support.Misc.ChatGPT()},
+                {"ADBHelper", new Sen.Shell.Modules.Support.Misc.ADBHelper()},
             };
             ns.Set("Shell", JsValue.FromObject(Engine, dictionary));
             Engine.SetValue("Sen", ns);
