@@ -124,7 +124,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
             public RemovesInfo Read(SenBuffer PamFile, int version)
             {
-                index = PamFile.readInt16LE();
+                index = PamFile.readUInt16LE();
                 if (index >= 2047)
                 {
                     index = PamFile.readInt32LE();
@@ -208,11 +208,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 resource = PamFile.readUInt8();
                 if (version >= 6 && resource == 255)
                 {
-                    resource = PamFile.readInt16LE();
+                    resource = PamFile.readUInt16LE();
                 }
                 if ((num & 8192) != 0)
                 {
-                    preload_frame = PamFile.readInt16LE();
+                    preload_frame = PamFile.readUInt16LE();
                 }
                 else
                 {
@@ -343,7 +343,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 else if ((f7 & MoveFlags.Rotate) != 0)
                 {
                     transform = new double[3];
-                    double num9 = PamFile.readInt16LE() / 1000d;
+                    double num9 = PamFile.readUInt16LE() / 1000d;
                     transform[0] = num9;
                 }
                 else
@@ -357,16 +357,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 else
                 {
-                    transform[^2] = PamFile.readInt16LE() / 20d;
-                    transform[^1] = PamFile.readInt16LE() / 20d;
+                    transform[^2] = PamFile.readUInt16LE() / 20d;
+                    transform[^1] = PamFile.readUInt16LE() / 20d;
                 }
                 if ((f7 & MoveFlags.SrcRect) != 0)
                 {
                     source_rectangle = new int[4];
-                    source_rectangle[0] = PamFile.readInt16LE() / 20;
-                    source_rectangle[1] = PamFile.readInt16LE() / 20;
-                    source_rectangle[2] = PamFile.readInt16LE() / 20;
-                    source_rectangle[3] = PamFile.readInt16LE() / 20;
+                    source_rectangle[0] = PamFile.readUInt16LE() / 20;
+                    source_rectangle[1] = PamFile.readUInt16LE() / 20;
+                    source_rectangle[2] = PamFile.readUInt16LE() / 20;
+                    source_rectangle[3] = PamFile.readUInt16LE() / 20;
                 }
                 if ((f7 & MoveFlags.Color) != 0)
                 {
@@ -378,7 +378,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 if ((f7 & MoveFlags.AnimFrameNum) != 0)
                 {
-                    sprite_frame_number = PamFile.readInt16LE();
+                    sprite_frame_number = PamFile.readUInt16LE();
                 }
                 else
                 {
@@ -410,20 +410,20 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             double[] position = new double[2];
             for (var i = 0; i < 2; i++)
             {
-                position[i] = PamFile.readInt16LE() / 20d;
+                position[i] = PamFile.readUInt16LE() / 20d;
             }
             double[] size = new double[2];
             for (var i = 0; i < 2; i++)
             {
-                size[i] = PamFile.readInt16LE() / 20d;
+                size[i] = PamFile.readUInt16LE() / 20d;
             }
-            int imagesCount = PamFile.readInt16LE();
+            int imagesCount = PamFile.readUInt16LE();
             var image = new ImageInfo[imagesCount];
             for (var i = 0; i < imagesCount; i++)
             {
                 image[i] = ReadImageInfo(PamFile, version);
             }
-            int spritesCount = PamFile.readInt16LE();
+            int spritesCount = PamFile.readUInt16LE();
             var sprite = new SpriteInfo[spritesCount];
             for (var i = 0; i < spritesCount; i++)
             {
@@ -462,7 +462,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    size[i] = PamFile.readInt16LE();
+                    size[i] = PamFile.readUInt16LE();
                 }
             }
             else
@@ -475,7 +475,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var transform = new double[6];
             if (version == 1)
             {
-                double num = PamFile.readInt16LE() / 1000d;
+                double num = PamFile.readUInt16LE() / 1000d;
                 transform[0] = Math.Cos(num);
                 transform[2] = -Math.Sin(num);
                 transform[1] = Math.Sin(num);
@@ -517,12 +517,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 sprite.name = null;
                 sprite.frame_rate = -1;
             }
-            int framesCount = PamFile.readInt16LE();
+            int framesCount = PamFile.readUInt16LE();
             sprite.work_area = new int[2];
             if (version >= 5)
             {
-                sprite.work_area[0] = PamFile.readInt16LE();
-                sprite.work_area[1] = PamFile.readInt16LE();
+                sprite.work_area[0] = PamFile.readUInt16LE();
+                sprite.work_area[1] = PamFile.readUInt16LE();
             }
             else
             {
@@ -548,7 +548,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 int count = PamFile.readUInt8();
                 if (count == 255)
                 {
-                    count = PamFile.readInt16LE();
+                    count = PamFile.readUInt16LE();
                 }
                 for (int i = 0; i < count; i++)
                 {
@@ -561,7 +561,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 int count = PamFile.readUInt8();
                 if (count == 255)
                 {
-                    count = PamFile.readInt16LE();
+                    count = PamFile.readUInt16LE();
                 }
                 for (int i = 0; i < count; i++)
                 {
@@ -574,7 +574,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 int count = PamFile.readUInt8();
                 if (count == 255)
                 {
-                    count = PamFile.readInt16LE();
+                    count = PamFile.readUInt16LE();
                 }
                 for (int i = 0; i < count; i++)
                 {
