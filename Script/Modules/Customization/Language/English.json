@@ -460,5 +460,12 @@
     "converting_resource_to_resinfo": "Converting Resource-Group to Res-Info",
     "decode_rton": "Decode All RTONs inside Packages",
     "rton_is_encrypted": "RTONs are PvZ2 Chinese RTONs (Encrypted RTONs)",
-    "pvz2_chinese_encryption_key_obtained": "PvZ2 Chinese Encryption Key Obtained:"
+    "pvz2_chinese_encryption_key_obtained": "PvZ2 Chinese Encryption Key Obtained:",
+    "decoding_popcap_ptx": "Decoding PopCap PTX:",
+    "decoding_popcap_ptx_template": "{1}: {2} x {3} ({4}, {5})",
+    "decoding_popcap_rton": "Decoding PopCap RTON:",
+    "decoding_popcap_pam": "Decoding PopCap Animation:",
+    "popcap_animation_to_flash": "PopCap Animation: Convert To Flash",
+    "decoding_popcap_animation_to_flash": "{1}: {2}",
+    "decode_wwise_bnk": "Decoding WWise Soundbank:"
 }

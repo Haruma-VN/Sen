@@ -126,6 +126,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                     const input_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_unpack_option.rsb_unpack_dir}`, `${resource_unpack_path}`));
                     const output_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `${resource_unpack_path}`));
                     if (resource_popcap_texture_format_information !== null && resource_popcap_texture_dimension_information !== null && rsb_unpack_option.extractAtlas) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("decoding_popcap_ptx").replace(/\{\}/g, ""));
+                        Sen.Shell.Console.Printf(
+                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("decoding_popcap_ptx_template"), [
+                                input_path,
+                                `${resource_popcap_texture_dimension_information.width}`,
+                                `${resource_popcap_texture_dimension_information.height}`,
+                                `${resource_popcap_texture_format_information.format}`,
+                                Sen.Script.Modules.System.Default.Localization.GetString(rsb_unpack_option.texture_format),
+                            ])}`
+                        );
                         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.DecodePopCapPTX(
                             `${input_path}`,
                             `${output_path.replace(/((\.ptx))?$/i, `.PNG`)}`,
@@ -135,6 +146,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                         );
                     } else if (Sen.Shell.Path.Parse(input_path).ext.toUpperCase() === ".RTON" && rsb_unpack_option.decode_rton) {
                         if (Sen.Shell.Path.Parse(input_path).name.toUpperCase() !== "RESOURCES") {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("decoding_popcap_rton").replace(/\{\}/g, ""));
+                            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${input_path}`);
                             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(input_path, output_path.replace(/((\.rton))?$/i, `.JSON`), {
                                 crypt: rsb_unpack_option.rton_encrypted,
                                 key: rsb_unpack_option.encryptionKey,
@@ -142,6 +155,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                         }
                     } else if (Sen.Shell.Path.Parse(input_path).ext.toUpperCase() === ".PAM" && rsb_unpack_option.decode_pam) {
                         const output_pam_json: string = output_path.replace(/((\.pam))?$/i, `.PAM.JSON`);
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("decoding_popcap_pam"));
+                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${input_path}`);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimationJson(input_path, output_pam_json);
                         if (rsb_unpack_option.pam_to_flash_animation) {
                             const destination: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource.FlashAnimationContainer = {
@@ -151,10 +166,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                                 subgroup: worker.path.at(-2) as string,
                                 pam: worker.path.at(-1) as string,
                             };
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("popcap_animation_to_flash"));
+                            Sen.Shell.Console.Printf(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+                                `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("decoding_popcap_animation_to_flash"), [
+                                    destination.filepath,
+                                    `${rsb_unpack_option.resolution}`,
+                                ])}`
+                            );
                             flash_animation_destination.push(destination);
                         }
                     } else if (Sen.Shell.Path.Parse(input_path).ext.toUpperCase() === ".BNK" && rsb_unpack_option.decode_bnk) {
-                        Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseSoundbankDecodeBySimple(input_path, output_path.replace(/((\.bnk))?$/i, `.soundbank`));
+                        const output = output_path.replace(/((\.bnk))?$/i, `.soundbank`);
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("decode_wwise_bnk"));
+                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${input_path}`);
+                        Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseSoundbankDecodeBySimple(input_path, output);
                     }
                 });
             });

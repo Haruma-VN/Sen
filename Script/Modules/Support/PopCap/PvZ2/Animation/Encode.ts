@@ -55,13 +55,25 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         change?: MovesInfo[];
     };
 
+    /**
+     * Structure
+     */
+
     export type CommandsInfo = {
         command: string[];
     };
 
+    /**
+     * Structure
+     */
+
     export type RemovesInfo = {
         index: number;
     };
+
+    /**
+     * Structure
+     */
 
     export type AddsInfo = {
         index: number;
@@ -72,6 +84,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         preload_frame: number;
         time_scale: number;
     };
+
+    /**
+     * Structure
+     */
 
     export type MovesInfo = {
         index: number;
@@ -94,6 +110,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         Commands = 32,
     }
 
+    /**
+     * Structure
+     */
+
     export interface ExtraInfo {
         version: number;
         frame_rate: number;
@@ -103,10 +123,18 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         main_sprite?: ExtraSpriteInfo;
     }
 
+    /**
+     * Structure
+     */
+
     export interface ExtraImageInfo {
         name?: string;
         size: number[];
     }
+
+    /**
+     * Structure
+     */
 
     export interface ExtraSpriteInfo {
         name?: string;
@@ -285,7 +313,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.PAMtoPAMJSON(inFile);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json, false);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
         return;
     }
@@ -304,7 +332,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         try {
             Sen.Shell.PvZ2Shell.PAMJSONtoPAM(inFile, outFile);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
         return;
     }
@@ -331,7 +359,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             );
             return outputDirectory;
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
     }
 
@@ -352,7 +380,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json, false);
             return;
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inDirectory);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inDirectory);
         }
     }
 
@@ -371,7 +399,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `extra.json`)), extra, false);
             return;
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
     }
 
@@ -384,6 +412,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
         version: int;
         frame_rate: int;
     }
+
+    /**
+     * Structure
+     */
 
     export interface ExtraJsonForUser {
         version: number;

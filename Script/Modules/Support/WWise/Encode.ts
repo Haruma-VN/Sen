@@ -1,4 +1,8 @@
 namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
+    /**
+     * Structure
+     */
+
     export interface WWiseInfoSimple {
         bank_header: BKHD;
         initialization?: INIT[];
@@ -10,16 +14,28 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
         platform_setting?: PLAT;
     }
 
+    /**
+     * Structure
+     */
+
     export interface BKHD {
         version: number;
         id: number;
         head_expand: string;
     }
 
+    /**
+     * Structure
+     */
+
     export interface INIT {
         id: number;
         name: string;
     }
+
+    /**
+     * Structure
+     */
 
     export interface STMG {
         volume_threshold: string;
@@ -31,20 +47,36 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
         unknown_type_2: number;
     }
 
+    /**
+     * Structure
+     */
+
     export interface STMGStageGroup {
         id: number;
         data: STMGStageGroupData;
     }
+
+    /**
+     * Structure
+     */
 
     export interface STMGStageGroupData {
         default_transition_time: string;
         custom_transition: string[];
     }
 
+    /**
+     * Structure
+     */
+
     export interface STMGSwitchGroup {
         id: number;
         data: STMGSwitchGroupData;
     }
+
+    /**
+     * Structure
+     */
 
     export interface STMGSwitchGroupData {
         parameter: number;
@@ -57,16 +89,28 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
         data: string;
     }
 
+    /**
+     * Structure
+     */
+
     export interface HIRC {
         id: number;
         type: number;
         data: string;
     }
 
+    /**
+     * Structure
+     */
+
     export interface ENVS {
         obstruction: ENVSItem;
         occlusion: ENVSItem;
     }
+
+    /**
+     * Structure
+     */
 
     export interface ENVSItem {
         volume: ENVSVolume;
@@ -79,29 +123,53 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
         volume_point: string[];
     }
 
+    /**
+     * Structure
+     */
+
     export interface ENVSLowPassFilter {
         low_pass_filter_vaule: string;
         low_pass_filter_point: string[];
     }
+
+    /**
+     * Structure
+     */
 
     export interface ENVSHighPassFilter {
         high_pass_filter_vaule: string;
         high_pass_filter_point: string[];
     }
 
+    /**
+     * Structure
+     */
+
     export interface STID {
         data: STIDData[];
         unknown_type: number;
     }
+
+    /**
+     * Structure
+     */
 
     export interface STIDData {
         id: number;
         name: string;
     }
 
+    /**
+     * Structure
+     */
+
     export interface PLAT {
         platform: string;
     }
+
+    /**
+     * Structure
+     */
 
     export interface WEMDATATemp {
         offset: number;
@@ -120,7 +188,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
             const information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple = Sen.Shell.PvZ2Shell.WWiseSoundBankDecode(inFile, outDirectory);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `definition.json`)), information, false);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inFile);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
         return;
     }
@@ -139,7 +207,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
         try {
             Sen.Shell.PvZ2Shell.WWiseSoundBankEncode(inDirectory, outFile, information);
         } catch (error: unknown) {
-            throw new Sen.Script.Modules.Exceptions.RuntimeError((error as any).message, inDirectory);
+            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inDirectory);
         }
         return;
     }
