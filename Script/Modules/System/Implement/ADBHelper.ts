@@ -201,4 +201,74 @@ namespace Sen.Script.Modules.System.Implement.ADBHelper {
     export function Existed(file_path: string): boolean {
         return Sen.Shell.ADBHelper.ADBSendConnect(Sen.Script.Modules.System.Implement.ADBHelper.ADBPath, `shell ls ${file_path}`) === "true";
     }
+
+    /**
+     * Structure
+     */
+
+    interface PackageInfo {
+        versionCode: string;
+        versionName: string;
+        primaryCpuAbi: string;
+        [key: string]: string;
+    }
+
+    /**
+     *
+     * @param output - After Shell call
+     * @returns
+     */
+
+    export function DeserializePackageInformation(output: string): PackageInfo {
+        const lines = output.trim().split("\n");
+        const packageInfo: PackageInfo = {
+            versionCode: "",
+            versionName: "",
+            primaryCpuAbi: "",
+        };
+        for (const line of lines) {
+            const match = line.match(/^\s*([a-zA-Z]+)=([^\s]+)/);
+            if (match) {
+                const key = match[1];
+                const value = match[2];
+                packageInfo[key] = value;
+            }
+        }
+        return packageInfo;
+    }
+
+    /**
+     *
+     * @param package_name - Provide application package name
+     * @returns
+     */
+
+    export function ObtainApplicationInformation(package_name: string): PackageInfo {
+        return Sen.Script.Modules.System.Implement.ADBHelper.DeserializePackageInformation(Sen.Shell.ADBHelper.ADBSendConnect(Sen.Script.Modules.System.Implement.ADBHelper.ADBPath, `shell dumpsys package ${package_name}`));
+    }
+
+    /**
+     *
+     * @param packet_info - Information of application
+     * @returns
+     */
+
+    export function PrintApplicationInformation(packet_info: PackageInfo): void {
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("installed_application_detail"));
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("current_app_version_code")}: ${packet_info.versionCode}`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("current_app_version_name")}: ${packet_info.versionName}`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("architecture")}: ${packet_info.primaryCpuAbi}`);
+        return;
+    }
+    /**
+     *
+     * @param machine_input - APK
+     * @returns Print message
+     */
+
+    export function PrintApplicationRun(machine_input: string): void {
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("now_running_application"));
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Shell.Path.Parse(machine_input).name_without_extension}`);
+        return;
+    }
 }

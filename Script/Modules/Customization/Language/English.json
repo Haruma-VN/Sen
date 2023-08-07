@@ -473,5 +473,13 @@
     "android_file_obtained": "Android File Obtained:",
     "machine_file_obtained": "Machine File Obtained:",
     "now_installing_application": "Now Installing Application:",
-    "android_obtained_connection": "Android Connection Obtained:"
+    "android_obtained_connection": "Android Connection Obtained:",
+    "input_application_package_name": "Input Application Package Name",
+    "input_apk_path": "Input APK Path",
+    "waiting_for_android_device_response": "Waiting for Android Device Responses...",
+    "current_app_version_code": "App Version Code",
+    "current_app_version_name": "App Version Name",
+    "architecture": "Architecture",
+    "now_running_application": "Now Running Application:",
+    "installed_application_detail": "Installed Application Detail:"
 }
