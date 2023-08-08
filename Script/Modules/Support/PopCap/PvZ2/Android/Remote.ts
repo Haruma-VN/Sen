@@ -32,6 +32,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote {
     }
 
     export function WatchFile(helper: Helper): void {
+        let connection: Record<string, string> = Sen.Script.Modules.System.Implement.ADBHelper.AndroidConnection();
+        if (Object.keys(connection).length === 0) {
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("waiting_for_android_device_response"));
+        }
+        while (Object.keys(connection).length === 0) {
+            connection = Sen.Script.Modules.System.Implement.ADBHelper.AndroidConnection();
+        }
+        Object.keys(connection).forEach((e: string) => {
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("android_obtained_connection"));
+            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${e}`);
+        });
         let status: boolean = Sen.Shell.FileSystem.FileExists(helper.file_path);
         if (!status) {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, Sen.Script.Modules.System.Default.Localization.GetString("no_such_file").replace(/\{\}/g, helper.file_path));
@@ -46,11 +57,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote {
             let current = Sen.Shell.FileSystem.GetModifyTimeUTC(helper.file_path).toString();
             while (true) {
                 try {
-                    Sen.Shell.ADBHelper.Sleep(3000n);
-                    const new_change = Sen.Shell.FileSystem.GetModifyTimeUTC(helper.file_path).toString();
-                    if (new_change !== current && Sen.Shell.FileSystem.FileExists(helper.file_path)) {
+                    Sen.Shell.ADBHelper.Sleep(5000n);
+                    const new_change = Sen.Shell.FileSystem.GetModifyTimeUTC(helper.file_path);
+                    if (new_change.toString() !== current && new_change.toString() !== "01/01/1601 00:00:00" && Sen.Shell.FileSystem.FileExists(helper.file_path)) {
+                        Sen.Shell.ADBHelper.Sleep(5000n);
                         const g_struct = Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.DeserializeTimeLine(new_change.toString());
-                        current = new_change;
+                        current = new_change.toString();
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("detect_file_changed"));
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${g_struct.date} & ${g_struct.time}`);
                         if (!Sen.Script.Modules.System.Implement.ADBHelper.IsClosed(helper.application_package)) {

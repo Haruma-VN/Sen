@@ -392,7 +392,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
         {
             var entry = new MSubgroupData()
             {
-                type = subgroup.type,
+                type = subgroup.res,
                 packet = new Dictionary<string, AtlasWrapper>()
             };
             var version_k = version == ExpandPath.Array;
