@@ -29,6 +29,7 @@ namespace Sen.Script {
             `Modules/Support/PopCap/PvZ2/Animation/Encode`,
             `Modules/Support/PopCap/PvZ2/Animation/Helper`,
             `Modules/Support/PopCap/PvZ2/Animation/Render`,
+            `Modules/Support/PopCap/PvZ2/Android/Remote`,
             `Modules/Support/PopCap/PvZ2/Arguments/Input`,
             `Modules/Support/PopCap/PvZ2/RSG/Encode`,
             `Modules/Support/PopCap/PvZ2/RSB/Unpack`,

@@ -138,7 +138,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "sha1_hash"
         | "sha256_hash"
         | "sha384_hash"
-        | "sha512_hash";
+        | "sha512_hash"
+        | "pvz2_remote_android_helper";
 
     /**
      *
@@ -171,6 +172,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.SplitManifest<string, string>(arg, output_argument);
                         });
+                    }
+                    break;
+                }
+                case "pvz2_remote_android_helper": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.WatchFile(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.Helper>(argument));
                     }
                     break;
                 }

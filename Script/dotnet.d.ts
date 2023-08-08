@@ -284,6 +284,13 @@ declare namespace Sen {
              */
 
             export function WriteBytesJS(outpath: string, data: int[]): void;
+
+            /**
+             *
+             * @param path - Provide file path
+             */
+
+            export function GetModifyTimeUTC(path: string): string;
         }
 
         declare namespace TypeChecker {
@@ -1672,6 +1679,13 @@ declare namespace Sen {
              */
 
             export function ADBSendConnect(fileName: string, Command: string): string;
+
+            /**
+             *
+             * @param time - Pass time to sleep
+             */
+
+            export function Sleep(time: bigint): void;
         }
 
         /**

@@ -371,5 +371,12 @@
         "exclude": [],
         "is_enabled": false,
         "type": "directory"
+    },
+    "pvz2_remote_android_helper": {
+        "func_number": 54,
+        "include": [".android.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
     }
 }

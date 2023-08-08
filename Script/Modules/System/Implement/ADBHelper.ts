@@ -271,4 +271,25 @@ namespace Sen.Script.Modules.System.Implement.ADBHelper {
         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Shell.Path.Parse(machine_input).name_without_extension}`);
         return;
     }
+
+    /**
+     *
+     * @param application_package - Provide application package
+     * @returns
+     */
+
+    export function ForceCloseApplication(application_package: string): void {
+        Sen.Shell.ADBHelper.ADBSendConnect(Sen.Script.Modules.System.Implement.ADBHelper.ADBPath, `shell am force-stop ${application_package}`);
+        return;
+    }
+
+    /**
+     *
+     * @param application_package - Provide application package name
+     * @returns
+     */
+
+    export function IsClosed(application_package: string): boolean {
+        return Sen.Shell.ADBHelper.ADBSendConnect(Sen.Script.Modules.System.Implement.ADBHelper.ADBPath, `shell pidof ${application_package}`) === "";
+    }
 }

@@ -12,6 +12,10 @@ namespace Sen.Shell.Modules.Support.Misc
     public abstract class ADBHelperVirtual
     {
         public abstract string ADBSendConnect(string fileName, string Command);
+
+        public abstract void Sleep(uint miliseconds);
+
+
     }
 
     public class ADBHelper : ADBHelperVirtual
@@ -36,7 +40,13 @@ namespace Sen.Shell.Modules.Support.Misc
             using var process = Process.Start(startInfo)!;
             var output = process.StandardOutput.ReadToEnd();
             return output;
-            
+           
+        }
+
+        public unsafe sealed override void Sleep(uint miliseconds)
+        {
+            Thread.Sleep((int)miliseconds);
+            return;
         }
     }
 }

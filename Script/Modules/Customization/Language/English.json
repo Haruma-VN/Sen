@@ -481,5 +481,10 @@
     "current_app_version_name": "App Version Name",
     "architecture": "Architecture",
     "now_running_application": "Now Running Application:",
-    "installed_application_detail": "Installed Application Detail:"
+    "installed_application_detail": "Installed Application Detail:",
+    "file_deleted": "File has been deleted",
+    "current_status": "Current Status:",
+    "detect_file_changed": "Detect File Changed:",
+    "now_watching_file": "Now Watching File:",
+    "require_closing_application": "Force Closing Application"
 }
