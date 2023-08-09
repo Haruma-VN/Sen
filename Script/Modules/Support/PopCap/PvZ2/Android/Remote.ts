@@ -54,14 +54,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote {
         if (status) {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("now_watching_file"));
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${helper.file_path}`);
-            let current = Sen.Shell.FileSystem.GetModifyTimeUTC(helper.file_path).toString();
+            let current: string = Sen.Shell.FileSystem.GetModifyTimeUTC(helper.file_path).toString();
             while (true) {
                 try {
                     Sen.Shell.ADBHelper.Sleep(5000n);
-                    const new_change = Sen.Shell.FileSystem.GetModifyTimeUTC(helper.file_path);
+                    const new_change: string = Sen.Shell.FileSystem.GetModifyTimeUTC(helper.file_path);
                     if (new_change.toString() !== current && new_change.toString() !== "01/01/1601 00:00:00" && Sen.Shell.FileSystem.FileExists(helper.file_path)) {
                         Sen.Shell.ADBHelper.Sleep(5000n);
-                        const g_struct = Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.DeserializeTimeLine(new_change.toString());
+                        const g_struct: TimeModify = Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.DeserializeTimeLine(new_change.toString());
                         current = new_change.toString();
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("detect_file_changed"));
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${g_struct.date} & ${g_struct.time}`);
