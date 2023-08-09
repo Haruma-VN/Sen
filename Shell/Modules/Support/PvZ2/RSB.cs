@@ -1451,7 +1451,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 FixFileListShuttle(RSGFile, RSGFile.readInt32LE(72), RSGFile.readInt32LE(), true);
             }
             RSGFile.readOffset = 0;
-            if (rsgMagic == "pgsr" && rsgVersion == version && rsgCompressionFlag == RsgInfo.readInt32LE())
+            if (rsgMagic == "pgsr" && rsgVersion == version && rsgCompressionFlag > 0 && rsgCompressionFlag < 3 && rsgCompressionFlag == RsgInfo.readInt32LE())
             {
                 return;
             }
@@ -1463,6 +1463,25 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 RSGFile.writeBytes(RsgInfo.toBytes());
                 RSGFile.writeNull(16);
                 RsgInfo.Close();
+            }
+            if (rsgCompressionFlag < 0 || rsgCompressionFlag > 3)
+            {
+                var part0_Zlib = RSGFile.readInt32LE(0x1C);
+                var part0_Size = RSGFile.readInt32LE();
+                var part1_Zlib = RSGFile.readInt32LE(0x1C);
+                var part1_Size = RSGFile.readInt32LE();
+                RSGFile.readOffset = 0;
+                int compressionFlags;
+                if ((part0_Zlib == part0_Size && part1_Zlib == 0) || (part1_Zlib != part1_Size && part0_Size == 0)) {
+                    compressionFlags = 1;
+                }
+                else if ((part0_Zlib != part0_Size && part1_Zlib == 0) || (part1_Zlib == part1_Size && part0_Size == 0)) {
+                    compressionFlags = 2;
+                }
+                else {
+                    compressionFlags = 3;
+                }
+                RSGFile.writeInt32LE(compressionFlags, 0x10);
             }
         }
 

@@ -23,6 +23,7 @@ using Org.BouncyCastle.Asn1.Cmp;
 using System.Linq;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
+using Sen.Shell.Modules.Support.PvZ2.Helper;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -784,12 +785,13 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public static async Task RSGUnpackAsync(params RSGUnpackTemplate[] kn)
         {
-            var shell = new PvZ2Shell();
+            var RSGFunction = new PVZ2RSG();
             var tasks = new List<Task>();
             foreach (var ki in kn)
             {
                 tasks.Add(Task.Run(() => {
-                    shell.RSGUnpack(ki.inFile, ki.outFolder, ki.useResDirectory);
+                    using var stream = File.OpenRead(ki.inFile);
+                    _ = RSGFunction.DecodeAsync(stream, ki.outFolder, tasks, false, ki.useResDirectory);
                 }));
             }
             await Task.WhenAll(tasks);

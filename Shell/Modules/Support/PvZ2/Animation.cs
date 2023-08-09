@@ -91,13 +91,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         public List<AddsInfo>? append { get; set; }
         public List<MovesInfo>? change { get; set; }
 
-        public static void WriteCommand(SenBuffer PamFile, int version, string[] command)
+        public static void WriteCommand(SenBuffer PamFile, string[] command)
         {
             PamFile.writeStringByInt16LE(command[0]);
             PamFile.writeStringByInt16LE(command[1]);
         }
 
-        public static string[] ReadCommand(SenBuffer PamFile, int version)
+        public static string[] ReadCommand(SenBuffer PamFile)
         {
             string[] command = new string[2];
             command[0] = PamFile.readStringByInt16LE();
@@ -109,7 +109,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             public int index { get; set; }
 
-            public void Write(SenBuffer PamFile, int version)
+            public void Write(SenBuffer PamFile)
             {
                 if (index >= 2047)
                 {
@@ -122,7 +122,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
             }
 
-            public RemovesInfo Read(SenBuffer PamFile, int version)
+            public RemovesInfo Read(SenBuffer PamFile)
             {
                 index = PamFile.readUInt16LE();
                 if (index >= 2047)
@@ -552,7 +552,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 for (int i = 0; i < count; i++)
                 {
-                    frameInfo.remove.Add(new FrameInfo.RemovesInfo().Read(PamFile, version));
+                    frameInfo.remove.Add(new FrameInfo.RemovesInfo().Read(PamFile));
                 }
             }
             frameInfo.append = new List<FrameInfo.AddsInfo>();
@@ -595,7 +595,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 int num12 = PamFile.readUInt8();
                 for (int m = 0; m < num12; m++)
                 {
-                    frameInfo.command.Add(FrameInfo.ReadCommand(PamFile, version));
+                    frameInfo.command.Add(FrameInfo.ReadCommand(PamFile));
                 }
             }
             return frameInfo;
@@ -846,7 +846,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 for (int i = 0; i < count; i++)
                 {
-                    frame.remove[i].Write(PamBinary, version);
+                    frame.remove[i].Write(PamBinary);
                 }
             }
             if ((flags & FrameFlags.Adds) != 0)
@@ -898,7 +898,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 PamBinary.writeUInt8((byte)count);
                 for (int i = 0; i < count; i++)
                 {
-                    FrameInfo.WriteCommand(PamBinary, version, frame.command[i]);
+                    FrameInfo.WriteCommand(PamBinary, frame.command[i]);
                 }
             }
         }
@@ -972,10 +972,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var spriteLength = AnimationJson.sprite.Length;
             for (var i = 0; i < spriteLength; i++)
             {
-                var spriteDocument = WriteSpriteDocument(i, DecodeFrameNodeList(i, AnimationJson.sprite[i], AnimationJson.sprite));
+                var spriteDocument = WriteSpriteDocument(i, DecodeFrameNodeList(AnimationJson.sprite[i], AnimationJson.sprite));
                 SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "sprite", $"sprite_{i + 1}.xml")), spriteDocument, xflns);
             }
-            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main_sprite.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(-1, AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
+            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main_sprite.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
             SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "DomDocument.xml")), WriteDomDocument(AnimationJson), xflns);
             fs.WriteText(path.Resolve(path.Join(outFolder, "main.xfl")), k_xfl_content, EncodingType.ASCII);
             var extraInfo = new ExtraInfo()
@@ -999,10 +999,17 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return extraInfo;
         }
 
-        public static Dictionary<int, List<XElement>> DecodeFrameNodeList(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite)
+        public static Dictionary<int, List<XElement>> DecodeFrameNodeList(SpriteInfo sprite, SpriteInfo[] sub_sprite)
         {
             Dictionary<int, Model> model = new();
             Dictionary<int, List<XElement>> frame_node_list = new();
+            frame_node_list[0] = new() {
+                            new XElement("DOMFrame",
+                                new XAttribute("index", "0"),
+                                new XAttribute("duration", sprite.frame!.Length),
+                                new XElement("elements")
+                            )
+            };
             var frameLength = sprite.frame!.Length;
             for (var i = 0; i < frameLength; i++)
             {
@@ -1022,10 +1029,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         frame_start = i,
                         frame_duration = i,
                     };
-                    frame_node_list[append.index] = new();
+                    frame_node_list[append.index + 1] = new();
                     if (i > 0)
                     {
-                        frame_node_list[append.index].Add(
+                        frame_node_list[append.index + 1].Add(
                             new XElement("DOMFrame",
                                 new XAttribute("index", "0"),
                                 new XAttribute("duration", i),
@@ -1047,7 +1054,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 foreach (var layer_index in model.Keys)
                 {
                     var layer = model[layer_index];
-                    var frame_node = frame_node_list[layer_index];
+                    var frame_node = frame_node_list[layer_index + 1];
                     if (layer.state != null)
                     {
                         if (frame_node.Count > 0)
@@ -1113,7 +1120,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             foreach (var layer_index in model.Keys)
             {
                 var layer = model[layer_index];
-                var frame_node = frame_node_list[layer_index];
+                var frame_node = frame_node_list[layer_index + 1];
                 frame_node[frame_node.Count - 1].SetAttributeValue("duration", layer.frame_duration);
                 model.Remove(layer_index);
             }
@@ -1131,7 +1138,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         new XAttribute("name", index == -1 ? "main_sprite" : $"sprite_{index + 1}"),
                         new XElement("layers", frame_node_list.Keys.OrderByDescending(i => i).Select((layer_index) =>
                             new XElement("DOMLayer",
-                                new XAttribute("name", layer_index + 1),
+                                new XAttribute("name", layer_index),
                                 new XElement("frames", frame_node_list[layer_index].ToArray())
                             )
                         ).ToArray())
@@ -1498,13 +1505,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     x_DOMFrame_list.ForEach((x_DOMFrame) =>
                     {
                         int frame_index = int.Parse(x_DOMFrame.Attribute("index")!.Value);
+
                         if (x_DOMFrame.Attribute("name") != null)
                         {
                             if (((string)x_DOMFrame.Attribute("labelType")!) != "name")
                             {
                                 throw new PAMException("invalid_domframe_name", (string)x_DOMFrame.Attribute("labelType")!);
                             }
-                            main_sprite_frame[frame_index].label = ((string)x_DOMFrame.Attribute("name")!);
+                            main_sprite_frame[frame_index].label = (string)x_DOMFrame.Attribute("name")!;
                         }
                         var x_Actionscript_list = x_DOMFrame.Elements("Actionscript").ToArray();
                         if (x_Actionscript_list.Length == 0)
@@ -1662,7 +1670,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var x_layers = x_layers_list[0];
             var x_DOMLayer_list = x_layers.Elements("DOMLayer").ToList();
             x_DOMLayer_list.Reverse();
+            var x_DOMlayer_Check = x_DOMLayer_list[0];
+            x_DOMLayer_list.RemoveAt(0);
             int layer_count = 0;
+            var allFrames = int.Parse((string)x_DOMlayer_Check.Elements("frames").ToArray()[0].Elements("DOMFrame").ToArray()[0].Attribute("duration")!);
+            if (x_DOMLayer_list.Count < allFrames)
+            {
+                result.AddRange(new FrameInfo[allFrames - result.Count + 1]);
+            }
             var get_frame_at = (int index) =>
             {
                 if (result.Count <= index)
@@ -2078,9 +2093,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             return;
         }
     }
-    public class AlphanumericStringComparer : IComparer<string>
+    public partial class AlphanumericStringComparer : IComparer<string>
     {
-        private static readonly Regex _re = new Regex(@"([0-9]+)");
+        private static readonly Regex _re = MyRegex();
 
         public int Compare(string? x, string? y)
         {
@@ -2119,6 +2134,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
             return x.Length.CompareTo(y.Length);
         }
+
+        [GeneratedRegex(@"([0-9]+)")]
+        private static partial Regex MyRegex();
     }
 
     public class AnimationHelperSetting
@@ -2263,7 +2281,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         private static List<ImageSequenceList> ReadSprite(int index, SpriteInfo sprite, SpriteInfo[] sub_sprite, Dictionary<int, List<ImageSequenceList>> imageSequenceList, Dictionary<int, List<ImageSequenceList>> spriteList, int[] disableSprite, Dictionary<int, List<ImageSequenceList>> mainSpriteFrame)
         {
-            var frame_node_list = PAM_Animation.DecodeFrameNodeList(index, sprite, sub_sprite);
+            var frame_node_list = PAM_Animation.DecodeFrameNodeList(sprite, sub_sprite);
             var frame_keys = frame_node_list.Keys.OrderBy(key => key).ToList();
             var spriteImageList = new List<ImageSequenceList>();
             foreach (var layer_index in frame_keys)
