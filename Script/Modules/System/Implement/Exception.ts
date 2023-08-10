@@ -418,6 +418,9 @@ namespace Sen.Script.Modules.Exceptions {
             this.name = Sen.Script.Modules.System.Default.Localization.GetString("flash_animation_resize_error");
         }
     }
+    /**
+     * Structure
+     */
 
     export class ResizeImageError extends Error {
         protected _file_path: string;
@@ -438,6 +441,9 @@ namespace Sen.Script.Modules.Exceptions {
             this._code = new_code;
         }
     }
+    /**
+     * Structure
+     */
 
     export class UnknownFormat<T> extends ResizeImageError {
         private _format: T;
@@ -454,6 +460,9 @@ namespace Sen.Script.Modules.Exceptions {
             this._format = new_format;
         }
     }
+    /**
+     * Structure
+     */
 
     export class JSONParseSyntaxError extends Error {
         protected _file_path: string;
@@ -470,26 +479,35 @@ namespace Sen.Script.Modules.Exceptions {
             this._file_path = new_file_location;
         }
     }
+    /**
+     * Structure
+     */
 
     export class JSONParseTrailingCommasError extends JSONParseSyntaxError {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "this_json_trailing_commas";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("this_json_trailing_commas");
         }
     }
+    /**
+     * Structure
+     */
 
     export class JSONParseTypeError extends JSONParseSyntaxError {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "this_json_has_type_error";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("this_json_has_type_error");
         }
     }
+    /**
+     * Structure
+     */
 
     export class JSONPatchOperationError extends Error {
         protected _operation: string;
         public constructor(message: string, operation: string) {
             super(message);
-            this.name = "this_json_has_type_error";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("this_json_has_type_error");
             this._operation = operation;
         }
 
@@ -501,12 +519,15 @@ namespace Sen.Script.Modules.Exceptions {
             this._operation = new_operation;
         }
     }
+    /**
+     * Structure
+     */
 
     export class WrongPropertyValue extends MissingProperty {
         protected _additional_message: string = "";
         public constructor(error: string, property: string, file_path: string, additional_message?: string) {
             super(error, property, file_path);
-            this.name = "wrong_property_value";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("wrong_property_value");
             if (additional_message !== null && additional_message !== undefined && additional_message !== void 0 && typeof additional_message === "string") {
                 this._additional_message = additional_message;
             }
@@ -519,12 +540,19 @@ namespace Sen.Script.Modules.Exceptions {
         }
     }
 
+    /**
+     * Structure
+     */
+
     export class WrongFile extends MissingFile {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "wrong_file_type";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("wrong_file_type");
         }
     }
+    /**
+     * Structure
+     */
 
     export class BrokenFile extends WrongFile {
         public constructor(message: string, file_path: string, name: string) {
@@ -532,13 +560,15 @@ namespace Sen.Script.Modules.Exceptions {
             this.name = name;
         }
     }
+    /**
+     * Structure
+     */
 
     export class InvalidRange extends Error {
         protected _file_path: string;
         public constructor(message: string, file_path: string) {
             super(message);
-            1;
-            this.name = "invalid_range";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("invalid_range");
             this._file_path = Sen.Shell.Path.Resolve(file_path);
         }
         public get file_path(): string {
@@ -549,26 +579,42 @@ namespace Sen.Script.Modules.Exceptions {
         }
     }
 
+    /**
+     * Structure
+     */
+
     export class DOMDocumentError extends InvalidRange {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "domdocument_error";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("domdocument_error");
         }
     }
+
+    /**
+     * Structure
+     */
 
     export class ImageXMLError extends DOMDocumentError {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "image_error";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("image_error");
         }
     }
+
+    /**
+     * Structure
+     */
 
     export class SpriteXMLError extends ImageXMLError {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "sprite_error";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("sprite_error");
         }
     }
+
+    /**
+     * Structure
+     */
 
     export class ResourceDataTypeContainerStrictlyRequirement extends ImageXMLError {
         public constructor(message: string, file_path: string, name: string) {
@@ -577,33 +623,53 @@ namespace Sen.Script.Modules.Exceptions {
         }
     }
 
+    /**
+     * Structure
+     */
+
     export class EncodingError extends ImageXMLError {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "encoding_error";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("encoding_error");
         }
     }
+
+    /**
+     * Structure
+     */
 
     export class ReadPathFailed extends ImageXMLError {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "cannot_read_path";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("cannot_read_path");
         }
     }
+
+    /**
+     * Structure
+     */
 
     export class UnsupportedDataType extends ReadPathFailed {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "unsupported_data_type";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("unsupported_data_type");
         }
     }
+
+    /**
+     * Structure
+     */
 
     export class UnsupportedFileType extends UnsupportedDataType {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "unsupported_file_type";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("unsupported_file_type");
         }
     }
+
+    /**
+     * Structure
+     */
 
     export class CannotWriteFile extends MissingFile {
         public constructor(message: string, file_path: string) {
@@ -611,33 +677,19 @@ namespace Sen.Script.Modules.Exceptions {
             this.name = Sen.Script.Modules.System.Default.Localization.GetString("cannot_write_file");
         }
     }
-
-    export class CannotReadFileSystem extends MissingFile {
-        public constructor(message: string, file_path: string, write_template: "directory" | "file" | "unknown") {
-            super(message, file_path);
-            switch (write_template) {
-                case "directory": {
-                    this.name = "cannot_read_file".replace(/\{\}/g, "directory");
-                    break;
-                }
-                case "file": {
-                    this.name = "cannot_read_file".replace(/\{\}/g, "file");
-                    break;
-                }
-                default: {
-                    this.name = "cannot_read_file".replace(/\{\}/g, "file_or_directory");
-                    break;
-                }
-            }
-        }
-    }
+    /**
+     * Structure
+     */
 
     export class ExtensionDoesNotMeetsRequirement extends MissingFile {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "cannot_read_file";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("cannot_read_file");
         }
     }
+    /**
+     * Structure
+     */
 
     export class PitchError extends MissingFile {
         private _should_be: string;
@@ -652,13 +704,19 @@ namespace Sen.Script.Modules.Exceptions {
             this._should_be = should_be;
         }
     }
+    /**
+     * Structure
+     */
 
     export class JoinImageError extends MissingFile {
         public constructor(message: string, file_path: string) {
             super(message, file_path);
-            this.name = "cannot_read_file";
+            this.name = Sen.Script.Modules.System.Default.Localization.GetString("cannot_read_file");
         }
     }
+    /**
+     * Structure
+     */
 
     export class AlreadyExists extends JoinImageError {
         public constructor(message: string, file_path: string) {
@@ -677,6 +735,9 @@ namespace Sen.Script.Modules.Exceptions {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("exception_type")}${exception_type}`);
         return;
     }
+    /**
+     * Structure
+     */
 
     export class WrongListSize extends JoinImageError {
         public constructor(message: string, file_path: string) {
@@ -800,7 +861,7 @@ namespace Sen.Script.Modules.Exceptions {
                     const message: string = (error as Sen.Script.Modules.Exceptions.MissingProperty).message;
                     const location: string = (error as Sen.Script.Modules.Exceptions.MissingProperty).file_path;
                     const property: string = (error as Sen.Script.Modules.Exceptions.MissingProperty).property;
-                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_property_is"} "${property}"`);
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${Sen.Script.Modules.System.Default.Localization.GetString("and_property_is")} "${property}"`);
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                     Sen.Script.Modules.Exceptions.ExecutionError(message);
                     break;
@@ -810,7 +871,7 @@ namespace Sen.Script.Modules.Exceptions {
                     const message: string = (error as Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined).message;
                     const location: string = (error as Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined).file_path;
                     const property: string = (error as Sen.Script.Modules.Exceptions.PropertyHasNotBeenDefined).property;
-                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${"and_property_is"} "${property}"`);
+                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name} ${Sen.Script.Modules.System.Default.Localization.GetString("and_property_is")} "${property}"`);
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                     Sen.Script.Modules.Exceptions.ExecutionError(message);
                     break;
@@ -1086,15 +1147,6 @@ namespace Sen.Script.Modules.Exceptions {
                     const name: string = (error as Sen.Script.Modules.Exceptions.CannotWriteFile).name;
                     const message: string = (error as Sen.Script.Modules.Exceptions.CannotWriteFile).message;
                     const location: string = (error as Sen.Script.Modules.Exceptions.CannotWriteFile).file_location;
-                    Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
-                    Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
-                    Sen.Script.Modules.Exceptions.ExecutionError(message);
-                    break;
-                }
-                case Sen.Script.Modules.Exceptions.CannotReadFileSystem: {
-                    const name: string = (error as Sen.Script.Modules.Exceptions.CannotReadFileSystem).name;
-                    const message: string = (error as Sen.Script.Modules.Exceptions.CannotReadFileSystem).message;
-                    const location: string = (error as Sen.Script.Modules.Exceptions.CannotReadFileSystem).file_location;
                     Sen.Script.Modules.Exceptions.ExecutionExceptionType(`${name}`);
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(location);
                     Sen.Script.Modules.Exceptions.ExecutionError(message);
