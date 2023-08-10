@@ -84,7 +84,7 @@ namespace Sen.Script {
             const available: Array<number> = new Array();
             const assets = Sen.Shell.ShellUpdate.SendGetRequest(`https://api.github.com/repos/Haruma-VN/Sen/releases/tags/shell`, "Sen").assets;
             Sen.Shell.Console.Print(2 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `Execution Argument: Please select one Shell below to download`);
-            for (let i: number = 0; i < assets.length; ++i) {
+            for (let i: int = 0; i < assets.length; ++i) {
                 const k_index: int = i + 1;
                 available.push(k_index);
                 Sen.Shell.Console.Printf(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${k_index}. ${assets[i].name}`);

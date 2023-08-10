@@ -1,5 +1,105 @@
 namespace Sen.Script.Modules.Implement.XML {
     /**
+     * Structure
+     */
+
+    export interface DOMDocument {
+        DOMDocument: {
+            "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance";
+            "@frameRate": "30";
+            "@width": string;
+            "@height": string;
+            "@xflVersion": "2.971";
+            "@xmlns": "http://ns.adobe.com/xfl/2008/";
+            folders: {
+                DOMFolderItem: [
+                    {
+                        "@name": "media";
+                        "@isExpanded": "true";
+                    },
+                    {
+                        "@name": "source";
+                        "@isExpanded": "true";
+                    },
+                    {
+                        "@name": "image";
+                        "@isExpanded": "true";
+                    },
+                    {
+                        "@name": "sprite";
+                        "@isExpanded": "true";
+                    }
+                ];
+            };
+            media: {
+                DOMBitmapItem: [
+                    {
+                        "@name": string;
+                        "@href": string;
+                    }
+                ];
+            };
+            symbols: {
+                Include: [
+                    {
+                        "@href": string;
+                    }
+                ];
+            };
+            timelines: DOMTimeline;
+        };
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface DOMFrame {
+        "@index": string;
+        "@name"?: string;
+        "@duration"?: string;
+        "@labelType"?: string;
+        Actionscript?: {
+            script: {
+                "#cdata-section": string;
+            };
+        };
+        elements: null | DOMSymbolInstance[];
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface DOMLayer {
+        "@name": string;
+        frames: {
+            DOMFrame: DOMFrame[];
+        };
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface DOMSymbolInstance {
+        "@libraryItemName": string;
+        "@symbolType": string;
+        "@loop"?: string;
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface DOMTimeline {
+        "@name": string;
+        layers: {
+            DOMLayer: DOMLayer[];
+        };
+    }
+
+    /**
      *
      * @param g_object - JS Object
      * @param handle_bigint - Handle BigInt?
