@@ -343,7 +343,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 else if ((f7 & MoveFlags.Rotate) != 0)
                 {
                     transform = new double[3];
-                    double num9 = PamFile.readUInt16LE() / 1000d;
+                    double num9 = PamFile.readInt16LE() / 1000d;
                     transform[0] = num9;
                 }
                 else
@@ -357,16 +357,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
                 else
                 {
-                    transform[^2] = PamFile.readUInt16LE() / 20d;
-                    transform[^1] = PamFile.readUInt16LE() / 20d;
+                    transform[^2] = PamFile.readInt16LE() / 20d;
+                    transform[^1] = PamFile.readInt16LE() / 20d;
                 }
                 if ((f7 & MoveFlags.SrcRect) != 0)
                 {
                     source_rectangle = new int[4];
-                    source_rectangle[0] = PamFile.readUInt16LE() / 20;
-                    source_rectangle[1] = PamFile.readUInt16LE() / 20;
-                    source_rectangle[2] = PamFile.readUInt16LE() / 20;
-                    source_rectangle[3] = PamFile.readUInt16LE() / 20;
+                    source_rectangle[0] = PamFile.readInt16LE() / 20;
+                    source_rectangle[1] = PamFile.readInt16LE() / 20;
+                    source_rectangle[2] = PamFile.readInt16LE() / 20;
+                    source_rectangle[3] = PamFile.readInt16LE() / 20;
                 }
                 if ((f7 & MoveFlags.Color) != 0)
                 {
@@ -1547,14 +1547,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         {
                             throw new PAMException("invalid_script_cdata_value", ((XCData)x_script_text).Value.Trim());
                         }
-                        if (frame_index < lastFrame)
-                        {
-                            main_sprite_frame[frame_index].stop = true;
-                        }
-                        else if (frame_index >= lastFrame)
-                        {
-                            main_sprite_frame[lastFrame - 1].stop = true;
-                        }
+                        main_sprite_frame[frame_index].stop = true;
                     });
                 }
                 {
@@ -1674,10 +1667,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             x_DOMLayer_list.RemoveAt(0);
             int layer_count = 0;
             var allFrames = int.Parse((string)x_DOMlayer_Check.Elements("frames").ToArray()[0].Elements("DOMFrame").ToArray()[0].Attribute("duration")!);
-            if (x_DOMLayer_list.Count < allFrames)
-            {
-                result.AddRange(new FrameInfo[allFrames - result.Count + 1]);
-            }
+            
             var get_frame_at = (int index) =>
             {
                 if (result.Count <= index)
@@ -1849,6 +1839,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 });
                 colse_current_model_if_need();
             });
+            if (result.Count < allFrames)
+            {
+                result.AddRange(new FrameInfo[allFrames - result.Count + 1]);
+            }
             for (int i = 0; i < result.Count; ++i)
             {
                 if (result[i] == null)
