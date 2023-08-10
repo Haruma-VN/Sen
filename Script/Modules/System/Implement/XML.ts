@@ -32,19 +32,15 @@ namespace Sen.Script.Modules.Implement.XML {
                 ];
             };
             media: {
-                DOMBitmapItem: [
-                    {
-                        "@name": string;
-                        "@href": string;
-                    }
-                ];
+                DOMBitmapItem: Array<{
+                    "@name": string;
+                    "@href": string;
+                }>;
             };
             symbols: {
-                Include: [
-                    {
-                        "@href": string;
-                    }
-                ];
+                Include: Array<{
+                    "@href": string;
+                }>;
             };
             timelines: DOMTimeline;
         };
