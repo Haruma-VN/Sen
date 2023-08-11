@@ -1839,13 +1839,13 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 });
                 colse_current_model_if_need();
             });
-            if (result.Count < allFrames)
+            if (result.Count <= allFrames)
             {
                 result.AddRange(new FrameInfo[allFrames - result.Count + 1]);
             }
-            for (int i = 0; i < result.Count; ++i)
+            for (var i = 0; i < result.Count; ++i)
             {
-                if (result[i] == null)
+                if (result[i] is null)
                 {
                     result[i] = new()
                     {
