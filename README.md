@@ -31,7 +31,7 @@
 
 -   My Personal Mail: harumavn@outlook.com
 -   My Discord: Haruma#3635
--   Join Sen discord server for more help: [Discord Server](https://discord.gg/C2Xr2kaBYJ)
+-   Join Sen discord server for more help: [Discord Server](https://discord.gg/UKJK3j7KGn)
 -   Issues relate to `Sen` or any requests: [GitHub Issues](https://github.com/Haruma-VN/Sen/issues)
 
 ## Final Words
