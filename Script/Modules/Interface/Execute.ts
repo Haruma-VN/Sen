@@ -1106,7 +1106,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
-                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(`${argument}`, `extra.json`))
+                            Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(`${argument}`, `struct.json`))
                         );
                         try {
                             Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(argument, output_argument, extra);
@@ -1118,7 +1118,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.pam`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
-                                Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(`${arg}`, `extra.json`))
+                                Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(`${arg}`, `struct.json`))
                             );
                             try {
                                 Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(arg, output_argument, extra);

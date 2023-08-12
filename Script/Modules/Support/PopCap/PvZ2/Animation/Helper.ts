@@ -152,7 +152,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
             image: [],
         };
         const extra_info: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
-            Sen.Shell.Path.Join(`${xfl_path}`, `extra.json`)
+            Sen.Shell.Path.Join(`${xfl_path}`, `struct.json`)
         );
         const image: Array<string> = Object.keys(extra_info.image);
         const calculate_resolution: double = CalculateResolution(resolution);
@@ -257,7 +257,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
             Sen.Shell.FileSystem.ReadText(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `DOMDocument.xml`)), Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `DOMDocument.xml`))
         );
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `extra.json`)), extra_info, false);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${xfl_path}`, `struct.json`)), extra_info, false);
         return;
     }
 }

@@ -975,7 +975,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var spriteDocument = WriteSpriteDocument(i, DecodeFrameNodeList(AnimationJson.sprite[i], AnimationJson.sprite));
                 SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "sprite", $"sprite_{i + 1}.xml")), spriteDocument, xflns);
             }
-            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main_sprite.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
+            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
             SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "DomDocument.xml")), WriteDomDocument(AnimationJson), xflns);
             fs.WriteText(path.Resolve(path.Join(outFolder, "main.xfl")), k_xfl_content, EncodingType.ASCII);
             var extraInfo = new ExtraInfo()
@@ -1259,7 +1259,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         )
                     ).ToArray(),
                     new XElement("Include",
-                        new XAttribute("href", "main_sprite.xml")
+                        new XAttribute("href", "main.xml")
                     )
                 ),
                 new XElement("timelines",
@@ -1431,7 +1431,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     image = extra.image!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "image", $"image_{i + 1}.xml"))))).ToArray(),
                     sprite = extra.sprite!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "sprite", $"sprite_{i + 1}.xml"))))).ToArray(),
-                    main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main_sprite.xml")))
+                    main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main.xml")))
                 }
             };
             PAMInfo AnimationJson = ParseMainDocument(PAMRipe);
