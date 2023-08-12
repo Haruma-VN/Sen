@@ -165,8 +165,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
         private static RSG_head ReadRSG_Head(SenBuffer RsgFile)
         {
-            RSG_head HeadInfo = new RSG_head();
-            string magic = RsgFile.readString(4);
+            var HeadInfo = new RSG_head();
+            var magic = RsgFile.readString(4);
             if (magic != RSG_head.magic) 
             {
                 throw new Exception("mismatch_rsg_magic");
@@ -200,9 +200,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
         private static byte[] CheckZlib(SenBuffer RsgFile, RSG_head HeadInfo, bool atlasInfo)
         {
-            bool ZlibHeaderCheck(byte[] RSGData)
+            static bool ZlibHeaderCheck(byte[] RSGData)
             {
-                for (int i = 0; i < ZlibLevelCompression.GetLength(0); i++)
+                for (var i = 0; i < ZlibLevelCompression.GetLength(0); i++)
                 {
                     if (RSGData[0] == ZlibLevelCompression[i, 0] && RSGData[1] == ZlibLevelCompression[i, 1])
                     {
@@ -211,6 +211,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 }
                 return true;
             }
+
             var Compress = new Compress();
             if (atlasInfo)
             {
@@ -238,7 +239,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
         private static void FileListSplit(SenBuffer RsgFile, RSG_head HeadInfo)
         {
-            var json = new JsonImplement();
             var nameDict = new List<NameDict>();
             string namePath = "";
             int tempOffset = HeadInfo.fileList_Offset;

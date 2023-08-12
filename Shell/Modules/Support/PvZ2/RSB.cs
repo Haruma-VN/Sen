@@ -4,7 +4,8 @@ using Sen.Shell.Modules.Support.PvZ2.RSG;
 using VCDiff.Encoders;
 using VCDiff.Decoders;
 using Newtonsoft.Json;
-
+using System.Text.RegularExpressions;
+using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSB
 {
@@ -310,7 +311,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             {
                 if (compositeInfo[i].name.ToUpper() != compositeList[i].namePath.ToUpper().Replace("_COMPOSITESHELL", ""))
                 {
-                    throw new Exception($"Invalid composite index: {compositeInfo[i].name}");
+                    throw new Exception(Regex.Replace(Localization.GetString("invalid_composite_name"), compositeInfo[i].name, @"\{\}"));
                 }
                 var subGroupList = new List<SubGroupInfo>();
                 for (var k = 0; k < compositeInfo[i].packetNumber; k++)
@@ -336,12 +337,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     }
                     if (rsgInfoList[rsgInfoCount].name.ToUpper() != rsgList[rsgListCount].namePath.ToUpper())
                     {
-                        throw new Exception($"Invalid RSG Name: {rsgInfoList[rsgInfoCount].name} || {rsgList[rsgListCount].namePath} in poolIndex: {packetIndex}");
+                        throw new Exception($"{Localization.GetString("invalid_rsg_name")}: {rsgInfoList[rsgInfoCount].name}  {rsgList[rsgListCount].namePath} {Localization.GetString("in_pool_index")}: {packetIndex}");
                     };
                     rsgNameList.Add(rsgInfoList[rsgInfoCount].name);
                     byte[] packetFile = RSBFile.getBytes(rsgInfoList[rsgInfoCount].rsgLength, (long)rsgInfoList[rsgInfoCount].rsgOffset);
-                    SenBuffer RSGFile = new SenBuffer(packetFile);
-                    PacketInfo packetInfo = RSGFunction.Unpack(RSGFile, "", false, true);
+                    var RSGFile = new SenBuffer(packetFile);
+                    var packetInfo = RSGFunction.Unpack(RSGFile, "", false, true);
                     var resInfoList = new List<RSBResInfo>();
                     var fileListLength = fileList.Count;
                     var ptxBeforeNumber = rsgInfoList[rsgInfoCount].ptxBeforeNumber;

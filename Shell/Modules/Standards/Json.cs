@@ -1,4 +1,5 @@
-﻿using System.Text.Encodings.Web;
+﻿using Newtonsoft.Json.Linq;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -17,6 +18,16 @@ namespace Sen.Shell.Modules.Standards
     {
         public abstract string Get(string property, string LanguageDirectory, string Language);
 
+    }
+
+    public class Entry
+    {
+        public required Default @default;
+    }
+
+    public class Default
+    {
+        public required string language;
     }
 
     public class Localization : Localization_Abstract
@@ -42,6 +53,16 @@ namespace Sen.Shell.Modules.Standards
                 #pragma warning disable CS8603
                 return value.GetString();
             }
+        }
+
+        public static string GetString(string json_key)
+        {
+            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
+            var local = new Localization();
+            return local.Get(json_key,path.Join(Sen.Shell.Program.Script_Directory, "Modules", "Customization", "Language"),
+                (string)Newtonsoft.Json.JsonConvert.DeserializeObject<Entry>(fs.ReadText(path.Join(Sen.Shell.Program.Script_Directory, "Modules", "Customization", "entry.json"), IOModule.EncodingType.UTF8))!.@default!.language!
+                );
         }
 
     }
