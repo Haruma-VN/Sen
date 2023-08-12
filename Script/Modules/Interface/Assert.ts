@@ -2,6 +2,11 @@ namespace Sen.Script.Modules.Interface.Assert {
     /**
      * Structure
      */
+
+    export type ArgumentType = "file" | "directory" | "unknown";
+    /**
+     * Structure
+     */
     export interface RequestArgument<Argument extends string> {
         argument?: Argument;
         method: string | null;
@@ -95,6 +100,8 @@ namespace Sen.Script.Modules.Interface.Assert {
                     }
                 } else {
                     try {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("type_of_argument"));
+                        Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.ObtainArgumentType(Sen.Script.Modules.System.Default.Localization.GetString(arg.argument!))}`);
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("method_obtained_by_default"));
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString(arg.method!)} | ${arg.method}`);
                         Sen.Script.Modules.Interface.Execute.Evaluate(arg.method as unknown as Sen.Script.Modules.Interface.Execute.function_name, arg.argument!);
@@ -105,6 +112,22 @@ namespace Sen.Script.Modules.Interface.Assert {
             });
         }
         return;
+    }
+
+    /**
+     *
+     * @param argument - Pass argument
+     * @returns
+     */
+
+    export function ObtainArgumentType(argument: string): ArgumentType {
+        if (Sen.Shell.FileSystem.FileExists(argument)) {
+            return "file";
+        } else if (Sen.Shell.FileSystem.DirectoryExists(argument)) {
+            return "directory";
+        } else {
+            return "unknown";
+        }
     }
 
     /**

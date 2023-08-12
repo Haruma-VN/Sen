@@ -765,7 +765,9 @@ namespace Sen.Script.Modules.Exceptions {
      */
 
     export function ExecutionError(message: string): void {
-        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, `${message}`)}`);
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, ``)}`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${message}`);
+
         return;
     }
 
@@ -1200,7 +1202,8 @@ namespace Sen.Script.Modules.Exceptions {
                 default: {
                     Sen.Script.Modules.Exceptions.ExecutionLoadedFrom(((error as any).file_path ??= "undefined"));
                     (error as any).message = Sen.Script.Modules.System.Default.Localization.GetString((error as Sen.Shell.DotNetSystem.Exception).message);
-                    Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, (error as any).message)}`);
+                    Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, "")}`);
+                    Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${(error as any).message}`);
                     break;
                 }
             }
@@ -1256,12 +1259,24 @@ namespace Sen.Script.Modules.Exceptions {
         return "";
     }
 
+    /**
+     *
+     * @param stack - Provide stack
+     * @returns
+     */
+
     export function FormatError(stack: string): string {
         while (stack.startsWith(" ")) {
             stack = stack.slice(1);
         }
         return stack;
     }
+
+    /**
+     *
+     * @param errorString - Provide error string
+     * @returns
+     */
 
     export function CatchException(errorString: string): void {
         const regexPattern: RegExp = /(.+)\s(.+):(\d+):(\d+)/;

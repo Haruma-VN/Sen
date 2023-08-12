@@ -500,5 +500,17 @@
     "unsupported_data_type": "Unsupported Data Type",
     "unsupported_file_type": "Unsupported File Type",
     "cannot_read_file": "Cannot Read File",
-    "and_property_is": "and property is"
+    "and_property_is": "and property is",
+    "type_of_argument": "Argument Type:",
+    "directory": "Directory",
+    "file": "File",
+    "now_executing_argument": "Now Executing Argument:",
+    "this_function_only_support_single_file": "This Function only supports single file",
+    "this_function_only_support_directory": "This Function only supports directory",
+    "for_packing_rsb_purpose_please_use": "For Packing RSB again please use:",
+    "argument_option": "Argument Option:",
+    "invalid_composite_name": "Invalid Composite Shell Name -> {}",
+    "invalid_rsg_name": "Invalid RSG Name",
+    "in_pool_index": "in pool index",
+    "invalid_packet_width": "Invalid Width"
 }

@@ -177,7 +177,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "pvz2_remote_android_helper": {
                     if (!Array.isArray(argument)) {
-                        Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.WatchFile(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.Helper>(argument));
+                        if (Sen.Shell.FileSystem.FileExists(argument)) {
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.WatchFile(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Android.Remote.Helper>(argument));
+                        } else {
+                            throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString("this_function_only_support_single_file"), `undefined`);
+                        }
                     }
                     break;
                 }
@@ -354,25 +358,19 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bundle`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(argument, output_argument);
-                        Sen.Shell.Console.Print(
-                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Magenta,
-                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("please_use_for_more"), [
-                                Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource"),
-                                Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory"),
-                            ])
-                        );
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("for_packing_rsb_purpose_please_use"));
+                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource")}`);
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("argument_option"));
+                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory")}`);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bundle`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(arg, output_argument);
-                            Sen.Shell.Console.Print(
-                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Magenta,
-                                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("please_use_for_more"), [
-                                    Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource"),
-                                    Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory"),
-                                ])
-                            );
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("for_packing_rsb_purpose_please_use"));
+                            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource")}`);
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("argument_option"));
+                            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory")}`);
                         });
                     }
                     break;
