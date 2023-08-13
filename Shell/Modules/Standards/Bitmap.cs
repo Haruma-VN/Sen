@@ -3,6 +3,7 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Formats.Gif;
 using Image = SixLabors.ImageSharp.Image;
 using Sen.Shell.Modules.Helper;
+using System.Runtime.InteropServices;
 
 namespace Sen.Shell.Modules.Standards.Bitmap
 {
@@ -76,7 +77,7 @@ namespace Sen.Shell.Modules.Standards.Bitmap
             get { return this._file_path; }
             set
             {
-                if(value != null)
+                if(value is not null)
                 {
                     this._file_path = value;
                 }
@@ -137,7 +138,6 @@ namespace Sen.Shell.Modules.Standards.Bitmap
         public abstract void ExportAnimatedGif(AnimatedGifOption option);
 
         public abstract void CreateAPNG(GenerateAPNG g_option);
-
 
     }
 

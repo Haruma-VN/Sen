@@ -15,6 +15,9 @@ typedef uLongf ZlibUnsignedLongFloat;
 
 typedef uint8_t Uint8Array;
 
+typedef std::string String;
+
+
 #define InternalAPI extern "C" __declspec(dllexport) 
 
 InternalAPI

@@ -15,9 +15,12 @@
 #include <cstdint>
 #include <corecrt_io.h>
 #include <regex>
+#include "dependencies/libpng/png.h"
 #include "dependencies/avir/avir.h"
 
 #define thiz (*this)
 
 #define log(...)\
 	std::cout << __VA_ARGS__ << std::endl;
+
+#define InternalVersion = 1
