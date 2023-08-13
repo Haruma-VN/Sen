@@ -122,7 +122,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                     }
                     const resource_unpack_path: string = `${Sen.Shell.Path.Join(...(worker.path as Array<string>))}`;
                     const resource_popcap_texture_format_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.PtxProperty = worker.ptx_property as Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.PtxProperty;
-                    const resource_popcap_texture_dimension_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo = worker.ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo;
+                    const resource_popcap_texture_dimension_information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo = worker.ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo;
                     const input_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${rsb_unpack_option.rsb_unpack_dir}`, `${resource_unpack_path}`));
                     const output_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `${resource_unpack_path}`));
                     if (resource_popcap_texture_format_information !== null && resource_popcap_texture_dimension_information !== null && rsb_unpack_option.extractAtlas) {

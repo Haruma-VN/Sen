@@ -687,12 +687,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.packet`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGUnpack(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.packet`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGUnpack(arg, output_argument);
                         });
                     }
                     break;
@@ -701,12 +701,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (!Array.isArray(argument)) {
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.rsg`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(argument, output_argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.rsg`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(arg, output_argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(arg, output_argument);
                         });
                     }
                     break;

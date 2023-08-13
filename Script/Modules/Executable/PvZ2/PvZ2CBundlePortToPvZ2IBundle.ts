@@ -146,11 +146,11 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
 
     export function ConvertTextureRSG(file_in: string, file_out: string, format: bigint): void {
         const packet_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(file_in, packet_directory);
-        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGUnpack(file_in, packet_directory);
+        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(
             Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`)
         );
-        information.res.forEach((resource: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo) => {
+        information.res.forEach((resource: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.ResInfo) => {
             let home: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `res`));
             create_nested_directory: for (let i: int = 0; i < (resource.path as Array<string>).length; ++i) {
                 if (i === resource.path.length - 1) {
@@ -174,8 +174,8 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
             Sen.Shell.FileSystem.DeleteFile(png_path);
         });
         information.compression_flags = 0b0011;
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(packet_directory, file_out);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
         return;
     }
@@ -189,13 +189,13 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
 
     export function ConvertCommonRSG(file_in: string, file_out: string): void {
         const packet_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(file_in, packet_directory);
-        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGUnpack(file_in, packet_directory);
+        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(
             Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`)
         );
         information.compression_flags = 0b0011;
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(packet_directory, file_out);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
         return;
     }

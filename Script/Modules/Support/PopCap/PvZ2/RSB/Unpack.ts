@@ -86,7 +86,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
     export interface ResInfo {
         path: string | string[];
-        ptx_info?: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo;
+        ptx_info?: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo;
         ptx_property?: PtxProperty;
     }
 

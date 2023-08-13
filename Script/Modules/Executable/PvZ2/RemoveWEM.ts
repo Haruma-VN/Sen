@@ -65,10 +65,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveWEM {
         const streamingwave_rsg: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${option.bundle}`, `packet`, `StreamingWave.rsg`));
         const streamingwave_dir: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${option.bundle}`, `packet`, `StreamingWave.packet`));
         if (Sen.Shell.FileSystem.FileExists(streamingwave_rsg)) {
-            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(streamingwave_rsg, streamingwave_dir);
+            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGUnpack(streamingwave_rsg, streamingwave_dir);
             const packet_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${streamingwave_dir}`, `packet.json`));
-            const packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(packet_path);
-            packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo, index: int) => {
+            const packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(packet_path);
+            packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.ResInfo, index: int) => {
                 if (option.removeID.includes(res.path.at(-1)?.toLowerCase() as string)) {
                     delete packet_info.res[index];
                 }
@@ -96,8 +96,8 @@ namespace Sen.Script.Modules.Executable.PvZ2.RemoveWEM {
                 ),
                 false
             );
-            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(packet_path, packet_info, false);
-            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(streamingwave_dir, streamingwave_rsg);
+            Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(packet_path, packet_info, false);
+            Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(streamingwave_dir, streamingwave_rsg);
             Sen.Shell.FileSystem.DeleteDirectory([streamingwave_dir]);
         }
         return;

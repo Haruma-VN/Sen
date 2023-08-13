@@ -11,7 +11,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         const global_data_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `Global_Data.rsg`));
         const global_data_bundle: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `Global_Data.rsg.packet`));
         Sen.Shell.FileSystem.CreateDirectory(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(global_data_bundle, `STREAMINGWAVES`, `GLOBAL_DATA`)));
-        const global_data_res: Array<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.ResInfo> = [];
+        const global_data_res: Array<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.ResInfo> = [];
         const global_data_res_clone: Array<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ResInfo> = [];
         for (const res_index in streaming_wave_packet_info.res) {
             const wem_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${streaming_wave_bundle}`, `${streaming_wave_packet_info.res[res_index].path as string}`));
@@ -83,7 +83,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
      * @returns Texture format
      */
 
-    export function ConvertFormat(bundle_directory: string, atlas_name: string, ptx_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo, atlas_format: number, compress_ptx: boolean): number {
+    export function ConvertFormat(bundle_directory: string, atlas_name: string, ptx_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo, atlas_format: number, compress_ptx: boolean): number {
         const ptx_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `unpack`, atlas_name as string));
         const png_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `convert`, atlas_name as string).replace(/((\.ptx))?$/i, `.png`));
         if (!Sen.Shell.FileSystem.DirectoryExists(Sen.Shell.Path.Dirname(png_path))) Sen.Shell.FileSystem.CreateDirectory(Sen.Shell.Path.Dirname(png_path));
@@ -91,15 +91,15 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
             Sen.Shell.TextureHandler.Create_RGBA8888_Decode(
                 ptx_path,
                 png_path,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo).width as number,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo).height as number
+                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
+                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
             );
         } else if (atlas_format === 147) {
             Sen.Shell.TextureHandler.Create_ETC1_RGB_A8_Decode(
                 ptx_path,
                 png_path,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo).width as number,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PtxInfo).height as number
+                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
+                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
             );
         }
         compress_ptx && atlas_format === 147
@@ -150,7 +150,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                                 compress_ptx
                             );
                         }
-                        const rsg_packetinfo: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = information.group[group].subgroup[subgroup].packet_info;
+                        const rsg_packetinfo: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = information.group[group].subgroup[subgroup].packet_info;
                         rsg_packetinfo.res.forEach((res) => {
                             res.path = (res.path as Array<string>).join("\\");
                         });
@@ -187,7 +187,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
     export function RewriteResources(bundle_directory: string, manifest_packet_name: string, input_resolution: number): void {
         const manifest_rsg_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `${manifest_packet_name}.rsg`));
         const manifest_rsg_bundle_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `${manifest_packet_name}.bundle`));
-        const manifest_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Shell.PvZ2Shell.RSGUnpack(manifest_rsg_path, `${manifest_rsg_bundle_directory}`, false);
+        const manifest_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Shell.PvZ2Shell.RSGUnpack(manifest_rsg_path, `${manifest_rsg_bundle_directory}`, false);
         const res_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, manifest_packet_info.res[0].path as string));
         const res_json_argument: string = res_argument.replace(/((\.rton))?$/i, `.json`);
         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(res_argument, res_json_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);

@@ -1388,14 +1388,14 @@ declare namespace Sen {
              * @param useResDirectory - Want to use res dir or not
              */
 
-            export function RSGUnpack(inFile: string, outFolder: string, useResDirectory: boolean = true): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+            export function RSGUnpack(inFile: string, outFolder: string, useResDirectory: boolean = true): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo;
             /**
              *
              * @param inDirectory - Pass RSG packet directory path
              * @param outFile - Out File
              */
 
-            export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo, useResDirectory: boolean = true): void;
+            export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo, useResDirectory: boolean = true): void;
             /**
              *
              * @param inFile - Pass RSB file path
@@ -1575,7 +1575,7 @@ declare namespace Sen {
              * @returns True/false
              */
 
-            export function IsPopCapRSG(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGAbnormal;
+            export function IsPopCapRSG(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGAbnormal;
 
             /**
              *
@@ -1584,7 +1584,7 @@ declare namespace Sen {
 
             export function RewriteSlot(resource: Resources_Group_Structure_Template, outfile: string): void;
 
-            // export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo, useResDirectory: boolean = true): void;
+            // export function RSGPack(inDirectory: string, outFile: string, packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo, useResDirectory: boolean = true): void;
 
             /**
              * Structure
@@ -1597,7 +1597,7 @@ declare namespace Sen {
 
                 readonly useResDirectory: false;
 
-                packet: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo;
+                packet: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo;
             }
 
             /**

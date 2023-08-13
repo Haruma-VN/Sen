@@ -221,12 +221,12 @@ namespace Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB {
 
     export function ConvertAbnormalRSG(file_in: string, file_out: string): void {
         const packet_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGUnpack(file_in, packet_directory);
-        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGUnpack(file_in, packet_directory);
+        const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(
             Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`)
         );
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, false);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGPack(packet_directory, file_out);
+        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, false);
+        Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
         return;
     }
@@ -248,14 +248,14 @@ namespace Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB {
             subgroups.forEach((subgroup: string) => {
                 const rsg_original: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.import_bundle, `packet`, `${subgroup}.rsg`));
                 switch (Sen.Shell.PvZ2Shell.IsPopCapRSG(rsg_original)) {
-                    case Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGAbnormal.Header: {
+                    case Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGAbnormal.Header: {
                         Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB.ConvertAbnormalRSG(rsg_original, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.current_bundle, `packet`, `${subgroup}.rsg`)));
                         break;
                     }
-                    case Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGAbnormal.NotASCIISmartpath: {
+                    case Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGAbnormal.NotASCIISmartpath: {
                         throw new Sen.Script.Modules.Exceptions.EvaluateError(Sen.Script.Modules.System.Default.Localization.GetString(`rsg_abnormal_contains_non_ascii_smartpart`), subgroup);
                     }
-                    case Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Encode.RSGAbnormal.None: {
+                    case Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGAbnormal.None: {
                         Sen.Shell.FileSystem.CopyFile(rsg_original, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.current_bundle, `packet`, `${subgroup}.rsg`)));
                         break;
                     }
