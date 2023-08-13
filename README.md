@@ -17,6 +17,8 @@
 
 -   `Shell` - Using `.NET 8.0 Runtime` as Console Application Project, create interface and has various functions inside it.
 
+-   `Internal` - Using `CMAKE` for cross-platform and C++ Standards to provide additional function to the `Shell`.
+
 -   `Script` - Script control flows of the tool.
 
 ## Acknowledgement
