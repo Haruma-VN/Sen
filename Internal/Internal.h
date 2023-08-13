@@ -15,8 +15,9 @@
 #include <cstdint>
 #include <corecrt_io.h>
 #include <regex>
+#include "dependencies/avir/avir.h"
 
 #define thiz (*this)
 
 #define log(...)\
-	std::cout << ... << std::endl;
+	std::cout << __VA_ARGS__ << std::endl;

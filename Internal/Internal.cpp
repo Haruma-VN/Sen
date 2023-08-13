@@ -54,7 +54,6 @@ inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array*
             uncompressedVector.insert(uncompressedVector.end(), outBuffer.begin(), outBuffer.begin() + strm.total_out - uncompressedVector.size());
         }
     } while (ret == Z_OK);
-
     inflateEnd(&strm);
     *uncompressedDataSize = uncompressedVector.size();
     *uncompressedData = new uint8_t[*uncompressedDataSize];

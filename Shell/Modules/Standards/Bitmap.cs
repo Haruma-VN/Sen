@@ -45,7 +45,7 @@ namespace Sen.Shell.Modules.Standards.Bitmap
         public Generic_T width {
             get { return this._width; }
             set {
-                if(value != null)
+                if(value is not null)
                 {
                     this._width = value;
                 }
@@ -57,7 +57,7 @@ namespace Sen.Shell.Modules.Standards.Bitmap
             get { return this._height; }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     this._height = value;
                 }
