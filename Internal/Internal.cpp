@@ -3,41 +3,49 @@
 
 #include "Internal.h"
 
-#define SenInternalAPI extern "C" __declspec(dllexport) 
+typedef void Void;
 
-SenInternalAPI
-inline unsigned char* ZlibCompress(const unsigned char* data, size_t dataSize, int level, size_t & compressedSize) {
-    uLongf destSize = compressBound(dataSize);
-    unsigned char* compressedData = new unsigned char[destSize];
+typedef unsigned char* UnsignedByteStream;
 
-    int result = compress2(compressedData, &destSize, data, dataSize, level);
+typedef int Integer;
+
+typedef size_t ArraySize;
+
+typedef uLongf ZlibUnsignedLongFloat;
+
+typedef uint8_t Uint8Array;
+
+#define InternalAPI extern "C" __declspec(dllexport) 
+
+InternalAPI
+inline auto ZlibCompress(const UnsignedByteStream data, ArraySize dataSize, Integer level, ArraySize& compressedSize) -> UnsignedByteStream {
+    auto destSize = compressBound(dataSize);
+    auto compressedData = new unsigned char[destSize];
+    auto result = compress2(compressedData, &destSize, data, dataSize, level);
     if (result != Z_OK) {
         delete[] compressedData;
         throw std::runtime_error("Compression failed");
     }
-
     compressedSize = destSize;
     return compressedData;
 }
 
-SenInternalAPI
-inline void ZlibUncompress(const uint8_t* data, int dataSize, uint8_t** uncompressedData, int* uncompressedDataSize) {
-    z_stream strm;
+InternalAPI
+inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array** uncompressedData, Integer* uncompressedDataSize) -> Void {
+    z_stream strm{};
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
     strm.avail_in = dataSize;
     strm.next_in = (Bytef*)data;
-
-    int ret = inflateInit(&strm);
+    auto ret = inflateInit(&strm);
     if (ret != Z_OK) {
         *uncompressedData = nullptr;
         *uncompressedDataSize = 0;
         return;
     }
-
-    std::vector<uint8_t> outBuffer(32768);
-    std::vector<uint8_t> uncompressedVector;
+    std::vector<Uint8Array> outBuffer(32768);
+    std::vector<Uint8Array> uncompressedVector;
     do {
         strm.avail_out = outBuffer.size();
         strm.next_out = (Bytef*)outBuffer.data();
@@ -48,7 +56,6 @@ inline void ZlibUncompress(const uint8_t* data, int dataSize, uint8_t** uncompre
     } while (ret == Z_OK);
 
     inflateEnd(&strm);
-
     *uncompressedDataSize = uncompressedVector.size();
     *uncompressedData = new uint8_t[*uncompressedDataSize];
     memcpy(*uncompressedData, uncompressedVector.data(), *uncompressedDataSize);
