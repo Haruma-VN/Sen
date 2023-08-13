@@ -52,4 +52,5 @@ inline void ZlibUncompress(const uint8_t* data, int dataSize, uint8_t** uncompre
     *uncompressedDataSize = uncompressedVector.size();
     *uncompressedData = new uint8_t[*uncompressedDataSize];
     memcpy(*uncompressedData, uncompressedVector.data(), *uncompressedDataSize);
+    return;
 }
