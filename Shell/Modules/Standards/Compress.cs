@@ -3,6 +3,9 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using ICSharpCode.SharpZipLib.Zip;
+using System.Runtime.InteropServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection.Emit;
 
 namespace Sen.Shell.Modules.Standards
 {
@@ -29,6 +32,14 @@ namespace Sen.Shell.Modules.Standards
         BEST_SPEED,
         BEST_COMPRESSION,
         DEFLATED,
+    }
+
+    public class SenAPI
+    {
+        private const string LibraryModule = $"./Internal";
+
+        [DllImport(LibraryModule)]
+        public static extern IntPtr compress_zlib(byte[] data, int dataSize, int level, out int compressedSize);
     }
 
 
@@ -59,16 +70,12 @@ namespace Sen.Shell.Modules.Standards
                 ZlibCompressionLevel.BEST_COMPRESSION => Deflater.BEST_COMPRESSION,
                 ZlibCompressionLevel.DEFLATED => Deflater.DEFLATED,
                 _ => Deflater.DEFAULT_COMPRESSION,
-
             };
-            using (var outputStream = new MemoryStream())
-            {
-                using (var deflaterStream = new DeflaterOutputStream(outputStream, new Deflater(compressionLevel)))
-                {
-                    deflaterStream.Write(dataStream, 0, dataStream.Length);
-                }
-                return outputStream.ToArray();
-            }
+            int compressedSize;
+            IntPtr compressedDataPtr = SenAPI.compress_zlib(dataStream, dataStream.Length, compressionLevel, out compressedSize);
+            byte[] compressedData = new byte[compressedSize];
+            Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            return compressedData;
 
         }
 

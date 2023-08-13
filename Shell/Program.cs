@@ -2,10 +2,11 @@
 using Sen.Shell.Modules.JavaScript;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.Download;
+using System.Runtime.InteropServices;
 
 namespace Sen.Shell
 {
-     internal class Program
+     public partial class Program
      {
 
         public static readonly string Script_Directory = Platform.CurrentPlatform() switch {
@@ -23,7 +24,7 @@ namespace Sen.Shell
             var SystemConsole = new SystemImplement();
             var path = new ImplementPath();
             var fs = new FileSystem();
-            if (!fs.DirectoryExists(Script_Directory) || !fs.FileExists(path.Resolve(path.Join($"{Script_Directory}","main.js"))))
+            if (!fs.DirectoryExists(Script_Directory) || !fs.FileExists(path.Resolve(path.Join($"{Script_Directory}", "main.js"))))
             {
                 SystemConsole.Print(null, $"Scripts not found, redownloading scripts from github");
                 await GitHub.DownloadScript(Script_Directory, $"https://api.github.com/repos/Haruma-VN/Sen/releases/tags/scripts");

@@ -411,3 +411,28 @@ Script/Modules/Executable/PvZ2/WWise/RemoveBNKEvent.ts
 Script/Modules/Customization/Language/string.json
 Script/test1.ts
 Script/External
+
+# Ignore build output directories
+build/
+out/
+.build/
+
+# Ignore CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# Ignore other common files and directories
+.idea/
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
