@@ -72,7 +72,7 @@ declare namespace Sen {
              * @returns current user platform
              */
 
-            export function CurrentUserPlatform(): string;
+            export function CurrentUserPlatform(): "Linux" | "Windows" | "Macintosh";
 
             /**
              *

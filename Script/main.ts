@@ -107,11 +107,29 @@ namespace Sen.Script {
      */
 
     export function TestShell(): void {
-        if (Sen.Shell.DotNetPlatform.CurrentUserPlatform() === "windows") {
+        if (Sen.Shell.DotNetPlatform.CurrentUserPlatform() === "Windows") {
             if (!Sen.Shell.FileSystem.FileExists(`${Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(Sen.Shell.MainScriptDirectory)}/Sen.exe`)}`)) {
                 throw new Error(`The Shell name must be "Sen.exe" on platform windows`);
             }
         }
+    }
+
+    /**
+     * External Libraries
+     */
+
+    export function DownloadInternal(): void {
+        switch (Sen.Shell.DotNetPlatform.CurrentUserPlatform()) {
+            case "Windows": {
+                const internal_path = `${Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(Sen.Shell.MainScriptDirectory)}/Internal.dll`)}`;
+                if (!Sen.Shell.FileSystem.FileExists(internal_path)) {
+                    Sen.Shell.Console.Print(null, `Internal Not Found, redownload Internal from server`);
+                    Sen.Shell.ShellUpdate.DownloadFromServer(`https://github.com/Haruma-VN/Sen/releases/download/internal/Internal.dll`, internal_path, "Sen");
+                }
+                break;
+            }
+        }
+        return;
     }
 
     /**
@@ -124,6 +142,7 @@ namespace Sen.Script {
         if (Sen.Shell.DotNetPlatform.SenShell === (0 as Sen.Script.Modules.Platform.Constraints.ShellType.Console)) {
             Sen.Shell.DotNetPlatform.SupportUtf8Console();
         }
+        Sen.Script.DownloadInternal();
         Sen.Shell.Console.Print(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `Sen ~ 2.2.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`);
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`);
