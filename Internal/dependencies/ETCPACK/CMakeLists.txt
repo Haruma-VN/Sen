@@ -12,3 +12,8 @@ add_library(
 	./etcpack.cxx
 	./image.cxx
 )
+
+target_link_libraries(
+	${PROJECT_NAME} PRIVATE
+	zlib
+)

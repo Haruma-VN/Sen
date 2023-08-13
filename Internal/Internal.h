@@ -10,3 +10,7 @@
 #include "dependencies/zlib/zlib.h"
 #include <filesystem>
 #include <fstream>
+#include "dependencies/rg_etc1/rg_etc1.h"
+#include <cstdint>
+
+#define thiz (*this)

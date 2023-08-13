@@ -34,12 +34,15 @@ namespace Sen.Shell.Modules.Standards
         DEFLATED,
     }
 
-    public class SenAPI
+    public static class SenAPI
     {
         private const string LibraryModule = $"./Internal";
 
         [DllImport(LibraryModule)]
-        public static extern IntPtr compress_zlib(byte[] data, int dataSize, int level, out int compressedSize);
+        public static extern IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
+
+        [DllImport(LibraryModule)]
+        public static extern void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
     }
 
 
@@ -48,14 +51,13 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] UncompressZlib(byte[] zlibData)
         {
-            using (var outputStream = new MemoryStream())
-            {
-                using (InflaterInputStream inflaterStream = new InflaterInputStream(new MemoryStream(zlibData)))
-                {
-                    inflaterStream.CopyTo(outputStream);
-                }
-                return outputStream.ToArray();
-            }
+            IntPtr uncompressedDataPtr;
+            int uncompressedDataSize;
+            SenAPI.ZlibUncompress(zlibData, zlibData.Length, out uncompressedDataPtr, out uncompressedDataSize);
+            byte[] uncompressedData = new byte[uncompressedDataSize];
+            Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
+            Marshal.FreeHGlobal(uncompressedDataPtr);
+            return uncompressedData;
         }
 
 
@@ -72,7 +74,7 @@ namespace Sen.Shell.Modules.Standards
                 _ => Deflater.DEFAULT_COMPRESSION,
             };
             int compressedSize;
-            IntPtr compressedDataPtr = SenAPI.compress_zlib(dataStream, dataStream.Length, compressionLevel, out compressedSize);
+            IntPtr compressedDataPtr = SenAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out compressedSize);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
             return compressedData;
