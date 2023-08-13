@@ -365,7 +365,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                                     {
                                         if (ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].width != packetInfo.res[m].ptx_info!.width)
                                         {
-                                            throw new Exception($"Invalid item packet width: {fileList[h].namePath}");
+                                            throw new Exception($"{Localization.GetString("invalid_packet_width")}: {fileList[h].namePath}");
                                         }
                                         if (ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].height != packetInfo.res[m].ptx_info!.height)
                                         {
