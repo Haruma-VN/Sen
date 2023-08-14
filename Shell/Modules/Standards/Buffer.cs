@@ -261,7 +261,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public ulong readVarUInt64(long offset = -1)
         {
             fixReadOffset(offset);
-            return (ulong)readVarUInt64();
+            return (ulong)readVarInt64();
         }
 
         public sbyte readInt8(long offset = -1)
