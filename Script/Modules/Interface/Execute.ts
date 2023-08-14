@@ -1526,8 +1526,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
                                 [0, 1],
                                 {
-                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
-                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
+                                    "0": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                    ],
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    ],
                                 },
                                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)),
                                 `use_64_bit_variant`
@@ -1547,8 +1553,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
                                     [0, 1],
                                     {
-                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
-                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
+                                        "0": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                        ],
+                                        "1": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                        ],
                                     },
                                     Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)),
                                     `use_64_bit_variant`
@@ -1935,14 +1947,20 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
                                 [0, 1],
                                 {
-                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
-                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
+                                    "0": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                    ],
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    ],
                                 },
                                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)),
                                 `use_64_bit_variant`
                             ) as 0 | 1
                         );
-                        const output_argument: string = Sen.Shell.Path.Resolve(`${argument}.bin`);
+                        const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(argument)}/${Sen.Shell.Path.Parse(argument).name_without_extension}`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
                             Sen.Shell.PvZ2Shell.PopCapZlibUncompress(argument, use_64bit_variant, output_argument);
@@ -1956,14 +1974,20 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
                                     [0, 1],
                                     {
-                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant")],
-                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("set_this_if_you_using_pvzgames"), Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant")],
+                                        "0": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                        ],
+                                        "1": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                        ],
                                     },
                                     Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_zlib.json`)),
                                     `use_64_bit_variant`
                                 ) as 0 | 1
                             );
-                            const output_argument: string = Sen.Shell.Path.Resolve(`${arg}.bin`);
+                            const output_argument: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(arg)}/${Sen.Shell.Path.Parse(arg).name_without_extension}`);
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
                                 Sen.Shell.PvZ2Shell.PopCapZlibUncompress(arg, use_64bit_variant, output_argument);

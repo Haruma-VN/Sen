@@ -220,7 +220,7 @@
     },
     "popcap_zlib_uncompress": {
         "func_number": 32,
-        "include": [".smf"],
+        "include": [".smf", ".compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
