@@ -85,7 +85,7 @@ namespace Sen.Shell.Modules.Standards
         {
             using var zipStream = new ZipOutputStream(File.Create(zip_output));
             {
-                if (files != null)
+                if (files is not null)
                 {
                     foreach (string file in files)
                     {
@@ -98,7 +98,7 @@ namespace Sen.Shell.Modules.Standards
                     }
                 }
 
-                if (directories != null)
+                if (directories is not null)
                 {
                     foreach (string directory in directories)
                     {
@@ -146,7 +146,7 @@ namespace Sen.Shell.Modules.Standards
             await Task.Run(() =>
             {
                 using var zipStream = new ZipOutputStream(File.Create(zipOutput));
-                if (files != null)
+                if (files is not null)
                 {
                     foreach (string file in files)
                     {
@@ -159,7 +159,7 @@ namespace Sen.Shell.Modules.Standards
                     }
                 }
 
-                if (directories != null)
+                if (directories is not null)
                 {
                     foreach (string directory in directories)
                     {

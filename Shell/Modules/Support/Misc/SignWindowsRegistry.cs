@@ -12,7 +12,7 @@ namespace Sen.Shell.Modules.Support.Misc
             #pragma warning disable CS8600
             using var key = Registry.CurrentUser.OpenSubKey($"Software\\Classes\\{extension}");
             {
-                if (key != null)
+                if (key is not null)
                 {
                     string value = key.GetValue(null) as string;
                     return value == progID;

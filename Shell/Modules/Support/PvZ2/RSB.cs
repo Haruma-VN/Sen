@@ -1211,7 +1211,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             for (var i = 0; i < modifyPacketResInfo.Length; i++)
             {
                 if (oriPacketResInfo[i].path != modifyPacketResInfo[i].path) ThrowError("item path", oriPacketResInfo[i].path, modifyPacketResInfo[i].path);
-                if (oriPacketResInfo[i].ptx_info != null && modifyPacketResInfo[i].ptx_info != null)
+                if (oriPacketResInfo[i].ptx_info is not null && modifyPacketResInfo[i].ptx_info is not null)
                 {
                     if (oriPacketResInfo[i].ptx_info!.id != modifyPacketResInfo[i].ptx_info!.id) ThrowError("item id", oriPacketResInfo[i].ptx_info!.id, modifyPacketResInfo[i].ptx_info!.id);
                     if (oriPacketResInfo[i].ptx_info!.width != modifyPacketResInfo[i].ptx_info!.width) ThrowError("item width", oriPacketResInfo[i].ptx_info!.width, modifyPacketResInfo[i].ptx_info!.width);
@@ -1354,7 +1354,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                         {
                             path = packetInfo.res[h].path
                         };
-                        if (packetInfo.res[h].ptx_info != null)
+                        if (packetInfo.res[h].ptx_info is not null)
                         {
                             resInfo.ptx_info = packetInfo.res[h].ptx_info;
                             resInfo.ptx_property = new PTXProperty
@@ -1654,7 +1654,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     b2 += 16;
                 }
 
-                for (int i = 0; i < rem; i++)
+                for (var i = 0; i < rem; i++)
                     if (data1[len - 1 - i] != data2[len - 1 - i])
                         return false;
 

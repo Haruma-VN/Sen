@@ -338,7 +338,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
 
         public static bool IsNotASCII(string str)
         {
-            for (int i = 0; i < str.Length; i++)
+            for (var i = 0; i < str.Length; i++)
             {
                 if (str[i] > 127)
                 {
@@ -587,7 +587,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSG
                 var rsgRsgInfo = new RSBResInfo{
                     path = packet_info.res[i].path,
                 };
-                if (packet_info.res[i].ptx_info != null) {
+                if (packet_info.res[i].ptx_info is not null) {
                     for (var k = 0; k < part1List.Count; k++) {
                         if (packet_info.res[i].path == part1List[k].path) {
                             rsgRsgInfo.ptx_info = packet_info.res[i].ptx_info;

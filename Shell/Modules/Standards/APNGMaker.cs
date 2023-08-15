@@ -204,9 +204,9 @@ namespace Sen.Shell.Modules.Helper
 
             int left = width, top = height, right = 0, bottom = 0;
 
-            for (int y = 0; y < height; y++)
+            for (var y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (var x = 0; x < width; x++)
                 {
                     if (image[x, y].A != 0)
                     {
@@ -235,12 +235,12 @@ namespace Sen.Shell.Modules.Helper
                 return 0;
             }
 
-            if (x == null)
+            if (x is null)
             {
                 return -1;
             }
 
-            if (y == null)
+            if (y is null)
             {
                 return 1;
             }
@@ -250,7 +250,7 @@ namespace Sen.Shell.Modules.Helper
             var x1 = _re.Split(x);
             var y1 = _re.Split(y);
 
-            for (int i = 0; i < x1.Length && i < y1.Length; i++)
+            for (var i = 0; i < x1.Length && i < y1.Length; i++)
             {
                 if (x1[i] != y1[i])
                 {

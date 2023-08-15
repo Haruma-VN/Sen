@@ -61,7 +61,7 @@ namespace Sen.Shell.Modules.JavaScript.Implement
 
         public int Compare(Buffer otherBuffer)
         {
-            if (otherBuffer == null)
+            if (otherBuffer is null)
                 throw new ArgumentNullException(nameof(otherBuffer));
 
             return Compare(data, otherBuffer.data);
@@ -69,7 +69,7 @@ namespace Sen.Shell.Modules.JavaScript.Implement
 
         public bool Includes(Buffer value)
         {
-            if (value == null)
+            if (value is null)
                 throw new ArgumentNullException(nameof(value));
 
             return Includes(data, value.data);
@@ -77,7 +77,7 @@ namespace Sen.Shell.Modules.JavaScript.Implement
 
         public int IndexOf(Buffer value, int startIndex = 0, int? endIndex = null)
         {
-            if (value == null)
+            if (value is null)
                 throw new ArgumentNullException(nameof(value));
 
             endIndex ??= data.Length;
@@ -87,7 +87,7 @@ namespace Sen.Shell.Modules.JavaScript.Implement
 
         public int LastIndexOf(Buffer value, int? startIndex = null, int? endIndex = null)
         {
-            if (value == null)
+            if (value is null)
                 throw new ArgumentNullException(nameof(value));
 
             startIndex ??= data.Length - 1;
@@ -123,7 +123,7 @@ namespace Sen.Shell.Modules.JavaScript.Implement
 
             int minLength = Math.Min(buffer1.Length, buffer2.Length);
 
-            for (int i = 0; i < minLength; i++)
+            for (var i = 0; i < minLength; i++)
             {
                 if (buffer1[i] < buffer2[i])
                     return -1;
@@ -146,11 +146,11 @@ namespace Sen.Shell.Modules.JavaScript.Implement
             if (buffer.Length < value.Length)
                 return false;
 
-            for (int i = 0; i <= buffer.Length - value.Length; i++)
+            for (var i = 0; i <= buffer.Length - value.Length; i++)
             {
                 bool match = true;
 
-                for (int j = 0; j < value.Length; j++)
+                for (var j = 0; j < value.Length; j++)
                 {
                     if (buffer[i + j] != value[j])
                     {
@@ -177,11 +177,11 @@ namespace Sen.Shell.Modules.JavaScript.Implement
             if (startIndex >= endIndex)
                 return -1;
 
-            for (int i = startIndex; i < endIndex; i++)
+            for (var i = startIndex; i < endIndex; i++)
             {
                 bool match = true;
 
-                for (int j = 0; j < value.Length; j++)
+                for (var j = 0; j < value.Length; j++)
                 {
                     if (buffer[i + j] != value[j])
                     {
@@ -208,11 +208,11 @@ namespace Sen.Shell.Modules.JavaScript.Implement
             if (startIndex <= endIndex)
                 return -1;
 
-            for (int i = startIndex; i >= endIndex; i--)
+            for (var i = startIndex; i >= endIndex; i--)
             {
                 bool match = true;
 
-                for (int j = 0; j < value.Length; j++)
+                for (var j = 0; j < value.Length; j++)
                 {
                     if (buffer[i - j] != value[value.Length - 1 - j])
                     {

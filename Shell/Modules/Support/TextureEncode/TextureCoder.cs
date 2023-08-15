@@ -63,9 +63,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
             }
             int Table1 = (int)((temp >> 37) & 0x7);
             int Table2 = (int)((temp >> 34) & 0x7);
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (var j = 0; j < 4; j++)
                 {
                     int val = (int)((temp >> ((j << 2) | i)) & 0x1);
                     bool neg = ((temp >> (((j << 2) | i) + 16)) & 0x1) == 1;
@@ -86,7 +86,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
         private static int GetScore(Rgba32[] Original, Rgba32[] Encode)
         {
             int Diff = 0;
-            for (int i = 0; i < 4 * 4; i++)
+            for (var i = 0; i < 4 * 4; i++)
             {
                 Diff += Math.Abs(Encode[i].R - Original[i].R);
                 Diff += Math.Abs(Encode[i].G - Original[i].G);
@@ -110,9 +110,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
         public static Rgba32[] GetLeftColors(Rgba32[] Pixels)
         {
             Rgba32[] Left = new Rgba32[8];
-            for (int y = 0; y < 4; y++)
+            for (var y = 0; y < 4; y++)
             {
-                for (int x = 0; x < 2; x++)
+                for (var x = 0; x < 2; x++)
                 {
                     Left[y * 2 + x] = Pixels[y * 4 + x];
                 }
@@ -123,9 +123,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
         public static Rgba32[] GetRightColors(Rgba32[] Pixels)
         {
             Rgba32[] Right = new Rgba32[8];
-            for (int y = 0; y < 4; y++)
+            for (var y = 0; y < 4; y++)
             {
-                for (int x = 2; x < 4; x++)
+                for (var x = 2; x < 4; x++)
                 {
                     Right[y * 2 + x - 2] = Pixels[y * 4 + x];
                 }
@@ -136,9 +136,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
         public static Rgba32[] GetTopColors(Rgba32[] Pixels)
         {
             Rgba32[] Top = new Rgba32[8];
-            for (int y = 0; y < 2; y++)
+            for (var y = 0; y < 2; y++)
             {
-                for (int x = 0; x < 4; x++)
+                for (var x = 0; x < 4; x++)
                 {
                     Top[y * 4 + x] = Pixels[y * 4 + x];
                 }
@@ -149,9 +149,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
         public static Rgba32[] GetBottomColors(Rgba32[] Pixels)
         {
             Rgba32[] Bottom = new Rgba32[8];
-            for (int y = 2; y < 4; y++)
+            for (var y = 2; y < 4; y++)
             {
-                for (int x = 0; x < 4; x++)
+                for (var x = 0; x < 4; x++)
                 {
                     Bottom[(y - 2) * 4 + x] = Pixels[y * 4 + x];
                 }
@@ -239,9 +239,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
         {
             int BaseMean = (BaseColor.R + BaseColor.G + BaseColor.B) / 3;
             int i = 0;
-            for (int yy = YOffs; yy < YEnd; yy++)
+            for (var yy = YOffs; yy < YEnd; yy++)
             {
-                for (int xx = XOffs; xx < XEnd; xx++)
+                for (var xx = XOffs; xx < XEnd; xx++)
                 {
                     int Diff = ((Pixels[i].R + Pixels[i].G + Pixels[i].B) / 3) - BaseMean;
 
@@ -261,7 +261,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
             Rgba32 Min = new Rgba32(0, 0, 0);
             int MinY = int.MaxValue;
             int MaxY = int.MinValue;
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
             {
                 if (Pixels[i].A == 0) continue;
                 int Y = (Pixels[i].R + Pixels[i].G + Pixels[i].B) / 3;
@@ -280,7 +280,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
             int ModDiff = int.MaxValue;
             int Modifier = -1;
             int Mode = -1;
-            for (int i = 0; i < 8; i++)
+            for (var i = 0; i < 8; i++)
             {
                 int SS = ETC1Modifiers[i, 0] * 2;
                 int SB = ETC1Modifiers[i, 0] + ETC1Modifiers[i, 1];
@@ -354,9 +354,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
             int blocks = width >> 2;
             int blockMask = blocks - 1;
             Rgba32[] result = new Rgba32[width * width];
-            for (int y = 0; y < blocks; y++)
+            for (var y = 0; y < blocks; y++)
             {
-                for (int x = 0; x < blocks; x++)
+                for (var x = 0; x < blocks; x++)
                 {
                     PvrTcPacket packet = packets[GetMortonNumber(x, y)];
                     uint mod = packet.modulationData;
@@ -364,12 +364,12 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
                     int weightindex = packet.usePunchthroughAlpha ? 16 : 0;
                     byte[][] factorfather = PvrTcPacket.BILINEAR_FACTORS;
                     int factorindex = 0;
-                    for (int py = 0; py < 4; py++)
+                    for (var py = 0; py < 4; py++)
                     {
                         int yOffset = (py < 2) ? -1 : 0;
                         int y0 = (y + yOffset) & blockMask;
                         int y1 = (y0 + 1) & blockMask;
-                        for (int px = 0; px < 4; px++)
+                        for (var px = 0; px < 4; px++)
                         {
                             byte[] factor = factorfather[factorindex];
                             int xOffset = (px < 2) ? -1 : 0;
@@ -397,9 +397,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
             int blocks = width >> 2;
             int blockMask = blocks - 1;
             PvrTcPacket[] packets = new PvrTcPacket[(width * width) >> 4];
-            for (int y = 0; y < blocks; y++)
+            for (var y = 0; y < blocks; y++)
             {
-                for (int x = 0; x < blocks; x++)
+                for (var x = 0; x < blocks; x++)
                 {
                     CalculateBoundingBox(colors, width, x, y, out Rgba32 min, out Rgba32 max);
                     PvrTcPacket packet = new PvrTcPacket();
@@ -409,20 +409,20 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
                     packets[GetMortonNumber(x, y)] = packet;
                 }
             }
-            for (int y = 0; y < blocks; y++)
+            for (var y = 0; y < blocks; y++)
             {
-                for (int x = 0; x < blocks; x++)
+                for (var x = 0; x < blocks; x++)
                 {
                     byte[][] factorfather = PvrTcPacket.BILINEAR_FACTORS;
                     int factorindex = 0;
                     int dataindex = (y << 2) * width + (x << 2);
                     uint modulationData = 0;
-                    for (int py = 0; py < 4; py++)
+                    for (var py = 0; py < 4; py++)
                     {
                         int yOffset = (py < 2) ? -1 : 0;
                         int y0 = (y + yOffset) & blockMask;
                         int y1 = (y0 + 1) & blockMask;
-                        for (int px = 0; px < 4; px++)
+                        for (var px = 0; px < 4; px++)
                         {
                             byte[] factor = factorfather[factorindex];
                             int xOffset = (px < 2) ? -1 : 0;
@@ -458,9 +458,9 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
             int blocks = width >> 2;
             int blockMask = blocks - 1;
             PvrTcPacket[] packets = new PvrTcPacket[(width * width) >> 4];
-            for (int y = 0; y < blocks; y++)
+            for (var y = 0; y < blocks; y++)
             {
-                for (int x = 0; x < blocks; x++)
+                for (var x = 0; x < blocks; x++)
                 {
                     CalculateBoundingBox(colors, width, x, y, out Rgba32 min, out Rgba32 max);
                     PvrTcPacket packet = new PvrTcPacket();
@@ -470,20 +470,20 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
                     packets[GetMortonNumber(x, y)] = packet;
                 }
             }
-            for (int y = 0; y < blocks; y++)
+            for (var y = 0; y < blocks; y++)
             {
-                for (int x = 0; x < blocks; x++)
+                for (var x = 0; x < blocks; x++)
                 {
                     byte[][] factorfather = PvrTcPacket.BILINEAR_FACTORS;
                     int factorindex = 0;
                     int dataindex = (y << 2) * width + (x << 2);
                     uint modulationData = 0;
-                    for (int py = 0; py < 4; py++)
+                    for (var py = 0; py < 4; py++)
                     {
                         int yOffset = (py < 2) ? -1 : 0;
                         int y0 = (y + yOffset) & blockMask;
                         int y1 = (y0 + 1) & blockMask;
-                        for (int px = 0; px < 4; px++)
+                        for (var px = 0; px < 4; px++)
                         {
                             byte[] factor = factorfather[factorindex];
                             int xOffset = (px < 2) ? -1 : 0;
@@ -520,10 +520,10 @@ namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
             byte maxr = 0, maxg = 0, maxb = 0, maxa = 0;
             byte minr = 255, ming = 255, minb = 255, mina = 255;
             int beginindex = (blockY << 2) * width + (blockX << 2);
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 int nindex = beginindex + i * width;
-                for (int j = 0; j < 4; j++)
+                for (var j = 0; j < 4; j++)
                 {
                     int index = nindex + j;
                     byte temp;

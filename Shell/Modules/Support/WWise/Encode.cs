@@ -481,7 +481,7 @@ namespace Sen.Shell.Modules.Support.WWise
             foreach (var WwiseProperty in WwiseInfo.GetType().GetProperties())
             {
                 var WwiseValue = WwiseProperty.GetValue(WwiseInfo);
-                if (WwiseValue != null)
+                if (WwiseValue is not null)
                 {
                     EncodeType(BNKFile, WwiseValue, WwiseInfo, inFolder);
                 }

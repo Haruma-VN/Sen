@@ -469,7 +469,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         }
 
         public void writeStringByEmpty(string str, long offset = -1) {
-            if (str == null) {
+            if (str is null) {
                 writeUInt8(0);
                 return;
             }
@@ -811,7 +811,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
 
         public void writeStringByInt16LE(string? str, long offset = -1) {
             fixWriteOffset(offset);
-            if (str == null) {
+            if (str is null) {
                 writeInt16LE(0);
                 return;
             }
@@ -821,7 +821,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public void writeStringByVarInt32(string? str, long offset = -1)
         {
             fixWriteOffset(offset);
-            if (str == null)
+            if (str is null)
             {
                 writeVarInt32(0);
                 return;

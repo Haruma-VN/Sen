@@ -297,7 +297,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.Helper
                 {120, 156},
                 {120, 218},
                 };
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 if (zlibByte[0] == ZlibLevelCompression[i, 0] && zlibByte[1] == ZlibLevelCompression[i, 1])
                 {
@@ -383,7 +383,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.Helper
 
         public static bool IsNotASCII(string str)
         {
-            for (int i = 0; i < str.Length; i++)
+            for (var i = 0; i < str.Length; i++)
             {
                 if (str[i] > 127) return true;
             }

@@ -436,7 +436,7 @@ namespace Sen.Shell.Modules.Support.Download
             var json = new JsonImplement();
             var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
             var path = new ImplementPath();
-            if (github_api_json.Assets == null)
+            if (github_api_json.Assets is null)
             {
                 throw new Exception($"assets not found from Github API");
             }
@@ -471,7 +471,7 @@ namespace Sen.Shell.Modules.Support.Download
             var json = new JsonImplement();
             var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
             var path = new ImplementPath();
-            if(github_api_json.Assets == null)
+            if(github_api_json.Assets is null)
             {
                 throw new Exception($"assets not found from Github API");
             }

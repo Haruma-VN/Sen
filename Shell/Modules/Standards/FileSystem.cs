@@ -448,7 +448,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
 
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     this._root = value;
                 }
@@ -460,7 +460,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             get { return this._dir; }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     this._dir = value;
                 }
@@ -472,7 +472,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             get { return this._basename; }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     this._basename = value;
                 }
@@ -484,7 +484,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             get { return this._extname; }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     this._extname = value;
                 }
@@ -496,7 +496,7 @@ namespace Sen.Shell.Modules.Standards.IOModule
             get { return this._name; }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     this._name = value;
                 }
@@ -510,23 +510,23 @@ namespace Sen.Shell.Modules.Standards.IOModule
 #pragma warning disable CS8618
         public FormatRecords(string root, string dir, string basename, string extname, string name)
         {
-            if (root != null)
+            if (root is not null)
             {
                 this._root = root;
             }
-            if (dir != null)
+            if (dir is not null)
             {
                 this._dir = dir;
             }
-            if (basename != null)
+            if (basename is not null)
             {
                 this._basename = basename;
             }
-            if (extname != null)
+            if (extname is not null)
             {
                 this._extname = extname;
             }
-            if (name != null)
+            if (name is not null)
             {
                 this._name = name;
             }
