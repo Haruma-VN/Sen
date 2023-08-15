@@ -593,7 +593,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             if ((flags & FrameFlags.Commands) != 0)
             {
                 int num12 = PamFile.readUInt8();
-                for (int m = 0; m < num12; m++)
+                for (var m = 0; m < num12; m++)
                 {
                     frameInfo.command.Add(FrameInfo.ReadCommand(PamFile));
                 }
@@ -975,7 +975,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var spriteDocument = WriteSpriteDocument(i, DecodeFrameNodeList(AnimationJson.sprite[i], AnimationJson.sprite));
                 SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "sprite", $"sprite_{i + 1}.xml")), spriteDocument, xflns);
             }
-            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main_sprite.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
+            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
             SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "DomDocument.xml")), WriteDomDocument(AnimationJson), xflns);
             fs.WriteText(path.Resolve(path.Join(outFolder, "main.xfl")), k_xfl_content, EncodingType.ASCII);
             var extraInfo = new ExtraInfo()
@@ -1131,11 +1131,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         {
             return new XElement("DOMSymbolItem",
                 k_xmlns_attribute,
-                new XAttribute("name", index == -1 ? "main_sprite" : $"sprite/sprite_{index + 1}"),
+                new XAttribute("name", index == -1 ? "main" : $"sprite/sprite_{index + 1}"),
                 new XAttribute("symbolType", "graphic"),
                 new XElement("timeline",
                     new XElement("DOMTimeline",
-                        new XAttribute("name", index == -1 ? "main_sprite" : $"sprite_{index + 1}"),
+                        new XAttribute("name", index == -1 ? "main" : $"sprite_{index + 1}"),
                         new XElement("layers", frame_node_list.Keys.OrderByDescending(i => i).Select((layer_index) =>
                             new XElement("DOMLayer",
                                 new XAttribute("name", layer_index),
@@ -1259,7 +1259,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         )
                     ).ToArray(),
                     new XElement("Include",
-                        new XAttribute("href", "main_sprite.xml")
+                        new XAttribute("href", "main.xml")
                     )
                 ),
                 new XElement("timelines",
@@ -1282,7 +1282,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                         new XAttribute("duration", AnimationJson.main_sprite.frame.Length),
                                         new XElement("elements",
                                             new XElement("DOMSymbolInstance",
-                                                new XAttribute("libraryItemName", "main_sprite"),
+                                                new XAttribute("libraryItemName", "main"),
                                                 new XAttribute("symbolType", "graphic"),
                                                 new XAttribute("loop", "loop")
                                             )
@@ -1431,7 +1431,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     image = extra.image!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "image", $"image_{i + 1}.xml"))))).ToArray(),
                     sprite = extra.sprite!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "sprite", $"sprite_{i + 1}.xml"))))).ToArray(),
-                    main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main_sprite.xml")))
+                    main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main.xml")))
                 }
             };
             PAMInfo AnimationJson = ParseMainDocument(PAMRipe);
@@ -1635,7 +1635,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 throw new PAMException("invalid_sprite_domsymbolitem", x_DOMSymbolItem.Name.LocalName);
             }
-            if ((string)x_DOMSymbolItem.Attribute("name")! != (index == -1 ? "main_sprite" : $"sprite/sprite_{index + 1}"))
+            if ((string)x_DOMSymbolItem.Attribute("name")! != (index == -1 ? "main" : $"sprite/sprite_{index + 1}"))
             {
                 throw new PAMException("invalid_sprite_domsymbolitem_name", (string)x_DOMSymbolItem.Attribute("name")!);
             }
@@ -1651,7 +1651,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 throw new PAMException("invalid_sprite_domtimeline_length", $"DOMTimeline length: {x_DOMTimeline_list.Length}");
             }
             var x_DOMTimeline = x_DOMTimeline_list[0];
-            if ((string)x_DOMTimeline.Attribute("name")! != (index == -1 ? "main_sprite" : $"sprite_{index + 1}"))
+            if ((string)x_DOMTimeline.Attribute("name")! != (index == -1 ? "main" : $"sprite_{index + 1}"))
             {
                 throw new PAMException("invalid_sprite_domtimeline_name", (string)x_DOMTimeline.Attribute("name")!);
             }
@@ -1666,8 +1666,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var x_DOMlayer_Check = x_DOMLayer_list[0];
             x_DOMLayer_list.RemoveAt(0);
             int layer_count = 0;
-            var allFrames = int.Parse((string)x_DOMlayer_Check.Elements("frames").ToArray()[0].Elements("DOMFrame").ToArray()[0].Attribute("duration")!);
-            
+            var allFrames = int.Parse((string)x_DOMlayer_Check.Elements("frames").ToArray()[0].Elements("DOMFrame").ToArray()[0].Attribute("duration")! ?? "1");
             var get_frame_at = (int index) =>
             {
                 if (result.Count <= index)
@@ -1839,7 +1838,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 });
                 colse_current_model_if_need();
             });
-            if (result.Count < allFrames)
+            if (result.Count <= allFrames)
             {
                 result.AddRange(new FrameInfo[allFrames - result.Count + 1]);
             }
