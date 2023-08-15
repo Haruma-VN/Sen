@@ -17,8 +17,10 @@ typedef uint8_t Uint8Array;
 
 typedef std::string String;
 
+typedef Bytef FloatByte;
 
-#define InternalAPI extern "C" __declspec(dllexport) 
+typedef float Float;
+
 
 InternalAPI
 inline auto ZlibCompress(const UnsignedByteStream data, ArraySize dataSize, Integer level, ArraySize& compressedSize) -> UnsignedByteStream {
@@ -40,7 +42,7 @@ inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array*
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
     strm.avail_in = dataSize;
-    strm.next_in = (Bytef*)data;
+    strm.next_in = (FloatByte*)data;
     auto ret = inflateInit(&strm);
     if (ret != Z_OK) {
         *uncompressedData = nullptr;
@@ -51,7 +53,7 @@ inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array*
     std::vector<Uint8Array> uncompressedVector;
     do {
         strm.avail_out = outBuffer.size();
-        strm.next_out = (Bytef*)outBuffer.data();
+        strm.next_out = (FloatByte*)outBuffer.data();
         ret = inflate(&strm, Z_NO_FLUSH);
         if (uncompressedVector.size() < strm.total_out) {
             uncompressedVector.insert(uncompressedVector.end(), outBuffer.begin(), outBuffer.begin() + strm.total_out - uncompressedVector.size());
@@ -62,4 +64,10 @@ inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array*
     *uncompressedData = new uint8_t[*uncompressedDataSize];
     memcpy(*uncompressedData, uncompressedVector.data(), *uncompressedDataSize);
     return;
+}
+
+InternalAPI
+inline auto InternalVersion() -> Integer
+{
+    return MInternalVersion;
 }

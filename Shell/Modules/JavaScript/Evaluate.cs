@@ -11,7 +11,8 @@ namespace Sen.Shell.Modules.JavaScript
 {
     public class JSEngine
     {
-        public static Engine Engine { get; } = new Engine(options => options.AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
+        public static Engine Engine { get; } = new Engine(options => options
+        .AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
 
         public static void Execute(string Script_Directory, string[] args)
         {

@@ -23,4 +23,6 @@
 #define log(...)\
 	std::cout << __VA_ARGS__ << std::endl;
 
-#define InternalVersion = 1
+#define MInternalVersion 1
+
+#define InternalAPI extern "C" __declspec(dllexport) 

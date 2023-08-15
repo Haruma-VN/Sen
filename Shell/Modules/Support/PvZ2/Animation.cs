@@ -180,7 +180,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     flags |= 8192;
                     PamFile.writeInt16LE((short)preload_frame);
                 }
-                if (name != null)
+                if (name is not null)
                 {
                     flags |= 4096;
                     PamFile.writeStringByInt16LE(name);
@@ -294,7 +294,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     PamFile.writeInt16LE((short)v0);
                     PamFile.writeInt16LE((short)v1);
                 }
-                if (source_rectangle != null && source_rectangle.Length >= 4)
+                if (source_rectangle is not null && source_rectangle.Length >= 4)
                 {
                     f7 |= MoveFlags.SrcRect;
                     PamFile.writeInt16LE((short)(source_rectangle[0] * 20));
@@ -302,7 +302,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     PamFile.writeInt16LE((short)(source_rectangle[2] * 20));
                     PamFile.writeInt16LE((short)(source_rectangle[3] * 20));
                 }
-                if (color != null && color.Length >= 4)
+                if (color is not null && color.Length >= 4)
                 {
                     f7 |= MoveFlags.Color;
                     PamFile.writeUInt8((byte)(color[0] * 255));
@@ -460,14 +460,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var size = new int[2];
             if (version >= 4)
             {
-                for (int i = 0; i < 2; i++)
+                for (var i = 0; i < 2; i++)
                 {
                     size[i] = PamFile.readUInt16LE();
                 }
             }
             else
             {
-                for (int i = 0; i < 2; i++)
+                for (var i = 0; i < 2; i++)
                 {
                     size[i] = -1;
                 }
@@ -550,7 +550,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     count = PamFile.readUInt16LE();
                 }
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     frameInfo.remove.Add(new FrameInfo.RemovesInfo().Read(PamFile));
                 }
@@ -563,7 +563,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     count = PamFile.readUInt16LE();
                 }
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     frameInfo.append.Add(new FrameInfo.AddsInfo().Read(PamFile, version));
                 }
@@ -576,7 +576,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     count = PamFile.readUInt16LE();
                 }
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     frameInfo.change.Add(new FrameInfo.MovesInfo().Read(PamFile, version));
                 }
@@ -612,7 +612,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 throw new PAMException("pam_version_out_of_range", "undefined");
             }
             PamBinary.writeUInt8((byte)(AnimationJson.frame_rate));
-            if (AnimationJson.position == null || AnimationJson.position.Length < 2)
+            if (AnimationJson.position is null || AnimationJson.position.Length < 2)
             {
                 PamBinary.writeInt16LE(0);
                 PamBinary.writeInt16LE(0);
@@ -622,7 +622,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 PamBinary.writeInt16LE((short)(AnimationJson.position[0] * 20));
                 PamBinary.writeInt16LE((short)(AnimationJson.position[1] * 20));
             }
-            if (AnimationJson.size == null || AnimationJson.size.Length < 2)
+            if (AnimationJson.size is null || AnimationJson.size.Length < 2)
             {
                 PamBinary.writeInt16LE(-1);
                 PamBinary.writeInt16LE(-1);
@@ -632,7 +632,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 PamBinary.writeInt16LE((short)(AnimationJson.size[0] * 20));
                 PamBinary.writeInt16LE((short)(AnimationJson.size[1] * 20));
             }
-            if (AnimationJson.image == null || AnimationJson.image.Length == 0)
+            if (AnimationJson.image is null || AnimationJson.image.Length == 0)
             {
                 PamBinary.writeInt16LE(0);
             }
@@ -646,7 +646,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     WriteImageInfo(PamBinary, version, image);
                 }
             }
-            if (AnimationJson.sprite == null || AnimationJson.sprite.Length == 0)
+            if (AnimationJson.sprite is null || AnimationJson.sprite.Length == 0)
             {
                 PamBinary.writeInt16LE(0);
             }
@@ -667,7 +667,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             else
             {
-                if (AnimationJson.main_sprite == null)
+                if (AnimationJson.main_sprite is null)
                 {
                     PamBinary.writeBool(false);
                 }
@@ -685,7 +685,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             PamBinary.writeStringByInt16LE(image.name);
             if (version >= 4)
             {
-                if (image.size != null && image.size.Length >= 2)
+                if (image.size is not null && image.size.Length >= 2)
                 {
                     for (var i = 0; i < 2; i++)
                     {
@@ -702,7 +702,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             if (version == 1)
             {
-                if (image.transform == null || image.transform.Length < 2)
+                if (image.transform is null || image.transform.Length < 2)
                 {
                     PamBinary.writeInt16LE(0);
                     PamBinary.writeInt16LE(0);
@@ -739,7 +739,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             else
             {
-                if (image.transform == null || image.transform.Length < 2)
+                if (image.transform is null || image.transform.Length < 2)
                 {
                     PamBinary.writeInt32LE(1310720);
                     PamBinary.writeInt32LE(0);
@@ -791,7 +791,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             if (version >= 5)
             {
-                if (sprite.work_area == null || sprite.work_area.Length < 2)
+                if (sprite.work_area is null || sprite.work_area.Length < 2)
                 {
                     PamBinary.writeInt16LE(1);
                     PamBinary.writeInt16LE(0);
@@ -806,7 +806,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             else
             {
-                if (sprite.work_area == null || sprite.work_area.Length < 2)
+                if (sprite.work_area is null || sprite.work_area.Length < 2)
                 {
                     PamBinary.writeInt16LE(1);
                 }
@@ -816,7 +816,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 }
             }
             int framesCount = sprite.frame!.Length;
-            for (int i = 0; i < framesCount; i++)
+            for (var i = 0; i < framesCount; i++)
             {
                 FrameInfo frame = sprite.frame[i];
                 WriteFrameInfo(PamBinary, version, frame);
@@ -825,12 +825,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
         private static void WriteFrameInfo(SenBuffer PamBinary, int version, FrameInfo frame)
         {
             FrameFlags flags = 0;
-            if (frame.remove != null && frame.remove.Count > 0) flags |= FrameFlags.Removes;
-            if (frame.append != null && frame.append.Count > 0) flags |= FrameFlags.Adds;
-            if (frame.change != null && frame.change.Count > 0) flags |= FrameFlags.Moves;
-            if (frame.label != null) flags |= FrameFlags.FrameName;
+            if (frame.remove is not null && frame.remove.Count > 0) flags |= FrameFlags.Removes;
+            if (frame.append is not null && frame.append.Count > 0) flags |= FrameFlags.Adds;
+            if (frame.change is not null && frame.change.Count > 0) flags |= FrameFlags.Moves;
+            if (frame.label is not null) flags |= FrameFlags.FrameName;
             if (frame.stop) flags |= FrameFlags.Stop;
-            if (frame.command != null && frame.command.Count > 0) flags |= FrameFlags.Commands;
+            if (frame.command is not null && frame.command.Count > 0) flags |= FrameFlags.Commands;
             PamBinary.writeUInt8((byte)flags);
             if ((flags & FrameFlags.Removes) != 0)
             {
@@ -844,7 +844,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     PamBinary.writeUInt8(255);
                     PamBinary.writeInt16LE((short)count);
                 }
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     frame.remove[i].Write(PamBinary);
                 }
@@ -861,7 +861,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     PamBinary.writeUInt8(255);
                     PamBinary.writeInt16LE((short)count);
                 }
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     frame.append[i].Write(PamBinary, version);
                 }
@@ -878,7 +878,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     PamBinary.writeUInt8(255);
                     PamBinary.writeInt16LE((short)count);
                 }
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     frame.change[i].Write(PamBinary, version);
                 }
@@ -896,7 +896,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 int count = frame.command!.Count;
                 if (count > 255) count = 255;
                 PamBinary.writeUInt8((byte)count);
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     FrameInfo.WriteCommand(PamBinary, frame.command[i]);
                 }
@@ -975,7 +975,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var spriteDocument = WriteSpriteDocument(i, DecodeFrameNodeList(AnimationJson.sprite[i], AnimationJson.sprite));
                 SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "sprite", $"sprite_{i + 1}.xml")), spriteDocument, xflns);
             }
-            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
+            SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "library", "main_sprite.xml")), WriteSpriteDocument(-1, DecodeFrameNodeList(AnimationJson.main_sprite, AnimationJson.sprite)), xflns);
             SenBuffer.SaveXml(path.Resolve(path.Join(outFolder, "DomDocument.xml")), WriteDomDocument(AnimationJson), xflns);
             fs.WriteText(path.Resolve(path.Join(outFolder, "main.xfl")), k_xfl_content, EncodingType.ASCII);
             var extraInfo = new ExtraInfo()
@@ -1046,7 +1046,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     var layer = model[change.index];
                     layer.state = true;
                     layer.transform = VariantToStandard(change.transform, change.index);
-                    if (change.color != null && change.color[0] != 0 && change.color[1] != 0)
+                    if (change.color is not null && change.color[0] != 0 && change.color[1] != 0)
                     {
                         layer.color = change.color;
                     }
@@ -1055,7 +1055,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     var layer = model[layer_index];
                     var frame_node = frame_node_list[layer_index + 1];
-                    if (layer.state != null)
+                    if (layer.state is not null)
                     {
                         if (frame_node.Count > 0)
                         {
@@ -1158,7 +1158,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             List<XElement> command_node = new();
             AnimationJson.main_sprite.frame!.Select((frame, frame_index) =>
             {
-                if (frame.label != null || frame.stop)
+                if (frame.label is not null || frame.stop)
                 {
                     if (prev_end.flow + 1 < frame_index)
                     {
@@ -1173,7 +1173,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         new XElement("elements")
                     );
                     var node_element = node;
-                    if (frame.label != null)
+                    if (frame.label is not null)
                     {
                         node_element.SetAttributeValue("name", frame.label);
                         node_element.SetAttributeValue("labelType", "name");
@@ -1259,7 +1259,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         )
                     ).ToArray(),
                     new XElement("Include",
-                        new XAttribute("href", "main.xml")
+                        new XAttribute("href", "main_sprite.xml")
                     )
                 ),
                 new XElement("timelines",
@@ -1431,7 +1431,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     image = extra.image!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "image", $"image_{i + 1}.xml"))))).ToArray(),
                     sprite = extra.sprite!.Select((e, i) => (SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "sprite", $"sprite_{i + 1}.xml"))))).ToArray(),
-                    main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main.xml")))
+                    main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main_sprite.xml")))
                 }
             };
             PAMInfo AnimationJson = ParseMainDocument(PAMRipe);
@@ -1506,7 +1506,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     {
                         int frame_index = int.Parse(x_DOMFrame.Attribute("index")!.Value);
 
-                        if (x_DOMFrame.Attribute("name") != null)
+                        if (x_DOMFrame.Attribute("name") is not null)
                         {
                             if (((string)x_DOMFrame.Attribute("labelType")!) != "name")
                             {
@@ -1595,7 +1595,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         foreach (var e in command_string)
                         {
                             var regex_result = Regex.Matches(e.Trim(), "fscommand\\(\"(.*)\", \"(.*)\"\\);").First();
-                            if (regex_result == null)
+                            if (regex_result is null)
                             {
                                 throw new PAMException("invalid_command_string", "undefined");
                             }
@@ -1674,7 +1674,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 {
                     result.AddRange(new FrameInfo[index - result.Count + 1]);
                 }
-                if (result[index] == null)
+                if (result[index] is null)
                 {
                     result[index] = new()
                     {
@@ -1699,7 +1699,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var x_DOMFrame_list = x_frames.Elements("DOMFrame").ToList();
                 var colse_current_model_if_need = () =>
                 {
-                    if (model != null)
+                    if (model is not null)
                     {
                         var target_frame = get_frame_at(model.frame_start + model.frame_duration);
                         target_frame.remove!.Add(new FrameInfo.RemovesInfo
@@ -1737,7 +1737,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     }
                     var x_DOMSymbolInstance = x_DOMSymbolInstance_list[0];
                     var name_match = Regex.Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!, "(image|sprite)/(image|sprite)_([0-9]+)").First();
-                    if (name_match == null)
+                    if (name_match is null)
                     {
                         throw new PAMException("invalid_dom_symbol_instance", "undefined");
                     }
@@ -1795,7 +1795,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                         }
                     }
                     var target_frame = get_frame_at(frame_index);
-                    if (model == null)
+                    if (model is null)
                     {
                         model = new()
                         {
@@ -1839,7 +1839,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 });
                 colse_current_model_if_need();
             });
-            if (result.Count <= allFrames)
+            if (result.Count < allFrames)
             {
                 result.AddRange(new FrameInfo[allFrames - result.Count + 1]);
             }
@@ -2098,12 +2098,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 return 0;
             }
 
-            if (x == null)
+            if (x is null)
             {
                 return -1;
             }
 
-            if (y == null)
+            if (y is null)
             {
                 return 1;
             }
@@ -2113,7 +2113,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var x1 = _re.Split(x);
             var y1 = _re.Split(y);
 
-            for (int i = 0; i < x1.Length && i < y1.Length; i++)
+            for (var i = 0; i < x1.Length && i < y1.Length; i++)
             {
                 if (x1[i] != y1[i])
                 {
@@ -2204,7 +2204,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var endFrameIndex = AnimationJson.main_sprite.frame!.Length - 1;
             for (var i = AnimationJson.main_sprite.frame!.Length - 1; i >= 0; i--)
             {
-                if (AnimationJson.main_sprite.frame[i].label != null)
+                if (AnimationJson.main_sprite.frame[i].label is not null)
                 {
                     labelInfo.Add(AnimationJson.main_sprite.frame[i].label!, new uint[] { (uint)i, (uint)endFrameIndex });
                     endFrameIndex = i - 1;

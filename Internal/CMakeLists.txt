@@ -33,7 +33,7 @@ add_subdirectory("./dependencies/etcpak")
 
 # Link against dependencies
 target_link_libraries(Internal PUBLIC 
-zlib ETCPACK rg_etc1 libpng)
+zlib ETCPACK rg_etc1 libpng etcpak)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Internal PROPERTY CXX_STANDARD 20)
