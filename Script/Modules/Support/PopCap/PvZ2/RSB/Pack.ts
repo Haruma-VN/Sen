@@ -107,15 +107,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                     );
                 }
             });
-            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, `${json_count} JSONs -> RTONs`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_process").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted")}: ${json_count} JSONs -> RTONs`);
         }
         if (option.generate_resources) {
             const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\")).replace(/((\.rton))?$/i, ".json");
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)), Sen.Shell.Path.Resolve(resource_file));
-            Sen.Shell.Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_resinfo_to_resourcegroup"))
-            );
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted_resinfo_to_resourcegroup")}`);
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(resource_file, resource_file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
         } else {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(
@@ -123,37 +122,23 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)),
                 Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`))).expand_path
             );
-            Sen.Shell.Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)
-                )
-            );
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json")}`);
         }
         if (manifest_group !== -1 && packages === -1) {
+            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\"));
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
-                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.json`)),
-                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.RTON`)),
+                Sen.Shell.Path.Resolve(resource_file.replace(/((\.rton))?$/i, ".json")),
+                Sen.Shell.Path.Resolve(resource_file),
                 Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
             );
             Sen.Shell.PvZ2Shell.RSGPack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)), manifestgroup_save, manifest.group[manifest_group].subgroup[0].packet_info, false);
-            Sen.Shell.Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)
-                )
-            );
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)}`);
         } else if (packages !== -1 && manifest_group === -1) {
             Sen.Shell.PvZ2Shell.RSGPack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)), packages_save, manifest.group[packages].subgroup[0].packet_info, false);
-            Sen.Shell.Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)
-                )
-            );
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)}`);
         } else if (packages !== -1 && manifest_group !== -1) {
             Sen.Shell.PvZ2Shell.RSGPackAsync(
                 {
@@ -169,20 +154,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                     useResDirectory: false,
                 }
             );
-            Sen.Shell.Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)
-                )
-            );
-            Sen.Shell.Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(
-                    /\{\}/g,
-                    Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)
-                )
-            );
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)}`);
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)}`);
         }
         Sen.Shell.PvZ2Shell.RSBPack(inDirectory, outFile, manifest);
         return;

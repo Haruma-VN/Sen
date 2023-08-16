@@ -512,5 +512,6 @@
     "invalid_composite_name": "Invalid Composite Shell Name -> {}",
     "invalid_rsg_name": "Invalid RSG Name",
     "in_pool_index": "in pool index",
-    "invalid_packet_width": "Invalid Width"
+    "invalid_packet_width": "Invalid Width",
+    "converted": "Converted"
 }
