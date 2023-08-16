@@ -39,3 +39,6 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Internal PROPERTY CXX_STANDARD 20)
 endif()
 
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-strict-prototypes")
+endif()
