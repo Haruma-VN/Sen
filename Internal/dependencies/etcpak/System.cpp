@@ -8,6 +8,9 @@
 
 #include "System.hpp"
 
+using namespace std;
+using std::max;
+
 unsigned int System::CPUCores()
 {
     static unsigned int cores = 0;

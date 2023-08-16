@@ -11,6 +11,9 @@
 #include "Tables.hpp"
 #include "TaskDispatch.hpp"
 
+using namespace std;
+using std::max;
+
 #ifdef __ARM_NEON
 #  include <arm_neon.h>
 #endif
