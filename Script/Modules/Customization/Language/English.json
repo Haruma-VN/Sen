@@ -513,5 +513,7 @@
     "invalid_rsg_name": "Invalid RSG Name",
     "in_pool_index": "in pool index",
     "invalid_packet_width": "Invalid Width",
-    "converted": "Converted"
+    "converted": "Converted",
+    "popcap_render_effect_decode": "PopCap Render-Effect: Decode",
+    "popcap_render_effect_encode": "PopCap Render-Effect: Encode"
 }

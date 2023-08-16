@@ -24,7 +24,7 @@ using System.Linq;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using Sen.Shell.Modules.Support.PvZ2.Helper;
-
+using Sen.Shell.Modules.Support.PvZ2.RenderEffect;
 namespace Sen.Shell.Modules.Support.PvZ2
 {
 
@@ -108,7 +108,6 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void FlashAnimationResize(string inDir, int resolution);
 
-
         public abstract void ZlibCompress(string inFile, string outFile);
 
         public abstract void ZlibUncompress(string inFile, string outFile);
@@ -131,6 +130,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void RSGUnpackAsync(params RSGUnpackTemplate[] kn);
 
+        public abstract void PopcapRenderEffectDecode(string inFile, string outFile);
+
+        public abstract void PopcapRenderEffectEncode(string inFile, string outFile);
 
     }
 
@@ -1181,6 +1183,18 @@ namespace Sen.Shell.Modules.Support.PvZ2
         }
 
 		public unsafe override sealed RSGAbnormal IsPopCapRSG(string inFile) => RSG.RSGFunction.IsPopCapRSG(new SenBuffer(inFile), true);
+
+        public unsafe override sealed void PopcapRenderEffectDecode(string inFile, string outFile) {
+            PopcapRenderEffect.Decode(new SenBuffer(inFile), outFile);
+            return;
+        }
+
+        public unsafe override sealed void PopcapRenderEffectEncode(string inFile, string outFile) {
+            var text = File.ReadAllText(inFile);
+            var POPFXObject = JsonConvert.DeserializeObject<PopcapRenderEffect.PopcapRenderEffectObject>(text)!;
+            PopcapRenderEffect.Encode(POPFXObject, outFile);
+            return;
+        }
 
 
         #endregion

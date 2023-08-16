@@ -139,7 +139,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "sha256_hash"
         | "sha384_hash"
         | "sha512_hash"
-        | "pvz2_remote_android_helper";
+        | "pvz2_remote_android_helper"
+        | "popcap_render_effect_decode"
+        | "popcap_render_effect_encode";
 
     /**
      *
@@ -158,6 +160,34 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(argument, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), argument.replaceAll(`/`, `\\`));
                     } else {
                         argument.forEach((arg: string) => Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(arg, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), arg.replaceAll(`/`, `\\`)));
+                    }
+                    break;
+                }
+                case "popcap_render_effect_decode": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.json`));
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.PvZ2Shell.PopcapRenderEffectDecode(argument, output_argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.json`));
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.PvZ2Shell.PopcapRenderEffectDecode(arg, output_argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_render_effect_encode": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`));
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.PvZ2Shell.PopcapRenderEffectEncode(argument, output_argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`));
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.PvZ2Shell.PopcapRenderEffectEncode(arg, output_argument);
+                        });
                     }
                     break;
                 }

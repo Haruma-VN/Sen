@@ -1639,6 +1639,21 @@ declare namespace Sen {
              */
 
             export function ConvertResInfoToResourceGroup(outFile: string, inFile: string): void;
+
+            /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
+             */
+
+            export function PopcapRenderEffectDecode(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
+             */
+
+            export function PopcapRenderEffectEncode(inFile: string, outFile: string): void;
         }
 
         /**

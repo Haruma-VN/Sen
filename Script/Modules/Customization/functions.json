@@ -378,5 +378,19 @@
         "exclude": [],
         "is_enabled": true,
         "type": "file"
+    },
+    "popcap_render_effect_decode": {
+        "func_number": 55,
+        "include": [".popfx"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_render_effect_encode": {
+        "func_number": 56,
+        "include": [".popfx.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
     }
 }
