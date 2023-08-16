@@ -13,7 +13,6 @@
 #include "dependencies/rg_etc1/rg_etc1.h"
 #include "dependencies/rg_etc1/rg_etc1.cpp"
 #include <cstdint>
-#include <corecrt_io.h>
 #include <regex>
 #include "dependencies/libpng/png.h"
 #include "dependencies/avir/avir.h"
@@ -25,4 +24,8 @@
 
 #define MInternalVersion 1
 
-#define InternalAPI extern "C" __declspec(dllexport) 
+#ifdef _WIN32
+#define InternalAPI extern "C" __declspec(dllexport)
+#else
+#define InternalAPI extern "C" __attribute__((visibility("default")))
+#endif
