@@ -91,5 +91,9 @@ typedef Bytef FloatByte;
 
 typedef float Float;
 
+typedef std::wstring UTF8;
+
+typedef char* CString;
+
 
 #pragma endregion

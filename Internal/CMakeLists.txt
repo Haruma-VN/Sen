@@ -30,10 +30,17 @@ add_subdirectory("./dependencies/rg_etc1")
 add_subdirectory("./dependencies/libpng")
 add_subdirectory("./dependencies/etcpak")
 
+# tinyfiledialogs link
+
+if(NOT (CMAKE_SYSTEM_NAME MATCHES "iOS" OR CMAKE_SYSTEM_NAME MATCHES "Android"))
+    add_subdirectory("./dependencies/tinyfiledialogs")
+    target_link_libraries(Internal PRIVATE tinyfiledialogs)
+endif()
 
 # Link against dependencies
 target_link_libraries(Internal PUBLIC 
 zlib ETCPACK rg_etc1 libpng etcpak)
+
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Internal PROPERTY CXX_STANDARD 20)

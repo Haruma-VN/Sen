@@ -40,7 +40,7 @@ inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array*
     } while (ret == Z_OK);
     inflateEnd(&strm);
     *uncompressedDataSize = uncompressedVector.size();
-    *uncompressedData = new uint8_t[*uncompressedDataSize];
+    *uncompressedData = new Uint8Array[*uncompressedDataSize];
     memcpy(*uncompressedData, uncompressedVector.data(), *uncompressedDataSize);
     return;
 }
@@ -50,3 +50,42 @@ inline auto InternalVersion() -> Integer
 {
     return MInternalVersion;
 }
+
+#if WINDOWS || LINUX || MACINTOSH
+#include "dependencies/tinyfiledialogs/tinyfiledialogs.c"
+
+InternalAPI
+inline auto OpenFileDialog(const CString title) -> String
+{
+    auto file = tinyfd_openFileDialog(
+        title,
+        "",
+        0,
+        NULL,
+        NULL,
+        0);
+    return (String) file;
+}
+
+InternalAPI
+inline auto OpenDirectoryDialog(const CString title) -> String
+{
+    auto directory = tinyfd_selectFolderDialog(
+        title,
+        ""
+    );
+    return (String) directory;
+}
+
+#else
+InternalAPI
+inline auto OpenFile(const CString title) -> Integer
+{
+    return 0;
+}
+inline auto OpenDirectory(const CString title) -> Integer
+{
+    return 0;
+}
+#endif
+
