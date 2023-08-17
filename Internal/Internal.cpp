@@ -1,25 +1,4 @@
-﻿// Internal.cpp : Defines the entry point for the application.
-//
-
-#include "Internal.h"
-
-typedef void Void;
-
-typedef unsigned char* UnsignedByteStream;
-
-typedef int Integer;
-
-typedef size_t ArraySize;
-
-typedef uLongf ZlibUnsignedLongFloat;
-
-typedef uint8_t Uint8Array;
-
-typedef std::string String;
-
-typedef Bytef FloatByte;
-
-typedef float Float;
+﻿#include "Internal.hpp"
 
 
 InternalAPI

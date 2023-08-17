@@ -19,7 +19,7 @@ add_library(
   "./dependencies/nlohmann/json.hpp"
   "./dependencies/nlohmann/json_fwd.hpp"
   "./tool/encode/encode.hpp"
-  "./Internal.h"
+  "./Internal.hpp"
   "./Internal.cpp"
 )
 
