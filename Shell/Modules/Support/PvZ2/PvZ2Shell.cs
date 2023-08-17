@@ -1173,8 +1173,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
             using var dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read);
             using var target = new FileStream(PatchFile, FileMode.Open, FileAccess.Read);
             var decoder = new VcDecoder(dict, target, output, 0xFFFFFFF);
-            long bytesWritten = 0;
-            var result = decoder.Decode(out bytesWritten);
+            var result = decoder.Decode(out long bytesWritten);
             if (result != VCDiffResult.SUCCESS)
             {
                throw new Exception("invalid_vcdiff_decode");
