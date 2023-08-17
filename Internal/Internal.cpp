@@ -53,28 +53,42 @@ inline auto InternalVersion() -> Integer
 
 #if WINDOWS || LINUX || MACINTOSH
 #include "dependencies/tinyfiledialogs/tinyfiledialogs.c"
+#if WINDOWS
+#include <Windows.h>
+#endif
 
 InternalAPI
-inline auto OpenFileDialog(const CString title) -> String
+inline auto OpenFileDialog(const CString title) -> CString
 {
     auto file = tinyfd_openFileDialog(
         title,
-        "",
+        nullptr,
         0,
         NULL,
         NULL,
         0);
-    return (String) file;
+    return file;
 }
 
 InternalAPI
-inline auto OpenDirectoryDialog(const CString title) -> String
+inline auto OpenDirectoryDialog(const CString title) -> CString
 {
     auto directory = tinyfd_selectFolderDialog(
         title,
-        ""
+        nullptr
     );
-    return (String) directory;
+    return directory;
+}
+
+InternalAPI
+inline auto SendLosNotification(
+    const char* title,
+    const char* message, 
+    const char* info
+) -> Void
+{
+    tinyfd_notifyPopup(title, message, info);
+    return;
 }
 
 #else

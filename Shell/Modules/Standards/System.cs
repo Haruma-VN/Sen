@@ -1,4 +1,5 @@
 ﻿using System.Text.Encodings.Web;
+using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Standards
 {
@@ -15,11 +16,19 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract void TerminateProgram();
 
+        public abstract string OpenFileDialog(string title);
+
+        public abstract string OpenDirectoryDialog(string title);
+
     }
 
 
     public class SystemImplement : SystemAbstract
     {
+
+        public override unsafe string OpenFileDialog(string title) => SenAPI.OpenFileDialog(title);
+
+        public override unsafe string OpenDirectoryDialog(string title) => SenAPI.OpenDirectoryDialog(title);
 
         public override void Print(Sen.Shell.Modules.Standards.ConsoleColor? color, params string[] texts)
         {

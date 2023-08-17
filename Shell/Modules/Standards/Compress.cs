@@ -36,13 +36,24 @@ namespace Sen.Shell.Modules.Standards
 
     public static class SenAPI
     {
+
         private const string LibraryModule = $"./Internal";
 
-        [DllImport(LibraryModule)]
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
 
-        [DllImport(LibraryModule)]
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern string OpenFileDialog(string title);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern string OpenDirectoryDialog(string title);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern string SendLosNotification(string title, string message, string info);
+
     }
 
 
