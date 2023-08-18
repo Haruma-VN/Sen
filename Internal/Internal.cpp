@@ -106,13 +106,13 @@ Integer InternalVersion()
 }
 
 #if WINDOWS || LINUX || MACINTOSH
-#include "dependencies/tinyfiledialogs/tinyfiledialogs.h"
+#include "dependencies/tinyfiledialogs/tinyfiledialogs.c"
 InternalAPI
 CString OpenFileDialog(const CString title)
 {
     auto file = tinyfd_openFileDialog(
         title,
-        nullptr,
+        null,
         0,
         null,
         null,
@@ -122,9 +122,9 @@ CString OpenFileDialog(const CString title)
 }
 
 InternalAPI
-char* OpenDirectoryDialog(const char* title)
+char* OpenDirectoryDialog(char* title)
 {
-    auto lTheSelectFolderName = tinyfd_selectFolderDialog(
+    char* lTheSelectFolderName = tinyfd_selectFolderDialog(
         title,
         null
     );

@@ -1,4 +1,5 @@
-﻿using System.Text.Encodings.Web;
+﻿using System.Runtime.InteropServices;
+using System.Text.Encodings.Web;
 using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Standards
@@ -28,7 +29,13 @@ namespace Sen.Shell.Modules.Standards
 
         public override unsafe string OpenFileDialog(string title) => SenAPI.OpenFileDialog(title);
 
-        public override unsafe string OpenDirectoryDialog(string title) => SenAPI.OpenDirectoryDialog(title);
+        public override unsafe string OpenDirectoryDialog(string title)
+        {
+            var k_ptr = SenAPI.OpenDirectoryDialog(title);
+            var m = Marshal.PtrToStringAnsi(k_ptr)!;
+            Marshal.FreeHGlobal(k_ptr);
+            return m;
+        }
 
         public override void Print(Sen.Shell.Modules.Standards.ConsoleColor? color, params string[] texts)
         {
