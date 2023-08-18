@@ -16,8 +16,8 @@ endif()
 add_library(
   Internal SHARED 
   "./dependencies/avir/avir.h"
-  "./dependencies/nlohmann/json.hpp"
-  "./dependencies/nlohmann/json_fwd.hpp"
+  "./dependencies/json/json.hpp"
+  "./dependencies/json/json_fwd.hpp"
   "./Internal.hpp"
   "./Internal.cpp"
 )

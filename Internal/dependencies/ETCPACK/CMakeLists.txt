@@ -17,3 +17,6 @@ target_link_libraries(
 	${PROJECT_NAME} PRIVATE
 	zlib
 )
+
+set_target_properties(ETCPACK PROPERTIES POSITION_INDEPENDENT_CODE ON)
+

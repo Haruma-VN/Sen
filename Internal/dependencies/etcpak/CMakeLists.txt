@@ -69,3 +69,5 @@ target_link_libraries(
 	${PROJECT_NAME} PRIVATE
 	libpng
 )
+
+set_target_properties(etcpak PROPERTIES POSITION_INDEPENDENT_CODE ON)
