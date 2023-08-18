@@ -36,6 +36,10 @@ if(NOT (CMAKE_SYSTEM_NAME MATCHES "iOS" OR CMAKE_SYSTEM_NAME MATCHES "Android"))
     target_link_libraries(Internal PRIVATE tinyfiledialogs)
 endif()
 
+if(APPLE)
+    target_compile_options(Internal PRIVATE -Wno-implicit-function-declaration)
+endif()
+
 # Link against dependencies
 target_link_libraries(Internal PUBLIC 
 zlib ETCPACK rg_etc1 libpng etcpak)
