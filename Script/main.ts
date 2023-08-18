@@ -67,12 +67,12 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 12;
+    export const ScriptVersion: int = 13;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 7;
+    export const ShellRequirement: int = 8;
 
     /**
      *
@@ -143,7 +143,12 @@ namespace Sen.Script {
             Sen.Shell.DotNetPlatform.SupportUtf8Console();
         }
         Sen.Script.DownloadInternal();
-        Sen.Shell.Console.Print(14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `Sen ~ 2.2.0 ~ ${Sen.Shell.DotNetPlatform.ShellHost()} ~ ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()}`);
+        Sen.Shell.Console.Print(
+            14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+            `Sen ~ 2.3.0 |  Shell ${
+                Sen.Shell.ShellVersion.ShellVersion
+            } & Script ${ScriptVersion} & Internal ${Sen.Internal.Version.InternalVersion()} | ${Sen.Shell.DotNetPlatform.ShellHost()} & ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()} & ${Sen.Internal.Version.GetProcessorArchitecture()}`
+        );
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`);
             Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");

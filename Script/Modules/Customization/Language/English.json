@@ -515,5 +515,6 @@
     "invalid_packet_width": "Invalid Width",
     "converted": "Converted",
     "popcap_render_effect_decode": "PopCap Render-Effect: Decode",
-    "popcap_render_effect_encode": "PopCap Render-Effect: Encode"
+    "popcap_render_effect_encode": "PopCap Render-Effect: Encode",
+    "popcap_image_sequence_to_pam_json": "PopCap Animation: Animation json from Render Images"
 }

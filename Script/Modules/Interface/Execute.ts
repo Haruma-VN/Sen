@@ -141,7 +141,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "sha512_hash"
         | "pvz2_remote_android_helper"
         | "popcap_render_effect_decode"
-        | "popcap_render_effect_encode";
+        | "popcap_render_effect_encode"
+        | "popcap_image_sequence_to_pam_json";
 
     /**
      *
@@ -161,6 +162,9 @@ namespace Sen.Script.Modules.Interface.Execute {
                     } else {
                         argument.forEach((arg: string) => Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(arg, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), arg.replaceAll(`/`, `\\`)));
                     }
+                    break;
+                }
+                case "popcap_image_sequence_to_pam_json": {
                     break;
                 }
                 case "popcap_render_effect_decode": {

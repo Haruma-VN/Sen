@@ -13,6 +13,35 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
     }
 
     /**
+     * Structure
+     */
+
+    export interface Rebuild {
+        animation: {
+            version: 1n | 2n | 3n | 4n | 5n | 6n;
+            transform: {
+                x: double;
+                y: double;
+            };
+            position: [double, double];
+            frame_rate: bigint;
+        };
+        resource: {
+            default: {
+                x: bigint;
+                y: bigint;
+            };
+            path_type: "array" | "string";
+            extend_id: string;
+            extend_path: Array<string>;
+            export: "resource-group" | "res-info";
+        };
+        atlas: {
+            trim: boolean;
+        };
+    }
+
+    /**
      *
      * @param pam_json - Deserialize pam json
      * @param sprites_to_disable - Sprite to disable list
@@ -233,7 +262,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                 Sen.Script.Modules.Interface.Arguments.ArgumentPrint(option.output_path, "file");
                 const frames: Array<string> = Sen.Shell.FileSystem.ReadDirectory(option.input_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
                     .filter((argument: string) => argument.toLowerCase().endsWith(`.png`))
-                    .sort((a: string, b: string) => parseInt(a) - parseInt(b));
+                    .sort((a, b) => {
+                        const numA = parseInt(Sen.Shell.Path.Parse(a).name_without_extension.split("_")[1]);
+                        const numB = parseInt(Sen.Shell.Path.Parse(b).name_without_extension.split("_")[1]);
+                        return numA - numB;
+                    });
                 Sen.Shell.DotNetBitmap.ExportAnimatedGif({
                     width: BigInt(Sen.Shell.DotNetBitmap.GetDimension(frames[0])!.width as unknown as number),
                     height: BigInt(Sen.Shell.DotNetBitmap.GetDimension(frames[0])!.height as unknown as number),

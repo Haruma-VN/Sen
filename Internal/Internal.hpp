@@ -22,6 +22,12 @@
 #include <list>
 #include <stdlib.h>
 #include <string.h>
+#include <array>
+#include <cstdio>
+#include <cstring>
+#if defined(_WIN32)
+#include <windows.h>
+#endif
 
 
 #include "dependencies/zlib/zlib.h"

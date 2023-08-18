@@ -392,5 +392,12 @@
         "exclude": [],
         "is_enabled": true,
         "type": "file"
+    },
+    "popcap_image_sequence_to_pam_json": {
+        "func_number": 57,
+        "include": [".render.animation"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
     }
 }

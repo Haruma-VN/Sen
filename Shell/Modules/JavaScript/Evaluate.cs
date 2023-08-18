@@ -49,6 +49,11 @@ namespace Sen.Shell.Modules.JavaScript
                 {"ADBHelper", new Sen.Shell.Modules.Support.Misc.ADBHelper()},
             };
             ns.Set("Shell", JsValue.FromObject(Engine, dictionary));
+            var k_dictionary = new Dictionary<string, object>
+            {
+                {"Version", new Internal.Internal() },
+            };
+            ns.Set("Internal", JsValue.FromObject(Engine, k_dictionary));
             Engine.SetValue("Sen", ns);
             Engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts\\main.js");
             return;

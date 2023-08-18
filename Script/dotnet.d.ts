@@ -87,6 +87,14 @@ declare namespace Sen {
              * Shell that host this tool
              */
             export function ShellHost(): string;
+            /**
+             *
+             * @param message - Send message here
+             * @param title - Send title here
+             * Sending notification message through multiple platform
+             */
+
+            export function SendMessageBox(message: string, title: string): void;
         }
 
         /**
@@ -129,6 +137,16 @@ declare namespace Sen {
              */
 
             export function Debug<T extends Array<any> | object>(color: Sen.Script.Modules.Platform.Constraints.ConsoleColor | null, ...params: Array<T>): void;
+            /**
+             * @returns Dialog
+             */
+
+            export function OpenFileDialog(title: string): string;
+            /**
+             * @returns Dialog
+             */
+
+            export function OpenDirectoryDialog(title: string): string;
         }
         /**
          * @packages Implementing File System based on C# & JS
@@ -2412,6 +2430,30 @@ declare namespace Sen {
         declare interface RTONCipher {
             crypt: boolean;
             key: string;
+        }
+    }
+
+    /**
+     * Internal Project
+     */
+
+    export namespace Internal {
+        /**
+         * Version
+         */
+
+        export class Version {
+            /**
+             * Version of Internal
+             */
+
+            public static InternalVersion(): number;
+
+            /**
+             * Give current architecture
+             */
+
+            public static GetProcessorArchitecture(): string;
         }
     }
 }

@@ -45,6 +45,60 @@ Void ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array** uncom
     return;
 }
 
+enum Architecture {
+    X64,
+    ARM,
+    INTEL,
+    X86,
+    UNKNOWN,
+    ARM64,
+};
+
+InternalAPI
+Architecture GetProcessorArchitecture()
+{
+#if defined(_WIN32)
+    SYSTEM_INFO si;
+    GetNativeSystemInfo(&si);
+
+    switch (si.wProcessorArchitecture)
+    {
+    case PROCESSOR_ARCHITECTURE_AMD64:
+        return Architecture::X64;
+    case PROCESSOR_ARCHITECTURE_ARM:
+        return Architecture::ARM;
+    case PROCESSOR_ARCHITECTURE_IA64:
+        return Architecture::INTEL;
+    case PROCESSOR_ARCHITECTURE_INTEL:
+        return Architecture::X86;
+    default:
+        return Architecture::UNKNOWN;
+    }
+#else
+    std::array<char, 128> buffer;
+    std::string result;
+    FILE* pipe = popen("uname -m", "r");
+    if (!pipe) throw std::runtime_error("popen() failed!");
+    while (fgets(buffer.data(), 128, pipe) != nullptr) {
+        result += buffer.data();
+    }
+    auto returnCode = pclose(pipe);
+
+    result.erase(std::remove(result.begin(), result.end(), '\n'), result.end());
+
+    if (result == "x86_64")
+        return Architecture::X64;
+    else if (result == "i686")
+        return Architecture::X86;
+    else if (result == "aarch64")
+        return Architecture::ARM64;
+    else if (result == "armv7l")
+        return Architecture::ARM;
+    else
+        return Architecture::UNKNOWN;
+#endif
+}
+
 InternalAPI
 Integer InternalVersion()
 {
