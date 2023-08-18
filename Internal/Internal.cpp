@@ -2,7 +2,7 @@
 
 
 InternalAPI
-inline auto ZlibCompress(const UnsignedByteStream data, ArraySize dataSize, Integer level, ArraySize& compressedSize) -> UnsignedByteStream {
+UnsignedByteStream ZlibCompress(const UnsignedByteStream data, ArraySize dataSize, Integer level, ArraySize& compressedSize) {
     auto destSize = compressBound(dataSize);
     auto compressedData = new unsigned char[destSize];
     auto result = compress2(compressedData, &destSize, data, dataSize, level);
@@ -15,7 +15,7 @@ inline auto ZlibCompress(const UnsignedByteStream data, ArraySize dataSize, Inte
 }
 
 InternalAPI
-inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array** uncompressedData, Integer* uncompressedDataSize) -> Void {
+Void ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array** uncompressedData, Integer* uncompressedDataSize) {
     z_stream strm{};
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
@@ -46,7 +46,7 @@ inline auto ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array*
 }
 
 InternalAPI
-inline auto InternalVersion() -> Integer
+Integer InternalVersion()
 {
     return MInternalVersion;
 }
@@ -58,7 +58,7 @@ inline auto InternalVersion() -> Integer
 #endif
 
 InternalAPI
-inline auto OpenFileDialog(const CString title) -> CString
+CString OpenFileDialog(const CString title)
 {
     auto file = tinyfd_openFileDialog(
         title,
@@ -71,7 +71,7 @@ inline auto OpenFileDialog(const CString title) -> CString
 }
 
 InternalAPI
-inline auto OpenDirectoryDialog(const CString title) -> CString
+CString OpenDirectoryDialog(const CString title)
 {
     auto directory = tinyfd_selectFolderDialog(
         title,
@@ -81,11 +81,11 @@ inline auto OpenDirectoryDialog(const CString title) -> CString
 }
 
 InternalAPI
-inline auto SendLosNotification(
+Void SendLosNotification(
     const char* title,
     const char* message, 
     const char* info
-) -> Void
+)
 {
     tinyfd_notifyPopup(title, message, info);
     return;

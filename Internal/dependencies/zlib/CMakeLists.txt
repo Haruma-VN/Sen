@@ -1,6 +1,6 @@
 project(
 	zlib
-	VERSION 1.2.12
+	VERSION 1.2.13
 	HOMEPAGE_URL https://www.zlib.net/
 	LANGUAGES C
 )
@@ -34,3 +34,5 @@ add_library(
 	./uncompr.c
 	./zutil.c
 )
+
+set_target_properties(zlib PROPERTIES POSITION_INDEPENDENT_CODE ON)
