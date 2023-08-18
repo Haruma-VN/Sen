@@ -45,14 +45,6 @@ Void ZlibUncompress(const Uint8Array* data, Integer dataSize, Uint8Array** uncom
     return;
 }
 
-enum Architecture {
-    X64,
-    ARM,
-    INTEL,
-    X86,
-    UNKNOWN,
-    ARM64,
-};
 
 InternalAPI
 Architecture GetProcessorArchitecture()
@@ -125,8 +117,9 @@ InternalAPI
 char const* OpenDirectoryDialog(char const* title)
 {
     char const* lTheSelectFolderName = tinyfd_selectFolderDialog(
-        "let us just select a directory", NULL);
-    tinyfd_messageBox("your password as it was saved", lTheSelectFolderName, "ok", "info", 1);
+        title, 
+        NULL
+    );
     return lTheSelectFolderName;
 }
 

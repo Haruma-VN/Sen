@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include "../../kernel/utility/string/common.hpp"
 
 namespace Sen::Internal::Utility::Path
 {
@@ -9,18 +10,55 @@ namespace Sen::Internal::Utility::Path
 	namespace fs = std::filesystem;
 
 	struct ParsedPath {
+
+	protected:
+
+		string _name;
+		string _name_without_extension;
+		string _extension;
+		string _parent_directory;
+		string _parent_directories;
 	public:
-		string name;
-		string name_without_extension;
-		string extension;
-		string parent_directory;
-		string parent_directories;
 
-		#pragma region Declaration
-
-		ParsedPath()
+		#pragma region Constructor
+		ParsedPath(
+			string name, 
+			string name_without_extension, 
+			string extension,
+			string parent_directory,
+			string parent_directories
+			)
 		{
+			this->_name = name;
+			this->_name_without_extension = name_without_extension;
+			this->_extension = extension;
+			this->_parent_directory = parent_directory;
+			this->_parent_directories = parent_directories;
+		}
 
+		auto name() -> std::string
+		{
+			return this->_name;
+		}
+
+		auto name_without_extension() -> std::string
+		{
+			return this->_name_without_extension;
+		}
+
+		auto extension() -> std::string
+		{
+			return this->_extension;
+		}
+
+		auto parent_directory() -> std::string
+		{
+			return this->_parent_directory;
+		}
+
+		auto parent_directories() -> std::string
+		{
+			return this->_parent_directories;
 		}
 		
 
@@ -31,6 +69,10 @@ namespace Sen::Internal::Utility::Path
 
 		#pragma endregion
 	};
+
+	inline std::string constexpr backslash = "\\";
+
+	inline std::string constexpr slash = "/";
 
 	#pragma region path
 
@@ -65,6 +107,84 @@ namespace Sen::Internal::Utility::Path
 	inline auto root_path(const std::wstring& path) -> std::string
 	{
 		return fs::current_path().root_path().string();
+	}
+
+	inline auto parent_directory(const std::string& path) -> std::string
+	{
+		auto c = parent_directories(path);
+		Sen::Internal::Utility::String::replace(
+			c,
+			backslash,
+			slash
+		);
+		return Sen::Internal::Utility::String::split(c, slash).at(-2);
+	}
+
+	inline auto parent_directory(const std::wstring& path) -> std::string
+	{
+		auto c = parent_directories(path);
+		Sen::Internal::Utility::String::replace(
+			c,
+			backslash,
+			slash
+		);
+		return Sen::Internal::Utility::String::split(c, slash).at(-2);
+	}
+
+	inline auto filename(const std::wstring& path) -> std::string
+	{
+		return fs::path(path).filename().string();
+	}
+
+	inline auto filename(const std::string& path) -> std::string
+	{
+		return fs::path(path).filename().string();
+	}
+
+	inline auto extension(const std::wstring& path) -> std::string
+	{
+		return fs::path(path).extension().string();
+	}
+
+	inline auto extension(const std::string& path) -> std::string
+	{
+		return fs::path(path).extension().string();
+	}
+
+	inline auto file_name_only(const std::string& path) -> std::string
+	{
+		return fs::path(path).stem().string();
+	}
+
+	inline auto file_name_only(const std::wstring& path) -> std::string
+	{
+		return fs::path(path).stem().string();
+	}
+
+	inline auto parse(
+		const std::string& path
+	) -> Sen::Internal::Utility::Path::ParsedPath*
+	{
+		return new ParsedPath(
+			filename(path),
+			file_name_only(path),
+			extension(path),
+			parent_directory(path),
+			parent_directories(path)
+		);
+	}
+
+	inline auto parse(
+		const std::wstring& path
+	) -> Sen::Internal::Utility::Path::ParsedPath*
+	{
+		return new ParsedPath(
+			filename(path),
+			file_name_only(path),
+			extension(path),
+			parent_directory(path),
+			parent_directories(path)
+		);
 	}
 
 	#pragma endregion

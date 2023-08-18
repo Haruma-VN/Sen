@@ -71,6 +71,15 @@ inline constexpr auto MInternalVersion = 1;
 
 #pragma region Platforms
 
+enum Architecture {
+    X64,
+    ARM,
+    INTEL,
+    X86,
+    UNKNOWN,
+    ARM64,
+};
+
 #define WINDOWS _WIN32
 
 #define LINUX __linux__

@@ -49,6 +49,7 @@ namespace Sen::Internal::Utility::FileSystem
 			data += line;
 		}
 		file.close();
+		return data;
 	}
 
 	inline auto read_file(String filepath) -> String
@@ -60,6 +61,7 @@ namespace Sen::Internal::Utility::FileSystem
 			data += line;
 		}
 		file.close();
+		return data;
 	}
 
 	/// <summary>
@@ -136,6 +138,16 @@ namespace Sen::Internal::Utility::FileSystem
 		);
 		Sen::Internal::Utility::FileSystem::write_file(new_path, data);
 		return;
+	}
+
+	inline auto read_buffer(
+		const std::string& filename
+	) -> std::vector<unsigned char> {
+		InFile file(filename, std::ios::binary | std::ios::ate);
+		auto size = file.tellg();
+		file.seekg(0, std::ios::beg);
+		std::vector<unsigned char> buffer(size);
+		return buffer;
 	}
  
 }
