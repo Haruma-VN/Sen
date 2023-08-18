@@ -20,6 +20,8 @@
 #include <map>
 #include <stack>
 #include <list>
+#include <stdlib.h>
+#include <string.h>
 
 
 #include "dependencies/zlib/zlib.h"
@@ -33,6 +35,10 @@
 
 #pragma region Compilation
 
+#ifdef _MSC_VER
+#pragma warning(disable:4996)
+#endif
+
 #define CRT_SECURE_NO_WARNINGS
 
 #define thiz (*this)
@@ -41,6 +47,8 @@
 	std::cout << __VA_ARGS__ << std::endl;
 
 inline constexpr auto MInternalVersion = 1;
+
+#define null NULL
 
 #pragma endregion
 
@@ -94,6 +102,8 @@ typedef float Float;
 typedef std::wstring UTF8;
 
 typedef char* CString;
+
+typedef wchar_t* UTF8String;
 
 
 #pragma endregion

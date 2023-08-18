@@ -52,7 +52,10 @@ namespace Sen.Shell.Modules.Standards
         public static extern string OpenDirectoryDialog(string title);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern string SendLosNotification(string title, string message, string info);
+        public static extern void SendLosNotification(string title, string message, string info);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SendMessageBox(string title, string message, string btn_display);
 
     }
 

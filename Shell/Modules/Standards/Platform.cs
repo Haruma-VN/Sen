@@ -56,6 +56,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract void SendNotification(string message, string title);
 
+        public abstract void SendMessageBox(string message, string title);
+
         public abstract string ShellHost();
 
     }
@@ -193,35 +195,13 @@ namespace Sen.Shell.Modules.Standards
 
         public override void SendNotification(string message, string title)
         {
-            var toast = new Support.Misc.ToastNotification();
-            try
-            {
+            SenAPI.SendLosNotification(title, message, "info");
+            return;
+        }
 
-                switch (CurrentPlatform())
-                {
-                    case UserPlatform.Macintosh:
-                        {
-                            toast.SendMacintosh(message, title);
-                            break;
-                        }
-                    case UserPlatform.Windows:
-                        {
-                            toast.SendWindows(message, title);
-                            break;
-                        }
-                    case UserPlatform.Linux:
-                        {
-                            toast.SendLinux(message, title);
-                            break;
-                        }
-                    default:
-                        {
-                            break;
-                        }
-                }
-            }
-            catch { }
-            finally { }
+        public override void SendMessageBox(string message, string title)
+        {
+            SenAPI.SendMessageBox(title, message, "OK");
             return;
         }
 
@@ -229,27 +209,5 @@ namespace Sen.Shell.Modules.Standards
         {
             return "Console";
         }
-
-        /// Xamarin.Forms only
-        //public static string CurrentPlatform()
-        //{
-        //    #if WINDOWS
-        //        return "windows";
-        //    #elif MACOS
-        //        return "macintosh";
-        //    #elif LINUX
-        //        return "linux";
-        //    #endif
-        //    switch (Device.SenPlatform)
-        //    {
-        //        case Device.iOS:
-        //            return "ios";
-        //        case Device.Android:
-        //            return "android";
-        //        case Device.Windows:
-        //            return "windows";
-        //        case Device.
-        //    }
-        //}
     }
 }

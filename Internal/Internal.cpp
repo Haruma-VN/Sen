@@ -52,11 +52,7 @@ Integer InternalVersion()
 }
 
 #if WINDOWS || LINUX || MACINTOSH
-#include "dependencies/tinyfiledialogs/tinyfiledialogs.c"
-#if WINDOWS
-#include <Windows.h>
-#endif
-
+#include "dependencies/tinyfiledialogs/tinyfiledialogs.h"
 InternalAPI
 CString OpenFileDialog(const CString title)
 {
@@ -64,26 +60,27 @@ CString OpenFileDialog(const CString title)
         title,
         nullptr,
         0,
-        NULL,
-        NULL,
-        0);
+        null,
+        null,
+        0
+    );
     return file;
 }
 
 InternalAPI
-CString OpenDirectoryDialog(const CString title)
+char* OpenDirectoryDialog(const char* title)
 {
-    auto directory = tinyfd_selectFolderDialog(
+    auto lTheSelectFolderName = tinyfd_selectFolderDialog(
         title,
-        nullptr
+        null
     );
-    return directory;
+    return lTheSelectFolderName;
 }
 
 InternalAPI
 Void SendLosNotification(
     const char* title,
-    const char* message, 
+    const char* message,
     const char* info
 )
 {
@@ -91,15 +88,15 @@ Void SendLosNotification(
     return;
 }
 
-#else
 InternalAPI
-inline auto OpenFile(const CString title) -> Integer
+Void SendMessageBox(
+    const char* title,
+    const char* message,
+    const char* btn_display
+)
 {
-    return 0;
-}
-inline auto OpenDirectory(const CString title) -> Integer
-{
-    return 0;
+    tinyfd_messageBox(title, message, btn_display, "info", 1);
+    return;
 }
 #endif
 
