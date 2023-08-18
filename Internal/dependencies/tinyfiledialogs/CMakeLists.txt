@@ -10,3 +10,5 @@ add_library(
 	./tinyfiledialogs.h
 	./tinyfiledialogs.c
 )
+
+set_target_properties(tinyfiledialogs PROPERTIES POSITION_INDEPENDENT_CODE ON)

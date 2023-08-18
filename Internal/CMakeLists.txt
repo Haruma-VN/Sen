@@ -18,7 +18,6 @@ add_library(
   "./dependencies/avir/avir.h"
   "./dependencies/nlohmann/json.hpp"
   "./dependencies/nlohmann/json_fwd.hpp"
-  "./tool/encode/encode.hpp"
   "./Internal.hpp"
   "./Internal.cpp"
 )
