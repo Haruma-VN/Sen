@@ -5,7 +5,7 @@
 #include <string.h>
 #include <vector>
 
-namespace Sen::Internal::Utility::String
+namespace Sen::Internal::Kernel::Utility::String
 {
 
 	using Boolean = bool;

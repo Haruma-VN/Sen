@@ -7,7 +7,7 @@
 #include <filesystem>
 #include "../../kernel/utility/string/common.hpp"
 
-namespace Sen::Internal::Utility::FileSystem 
+namespace Sen::Internal::Kernel::Utility::FileSystem
 {
 
 	using Void = void;
@@ -109,16 +109,16 @@ namespace Sen::Internal::Utility::FileSystem
 		String data
 	) -> Void
 	{
-		auto new_path = Sen::Internal::Utility::Path::resolve(filepath);
+		auto new_path = Sen::Internal::Kernel::Utility::Path::resolve(filepath);
 		auto constexpr delimeter = "/";
 		auto constexpr backslashs = "\\";
-		Sen::Internal::Utility::String::replace(new_path, backslashs, delimeter);
-		auto list = Sen::Internal::Utility::String::split(new_path, delimeter);
+		Sen::Internal::Kernel::Utility::String::replace(new_path, backslashs, delimeter);
+		auto list = Sen::Internal::Kernel::Utility::String::split(new_path, delimeter);
 		list.pop_back();
-		Sen::Internal::Utility::FileSystem::create_directories(
-			Sen::Internal::Utility::String::join(list, delimeter)
+		Sen::Internal::Kernel::Utility::FileSystem::create_directories(
+			Sen::Internal::Kernel::Utility::String::join(list, delimeter)
 		);
-		Sen::Internal::Utility::FileSystem::write_file(new_path, data);
+		Sen::Internal::Kernel::Utility::FileSystem::write_file(new_path, data);
 		return;
 	}
 
@@ -127,16 +127,16 @@ namespace Sen::Internal::Utility::FileSystem
 		String data
 	) -> Void
 	{
-		auto new_path = Sen::Internal::Utility::Path::resolve(filepath);
+		auto new_path = Sen::Internal::Kernel::Utility::Path::resolve(filepath);
 		auto constexpr delimeter = "/";
 		auto constexpr backslashs = "\\";
-		Sen::Internal::Utility::String::replace(new_path, backslashs, delimeter);
-		auto list = Sen::Internal::Utility::String::split(new_path, delimeter);
+		Sen::Internal::Kernel::Utility::String::replace(new_path, backslashs, delimeter);
+		auto list = Sen::Internal::Kernel::Utility::String::split(new_path, delimeter);
 		list.pop_back();
-		Sen::Internal::Utility::FileSystem::create_directories(
-			Sen::Internal::Utility::String::join(list, delimeter)
+		Sen::Internal::Kernel::Utility::FileSystem::create_directories(
+			Sen::Internal::Kernel::Utility::String::join(list, delimeter)
 		);
-		Sen::Internal::Utility::FileSystem::write_file(new_path, data);
+		Sen::Internal::Kernel::Utility::FileSystem::write_file(new_path, data);
 		return;
 	}
 

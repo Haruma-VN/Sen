@@ -2,7 +2,7 @@
 #include <filesystem>
 #include "../../kernel/utility/string/common.hpp"
 
-namespace Sen::Internal::Utility::Path
+namespace Sen::Internal::Kernel::Utility::Path
 {
 	
 	using std::string;
@@ -112,23 +112,23 @@ namespace Sen::Internal::Utility::Path
 	inline auto parent_directory(const std::string& path) -> std::string
 	{
 		auto c = parent_directories(path);
-		Sen::Internal::Utility::String::replace(
+		Sen::Internal::Kernel::Utility::String::replace(
 			c,
 			backslash,
 			slash
 		);
-		return Sen::Internal::Utility::String::split(c, slash).at(-2);
+		return Sen::Internal::Kernel::Utility::String::split(c, slash).at(-2);
 	}
 
 	inline auto parent_directory(const std::wstring& path) -> std::string
 	{
 		auto c = parent_directories(path);
-		Sen::Internal::Utility::String::replace(
+		Sen::Internal::Kernel::Utility::String::replace(
 			c,
 			backslash,
 			slash
 		);
-		return Sen::Internal::Utility::String::split(c, slash).at(-2);
+		return Sen::Internal::Kernel::Utility::String::split(c, slash).at(-2);
 	}
 
 	inline auto filename(const std::wstring& path) -> std::string
@@ -163,7 +163,7 @@ namespace Sen::Internal::Utility::Path
 
 	inline auto parse(
 		const std::string& path
-	) -> Sen::Internal::Utility::Path::ParsedPath*
+	) -> Sen::Internal::Kernel::Utility::Path::ParsedPath*
 	{
 		return new ParsedPath(
 			filename(path),
@@ -176,7 +176,7 @@ namespace Sen::Internal::Utility::Path
 
 	inline auto parse(
 		const std::wstring& path
-	) -> Sen::Internal::Utility::Path::ParsedPath*
+	) -> Sen::Internal::Kernel::Utility::Path::ParsedPath*
 	{
 		return new ParsedPath(
 			filename(path),
