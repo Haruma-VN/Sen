@@ -25,6 +25,7 @@
 #include <array>
 #include <cstdio>
 #include <cstring>
+#include "kernel/utility/utility.hpp"
 #if defined(_WIN32)
 #include <windows.h>
 #endif

@@ -136,6 +136,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     }
 
+    #endregion
+
     #region Resources Writing
 
     [JsonSerializable(typeof(ResourceGroup))]
@@ -742,8 +744,6 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     #endregion
 
-
-    #endregion
 
     #region Asynchronous Task
 

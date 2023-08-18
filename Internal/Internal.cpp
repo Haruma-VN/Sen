@@ -122,12 +122,11 @@ CString OpenFileDialog(const CString title)
 }
 
 InternalAPI
-char* OpenDirectoryDialog(char* title)
+char const* OpenDirectoryDialog(char const* title)
 {
-    char* lTheSelectFolderName = tinyfd_selectFolderDialog(
-        title,
-        null
-    );
+    char const* lTheSelectFolderName = tinyfd_selectFolderDialog(
+        "let us just select a directory", NULL);
+    tinyfd_messageBox("your password as it was saved", lTheSelectFolderName, "ok", "info", 1);
     return lTheSelectFolderName;
 }
 

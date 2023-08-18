@@ -18,6 +18,10 @@ add_library(
   "./dependencies/avir/avir.h"
   "./dependencies/json/json.hpp"
   "./dependencies/json/json_fwd.hpp"
+  "./kernel/utility/string/common.hpp"
+  "./kernel/utility/path/common.hpp"
+  "./kernel/utility/filesystem/common.hpp"
+  "./kernel/utility/utility.hpp"
   "./Internal.hpp"
   "./Internal.cpp"
 )
