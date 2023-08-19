@@ -28,6 +28,7 @@
 #include "kernel/utility/utility.hpp"
 #if defined(_WIN32)
 #include <windows.h>
+#include <codecvt>
 #endif
 
 
