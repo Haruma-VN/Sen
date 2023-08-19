@@ -33,6 +33,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 
 	namespace fs = std::filesystem;
 
+	#if _WIN32
+
 	inline auto write_file(
 		WString filepath, 
 		String data
@@ -44,6 +46,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		return;
 	}
 
+	#endif
+
 	inline auto write_file(
 		String filepath, 
 		String data
@@ -54,6 +58,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		file.close();
 		return;
 	}
+
+	#if _WIN32
 
 	inline auto read_file(
 		WString filepath
@@ -68,6 +74,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		file.close();
 		return data;
 	}
+
+	#endif
 
 	inline auto read_file(
 		String filepath
@@ -89,6 +97,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 	/// <param name="directory_path">Pass directory path</param>
 	/// <returns>Created directory</returns>
 
+	#if _WIN32
+
 	inline auto create_directory(
 		WString directory_path
 	) -> Void 
@@ -96,6 +106,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		fs::create_directory(directory_path);
 		return;
 	}
+
+	#endif
 
 	inline auto create_directory(
 		String directory_path
@@ -111,6 +123,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 	/// <param name="directory_path"></param>
 	/// <returns>Created many directories</returns>
 
+	#if _WIN32
+
 	inline auto create_directories(
 		WString directory_path
 	) -> Void
@@ -119,6 +133,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		return;
 	}
 
+	#endif
+
 	inline auto create_directories(
 		String directory_path
 	) -> Void
@@ -126,6 +142,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		fs::create_directories(directory_path);
 		return;
 	}
+
+	#if _WIN32
 	
 	inline auto out_file(
 		WString &filepath, 
@@ -144,6 +162,8 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		Sen::Internal::Kernel::Utility::FileSystem::write_file(new_path, data);
 		return;
 	}
+
+	#endif
 
 	inline auto out_file(
 		String& filepath,
