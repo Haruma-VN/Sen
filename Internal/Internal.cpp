@@ -177,6 +177,7 @@ char const* OpenDirectoryDialog(
     return &path[0][0];
 }
 #else
+InternalAPI
 char const* OpenDirectoryDialog(char const* title)
 {
         char const* lTheSelectFolderName = tinyfd_selectFolderDialog(
