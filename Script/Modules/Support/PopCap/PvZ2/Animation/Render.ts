@@ -25,6 +25,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
             };
             position: [double, double];
             frame_rate: bigint;
+            scale_ratio: double;
         };
         resource: {
             default: {
@@ -34,7 +35,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
             path_type: "array" | "string";
             extend_id: string;
             extend_path: Array<string>;
-            export: "resource-group" | "res-info";
         };
         atlas: {
             trim: boolean;
@@ -262,7 +262,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                 Sen.Script.Modules.Interface.Arguments.ArgumentPrint(option.output_path, "file");
                 const frames: Array<string> = Sen.Shell.FileSystem.ReadDirectory(option.input_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
                     .filter((argument: string) => argument.toLowerCase().endsWith(`.png`))
-                    .sort((a, b) => {
+                    .sort((a: string, b: string) => {
                         const numA = parseInt(Sen.Shell.Path.Parse(a).name_without_extension.split("_")[1]);
                         const numB = parseInt(Sen.Shell.Path.Parse(b).name_without_extension.split("_")[1]);
                         return numA - numB;
@@ -284,7 +284,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                 Sen.Script.Modules.Interface.Arguments.ArgumentPrint(option.output_path, "file");
                 const frames: Array<string> = Sen.Shell.FileSystem.ReadDirectory(option.input_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
                     .filter((argument: string) => argument.toLowerCase().endsWith(`.png`))
-                    .sort((a, b) => {
+                    .sort((a: string, b: string) => {
                         const numA = parseInt(Sen.Shell.Path.Parse(a).name_without_extension.split("_")[1]);
                         const numB = parseInt(Sen.Shell.Path.Parse(b).name_without_extension.split("_")[1]);
                         return numA - numB;
@@ -298,5 +298,173 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
             }
         }
         return;
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface Input {
+        size: {
+            width: double;
+            height: double;
+        };
+        work_area: {
+            from: double;
+            to: double;
+        };
+        version: 1 | 2 | 3 | 4 | 5 | 6;
+        frame_rate: double;
+        position: {
+            x: double;
+            y: double;
+        };
+        transform: {
+            a: 1;
+            b: 0;
+            c: 0;
+            d: 1;
+            tx: double;
+            ty: double;
+        };
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface Request {
+        resource_build: string;
+        render_directory: string;
+        frame_name: string;
+        content_name: string;
+    }
+
+    /**
+     *
+     * @param list - Pass list of Image Info
+     * @returns
+     */
+
+    export function GetLargestSize(list: Array<Sen.Script.Modules.BitMap.Constraints.ImageInfo<number>>): Record<"width" | "height", number> {
+        let largestWidth: number = list[0].width;
+        let largestHeight: number = list[0].height;
+        for (let i = 1; i < list.length; ++i) {
+            const current: Sen.Script.Modules.BitMap.Constraints.ImageInfo<number> = list[i];
+            if (current.width > largestWidth) {
+                largestWidth = current.width;
+            }
+            if (current.height > largestHeight) {
+                largestHeight = current.height;
+            }
+        }
+        return {
+            width: largestWidth,
+            height: largestHeight,
+        };
+    }
+
+    /**
+     *
+     * @param package_n - Pass package
+     * @returns
+     */
+
+    export function BuildAnimationFromRenderImages(package_n: Request): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson {
+        const resource_build: Rebuild = Sen.Script.Modules.FileSystem.Json.ReadJson<Rebuild>(package_n.resource_build);
+        const m_list: Array<string> = Sen.Shell.FileSystem.ReadDirectory(package_n.render_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
+            .filter((e) => e.toLowerCase().endsWith(`.png`) && Sen.Shell.Path.Parse(e).name_without_extension === package_n.frame_name)
+            .sort((a: string, b: string) => {
+                const numA = parseInt(Sen.Shell.Path.Parse(a).name_without_extension.split("_")[1]);
+                const numB = parseInt(Sen.Shell.Path.Parse(b).name_without_extension.split("_")[1]);
+                return numA - numB;
+            });
+        const d_list: Array<Sen.Script.Modules.BitMap.Constraints.ImageInfo<number>> = m_list.map((e: string) => Sen.Shell.DotNetBitmap.GetDimension<number>(e));
+        const option: Input = {
+            size: GetLargestSize(d_list),
+            work_area: {
+                from: 0,
+                to: m_list.length,
+            },
+            version: Number(resource_build.animation.version) as 6,
+            frame_rate: Number(resource_build.animation.frame_rate),
+            transform: {
+                a: 1,
+                b: 0,
+                c: 0,
+                d: 1,
+                tx: resource_build.animation.transform.x,
+                ty: resource_build.animation.transform.y,
+            },
+            position: {
+                x: resource_build.animation.position[0],
+                y: resource_build.animation.position[1],
+            },
+        };
+        const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = {
+            version: option.version,
+            frame_rate: option.frame_rate,
+            position: [option.position.x, option.position.y],
+            size: [option.size.width, option.size.height],
+            image: [],
+            sprite: [],
+            main_sprite: {
+                name: "",
+                description: "",
+                frame_rate: option.frame_rate,
+                work_area: [option.work_area.from, option.work_area.to],
+                frame: [],
+            },
+        };
+        const transform: Array<double> = Object.values(option.transform)!;
+        d_list.forEach((e: Sen.Script.Modules.BitMap.Constraints.ImageInfo<number>, index: int) => {
+            const temp: string = `${package_n.content_name}_${index + 1}`;
+            pam_json.image.push({
+                name: `${temp.toLowerCase()}|${resource_build.resource.extend_id}${temp.toUpperCase()}`,
+                size: [Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.BeautifyDimension(e.width * 0.78125), Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.BeautifyDimension(e.height * 0.78125)],
+                transform: [...(transform as unknown as [double, double, double, double, double, double])],
+            });
+            pam_json.main_sprite.frame!.push({
+                label: null as unknown as any,
+                stop: index === d_list.length - 1 ? true : false,
+                command: [],
+                remove:
+                    index === 0
+                        ? []
+                        : [
+                              {
+                                  index: index - 1,
+                              },
+                          ],
+                append: [
+                    {
+                        index: index,
+                        name: null as any as undefined,
+                        resource: index,
+                        sprite: false,
+                        additive: false,
+                        preload_frame: 0,
+                        time_scale: 1,
+                    },
+                ],
+                change: [
+                    {
+                        index: index,
+                        transform: [
+                            resource_build.animation.scale_ratio !== 1 ? 1 * resource_build.animation.scale_ratio : resource_build.animation.scale_ratio,
+                            0,
+                            0,
+                            resource_build.animation.scale_ratio !== 1 ? 1 * resource_build.animation.scale_ratio : resource_build.animation.scale_ratio,
+                            resource_build.animation.transform.x,
+                            resource_build.animation.transform.y,
+                        ] as any,
+                        color: [1, 1, 1, 1],
+                        sprite_frame_number: null as any,
+                        source_rectangle: null as any,
+                    },
+                ],
+            });
+        });
+        return pam_json;
     }
 }

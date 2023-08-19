@@ -67,12 +67,14 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 13;
+    export const ScriptVersion: int = 13 as const;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 8;
+    export const ShellRequirement: int = 8 as const;
+
+    export const M_Version: string = `2.3.0` as const;
 
     /**
      *
@@ -145,7 +147,7 @@ namespace Sen.Script {
         Sen.Script.DownloadInternal();
         Sen.Shell.Console.Print(
             14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
-            `Sen ~ 2.3.0 |  Shell ${
+            `Sen ~ ${Sen.Script.M_Version} |  Shell ${
                 Sen.Shell.ShellVersion.ShellVersion
             } & Script ${ScriptVersion} & Internal ${Sen.Internal.Version.InternalVersion()} | ${Sen.Shell.DotNetPlatform.ShellHost()} & ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()} & ${Sen.Internal.Version.GetProcessorArchitecture()}`
         );

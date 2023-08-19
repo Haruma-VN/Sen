@@ -1411,6 +1411,8 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.xfl`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("please_provide_media"));
+                        Sen.Shell.Console.Printf(null, `      ${Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(output_argument, `library`, `media`))}`);
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimateAdobeFlashAnimation(argument, output_argument, resolution);
                     } else {
                         argument.forEach((arg: string) => {
@@ -1421,6 +1423,8 @@ namespace Sen.Script.Modules.Interface.Execute {
                             );
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.xfl`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("please_provide_media"));
+                            Sen.Shell.Console.Printf(null, `      ${Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(output_argument, `library`, `media`))}`);
                             Sen.Script.Modules.Support.PopCap.PvZ2.Animation.PopCapAnimationToAnimateAdobeFlashAnimation(arg, output_argument, resolution);
                         });
                     }

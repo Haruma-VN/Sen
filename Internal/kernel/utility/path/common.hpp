@@ -234,5 +234,4 @@ namespace Sen::Internal::Kernel::Utility::Path
 		return n;
 	}
 
-	#pragma endregion
 }
