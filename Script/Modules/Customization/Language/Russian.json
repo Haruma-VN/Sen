@@ -17,7 +17,7 @@
     "execution_expected": "Ожидаемое выполнение: ",
     "execution_reminder": "Уведомление о выполнении: ",
     "execution_status": "Статус выполнения: {}",
-    "execution_process": "Обработанное выполнение: {}",
+    "execution_process": "Обрабатываемое выполнение: {}",
     "execution_finish": "Выполнение завершено: {}",
     "execution_failed": "Неудачное выполнение: {}",
     "execution_warning": "Выполнено с предупреждением: {}",
@@ -512,5 +512,11 @@
     "invalid_composite_name": "Неверное название в Composite Shell -> {}",
     "invalid_rsg_name": "Неверное название RSG",
     "in_pool_index": "с индексом",
-    "invalid_packet_width": "Неверная ширина"	
+    "invalid_packet_width": "Неверная ширина",
+    "converted": "Сконвертирован",
+    "popcap_render_effect_decode": "PopCap Render-Effect: Декодировать",
+    "popcap_render_effect_encode": "PopCap Render-Effect: Закодировать",
+    "popcap_image_sequence_to_pam_json": "PopCap Animation: Создать Animation JSON из срендеренных изображений",
+    "please_provide_media": "Укажите путь до папки \"media\": ",
+    "select_input_method": "Выберите тип"	
 }
