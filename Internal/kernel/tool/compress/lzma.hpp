@@ -3,7 +3,8 @@
 #include <vector>
 #include "../../dependencies/lzma/LzmaLib.c"
 
-namespace Sen::Internal::Kernel::Tool::Compress::lzma {
+namespace Sen::Internal::Kernel::Tool::Compress::lzma 
+{
 
     inline auto compress_lzma(
         const std::vector<uint8_t>& data
