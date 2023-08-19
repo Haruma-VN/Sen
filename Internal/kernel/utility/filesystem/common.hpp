@@ -6,6 +6,7 @@
 #include <iostream>
 #include <filesystem>
 #include "../../kernel/utility/string/common.hpp"
+#include "../../kernel/utility/path/common.hpp"
 
 namespace Sen::Internal::Kernel::Utility::FileSystem
 {
@@ -24,7 +25,12 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 
 	using ios = std::ios;
 
-	inline auto write_file(WString filepath, String data) -> Void 
+	namespace fs = std::filesystem;
+
+	inline auto write_file(
+		WString filepath, 
+		String data
+	) -> Void 
 	{
 		OutFile file(filepath, ios::out);
 		file << data;
@@ -32,7 +38,10 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		return;
 	}
 
-	inline auto write_file(String filepath, String data) -> Void
+	inline auto write_file(
+		String filepath, 
+		String data
+	) -> Void
 	{
 		OutFile file(filepath, ios::out);
 		file << data;
@@ -40,7 +49,9 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		return;
 	}
 
-	inline auto read_file(WString filepath) -> String 
+	inline auto read_file(
+		WString filepath
+	) -> String 
 	{
 		InFile file(filepath, ios::in);
 		String line;
@@ -52,7 +63,9 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		return data;
 	}
 
-	inline auto read_file(String filepath) -> String
+	inline auto read_file(
+		String filepath
+	) -> String
 	{
 		InFile file(filepath, ios::in);
 		String line;
@@ -70,15 +83,19 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 	/// <param name="directory_path">Pass directory path</param>
 	/// <returns>Created directory</returns>
 
-	inline auto create_directory(WString directory_path) -> Void 
+	inline auto create_directory(
+		WString directory_path
+	) -> Void 
 	{
-		std::filesystem::create_directory(directory_path);
+		fs::create_directory(directory_path);
 		return;
 	}
 
-	inline auto create_directory(String directory_path) -> Void
+	inline auto create_directory(
+		String directory_path
+	) -> Void
 	{
-		std::filesystem::create_directory(directory_path);
+		fs::create_directory(directory_path);
 		return;
 	}
 
@@ -92,7 +109,7 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		WString directory_path
 	) -> Void
 	{
-		std::filesystem::create_directories(directory_path);
+		fs::create_directories(directory_path);
 		return;
 	}
 
@@ -100,7 +117,7 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		String directory_path
 	) -> Void
 	{
-		std::filesystem::create_directories(directory_path);
+		fs::create_directories(directory_path);
 		return;
 	}
 	

@@ -7,7 +7,6 @@
 If you wish to compile the project yourself, you would need these:
 
 -   [CMAKE 3.8+](https://cmake.org/)
--   [TypeScript 4.8.0+](https://www.typescriptlang.org/)
 -   [Powershell for Windows](https://learn.microsoft.com/en-us/powershell/)
 -   [Ubuntu for Linux](https://ubuntu.com/tutorials/command-line-for-beginners)
 -   [Terminal for Macintosh](https://developer.apple.com/library/archive/documentation/OpenSource/Conceptual/ShellScripting/Introduction/Introduction.html)

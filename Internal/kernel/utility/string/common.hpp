@@ -9,42 +9,52 @@ namespace Sen::Internal::Kernel::Utility::String
 {
 
 	using Boolean = bool;
+
+	using std::vector;
+
+	using std::string;
+
+	using std::wstring;
 	
 	inline auto replace(
-		std::string& str, 
-		const std::string& from, 
-		const std::string& to
+		string& str, 
+		const string& from, 
+		const string& to
 	) -> Boolean 
 	{
 		auto start_pos = str.find(from);
-		if(start_pos == std::string::npos)
+		if (start_pos == string::npos)
+		{
 			return false;
+		}
 		str.replace(start_pos, from.length(), to);
 		return true;
 	}
 
 	inline auto replace(
-		std::wstring& str, 
-		const std::wstring& from, 
-		const std::wstring& to
+		wstring& str, 
+		const wstring& from, 
+		const wstring& to
 	) -> Boolean
 	{
 		auto start_pos = str.find(from);
-		if (start_pos == std::string::npos)
+		if (start_pos == string::npos)
+		{
 			return false;
+		}
 		str.replace(start_pos, from.length(), to);
 		return true;
 	}
 
 	 inline auto split(
-		 const std::string& str,
-		 const std::string& delimiter
-	 ) -> std::vector<std::string> 
+		 const string& str,
+		 const string& delimiter
+	 ) -> vector<string> 
 	 {
-		auto result = std::vector<std::string>();
+		auto result = vector<string>();
 		auto start = 0;
 		auto end = str.find(delimiter);
-		while (end != std::string::npos) {
+		while (end != string::npos) {
 			result.push_back(str.substr(start, end - start));
 			start = end + delimiter.length();
 			end = str.find(delimiter, start);
@@ -54,14 +64,14 @@ namespace Sen::Internal::Kernel::Utility::String
 	}
 
 	 inline auto split(
-		 const std::wstring& str,
-		 const std::wstring& delimiter
-	 ) -> std::vector<std::wstring> 
+		 const wstring& str,
+		 const wstring& delimiter
+	 ) -> vector<wstring> 
 	 {
-		 auto result = std::vector<std::wstring>();
+		 auto result = vector<wstring>();
 		 auto start = 0;
 		 auto end = str.find(delimiter);
-		 while (end != std::string::npos) {
+		 while (end != string::npos) {
 			 result.push_back(str.substr(start, end - start));
 			 start = end + delimiter.length();
 			 end = str.find(delimiter, start);
@@ -71,11 +81,11 @@ namespace Sen::Internal::Kernel::Utility::String
 	 }
 
 	 inline auto join(
-		 const std::vector<std::string>& list, 
-		 const std::string& delimimer
-	 ) -> std::string
+		 const vector<string>& list, 
+		 const string& delimimer
+	 ) -> string
 	 {
-		 auto str = (std::string) "";
+		 auto str = (string) "";
 		 for (auto &c: list) {
 			 str += c;
 		 }
@@ -83,11 +93,11 @@ namespace Sen::Internal::Kernel::Utility::String
 	 }
 
 	 inline auto join(
-		 const std::vector<std::wstring>& list,
-		 const std::wstring& delimimer
+		 const vector<wstring>& list,
+		 const wstring& delimimer
 	 ) -> std::wstring
 	 {
-		 std::wstring str = L"";
+		 wstring str = L"";
 		 for (auto& c : list) {
 			 str += c;
 		 }
