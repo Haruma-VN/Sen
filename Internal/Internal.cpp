@@ -113,7 +113,7 @@ CString OpenFileDialog(const CString title)
     return file;
 }
 #if WINDOWS
-// TwinStar.ToolKit
+#pragma warning disable
 
 inline auto utf16_to_utf8(
     std::u16string_view const& source
@@ -167,6 +167,7 @@ inline auto pick_path(
     dialog->Release();
     return result;
 }
+
 
 InternalAPI
 char const* OpenDirectoryDialog(

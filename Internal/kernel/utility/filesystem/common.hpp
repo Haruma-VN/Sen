@@ -175,9 +175,9 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 
 	template <typename T>
 	inline auto write_file(
-		const char* filename, 
+		const CharPtr filename, 
 		const std::vector<T>& buffer
-	) -> void {
+	) -> Void {
 		if (std::FILE* f = std::fopen(filename, "wb")) {
 			std::fwrite(buffer.data(), sizeof(T), buffer.size(), f);
 			std::fclose(f);
@@ -187,7 +187,7 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 
 	template <typename T>
 	inline auto out_file(
-		const char* filepath,
+		const CharPtr filepath,
 		const std::vector<T>& buffer
 	) -> Void
 	{

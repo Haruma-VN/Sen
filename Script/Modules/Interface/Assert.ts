@@ -318,6 +318,26 @@ namespace Sen.Script.Modules.Interface.Assert {
         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("no_argument_were_passed")}`);
         let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (arg !== "") {
+            if (arg === ":p") {
+                const method: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("select_input_method"), [1, 2], {
+                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("file"), Sen.Script.Modules.System.Default.Localization.GetString("file")],
+                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("directory"), Sen.Script.Modules.System.Default.Localization.GetString("directory")],
+                }) as 1 | 2;
+                switch (method) {
+                    case 1: {
+                        do {
+                            arg = Sen.Shell.Console.OpenFileDialog("Sen");
+                        } while (arg === null || arg === ``);
+                        break;
+                    }
+                    case 2: {
+                        do {
+                            arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
+                        } while (arg === null || arg === ``);
+                        break;
+                    }
+                }
+            }
             if (arg.endsWith(" ")) {
                 arg = arg.slice(0, -1);
             }

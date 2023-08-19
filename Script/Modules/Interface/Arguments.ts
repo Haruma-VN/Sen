@@ -47,7 +47,10 @@ namespace Sen.Script.Modules.Interface.Arguments {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, msg);
         let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (!/^\d+$/.test(input)) {
-            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("not_a_valid_integer_input"))}`);
+            Sen.Shell.Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                `${Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("not_a_valid_integer_input"))}`
+            );
             input = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         }
         return parseInt(input);
@@ -62,6 +65,43 @@ namespace Sen.Script.Modules.Interface.Arguments {
     export function InputPath(type: "file" | "directory" | "unknown"): string {
         let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (arg !== "") {
+            if (arg === ":p") {
+                switch (type) {
+                    case "file": {
+                        do {
+                            arg = Sen.Shell.Console.OpenFileDialog("Sen");
+                        } while (arg === null || arg === ``);
+                        break;
+                    }
+                    case "directory": {
+                        do {
+                            arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
+                        } while (arg === null || arg === ``);
+                        break;
+                    }
+                    case "unknown": {
+                        const method: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("select_input_method"), [1, 2], {
+                            "1": [Sen.Script.Modules.System.Default.Localization.GetString("file"), Sen.Script.Modules.System.Default.Localization.GetString("file")],
+                            "2": [Sen.Script.Modules.System.Default.Localization.GetString("directory"), Sen.Script.Modules.System.Default.Localization.GetString("directory")],
+                        }) as 1 | 2;
+                        switch (method) {
+                            case 1: {
+                                do {
+                                    arg = Sen.Shell.Console.OpenFileDialog("Sen");
+                                } while (arg === null || arg === ``);
+                                break;
+                            }
+                            case 2: {
+                                do {
+                                    arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
+                                } while (arg === null || arg === ``);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
             if (arg.endsWith(" ")) {
                 arg = arg.slice(0, -1);
             }

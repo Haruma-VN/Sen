@@ -397,7 +397,7 @@
         "func_number": 57,
         "include": [".render.animation"],
         "exclude": [],
-        "is_enabled": true,
+        "is_enabled": false,
         "type": "directory"
     }
 }
