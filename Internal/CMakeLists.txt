@@ -18,6 +18,8 @@ add_library(
   "./dependencies/avir/avir.h"
   "./dependencies/json/json.hpp"
   "./dependencies/json/json_fwd.hpp"
+  "./kernel/tool/compress/bzip2.hpp"
+  "./kernel/tool/compress/lzma.hpp"
   "./kernel/utility/string/common.hpp"
   "./kernel/utility/path/common.hpp"
   "./kernel/utility/filesystem/common.hpp"
@@ -32,6 +34,8 @@ add_subdirectory("./dependencies/ETCPACK")
 add_subdirectory("./dependencies/rg_etc1")
 add_subdirectory("./dependencies/libpng")
 add_subdirectory("./dependencies/etcpak")
+add_subdirectory("./dependencies/lzma")
+add_subdirectory("./dependencies/bzip2")
 
 # tinyfiledialogs link
 
@@ -45,8 +49,16 @@ if(APPLE)
 endif()
 
 # Link against dependencies
-target_link_libraries(Internal PUBLIC 
-zlib ETCPACK rg_etc1 libpng etcpak)
+target_link_libraries(
+  Internal PUBLIC 
+  zlib 
+  ETCPACK 
+  rg_etc1 
+  libpng 
+  etcpak
+  lzma
+  bzip2
+)
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

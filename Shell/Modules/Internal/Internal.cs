@@ -27,7 +27,7 @@ namespace Sen.Shell.Modules.Internal
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern int InternalVersion();
 
-        [DllImport(LibraryModule)]
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern Architecture GetProcessorArchitecture();
     }
 

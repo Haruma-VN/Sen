@@ -1,5 +1,11 @@
 ﻿#pragma once
 
+#pragma region version
+
+inline constexpr auto MInternalVersion = 2;
+
+#pragma endregion
+
 #pragma region Standards
 
 #include <iostream>
@@ -37,6 +43,7 @@
 #include "dependencies/rg_etc1/rg_etc1.cpp"
 #include "dependencies/libpng/png.h"
 #include "dependencies/avir/avir.h"
+#include "dependencies/bzip2/bzlib.h"
 
 #pragma endregion
 
@@ -53,8 +60,6 @@
 
 #define log(...)\
 	std::cout << __VA_ARGS__ << std::endl;
-
-inline constexpr auto MInternalVersion = 1;
 
 #define null NULL
 

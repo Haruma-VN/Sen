@@ -24,6 +24,22 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract byte[] UncompressZlib(byte[] zlibData);
 
+        public abstract byte[] CompressGZip(byte[] dataStream);
+
+        public abstract byte[] UncompressGZip(byte[] zlibData);
+
+        public abstract byte[] CompressDeflate(byte[] dataStream);
+
+        public abstract byte[] UncompressDeflate(byte[] zlibData);
+
+        public abstract byte[] CompressBzip2(byte[] dataStream);
+
+        public abstract byte[] UncompressBzip2(byte[] zlibData);
+
+        public abstract byte[] CompressLzma(byte[] dataStream);
+
+        public abstract byte[] UncompressLzma(byte[] zlibData);
+
     }
     public enum ZlibCompressionLevel
     {
@@ -57,6 +73,30 @@ namespace Sen.Shell.Modules.Standards
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SendMessageBox(string title, string message, string btn_display);
 
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr GZipCompress(byte[] data, int dataSize, out int compressedSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr GZipUncompress(byte[] data, int dataSize, out int compressedSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr DeflateCompress(byte[] data, int dataSize, out int compressedSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr DeflateUncompress(byte[] data, int dataSize, out int compressedSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr Bzip2Compress(byte[] data, int dataSize, out int compressedSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr Bzip2Uncompress(byte[] data, int dataSize, out int compressedSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr lzmaCompress(byte[] data, int dataSize, out int compressedSize);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr lzmaUncompress(byte[] data, int dataSize, out int compressedSize);
+
     }
 
 
@@ -74,6 +114,77 @@ namespace Sen.Shell.Modules.Standards
             return uncompressedData;
         }
 
+        public override byte[] UncompressGZip(byte[] zlibData)
+        {
+            IntPtr uncompressedDataPtr = SenAPI.GZipUncompress(zlibData, zlibData.Length, out int uncompressedDataSize);
+            byte[] uncompressedData = new byte[uncompressedDataSize];
+            Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
+            Marshal.FreeHGlobal(uncompressedDataPtr);
+            return uncompressedData;
+        }
+
+        public override byte[] UncompressDeflate(byte[] zlibData)
+        {
+            IntPtr uncompressedDataPtr = SenAPI.DeflateUncompress(zlibData, zlibData.Length, out int uncompressedDataSize);
+            byte[] uncompressedData = new byte[uncompressedDataSize];
+            Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
+            Marshal.FreeHGlobal(uncompressedDataPtr);
+            return uncompressedData;
+        }
+
+        public override byte[] UncompressBzip2(byte[] data)
+        {
+            IntPtr uncompressedDataPtr = SenAPI.Bzip2Compress(data, data.Length, out int uncompressedDataSize);
+            byte[] uncompressedData = new byte[uncompressedDataSize];
+            Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
+            Marshal.FreeHGlobal(uncompressedDataPtr);
+            return uncompressedData;
+        }
+
+        public override byte[] UncompressLzma(byte[] lzma)
+        {
+            IntPtr uncompressedDataPtr = SenAPI.lzmaUncompress(lzma, lzma.Length, out int uncompressedDataSize);
+            byte[] uncompressedData = new byte[uncompressedDataSize];
+            Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
+            Marshal.FreeHGlobal(uncompressedDataPtr);
+            return uncompressedData;
+        }
+
+        public override byte[] CompressGZip(byte[] dataStream)
+        {
+            IntPtr compressedDataPtr = SenAPI.GZipCompress(dataStream, dataStream.Length, out int compressedSize);
+            byte[] compressedData = new byte[compressedSize];
+            Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            return compressedData;
+
+        }
+
+        public override byte[] CompressBzip2(byte[] dataStream)
+        {
+            IntPtr compressedDataPtr = SenAPI.Bzip2Compress(dataStream, dataStream.Length, out int compressedSize);
+            byte[] compressedData = new byte[compressedSize];
+            Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            return compressedData;
+
+        }
+
+        public override byte[] CompressLzma(byte[] dataStream)
+        {
+            IntPtr compressedDataPtr = SenAPI.lzmaCompress(dataStream, dataStream.Length, out int compressedSize);
+            byte[] compressedData = new byte[compressedSize];
+            Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            return compressedData;
+
+        }
+
+        public override byte[] CompressDeflate(byte[] dataStream)
+        {
+            IntPtr compressedDataPtr = SenAPI.GZipCompress(dataStream, dataStream.Length, out int compressedSize);
+            byte[] compressedData = new byte[compressedSize];
+            Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            return compressedData;
+
+        }
 
         public override byte[] CompressZlib(byte[] dataStream, ZlibCompressionLevel compression_level)
         {
