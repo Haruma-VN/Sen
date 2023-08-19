@@ -10,6 +10,8 @@ namespace Sen::Internal::Kernel::Utility::Path
 
 	namespace fs = std::filesystem;
 
+	namespace ss = Sen::Internal::Kernel::Utility::String;
+
 	typedef size_t Size;
 
 	struct ParsedPath {
@@ -73,9 +75,9 @@ namespace Sen::Internal::Kernel::Utility::Path
 		#pragma endregion
 	};
 
-	inline std::string constexpr backslash = "\\";
+	inline const std::string backslash = "\\";
 
-	inline std::string constexpr slash = "/";
+	inline const std::string  slash = "/";
 
 	#pragma region path
 
@@ -129,12 +131,12 @@ namespace Sen::Internal::Kernel::Utility::Path
 	) -> std::string
 	{
 		auto c = parent_directories(path);
-		Sen::Internal::Kernel::Utility::String::replace(
+		ss::replace(
 			c,
 			backslash,
 			slash
 		);
-		return Sen::Internal::Kernel::Utility::String::split(c, slash).at(-2);
+		return ss::split(c, slash).at(-2);
 	}
 
 	inline auto parent_directory(
@@ -142,12 +144,12 @@ namespace Sen::Internal::Kernel::Utility::Path
 	) -> std::string
 	{
 		auto c = parent_directories(path);
-		Sen::Internal::Kernel::Utility::String::replace(
+		ss::replace(
 			c,
 			backslash,
 			slash
 		);
-		return Sen::Internal::Kernel::Utility::String::split(c, slash).at(-2);
+		return ss::split(c, slash).at(-2);
 	}
 
 	inline auto filename(
@@ -194,7 +196,7 @@ namespace Sen::Internal::Kernel::Utility::Path
 
 	inline auto parse(
 		const std::string& path
-	) -> Sen::Internal::Kernel::Utility::Path::ParsedPath*
+	) -> Path::ParsedPath*
 	{
 		return new ParsedPath(
 			filename(path),
@@ -207,7 +209,7 @@ namespace Sen::Internal::Kernel::Utility::Path
 
 	inline auto parse(
 		const std::wstring& path
-	) -> Sen::Internal::Kernel::Utility::Path::ParsedPath*
+	) -> Path::ParsedPath*
 	{
 		return new ParsedPath(
 			filename(path),
@@ -228,10 +230,34 @@ namespace Sen::Internal::Kernel::Utility::Path
 		va_start(args, size);
 		for (auto i = 0; i < size; ++i) {
 			auto & value = va_arg(args, std::string);
-			n = Sen::Internal::Kernel::Utility::String::join({n, value}, slash);
+			n = ss::join({n, value}, slash);
 		}
 		va_end(args);
 		return n;
+	}
+
+	inline auto join(
+		const std::vector<std::string>& paths
+	) -> std::string {
+		std::string result;
+		for (const auto& path : paths) {
+			if (!result.empty() && result.back() != '/' && !path.empty() && path.front() != '/') {
+				result += '/';
+			}
+			result += path;
+		}
+		return result;
+	}
+
+	inline auto get_seperator(
+
+	) -> std::string
+	{
+	#if _WIN32
+			return "\\";
+	#else
+			return "/";
+	#endif
 	}
 
 }

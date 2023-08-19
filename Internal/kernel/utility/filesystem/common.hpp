@@ -25,6 +25,12 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 
 	using ios = std::ios;
 
+	typedef size_t Size;
+
+	typedef void* VoidPtr;
+
+	typedef char* CharPtr;
+
 	namespace fs = std::filesystem;
 
 	inline auto write_file(
@@ -165,6 +171,37 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		file.seekg(0, std::ios::beg);
 		std::vector<unsigned char> buffer(size);
 		return buffer;
+	}
+
+	template <typename T>
+	inline auto write_file(
+		const char* filename, 
+		const std::vector<T>& buffer
+	) -> void {
+		if (std::FILE* f = std::fopen(filename, "wb")) {
+			std::fwrite(buffer.data(), sizeof(T), buffer.size(), f);
+			std::fclose(f);
+		}
+		return;
+	}
+
+	template <typename T>
+	inline auto out_file(
+		const char* filepath,
+		const std::vector<T>& buffer
+	) -> Void
+	{
+		auto new_path = Sen::Internal::Kernel::Utility::Path::resolve(filepath);
+		auto constexpr delimeter = "/";
+		auto constexpr backslashs = "\\";
+		Sen::Internal::Kernel::Utility::String::replace(new_path, backslashs, delimeter);
+		auto list = Sen::Internal::Kernel::Utility::String::split(new_path, delimeter);
+		list.pop_back();
+		Sen::Internal::Kernel::Utility::FileSystem::create_directories(
+			Sen::Internal::Kernel::Utility::String::join(list, delimeter)
+		);
+		Sen::Internal::Kernel::Utility::FileSystem::write_file<T>(new_path, buffer);
+		return;
 	}
  
 }
