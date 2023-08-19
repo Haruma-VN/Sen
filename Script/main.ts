@@ -130,6 +130,14 @@ namespace Sen.Script {
                 }
                 break;
             }
+            case "Linux": {
+                const internal_path = `${Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(Sen.Shell.MainScriptDirectory)}/Internal.so`)}`;
+                if (!Sen.Shell.FileSystem.FileExists(internal_path)) {
+                    Sen.Shell.Console.Print(null, `Internal Not Found, redownload Internal from server`);
+                    Sen.Shell.ShellUpdate.DownloadFromServer(`https://github.com/Haruma-VN/Sen/releases/download/internal/Internal.so`, internal_path, "Sen");
+                }
+                break;
+            }
         }
         return;
     }
