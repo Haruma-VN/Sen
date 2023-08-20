@@ -23,6 +23,7 @@ add_library(
   "./kernel/utility/string/common.hpp"
   "./kernel/utility/path/common.hpp"
   "./kernel/utility/filesystem/common.hpp"
+  "./kernel/utility/exception/common.hpp"
   "./kernel/utility/utility.hpp"
   "./Internal.hpp"
   "./Internal.cpp"

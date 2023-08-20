@@ -15,7 +15,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
         stream.avail_in = data.size();
         stream.next_in = const_cast<char*>(data.data());
         if (BZ2_bzCompressInit(&stream, 9, 0, 0) != BZ_OK) {
-            throw std::runtime_error("Failed to initialize bzlib stream");
+            throw_line("Failed to initialize bzlib stream");
         }
         auto compressed_data = std::vector<char>{};
         std::vector<char> buffer(1024);
@@ -25,7 +25,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             stream.next_out = buffer.data();
             result = BZ2_bzCompress(&stream, BZ_FINISH);
             if (result == BZ_SEQUENCE_ERROR || result == BZ_PARAM_ERROR || result == BZ_MEM_ERROR || result == BZ_DATA_ERROR) {
-                throw std::runtime_error("Failed to compress data");
+                throw_line("Failed to compress data");
             }
             size_t bytes_written = buffer.size() - stream.avail_out;
             compressed_data.insert(compressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
@@ -44,7 +44,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
         stream.avail_in = data.size();
         stream.next_in = const_cast<char*>(data.data());
         if (BZ2_bzDecompressInit(&stream, 0, 0) != BZ_OK) {
-            throw std::runtime_error("Failed to initialize bzlib stream");
+            throw_line("Failed to initialize bzlib stream");
         }
         auto uncompressed_data = std::vector<char>{};
         std::vector<char> buffer(1024);
@@ -54,7 +54,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             stream.next_out = buffer.data();
             result = BZ2_bzDecompress(&stream);
             if (result == BZ_SEQUENCE_ERROR || result == BZ_PARAM_ERROR || result == BZ_MEM_ERROR || result == BZ_DATA_ERROR) {
-                throw std::runtime_error("Failed to uncompress data");
+                throw_line("Failed to uncompress data");
             }
             size_t bytes_written = buffer.size() - stream.avail_out;
             uncompressed_data.insert(uncompressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);

@@ -134,7 +134,7 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] UncompressBzip2(byte[] data)
         {
-            IntPtr uncompressedDataPtr = SenAPI.BZip2Compress(data, data.Length, out int uncompressedDataSize);
+            IntPtr uncompressedDataPtr = SenAPI.BZip2Uncompress(data, data.Length, out int uncompressedDataSize);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(uncompressedDataPtr);

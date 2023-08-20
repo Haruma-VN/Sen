@@ -31,7 +31,7 @@ inline constexpr auto MInternalVersion = 2;
 #include <array>
 #include <cstdio>
 #include <cstring>
-#include "kernel/utility/utility.hpp"
+#include <exception>
 #if defined(_WIN32)
 #include <windows.h>
 #include <codecvt>
@@ -44,6 +44,7 @@ inline constexpr auto MInternalVersion = 2;
 #include "dependencies/libpng/png.h"
 #include "dependencies/avir/avir.h"
 #include "dependencies/bzip2/bzlib.h"
+#include "kernel/utility/utility.hpp"
 
 #pragma endregion
 
@@ -127,5 +128,6 @@ typedef char* CString;
 
 typedef wchar_t* UTF8String;
 
+typedef std::exception Exception;
 
 #pragma endregion
