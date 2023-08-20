@@ -72,7 +72,7 @@ namespace Sen.Script {
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 9 as const;
+    export const ShellRequirement: int = 8 as const;
 
     /**
      * Tool Version

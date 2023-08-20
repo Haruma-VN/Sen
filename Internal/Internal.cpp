@@ -161,7 +161,7 @@ UnsignedByteStream DeflateCompress(
 }
 
 InternalAPI
-UnsignedByteStream DeflateUncompress(
+const unsigned char* DeflateUncompress(
     const char* data, 
     size_t data_size, 
     size_t * uncompressed_data_size
@@ -197,7 +197,7 @@ UnsignedByteStream DeflateUncompress(
 
 
 InternalAPI
-Sen::Internal::Kernel::Utility::FileSystem::CharPtr BZip2Compress(
+const char* BZip2Compress(
     const char* data,
     size_t data_size,
     size_t* compressed_data_size
@@ -211,7 +211,7 @@ Sen::Internal::Kernel::Utility::FileSystem::CharPtr BZip2Compress(
 }
 
 InternalAPI
-Sen::Internal::Kernel::Utility::FileSystem::CharPtr BZip2Uncompress(
+const char* BZip2Uncompress(
     const char* data,
     size_t data_size,
     size_t* uncompressed_data_size

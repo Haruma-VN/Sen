@@ -518,5 +518,17 @@
     "popcap_render_effect_encode": "PopCap Render-Effect: Encode",
     "popcap_image_sequence_to_pam_json": "PopCap Animation: Animation json from Render Images",
     "please_provide_media": "Before open in animate, please provide sprites to the media directory:",
-    "select_input_method": "Select Input Type"
+    "select_input_method": "Select Input Type",
+    "gzip_compress": "GZip Compress",
+    "gzip_uncompress": "GZip Uncompress",
+    "deflate_compress": "Deflate Compress",
+    "deflate_uncompress": "Deflate Uncompress",
+    "bzip2_compress": "BZip2 Compress",
+    "bzip2_uncompress": "BZip2 Uncompress",
+    "lzma_compress": "Lzma Compress",
+    "lzma_uncompress": "Lzma Uncompress",
+    "zlib_compress": "Zlib Compress",
+    "zlib_uncompress": "Zlib Uncompress",
+    "popcap_newton_decode": "PopCap Newton: Decode",
+    "popcap_newton_encode": "PopCap Newton: Encode"
 }
