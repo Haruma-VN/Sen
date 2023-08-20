@@ -136,6 +136,22 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void DecodeNewtonResource(string inFile, string outFile);
 
+        public abstract void GZipCompress(string inFile, string outFile);
+
+        public abstract void GZipUncompress(string inFile, string outFile);
+
+        public abstract void DeflateCompress(string inFile, string outFile);
+
+        public abstract void DeflateUncompress(string inFile, string outFile);
+
+        public abstract void Bzip2Compress(string inFile, string outFile);
+
+        public abstract void Bzip2Uncompress(string inFile, string outFile);
+
+        public abstract void LzmaCompress(string inFile, string outFile);
+
+        public abstract void LzmaUncompress(string inFile, string outFile);
+
     }
 
     #endregion
@@ -1149,6 +1165,86 @@ namespace Sen.Shell.Modules.Support.PvZ2
         {
             var RSBAfter = RSBFunction.RSBPatchDecode(new SenBuffer(RSBOriginalFilePath), new SenBuffer(RSBPatchFilePath));
             RSBAfter.OutFile(RSBOutFilePath);
+            return;
+        }
+
+        public unsafe override sealed void GZipCompress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.CompressGZip(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
+            return;
+        }
+
+        public unsafe override sealed void GZipUncompress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.UncompressGZip(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
+            return;
+        }
+
+        public unsafe override sealed void DeflateCompress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.CompressDeflate(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
+            return;
+        }
+
+        public unsafe override sealed void DeflateUncompress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.UncompressDeflate(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
+            return;
+        }
+
+        public unsafe override sealed void Bzip2Compress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.CompressBzip2(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
+            return;
+        }
+
+        public unsafe override sealed void Bzip2Uncompress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.UncompressBzip2(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
+            return;
+        }
+
+        public unsafe override sealed void LzmaCompress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.CompressLzma(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
+            return;
+        }
+
+        public unsafe override sealed void LzmaUncompress(string inFile, string outFile)
+        {
+            var buffer = new SenBuffer(inFile);
+            var compression = new Standards.Compress();
+            byte[] file = compression.UncompressLzma(buffer.toBytes());
+            var wr = new SenBuffer(file);
+            wr.OutFile(outFile);
             return;
         }
 

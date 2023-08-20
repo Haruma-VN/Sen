@@ -1545,6 +1545,62 @@ declare namespace Sen {
              */
 
             export function ZlibUncompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function GZipCompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function GZipUncompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function DeflateCompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function DeflateUncompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function Bzip2Compress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function Bzip2Uncompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function LzmaCompress(inFile: string, outFile: string): void;
+            /**
+             *
+             * @param inFile - Pass input path
+             * @param outFile - Pass output file
+             */
+
+            export function LzmaUncompress(inFile: string, outFile: string): void;
 
             /**
              *
