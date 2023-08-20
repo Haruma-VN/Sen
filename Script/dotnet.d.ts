@@ -1341,6 +1341,14 @@ declare namespace Sen {
              * @returns RTON2JSON
              */
             export function RTONDecode(inFile: string, outFile: string, decryptRTON: RTONCipher): void;
+
+            /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
+             */
+
+            export function DecodeNewtonResource(inFile: string, outFile: string): void;
             /**
              *
              * @param inFile - Pass JSON file here

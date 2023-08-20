@@ -134,6 +134,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void PopcapRenderEffectEncode(string inFile, string outFile);
 
+        public abstract void DecodeNewtonResource(string inFile, string outFile);
+
     }
 
     #endregion
@@ -145,7 +147,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public unsafe class ResourceGroup
     {
 
-        public readonly uint version = 1;
+        public readonly uint? version = 1;
 
         public readonly uint content_version = 1;
 
@@ -158,7 +160,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public unsafe class MResourceGroup
     {
 
-        public readonly uint version = 1;
+        public readonly uint? version = 1;
 
         public readonly uint content_version = 1;
 
@@ -1192,6 +1194,20 @@ namespace Sen.Shell.Modules.Support.PvZ2
             var text = File.ReadAllText(inFile);
             var POPFXObject = JsonConvert.DeserializeObject<PopcapRenderEffect.PopcapRenderEffectObject>(text)!;
             PopcapRenderEffect.Encode(POPFXObject, outFile);
+            return;
+        }
+
+        public override void DecodeNewtonResource(string inFile, string outFile)
+        {
+            var resource = Newton.DecodeNewton(new SenBuffer(inFile));
+            var fs = new FileSystem();
+            var path = new ImplementPath();
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+            fs.WriteText(path.Resolve(outFile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resource, settings)), 
+                EncodingType.UTF8);
             return;
         }
 
