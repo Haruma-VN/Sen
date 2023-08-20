@@ -469,5 +469,12 @@
         "exclude": [],
         "is_enabled": false,
         "type": "file"
+    },
+    "popcap_newton_decode": {
+        "func_number": 68,
+        "include": [".newton"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
     }
 }
