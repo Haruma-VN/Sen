@@ -103,4 +103,18 @@ namespace Sen::Internal::Kernel::Utility::String
 		 }
 		 return str;
 	 }
+
+	 inline auto replaceAll(
+		 std::string subject, 
+		 const std::string& search, 
+		 const std::string& replace
+	 ) -> std::string {
+		 auto pos = 0;
+		 while ((pos = subject.find(search, pos)) != std::string::npos) {
+			 subject.replace(pos, search.length(), replace);
+			 pos += replace.length();
+		 }
+		 return subject;
+	 }
+
 }
