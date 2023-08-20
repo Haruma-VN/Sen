@@ -264,9 +264,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public int? y;
 
-        public int? cols;
+        public uint? cols;
 
-        public int? rows;
+        public uint? rows;
 
         public uint? width;
 
@@ -362,11 +362,11 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 
-        public required int? cols;
+        public required uint? cols;
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 
-        public required int? rows;
+        public required uint? rows;
     }
 
     public enum ExpandPath
@@ -579,8 +579,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
                         ah = (uint)subValue["default"]!["ah"]!,
                         x = (int)subValue["default"]!["x"]!,
                         y = (int)subValue["default"]!["y"]!,
-                        cols = (int?)(subValue["default"]!["cols"] ??= null),
-                        rows = (int?)(subValue["default"]!["rows"] ??= null),
+                        cols = (uint?)(subValue["default"]!["cols"] ??= null),
+                        rows = (uint?)(subValue["default"]!["rows"] ??= null),
                     });
                 }
             }

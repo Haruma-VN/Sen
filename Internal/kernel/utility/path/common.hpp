@@ -1,4 +1,5 @@
 #pragma once
+
 #include <filesystem>
 #include <cstdarg>
 #include "../../kernel/utility/string/common.hpp"

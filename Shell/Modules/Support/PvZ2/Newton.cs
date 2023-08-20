@@ -120,14 +120,14 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             resource_x.slot = data.readUInt32LE();
                             resource_x.width = data.readUInt32LE();
                             resource_x.height = data.readUInt32LE();
-                            resource_x.x = (int)data.readUInt32LE(); 
-                            resource_x.y = (int)data.readUInt32LE();
+                            resource_x.x = data.readInt32LE(); 
+                            resource_x.y = data.readInt32LE();
                             resource_x.ax = data.readUInt32LE();
                             resource_x.ay = data.readUInt32LE();
                             resource_x.aw = data.readUInt32LE();
                             resource_x.ah = data.readUInt32LE();
-                            resource_x.cols = (int)data.readUInt32LE();
-                            resource_x.rows = (int)data.readUInt32LE(); 
+                            resource_x.cols = data.readUInt32LE();
+                            resource_x.rows = data.readUInt32LE(); 
                             resource_x.atlas = data.readUInt8() != 0; 
                             var resource_has_parent = data.readUInt8();
                             resource_x.id = ReadString(data);
