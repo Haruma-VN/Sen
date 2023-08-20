@@ -518,5 +518,17 @@
     "popcap_render_effect_encode": "PopCap Render-Effect: Mã Hoá",
     "popcap_image_sequence_to_pam_json": "PopCap Animation: Hoạt ảnh JSON từ thư mục render",
     "please_provide_media": "Trước khi mở trong Adobe, hãy cung cấp sprites cho media:",
-    "select_input_method": "Chọn định dạng để lấy"
+    "select_input_method": "Chọn định dạng để lấy",
+    "gzip_compress": "GZip: Nén",
+    "gzip_uncompress": "GZip: Giải Nén",
+    "deflate_compress": "Deflate: Nén",
+    "deflate_uncompress": "Deflate: Giải Nén",
+    "bzip2_compress": "BZip2: Nén",
+    "bzip2_uncompress": "BZip2: Giải Nén",
+    "lzma_compress": "Lzma: Nén",
+    "lzma_uncompress": "Lzma: Giải Nén",
+    "zlib_compress": "Zlib: Nén",
+    "zlib_uncompress": "Zlib: Giải Nén",
+    "popcap_newton_decode": "PopCap Newton: Giải Mã",
+    "popcap_newton_encode": "PopCap Newton: Mã Hoá"
 }
