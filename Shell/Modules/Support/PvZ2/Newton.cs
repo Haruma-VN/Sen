@@ -1,6 +1,8 @@
 ﻿using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 
+#pragma warning disable CS8602
+
 namespace Sen.Shell.Modules.Support.PvZ2
 {
     public class Newton
@@ -153,7 +155,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             atlas = data.readUInt8() != 0
                         };
                             var is_sprite = m_wrapper.aw != 0 && m_wrapper.ah != 0;
-                            resource_x.slot = m_wrapper.slot;
+                            resource_x.slot = m_wrapper.slot!;
                             resource_x.width = m_wrapper.width != 0 ? m_wrapper.width : null;
                             resource_x.height = m_wrapper.height != 0 ? m_wrapper.height : null;
                             resource_x.x = m_wrapper.x != 2147483647 && m_wrapper.x != 0 ? m_wrapper.x : null; 

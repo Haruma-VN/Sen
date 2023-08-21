@@ -34,7 +34,7 @@ namespace Sen::Internal::Kernel::Utility::Exception {
                 SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
                 std::wcout << L"● Internal Raise:" << std::endl;
                 SetConsoleTextAttribute(hConsole, 15);
-                o << "      " << ss::replaceAll(output, "/", "\\") << ":" << line;
+                o << "      " << "Internal\\" << ss::replaceAll(output, "/", "\\") << ":" << line;
             #elif __MACH__ || __linux__
                 std::cout << "\x1B[31m● Internal Exception:\033[0m\t\t" << std::endl;
                 std::cout << "      " << arg << std::endl;

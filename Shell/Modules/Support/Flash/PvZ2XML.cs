@@ -72,7 +72,7 @@ namespace Sen.Shell.Modules.Support.Flash
                     .Where(element => element!.Attribute("href")!.Value!.Contains("image")).ToList<XElement>();
                 var document_resource_symbols_element_attribute_sprite = document_resource_symbols_element!.FirstOrDefault<XElement>()!.Elements(domdocument_namespace + "Include")
                     .Where(element => element.Attribute("href")!.Value.Contains("sprite")
-                && !element.Attribute("href")!.Value.Contains("main_sprite")).ToList<XElement>();
+                && !element.Attribute("href")!.Value.Contains("main")).ToList<XElement>();
                 document_resource_symbols_element!.FirstOrDefault<XElement>()!.RemoveAll();
                 dom.image.ToList<string>().ForEach(element =>
                 (document_resource_symbols_element_attribute_image as List<XElement>)!.Add(new XElement(domdocument_namespace + "Include", new XAttribute("href", $"image/{element as string}.xml"))));
@@ -83,7 +83,7 @@ namespace Sen.Shell.Modules.Support.Flash
                 document_resource_symbols_element!.FirstOrDefault<XElement>()!.RemoveAll();
                 document_resource_symbols_element_attribute_source!.ToArray<XElement>()!.Concat<XElement>(document_resource_symbols_element_attribute_image!.ToArray<XElement>())
                     !.Concat<XElement>(document_resource_symbols_element_attribute_sprite!.ToArray<XElement>())!.ToList<XElement>()
-                    !.Concat(new List<XElement>() { new XElement(domdocument_namespace + "Include", new XAttribute("href", $"main_sprite.xml")) })!.ToList<XElement>()
+                    !.Concat(new List<XElement>() { new XElement(domdocument_namespace + "Include", new XAttribute("href", $"main.xml")) })!.ToList<XElement>()
                     !.ForEach(element => document_resource_symbols_element!.FirstOrDefault<XElement>()!.Add(element as XElement));
             }
             var domdocument_serialize_settings = new XmlWriterSettings()

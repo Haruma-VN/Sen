@@ -530,5 +530,7 @@
     "zlib_compress": "Zlib: Сжать",
     "zlib_uncompress": "Zlib: Разжать",
     "popcap_newton_decode": "PopCap Newton: Декодировать",
-    "popcap_newton_encode": "PopCap Newton: Закодировать"		
+    "popcap_newton_encode": "PopCap Newton: Закодировать",
+    "language.author": "Vi",
+    "this_translation_by": "This Translation of Sen Created By:"
 }

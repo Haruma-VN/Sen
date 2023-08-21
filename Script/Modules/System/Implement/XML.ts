@@ -96,6 +96,61 @@ namespace Sen.Script.Modules.Implement.XML {
     }
 
     /**
+     * Structure
+     */
+
+    export interface Sprite {
+        DOMSymbolItem: {
+            "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance";
+            "@name": string;
+            "@symbolType": "graphic";
+            "@xmlns": "http://ns.adobe.com/xfl/2008/";
+            timeline: {
+                DOMTimeline: {
+                    "@name": string;
+                    layers: {
+                        DOMLayer: Array<{
+                            "@name": string;
+                            frames: {
+                                DOMFrame: {
+                                    "@index": "0";
+                                    "@duration": "1";
+                                    elements: null | {
+                                        DOMSymbolInstance: {
+                                            "@libraryItemName": string;
+                                            "@symbolType": "graphic";
+                                            "@loop": "loop";
+                                            "@firstFrame": "0";
+                                            matrix: {
+                                                Matrix: {
+                                                    "@a": "1.000000";
+                                                    "@b": "0.000000";
+                                                    "@c": "0.000000";
+                                                    "@d": "1.000000";
+                                                    "@tx": string;
+                                                    "@ty": string;
+                                                };
+                                            };
+                                            color: {
+                                                Color: {
+                                                    "@redMultiplier": "1.000000";
+                                                    "@greenMultiplier": "1.000000";
+                                                    "@blueMultiplier": "1.000000";
+                                                    "@alphaMultiplier": "1.000000";
+                                                };
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        }>;
+                    };
+                };
+            };
+        };
+    }
+
+    /**
      *
      * @param g_object - JS Object
      * @param handle_bigint - Handle BigInt?

@@ -516,5 +516,7 @@
     "popcap_render_effect_encode": "PopCap渲染效果:编码",
     "popcap_image_sequence_to_pam_json": "PopCap动画:来自渲染图像的动画json",
     "please_provide_media": "在动画中打开之前，请将精灵提供给媒体目录:",
-    "select_input_method": "选择输入类型"
+    "select_input_method": "选择输入类型",
+    "language.author": "花园摆-米浴",
+    "this_translation_by": "This Translation of Sen Created By:"
 }

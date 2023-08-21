@@ -187,6 +187,9 @@ namespace Sen.Script {
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3))
         );
+        if (Sen.Script.Modules.System.Default.Localization.GetString("language.author") !== "Haruma") {
+            Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("this_translation_by"), Sen.Script.Modules.System.Default.Localization.GetString("language.author"));
+        }
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
             Sen.Script.Modules.Interface.Assert.Evaluate(argument);

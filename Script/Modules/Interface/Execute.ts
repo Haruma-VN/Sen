@@ -612,7 +612,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         const png_argument: Array<string> = new Array();
                         assert_argument: while (true) {
-                            let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+                            let arg: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
                             if (arg.endsWith(` `)) {
                                 arg = arg.slice(0, -1);
                             }
@@ -662,7 +662,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             );
                             const png_argument: Array<string> = new Array();
                             assert_argument: while (true) {
-                                let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+                                let arg: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
                                 if (arg.endsWith(` `)) {
                                     arg = arg.slice(0, -1);
                                 }

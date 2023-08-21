@@ -170,7 +170,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                 const typename: string = `${resource_dom_document_name}|${animation_helper.id_replacer}${Sen.Shell.Path.Parse(element.file_path).name_without_extension.toUpperCase()}`;
                 resource_element_addon_dom_document.media.push(resource_dom_document_name);
                 Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("name_set_as_default"));
-                Sen.Shell.Console.Printf(null, `        ${typename}`);
+                Sen.Shell.Console.Printf(null, `       ${typename}`);
                 extra_info.image[`image_${resource_dom_document_index}`] = {
                     name: typename,
                     width: dimension_x[0x00] - Math.ceil(dimension_x[0x00]) < 0.5 ? Math.ceil(dimension_x[0x00]) : Math.floor(dimension_x[0x00]),

@@ -499,5 +499,7 @@
     "unsupported_data_type": "Tipo de datos no soportado",
     "unsupported_file_type": "Tipo de archivo no soportado",
     "cannot_read_file": "No se puede leer el archivo",
-    "and_property_is": "y la propiedad es"
+    "and_property_is": "y la propiedad es",
+    "language.author": "HNR",
+    "this_translation_by": "This Translation of Sen Created By:"
 }

@@ -41,4 +41,17 @@ namespace Sen.Script.Modules.System.Implement.JavaScript {
         Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `${js_path}`)));
         return;
     }
+
+    /**
+     *
+     * @param title - Pass title
+     * @param description - Description
+     * @returns
+     */
+
+    export function EvaluatePrint(title: string, description: string): void {
+        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, title);
+        Sen.Shell.Console.Printf(null, `      ${description}`);
+        return;
+    }
 }

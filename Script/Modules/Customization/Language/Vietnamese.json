@@ -530,5 +530,7 @@
     "zlib_compress": "Zlib: Nén",
     "zlib_uncompress": "Zlib: Giải Nén",
     "popcap_newton_decode": "PopCap Newton: Giải Mã",
-    "popcap_newton_encode": "PopCap Newton: Mã Hoá"
+    "popcap_newton_encode": "PopCap Newton: Mã Hoá",
+    "language.author": "PPP",
+    "this_translation_by": "This Translation of Sen Created By:"
 }
