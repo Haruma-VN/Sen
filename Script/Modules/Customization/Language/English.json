@@ -530,5 +530,11 @@
     "zlib_compress": "Zlib: Compress",
     "zlib_uncompress": "Zlib: Uncompress",
     "popcap_newton_decode": "PopCap Newton: Decode",
-    "popcap_newton_encode": "PopCap Newton: Encode"
+    "popcap_newton_encode": "PopCap Newton: Encode",
+    "unknown_group_type": "Unknown Group Type",
+    "unknown_resource_count": "Unknown resource count",
+    "unknown_version_number": "Unknown Version Number",
+    "unknown_file_type": "Unknown File Type",
+    "subgroup_count_cannot_be_zero": "Subgroup count cannot be zero",
+    "check_length_layer_is_missing": "Does not find empty layer, should create empty layer \"0\""
 }

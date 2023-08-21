@@ -1666,6 +1666,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             var x_DOMlayer_Check = x_DOMLayer_list[0];
             x_DOMLayer_list.RemoveAt(0);
             int layer_count = 0;
+            if ((string)x_DOMlayer_Check.Attribute("name")! != "0") {
+                throw new PAMException("check_length_layer_is_missing", "");
+            }
             var allFrames = int.Parse((string)x_DOMlayer_Check.Elements("frames").ToArray()[0].Elements("DOMFrame").ToArray()[0].Attribute("duration")! ?? "1");
             var get_frame_at = (int index) =>
             {

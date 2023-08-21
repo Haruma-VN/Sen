@@ -1,15 +1,5 @@
-﻿using Esprima.Ast;
-using Newtonsoft.Json;
+﻿using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Support.PvZ2.RSB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-using static Sen.Shell.Modules.Support.PvZ2.Newton;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -53,29 +43,30 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 var group_type = data.readUInt8();
                 group.type = group_type switch
                 {
-                    1 => "composite",
-                    2 => "simple",
-                    _ => throw new Exception($"Unknown type {group_type}")
+                    0x01 => "composite",
+                    0x02 => "simple",
+                    _ => throw new Exception($"{Localization.GetString("unknown_group_type")}: {group_type}")
                 };
                 var res = data.readUInt32LE();
-                group.res = res != 0 ? $"{res}" : null;
+                group.res = res != 0x00 ? $"{res}" : null;
                 var subgroups_count = data.readUInt32LE();
                 var resources_count = data.readUInt32LE();
-                if (!(data.readUInt8() == 1))
+                var version = data.readUInt8();
+                if (!(version == 0x01))
                 {
-                    throw new Exception("Unknown version");
+                    throw new Exception($"{Localization.GetString("unknown_version_number")}");
                 }
                 var group_has_parent = data.readUInt8();
                 group.id = ReadString(data);
-                if (group_has_parent != 0)
+                if (group_has_parent != 0x00)
                 {
                     group.parent = ReadString(data);
                 }
-                if(group_type == 1)
+                if(group_type == 0x01)
                 {
-                    if(!(resources_count == 0))
+                    if(!(resources_count == 0x00))
                     {
-                        throw new Exception("Unknown resource count");
+                        throw new Exception($"{Localization.GetString("unknown_resource_count")}");
                     }
                     group.subgroups = new List<SubgroupWrapper>();
                     for (var subgroups_index = 0; subgroups_index < subgroups_count; ++subgroups_index)
@@ -85,16 +76,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             res = "",
                         };
                         var sub_res = data.readUInt32LE();
-                        subgroup.res = sub_res != 0 ? $"{sub_res}" : null;
+                        subgroup.res = sub_res != 0x00 ? $"{sub_res}" : null;
                         subgroup.id = ReadString(data);
                         group.subgroups.Add(subgroup);
                     }
                 }
-                if(group_type == 2)
+                if(group_type == 0x02)
                 {
-                    if (!(subgroups_count == 0))
+                    if (!(subgroups_count == 0x00))
                     {
-                        throw new Exception();
+                        throw new Exception($"{Localization.GetString("subgroup_count_cannot_be_zero")}");
                     }
                     group.resources = new List<MSubgroupWrapper>();
                     for (var resources_index = 0; resources_index < resources_count; ++resources_index)
@@ -143,7 +134,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                                 }
                             default:
                                 {
-                                    throw new Exception($"Unknown {resource_type} at {group.id}");
+                                    throw new Exception($"{Localization.GetString("unknown")} {resource_type} {Localization.GetString("at")} {group.id}");
                                 }
                             }
                         var m_wrapper = new MData
@@ -178,7 +169,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             var resource_has_parent = data.readUInt8();
                             resource_x.id = ReadString(data);
                             resource_x.path = ReadString(data);
-                            if (resource_has_parent != 0) {
+                            if (resource_has_parent != 0x00) {
                                 resource_x.parent = ReadString(data);
                             }
                             switch (resource_type)
@@ -227,9 +218,9 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 var m_data = resource.groups[group_index];
                 newton.writeUInt8(m_data.type switch
                 {
-                    "composite" => 1,
-                    "simple" => 2,
-                    _ => throw new Exception($"Unknown group type: {m_data.type}"),
+                    "composite" => 0x01,
+                    "simple" => 0x02,
+                    _ => throw new Exception($"{Localization.GetString("unknown_group_type")}: {m_data.type}"),
                 });
                 var subgroups_count = m_data.subgroups is null ? 0x00 : (uint)m_data.subgroups.Count;
                 var resources_count = m_data.resources is null ? 0x00 : (uint)m_data.resources.Count;
@@ -283,7 +274,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             "PrimeFont" => 0x05,
                             "RenderEffect" => 0x06,
                             "DecodedSoundBank" => 0x07,
-                            _ => throw new Exception($"Unknown type {resources_x.type}"),
+                            _ => throw new Exception($"{Localization.GetString("unknown_file_type")}: {resources_x.type}"),
                         });
                         newton.writeUInt32LE(resources_x.slot);
                         if(resources_x.width is null)

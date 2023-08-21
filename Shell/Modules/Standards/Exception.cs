@@ -63,7 +63,7 @@
 
     public class PAMException : RuntimeException
     {
-        public PAMException(string message, string errorCode) : base(message, errorCode)
+        public PAMException(string message, string errorCode) : base(Localization.GetString(message), errorCode)
         {
             this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMException;
         }

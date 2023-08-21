@@ -192,12 +192,12 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_newton_encode": {
                     if (!Array.isArray(argument)) {
-                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.newton`));
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Shell.PvZ2Shell.EncodeNewtonResource(argument, output_argument);
                     } else {
                         argument.forEach((arg: string) => {
-                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.newton`));
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Shell.PvZ2Shell.EncodeNewtonResource(arg, output_argument);
                         });

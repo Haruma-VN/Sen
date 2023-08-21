@@ -140,6 +140,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)}`);
         } else if (packages !== -1 && manifest_group !== -1) {
+            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\"));
+            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
+                Sen.Shell.Path.Resolve(resource_file.replace(/((\.rton))?$/i, ".json")),
+                Sen.Shell.Path.Resolve(resource_file),
+                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
+            );
             Sen.Shell.PvZ2Shell.RSGPackAsync(
                 {
                     inFolder: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)),
