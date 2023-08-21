@@ -139,6 +139,8 @@ namespace Sen.Shell.Modules.Standards.Bitmap
 
         public abstract void CreateAPNG(GenerateAPNG g_option);
 
+        public abstract void ExpandImage(string inputFile, string outputFile, Dimension dimension);
+
     }
 
 
@@ -164,10 +166,18 @@ namespace Sen.Shell.Modules.Standards.Bitmap
         public required uint framesPerSecond;
     }
 
+    public struct Dimension
+    {
+        public int width;
+
+        public int height;
+    }
+
     public class Bitmap_Implement : Abstract_Bitmap
     {
 
         #pragma warning disable CS8500
+
 
         public unsafe sealed override void CreateAPNG(GenerateAPNG g_option)
         {
@@ -178,6 +188,15 @@ namespace Sen.Shell.Modules.Standards.Bitmap
                 dels[i] = 33;
             }
             APNGMaker.CreateAPNG(g_option.imageList.ToArray(), g_option.outFile, dels);
+            return;
+        }
+
+        public unsafe override void ExpandImage(string inputFile, string outputFile, Dimension dimension)
+        {
+            using var originalImage = (Image<Rgba32>)Image.Load(inputFile);
+            using var expandedImage = new Image<Rgba32>(dimension.width, dimension.height);
+            expandedImage.Mutate(x => x.DrawImage(originalImage, new Point(0, 0), 1));
+            expandedImage.Save(outputFile);
             return;
         }
 

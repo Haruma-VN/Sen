@@ -39,7 +39,22 @@ namespace Sen.Shell.Modules.Support.Misc
             {
                 var progID = $"Sen.FileType";
                 var path = new ImplementPath();
-                string[] extensions = { ".rsb", ".rsg", ".pam", ".rton", ".json", ".png", ".ptx", ".js", ".obb", ".bnk", ".wem", ".txt" };
+                string[] extensions = { 
+                    ".rsb", 
+                    ".rsg",
+                    ".pam", 
+                    ".rton", 
+                    ".json", 
+                    ".png", 
+                    ".ptx", 
+                    ".js", 
+                    ".obb", 
+                    ".bnk", 
+                    ".wem", 
+                    ".txt", 
+                    ".popfx", 
+                    ".newton", 
+                };
                 var appPath = path.Resolve($"{path.Dirname(Sen.Shell.Program.Script_Directory)}/Sen.exe");
                 var fs = new FileSystem();
                 if(appPath is not null && fs.FileExists(appPath))
