@@ -153,7 +153,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "bzip2_uncompress"
         | "lzma_compress"
         | "lzma_uncompress"
-        | "popcap_newton_decode";
+        | "popcap_newton_decode"
+        | "popcap_newton_encode";
 
     /**
      *
@@ -185,6 +186,20 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.json`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Shell.PvZ2Shell.DecodeNewtonResource(arg, output_argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_newton_encode": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.newton`));
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.PvZ2Shell.EncodeNewtonResource(argument, output_argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.newton`));
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.PvZ2Shell.EncodeNewtonResource(arg, output_argument);
                         });
                     }
                     break;

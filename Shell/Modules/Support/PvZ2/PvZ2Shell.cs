@@ -136,6 +136,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void DecodeNewtonResource(string inFile, string outFile);
 
+        public abstract void EncodeNewtonResource(string inFile, string outFile);
+
         public abstract void GZipCompress(string inFile, string outFile);
 
         public abstract void GZipUncompress(string inFile, string outFile);
@@ -1304,6 +1306,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
             };
             fs.WriteText(path.Resolve(outFile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resource, settings)), 
                 EncodingType.UTF8);
+            return;
+        }
+
+        public override void EncodeNewtonResource(string inFile, string outFile)
+        {
+            var fs = new FileSystem();
+            var newton = Newton.EncodeNewton(
+                JsonConvert.DeserializeObject<MResourceGroup>(fs.ReadText(inFile, EncodingType.UTF8))!
+                );
+            newton.OutFile(outFile); 
             return;
         }
 

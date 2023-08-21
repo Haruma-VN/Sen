@@ -1351,6 +1351,13 @@ declare namespace Sen {
             export function DecodeNewtonResource(inFile: string, outFile: string): void;
             /**
              *
+             * @param inFile - In file
+             * @param outFile - Out file
+             */
+
+            export function EncodeNewtonResource(inFile: string, outFile: string): void;
+            /**
+             *
              * @param inFile - Pass JSON file here
              * @param outFile - Pass RTON output here
              * @returns JSON2RTON

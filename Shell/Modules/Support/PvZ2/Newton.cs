@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using static Sen.Shell.Modules.Support.PvZ2.Newton;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sen.Shell.Modules.Support.PvZ2
@@ -175,6 +176,191 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 resource.groups.Add(group);
             }
             return resource;
+        }
+
+        public static SenBuffer EncodeNewton(MResourceGroup resource)
+        {
+            var newton = new SenBuffer();
+            newton.writeUInt32LE(resource.slot_count);
+            var groups_count = resource.groups.Count;
+            newton.writeUInt32LE((uint)groups_count);
+            for(var group_index = 0; group_index < groups_count; ++group_index)
+            {
+                var m_data = resource.groups[group_index];
+                newton.writeUInt8(m_data.type switch
+                {
+                    "composite" => 1,
+                    "simple" => 2,
+                    _ => throw new Exception($"Unknown group type: {m_data.type}"),
+                });
+                var subgroups_count = m_data.subgroups is null ? 0x00 : (uint)m_data.subgroups.Count;
+                var resources_count = m_data.resources is null ? 0x00 : (uint)m_data.resources.Count;
+                newton.writeUInt32LE(Convert.ToUInt32(m_data.res is null ? "0" : m_data.res));
+                newton.writeUInt32LE(subgroups_count);
+                newton.writeUInt32LE(resources_count);
+                newton.writeUInt8(0x01);
+                if (m_data.parent is not null)
+                {
+                    newton.writeUInt8(0x01);
+                }
+                else
+                {
+                    newton.writeUInt8(0x00);
+                }
+                    newton.writeUInt32LE((uint)m_data.id.Length);
+                newton.writeString(m_data.id);
+                if (m_data.parent is not null)
+                {
+                    newton.writeUInt32LE((uint)m_data.parent.Length);
+                    newton.writeString(m_data.parent);
+                }
+                if(m_data.type == "composite")
+                {
+                    for(var i = 0; i < subgroups_count; ++i)
+                    {
+                        var current = m_data!.subgroups[i]!;
+                        if(current.res is not null)
+                        {
+                            newton.writeUInt32LE(UInt32.Parse(current.res));
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE(0x00);
+                        }
+                        newton.writeUInt32LE((uint)current.id.Length);
+                        newton.writeString(current.id);
+                    }
+                }
+                if(m_data.type == "simple")
+                {
+                    for (var resources_index = 0; resources_index < resources_count; ++resources_index) 
+                    {
+                        var resources_x = m_data.resources![resources_index]!;
+                        newton.writeUInt8(resources_x.type switch
+                        {
+                            "Image" => 0x01,
+                            "PopAnim" => 0x02,
+                            "SoundBank" => 0x03,
+                            "File" => 0x04,
+                            "PrimeFont" => 0x05,
+                            "RenderEffect" => 0x06,
+                            "DecodedSoundBank" => 0x07,
+                            _ => throw new Exception($"Unknown type {resources_x.type}"),
+                        });
+                        newton.writeUInt32LE(resources_x.slot);
+                        if(resources_x.width is null)
+                        {
+                            newton.writeUInt32LE(0x00);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.width);
+                        }
+                        if (resources_x.height is null)
+                        {
+                            newton.writeUInt32LE(0x00);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.height);
+                        }
+                        if (resources_x.x is null || (resources_x is not null && resources_x.x == 2147483647))
+                        {
+                            newton.writeInt32LE(2147483647);
+                        }
+                        else
+                        {
+                            newton.writeInt32LE((int)resources_x!.x);
+                        }
+                        if (resources_x.y is null || (resources_x is not null && resources_x.y == 2147483647))
+                        {
+                            newton.writeInt32LE(2147483647);
+                        }
+                        else
+                        {
+                            newton.writeInt32LE((int)resources_x!.y);
+                        }
+                        if (resources_x.ax is null)
+                        {
+                            newton.writeUInt32LE(0x00);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.ax);
+                        }
+                        if (resources_x.ay is null)
+                        {
+                            newton.writeUInt32LE(0x00);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.ay);
+                        }
+                        if (resources_x.aw is null)
+                        {
+                            newton.writeUInt32LE(0x00);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.aw);
+                        }
+                        if (resources_x.ah is null)
+                        {
+                            newton.writeUInt32LE(0x00);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.ah);
+                        }
+                        if (resources_x.cols is null)
+                        {
+                            newton.writeUInt32LE(0x01);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.cols);
+                        }
+                        if (resources_x.rows is null)
+                        {
+                            newton.writeUInt32LE(0x01);
+                        }
+                        else
+                        {
+                            newton.writeUInt32LE((uint)resources_x.rows);
+                        }
+                        if (resources_x.atlas is not null && (bool)resources_x.atlas!)
+                        {
+                            newton.writeUInt8(0x01);
+                        }
+                        else
+                        {
+                            newton.writeUInt8(0x00);
+                        }
+                        newton.writeUInt8(0x01);
+                        newton.writeUInt8(0x01);
+                        var resource_has_parent = resources_x.parent is not null;
+                        if (resource_has_parent)
+                        {
+                            newton.writeUInt8(0x01);
+                        }
+                        else
+                        {
+                            newton.writeUInt8(0x00);
+                        }
+                        newton.writeUInt32LE((uint)resources_x.id.Length);
+                        newton.writeString(resources_x.id);
+                        var path = resources_x.path.ToString()!;
+                        newton.writeUInt32LE((uint)path.Length);
+                        newton.writeString(path);
+                        if (resource_has_parent)
+                        {
+                            newton.writeUInt32LE((uint)resources_x!.parent!.Length);
+                            newton.writeString(resources_x.parent!);
+                        }
+                    }
+                }
+            }
+            return newton;
         }
 
         public struct MData

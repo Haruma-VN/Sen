@@ -67,18 +67,18 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 14 as const;
+    export const ScriptVersion: int = 16 as const;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 8 as const;
+    export const ShellRequirement: int = 10 as const;
 
     /**
      * Tool Version
      */
 
-    export const M_Version: string = `2.4.0` as const;
+    export const M_Version: string = `2.6.0` as const;
 
     /**
      *
