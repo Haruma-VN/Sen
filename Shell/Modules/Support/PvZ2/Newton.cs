@@ -26,6 +26,17 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return str;
         }
 
+        public enum ResourceType
+        {
+            Image = 1,
+            PopAnim,
+            SoundBank,
+            File,
+            PrimeFont,
+            RenderEffect,
+            DecodedSoundBank,
+        }
+
         public static MResourceGroup DecodeNewton(SenBuffer data)
         {
             var resource = new MResourceGroup() {
@@ -95,37 +106,37 @@ namespace Sen.Shell.Modules.Support.PvZ2
                         var resource_type = data.readUInt8();
                         switch (resource_type)
                         {
-                            case 1:
+                            case (byte)ResourceType.Image:
                                 {
                                     resource_x.type = "Image";
                                     break;
                                 }
-                            case 2:
+                            case (byte)ResourceType.PopAnim:
                                 {
                                     resource_x.type = "PopAnim";
                                     break;
                                 }
-                            case 3:
+                            case (byte)ResourceType.SoundBank:
                                 {
                                     resource_x.type = "SoundBank";
                                     break;
                                 }
-                            case 4:
+                            case (byte)ResourceType.File:
                                 {
                                     resource_x.type = "File";
                                     break;
                                 }
-                            case 5:
+                            case (byte)ResourceType.PrimeFont:
                                 {
                                     resource_x.type = "PrimeFont";
                                     break;
                                 }
-                            case 6:
+                            case (byte)ResourceType.RenderEffect:
                                 {
                                     resource_x.type = "RenderEffect";
                                     break;
                                 }
-                            case 7:
+                            case (byte)ResourceType.DecodedSoundBank:
                                 {
                                     resource_x.type = "DecodedSoundBank";
                                     break;
@@ -150,18 +161,18 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             rows = data.readUInt32LE(),
                             atlas = data.readUInt8() != 0
                         };
-                        resource_x.slot = m_wrapper.slot;
+                            var is_sprite = m_wrapper.aw != 0 && m_wrapper.ah != 0;
+                            resource_x.slot = m_wrapper.slot;
                             resource_x.width = m_wrapper.width != 0 ? m_wrapper.width : null;
                             resource_x.height = m_wrapper.height != 0 ? m_wrapper.height : null;
-                            resource_x.x = m_wrapper.x != 2147483647 ? m_wrapper.x : null; 
-                            resource_x.y = m_wrapper.y != 2147483647 ? m_wrapper.y : null;
-                            resource_x.ax = m_wrapper.ax != 0 ? m_wrapper.ax : null;
-                            resource_x.ay = m_wrapper.ay != 0 ? m_wrapper.ay : null;
+                            resource_x.x = m_wrapper.x != 2147483647 && m_wrapper.x != 0 ? m_wrapper.x : null; 
+                            resource_x.y = m_wrapper.y != 2147483647 && m_wrapper.y != 0 ? m_wrapper.y : null;
+                            resource_x.ax = is_sprite ? m_wrapper.ax : null;
+                            resource_x.ay = is_sprite ? m_wrapper.ay : null;
                             resource_x.aw = m_wrapper.aw != 0 ? m_wrapper.aw : null;
                             resource_x.ah = m_wrapper.ah != 0 ? m_wrapper.ah : null;
                             resource_x.cols = m_wrapper.cols != 1 ? m_wrapper.cols : null;
                             resource_x.rows = m_wrapper.rows != 1 ? m_wrapper.rows : null; 
-                            resource_x.atlas = m_wrapper.atlas ? true : null;
                             data.readUInt8();
                             data.readUInt8();
                             var resource_has_parent = data.readUInt8();
@@ -170,7 +181,34 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             if (resource_has_parent != 0) {
                                 resource_x.parent = ReadString(data);
                             }
-                            group.resources.Add(resource_x);
+                            switch (resource_type)
+                            {
+                                case (byte)ResourceType.PopAnim:
+                                    {
+                                        resource_x.forceOriginalVectorSymbolSize = true;
+                                        break;
+                                    }
+                                case (byte)ResourceType.RenderEffect:
+                                    {
+                                        resource_x.srcpath = $"res\\common\\{resource_x.path}";
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        if (m_wrapper.atlas)
+                                        {
+                                            resource_x.atlas = true;
+                                            resource_x.runtime = true;
+                                        }
+                                        else
+                                        {
+                                            resource_x.atlas = null;
+                                            resource_x.runtime = null;
+                                        }
+                                        break;
+                                    }
+                            }
+                        group.resources.Add(resource_x);
                     }
                 }
                 resource.groups.Add(group);
@@ -264,17 +302,31 @@ namespace Sen.Shell.Modules.Support.PvZ2
                         {
                             newton.writeUInt32LE((uint)resources_x.height);
                         }
-                        if (resources_x.x is null || (resources_x is not null && resources_x.x == 2147483647))
+                        if (resources_x.x is null)
                         {
-                            newton.writeInt32LE(2147483647);
+                            if (resources_x.aw != 0 && resources_x.ah != 0)
+                            {
+                                newton.writeInt32LE(0x00);
+                            }
+                            else
+                            {
+                                newton.writeInt32LE(0x7FFFFFFF);
+                            }
                         }
                         else
                         {
                             newton.writeInt32LE((int)resources_x!.x);
                         }
-                        if (resources_x.y is null || (resources_x is not null && resources_x.y == 2147483647))
+                        if (resources_x.y is null)
                         {
-                            newton.writeInt32LE(2147483647);
+                            if (resources_x.aw is not null && resources_x.aw != 0 && resources_x.ah is not null && resources_x.ah != 0)
+                            {
+                                newton.writeInt32LE(0x00);
+                            }
+                            else
+                            {
+                                newton.writeInt32LE(0x7FFFFFFF);
+                            }
                         }
                         else
                         {

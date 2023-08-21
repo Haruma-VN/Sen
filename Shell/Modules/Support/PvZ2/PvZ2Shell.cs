@@ -191,13 +191,13 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public unsafe class ShellSubgroupData
     {
-        public required string id;
-
         public required string type;
 
-        public string? parent;
+        public required string id;
 
         public string? res;
+
+        public string? parent;
 
         public List<SubgroupWrapper>? subgroups;
 
@@ -240,27 +240,17 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
     public unsafe class MSubgroupWrapper
     {
+        public string type;
+
         public required uint slot;
 
         public required string id;
 
         public object path;
 
-        public string type;
-
-        public string? parent;
-
         public bool? atlas;
 
         public bool? runtime;
-
-        public uint? ax;
-
-        public uint? ay;
-
-        public uint? aw;
-
-        public uint? ah;
 
         public int? x;
 
@@ -269,6 +259,16 @@ namespace Sen.Shell.Modules.Support.PvZ2
         public uint? cols;
 
         public uint? rows;
+
+        public string? parent;
+
+        public uint? ax;
+
+        public uint? ay;
+
+        public uint? aw;
+
+        public uint? ah;
 
         public uint? width;
 
