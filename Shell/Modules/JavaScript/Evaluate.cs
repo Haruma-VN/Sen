@@ -6,6 +6,8 @@ using Sen.Shell.Modules.Support.PvZ2;
 using Jint;
 using Sen.Shell.Modules.Support.Download;
 using Jint.Native;
+using Jint.Runtime.Interop;
+using Sen.Shell.Modules.Standards.IOModule.Buffer;
 
 namespace Sen.Shell.Modules.JavaScript
 {
@@ -47,6 +49,7 @@ namespace Sen.Shell.Modules.JavaScript
                 {"PvZ2Lawnstrings", new Sen.Shell.Modules.Support.PvZ2.Lawnstrings()},
                 {"ChatGPT", new Sen.Modules.Support.Misc.ChatGPT()},
                 {"ADBHelper", new Sen.Shell.Modules.Support.Misc.ADBHelper()},
+                { "SenBuffer", TypeReference.CreateTypeReference(Engine, typeof(SenBuffer)) },
             };
             ns.Set("Shell", JsValue.FromObject(Engine, dictionary));
             var k_dictionary = new Dictionary<string, object>

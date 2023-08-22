@@ -134,6 +134,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
                     let k_find: string;
                     switch (import_k) {
                         case 1: {
+                            Sen.Shell.Console.Print(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_sprite"))
+                            );
                             const available: Array<int> = new Array<int>();
                             const k_exp: Array<[string, string]> = Object.entries(struct.sprite);
                             k_exp.forEach((k_data, m_index) => {
@@ -149,6 +153,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
                             break;
                         }
                         case 2: {
+                            Sen.Shell.Console.Print(
+                                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_image"))
+                            );
                             const available: Array<int> = new Array<int>();
                             const k_exp: Array<
                                 [
@@ -175,7 +183,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
                     }
                     const xml_path: string = Sen.Shell.Path.Join(this.xfl_path, `library`, `main.xml`);
                     const main: Sen.Script.Modules.Implement.XML.Sprite = Sen.Script.Modules.Implement.XML.ReadXML(xml_path);
-                    let layer = main.DOMSymbolItem.timeline.DOMTimeline.layers.DOMLayer;
+                    const layer = main.DOMSymbolItem.timeline.DOMTimeline.layers.DOMLayer;
                     const m_finder = layer.filter((e) => {
                         if (Array.isArray(e.frames.DOMFrame as unknown as Array<any>)) {
                             return (e.frames.DOMFrame as unknown as Array<any>).some((m) => m.elements !== null && m.elements.DOMSymbolInstance[`@libraryItemName`].includes(k_find));
@@ -188,7 +196,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
                         if (Array.isArray(m_data.frames.DOMFrame)) {
                             m_data.frames.DOMFrame.forEach((m: any) => {
                                 if (m.elements !== null) {
-                                    m.elements.DOMSymbolInstance[`@libraryItemName`] = `sprite/${m_list.at(-1)!.at(0)!}`;
+                                    m.elements.DOMSymbolInstance[`@libraryItemName`] = import_k === 1 ? `sprite/${m_list.at(-1)!.at(0)!}` : `image/${m_list.at(-1)!.at(0)!}`;
                                 }
                             });
                         }

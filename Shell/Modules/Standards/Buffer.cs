@@ -9,7 +9,13 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
     #pragma warning disable IDE0063
     #pragma warning disable IDE0079
     #pragma warning disable IDE0060
-    public class SenBuffer
+
+    public abstract class BufferM
+    {
+
+    }
+
+    public class SenBuffer : BufferM
     {
 
         public Stream baseStream;
@@ -33,11 +39,13 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         {
             baseStream = stream;
         }
+
         public Encoding Encode = Encoding.UTF8;
 
         /// <summary>
         /// Creates a new empty SenBuffer instance.
         /// </summary>
+        /// 
         public SenBuffer() : this(new MemoryStream())
         {
         }
@@ -46,6 +54,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         /// Creates a new  SenBuffer instance.
         /// <param name="bytes"> { Bytes } The Bytes to use as the internal Bytes value.</param>
         /// </summary>
+        
         public SenBuffer(byte[] bytes) : this(new MemoryStream(bytes))
         {
         }
@@ -54,6 +63,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         /// Creates a new  SenBuffer instance.
         /// <param name="size"> { Size } The size to create length of SenBuffer.</param>
         /// </summary>
+
 
         public SenBuffer(int size)
         {
@@ -122,6 +132,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             Image<Rgba32> image = Image.Load<Rgba32>(baseStream);
             return image;
         }
+
         private void fixReadOffset(long offset)
         {
             if (offset != -1 && offset > -1)
@@ -164,7 +175,10 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public byte[] readBytes(int count, long offset = -1)
         {
             fixReadOffset(offset);
-            if (readOffset + count > length) throw new ArgumentException($"Offset is outside the bounds of the DataView");
+            if (readOffset + count > length)
+            {
+                throw new ArgumentException($"Offset is outside the bounds of the DataView");
+            }   
             byte[] array = new byte[count];
             baseStream.Read(array, 0, count);
             readOffset += count;
@@ -555,6 +569,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             m_buffer[1] = (byte)(number >> 8);
             m_buffer[0] = (byte)(number >> 16);
             writeBytes(m_buffer);
+            return;
         }
 
         public void writeUInt32LE(uint number, long offset = -1)
@@ -566,6 +581,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             m_buffer[2] = (byte)(number >> 16);
             m_buffer[3] = (byte)(number >> 24);
             writeBytes(m_buffer);
+            return;
         }
 
         public void writeUInt32BE(uint number, long offset = -1)
@@ -607,6 +623,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             m_buffer[1] = (byte)(number >> 48);
             m_buffer[0] = (byte)(number >> 56);
             writeBytes(m_buffer);
+            return;
         }
 
         public void writeFloatLE(float number, long offset = -1)
@@ -614,6 +631,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             m_buffer = BitConverter.GetBytes(number);
             fixWriteOffset(offset);
             writeBytes(m_buffer);
+            return;
 
         }
 
@@ -623,6 +641,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             Array.Reverse(m_buffer);
             fixWriteOffset(offset);
             writeBytes(m_buffer);
+            return;
 
         }
 
@@ -862,6 +881,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             Flush();
             return baseStream;
         }
+
         public string toString(string EncodingType = "UTF-8") {
             Encoding encoding = Encoding.GetEncoding(EncodingType);
             byte[] array = toBytes();

@@ -559,6 +559,12 @@
     "does_not_find_custom": "Does not find \"_custom\"",
     "success_apply_to_sprite": "Success apply to {}",
     "input_flash_project": "Input Flash Project",
-    "sprite": "sprite",
-    "image": "image"
+    "sprite": "Sprite",
+    "image": "Image",
+    "input_sprite": "Input Sprite",
+    "input_image": "Input Image",
+    "modern_apple_devices": "iPad3: Modern Apple Devices",
+    "average_apple_devices": "iPad2: Mid Apple Devices",
+    "low_apple_devices": "iPhone: Low Apple Devices",
+    "all_apple_devices": "All: Support all kinds of Apple Devices"
 }

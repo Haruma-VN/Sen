@@ -31,6 +31,162 @@ declare namespace Sen {
 
         declare const argument: string[];
 
+        /**
+         * Buffer
+         */
+
+        export class SenBuffer {
+            /**
+             *
+             * @param n - File path | Size | Array Buffer
+             */
+
+            constructor(n?: string | bigint | Array<bigint>): void;
+            readUInt8(): bigint;
+            readUInt8(offset: bigint): bigint;
+            readUInt16LE(offset: bigint): bigint;
+            readUInt16LE(): bigint;
+            readUInt24LE(offset: bigint): bigint;
+            readUInt24LE(): bigint;
+            readUInt32LE(offset: bigint): bigint;
+            readUInt32LE(): bigint;
+            readBigUInt64LE(offset: bigint): bigint;
+            readBigUInt64LE(): bigint;
+            readUInt16BE(offset: bigint): bigint;
+            readUInt16BE(): bigint;
+            readUInt24BE(offset: bigint): bigint;
+            readUInt24BE(): bigint;
+            readUInt32BE(offset: bigint): bigint;
+            readUInt32BE(): bigint;
+            readBigUInt64BE(offset: bigint): bigint;
+            readBigUInt64BE(): bigint;
+            readVarUInt32(offset: bigint): bigint;
+            readVarUInt32(): bigint;
+            readVarUInt64(offset: bigint): bigint;
+            readVarUInt64(): bigint;
+            readInt8(): bigint;
+            readInt8(offset: bigint): bigint;
+            readBytes(count: bigint): Array<bigint>;
+            readBytes(count: bigint, offset: bigint): Array<bigint>;
+            readVarInt32(offset: bigint): bigint;
+            readVarInt32(): bigint;
+            readVarInt64(offset: bigint): bigint;
+            readVarInt64(): bigint;
+            readZigZag32(): bigint;
+            readZigZag32(offset: bigint): bigint;
+            readZigZag64(): bigint;
+            readZigZag64(offset: bigint): bigint;
+            readFloatLE(): float;
+            readFloatLE(offset: bigint): float;
+            readFloatBE(): bigint;
+            readFloatBE(offset: bigint): float;
+            readDoubleLE(): double;
+            readDoubleLE(offset: bigint): double;
+            readDoubleBE(): bigint;
+            readDoubleBE(offset: bigint): double;
+            readBool(): boolean;
+            readBool(offset: bigint): boolean;
+            readStringByEmpty(): string;
+            readStringByEmpty(offset: bigint): string;
+            getStringByEmpty(offset: bigint): string;
+            readStringByInt16LE(offset: bigint): string;
+            readStringByInt16LE(): string;
+            readStringByVarInt32(): string;
+            readStringByVarInt32(offset: bigint): string;
+            writeBytes(array: Array<bigint>): void;
+            writeBytes(array: Array<bigint>, offset: bigint): void;
+            writeString(str: string): void;
+            writeString(str: string, offset: bigint): void;
+            writeString(str: string, offset: bigint, encodingType: string = "UTF-8"): void;
+            writeStringByEmpty(str: string): void;
+            writeStringByEmpty(str: string, offset: bigint): void;
+            writeNull(count: bigint): void;
+            writeNull(count: bigint, offset: bigint): void;
+            writeStringFourByte(str: string): void;
+            writeStringFourByte(str: string, offset: bigint): void;
+            setBytes(array: Array<bigint>, offset: bigint, overwriteOffset: boolean): void;
+            writeUInt8(num: bigint): void;
+            writeUInt8(num: bigint, offset: bigint): void;
+            writeUInt16LE(num: bigint): void;
+            writeUInt16LE(num: bigint, offset: bigint): void;
+            writeUInt16BE(num: bigint): void;
+            writeUInt16BE(num: bigint, offset: bigint): void;
+            writeUInt24LE(num: bigint): void;
+            writeUInt24LE(num: bigint, offset: bigint): void;
+            writeUInt24BE(num: bigint): void;
+            writeUInt24BE(num: bigint, offset: bigint): void;
+            writeUInt32LE(num: bigint): void;
+            writeUInt32LE(num: bigint, offset: bigint): void;
+            writeUInt32BE(num: bigint): void;
+            writeUInt32BE(num: bigint, offset: bigint): void;
+            writeBigUInt64LE(num: bigint): void;
+            writeBigUInt64LE(num: bigint, offset: bigint): void;
+            writeBigUInt64BE(num: bigint): void;
+            writeBigUInt64BE(num: bigint, offset: bigint): void;
+            writeFloatLE(num: float): void;
+            writeFloatLE(num: float, offset: bigint): void;
+            writeFloatBE(num: float): void;
+            writeFloatBE(num: float, offset: bigint): void;
+            writeDoubleLE(num: double): void;
+            writeDoubleLE(num: double, offset: bigint): void;
+            writeDoubleBE(num: double): void;
+            writeDoubleBE(num: double, offset: bigint): void;
+            writeUVarInt32(num: bigint): void;
+            writeUVarInt32(num: bigint, offset: bigint): void;
+            writeUVarInt64(num: bigint): void;
+            writeUVarInt64(num: bigint, offset: bigint): void;
+            writeInt8(num: bigint): void;
+            writeInt8(num: bigint, offset: bigint): void;
+            writeInt16LE(num: bigint): void;
+            writeInt16LE(num: bigint, offset: bigint): void;
+            writeInt16BE(num: bigint): void;
+            writeInt16BE(num: bigint, offset: bigint): void;
+            writeInt24LE(num: bigint): void;
+            writeInt24LE(num: bigint, offset: bigint): void;
+            writeInt24BE(num: bigint): void;
+            writeInt24BE(num: bigint, offset: bigint): void;
+            writeInt32LE(num: bigint): void;
+            writeInt32LE(num: bigint, offset: bigint): void;
+            writeInt32BE(num: bigint): void;
+            writeInt32BE(num: bigint, offset: bigint): void;
+            writeBigInt64LE(num: bigint): void;
+            writeBigInt64LE(num: bigint, offset: bigint): void;
+            writeBigInt64BE(num: bigint): void;
+            writeBigInt64BE(num: bigint, offset: bigint): void;
+            writeVarInt32(num: bigint): void;
+            writeVarInt32(num: bigint, offset: bigint): void;
+            writeVarInt64(num: bigint): void;
+            writeVarInt64(num: bigint, offset: bigint): void;
+            writeBool(val: boolean): void;
+            writeBool(val: boolean, offset: bigint): void;
+            writeZigZag32(val: bigint): void;
+            writeZigZag32(val: bigint, offset: bigint): void;
+            writeZigZag64(val: bigint): void;
+            writeZigZag64(val: bigint, offset: bigint): void;
+            writeStringByInt16LE(): void;
+            writeStringByInt16LE(str: string): void;
+            writeStringByInt16LE(str: string, offset: bigint): void;
+            writeStringByVarInt32(): void;
+            writeStringByVarInt32(str: string): void;
+            writeStringByVarInt32(str: string, offset: bigint): void;
+            writeSenBuffer(sen: SenBuffer): void;
+            writeSenBuffer(sen: SenBuffer, offset: bigint): void;
+            toByte(): Array<bigint>;
+            toString(): string;
+            toString(encodingType: string): string;
+            BackupReadOffset(): void;
+            RestoreReadOffset(): void;
+            BackupWriteOffset(): void;
+            RestoreWriteOffset(): void;
+            CreateDirectory(outpath: string): void;
+            OutFile(outpath: string): void;
+            SaveFile(outpath: string): void;
+            async SaveFileAsync(path: string): Promise<void>;
+            async OutFileAsync(path: string): Promise<void>;
+            Close(): void;
+            Flush(): void;
+        }
+
         declare namespace ChatGPT {
             export function AskChatGPT(api: string, question: string): string;
         }
@@ -713,6 +869,24 @@ declare namespace Sen {
              */
 
             export function CreateAPNG(g_option: GenerateAPNG): void;
+
+            /**
+             * Structure
+             */
+
+            export interface Dimension {
+                width: bigint;
+                height: bigint;
+            }
+
+            /**
+             *
+             * @param inFile - Pass in file
+             * @param outFile - Pass out file
+             * @param dimension - Dimension
+             */
+
+            export function ExpandImage(inFile: string, outFile: string, dimension: Dimension): void;
         }
 
         declare namespace TextureHandler {
