@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Newtonsoft.Json;
+using Sen.Shell.Modules.Support.PvZ2.RSB;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -209,6 +211,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             m_buffer = readBytes(1);
             return (byte)m_buffer[0];
         }
+
 
         public ushort readUInt16LE(long offset = -1)
         {
@@ -983,6 +986,12 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public virtual void Flush()
         {
             baseStream.Flush();
+        }
+
+        public virtual string SerializeJson(object json)
+        {
+
+            return RSBFunction.JsonPrettify(JsonConvert.SerializeObject(json));
         }
     }
 }
