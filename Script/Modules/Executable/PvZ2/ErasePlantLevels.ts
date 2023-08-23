@@ -31,7 +31,8 @@ namespace Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels {
                 (obj.objdata.PlantTier as Array<int>).length = 1;
             }
         }
-        Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Executable.PvZ2.ErasePlantLevels.PlantLevelsEraseDataOnly>(file_out, deserialize_json, false);
+        const sen = new Sen.Shell.SenBuffer();
+        Sen.Shell.FileSystem.WriteFile(file_out, sen.SerializeJson(deserialize_json));
         return;
     }
 

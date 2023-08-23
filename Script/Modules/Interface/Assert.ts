@@ -309,6 +309,54 @@ namespace Sen.Script.Modules.Interface.Assert {
     }
 
     /**
+     * Structure
+     */
+
+    export interface CommandForward {
+        query: "js_evaluate";
+        package: Array<Record<"launch" | "id", string>>;
+    }
+
+    /**
+     *
+     * @param path - Current launch
+     * @param command_path - Command.json path
+     * @returns
+     */
+
+    export function QueryPath(path: string, command_path: string): string {
+        if (path.startsWith("~")) {
+            return Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(Sen.Shell.MainScriptDirectory, ...path.split("/").filter((e, i) => i !== 0)));
+        } else if (path.startsWith(".")) {
+            return Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(command_path, ...path.split("/").filter((e, i) => i !== 0)));
+        }
+        return path;
+    }
+
+    /**
+     *
+     * @param forward - Forward
+     * @param command - Command path
+     * @returns
+     */
+
+    export function QuickJS(forward: CommandForward, command: string): void {
+        Sen.Shell.Console.Print(Platform.Constraints.ConsoleColor.Green, System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, System.Default.Localization.GetString("select_js")));
+        const available: Array<int> = new Array<int>();
+        forward.package.forEach((command: Record<"id" | "launch", string>, index: int) => {
+            Sen.Shell.Console.Printf(null, `      ${index + 1}. ${System.Default.Localization.GetString(command.id)}`);
+            available.push(index + 1);
+        });
+        let input: string = Sen.Shell.Console.Input(Platform.Constraints.ConsoleColor.Cyan);
+        while (!available.includes(parseInt(input))) {
+            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, Sen.Script.Modules.System.Default.Localization.GetString("is_not_valid_input_argument").replace(/\{\}/g, `${input}`));
+            input = Sen.Shell.Console.Input(Platform.Constraints.ConsoleColor.Cyan);
+        }
+        Sen.Script.Modules.System.Implement.JavaScript.JSEvaluate(`${QueryPath(forward.package[parseInt(input) - 1].launch, command)}.js`);
+        return;
+    }
+
+    /**
      *
      * @param argument - Pass the argument array to input more
      * @returns
@@ -317,7 +365,12 @@ namespace Sen.Script.Modules.Interface.Assert {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, ``)}`);
         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("no_argument_were_passed")}`);
         let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
-        while (arg !== "") {
+        assert_view: while (arg !== "") {
+            if (arg === ":js") {
+                const js_command: string = Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Executable`, `command.json`);
+                QuickJS(Sen.Script.Modules.FileSystem.Json.ReadJson<CommandForward>(js_command), js_command);
+                break assert_view;
+            }
             if (arg === ":p") {
                 const method: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("select_input_method"), [1, 2], {
                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("file"), Sen.Script.Modules.System.Default.Localization.GetString("file")],

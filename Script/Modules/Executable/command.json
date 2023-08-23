@@ -1,0 +1,37 @@
+{
+    "query": "js_evaluate",
+    "package": [
+        {
+            "id": "android_rsb_to_ios_rsb",
+            "launch": "~/Modules/Executable/PvZ2/AndroidRSBtoIOSRSB"
+        },
+        {
+            "id": "erase_plant_levels",
+            "launch": "~/Modules/Executable/PvZ2/ErasePlantLevels"
+        },
+        {
+            "id": "extract_cn_rsb",
+            "launch": "~/Modules/Executable/PvZ2/ExtractCNRSBfromIPAandAPK"
+        },
+        {
+            "id": "import_custom_content",
+            "launch": "~/Modules/Executable/PvZ2/ImportCompositeFromRSB"
+        },
+        {
+            "id": "reorganize_resource",
+            "launch": "~/Modules/Executable/PvZ2/OrganizeResources"
+        },
+        {
+            "id": "remove_subgroup",
+            "launch": "~/Modules/Executable/PvZ2/RemoveSubgroup"
+        },
+        {
+            "id": "remove_wem",
+            "launch": "~/Modules/Executable/PvZ2/RemoveWEM"
+        },
+        {
+            "id": "animation_helper_clone_content",
+            "launch": "~/Modules/Executable/PvZ2/CloneAnimateContent"
+        }
+    ]
+}

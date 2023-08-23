@@ -567,5 +567,6 @@
     "average_apple_devices": "iPad2: Mid Apple Devices",
     "low_apple_devices": "iPhone: Low Apple Devices",
     "all_apple_devices": "All: Support all kinds of Apple Devices",
-    "download_sen_success": "Download success! Happy Modding!"
+    "download_sen_success": "Download success! Happy Modding!",
+    "select_js": "Select JavaScript to Evaluate"
 }
