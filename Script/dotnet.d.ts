@@ -201,6 +201,27 @@ declare namespace Sen {
             Close(): void;
             Flush(): void;
             SerializeJson<T>(json: T): string;
+            readInt16BE(): bigint;
+            readInt16BE(offset: bigint): bigint;
+            peekUInt8(): bigint;
+            peekUInt8(offset: bigint): bigint;
+            peekInt8(): bigint;
+            peekInt8(offset: bigint): bigint;
+            peekUInt16LE(): bigint;
+            peekUInt16LE(offset: bigint): bigint;
+            peekUInt16BE(): bigint;
+            peekUInt16BE(offset: bigint): bigint;
+            peekUInt24LE(): bigint;
+            peekUInt24LE(offset: bigint): bigint;
+            peekUInt24BE(): bigint;
+            peekUInt24BE(offset: bigint): bigint;
+            peekUInt32LE(): bigint;
+            peekUInt32LE(offset: bigint): bigint;
+            peekUInt32BE(): bigint;
+            peekUInt32BE(offset: bigint): bigint;
+            peekString(count: bigint): string;
+            peekString(count: bigint, offset: bigint): string;
+            peekString(count: bigint, offset: bigint, encodingType: string): string;
         }
 
         declare namespace ChatGPT {

@@ -299,6 +299,14 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             m_buffer = readBytes(2);
             return (short)(m_buffer[0] | (m_buffer[1] << 8));
         }
+        
+        public short readInt16BE(long offset = -1)
+        {
+            fixReadOffset(offset);
+            m_buffer = readBytes(2);
+            return (short)(m_buffer[1] | (m_buffer[0] << 8));
+        }
+
 
         public int readInt24LE(long offset = -1)
         {
@@ -428,7 +436,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             return BitConverter.ToDouble(m_buffer, 0);
         }
 
-        public Boolean readBool(long offset = -1)
+        public bool readBool(long offset = -1)
         {
             fixReadOffset(offset);
             m_buffer = readBytes(1);
@@ -472,6 +480,95 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             return readString(readVarInt32());
         }
 
+        public byte peekUInt8(long offset = -1) {
+            byte num = readUInt8(offset);
+            readOffset--;
+            return num;
+        }
+
+        public sbyte peekInt8(long offset = -1) {
+            sbyte num = readInt8(offset);
+            readOffset--;
+            return num;
+        }
+
+        public ushort peekUInt16LE(long offset = -1) {
+            ushort num = readUInt16LE(offset);
+            readOffset -= 2;
+            return num;
+        }
+
+        public ushort peekUInt16BE(long offset = -1) {
+            ushort num = readUInt16BE(offset);
+            readOffset -= 2;
+            return num;
+        }
+
+        public short peekInt16LE(long offset = -1) {
+            short num = readInt16LE(offset);
+            readOffset -= 2;
+            return num;
+        }
+
+        public short peekInt16BE(long offset = -1) {
+            short num = readInt16BE(offset);
+            readOffset -= 2;
+            return num;
+        }
+
+        public uint peekUInt24LE(long offset = -1) {
+            uint num = readUInt24LE(offset);
+            readOffset -= 3;
+            return num;
+        }
+
+        public uint peekUInt24BE(long offset = -1) {
+            uint num = readUInt24BE(offset);
+            readOffset -= 3;
+            return num;
+        }
+
+        public int peekInt24LE(long offset = -1) {
+            int num = readInt24LE(offset);
+            readOffset -= 3;
+            return num;
+        }
+
+        public int peekInt24BE(long offset = -1) {
+            int num = readInt24BE(offset);
+            readOffset -= 3;
+            return num;
+        }
+
+        public uint peekUInt32LE(long offset = -1) {
+            uint num = readUInt32LE(offset);
+            readOffset -= 4;
+            return num;
+        }
+
+        public uint peekUInt32BE(long offset = -1) {
+            uint num = readUInt32BE(offset);
+            readOffset -= 4;
+            return num;
+        }
+
+        public int peekInt32LE(long offset = -1) {
+            int num = readInt32LE(offset);
+            readOffset -= 4;
+            return num;
+        }
+
+        public int peekInt32BE(long offset = -1) {
+            int num = readInt32BE(offset);
+            readOffset -= 4;
+            return num;
+        }
+
+        public string peekString(int count, long offset = -1, string EncodingType = "UTF-8") {
+            string str = readString(count, offset, EncodingType);
+            readOffset -= count;
+            return str;
+        }
 
         // Write
         public void writeBytes(byte[] array, long offset = -1)
@@ -518,7 +615,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             writeBytes(str_bytes);
         }
 
-        public void setBytes(byte[] array, long offset, Boolean overwriteOffset)
+        public void setBytes(byte[] array, long offset, bool overwriteOffset)
         {
             int length = array.Length;
             if (overwriteOffset)

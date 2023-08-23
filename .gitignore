@@ -437,3 +437,4 @@ _deps
 *.swo
 *~
 Shell/Properties/launchSettings.json
+Updater
