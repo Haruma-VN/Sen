@@ -59,6 +59,7 @@ namespace Sen.Shell.Modules.JavaScript
             ns.Set("Internal", JsValue.FromObject(Engine, k_dictionary));
             Engine.SetValue("Sen", ns);
             Engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts\\main.js");
+            Engine.Evaluate($"Sen.Script.Main(Sen.Shell.argument);");
             return;
         }
     }

@@ -481,8 +481,6 @@ namespace Sen.Shell.Modules.Support.Download
             compression.UncompressZip(script_save, script_dir);
             // delete zip
             fs.DeleteFile(script_save);
-            var platform = new Platform();
-            platform.SendNotification("Script download success, happy modding!", "Sen");
             return;
         }
 

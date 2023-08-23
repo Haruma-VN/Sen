@@ -207,4 +207,3 @@ namespace Sen.Script {
         return;
     }
 }
-Sen.Script.Main(Sen.Shell.argument);

@@ -151,7 +151,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             else
             {
                 // 
-                throw new Exception();
+                throw new Exception("Offset not found");
             }
 
         }
@@ -273,6 +273,11 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         {
             fixReadOffset(offset);
             return (uint)readVarInt32();
+        }
+
+        public long readP(long? value)
+        {
+            return value is null ? this.readOffset : this.readOffset = (long)value;
         }
 
         public ulong readVarUInt64(long offset = -1)

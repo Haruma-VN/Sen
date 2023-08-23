@@ -66,6 +66,21 @@ declare namespace Sen {
             readVarUInt64(): bigint;
             readInt8(): bigint;
             readInt8(offset: bigint): bigint;
+            readInt16LE(): bigint;
+            readInt16LE(offset: bigint): bigint;
+            readInt24LE(): bigint;
+            readInt24LE(offset: bigint): bigint;
+            readInt32LE(): bigint;
+            readInt32LE(offset: bigint): bigint;
+            readBigInt64LE(): bigint;
+            readBigInt64LE(offset: bigint): bigint;
+            readBigInt64BE(): bigint;
+            readBigInt64BE(offset: bigint): bigint;
+            readP(): bigint;
+            readP(value: bigint): bigint;
+            readString(count: bigint): string;
+            readString(count: bigint, offset: bigint): string;
+            readString(count: bigint, offset: bigint, encodingType: string): string;
             readBytes(count: bigint): Array<bigint>;
             readBytes(count: bigint, offset: bigint): Array<bigint>;
             readVarInt32(offset: bigint): bigint;
@@ -185,6 +200,7 @@ declare namespace Sen {
             async OutFileAsync(path: string): Promise<void>;
             Close(): void;
             Flush(): void;
+            SerializeJson<T>(json: T): string;
         }
 
         declare namespace ChatGPT {
