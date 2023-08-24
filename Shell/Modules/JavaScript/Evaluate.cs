@@ -13,8 +13,9 @@ namespace Sen.Shell.Modules.JavaScript
 {
     public class JSEngine
     {
-        public static Engine Engine { get; } = new Engine(options => options
-        .AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
+        public static Engine Engine { get; } = new Engine(options => 
+        options.EnableModules(Sen.Shell.Program.Script_Directory).Strict().AllowClrWrite()
+        .AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => false));
 
         public static void Execute(string Script_Directory, string[] args)
         {
@@ -59,7 +60,7 @@ namespace Sen.Shell.Modules.JavaScript
             ns.Set("Internal", JsValue.FromObject(Engine, k_dictionary));
             Engine.SetValue("Sen", ns);
             Engine.Evaluate(fs.ReadText(main_js, EncodingType.UTF8), "Scripts\\main.js");
-            Engine.Evaluate($"Sen.Script.Main(Sen.Shell.argument);");
+            Engine.Evaluate($"Sen.Script.Main(Sen.Shell.argument);", "<Script>");
             return;
         }
     }

@@ -59,6 +59,10 @@ inline constexpr auto MInternalVersion = 3;
 
 #define thiz (*this)
 
+#define CHUNK_SIZE 1024
+
+#define CHUNK 16384
+
 #define log(...)\
 	std::cout << __VA_ARGS__ << std::endl;
 

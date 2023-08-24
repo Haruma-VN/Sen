@@ -80,10 +80,10 @@ namespace Sen.Shell.Modules.Standards
         public static extern IntPtr GZipUncompress(byte[] data, int dataSize, out int compressedSize);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr DeflateCompress(byte[] data, int dataSize, out int compressedSize);
+        public static extern void DeflateCompress(byte[] data, int dataSize, out IntPtr compressedData, out int size);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr DeflateUncompress(byte[] data, int dataSize, out int compressedSize);
+        public static extern void DeflateUncompress(byte[] input, int input_size, out IntPtr output, out int output_size);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr BZip2Compress(byte[] data, int dataSize, out int compressedSize);
@@ -92,7 +92,7 @@ namespace Sen.Shell.Modules.Standards
         public static extern IntPtr BZip2Uncompress(byte[] data, int dataSize, out int compressedSize);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr lzmaCompress(byte[] data, int dataSize, out int compressedSize);
+        public static extern void lzmaCompress(byte[] data, int dataSize, out IntPtr compressData ,out int compressedSize);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr lzmaUncompress(byte[] data, int dataSize, out int compressedSize);
@@ -125,10 +125,10 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] UncompressDeflate(byte[] zlibData)
         {
-            IntPtr uncompressedDataPtr = SenAPI.DeflateUncompress(zlibData, zlibData.Length, out int uncompressedDataSize);
+            SenAPI.DeflateUncompress(zlibData, zlibData.Length, out IntPtr output, out int uncompressedDataSize);
             byte[] uncompressedData = new byte[uncompressedDataSize];
-            Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
-            Marshal.FreeHGlobal(uncompressedDataPtr);
+            Marshal.Copy(output, uncompressedData, 0, uncompressedDataSize);
+            Marshal.FreeHGlobal(output);
             return uncompressedData;
         }
 
@@ -170,19 +170,20 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] CompressLzma(byte[] dataStream)
         {
-            IntPtr compressedDataPtr = SenAPI.lzmaCompress(dataStream, dataStream.Length, out var compressedSize);
+            SenAPI.lzmaCompress(dataStream, dataStream.Length, out IntPtr compressData ,out int compressedSize);
             byte[] compressedData = new byte[compressedSize];
-            Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            Marshal.Copy(compressData, compressedData, 0, compressedSize);
             return compressedData;
 
         }
 
         public override byte[] CompressDeflate(byte[] dataStream)
         {
-            IntPtr compressedDataPtr = SenAPI.GZipCompress(dataStream, dataStream.Length, out int compressedSize);
-            byte[] compressedData = new byte[compressedSize];
-            Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
-            return compressedData;
+            SenAPI.DeflateCompress(dataStream, dataStream.Length, out var compressedData, out var size);
+            byte[] deflateData = new byte[size];
+            Marshal.Copy(compressedData, deflateData, 0, size);
+            Marshal.FreeHGlobal(compressedData);
+            return deflateData;
 
         }
 

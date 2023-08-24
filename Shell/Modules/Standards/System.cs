@@ -33,7 +33,6 @@ namespace Sen.Shell.Modules.Standards
         {
             var k_ptr = SenAPI.OpenDirectoryDialog(title);
             var m = Marshal.PtrToStringAnsi(k_ptr)!;
-            Marshal.FreeHGlobal(k_ptr);
             return m;
         }
 

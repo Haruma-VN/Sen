@@ -31,6 +31,12 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public string? filePath;
         private byte[]? m_buffer;
 
+
+        public long size() => this.length;
+
+
+        public Encoding Encode = Encoding.UTF8;
+
         //Constructors
         /// <summary>
         /// Creates a new SenBuffer instance.
@@ -41,8 +47,6 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         {
             baseStream = stream;
         }
-
-        public Encoding Encode = Encoding.UTF8;
 
         /// <summary>
         /// Creates a new empty SenBuffer instance.
@@ -186,6 +190,8 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             readOffset += count;
             return array;
         }
+
+        public long current() => this.readOffset;
 
         public string readString(int count, long offset = -1, string EncodingType = "UTF-8")
         {

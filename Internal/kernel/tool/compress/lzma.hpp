@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../../dependencies/lzma/LzmaLib.c"
+#include "../../dependencies/lzma/LzmaLib.h"
 #include "../../kernel/utility/exception/common.hpp"
 
 namespace Sen::Internal::Kernel::Tool::Compress::lzma 

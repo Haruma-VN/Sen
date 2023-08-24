@@ -157,89 +157,44 @@ UnsignedByteStream GZipUncompress(
 }
 
 InternalAPI
-UnsignedByteStream DeflateCompress(
-    const char* data, 
-    size_t data_size, 
-    size_t * compressed_data_size
-) {
-    try
-    {
-        auto stream = z_stream();
-        stream.zalloc = Z_NULL;
-        stream.zfree = Z_NULL;
-        stream.opaque = Z_NULL;
-        stream.avail_in = data_size;
-        stream.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(data));
-        if (deflateInit(&stream, Z_DEFAULT_COMPRESSION) != Z_OK) {
-            throw_line("Failed to initialize zlib stream");
-        }
-        auto compressed_data = std::vector<uint8_t>{};
-        std::vector<uint8_t> buffer(1024);
-        int result;
-        do {
-            stream.avail_out = buffer.size();
-            stream.next_out = buffer.data();
-            result = deflate(&stream, Z_FINISH);
-            if (result == Z_STREAM_ERROR) {
-                throw_line("Failed to compress data");
-            }
-            size_t bytes_written = buffer.size() - stream.avail_out;
-            compressed_data.insert(compressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
-        } while (result != Z_STREAM_END);
-        deflateEnd(&stream);
-        *compressed_data_size = compressed_data.size();
-        auto result_data = new unsigned char[compressed_data.size()];
-        std::copy(compressed_data.begin(), compressed_data.end(), result_data);
-        return result_data;
-    }
-    catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
-    {
-        log(e.what());
-        throw 0;
-    }
-}
+void DeflateCompress(
+    const char* input,
+    int inputSize,
+    char** output,
+    int* outputSize
+)
+{
+    z_stream strm;
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = inputSize;
+    strm.next_in = (Bytef*)input;
 
-InternalAPI
-const unsigned char* DeflateUncompress(
-    const char* data, 
-    size_t data_size, 
-    size_t * uncompressed_data_size
-) {
-    try
-    {
-        auto stream = z_stream{};
-        stream.zalloc = Z_NULL;
-        stream.zfree = Z_NULL;
-        stream.opaque = Z_NULL;
-        stream.avail_in = data_size;
-        stream.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(data));
-        if (inflateInit(&stream) != Z_OK) {
-            throw_line("Failed to initialize zlib stream");
-        }
-        auto uncompressed_data = std::vector<uint8_t>{};
-        std::vector<uint8_t> buffer(1024);
-        int result;
-        do {
-            stream.avail_out = buffer.size();
-            stream.next_out = buffer.data();
-            result = inflate(&stream, Z_NO_FLUSH);
-            if (result == Z_STREAM_ERROR || result == Z_NEED_DICT || result == Z_DATA_ERROR || result == Z_MEM_ERROR) {
-                throw_line("Failed to uncompress data");
-            }
-            size_t bytes_written = buffer.size() - stream.avail_out;
-            uncompressed_data.insert(uncompressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
-        } while (result != Z_STREAM_END);
-        inflateEnd(&stream);
-        *uncompressed_data_size = uncompressed_data.size();
-        auto result_data = new unsigned char[uncompressed_data.size()];
-        std::copy(uncompressed_data.begin(), uncompressed_data.end(), result_data);
-        return result_data;
+    int ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
+    if (ret != Z_OK)
+        return;
+
+    *outputSize = deflateBound(&strm, inputSize);
+    *output = new char[*outputSize];
+
+    strm.avail_out = *outputSize;
+    strm.next_out = (Bytef*)*output;
+
+    ret = deflate(&strm, Z_FINISH);
+
+    deflateEnd(&strm);
+
+    if (ret == Z_STREAM_END) {
+        *outputSize = strm.total_out;
+        *output = (char*)realloc(*output, *outputSize);
     }
-    catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
-    {
-        log(e.what());
-        throw 0;
+    else {
+        delete[] * output;
+        *output = nullptr;
+        *outputSize = 0;
     }
+    return;
 }
 
 
@@ -266,6 +221,56 @@ const char* BZip2Compress(
 }
 
 InternalAPI
+Void DeflateUncompress(
+    unsigned char* in,
+    int in_len, 
+    unsigned char** out, 
+    int* out_len) 
+{
+    int ret;
+    unsigned have;
+    z_stream strm;
+    unsigned char out_buf[CHUNK];
+    int out_size = 0;
+
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = in_len;
+    strm.next_in = in;
+
+    ret = inflateInit2(&strm, -MAX_WBITS);
+    if (ret != Z_OK)
+        return;
+
+    do {
+        strm.avail_out = CHUNK;
+        strm.next_out = out_buf;
+        ret = inflate(&strm, Z_NO_FLUSH);
+        assert(ret != Z_STREAM_ERROR);
+        switch (ret) {
+        case Z_NEED_DICT:
+            ret = Z_DATA_ERROR;
+        case Z_DATA_ERROR:
+        case Z_MEM_ERROR:
+            (void)inflateEnd(&strm);
+            return;
+        }
+        have = CHUNK - strm.avail_out;
+
+        *out = (unsigned char*)realloc(*out, out_size + have);
+        memcpy(*out + out_size, out_buf, have);
+        out_size += have;
+
+    } while (strm.avail_out == 0);
+
+    (void)inflateEnd(&strm);
+
+    *out_len = out_size;
+    return;
+}
+
+InternalAPI
 const char* BZip2Uncompress(
     const char* data,
     size_t data_size,
@@ -288,47 +293,47 @@ const char* BZip2Uncompress(
 }
 
 InternalAPI
-uint8_t* lzmaCompress(
-    const uint8_t * data, 
-    size_t data_size, 
-    size_t * compressed_data_size
+Void lzmaCompress(
+    unsigned char* in, 
+    size_t in_len, 
+    unsigned char** out, 
+    size_t* out_len
 ) {
-    try
-    {
-        auto inputVector = std::vector<uint8_t>(data, data + data_size);
-        auto outputVector = Sen::Internal::Kernel::Tool::Compress::lzma::compress_lzma(inputVector);
-        auto outputData = new uint8_t[outputVector.size()];
-        std::copy(outputVector.begin(), outputVector.end(), outputData);
-        *compressed_data_size = outputVector.size();
-        return outputData;
+    size_t out_size = in_len + (in_len / 3) + 128;
+    *out = (unsigned char*)malloc(out_size + LZMA_PROPS_SIZE);
+
+    size_t props_size = LZMA_PROPS_SIZE;
+    int res = LzmaCompress(*out + LZMA_PROPS_SIZE, &out_size, in, in_len, *out, &props_size, 5, 1 << 24, 3, 0, 2, 32, 1);
+    if (res != SZ_OK) {
+        free(*out);
+        *out = NULL;
+        *out_len = 0;
+        return;
     }
-    catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
-    {
-        log(e.what());
-        throw 0;
-    }
+
+    *out_len = out_size + LZMA_PROPS_SIZE;
 }
 
+
 InternalAPI
-uint8_t* lzmaUncompress(
-    const uint8_t * data, 
-    size_t data_size, 
-    size_t * uncompressed_data_size
+void lzmaUncompress(
+    unsigned char* in, 
+    size_t in_len, 
+    unsigned char** out, 
+    size_t* out_len
 ) {
-    try
-    {
-        auto inputVector = std::vector<uint8_t>(data, data + data_size);
-        auto outputVector = Sen::Internal::Kernel::Tool::Compress::lzma::uncompress_lzma(inputVector);
-        auto outputData = new uint8_t[outputVector.size()];
-        std::copy(outputVector.begin(), outputVector.end(), outputData);
-        *uncompressed_data_size = outputVector.size();
-        return outputData;
+    size_t out_size = in_len * 10;
+    *out = (unsigned char*)malloc(out_size);
+
+    int res = LzmaUncompress(*out, &out_size, in + LZMA_PROPS_SIZE, &in_len, in, LZMA_PROPS_SIZE);
+    if (res != SZ_OK) {
+        free(*out);
+        *out = NULL;
+        *out_len = 0;
+        return;
     }
-    catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
-    {
-        std::cerr << e.what() << std::endl;
-        throw 0;
-    }
+
+    *out_len = out_size;
 }
 
 
