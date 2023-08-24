@@ -17,6 +17,7 @@ namespace Sen.Script {
             `Modules/System/Implement/XML`,
             `Modules/System/Implement/Number`,
             `Modules/System/Implement/ADBHelper`,
+            `Modules/System/Implement/ByteStream`,
             `Modules/System/Default/Localization`,
             `Modules/System/Default/Timer`,
             `Modules/Support/PopCap/PvZ2/Resources/ResInfo`,
@@ -67,18 +68,18 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 17 as const;
+    export const ScriptVersion: int = 18 as const;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 11 as const;
+    export const ShellRequirement: int = 12 as const;
 
     /**
      * Tool Version
      */
 
-    export const M_Version: string = `2.6.1` as const;
+    export const M_Version: string = `2.7.0` as const;
 
     /**
      *

@@ -1086,6 +1086,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             }
             Flush();
         }
+
         public virtual void Close()
         {
             baseStream.Close();
@@ -1096,10 +1097,10 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             baseStream.Flush();
         }
 
-        public virtual string SerializeJson(object json)
+        public virtual string SerializeJson(object json, char indent = '\t')
         {
 
-            return RSBFunction.JsonPrettify(JsonConvert.SerializeObject(json));
+            return RSBFunction.JsonPrettify(JsonConvert.SerializeObject(json), indent);
         }
     }
 }

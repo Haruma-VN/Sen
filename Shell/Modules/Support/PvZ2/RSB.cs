@@ -565,16 +565,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             return;
         }
 
-        public static string JsonPrettify(string json)
+        public unsafe static string JsonPrettify(string json, char indent = '\t')
         {
-            using (var stringReader = new StringReader(json))
-            using (var stringWriter = new StringWriter())
-            {
-                var jsonReader = new JsonTextReader(stringReader);
-                var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented, IndentChar = '\t', Indentation = 1 };
-                jsonWriter.WriteToken(jsonReader);
-                return stringWriter.ToString();
-            }
+            using var stringReader = new StringReader(json);
+            using var stringWriter = new StringWriter();
+            var jsonReader = new JsonTextReader(stringReader);
+            var jsonWriter = new JsonTextWriter(stringWriter) { Formatting = Formatting.Indented, IndentChar = indent, Indentation = 1 };
+            jsonWriter.WriteToken(jsonReader);
+            return stringWriter.ToString();
         }
 
         public static RSB_head ReadHead(SenBuffer RSBFile)

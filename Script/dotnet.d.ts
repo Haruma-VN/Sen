@@ -76,8 +76,6 @@ declare namespace Sen {
             readBigInt64LE(offset: bigint): bigint;
             readBigInt64BE(): bigint;
             readBigInt64BE(offset: bigint): bigint;
-            readP(): bigint;
-            readP(value: bigint): bigint;
             readString(count: bigint): string;
             readString(count: bigint, offset: bigint): string;
             readString(count: bigint, offset: bigint, encodingType: string): string;
@@ -93,19 +91,20 @@ declare namespace Sen {
             readZigZag64(offset: bigint): bigint;
             readFloatLE(): float;
             readFloatLE(offset: bigint): float;
-            readFloatBE(): bigint;
+            readFloatBE(): float;
             readFloatBE(offset: bigint): float;
             readDoubleLE(): double;
             readDoubleLE(offset: bigint): double;
-            readDoubleBE(): bigint;
+            readDoubleBE(): double;
             readDoubleBE(offset: bigint): double;
             readBool(): boolean;
             readBool(offset: bigint): boolean;
             readStringByEmpty(): string;
             readStringByEmpty(offset: bigint): string;
+            getStringByEmpty(): string;
             getStringByEmpty(offset: bigint): string;
-            readStringByInt16LE(offset: bigint): string;
             readStringByInt16LE(): string;
+            readStringByInt16LE(offset: bigint): string;
             readStringByVarInt32(): string;
             readStringByVarInt32(offset: bigint): string;
             writeBytes(array: Array<bigint>): void;
@@ -201,6 +200,7 @@ declare namespace Sen {
             Close(): void;
             Flush(): void;
             SerializeJson<T>(json: T): string;
+            SerializeJson<T>(json: T, indent: bigint | string): string;
             readInt16BE(): bigint;
             readInt16BE(offset: bigint): bigint;
             peekUInt8(): bigint;
@@ -219,9 +219,27 @@ declare namespace Sen {
             peekUInt32LE(offset: bigint): bigint;
             peekUInt32BE(): bigint;
             peekUInt32BE(offset: bigint): bigint;
+            peekInt16LE(): bigint;
+            peekInt16LE(offset: bigint): bigint;
+            peekInt16BE(): bigint;
+            peekInt16BE(offset: bigint): bigint;
+            peekInt24LE(): bigint;
+            peekInt24LE(offset: bigint): bigint;
+            peekInt24BE(): bigint;
+            peekInt24BE(offset: bigint): bigint;
+            peekInt32LE(): bigint;
+            peekInt32LE(offset: bigint): bigint;
+            peekInt32BE(): bigint;
+            peekInt32BE(offset: bigint): bigint;
             peekString(count: bigint): string;
             peekString(count: bigint, offset: bigint): string;
             peekString(count: bigint, offset: bigint, encodingType: string): string;
+            size(): bigint;
+            current(): bigint;
+            readInt24BE(): bigint;
+            readInt24BE(offset: bigint): bigint;
+            readInt32BE(): bigint;
+            readInt32BE(offset: bigint): bigint;
         }
 
         declare namespace ChatGPT {
