@@ -29,6 +29,39 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
         }
 
         public Ink(): void {
+            Sen.Shell.Console.Print(
+                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_more_that_path").replace(/\{\}/g, "png"))
+            );
+            const png_argument: Array<string> = new Array();
+            assert_argument: while (true) {
+                let arg: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
+                if (arg.endsWith(` `)) {
+                    arg = arg.slice(0, -1);
+                }
+                if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
+                    arg = arg.slice(1, -1);
+                }
+                if (Sen.Shell.FileSystem.FileExists(arg) && /((\.png))$/i.test(arg)) {
+                    png_argument.push(arg);
+                    break assert_argument;
+                } else {
+                    Sen.Shell.Console.Print(
+                        Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
+                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("file_assert_is_not").replace(/\{\}/g, "png"))
+                    );
+                }
+            }
+            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, this.xfl_path, this.resolution, {
+                generate_sprite: "new",
+                sprite_name: "",
+            });
+            const import_type: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("costume_import_type"), [1, 2], {
+                "1": [Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import"), Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import")],
+                "2": [Sen.Script.Modules.System.Default.Localization.GetString("generate_new_custom"), Sen.Script.Modules.System.Default.Localization.GetString("generate_new_custom")],
+            }) as 1 | 2;
+            const struct = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(this.xfl_path, `struct.json`));
+            const m_list: Array<[string, string]> = Object.entries(struct.sprite);
             return;
         }
 
@@ -62,6 +95,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
             }
             Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, this.xfl_path, this.resolution, {
                 generate_sprite: "new",
+                sprite_name: "",
             });
             const import_type: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("costume_import_type"), [1, 2], {
                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import"), Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import")],

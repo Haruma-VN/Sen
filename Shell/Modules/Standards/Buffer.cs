@@ -919,7 +919,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             writeUInt8((byte)num);
         }
 
-        public void writeBool(bool value, long offset = -1)
+        public unsafe void writeBool(bool value, long offset = -1)
         {
             m_buffer = new byte[1];
             m_buffer[0] = (byte)(value ? 1u : 0u);
@@ -932,6 +932,21 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             fixWriteOffset(offset);
             writeVarInt32((number << 1) ^ (number >> 31));
         }
+
+        public unsafe void slice(long begin, long end)
+        {
+            if (begin < 0 || end < begin || end > this.baseStream.Length)
+            {
+                throw new ArgumentOutOfRangeException("Invalid Buffer Slice");
+            }
+            var length = end - begin;
+            byte[] buffer = new byte[length];
+            this.baseStream.Seek(begin, SeekOrigin.Begin);
+            this.baseStream.Read(buffer, 0, (int)length);
+            this.baseStream = new MemoryStream(buffer);
+            return;
+        }
+
 
         public void writeZigZag64(long number, long offset = -1)
         {
@@ -1086,6 +1101,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             }
             Flush();
         }
+
 
         public virtual void Close()
         {

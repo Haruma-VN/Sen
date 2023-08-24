@@ -641,6 +641,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         }) as 1 | 2 | 3;
                         let option: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.Option = {
                             generate_sprite: "none",
+                            sprite_name: "",
                         };
                         switch (sprite_distribution) {
                             case 1:
@@ -695,6 +696,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 1 | 2 | 3;
                             let option: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.Option = {
                                 generate_sprite: "none",
+                                sprite_name: "",
                             };
                             switch (sprite_distribution) {
                                 case 1:
@@ -1237,12 +1239,25 @@ namespace Sen.Script.Modules.Interface.Execute {
                             ) as 1 | 2) === 1
                                 ? true
                                 : false;
+                        const encode_newton: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("encode_newton"),
+                                [0, 1],
+                                {
+                                    "0": [Sen.Script.Modules.System.Default.Localization.GetString("not_generate_newton_resource"), Sen.Script.Modules.System.Default.Localization.GetString("not_generate_newton_resource")],
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("generate_newton_resource"), Sen.Script.Modules.System.Default.Localization.GetString("generate_newton_resource")],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_pack_simple.json`)),
+                                `encode_newton`
+                            ) as 0 | 1
+                        );
                         const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`));
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSBBySimple(argument, output_argument, {
                             encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key,
                             encryptRTON: encrypted_rton,
                             generate_resources: generate_resources,
+                            encode_newton: encode_newton,
                         });
                     } else {
                         argument.forEach((arg: string) => {
@@ -1271,12 +1286,25 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 ) as 1 | 2) === 1
                                     ? true
                                     : false;
+                            const encode_newton: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("encode_newton"),
+                                    [0, 1],
+                                    {
+                                        "0": [Sen.Script.Modules.System.Default.Localization.GetString("not_generate_newton_resource"), Sen.Script.Modules.System.Default.Localization.GetString("not_generate_newton_resource")],
+                                        "1": [Sen.Script.Modules.System.Default.Localization.GetString("generate_newton_resource"), Sen.Script.Modules.System.Default.Localization.GetString("generate_newton_resource")],
+                                    },
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_pack_simple.json`)),
+                                    `encode_newton`
+                                ) as 0 | 1
+                            );
                             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`));
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSBBySimple(arg, output_argument, {
                                 encryptionKey: Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key,
                                 encryptRTON: encrypted_rton,
                                 generate_resources: generate_resources,
+                                encode_newton: encode_newton,
                             });
                         });
                     }
@@ -1757,7 +1785,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         const output_argument: string = Sen.Shell.Path.Resolve(`${argument}.bin`);
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Optimal);
+                            Sen.Shell.PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.BEST_COMPRESSION);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -1784,7 +1812,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             const output_argument: string = Sen.Shell.Path.Resolve(`${arg}.bin`);
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.Optimal);
+                                Sen.Shell.PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.BEST_COMPRESSION);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }

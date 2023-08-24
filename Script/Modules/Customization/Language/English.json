@@ -422,7 +422,7 @@
     "deserializing_json": "Deserializing json...",
     "finished": "Finished",
     "extends_texture_information_for_pvz2c": "Extends Texture Information for PvZ 2 Chinese",
-    "pvz2c_extends_0": "PvZ 2 International  & PvZ 2 Chinese iOS before 1.6",
+    "pvz2c_extends_0": "PvZ 2 International & PvZ 2 Chinese iOS before 1.6",
     "pvz2c_extends_1": "PvZ 2 Chinese Android Early Version and PvZ 2 Chinese iOS 1.6",
     "pvz2c_extends_2": "PvZ 2 Chinese Android Current Version & PvZ 2 Chinese iOS 1.6 to 2.5",
     "pvz2c_extends_3": "PvZ 2 Chinese iOS after 2.5",
@@ -547,5 +547,9 @@
     "import_pvz2c_bundle": "PopCap RSB: Import Chinese Content",
     "reorganize_resource": "PopCap Resource-Group: Organize Resources",
     "remove_subgroup": "PopCap RSB: Remove Subgroup",
-    "remove_wem": "PopCap RSB: Remove WEM"
+    "remove_wem": "PopCap RSB: Remove WEM",
+    "encode_newton": "Encode Newton Resources for version 10.8.1 and above",
+    "generated_newton_resource": "Generated Newton Resources",
+    "generate_newton_resource": "Generate Newton Resource",
+    "not_generate_newton_resource": "Not Generate Newton Resource"
 }

@@ -316,7 +316,7 @@ Void lzmaCompress(
 
 
 InternalAPI
-void lzmaUncompress(
+Void lzmaUncompress(
     unsigned char* in, 
     size_t in_len, 
     unsigned char** out, 
@@ -325,7 +325,7 @@ void lzmaUncompress(
     size_t out_size = in_len * 10;
     *out = (unsigned char*)malloc(out_size);
 
-    int res = LzmaUncompress(*out, &out_size, in + LZMA_PROPS_SIZE, &in_len, in, LZMA_PROPS_SIZE);
+    auto res = LzmaUncompress(*out, &out_size, in + LZMA_PROPS_SIZE, &in_len, in, LZMA_PROPS_SIZE);
     if (res != SZ_OK) {
         free(*out);
         *out = NULL;
@@ -334,6 +334,7 @@ void lzmaUncompress(
     }
 
     *out_len = out_size;
+    return;
 }
 
 

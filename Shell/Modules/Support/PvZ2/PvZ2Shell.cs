@@ -1047,8 +1047,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 Use64BitVariant = use64bitvariant,
                 ZlibLevel = zlib_level
             });
-            var fs = new FileSystem();
-            fs.OutFile<byte[]>(outFile, zlib_data);
+            zlib_data.OutFile(outFile);
             return;
         }
 

@@ -63,6 +63,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         generate_resources: boolean;
         encryptRTON: boolean;
         encryptionKey: string;
+        encode_newton: boolean;
     }
 
     /**
@@ -111,22 +112,45 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted")}: ${json_count} JSONs -> RTONs`);
         }
         if (option.generate_resources) {
-            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\")).replace(/((\.rton))?$/i, ".json");
+            const resource_file: string = Sen.Shell.Path.Join(
+                `${inDirectory}`,
+                `resource`,
+                ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
+            ).replace(/((\.rton))?$/i, ".json");
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)), Sen.Shell.Path.Resolve(resource_file));
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted_resinfo_to_resourcegroup")}`);
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(resource_file, resource_file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+            if (option.encode_newton) {
+                Sen.Shell.PvZ2Shell.EncodeNewtonResource(resource_file, resource_file.replace(/((\.json))?$/i, ".NEWTON"));
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("generated_newton_resource")}`);
+            }
         } else {
+            const resource_file: string = Sen.Shell.Path.Join(
+                `${inDirectory}`,
+                `resource`,
+                ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
+            ).replace(/((\.rton))?$/i, ".json");
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(
-                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\")).replace(/((\.rton))?$/i, ".json")),
+                resource_file,
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)),
                 Sen.Script.Modules.FileSystem.Json.ReadJson<res_json>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`))).expand_path
             );
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json")}`);
+            if (option.encode_newton) {
+                Sen.Shell.PvZ2Shell.EncodeNewtonResource(resource_file, resource_file.replace(/((\.json))?$/i, ".NEWTON"));
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("generated_newton_resource")}`);
+            }
         }
         if (manifest_group !== -1 && packages === -1) {
-            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\"));
+            const resource_file: string = Sen.Shell.Path.Join(
+                `${inDirectory}`,
+                `resource`,
+                ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
+            ).replace(/((\.rton))?$/i, ".json");
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
                 Sen.Shell.Path.Resolve(resource_file.replace(/((\.rton))?$/i, ".json")),
                 Sen.Shell.Path.Resolve(resource_file),
@@ -140,7 +164,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)}`);
         } else if (packages !== -1 && manifest_group !== -1) {
-            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\"));
+            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\"));
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
                 Sen.Shell.Path.Resolve(resource_file.replace(/((\.rton))?$/i, ".json")),
                 Sen.Shell.Path.Resolve(resource_file),

@@ -995,5 +995,19 @@ namespace Sen.Script.Modules {
             }
             return this.m_data.peekString(count);
         }
+
+        /**
+         * [0x01n, 0x02n, 0x03n, 0x04n]
+         * sen.slice(0n, 2n)
+         * -> [0x01n, 0x02n]
+         * @param begin - Begin
+         * @param count - End
+         * @returns
+         */
+
+        public slice(begin: bigint, count: bigint): void {
+            this.m_data.slice(begin, count);
+            return;
+        }
     }
 }

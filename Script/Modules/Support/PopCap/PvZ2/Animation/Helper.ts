@@ -124,6 +124,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
 
     export interface Option {
         generate_sprite: "none" | "old" | "new";
+        sprite_name: string;
     }
 
     /**
@@ -212,7 +213,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
                             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
                             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_sprite_name"))
                         );
-                        const sprite_name: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+                        const sprite_name: string = option.sprite_name === "" ? Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan) : option.sprite_name;
                         extra_info.sprite[`sprite_${sprite_index}`] = sprite_name;
                         resource_element_addon_dom_document.sprite.push(sprite_destination);
                         break;

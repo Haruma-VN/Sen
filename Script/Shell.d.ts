@@ -240,6 +240,7 @@ declare namespace Sen {
             readInt24BE(offset: bigint): bigint;
             readInt32BE(): bigint;
             readInt32BE(offset: bigint): bigint;
+            slice(begin: bigint, end: bigint): void;
         }
 
         declare namespace ChatGPT {
@@ -2767,21 +2768,21 @@ declare namespace Sen {
              * @param level - Zlib Level
              */
 
-            public static Zlib(data: Array<bigint>, level?: bigint): Array<number>;
+            public static Zlib<T>(data: Array<bigint>, level?: Sen.Script.Modules.Compression.Constraints.ZlibLevel): Array<T>;
 
             /**
              *
              * @param data Data Stream
              */
 
-            public static Gzip(data: Array<bigint>): Array<number>;
+            public static Gzip<T>(data: Array<bigint>): Array<T>;
 
             /**
              *
              * @param data Data Stream
              */
 
-            public static Deflate(data: Array<bigint>): Array<number>;
+            public static Deflate<T>(data: Array<bigint>): Array<T>;
         }
 
         /**
@@ -2794,21 +2795,21 @@ declare namespace Sen {
              * @param data Data Stream
              */
 
-            public static Zlib(data: Array<bigint>): Array<number>;
+            public static Zlib<T>(data: Array<bigint>): Array<T>;
 
             /**
              *
              * @param data Data Stream
              */
 
-            public static Gzip(data: Array<bigint>): Array<number>;
+            public static Gzip<T>(data: Array<bigint>): Array<T>;
 
             /**
              *
              * @param data Data Stream
              */
 
-            public static Deflate(data: Array<bigint>): Array<number>;
+            public static Deflate<T>(data: Array<bigint>): Array<T>;
         }
     }
 }
