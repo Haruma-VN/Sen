@@ -1,4 +1,5 @@
 ﻿using Sen.Shell.Modules;
+using Sen.Shell.Modules.Standards;
 using System.Runtime.InteropServices;
 
 namespace Sen.Shell.Modules.Internal
@@ -31,7 +32,7 @@ namespace Sen.Shell.Modules.Internal
         public static extern Architecture GetProcessorArchitecture();
     }
 
-    public class Internal : M_Internal
+    public class Version : M_Internal
     {
         public override string GetProcessorArchitecture()
         {
@@ -48,5 +49,33 @@ namespace Sen.Shell.Modules.Internal
         }
 
         public override int InternalVersion() => SenAPI.InternalVersion();
+    }
+
+    public class Compress
+    {
+
+        private Standards.Compress m_compress = new Standards.Compress();
+
+        public Compress() { }
+
+        public byte[] Zlib(byte[] data, Standards.ZlibCompressionLevel level = ZlibCompressionLevel.BEST_COMPRESSION) => m_compress.CompressZlib(data, level);
+
+
+        public byte[] Gzip(byte[] data) => m_compress.CompressGZip(data);
+
+        public byte[] Deflate(byte[] data) => m_compress.CompressDeflate(data);
+
+    }
+
+    public class Uncompress
+    {
+
+        private Standards.Compress m_compress = new Standards.Compress();
+
+        public byte[] Zlib(byte[] data) => m_compress.UncompressZlib(data);
+
+        public byte[] Gzip(byte[] data) => m_compress.UncompressGZip(data);
+
+        public byte[] Deflate(byte[] data) => m_compress.UncompressDeflate(data);
     }
 }

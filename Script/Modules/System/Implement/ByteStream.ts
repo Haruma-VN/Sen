@@ -827,7 +827,7 @@ namespace Sen.Script.Modules {
          */
 
         public toByte(): Array<bigint> {
-            return this.m_data.toByte();
+            return this.m_data.toBytes();
         }
 
         /**

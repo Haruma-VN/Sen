@@ -185,7 +185,7 @@ declare namespace Sen {
             writeStringByVarInt32(str: string, offset: bigint): void;
             writeSenBuffer(sen: SenBuffer): void;
             writeSenBuffer(sen: SenBuffer, offset: bigint): void;
-            toByte(): Array<bigint>;
+            toBytes(): Array<bigint>;
             toString(): string;
             toString(encodingType: string): string;
             BackupReadOffset(): void;
@@ -2754,6 +2754,61 @@ declare namespace Sen {
              */
 
             public static GetProcessorArchitecture(): string;
+        }
+
+        /**
+         * Compress
+         */
+
+        export class Compress {
+            /**
+             *
+             * @param data - Data Stream
+             * @param level - Zlib Level
+             */
+
+            public static Zlib(data: Array<bigint>, level?: bigint): Array<number>;
+
+            /**
+             *
+             * @param data Data Stream
+             */
+
+            public static Gzip(data: Array<bigint>): Array<number>;
+
+            /**
+             *
+             * @param data Data Stream
+             */
+
+            public static Deflate(data: Array<bigint>): Array<number>;
+        }
+
+        /**
+         * Uncompress
+         */
+
+        export class Uncompress {
+            /**
+             *
+             * @param data Data Stream
+             */
+
+            public static Zlib(data: Array<bigint>): Array<number>;
+
+            /**
+             *
+             * @param data Data Stream
+             */
+
+            public static Gzip(data: Array<bigint>): Array<number>;
+
+            /**
+             *
+             * @param data Data Stream
+             */
+
+            public static Deflate(data: Array<bigint>): Array<number>;
         }
     }
 }

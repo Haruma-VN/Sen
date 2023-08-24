@@ -55,7 +55,9 @@ namespace Sen.Shell.Modules.JavaScript
             ns.Set("Shell", JsValue.FromObject(Engine, dictionary));
             var k_dictionary = new Dictionary<string, object>
             {
-                {"Version", new Internal.Internal() },
+                {"Version", new Internal.Version() },
+                {"Compress", new Internal.Compress() },
+                {"Uncompress", new Internal.Uncompress() },
             };
             ns.Set("Internal", JsValue.FromObject(Engine, k_dictionary));
             Engine.SetValue("Sen", ns);
