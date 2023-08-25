@@ -58,6 +58,21 @@ namespace Sen.Script.Modules.Interface.Arguments {
 
     /**
      *
+     * @param arg - Provide arg
+     * @returns
+     */
+
+    export function ObtainArgument(arg: string): void {
+        Sen.Shell.Console.Print(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_success").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("argument_obtained"))
+        );
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${arg}`);
+        return;
+    }
+
+    /**
+     *
      * @param type - Type for input
      * @returns File path input by the user
      */
@@ -71,12 +86,14 @@ namespace Sen.Script.Modules.Interface.Arguments {
                         do {
                             arg = Sen.Shell.Console.OpenFileDialog("Sen");
                         } while (arg === null || arg === ``);
+                        ObtainArgument(arg);
                         break;
                     }
                     case "directory": {
                         do {
                             arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
                         } while (arg === null || arg === ``);
+                        ObtainArgument(arg);
                         break;
                     }
                     case "unknown": {
@@ -89,12 +106,14 @@ namespace Sen.Script.Modules.Interface.Arguments {
                                 do {
                                     arg = Sen.Shell.Console.OpenFileDialog("Sen");
                                 } while (arg === null || arg === ``);
+                                ObtainArgument(arg);
                                 break;
                             }
                             case 2: {
                                 do {
                                     arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
                                 } while (arg === null || arg === ``);
+                                ObtainArgument(arg);
                                 break;
                             }
                         }

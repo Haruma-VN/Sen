@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Encodings.Web;
 using Sen.Shell.Modules.Standards;
 
@@ -27,12 +28,17 @@ namespace Sen.Shell.Modules.Standards
     public class SystemImplement : SystemAbstract
     {
 
-        public override unsafe string OpenFileDialog(string title) => SenAPI.OpenFileDialog(title);
+        public override unsafe string OpenFileDialog(string title)
+        {
+            IntPtr k_ptr = SenAPI.OpenFileDialog(title);
+            var m = Marshal.PtrToStringUTF8(k_ptr)!;
+            return m;
+        }
 
         public override unsafe string OpenDirectoryDialog(string title)
         {
             var k_ptr = SenAPI.OpenDirectoryDialog(title);
-            var m = Marshal.PtrToStringAnsi(k_ptr)!;
+            var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
         }
 

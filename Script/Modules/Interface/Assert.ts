@@ -366,9 +366,15 @@ namespace Sen.Script.Modules.Interface.Assert {
         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("no_argument_were_passed")}`);
         let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         assert_view: while (arg !== "") {
-            if (arg === ":js") {
-                const js_command: string = Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Executable`, `command.json`);
-                QuickJS(Sen.Script.Modules.FileSystem.Json.ReadJson<CommandForward>(js_command), js_command);
+            function UseHotKey(): boolean {
+                if (arg === ":js") {
+                    const js_command: string = Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Executable`, `Methods`, `js_evaluate.json`);
+                    QuickJS(Sen.Script.Modules.FileSystem.Json.ReadJson<CommandForward>(js_command), js_command);
+                    return true;
+                }
+                return false;
+            }
+            if (UseHotKey()) {
                 break assert_view;
             }
             if (arg === ":p") {
@@ -376,18 +382,20 @@ namespace Sen.Script.Modules.Interface.Assert {
                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("file"), Sen.Script.Modules.System.Default.Localization.GetString("file")],
                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("directory"), Sen.Script.Modules.System.Default.Localization.GetString("directory")],
                 }) as 1 | 2;
-                switch (method) {
+                m_case: switch (method) {
                     case 1: {
                         do {
                             arg = Sen.Shell.Console.OpenFileDialog("Sen");
                         } while (arg === null || arg === ``);
-                        break;
+                        Sen.Script.Modules.Interface.Arguments.ObtainArgument(arg);
+                        break m_case;
                     }
                     case 2: {
                         do {
                             arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
                         } while (arg === null || arg === ``);
-                        break;
+                        Sen.Script.Modules.Interface.Arguments.ObtainArgument(arg);
+                        break m_case;
                     }
                 }
             }

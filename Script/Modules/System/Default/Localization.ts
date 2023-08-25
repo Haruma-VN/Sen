@@ -1,5 +1,20 @@
 namespace Sen.Script.Modules.System.Default.Localization {
     /**
+     *
+     * @param path - Current launch
+     * @param command_path - Command.json path
+     * @returns
+     */
+
+    export function QueryPath(path: string, command_path: string): string {
+        if (path.startsWith("~")) {
+            return Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(Sen.Shell.MainScriptDirectory, ...path.split("/").filter((e, i) => i !== 0)));
+        } else if (path.startsWith(".")) {
+            return Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(command_path, ...path.split("/").filter((e, i) => i !== 0)));
+        }
+        return path;
+    }
+    /**
      * Entry json
      */
     export type entry_json = {
@@ -26,7 +41,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
      * Destination
      */
 
-    export const packed_codebooks_aoTuV_603: string = EntryJson.additional.packed_codebooks_aoTuV_603;
+    export const packed_codebooks_aoTuV_603: string = QueryPath(EntryJson.additional.packed_codebooks_aoTuV_603, EntryJson.additional.packed_codebooks_aoTuV_603);
 
     /**
      * Tool language

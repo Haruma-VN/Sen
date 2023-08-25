@@ -10,6 +10,6 @@
         "execute_function_if_exists_one": true
     },
     "additional": {
-        "packed_codebooks_aoTuV_603": "/Modules/Customization/Dependencies/packed_codebooks_aoTuV_603.bin"
+        "packed_codebooks_aoTuV_603": "~/Modules/Customization/Dependencies/packed_codebooks_aoTuV_603.bin"
     }
 }

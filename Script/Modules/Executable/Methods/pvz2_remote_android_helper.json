@@ -1,0 +1,9 @@
+{
+    "query": "pvz2_remote_android_helper",
+    "package": [
+        {
+            "id": "watch_popcap_rsb",
+            "launch": "~/Modules/Customization/RemoteAndroidHelper/watch_popcap_rsb"
+        }
+    ]
+}

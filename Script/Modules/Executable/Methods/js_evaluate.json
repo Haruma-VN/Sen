@@ -6,10 +6,6 @@
             "launch": "~/Modules/Executable/PvZ2/AndroidRSBtoIOSRSB"
         },
         {
-            "id": "erase_plant_levels",
-            "launch": "~/Modules/Executable/PvZ2/ErasePlantLevels"
-        },
-        {
             "id": "extract_cn_rsb",
             "launch": "~/Modules/Executable/PvZ2/ExtractCNRSBfromIPAandAPK"
         },

@@ -317,7 +317,7 @@ namespace Sen.Script.Modules {
          * @returns Read Zig Zag & Move pos
          */
 
-        public readZigZag32(offset?: bigint): bigint {
+        public readZ32(offset?: bigint): bigint {
             if (offset) {
                 return BigInt(this.m_data.readZigZag32(offset));
             }
@@ -329,7 +329,7 @@ namespace Sen.Script.Modules {
          * @returns Read Zig Zag & Move pos
          */
 
-        public readZigZag64(offset?: bigint): bigint {
+        public readZ64(offset?: bigint): bigint {
             if (offset) {
                 return BigInt(this.m_data.readZigZag64(offset));
             }

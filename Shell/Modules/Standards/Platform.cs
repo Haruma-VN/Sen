@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Sen.Shell.Modules.Standards
@@ -193,9 +194,38 @@ namespace Sen.Shell.Modules.Standards
             return;
         }
 
+        public static void SendWindowsNotification(string title, string message, string iconType)
+        {
+            if (string.IsNullOrEmpty(title)) title = " ";
+            if (string.IsNullOrEmpty(message)) message = " ";
+            if (string.IsNullOrEmpty(iconType)) iconType = "info";
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Arguments = $"-command \"& {{Add-Type -AssemblyName System.Windows.Forms; $notifyIcon = New-Object System.Windows.Forms.NotifyIcon; $notifyIcon.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon('{System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName}'); $notifyIcon.BalloonTipTitle = '{title}'; $notifyIcon.BalloonTipText = '{message}'; $notifyIcon.BalloonTipIcon = '{iconType}'; $notifyIcon.Visible = $true; $notifyIcon.ShowBalloonTip(10000);}}\"",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
+            };
+
+            using (var process = new Process { StartInfo = startInfo })
+            {
+                process.Start();
+                process.WaitForExit();
+            }
+        }
+
         public override void SendNotification(string message, string title)
         {
-            SenAPI.SendLosNotification(title, message, "info");
+            if(Platform.CurrentPlatform() == UserPlatform.Windows)
+            {
+                SendWindowsNotification(title, message, "info");
+            }
+            else
+            {
+                SenAPI.SendLosNotification(title, message, "info");
+            }
             return;
         }
 
