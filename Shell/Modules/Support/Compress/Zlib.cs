@@ -78,6 +78,11 @@ namespace Sen.Shell.Modules.Support.Compress
         public unsafe override byte[] ZlibUncompress(string ripefile, bool use64bitvariant)
         {
             var buffer = new SenBuffer(ripefile);
+            var magic = buffer.readUInt32LE();
+            if (magic != 0xDEADFED4)
+            {
+                throw new Exception("mismatch_popcap_zlib_magic");
+            }
             if (use64bitvariant)
             {
                 buffer.slice(16, buffer.length);
