@@ -773,13 +773,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         );
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.WemToOGG(
-                                argument,
-                                output_argument,
-                                Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`),
-                                inlineCodebook,
-                                inlineSetup
-                            );
+                            Sen.Shell.PvZ2Shell.WemToOGG(argument, output_argument, Sen.Shell.Path.Resolve(`${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`), inlineCodebook, inlineSetup);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, argument);
                         }
@@ -802,13 +796,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             );
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.WemToOGG(
-                                    arg,
-                                    output_argument,
-                                    Sen.Shell.Path.Resolve(`${Sen.Shell.MainScriptDirectory}${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`),
-                                    inlineCodebook,
-                                    inlineSetup
-                                );
+                                Sen.Shell.PvZ2Shell.WemToOGG(arg, output_argument, Sen.Shell.Path.Resolve(`${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`), inlineCodebook, inlineSetup);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, arg);
                             }
