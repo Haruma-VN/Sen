@@ -8,45 +8,60 @@
 
 namespace Sen::Internal::Kernel::Tool::Compress::lzma 
 {
+    using ByteVector = std::vector<byte>;
+
+    inline auto cast(
+        const ByteVector& vecByte, 
+        std::string& res
+    ) -> bool
+    {
+        std::string strTmp(&vecByte[0], &vecByte[0] + vecByte.size());
+        res = strTmp;
+        return true;
+    }
+
+    inline auto cast(
+        const std::string& strVal, 
+        ByteVector& vecByte
+    ) -> bool
+    {
+        vecByte = std::vector<BYTE>(&strVal[0], &strVal[0] + strVal.length());
+        return true;
+    }
 
     inline auto compress_lzma(
-        const std::vector<uint8_t>& data
-    ) -> std::vector<uint8_t> {
-        auto compressed_data_size = data.size() + (data.size() / 3) + 128;
-        std::vector<uint8_t> compressed_data(compressed_data_size);
-        size_t props_size = LZMA_PROPS_SIZE;
-        auto result = LzmaCompress(compressed_data.data() + LZMA_PROPS_SIZE, &compressed_data_size,
-            data.data(), data.size(),
-            compressed_data.data(), &props_size,
-            5, 1 << 24, 3, 0, 2, 32, 1);
-        if (result != SZ_OK) {
-            throw_line("Failed to compress data");
-        }
-        compressed_data.resize(compressed_data_size + LZMA_PROPS_SIZE);
-        return compressed_data;
+        _In_ const ByteVector& vecIn, 
+        _Out_ ByteVector& vecOut
+    ) -> void {
+        auto propsSize = (size_t)LZMA_PROPS_SIZE;
+        auto destLen = vecIn.size() + vecIn.size() / 3 + 128;
+        vecOut.resize(propsSize + destLen);
+        int res = LzmaCompress(
+            &vecOut[LZMA_PROPS_SIZE], &destLen,
+            &vecIn[0], vecIn.size(),
+            &vecOut[0], &propsSize,
+            -1, 0, -1, -1, -1, -1, -1);
+
+        assert(propsSize == LZMA_PROPS_SIZE);
+        assert(res == SZ_OK);
+        vecOut.resize(propsSize + destLen);
+        return;
     }
 
     inline auto uncompress_lzma(
-        const std::vector<uint8_t>& data
-    ) -> std::vector<uint8_t> {
-        auto uncompressed_data_size = (static_cast<uint64_t>(data[5]) << 32) |
-            (static_cast<uint64_t>(data[6]) << 24) |
-            (static_cast<uint64_t>(data[7]) << 16) |
-            (static_cast<uint64_t>(data[8]) << 8) |
-            static_cast<uint64_t>(data[9]);
-        if (uncompressed_data_size == static_cast<uint64_t>(-1)) {
-            throw_line("Failed to determine uncompressed data size");
-        }
-        std::vector<uint8_t> uncompressed_data(uncompressed_data_size);
-        size_t src_len = data.size() - LZMA_PROPS_SIZE;
-        auto result = LzmaUncompress(uncompressed_data.data(), &uncompressed_data_size,
-            data.data() + LZMA_PROPS_SIZE, &src_len,
-            data.data(), LZMA_PROPS_SIZE);
-        if (result != SZ_OK) {
-            throw_line("Failed to uncompress data");
-        }
-        uncompressed_data.resize(uncompressed_data_size);
-        return uncompressed_data;
+        _In_ const ByteVector& vecIn,
+        _Out_ ByteVector& vecOut
+    ) -> void {
+        auto iLZMA_PROPS_SIZE = LZMA_PROPS_SIZE;
+        vecOut.resize(vecIn.size() * 10);
+        size_t dstLen = vecOut.size();
+        size_t srcLen = vecIn.size() - iLZMA_PROPS_SIZE;
+        SRes res = LzmaUncompress(
+            &vecOut[0], &dstLen,
+            &vecIn[iLZMA_PROPS_SIZE], &srcLen,
+            &vecIn[0], iLZMA_PROPS_SIZE);
+        vecOut.resize(dstLen);
+        return;
     }
 
 }

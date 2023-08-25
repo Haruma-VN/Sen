@@ -21,6 +21,7 @@ add_library(
   "./kernel/tool/compress/bzip2.hpp"
   "./kernel/tool/compress/lzma.hpp"
   "./kernel/utility/string/common.hpp"
+  "./kernel/utility/array/common.hpp"
   "./kernel/utility/path/common.hpp"
   "./kernel/utility/filesystem/common.hpp"
   "./kernel/utility/exception/common.hpp"

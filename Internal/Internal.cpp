@@ -299,19 +299,17 @@ Void lzmaCompress(
     unsigned char** out, 
     size_t* out_len
 ) {
-    size_t out_size = in_len + (in_len / 3) + 128;
-    *out = (unsigned char*)malloc(out_size + LZMA_PROPS_SIZE);
-
-    size_t props_size = LZMA_PROPS_SIZE;
-    int res = LzmaCompress(*out + LZMA_PROPS_SIZE, &out_size, in, in_len, *out, &props_size, 5, 1 << 24, 3, 0, 2, 32, 1);
-    if (res != SZ_OK) {
-        free(*out);
-        *out = NULL;
-        *out_len = 0;
-        return;
-    }
-
-    *out_len = out_size + LZMA_PROPS_SIZE;
+    auto compressedData = std::vector<byte>();
+    Sen::Internal::Kernel::Tool::Compress::lzma::compress_lzma(
+        Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
+        compressedData
+    );
+    auto m_vector = Sen::Internal::Kernel::Utility::Array::byte_list_to_unsigned_char_list(compressedData);
+    *out = (unsigned char*)Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<unsigned char>(
+        m_vector
+    );
+    *out_len = m_vector.size();
+    return;
 }
 
 
@@ -322,18 +320,16 @@ Void lzmaUncompress(
     unsigned char** out, 
     size_t* out_len
 ) {
-    size_t out_size = in_len * 10;
-    *out = (unsigned char*)malloc(out_size);
-
-    auto res = LzmaUncompress(*out, &out_size, in + LZMA_PROPS_SIZE, &in_len, in, LZMA_PROPS_SIZE);
-    if (res != SZ_OK) {
-        free(*out);
-        *out = NULL;
-        *out_len = 0;
-        return;
-    }
-
-    *out_len = out_size;
+    auto uncompressedData = std::vector<byte>();
+    Sen::Internal::Kernel::Tool::Compress::lzma::uncompress_lzma(
+        Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
+        uncompressedData
+    );
+    auto m_vector = Sen::Internal::Kernel::Utility::Array::byte_list_to_unsigned_char_list(uncompressedData);
+    *out = (unsigned char*)Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<unsigned char>(
+        m_vector
+    );
+    *out_len = m_vector.size();
     return;
 }
 

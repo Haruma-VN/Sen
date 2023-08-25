@@ -95,7 +95,7 @@ namespace Sen.Shell.Modules.Standards
         public static extern void lzmaCompress(byte[] data, int dataSize, out IntPtr compressData ,out int compressedSize);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr lzmaUncompress(byte[] data, int dataSize, out int compressedSize);
+        public static extern void lzmaUncompress(byte[] data, int dataSize, out IntPtr uncompressedData ,out int compressedSize);
 
     }
 
@@ -143,7 +143,7 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] UncompressLzma(byte[] lzma)
         {
-            IntPtr uncompressedDataPtr = SenAPI.lzmaUncompress(lzma, lzma.Length, out int uncompressedDataSize);
+            SenAPI.lzmaUncompress(lzma, lzma.Length, out IntPtr uncompressedDataPtr ,out int uncompressedDataSize);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(uncompressedDataPtr);
