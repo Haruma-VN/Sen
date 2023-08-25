@@ -191,6 +191,7 @@ namespace Sen.Script {
         if (Sen.Script.Modules.System.Default.Localization.GetString("language.author") !== "Haruma") {
             Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("this_translation_by"), Sen.Script.Modules.System.Default.Localization.GetString("language.author"));
         }
+        let t = Sen.Script.Modules.System.Default.Localization.CountDown(5);
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         const wrapper = { success: 0, fail: 0 };
         try {

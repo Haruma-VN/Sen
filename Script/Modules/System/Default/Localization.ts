@@ -38,6 +38,84 @@ namespace Sen.Script.Modules.System.Default.Localization {
     );
 
     /**
+     * Structure
+     */
+
+    export interface TimeSchedule {
+        startTime: bigint;
+        endTime: bigint;
+    }
+
+    /**
+     *
+     * @param view - Import View
+     * @returns
+     */
+
+    export function ViewDate(view: TimeSchedule): void {
+        const currentUnixTime = BigInt(Math.floor(Date.now() / 1000));
+        if (currentUnixTime >= view.startTime && currentUnixTime <= view.endTime) {
+            Sen.Shell.Console.Print(null, `4`);
+        }
+        return;
+    }
+
+    /**
+     *
+     * @param targetUnixTimestamp - target time
+     * @returns Day left
+     */
+
+    export function TimeLeft(targetUnixTimestamp: number): number {
+        const currentUnixTimestamp = Math.floor(Date.now() / 1000);
+        const timeDifferenceInSeconds = targetUnixTimestamp - currentUnixTimestamp;
+        const days = Math.floor(timeDifferenceInSeconds / (60 * 60 * 24));
+        return days;
+    }
+
+    export function CountDown(range: number): void {
+        const time_left = Sen.Script.Modules.System.Default.Localization.TimeLeft(1694278800);
+        if (time_left <= range) {
+            const data = new Shell.SenBuffer([
+                0x7bn,
+                0x7dn,
+                0x20n,
+                0x64n,
+                0x61n,
+                0x79n,
+                0x20n,
+                0x6cn,
+                0x65n,
+                0x66n,
+                0x74n,
+                0x20n,
+                0x74n,
+                0x6fn,
+                0x20n,
+                0x48n,
+                0x61n,
+                0x72n,
+                0x75n,
+                0x6dn,
+                0x61n,
+                0x27n,
+                0x73n,
+                0x20n,
+                0x62n,
+                0x69n,
+                0x72n,
+                0x74n,
+                0x68n,
+                0x64n,
+                0x61n,
+                0x79n,
+            ]);
+            Sen.Shell.Console.Print(null, data.readString(data.size()).replace(/\{\}/g, `${time_left}`));
+        }
+        return;
+    }
+
+    /**
      * Destination
      */
 
