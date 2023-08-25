@@ -582,5 +582,6 @@
     "popcap_crypt_data_encrypt": "PopCap Crypt-Data: Encrypt",
     "crypt_data_key_obtained": "PopCap Crypt-Data: Key Obtained",
     "limit": "Limit",
-    "invalid_crypt_data_magic": "Invalid Crypt-Data Magic, should begins with \"CRYPT-RES\""
+    "invalid_crypt_data_magic": "Invalid Crypt-Data Magic, should begins with \"CRYPT-RES\"",
+    "execution_obtained": "Execution Obtained: {}"
 }

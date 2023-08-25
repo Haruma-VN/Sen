@@ -210,7 +210,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey}`);
                         Sen.Shell.Console.Print(
                             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_obtained").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
                         );
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.limit}`);
                         const output_argument: Argument = {
@@ -224,7 +224,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey}`);
                             Sen.Shell.Console.Print(
                                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_obtained").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
                             );
                             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.limit}`);
                             const output_argument: Argument = {
@@ -242,11 +242,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey}`);
                         Sen.Shell.Console.Print(
                             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
+                            Sen.Script.Modules.System.Default.Localization.GetString("execution_obtained").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
                         );
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.limit}`);
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.cdat`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Shell.PvZ2Shell.CryptDataEncrypt(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
@@ -256,11 +256,11 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey}`);
                             Sen.Shell.Console.Print(
                                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
+                                Sen.Script.Modules.System.Default.Localization.GetString("execution_obtained").replaceAll(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("limit"))
                             );
                             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.limit}`);
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.cdat`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Shell.PvZ2Shell.CryptDataEncrypt(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
