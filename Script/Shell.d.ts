@@ -359,6 +359,11 @@ declare namespace Sen {
              */
 
             export function OpenDirectoryDialog(title: string): string;
+            /**
+             * @returns Dialog
+             */
+
+            export function SaveFileDialog(title: string): string;
         }
         /**
          * @packages Implementing File System based on C# & JS

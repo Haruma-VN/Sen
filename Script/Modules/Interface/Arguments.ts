@@ -152,35 +152,127 @@ namespace Sen.Script.Modules.Interface.Arguments {
 
     /**
      *
+     * @param type - Type for input
+     * @returns File path input by the user
+     */
+
+    export function SavePath(type: "file" | "directory" | "unknown"): string {
+        let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        assert_view: while (arg !== "") {
+            if (arg === ":p") {
+                switch (type) {
+                    case "file": {
+                        do {
+                            arg = Sen.Shell.Console.SaveFileDialog("Sen");
+                        } while (arg === null || arg === ``);
+                        ObtainArgument(arg);
+                        break assert_view;
+                    }
+                    case "directory": {
+                        do {
+                            arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
+                        } while (arg === null || arg === ``);
+                        ObtainArgument(arg);
+                        break assert_view;
+                    }
+                    case "unknown": {
+                        const method: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("select_input_method"), [1, 2], {
+                            "1": [Sen.Script.Modules.System.Default.Localization.GetString("file"), Sen.Script.Modules.System.Default.Localization.GetString("file")],
+                            "2": [Sen.Script.Modules.System.Default.Localization.GetString("directory"), Sen.Script.Modules.System.Default.Localization.GetString("directory")],
+                        }) as 1 | 2;
+                        switch (method) {
+                            case 1: {
+                                do {
+                                    arg = Sen.Shell.Console.SaveFileDialog("Sen");
+                                } while (arg === null || arg === ``);
+                                ObtainArgument(arg);
+                                break assert_view;
+                            }
+                            case 2: {
+                                do {
+                                    arg = Sen.Shell.Console.OpenDirectoryDialog("Sen");
+                                } while (arg === null || arg === ``);
+                                ObtainArgument(arg);
+                                break assert_view;
+                            }
+                        }
+                    }
+                }
+            }
+            if (arg.endsWith(" ")) {
+                arg = arg.slice(0, -1);
+            }
+            if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
+                arg = arg.slice(1, -1);
+            }
+            if (type === "file" && !Sen.Shell.FileSystem.FileExists(arg)) {
+                break assert_view;
+            } else if (type === "directory" && !Sen.Shell.FileSystem.DirectoryExists(arg)) {
+                return arg;
+            } else {
+                SavePath(type);
+            }
+        }
+        return arg;
+    }
+
+    /**
+     * Structure
+     */
+
+    export interface Argument {
+        argument: string;
+    }
+
+    /**
+     *
      * @param argument - Pass argument here
      * @param type - Pass file type here
      * @returns Printing message
      */
 
-    export function ArgumentPrint(argument: string, type: "file" | "directory"): void {
-        if (type === "file" && Sen.Shell.FileSystem.FileExists(argument)) {
-            if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
-                Sen.Shell.Console.Print(
-                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
-                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists_remove_instantly").replace(/\{\}/g, argument))
-                );
-                Sen.Shell.FileSystem.DeleteFile(argument);
-            } else {
-                throw new Sen.Script.Modules.Exceptions.AlreadyExists(Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists"), argument);
-            }
-        }
-        if (type === "directory" && Sen.Shell.FileSystem.DirectoryExists(argument)) {
-            if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
-                Sen.Shell.Console.Print(
-                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
-                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists_override").replace(/\{\}/g, argument))
-                );
-            } else {
-                throw new Sen.Script.Modules.Exceptions.AlreadyExists(Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists"), argument);
-            }
-        }
+    export function ArgumentPrint(option: Argument, type: "file" | "directory"): void {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_receievd_as_default"));
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${argument}`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${option.argument}`);
+        if (type === "file" && Sen.Shell.FileSystem.FileExists(option.argument)) {
+            if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
+                Sen.Shell.Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
+                        /\{\}/g,
+                        Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists_remove_instantly").replace(/\{\}/g, option.argument)
+                    )
+                );
+                Sen.Shell.FileSystem.DeleteFile(option.argument);
+            } else {
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow, Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(/\{\}/g, ``));
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("file_already_exists")}`);
+                Sen.Shell.Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("out_path"))
+                );
+                option.argument = SavePath("file");
+            }
+        }
+        if (type === "directory" && Sen.Shell.FileSystem.DirectoryExists(option.argument)) {
+            if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.override) {
+                Sen.Shell.Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow,
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(
+                        /\{\}/g,
+                        Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists_override").replace(/\{\}/g, option.argument)
+                    )
+                );
+            } else {
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Yellow, Sen.Script.Modules.System.Default.Localization.GetString("execution_warning").replace(/\{\}/g, ``));
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("directory_already_exists")}`);
+                Sen.Shell.Console.Print(
+                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("out_path"))
+                );
+                option.argument = SavePath("directory");
+            }
+        }
         return;
     }
 }

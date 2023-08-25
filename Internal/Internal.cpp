@@ -465,13 +465,13 @@ Void* OpenDirectoryDialog(
 )
 {
     auto path = pick_path(true, false);
-    return &path[0][0];
+    return &path.at(0).at(0);
 }
 #else
 InternalAPI
-char const* OpenDirectoryDialog(char const* title)
+Void* OpenDirectoryDialog(char const* title)
 {
-        char const* lTheSelectFolderName = tinyfd_selectFolderDialog(
+    auto lTheSelectFolderName = tinyfd_selectFolderDialog(
             title,
             NULL
         );
@@ -479,6 +479,20 @@ char const* OpenDirectoryDialog(char const* title)
 }
 #endif
 
+InternalAPI
+Void* SaveFileDialog(
+    const char* title
+) 
+{
+    auto c = tinyfd_saveFileDialog(
+        title,
+        null,
+        0,
+        null,
+        null
+        );
+    return c;
+}
 
 InternalAPI
 Void SendLosNotification(

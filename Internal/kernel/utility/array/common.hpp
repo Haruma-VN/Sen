@@ -23,8 +23,7 @@ namespace Sen::Internal::Kernel::Utility::Array
 
 
 	template <typename T>
-	inline auto convert_vector_to_array
-	(
+	inline auto convert_vector_to_array(
 		std::vector<T> &vec
 	) -> T*
 	{
@@ -40,7 +39,7 @@ namespace Sen::Internal::Kernel::Utility::Array
 		std::vector<byte> &vec
 	) -> std::vector<unsigned char> {
 		std::vector<unsigned char> result;
-		for (byte b : vec) {
+		for (auto &b : vec) {
 			result.push_back(b);
 		}
 		return result;

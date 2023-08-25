@@ -59,11 +59,20 @@ namespace Sen.Script.Modules.Interface.Assert {
     }
 
     /**
+     * Total Count
+     */
+
+    export interface Wrapper {
+        success: number;
+        fail: number;
+    }
+
+    /**
      *
      * @param argument - Assert functions
      * @returns
      */
-    export function Evaluate(argument: Array<string>): void {
+    export function Evaluate(argument: Array<string>, wrapper: Wrapper): void {
         // create debug directory
         Sen.Script.Modules.Interface.Assert.ProcessFunctionsJson();
         Sen.Script.Modules.Interface.Assert.CreateDebugDirectory();
@@ -82,7 +91,7 @@ namespace Sen.Script.Modules.Interface.Assert {
                 all: host.length,
             });
             try {
-                Sen.Script.Modules.Interface.Execute.ExecuteArgument(execute_argument);
+                Sen.Script.Modules.Interface.Execute.ExecuteArgument(execute_argument, wrapper);
             } catch (error: unknown) {
                 Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
             }
@@ -94,7 +103,7 @@ namespace Sen.Script.Modules.Interface.Assert {
                 });
                 if (arg.method === null) {
                     try {
-                        Sen.Script.Modules.Interface.Execute.ExecuteArgument(arg.argument!);
+                        Sen.Script.Modules.Interface.Execute.ExecuteArgument(arg.argument!, wrapper);
                     } catch (error: unknown) {
                         Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
                     }
@@ -104,7 +113,7 @@ namespace Sen.Script.Modules.Interface.Assert {
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.ObtainArgumentType(Sen.Script.Modules.System.Default.Localization.GetString(arg.argument!))}`);
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("method_obtained_by_default"));
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString(arg.method!)} | ${arg.method}`);
-                        Sen.Script.Modules.Interface.Execute.Evaluate(arg.method as unknown as Sen.Script.Modules.Interface.Execute.function_name, arg.argument!);
+                        Sen.Script.Modules.Interface.Execute.Evaluate(arg.method as unknown as Sen.Script.Modules.Interface.Execute.function_name, arg.argument!, wrapper);
                     } catch (error: unknown) {
                         Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
                     }

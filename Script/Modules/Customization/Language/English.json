@@ -1,6 +1,6 @@
 {
     "this_translation_by": "This translation of Sen is created by:",
-    "language.author": "Haruma | Discord: https://discord.com/invite/UKJK3j7KGn",
+    "language.author": "Haruma-VN | GitHub: https://github.com/Haruma-VN/Sen",
     "all_modules_have_been_loaded": "All modules have been loaded",
     "all_functions_loaded": "All functions have been loaded",
     "all_commands_executed": "All commands have been successfully executed!",
@@ -575,5 +575,7 @@
     "select_js": "Select JavaScript to Evaluate",
     "watch_popcap_rsb": "Android Remote Helper: Watch RSB",
     "argument_obtained": "Argument Obtained",
-    "execution_success": "Execution Success: {}"
+    "execution_success": "Execution Success: {}",
+    "command_executed_with": "All commands executed: {1} successed & {2} failed",
+    "out_path": "Provide new output path"
 }

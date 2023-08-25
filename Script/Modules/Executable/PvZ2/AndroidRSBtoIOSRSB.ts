@@ -238,9 +238,19 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         );
         const file_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
         const bundle_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.bundle`)}`);
-        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(bundle_directory, "file");
+        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+            {
+                argument: bundle_directory,
+            },
+            "directory"
+        );
         const output_file: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(file_in)}/${Sen.Shell.Path.Parse(file_in).name_without_extension}.converted.rsb`);
-        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_file, "file");
+        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+            {
+                argument: output_file,
+            },
+            "file"
+        );
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_encode"))

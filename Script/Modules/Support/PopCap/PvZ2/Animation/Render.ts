@@ -259,7 +259,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                     input_path: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `frames`)),
                     output_path: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `${Sen.Shell.Path.Parse(file_input).name_without_extension}.gif`)),
                 };
-                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(option.output_path, "file");
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                    {
+                        argument: option.output_path,
+                    },
+                    "file"
+                );
                 const frames: Array<string> = Sen.Shell.FileSystem.ReadDirectory(option.input_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
                     .filter((argument: string) => argument.toLowerCase().endsWith(`.png`))
                     .sort((a: string, b: string) => {
@@ -281,7 +286,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
                     input_path: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `frames`)),
                     output_path: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `${Sen.Shell.Path.Parse(file_input).name_without_extension}.apng`)),
                 };
-                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(option.output_path, "file");
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                    {
+                        argument: option.output_path,
+                    },
+                    "file"
+                );
                 const frames: Array<string> = Sen.Shell.FileSystem.ReadDirectory(option.input_path, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory)
                     .filter((argument: string) => argument.toLowerCase().endsWith(`.png`))
                     .sort((a: string, b: string) => {

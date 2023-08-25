@@ -36,7 +36,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
         auto propsSize = (size_t)LZMA_PROPS_SIZE;
         auto destLen = vecIn.size() + vecIn.size() / 3 + 128;
         vecOut.resize(propsSize + destLen);
-        int res = LzmaCompress(
+        auto res = LzmaCompress(
             &vecOut[LZMA_PROPS_SIZE], &destLen,
             &vecIn[0], vecIn.size(),
             &vecOut[0], &propsSize,

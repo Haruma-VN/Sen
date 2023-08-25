@@ -482,11 +482,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     );
                 }
                 const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${parent_name.toUpperCase()}.png`));
-                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                    {
+                        argument: output_argument,
+                    },
+                    "file"
+                );
                 Sen.Shell.DotNetBitmap.CompositeImages(max_rects_collections[i], output_argument, `${Sen.Shell.Path.Dirname(directory_path)}`, dimension_output_test.width, dimension_output_test.height);
             }
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`));
-            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                {
+                    argument: output_argument,
+                },
+                "file"
+            );
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.resource_atlas_and_sprites>(
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`)),
                 subgroup_output,
@@ -599,11 +609,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                     };
                 }
                 const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${parent_name.toUpperCase()}.png`));
-                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                    {
+                        argument: output_argument,
+                    },
+                    "file"
+                );
                 Sen.Shell.DotNetBitmap.CompositeImages(max_rects_collections[i], `${parent_name.toUpperCase()}.png`, `${Sen.Shell.Path.Dirname(directory_path)}`, dimension_output_test.width, dimension_output_test.height);
             }
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`));
-            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                {
+                    argument: output_argument,
+                },
+                "file"
+            );
             Sen.Script.Modules.FileSystem.Json.WriteJson<sprite_data>(output_argument, subgroup_output[atlas_json.subgroup] as any, false);
             return;
         }
@@ -666,7 +686,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
         }
         if (option.allow_384) {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `384`)}`));
-            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                {
+                    argument: output_argument,
+                },
+                "directory"
+            );
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 384, output_argument);
             const dimension_k: g_dimension<int> = {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.25)),
@@ -688,7 +713,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
         }
         if (option.allow_768) {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `768`)}`));
-            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                {
+                    argument: output_argument,
+                },
+                "directory"
+            );
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 768, output_argument);
             const dimension_k: g_dimension<int> = {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.5)),
@@ -710,7 +740,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
         }
         if (option.allow_1200) {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `1200`)}`));
-            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                {
+                    argument: output_argument,
+                },
+                "directory"
+            );
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 1200, output_argument);
             const dimension_k: g_dimension<int> = {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.78125)),
@@ -732,7 +767,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
         }
         if (option.allow_640) {
             const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(directory_path)}`, `${Sen.Shell.Path.Parse(directory_path).name.replace(`1536`, `640`)}`));
-            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                {
+                    argument: output_argument,
+                },
+                "directory"
+            );
             Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Resize.ResizePopCapSprite.DoAllResizeBasedOnAtlasJson(directory_path, 1536, 640, output_argument);
             const dimension_k: g_dimension<int> = {
                 width: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack.Create2nSquareRoot(Math.ceil(pack_data.width * 0.4166666666666667)),

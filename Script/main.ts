@@ -192,14 +192,18 @@ namespace Sen.Script {
             Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("this_translation_by"), Sen.Script.Modules.System.Default.Localization.GetString("language.author"));
         }
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
+        const wrapper = { success: 0, fail: 0 };
         try {
-            Sen.Script.Modules.Interface.Assert.Evaluate(argument);
+            Sen.Script.Modules.Interface.Assert.Evaluate(argument, wrapper);
         } catch (error: unknown) {
             Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
         }
         const Sen_module_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, ""));
-        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("all_commands_executed")}`);
+        Sen.Shell.Console.Printf(
+            Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("command_executed_with"), [`${wrapper.success}`, `${wrapper.fail}`])}`
+        );
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("total_time_spent").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3))

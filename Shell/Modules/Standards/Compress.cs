@@ -68,6 +68,9 @@ namespace Sen.Shell.Modules.Standards
         public static extern IntPtr OpenDirectoryDialog(string title);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr SaveFileDialog(string title);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SendLosNotification(string title, string message, string info);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]

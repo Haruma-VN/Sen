@@ -191,7 +191,12 @@ namespace Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB {
             }
             case 2n: {
                 const composite_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.current_bundle, `import.json`));
-                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(composite_json_path, `file`);
+                Sen.Script.Modules.Interface.Arguments.ArgumentPrint(
+                    {
+                        argument: composite_json_path,
+                    },
+                    `file`
+                );
                 Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB.PortableProject<string>>(
                     composite_json_path,
                     Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB.GenerateProjectGetter(),

@@ -22,6 +22,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract string OpenDirectoryDialog(string title);
 
+        public abstract string SaveFileDialog(string title);
+
     }
 
 
@@ -38,6 +40,13 @@ namespace Sen.Shell.Modules.Standards
         public override unsafe string OpenDirectoryDialog(string title)
         {
             var k_ptr = SenAPI.OpenDirectoryDialog(title);
+            var m = Marshal.PtrToStringUTF8(k_ptr)!;
+            return m;
+        }
+
+        public override unsafe string SaveFileDialog(string title)
+        {
+            var k_ptr = SenAPI.SaveFileDialog(title);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
         }
