@@ -483,5 +483,19 @@
         "exclude": [],
         "is_enabled": true,
         "type": "file"
+    },
+    "popcap_crypt_data_decrypt": {
+        "func_number": 70,
+        "include": [".cdat"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_crypt_data_encrypt": {
+        "func_number": 71,
+        "include": [".bin"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
     }
 }

@@ -1588,6 +1588,22 @@ declare namespace Sen {
              *
              * @param inFile - In file
              * @param outFile - Out file
+             * @param key - Provide key
+             */
+
+            export function CryptDataEncrypt(inFile: string, outFile: string, key: string): void;
+            /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
+             * @param key - Provide key
+             */
+
+            export function CryptDataDecrypt(inFile: string, outFile: string, key: string): void;
+            /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
              */
 
             export function EncodeNewtonResource(inFile: string, outFile: string): void;

@@ -20,6 +20,7 @@ namespace Sen.Script {
             `Modules/System/Implement/ByteStream`,
             `Modules/System/Default/Localization`,
             `Modules/System/Default/Timer`,
+            `Modules/Support/PopCap/PvZ/CryptData/Encrypt`,
             `Modules/Support/PopCap/PvZ2/Resources/ResInfo`,
             `Modules/Support/PopCap/PvZ2/Resources/ResourceGroup`,
             `Modules/Support/PopCap/PvZ2/Atlas/Split`,

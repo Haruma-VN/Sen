@@ -191,6 +191,19 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             return array;
         }
 
+        public byte readByte(long offset = -1)
+        {
+            fixReadOffset(offset);
+            if (readOffset + 1 > length)
+            {
+                throw new ArgumentException($"Offset is outside the bounds of the DataView");
+            }
+            byte[] array = new byte[1];
+            baseStream.Read(array, 0, 1);
+            readOffset += 1;
+            return array[0];
+        }
+
         public long current() => this.readOffset;
 
         public string readString(int count, long offset = -1, string EncodingType = "UTF-8")
@@ -583,6 +596,13 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             int length = array.Length;
             baseStream.Write(array, 0, length);
             writeOffset += length;
+        }
+
+        public void writeByte(byte byte_t, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            baseStream.Write(new byte[] { byte_t}, 0, 1);
+            writeOffset += 1;
         }
 
         public void writeString(string str, long offset = -1, string EncodingType = "UTF-8")
@@ -1045,6 +1065,27 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             var newPath = checkPath(output_path);
             CreateDirectory(newPath);
             SaveFile(newPath);
+        }
+
+        public void copy(SenBuffer s)
+        {
+            byte[] array = new byte[81920];
+            int count;
+            while ((count = Read(array, 0, array.Length)) != 0)
+            {
+                s.Write(array, 0, count);
+            }
+        }
+
+        public int Read(byte[] buffer, int offset, int count)
+        {
+            return this.baseStream.Read(buffer, offset, count);
+        }
+
+        public void Write(byte[] buffer, int offset, int count)
+        {
+            this.baseStream.Write(buffer, offset, count);
+            return;
         }
 
         public virtual void SaveFile(string path)

@@ -154,6 +154,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
         public abstract void LzmaUncompress(string inFile, string outFile);
 
+        public abstract void CryptDataEncrypt(string inFile, string outFile, string key);
+
+        public abstract void CryptDataDecrypt(string inFile, string outFile, string key);
+
     }
 
     #endregion
@@ -1315,6 +1319,20 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 JsonConvert.DeserializeObject<MResourceGroup>(fs.ReadText(inFile, EncodingType.UTF8))!
                 );
             newton.OutFile(outFile); 
+            return;
+        }
+
+        public override void CryptDataEncrypt(string inFile, string outFile, string key)
+        {
+            var sen = Sen.Shell.Modules.Support.PvZ.CryptData.Encrypt(inFile, key);
+            sen.OutFile(outFile);
+            return;
+        }
+
+        public override void CryptDataDecrypt(string inFile, string outFile, string key)
+        {
+            var sen = Sen.Shell.Modules.Support.PvZ.CryptData.Decrypt(inFile, key);
+            sen.OutFile(outFile);
             return;
         }
 

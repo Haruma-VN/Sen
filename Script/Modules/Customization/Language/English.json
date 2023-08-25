@@ -577,5 +577,10 @@
     "argument_obtained": "Argument Obtained",
     "execution_success": "Execution Success: {}",
     "command_executed_with": "All commands executed: {1} successed & {2} failed",
-    "out_path": "Provide new output path"
+    "out_path": "Provide new output path",
+    "popcap_crypt_data_decrypt": "PopCap Crypt-Data: Decrypt",
+    "popcap_crypt_data_encrypt": "PopCap Crypt-Data: Encrypt",
+    "crypt_data_key_obtained": "PopCap Crypt-Data: Key Obtained",
+    "limit": "Limit",
+    "invalid_crypt_data_magic": "Invalid Crypt-Data Magic, should begins with \"CRYPT-RES\""
 }
