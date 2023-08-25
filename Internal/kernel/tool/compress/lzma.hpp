@@ -41,7 +41,6 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
             &vecIn[0], vecIn.size(),
             &vecOut[0], &propsSize,
             -1, 0, -1, -1, -1, -1, -1);
-
         assert(propsSize == LZMA_PROPS_SIZE);
         assert(res == SZ_OK);
         vecOut.resize(propsSize + destLen);

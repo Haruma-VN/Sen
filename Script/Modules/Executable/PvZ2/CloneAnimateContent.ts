@@ -1,34 +1,10 @@
 namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
-    /**
-     * Structure
-     */
-
-    export enum SelectionQuery {
-        ink = 1,
-        butter,
-        costume,
-        unknown,
-    }
-
     export class Clone {
         public constructor(private xfl_path: string, private resolution: int) {
             return;
         }
 
-        public Input(): SelectionQuery {
-            return Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                Sen.Script.Modules.System.Default.Localization.GetString("select_method"),
-                [SelectionQuery.ink, SelectionQuery.butter, SelectionQuery.costume, SelectionQuery.unknown],
-                {
-                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("ink"), Sen.Script.Modules.System.Default.Localization.GetString("ink")],
-                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("butter"), Sen.Script.Modules.System.Default.Localization.GetString("butter")],
-                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("costume"), Sen.Script.Modules.System.Default.Localization.GetString("costume")],
-                    "4": [Sen.Script.Modules.System.Default.Localization.GetString("unknown"), Sen.Script.Modules.System.Default.Localization.GetString("unknown")],
-                }
-            ) as SelectionQuery;
-        }
-
-        public Ink(): void {
+        public Clone(): void {
             Sen.Shell.Console.Print(
                 Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
                 Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_more_that_path").replace(/\{\}/g, "png"))
@@ -56,51 +32,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
                 generate_sprite: "new",
                 sprite_name: "",
             });
-            const import_type: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("costume_import_type"), [1, 2], {
-                "1": [Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import"), Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import")],
-                "2": [Sen.Script.Modules.System.Default.Localization.GetString("generate_new_custom"), Sen.Script.Modules.System.Default.Localization.GetString("generate_new_custom")],
-            }) as 1 | 2;
-            const struct = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(this.xfl_path, `struct.json`));
-            const m_list: Array<[string, string]> = Object.entries(struct.sprite);
-            return;
-        }
-
-        public Butter(): void {
-            return;
-        }
-
-        public Costume(): void {
-            Sen.Shell.Console.Print(
-                Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-                Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_more_that_path").replace(/\{\}/g, "png"))
-            );
-            const png_argument: Array<string> = new Array();
-            assert_argument: while (true) {
-                let arg: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
-                if (arg.endsWith(` `)) {
-                    arg = arg.slice(0, -1);
-                }
-                if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
-                    arg = arg.slice(1, -1);
-                }
-                if (Sen.Shell.FileSystem.FileExists(arg) && /((\.png))$/i.test(arg)) {
-                    png_argument.push(arg);
-                    break assert_argument;
-                } else {
-                    Sen.Shell.Console.Print(
-                        Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                        Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("file_assert_is_not").replace(/\{\}/g, "png"))
-                    );
-                }
-            }
-            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.AddImageToAnimationAdobeFlash(png_argument, this.xfl_path, this.resolution, {
-                generate_sprite: "new",
-                sprite_name: "",
-            });
-            const import_type: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("costume_import_type"), [1, 2], {
-                "1": [Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import"), Sen.Script.Modules.System.Default.Localization.GetString("find_custom_and_import")],
-                "2": [Sen.Script.Modules.System.Default.Localization.GetString("generate_new_custom"), Sen.Script.Modules.System.Default.Localization.GetString("generate_new_custom")],
-            }) as 1 | 2;
+            const import_type: 1 | 2 = Number("2") as 2 | 1;
             const struct = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(this.xfl_path, `struct.json`));
             const m_list: Array<[string, string]> = Object.entries(struct.sprite);
             switch (import_type) {
@@ -259,25 +191,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
         const arg: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"));
         const clone: Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent.Clone = new Clone(arg, resolution);
-        const option: SelectionQuery = clone.Input();
-        switch (option) {
-            case SelectionQuery.ink: {
-                clone.Ink();
-                break;
-            }
-            case SelectionQuery.butter: {
-                clone.Butter();
-                break;
-            }
-            case SelectionQuery.costume: {
-                clone.Costume();
-                break;
-            }
-            case SelectionQuery.unknown: {
-                clone.Unknown();
-                break;
-            }
-        }
+        clone.Clone();
         return;
     }
 }

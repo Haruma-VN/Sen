@@ -45,6 +45,7 @@ inline constexpr auto MInternalVersion = 3;
 #include "dependencies/avir/avir.h"
 #include "dependencies/bzip2/bzlib.h"
 #include "kernel/utility/utility.hpp"
+#include "dependencies/etcpak/ProcessRGB.hpp"
 
 #pragma endregion
 
