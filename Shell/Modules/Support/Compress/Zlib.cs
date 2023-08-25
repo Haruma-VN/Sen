@@ -91,7 +91,7 @@ namespace Sen.Shell.Modules.Support.Compress
             {
                 buffer.slice(8, buffer.length);
             }
-            var compress = new Standards.Compress();
+            var compress = new Compress();
             return compress.UncompressZlib(buffer.toBytes());
         }
     }

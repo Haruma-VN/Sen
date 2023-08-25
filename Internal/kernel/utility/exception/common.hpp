@@ -39,7 +39,7 @@ namespace Sen::Internal::Kernel::Utility::Exception {
                 std::cout << "\x1B[31m● Internal Exception:\033[0m\t\t" << std::endl;
                 std::cout << "      " << arg << std::endl;
                 std::cout << "\x1B[31m● Internal Raise:\033[0m\t\t" << std::endl;
-                o << "      " << ss::replaceAll(output, "/", "\\") << ":" << line;
+                o << "      " << "Internal\\" << ss::replaceAll(output, "/", "\\") << ":" << line;
                 std::cout << arg << std::endl;
             #else 
             // future
