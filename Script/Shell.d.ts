@@ -355,10 +355,10 @@ declare namespace Sen {
 
             export function OpenFileDialog(title: string, filter: Array<string>): string;
             /**
-            * @returns Dialogs
-            */
+             * @returns Dialogs
+             */
 
-           export function OpenMultipleFileDialog(title: string, filter: Array<string>): Array<string>;
+            export function OpenMultipleFileDialog(title: string, filter: Array<string>): Array<string>;
             /**
              * @returns Dialog
              */
@@ -2809,6 +2809,47 @@ declare namespace Sen {
              */
 
             public static Deflate<T>(data: Array<bigint>): Array<T>;
+        }
+
+        /**
+         * Open-VCDiff | Google
+         */
+
+        export class VCDiff {
+            /**
+             *
+             * @param before - file before in
+             * @param after - file after in
+             * @param patch - file patch out
+             */
+            public static Encode(before: string, after: string, patch: string): void;
+
+            /**
+             *
+             * @param before - Before Buffer
+             * @param after - After Buffer
+             * @returns Patch Buffer
+             */
+
+            public static Encode(before: Array<bigint>, after: Array<bigint>): Array<bigint>;
+
+            /**
+             *
+             * @param before - before file in
+             * @param patch - patch file in
+             * @param after - after file out
+             */
+
+            public static Decode(before: string, patch: string, after: string): void;
+
+            /**
+             *
+             * @param before - Before Buffer
+             * @param patch - Patch Buffer
+             * @returns After Buffer
+             */
+
+            public static Decode(before: Array<bigint>, patch: Array<bigint>): Array<bigint>;
         }
 
         /**
