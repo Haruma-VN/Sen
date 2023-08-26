@@ -43,6 +43,7 @@ namespace Sen.Script {
             `Modules/Interface/Assert`,
             `Modules/Interface/Arguments`,
             `Modules/Interface/Execute`,
+            `Modules/Interface/Batch`,
         ]),
     ];
 

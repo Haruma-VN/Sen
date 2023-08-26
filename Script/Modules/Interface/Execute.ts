@@ -48,11 +48,11 @@ namespace Sen.Script.Modules.Interface.Execute {
             const function_name_m: function_name = Sen.Script.Modules.Interface.Execute.GetFunctionName(available[0]);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("command_executed"));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString(function_name_m)} | ${function_name_m}`);
-            Sen.Script.Modules.Interface.Execute.Evaluate(function_name_m, argument, wrapper);
+            Sen.Script.Modules.Interface.Execute.Evaluate(function_name_m, argument, wrapper, true);
             return;
         }
         const func_name: function_name = Sen.Script.Modules.Interface.Execute.GetFunctionName(Sen.Script.Modules.Interface.Arguments.TestInput(available));
-        Sen.Script.Modules.Interface.Execute.Evaluate(func_name, argument, wrapper);
+        Sen.Script.Modules.Interface.Execute.Evaluate(func_name, argument, wrapper, true);
         return;
     }
 
@@ -84,8 +84,8 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_official_resources_split"
         | "popcap_official_resources_merge"
         | "popcap_official_atlas_split"
-        | "popcap_official_pam_to_pam_json"
-        | "popcap_official_pam_json_to_pam"
+        | "popcap_pam_to_pam_json"
+        | "popcap_pam_json_to_pam"
         | "popcap_official_atlas_merge"
         | "popcap_resinfo_atlas_split"
         | "popcap_resinfo_atlas_merge"
@@ -94,14 +94,14 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rton_to_json"
         | "popcap_json_to_rton"
         | "popcap_sprite_resize"
-        | "popcap_official_pam_to_flash_animation"
-        | "popcap_official_pam_from_flash_animation"
+        | "popcap_pam_to_flash_animation"
+        | "popcap_pam_from_flash_animation"
         | "popcap_official_resources_to_resinfo_resources"
         | "popcap_resinfo_resources_to_official_resources"
         | "popcap_rsg_unpack"
         | "popcap_rsg_pack"
-        | "popcap_official_pam_json_to_flash_animation"
-        | "popcap_official_pam_json_from_flash_animation"
+        | "popcap_pam_json_to_flash_animation"
+        | "popcap_pam_json_from_flash_animation"
         | "popcap_rsb_unpack"
         | "popcap_rsb_pack"
         | "popcap_zlib_compress"
@@ -173,8 +173,7 @@ namespace Sen.Script.Modules.Interface.Execute {
      * @returns Evaluate the tool
      */
 
-    export function Evaluate(function_name: Sen.Script.Modules.Interface.Execute.function_name, argument: string | string[], wrapper: Sen.Script.Modules.Interface.Assert.Wrapper): void {
-        let notify: boolean = true;
+    export function Evaluate(function_name: Sen.Script.Modules.Interface.Execute.function_name, argument: string | string[], wrapper: Sen.Script.Modules.Interface.Assert.Wrapper, notify: boolean): void {
         const func_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
             switch (function_name) {
@@ -1551,7 +1550,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_official_pam_from_flash_animation": {
+                case "popcap_pam_from_flash_animation": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam`)),
@@ -1846,7 +1845,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_official_pam_to_pam_json": {
+                case "popcap_pam_to_pam_json": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam.json`)),
@@ -1864,7 +1863,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_official_pam_to_flash_animation": {
+                case "popcap_pam_to_flash_animation": {
                     if (!Array.isArray(argument)) {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
@@ -1896,7 +1895,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_official_pam_json_to_pam": {
+                case "popcap_pam_json_to_pam": {
                     if (!Array.isArray(argument)) {
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(argument));
                         const output_argument: Argument = {
@@ -1954,7 +1953,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_official_pam_json_from_flash_animation": {
+                case "popcap_pam_json_from_flash_animation": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam.json`)),
@@ -1991,7 +1990,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     }
                     break;
                 }
-                case "popcap_official_pam_json_to_flash_animation": {
+                case "popcap_pam_json_to_flash_animation": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.xfl`)),
@@ -2912,7 +2911,7 @@ namespace Sen.Script.Modules.Interface.Execute {
             if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.execute_again_after_error) {
                 const confirm: boolean = Boolean(Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputBoolean(Sen.Script.Modules.System.Default.Localization.GetString("execute_again")));
                 if (confirm) {
-                    Sen.Script.Modules.Interface.Execute.Evaluate(function_name, argument, wrapper);
+                    Sen.Script.Modules.Interface.Execute.Evaluate(function_name, argument, wrapper, notify);
                 }
             } else {
                 ++wrapper.fail;

@@ -106,12 +106,12 @@
     "popcap_official_atlas_merge": "PopCap Atlas: Объединить (Для Resource-Group)",
     "popcap_resinfo_atlas_split": "PopCap Atlas: Разделить (Для Res-Info)",
     "popcap_resinfo_atlas_merge": "PopCap Atlas: Объединить (Для Res-Info)",
-    "popcap_official_pam_json_to_pam": "PopCap Animation: Конвертировать PAM в JSON",
-    "popcap_official_pam_to_pam_json": "PopCap Animation: Конвертировать JSON в PAM",
-    "popcap_official_pam_to_flash_animation": "PopCap Animation: Конвертировать PAM в Adobe Animate Flash Animation",
-    "popcap_official_pam_from_flash_animation": "PopCap Animation: Конвертировать Adobe Animate Flash Animation в PAM",
-    "popcap_official_pam_json_to_flash_animation": "PopCap Animation: Конвертировать Animation JSON в Adobe Animate Flash Animation",
-    "popcap_official_pam_json_from_flash_animation": "PopCap Animation: Конвертировать Adobe Animate Flash Animation в Animation JSON",
+    "popcap_pam_json_to_pam": "PopCap Animation: Конвертировать PAM в JSON",
+    "popcap_pam_to_pam_json": "PopCap Animation: Конвертировать JSON в PAM",
+    "popcap_pam_to_flash_animation": "PopCap Animation: Конвертировать PAM в Adobe Animate Flash Animation",
+    "popcap_pam_from_flash_animation": "PopCap Animation: Конвертировать Adobe Animate Flash Animation в PAM",
+    "popcap_pam_json_to_flash_animation": "PopCap Animation: Конвертировать Animation JSON в Adobe Animate Flash Animation",
+    "popcap_pam_json_from_flash_animation": "PopCap Animation: Конвертировать Adobe Animate Flash Animation в Animation JSON",
     "popcap_resize_animation": "PopCap Adobe Animate Flash Animation: Изменить разрешение",
     "popcap_localization_text_table": "PopCap Localization Text Table",
     "select_one_texture_format": "Выберите один из форматов текстур",
@@ -566,5 +566,5 @@
     "modern_apple_devices": "iPad3: Современные устройства Apple",
     "average_apple_devices": "iPad2: Устройства Apple со средними характеристиками",
     "low_apple_devices": "iPhone: Устройства Apple с низкими характеристиками",
-    "all_apple_devices": "Все: Поддержка для всех устройств Apple"	
+    "all_apple_devices": "Все: Поддержка для всех устройств Apple"
 }

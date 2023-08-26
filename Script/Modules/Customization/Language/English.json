@@ -109,12 +109,12 @@
     "popcap_official_atlas_merge": "PopCap Resource-Group Structure Atlas: Merge",
     "popcap_resinfo_atlas_split": "PopCap Res-Info Structure Atlas: Split",
     "popcap_resinfo_atlas_merge": "PopCap Res-Info Structure Atlas: Merge",
-    "popcap_official_pam_json_to_pam": "PopCap Animation: Convert Animation JSON to PAM",
-    "popcap_official_pam_to_pam_json": "PopCap Animation: Convert PAM to Animation JSON",
-    "popcap_official_pam_to_flash_animation": "PopCap Animation: Convert PAM to Adobe Animate Flash Animation",
-    "popcap_official_pam_from_flash_animation": "PopCap Animation: Convert PAM from Adobe Animate Flash Animation",
-    "popcap_official_pam_json_to_flash_animation": "PopCap Animation: Convert Animation JSON to Adobe Animate Flash Animation",
-    "popcap_official_pam_json_from_flash_animation": "PopCap Animation: Convert Adobe Animate Flash Animation to Animation JSON",
+    "popcap_pam_json_to_pam": "PopCap Animation: Convert Animation JSON to PAM",
+    "popcap_pam_to_pam_json": "PopCap Animation: Convert PAM to Animation JSON",
+    "popcap_pam_to_flash_animation": "PopCap Animation: Convert PAM to Adobe Animate Flash Animation",
+    "popcap_pam_from_flash_animation": "PopCap Animation: Convert PAM from Adobe Animate Flash Animation",
+    "popcap_pam_json_to_flash_animation": "PopCap Animation: Convert Animation JSON to Adobe Animate Flash Animation",
+    "popcap_pam_json_from_flash_animation": "PopCap Animation: Convert Adobe Animate Flash Animation to Animation JSON",
     "popcap_resize_animation": "PopCap Adobe Animate Flash Animation Resize",
     "popcap_localization_text_table": "PopCap Localization Text Table",
     "select_one_texture_format": "Select one texture format",
@@ -583,5 +583,8 @@
     "crypt_data_key_obtained": "PopCap Crypt-Data: Key Obtained",
     "limit": "Limit",
     "invalid_crypt_data_magic": "Invalid Crypt-Data Magic, should begins with \"CRYPT-RES\"",
-    "execution_obtained": "Execution Obtained: {}"
+    "execution_obtained": "Execution Obtained: {}",
+    "encryption_key": "Encryption Key",
+    "xor_encrypt": "XOR Encrypt",
+    "input_dir": "Input Directory"
 }

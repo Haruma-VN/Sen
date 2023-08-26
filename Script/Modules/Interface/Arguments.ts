@@ -84,7 +84,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
                 switch (type) {
                     case "file": {
                         do {
-                            arg = Sen.Shell.Console.OpenFileDialog("Sen");
+                            arg = Sen.Shell.Console.OpenFileDialog("Sen", []);
                         } while (arg === null || arg === ``);
                         ObtainArgument(arg);
                         break;
@@ -104,7 +104,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
                         switch (method) {
                             case 1: {
                                 do {
-                                    arg = Sen.Shell.Console.OpenFileDialog("Sen");
+                                    arg = Sen.Shell.Console.OpenFileDialog("Sen", []);
                                 } while (arg === null || arg === ``);
                                 ObtainArgument(arg);
                                 break;
@@ -156,14 +156,14 @@ namespace Sen.Script.Modules.Interface.Arguments {
      * @returns File path input by the user
      */
 
-    export function SavePath(type: "file" | "directory" | "unknown"): string {
+    export function SavePath(type: "file" | "directory" | "unknown", filter: string[]): string {
         let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         assert_view: while (arg !== "") {
             if (arg === ":p") {
                 switch (type) {
                     case "file": {
                         do {
-                            arg = Sen.Shell.Console.SaveFileDialog("Sen");
+                            arg = Sen.Shell.Console.SaveFileDialog("Sen", filter);
                         } while (arg === null || arg === ``);
                         ObtainArgument(arg);
                         break assert_view;
@@ -183,7 +183,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
                         switch (method) {
                             case 1: {
                                 do {
-                                    arg = Sen.Shell.Console.SaveFileDialog("Sen");
+                                    arg = Sen.Shell.Console.SaveFileDialog("Sen", filter);
                                 } while (arg === null || arg === ``);
                                 ObtainArgument(arg);
                                 break assert_view;
@@ -210,7 +210,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
             } else if (type === "directory" && !Sen.Shell.FileSystem.DirectoryExists(arg)) {
                 return arg;
             } else {
-                SavePath(type);
+                SavePath(type, filter);
             }
         }
         return arg;
@@ -231,7 +231,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
      * @returns Printing message
      */
 
-    export function ArgumentPrint(option: Argument, type: "file" | "directory"): void {
+    export function ArgumentPrint(option: Argument, type: "file" | "directory", filter?: Array<string>): void {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_receievd_as_default"));
         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${option.argument}`);
         if (type === "file" && Sen.Shell.FileSystem.FileExists(option.argument)) {
@@ -251,7 +251,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
                     Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("out_path"))
                 );
-                option.argument = SavePath("file");
+                option.argument = SavePath("file", filter ?? []);
             }
         }
         if (type === "directory" && Sen.Shell.FileSystem.DirectoryExists(option.argument)) {
@@ -270,7 +270,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
                     Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("out_path"))
                 );
-                option.argument = SavePath("directory");
+                option.argument = SavePath("directory", filter ?? []);
             }
         }
         return;

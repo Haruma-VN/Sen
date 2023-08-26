@@ -353,7 +353,7 @@ declare namespace Sen {
              * @returns Dialog
              */
 
-            export function OpenFileDialog(title: string): string;
+            export function OpenFileDialog(title: string, filter: Array<string>): string;
             /**
              * @returns Dialog
              */
@@ -363,7 +363,7 @@ declare namespace Sen {
              * @returns Dialog
              */
 
-            export function SaveFileDialog(title: string): string;
+            export function SaveFileDialog(title: string, filter: Array<string>): string;
         }
         /**
          * @packages Implementing File System based on C# & JS

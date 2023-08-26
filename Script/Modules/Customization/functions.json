@@ -92,14 +92,14 @@
         "is_enabled": true,
         "type": "directory"
     },
-    "popcap_official_pam_to_pam_json": {
+    "popcap_pam_to_pam_json": {
         "func_number": 14,
         "include": [".pam"],
         "exclude": [".pam.json"],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_official_pam_json_to_pam": {
+    "popcap_pam_json_to_pam": {
         "func_number": 15,
         "include": [".pam.json"],
         "exclude": [".json"],
@@ -127,28 +127,28 @@
         "is_enabled": true,
         "type": "directory"
     },
-    "popcap_official_pam_to_flash_animation": {
+    "popcap_pam_to_flash_animation": {
         "func_number": 19,
         "include": [".pam"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_official_pam_from_flash_animation": {
+    "popcap_pam_from_flash_animation": {
         "func_number": 20,
         "include": [".xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
-    "popcap_official_pam_json_to_flash_animation": {
+    "popcap_pam_json_to_flash_animation": {
         "func_number": 21,
         "include": [".pam.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_official_pam_json_from_flash_animation": {
+    "popcap_pam_json_from_flash_animation": {
         "func_number": 22,
         "include": [".xfl"],
         "exclude": [],

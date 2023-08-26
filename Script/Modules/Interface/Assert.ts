@@ -78,7 +78,7 @@ namespace Sen.Script.Modules.Interface.Assert {
         Sen.Script.Modules.Interface.Assert.CreateDebugDirectory();
         const host: HostRequestArgument<string> = Sen.Script.Modules.Interface.Assert.ProcessArgument<string>(argument);
         if (host.length === 0) {
-            Sen.Script.Modules.Interface.Assert.InputMorePath(host);
+            Sen.Script.Modules.Interface.Assert.InputMorePath(host, wrapper);
         }
         let evaluate_more_argument: boolean = false;
         if (host.length > 1 && host.filter((value: RequestArgument<string>) => value.method !== null).length === 0) {
@@ -113,7 +113,7 @@ namespace Sen.Script.Modules.Interface.Assert {
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.ObtainArgumentType(Sen.Script.Modules.System.Default.Localization.GetString(arg.argument!))}`);
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("method_obtained_by_default"));
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString(arg.method!)} | ${arg.method}`);
-                        Sen.Script.Modules.Interface.Execute.Evaluate(arg.method as unknown as Sen.Script.Modules.Interface.Execute.function_name, arg.argument!, wrapper);
+                        Sen.Script.Modules.Interface.Execute.Evaluate(arg.method as unknown as Sen.Script.Modules.Interface.Execute.function_name, arg.argument!, wrapper, true);
                     } catch (error: unknown) {
                         Sen.Script.Modules.Exceptions.PrintError<Error, string>(error);
                     }
@@ -370,20 +370,27 @@ namespace Sen.Script.Modules.Interface.Assert {
      * @param argument - Pass the argument array to input more
      * @returns
      */
-    export function InputMorePath(argument: Sen.Script.Modules.Interface.Assert.HostRequestArgument<string>): void {
+    export function InputMorePath(argument: Sen.Script.Modules.Interface.Assert.HostRequestArgument<string>, wrapper: Wrapper): void {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, ``)}`);
         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("no_argument_were_passed")}`);
         let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         assert_view: while (arg !== "") {
             function UseHotKey(): boolean {
-                if (arg === ":js") {
-                    const js_command: string = Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Executable`, `Methods`, `js_evaluate.json`);
-                    QuickJS(Sen.Script.Modules.FileSystem.Json.ReadJson<CommandForward>(js_command), js_command);
-                    return true;
+                switch (arg) {
+                    case ":js": {
+                        const js_command: string = Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Executable`, `Methods`, `js_evaluate.json`);
+                        QuickJS(Sen.Script.Modules.FileSystem.Json.ReadJson<CommandForward>(js_command), js_command);
+                        return true;
+                    }
+                    case ":b": {
+                        Sen.Script.Modules.Interface.Batch.Execute(wrapper);
+                        return true;
+                    }
                 }
                 return false;
             }
             if (UseHotKey()) {
+                ++wrapper.success;
                 break assert_view;
             }
             if (arg === ":p") {
@@ -394,7 +401,7 @@ namespace Sen.Script.Modules.Interface.Assert {
                 m_case: switch (method) {
                     case 1: {
                         do {
-                            arg = Sen.Shell.Console.OpenFileDialog("Sen");
+                            arg = Sen.Shell.Console.OpenFileDialog("Sen", []);
                         } while (arg === null || arg === ``);
                         Sen.Script.Modules.Interface.Arguments.ObtainArgument(arg);
                         break m_case;
