@@ -562,7 +562,7 @@ const char* VCDiffEncode(
 {
     auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
     auto after_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(after, after_size);
-    auto encoded_data = Sen::Internal::Kernel::Tool::Diff::VcDiff::encode(
+    auto encoded_data = Sen::Internal::Kernel::Tool::Diff::VCDiff::encode(
         before_t,
         after_t
     );
@@ -582,7 +582,7 @@ const char* VCDiffDecode(
 {
     auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
     auto patch_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(patch, patch_size);
-    auto decoded_data = Sen::Internal::Kernel::Tool::Diff::VcDiff::decode(
+    auto decoded_data = Sen::Internal::Kernel::Tool::Diff::VCDiff::decode(
         before_t,
         patch_t
     );
