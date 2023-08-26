@@ -45,6 +45,7 @@ Void ZlibUncompress(
         if (ret != Z_OK) {
             *uncompressedData = nullptr;
             *uncompressedDataSize = 0;
+            throw_line("Uncompress zlib failed");
             return;
         }
         std::vector<Uint8Array> outBuffer(32768);
@@ -164,35 +165,44 @@ void DeflateCompress(
     int* outputSize
 )
 {
-    z_stream strm;
-    strm.zalloc = Z_NULL;
-    strm.zfree = Z_NULL;
-    strm.opaque = Z_NULL;
-    strm.avail_in = inputSize;
-    strm.next_in = (Bytef*)input;
+    try
+    {
+        auto strm = z_stream{};
+        strm.zalloc = Z_NULL;
+        strm.zfree = Z_NULL;
+        strm.opaque = Z_NULL;
+        strm.avail_in = inputSize;
+        strm.next_in = (Bytef*)input;
 
-    int ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
-    if (ret != Z_OK)
-        return;
+        int ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
+        if (ret != Z_OK)
+            return;
 
-    *outputSize = deflateBound(&strm, inputSize);
-    *output = new char[*outputSize];
+        *outputSize = deflateBound(&strm, inputSize);
+        *output = new char[*outputSize];
 
-    strm.avail_out = *outputSize;
-    strm.next_out = (Bytef*)*output;
+        strm.avail_out = *outputSize;
+        strm.next_out = (Bytef*)*output;
 
-    ret = deflate(&strm, Z_FINISH);
+        ret = deflate(&strm, Z_FINISH);
 
-    deflateEnd(&strm);
+        deflateEnd(&strm);
 
-    if (ret == Z_STREAM_END) {
-        *outputSize = strm.total_out;
-        *output = (char*)realloc(*output, *outputSize);
+        if (ret == Z_STREAM_END) {
+            *outputSize = strm.total_out;
+            *output = (char*)realloc(*output, *outputSize);
+        }
+        else {
+            delete[] * output;
+            *output = nullptr;
+            *outputSize = 0;
+            throw_line("Uncompress failed");
+        }
     }
-    else {
-        delete[] * output;
-        *output = nullptr;
-        *outputSize = 0;
+    catch (const std::exception& e)
+    {
+        log(e.what());
+        throw 0;
     }
     return;
 }
@@ -541,3 +551,41 @@ Void SendMessageBox(
 }
 #endif
 
+InternalAPI
+const char* VCDiffEncode(
+    char* before,
+    size_t before_size,
+    char* after,
+    size_t after_size,
+    size_t &data_size
+)
+{
+    auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
+    auto after_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(after, after_size);
+    auto encoded_data = Sen::Internal::Kernel::Tool::Diff::VcDiff::encode(
+        before_t,
+        after_t
+    );
+    data_size = encoded_data.size();
+    auto array = Sen::Internal::Kernel::Utility::Array::convert_vector_to_array(encoded_data);
+    return array;
+}
+
+InternalAPI
+const char* VCDiffDecode(
+    char* before,
+    size_t before_size,
+    char* patch,
+    size_t patch_size,
+    size_t &after_size
+)
+{
+    auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
+    auto patch_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(patch, patch_size);
+    auto decoded_data = Sen::Internal::Kernel::Tool::Diff::VcDiff::decode(
+        before_t,
+        patch_t
+    );
+    after_size = decoded_data.size();
+    return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array(decoded_data);
+}

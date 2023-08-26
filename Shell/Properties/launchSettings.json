@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Sen": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "\"./Scripts/test.js\""
     }
   }
 }

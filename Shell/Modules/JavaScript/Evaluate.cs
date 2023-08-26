@@ -15,7 +15,7 @@ namespace Sen.Shell.Modules.JavaScript
     {
         public static Engine Engine { get; } = new Engine(options => 
         options.EnableModules(Sen.Shell.Program.Script_Directory).Strict().AllowClrWrite()
-        .AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => true));
+        .AllowClr(typeof(Program).Assembly).CatchClrExceptions(exception => false));
 
         public static void Execute(string Script_Directory, string[] args)
         {
@@ -57,6 +57,7 @@ namespace Sen.Shell.Modules.JavaScript
             {
                 {"Version", new Internal.Version() },
                 {"Compress", new Internal.Compress() },
+                {"VCDiff", new Internal.VCDiff() },
                 {"Uncompress", new Internal.Uncompress() },
             };
             ns.Set("Internal", JsValue.FromObject(Engine, k_dictionary));

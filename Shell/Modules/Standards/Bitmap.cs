@@ -176,8 +176,6 @@ namespace Sen.Shell.Modules.Standards.Bitmap
     public class Bitmap_Implement : Abstract_Bitmap
     {
 
-        #pragma warning disable CS8500
-
 
         public unsafe sealed override void CreateAPNG(GenerateAPNG g_option)
         {

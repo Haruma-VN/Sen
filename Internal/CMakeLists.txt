@@ -20,6 +20,7 @@ add_library(
   "./dependencies/json/json_fwd.hpp"
   "./kernel/tool/compress/bzip2.hpp"
   "./kernel/tool/compress/lzma.hpp"
+  "./kernel/tool/diff/vcdiff.hpp"
   "./kernel/utility/string/common.hpp"
   "./kernel/utility/array/common.hpp"
   "./kernel/utility/path/common.hpp"
@@ -38,6 +39,7 @@ add_subdirectory("./dependencies/libpng")
 add_subdirectory("./dependencies/etcpak")
 add_subdirectory("./dependencies/lzma")
 add_subdirectory("./dependencies/bzip2")
+add_subdirectory("./dependencies/open_vcdiff")
 
 # tinyfiledialogs link
 
@@ -60,6 +62,7 @@ target_link_libraries(
   etcpak
   lzma
   bzip2
+  open_vcdiff
 )
 
 

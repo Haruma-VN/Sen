@@ -50,16 +50,16 @@ namespace Sen.Shell.Modules.Standards
         DEFLATED,
     }
 
-    public static class SenAPI
+    public static partial class SenAPI
     {
 
         private const string LibraryModule = $"./Internal";
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr OpenFileDialog(string title, int size, string[] filters);
@@ -79,29 +79,39 @@ namespace Sen.Shell.Modules.Standards
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SendMessageBox(string title, string message, string btn_display);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GZipCompress(byte[] data, int dataSize, out int compressedSize);
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr GZipCompress(byte[] data, int dataSize, out int compressedSize);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GZipUncompress(byte[] data, int dataSize, out int compressedSize);
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr GZipUncompress(byte[] data, int dataSize, out int compressedSize);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DeflateCompress(byte[] data, int dataSize, out IntPtr compressedData, out int size);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void DeflateCompress(byte[] data, int dataSize, out IntPtr compressedData, out int size);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DeflateUncompress(byte[] input, int input_size, out IntPtr output, out int output_size);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void DeflateUncompress(byte[] input, int input_size, out IntPtr output, out int output_size);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr BZip2Compress(byte[] data, int dataSize, out int compressedSize);
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr BZip2Compress(byte[] data, int dataSize, out int compressedSize);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr BZip2Uncompress(byte[] data, int dataSize, out int compressedSize);
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr BZip2Uncompress(byte[] data, int dataSize, out int compressedSize);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void lzmaCompress(byte[] data, int dataSize, out IntPtr compressData ,out int compressedSize);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void lzmaCompress(byte[] data, int dataSize, out IntPtr compressData ,out int compressedSize);
 
-        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void lzmaUncompress(byte[] data, int dataSize, out IntPtr uncompressedData ,out int compressedSize);
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial void lzmaUncompress(byte[] data, int dataSize, out IntPtr uncompressedData ,out int compressedSize);
+
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr VCDiffEncode(byte[] before, int before_size, byte[] after, int after_size, out int patch_size);
+
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr VCDiffDecode(byte[] before, int before_size, byte[] patch, int patch_size, out int after_size);
 
     }
 
