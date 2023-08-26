@@ -389,13 +389,17 @@ Integer InternalVersion()
 #include "dependencies/tinyfiledialogs/tinyfiledialogs.c"
 
 InternalAPI
-Void* OpenFileDialog(const CString title)
+Void* OpenFileDialog(
+    const CString title,
+    const int size,
+    const char** filter
+)
 {
     auto file = tinyfd_openFileDialog(
         title,
         null,
-        0,
-        null,
+        size,
+        filter,
         null,
         0
     );
@@ -481,14 +485,16 @@ Void* OpenDirectoryDialog(char const* title)
 
 InternalAPI
 Void* SaveFileDialog(
-    const char* title
+    const char* title,
+    int size,
+    const char** filter
 ) 
 {
     auto c = tinyfd_saveFileDialog(
         title,
         null,
-        0,
-        null,
+        size,
+        filter,
         null
         );
     return c;

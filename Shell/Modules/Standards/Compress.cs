@@ -62,13 +62,13 @@ namespace Sen.Shell.Modules.Standards
         public static extern void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr OpenFileDialog(string title);
+        public static extern IntPtr OpenFileDialog(string title, int size, string[] filters);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr OpenDirectoryDialog(string title);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr SaveFileDialog(string title);
+        public static extern IntPtr SaveFileDialog(string title, int size, string[] filters);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SendLosNotification(string title, string message, string info);

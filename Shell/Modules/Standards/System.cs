@@ -18,11 +18,11 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract void TerminateProgram();
 
-        public abstract string OpenFileDialog(string title);
+        public abstract string OpenFileDialog(string title, string[] filter);
 
         public abstract string OpenDirectoryDialog(string title);
 
-        public abstract string SaveFileDialog(string title);
+        public abstract string SaveFileDialog(string title, string[] filter);
 
     }
 
@@ -30,9 +30,9 @@ namespace Sen.Shell.Modules.Standards
     public class SystemImplement : SystemAbstract
     {
 
-        public override unsafe string OpenFileDialog(string title)
+        public override unsafe string OpenFileDialog(string title, string[] filter)
         {
-            IntPtr k_ptr = SenAPI.OpenFileDialog(title);
+            IntPtr k_ptr = SenAPI.OpenFileDialog(title, filter.Length, filter);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
         }
@@ -44,9 +44,9 @@ namespace Sen.Shell.Modules.Standards
             return m;
         }
 
-        public override unsafe string SaveFileDialog(string title)
+        public override unsafe string SaveFileDialog(string title, string[] filter)
         {
-            var k_ptr = SenAPI.SaveFileDialog(title);
+            var k_ptr = SenAPI.SaveFileDialog(title, filter.Length, filter);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
         }

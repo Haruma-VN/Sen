@@ -27,6 +27,7 @@ namespace Sen.Shell.Modules.Standards
         public abstract byte[] RTONRijndaelEncrypt(byte[] plainTextBytes, byte[] ivStringBytes, byte[] keyBytes, IBlockCipherPadding padding);
 
         public abstract byte[] RTONRijndaelDecrypt(byte[] cipherTextBytes, byte[] ivStringBytes, byte[] keyBytes, IBlockCipherPadding padding);
+
        // public abstract byte[] AESEncrypt(string plainText, string password, string salt);
 
     }
@@ -242,5 +243,8 @@ namespace Sen.Shell.Modules.Standards
             cipher.DoFinal(comparisonBytes, length);
             return comparisonBytes;
         }
+
+
+
     }
 }
