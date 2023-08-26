@@ -37,7 +37,7 @@ namespace Sen::Internal::Kernel::Utility::Array
 
 
 	inline auto byte_list_to_unsigned_char_list(
-		std::vector<byte> &vec
+		std::vector<std::uint8_t> &vec
 	) -> std::vector<unsigned char> {
 		std::vector<unsigned char> result;
 		for (auto &b : vec) {

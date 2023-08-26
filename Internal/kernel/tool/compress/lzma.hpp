@@ -8,7 +8,7 @@
 
 namespace Sen::Internal::Kernel::Tool::Compress::lzma 
 {
-    using ByteVector = std::vector<byte>;
+    using ByteVector = std::vector<std::uint8_t>;
 
     inline auto cast(
         const ByteVector& vecByte, 
@@ -25,13 +25,13 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
         ByteVector& vecByte
     ) -> bool
     {
-        vecByte = std::vector<BYTE>(&strVal[0], &strVal[0] + strVal.length());
+        vecByte = std::vector<std::uint8_t>(&strVal[0], &strVal[0] + strVal.length());
         return true;
     }
 
     inline auto compress_lzma(
-        _In_ const ByteVector& vecIn, 
-        _Out_ ByteVector& vecOut
+        const ByteVector& vecIn, 
+         ByteVector& vecOut
     ) -> void {
         auto propsSize = (size_t)LZMA_PROPS_SIZE;
         auto destLen = vecIn.size() + vecIn.size() / 3 + 128;
@@ -48,8 +48,8 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
     }
 
     inline auto uncompress_lzma(
-        _In_ const ByteVector& vecIn,
-        _Out_ ByteVector& vecOut
+        const ByteVector& vecIn,
+        ByteVector& vecOut
     ) -> void {
         auto iLZMA_PROPS_SIZE = LZMA_PROPS_SIZE;
         vecOut.resize(vecIn.size() * 10);
