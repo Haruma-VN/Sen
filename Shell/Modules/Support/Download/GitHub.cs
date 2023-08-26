@@ -481,6 +481,32 @@ namespace Sen.Shell.Modules.Support.Download
             compression.UncompressZip(script_save, script_dir);
             // delete zip
             fs.DeleteFile(script_save);
+            var system = new Platform();
+            system.SendNotification("Sen successfully downloaded all module", "Sen");
+            return;
+        }
+
+        public static async Task DownloadInternal(string script_dir, string link)
+        {
+            var json = new JsonImplement();
+            var github_api_json = json.ParseJson<GitHubReleases>(await GitHub.SendGetRequestAsync(link, $"Sen"));
+            var path = new ImplementPath();
+            if (github_api_json.Assets is null)
+            {
+                throw new Exception($"assets not found from Github API");
+            }
+            
+            var internal_x = Platform.CurrentPlatform() switch { 
+                UserPlatform.Windows => path.Resolve($"{path.Dirname($"{script_dir}")}/Internal.dll"),
+                UserPlatform.Linux => path.Resolve($"{path.Dirname($"{script_dir}")}/Internal.so"),
+                UserPlatform.Macintosh => path.Resolve($"{path.Dirname($"{script_dir}")}/Internal.dylib"),
+            };
+            await DownloadFileAsync(github_api_json.Assets.Find(e => e.Name == Platform.CurrentPlatform() switch
+            {
+                UserPlatform.Windows => "Internal.dll",
+                UserPlatform.Linux => "Internal.so",
+                _ => throw new Exception("Please compile the Internal yourself"),
+            } )!.Browser_download_url, (internal_x), $"Sen");
             return;
         }
 

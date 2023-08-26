@@ -586,5 +586,7 @@
     "execution_obtained": "Execution Obtained: {}",
     "encryption_key": "Encryption Key",
     "xor_encrypt": "XOR Encrypt",
-    "input_dir": "Input Directory"
+    "input_dir": "Input Directory",
+    "important_notification": "Important Notification:",
+    "multiple_files": "Multiple Files"
 }

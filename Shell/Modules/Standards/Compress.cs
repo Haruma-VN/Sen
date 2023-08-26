@@ -65,6 +65,9 @@ namespace Sen.Shell.Modules.Standards
         public static extern IntPtr OpenFileDialog(string title, int size, string[] filters);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr OpenMultipleFileDialog(string title, int size, string[] filters);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr OpenDirectoryDialog(string title);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]

@@ -394,10 +394,11 @@ namespace Sen.Script.Modules.Interface.Assert {
                 break assert_view;
             }
             if (arg === ":p") {
-                const method: 1 | 2 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("select_input_method"), [1, 2], {
+                const method: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("select_input_method"), [1, 2, 3], {
                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("file"), Sen.Script.Modules.System.Default.Localization.GetString("file")],
                     "2": [Sen.Script.Modules.System.Default.Localization.GetString("directory"), Sen.Script.Modules.System.Default.Localization.GetString("directory")],
-                }) as 1 | 2;
+                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("multiple_files"), Sen.Script.Modules.System.Default.Localization.GetString("multiple_files")],
+                }) as 1 | 2 | 3;
                 m_case: switch (method) {
                     case 1: {
                         do {
@@ -412,6 +413,18 @@ namespace Sen.Script.Modules.Interface.Assert {
                         } while (arg === null || arg === ``);
                         Sen.Script.Modules.Interface.Arguments.ObtainArgument(arg);
                         break m_case;
+                    }
+                    case 3: {
+                        do {
+                            argument.push(
+                                ...Sen.Shell.Console.OpenMultipleFileDialog("Sen", []).map((e: string) => ({
+                                    argument: Sen.Shell.Path.Resolve(e),
+                                    method: null,
+                                }))
+                            );
+                        } while (argument.length === 0);
+                        Sen.Script.Modules.Interface.Arguments.ObtainArgument(arg);
+                        return;
                     }
                 }
             }

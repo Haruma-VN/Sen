@@ -299,7 +299,7 @@ Void lzmaCompress(
     unsigned char** out, 
     size_t* out_len
 ) {
-    auto compressedData = std::vector<byte>();
+    auto compressedData = std::vector<std::uint8_t>();
     Sen::Internal::Kernel::Tool::Compress::lzma::compress_lzma(
         Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
         compressedData
@@ -320,7 +320,7 @@ Void lzmaUncompress(
     unsigned char** out, 
     size_t* out_len
 ) {
-    auto uncompressedData = std::vector<byte>();
+    auto uncompressedData = std::vector<std::uint8_t>();
     Sen::Internal::Kernel::Tool::Compress::lzma::uncompress_lzma(
         Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
         uncompressedData
@@ -402,6 +402,24 @@ Void* OpenFileDialog(
         filter,
         null,
         0
+    );
+    return file;
+}
+
+InternalAPI
+Void* OpenMultipleFileDialog(
+    const CString title,
+    const int size,
+    const char** filter
+)
+{
+    auto file = tinyfd_openFileDialog(
+        title,
+        null,
+        size,
+        filter,
+        null,
+        2
     );
     return file;
 }

@@ -20,6 +20,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract string OpenFileDialog(string title, string[] filter);
 
+        public abstract string[] OpenMultipleFileDialog(string title, string[] filter);
+
         public abstract string OpenDirectoryDialog(string title);
 
         public abstract string SaveFileDialog(string title, string[] filter);
@@ -35,6 +37,13 @@ namespace Sen.Shell.Modules.Standards
             IntPtr k_ptr = SenAPI.OpenFileDialog(title, filter.Length, filter);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
+        }
+
+        public override unsafe string[] OpenMultipleFileDialog(string title, string[] filter)
+        {
+            IntPtr k_ptr = SenAPI.OpenMultipleFileDialog(title, filter.Length, filter);
+            var m = Marshal.PtrToStringUTF8(k_ptr)!;
+            return m.Split('|');
         }
 
         public override unsafe string OpenDirectoryDialog(string title)

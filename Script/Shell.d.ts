@@ -355,6 +355,11 @@ declare namespace Sen {
 
             export function OpenFileDialog(title: string, filter: Array<string>): string;
             /**
+            * @returns Dialogs
+            */
+
+           export function OpenMultipleFileDialog(title: string, filter: Array<string>): Array<string>;
+            /**
              * @returns Dialog
              */
 

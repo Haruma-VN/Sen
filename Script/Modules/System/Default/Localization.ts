@@ -75,7 +75,7 @@ namespace Sen.Script.Modules.System.Default.Localization {
 
     export function CountDown(range: number): void {
         const time_left = Sen.Script.Modules.System.Default.Localization.TimeLeft(1694278800);
-        if (time_left <= range) {
+        if (time_left <= range && time_left > 0) {
             const data = new Shell.SenBuffer([
                 0x7bn,
                 0x7dn,
@@ -110,7 +110,12 @@ namespace Sen.Script.Modules.System.Default.Localization {
                 0x61n,
                 0x79n,
             ]);
-            Sen.Shell.Console.Print(null, data.readString(data.size()).replace(/\{\}/g, `${time_left}`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("important_notification"));
+            Sen.Shell.Console.Printf(null, `      ${data.readString(data.size()).replace(/\{\}/g, `${time_left}`)}`);
+        } else if (time_left === 0) {
+            const data = new Shell.SenBuffer([0x54n, 0x6fn, 0x64n, 0x61n, 0x79n, 0x20n, 0x69n, 0x73n, 0x20n, 0x48n, 0x61n, 0x72n, 0x75n, 0x6dn, 0x61n, 0x27n, 0x73n, 0x20n, 0x62n, 0x69n, 0x72n, 0x74n, 0x68n, 0x64n, 0x61n, 0x79n]);
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan, Sen.Script.Modules.System.Default.Localization.GetString("important_notification"));
+            Sen.Shell.Console.Printf(null, `      ${data.readString(data.size())}`);
         }
         return;
     }

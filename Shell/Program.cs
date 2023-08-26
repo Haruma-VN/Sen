@@ -18,15 +18,28 @@ namespace Sen.Shell
             _ => throw new Exception($"Unknown"),
         };
 
+        public static readonly string InternalPath = Platform.CurrentPlatform() switch
+        {
+            UserPlatform.Windows => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Internal.dll"),
+            UserPlatform.Linux => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Internal.so"),
+            UserPlatform.Macintosh => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Internal.dylib"),
+            _ => throw new Exception($"Unknown"),
+        };
+
         public async static Task<int> Main(string[] args)
         {
             Modules.Support.Misc.SignWindowsRegistry.AssignExtensionWithSen();
             var SystemConsole = new SystemImplement();
             var path = new ImplementPath();
             var fs = new FileSystem();
+            if (!fs.FileExists(InternalPath))
+            {
+                SystemConsole.Print(null, $"Internal Module not found, redownloading Internal from Github");
+                await GitHub.DownloadInternal(InternalPath, $"https://api.github.com/repos/Haruma-VN/Sen/releases/tags/internal");
+            }
             if (!fs.DirectoryExists(Script_Directory) || !fs.FileExists(path.Resolve(path.Join($"{Script_Directory}", "main.js"))))
             {
-                SystemConsole.Print(null, $"Scripts not found, redownloading scripts from github");
+                SystemConsole.Print(null, $"Script Module not found, redownloading Script from Github");
                 await GitHub.DownloadScript(Script_Directory, $"https://api.github.com/repos/Haruma-VN/Sen/releases/tags/scripts");
             }
             try
