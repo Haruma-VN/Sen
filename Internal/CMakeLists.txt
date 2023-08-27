@@ -1,4 +1,5 @@
 ﻿cmake_minimum_required (VERSION 3.8)
+
 project(
   Internal
   VERSION 4
@@ -35,6 +36,8 @@ add_library(
   "./Internal.cpp"
 )
 
+
+# C++ Standards
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -54,6 +57,8 @@ if(NOT (CMAKE_SYSTEM_NAME MATCHES "iOS" OR CMAKE_SYSTEM_NAME MATCHES "Android"))
     add_subdirectory("./dependencies/tinyfiledialogs")
     target_link_libraries(Internal PRIVATE tinyfiledialogs)
 endif()
+
+# Set compiler
 
 if(APPLE)
     target_compile_options(Internal PRIVATE -Wno-implicit-function-declaration)
@@ -80,12 +85,31 @@ target_link_libraries(
   open_vcdiff
 )
 
+# symbol visibility
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
+# position independent code
+set(CMAKE_POSITION_INDEPENDENT_CODE true)
+
+# Compilation define
+
+target_compile_definitions( 
+    ${PROJECT_NAME} PRIVATE 
+    _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING 
+) 
+  
+target_compile_definitions( 
+    ${PROJECT_NAME} PRIVATE 
+    CONFIG_BIGNUM 
+)
+
 # Output name
 if(UNIX OR ANDROID OR APPLE OR IOS)
     set_target_properties(Internal PROPERTIES PREFIX "" OUTPUT_NAME "Internal")
 endif()
 
-
+# CMake Strict
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Internal PROPERTY CXX_STANDARD 20)
