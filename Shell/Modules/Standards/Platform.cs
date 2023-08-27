@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Sen.Shell.Modules.Internal;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -224,14 +225,14 @@ namespace Sen.Shell.Modules.Standards
             }
             else
             {
-                SenAPI.SendLosNotification(title, message, "info");
+                LotusAPI.SendLosNotification(title, message, "info");
             }
             return;
         }
 
         public override void SendMessageBox(string message, string title)
         {
-            SenAPI.SendMessageBox(title, message, "OK");
+            LotusAPI.SendMessageBox(title, message, "OK");
             return;
         }
 

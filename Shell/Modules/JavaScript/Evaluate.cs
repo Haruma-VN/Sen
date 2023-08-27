@@ -8,6 +8,7 @@ using Sen.Shell.Modules.Support.Download;
 using Jint.Native;
 using Jint.Runtime.Interop;
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Modules.Support;
 
 namespace Sen.Shell.Modules.JavaScript
 {
@@ -41,11 +42,11 @@ namespace Sen.Shell.Modules.JavaScript
                 {"DotNetLocalization", new Localization()},
                 {"TextureHandler", new TextureEncoderFast()},
                 {"TextureHandlerPromise", new TextureEncoderAsync()},
-                {"PvZ2Shell", new PvZ2Shell()},
+                {"LotusModule", new LotusModule()},
                 {"ShellVersion", new Version()},
                 {"ShellUpdate", new DownloadUpdate()},
                 {"Buffer", typeof(Implement.Buffer)},
-                {"PvZ2XML", new Support.Flash.PvZ2XML()},
+                {"PvZ2XML", new Support.Flash.XML()},
                 {"XMLHelper", new Support.Flash.XmlHelper()},
                 {"PvZ2Lawnstrings", new Sen.Shell.Modules.Support.PvZ2.Lawnstrings()},
                 {"ChatGPT", new Sen.Modules.Support.Misc.ChatGPT()},

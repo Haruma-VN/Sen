@@ -46,7 +46,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack {
      */
 
     export function RSGUnpack(rsg_in: string, out_dir: string, use_res: boolean = false): void {
-        const standard: PacketInfo = Sen.Shell.PvZ2Shell.RSGUnpack(rsg_in, out_dir);
+        const standard: PacketInfo = Sen.Shell.LotusModule.RSGUnpack(rsg_in, out_dir);
         const packet_info: PacketInfo = { ...standard, res: [] };
         standard.res.forEach((resx: ResInfo) => {
             packet_info.res.push({
@@ -69,7 +69,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack {
         packet_info.res.forEach((res: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.ResInfo) => {
             res.path = (res.path as Array<string>).join("\\");
         });
-        Sen.Shell.PvZ2Shell.RSGPack(rsg_directory, out_rsg, packet_info);
+        Sen.Shell.LotusModule.RSGPack(rsg_directory, out_rsg, packet_info);
         return;
     }
 }

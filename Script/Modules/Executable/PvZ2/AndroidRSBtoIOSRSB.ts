@@ -7,7 +7,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
     export function ConvertStreamingWavetoGlobalData(bundle_directory: string, information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation): void {
         const streaming_wave_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `StreamingWave.rsg`));
         const streaming_wave_bundle: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `StreamingWave.rsg.packet`));
-        const streaming_wave_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = Sen.Shell.PvZ2Shell.RSGUnpack(streaming_wave_path, `${streaming_wave_bundle}`, false);
+        const streaming_wave_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBPacketInfo = Sen.Shell.LotusModule.RSGUnpack(streaming_wave_path, `${streaming_wave_bundle}`, false);
         const global_data_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `Global_Data.rsg`));
         const global_data_bundle: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `Global_Data.rsg.packet`));
         Sen.Shell.FileSystem.CreateDirectory(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(global_data_bundle, `STREAMINGWAVES`, `GLOBAL_DATA`)));
@@ -22,7 +22,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
             Sen.Shell.FileSystem.CopyFile(wem_path, new_wem_path);
         }
         streaming_wave_packet_info.res = global_data_res;
-        Sen.Shell.PvZ2Shell.RSGPack(`${global_data_bundle}`, `${global_data_path}`, streaming_wave_packet_info, false);
+        Sen.Shell.LotusModule.RSGPack(`${global_data_bundle}`, `${global_data_path}`, streaming_wave_packet_info, false);
         information.group["Global_Data"] = {
             is_composite: false,
             subgroup: {
@@ -139,7 +139,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                         check_contain_atlas = true;
                         const rsg_infile_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `${subgroup}.rsg`));
                         const rsg_outfile_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `unpack`));
-                        Sen.Shell.PvZ2Shell.RSGUnpack(rsg_infile_path, `${rsg_outfile_path}`, false);
+                        Sen.Shell.LotusModule.RSGUnpack(rsg_infile_path, `${rsg_outfile_path}`, false);
                         for (let k = 0; k < information.group[group].subgroup[subgroup].packet_info.res.length; k++) {
                             const packet_res_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ResInfo = information.group[group].subgroup[subgroup].packet_info.res[k];
                             information.group[group].subgroup[subgroup].packet_info.res[k].ptx_property!.format = ConvertFormat(
@@ -154,7 +154,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                         rsg_packetinfo.res.forEach((res) => {
                             res.path = (res.path as Array<string>).join("\\");
                         });
-                        Sen.Shell.PvZ2Shell.RSGPack(`${rsg_outfile_path}`, `${rsg_infile_path}`, rsg_packetinfo, false);
+                        Sen.Shell.LotusModule.RSGPack(`${rsg_outfile_path}`, `${rsg_infile_path}`, rsg_packetinfo, false);
                         rsg_packetinfo.res.forEach((res) => {
                             res.path = (res.path as string).split("\\");
                         });
@@ -187,7 +187,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
     export function RewriteResources(bundle_directory: string, manifest_packet_name: string, input_resolution: number): void {
         const manifest_rsg_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `${manifest_packet_name}.rsg`));
         const manifest_rsg_bundle_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `${manifest_packet_name}.bundle`));
-        const manifest_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Shell.PvZ2Shell.RSGUnpack(manifest_rsg_path, `${manifest_rsg_bundle_directory}`, false);
+        const manifest_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Shell.LotusModule.RSGUnpack(manifest_rsg_path, `${manifest_rsg_bundle_directory}`, false);
         const res_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, manifest_packet_info.res[0].path as string));
         const res_json_argument: string = res_argument.replace(/((\.rton))?$/i, `.json`);
         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(res_argument, res_json_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
@@ -221,7 +221,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json>(content_json_path, subgroup_content_json, false);
         Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(output_argument, res_json_argument);
         Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(res_json_argument, res_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
-        Sen.Shell.PvZ2Shell.RSGPack(`${manifest_rsg_bundle_directory}`, `${manifest_rsg_path}`, manifest_packet_info, false);
+        Sen.Shell.LotusModule.RSGPack(`${manifest_rsg_bundle_directory}`, `${manifest_rsg_path}`, manifest_packet_info, false);
         return;
     }
 

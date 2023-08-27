@@ -190,7 +190,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup {
                     resources_json.groups.push(deserialized_subgroup);
                 }
             }
-            Sen.Shell.PvZ2Shell.RewriteSlot(resources_json, output_file);
+            Sen.Shell.LotusModule.RewriteSlot(resources_json, output_file);
             return;
         }
 

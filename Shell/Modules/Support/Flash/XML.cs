@@ -47,9 +47,9 @@ namespace Sen.Shell.Modules.Support.Flash
     }
 
 
-    public class PvZ2XML : XMLWrite
+    public class XML : XMLWrite
     {
-        public PvZ2XML() { }
+        public XML() { }
 
         public unsafe sealed override void InsertDOMDocumentData(DOMDocument dom, string xml, string outFile)
         {

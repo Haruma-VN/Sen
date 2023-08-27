@@ -1556,7 +1556,7 @@ declare namespace Sen {
          * PvZ2 Shell
          */
 
-        declare namespace PvZ2Shell {
+        declare namespace LotusModule {
             /**
              *
              * @param inFile - Pass RTON

@@ -310,7 +310,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
 
     export function PopCapAnimationToAnimationJson(inFile: string, outFile: string): void {
         try {
-            const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.PAMtoPAMJSON(inFile);
+            const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.LotusModule.PAMtoPAMJSON(inFile);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json, false);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
@@ -330,7 +330,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
         try {
-            Sen.Shell.PvZ2Shell.PAMJSONtoPAM(inFile, outFile);
+            Sen.Shell.LotusModule.PAMJSONtoPAM(inFile, outFile);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
         }
@@ -351,7 +351,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(inFile);
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
         try {
-            const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMJSONtoFlashAnimation(inFile, outputDirectory, resolution);
+            const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.LotusModule.PAMJSONtoFlashAnimation(inFile, outputDirectory, resolution);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `struct.json`)),
                 Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json),
@@ -376,7 +376,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `struct.json`)))
         );
         try {
-            const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.PvZ2Shell.FlashAnimationtoPAMJSON(inDirectory, extra_json);
+            const pam_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson = Sen.Shell.LotusModule.FlashAnimationtoPAMJSON(inDirectory, extra_json);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(outFile, pam_json, false);
             return;
         } catch (error: unknown) {
@@ -394,7 +394,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
 
     export function PopCapAnimationToAnimateAdobeFlashAnimation(inFile: string, outputDirectory: string, resolution: int): void {
         try {
-            const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.PvZ2Shell.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
+            const extra_json: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Shell.LotusModule.PAMtoFlashAnimation(inFile, outputDirectory, resolution);
             const extra = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvert(extra_json);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outputDirectory}`, `struct.json`)), extra, false);
             return;

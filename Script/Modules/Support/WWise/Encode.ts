@@ -185,7 +185,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
 
     export function WWiseSoundbankDecodeBySimple(inFile: string, outDirectory: string): void {
         try {
-            const information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple = Sen.Shell.PvZ2Shell.WWiseSoundBankDecode(inFile, outDirectory);
+            const information: Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple = Sen.Shell.LotusModule.WWiseSoundBankDecode(inFile, outDirectory);
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.WWise.Soundbank.Encode.WWiseInfoSimple>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `definition.json`)), information, false);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inFile);
@@ -205,7 +205,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `definition.json`))
         );
         try {
-            Sen.Shell.PvZ2Shell.WWiseSoundBankEncode(inDirectory, outFile, information);
+            Sen.Shell.LotusModule.WWiseSoundBankEncode(inDirectory, outFile, information);
         } catch (error: unknown) {
             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), inDirectory);
         }

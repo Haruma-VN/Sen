@@ -1,4 +1,5 @@
-﻿using Sen.Shell.Modules.Standards;
+﻿using Sen.Modules.Support;
+using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 
 #pragma warning disable CS8602

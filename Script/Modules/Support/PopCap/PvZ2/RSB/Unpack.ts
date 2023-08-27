@@ -178,7 +178,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
 
     export function UnpackPopCapOfficialRSB(inRSB: string, outDirectory: string, write_manifest: boolean): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
         try {
-            const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
+            const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.LotusModule.RSBUnpack(inRSB, outDirectory);
             if (write_manifest) {
                 Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
                     Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `manifest.json`)),
@@ -216,7 +216,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      */
 
     export function UnpackPopCapOfficialRSBBySimple(inRSB: string, outDirectory: string, information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimpleResources, rton_option: DecodeRTON): void {
-        const rsb_header_structure: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead = Sen.Shell.PvZ2Shell.ProcessRSBData(inRSB);
+        const rsb_header_structure: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead = Sen.Shell.LotusModule.ProcessRSBData(inRSB);
         if (BigInt(rsb_header_structure.version) !== 4n) {
             throw new Sen.Script.Modules.Exceptions.UnsupportedDataType(Sen.Script.Modules.System.Default.Localization.GetString("unsupported_rsb_version_not_4"), inRSB);
         }
@@ -235,7 +235,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
         if (manifest_group) {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converting_resource_to_resinfo")}`);
-            Sen.Shell.PvZ2Shell.RSGUnpack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `packet`, `${manifest_group}.rsg`)), Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`)), false);
+            Sen.Shell.LotusModule.RSGUnpack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `packet`, `${manifest_group}.rsg`)), Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`)), false);
             const manifest_path: string = manifest_additional_information.group.find((e) => e.name === manifest_group)?.subgroup[0].packet_info.res.find((e) => (e.path as string)!.endsWith(".RTON"))?.path! as string;
             const resources_rton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`, ...manifest_path.split("\\")));
             const resources_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_rton_path)}`, `${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`));
@@ -246,7 +246,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("unpacking_packages")}`);
             const packages_destination: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`));
-            Sen.Shell.PvZ2Shell.RSGUnpack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `packet`, `${packages}.rsg`)), packages_destination, false);
+            Sen.Shell.LotusModule.RSGUnpack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `packet`, `${packages}.rsg`)), packages_destination, false);
             if (rton_option.decode_rtons) {
                 if (rton_option.rton_is_encrypted) {
                     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
@@ -255,7 +255,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
                 const packages_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`, `PACKAGES`));
                 const rtons: Array<string> = Sen.Shell.FileSystem.ReadDirectory(packages_directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory).filter((e: string) => e.toUpperCase().endsWith(".RTON"));
                 rtons.forEach((rton: string) =>
-                    Sen.Shell.PvZ2Shell.RTONDecode(rton, rton.replace(/((\.rton))?$/i, ".JSON"), {
+                    Sen.Shell.LotusModule.RTONDecode(rton, rton.replace(/((\.rton))?$/i, ".JSON"), {
                         key: rton_option.rton_key,
                         crypt: rton_option.rton_is_encrypted,
                     })
@@ -275,7 +275,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      */
 
     export function UnpackAbnormalRSBByLooseConstraints(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
-        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.PvZ2Shell.RSBUnpackByLooseConstraints(inRSB, outDirectory);
+        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.LotusModule.RSBUnpackByLooseConstraints(inRSB, outDirectory);
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `manifest.json`)),
             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json),
@@ -326,11 +326,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      */
 
     export function UnpackPopCapRSBWithSimplifiedInformation(inRSB: string, outDirectory: string): void {
-        const rsb_header_structure: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead = Sen.Shell.PvZ2Shell.ProcessRSBData(inRSB);
+        const rsb_header_structure: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBHead = Sen.Shell.LotusModule.ProcessRSBData(inRSB);
         if (rsb_header_structure.version !== 4) {
             throw new Sen.Script.Modules.Exceptions.UnsupportedDataType(Sen.Script.Modules.System.Default.Localization.GetString("unsupported_rsb_version_not_4"), inRSB);
         }
-        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.PvZ2Shell.RSBUnpack(inRSB, outDirectory);
+        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.LotusModule.RSBUnpack(inRSB, outDirectory);
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>>(
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `pvz2.json`)),
             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToSimplifiedManifest(manifest_json),

@@ -1,11 +1,10 @@
-﻿using Sen.Shell.Modules;
-using Sen.Shell.Modules.Standards;
+﻿using Sen.Shell.Modules.Standards;
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using System.Runtime.InteropServices;
 
 namespace Sen.Shell.Modules.Internal
 {
-    public abstract class M_Internal
+    public abstract class MInternal
     {
         public abstract int InternalVersion();
 
@@ -22,24 +21,11 @@ namespace Sen.Shell.Modules.Internal
         ARM64,
     };
 
-    public partial class SenAPI
-    {
-        private const string LibraryModule = $"./Internal";
-
-        [LibraryImport(LibraryModule)]
-        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial int InternalVersion();
-
-        [LibraryImport(LibraryModule)]
-        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial Architecture GetProcessorArchitecture();
-    }
-
-    public class Version : M_Internal
+    public class Version : MInternal
     {
         public override string GetProcessorArchitecture()
         {
-             return SenAPI.GetProcessorArchitecture() switch
+             return LotusAPI.GetProcessorArchitecture() switch
              {
                  Architecture.X64 => "x64",
                  Architecture.ARM => "ARM",
@@ -51,7 +37,7 @@ namespace Sen.Shell.Modules.Internal
              };
         }
 
-        public override int InternalVersion() => SenAPI.InternalVersion();
+        public override int InternalVersion() => LotusAPI.InternalVersion();
     }
 
     public class Compress
@@ -61,7 +47,8 @@ namespace Sen.Shell.Modules.Internal
 
         public Compress() { }
 
-        public byte[] Zlib(byte[] data, Standards.ZlibCompressionLevel level = ZlibCompressionLevel.BEST_COMPRESSION) => m_compress.CompressZlib(data, level);
+        public byte[] Zlib(byte[] data, Standards.ZlibCompressionLevel level = ZlibCompressionLevel.BEST_COMPRESSION) => 
+            m_compress.CompressZlib(data, level);
 
 
         public byte[] Gzip(byte[] data) => m_compress.CompressGZip(data);
@@ -92,7 +79,7 @@ namespace Sen.Shell.Modules.Internal
 
         public byte[] Decode(byte[] before, byte[] patch)
         {
-            var after = Sen.Shell.Modules.Standards.SenAPI.VCDiffDecode(before, before.Length, patch, patch.Length, out var size);
+            var after = LotusAPI.VCDiffDecode(before, before.Length, patch, patch.Length, out var size);
             byte[] afterData = new byte[size];
             Marshal.Copy(after, afterData, 0, size);
             Marshal.FreeHGlobal(after);
@@ -108,7 +95,7 @@ namespace Sen.Shell.Modules.Internal
 
         public byte[] Encode(byte[] before, byte[] after)
         {
-            var patch = Sen.Shell.Modules.Standards.SenAPI.VCDiffEncode(before, before.Length, after, after.Length, out var size);
+            var patch = LotusAPI.VCDiffEncode(before, before.Length, after, after.Length, out var size);
             byte[] patchData = new byte[size];
             Marshal.Copy(patch, patchData, 0, size);
             return patchData;

@@ -191,14 +191,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.json`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.DecodeNewtonResource(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.DecodeNewtonResource(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.json`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.DecodeNewtonResource(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.DecodeNewtonResource(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -216,7 +216,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.CryptDataDecrypt(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
+                        Sen.Shell.LotusModule.CryptDataDecrypt(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
                     } else {
                         argument.forEach((arg: string) => {
                             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("crypt_data_key_obtained"));
@@ -230,7 +230,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.CryptDataDecrypt(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
+                            Sen.Shell.LotusModule.CryptDataDecrypt(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
                         });
                     }
                     break;
@@ -248,7 +248,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.cdat`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.CryptDataEncrypt(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
+                        Sen.Shell.LotusModule.CryptDataEncrypt(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
                     } else {
                         argument.forEach((arg: string) => {
                             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("crypt_data_key_obtained"));
@@ -262,7 +262,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.cdat`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.CryptDataEncrypt(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
+                            Sen.Shell.LotusModule.CryptDataEncrypt(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ.CryptData.Encrypt.encryptionKey);
                         });
                     }
                     break;
@@ -273,14 +273,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.EncodeNewtonResource(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.EncodeNewtonResource(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.EncodeNewtonResource(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.EncodeNewtonResource(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -291,14 +291,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.GZipCompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.GZipCompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.GZipCompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.GZipCompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -309,14 +309,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.GZipUncompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.GZipUncompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.GZipUncompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.GZipUncompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -327,14 +327,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.DeflateCompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.DeflateCompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.DeflateCompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.DeflateCompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -345,14 +345,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.DeflateUncompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.DeflateUncompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.DeflateUncompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.DeflateUncompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -363,14 +363,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.ZlibCompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.ZlibCompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.ZlibCompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.ZlibCompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -381,14 +381,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.ZlibUncompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.ZlibUncompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.ZlibUncompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.ZlibUncompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -399,14 +399,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.Bzip2Compress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.Bzip2Compress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.Bzip2Compress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.Bzip2Compress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -417,14 +417,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.Bzip2Uncompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.Bzip2Uncompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.Bzip2Uncompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.Bzip2Uncompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -435,14 +435,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.LzmaCompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.LzmaCompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.LzmaCompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.LzmaCompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -453,14 +453,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.LzmaUncompress(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.LzmaUncompress(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.LzmaUncompress(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.LzmaUncompress(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -471,14 +471,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.json`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.PopcapRenderEffectDecode(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.PopcapRenderEffectDecode(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.json`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.PopcapRenderEffectDecode(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.PopcapRenderEffectDecode(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -489,14 +489,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.PopcapRenderEffectEncode(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.PopcapRenderEffectEncode(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.PopcapRenderEffectEncode(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.PopcapRenderEffectEncode(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -899,7 +899,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.wav`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.ConvertOGGtoWAV(argument, output_argument.argument);
+                            Sen.Shell.LotusModule.ConvertOGGtoWAV(argument, output_argument.argument);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, argument);
                         }
@@ -910,7 +910,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.wav`)),
                                 };
                                 Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                                Sen.Shell.PvZ2Shell.ConvertOGGtoWAV(arg, output_argument.argument);
+                                Sen.Shell.LotusModule.ConvertOGGtoWAV(arg, output_argument.argument);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, arg);
                             }
@@ -939,7 +939,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.WemToOGG(argument, output_argument.argument, Sen.Shell.Path.Resolve(`${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`), inlineCodebook, inlineSetup);
+                            Sen.Shell.LotusModule.WemToOGG(argument, output_argument.argument, Sen.Shell.Path.Resolve(`${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`), inlineCodebook, inlineSetup);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, argument);
                         }
@@ -964,7 +964,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.WemToOGG(arg, output_argument.argument, Sen.Shell.Path.Resolve(`${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`), inlineCodebook, inlineSetup);
+                                Sen.Shell.LotusModule.WemToOGG(arg, output_argument.argument, Sen.Shell.Path.Resolve(`${Sen.Script.Modules.System.Default.Localization.packed_codebooks_aoTuV_603}`), inlineCodebook, inlineSetup);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(`${(error as any).message}`, arg);
                             }
@@ -1560,7 +1560,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(`${argument}`, `struct.json`))
                         );
                         try {
-                            Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(argument, output_argument.argument, extra);
+                            Sen.Shell.LotusModule.FlashAnimationtoPAM(argument, output_argument.argument, extra);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.FlashAnimationToPopCapAnimationError(`${(error as any).message}`, argument);
                         }
@@ -1574,7 +1574,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonForUser>(Sen.Shell.Path.Join(`${arg}`, `struct.json`))
                             );
                             try {
-                                Sen.Shell.PvZ2Shell.FlashAnimationtoPAM(arg, output_argument.argument, extra);
+                                Sen.Shell.LotusModule.FlashAnimationtoPAM(arg, output_argument.argument, extra);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.FlashAnimationToPopCapAnimationError(`${(error as any).message}`, arg);
                             }
@@ -1978,14 +1978,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bin`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.PvZ2Shell.RSBObfuscate(argument, output_argument.argument);
+                        Sen.Shell.LotusModule.RSBObfuscate(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bin`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.PvZ2Shell.RSBObfuscate(arg, output_argument.argument);
+                            Sen.Shell.LotusModule.RSBObfuscate(arg, output_argument.argument);
                         });
                     }
                     break;
@@ -2022,7 +2022,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (!Array.isArray(argument)) {
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"));
                         try {
-                            Sen.Shell.PvZ2Shell.FlashAnimationResize(argument, resolution);
+                            Sen.Shell.LotusModule.FlashAnimationResize(argument, resolution);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.FlashAnimationResizeError(`${(error as any).message}`, argument);
                         }
@@ -2030,7 +2030,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         argument.forEach((arg: string) => {
                             const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"));
                             try {
-                                Sen.Shell.PvZ2Shell.FlashAnimationResize(arg, resolution);
+                                Sen.Shell.LotusModule.FlashAnimationResize(arg, resolution);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.FlashAnimationResizeError(`${(error as any).message}`, arg);
                             }
@@ -2063,7 +2063,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.PopCapZlibCompress(argument, use_64bit_variant, output_argument.argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.BEST_COMPRESSION);
+                            Sen.Shell.LotusModule.PopCapZlibCompress(argument, use_64bit_variant, output_argument.argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.BEST_COMPRESSION);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -2092,7 +2092,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.PopCapZlibCompress(arg, use_64bit_variant, output_argument.argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.BEST_COMPRESSION);
+                                Sen.Shell.LotusModule.PopCapZlibCompress(arg, use_64bit_variant, output_argument.argument, Sen.Script.Modules.Compression.Constraints.ZlibLevel.BEST_COMPRESSION);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }
@@ -2492,7 +2492,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.PopCapZlibUncompress(argument, use_64bit_variant, output_argument.argument);
+                            Sen.Shell.LotusModule.PopCapZlibUncompress(argument, use_64bit_variant, output_argument.argument);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -2521,7 +2521,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.PopCapZlibUncompress(arg, use_64bit_variant, output_argument.argument);
+                                Sen.Shell.LotusModule.PopCapZlibUncompress(arg, use_64bit_variant, output_argument.argument);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }
@@ -2571,7 +2571,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.CreateRSBPatch(argument, rsb_after_file, output_argument.argument);
+                            Sen.Shell.LotusModule.CreateRSBPatch(argument, rsb_after_file, output_argument.argument);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -2589,7 +2589,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.CreateRSBPatch(arg, rsb_after_file, output_argument.argument);
+                                Sen.Shell.LotusModule.CreateRSBPatch(arg, rsb_after_file, output_argument.argument);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }
@@ -2609,7 +2609,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         try {
-                            Sen.Shell.PvZ2Shell.ApplyRSBPatch(argument, rsbpatch_filepath, output_argument.argument);
+                            Sen.Shell.LotusModule.ApplyRSBPatch(argument, rsbpatch_filepath, output_argument.argument);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -2625,7 +2625,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             try {
-                                Sen.Shell.PvZ2Shell.ApplyRSBPatch(arg, rsbpatch_filepath, output_argument.argument);
+                                Sen.Shell.LotusModule.ApplyRSBPatch(arg, rsbpatch_filepath, output_argument.argument);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }
@@ -2645,7 +2645,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         try {
-                            Sen.Shell.PvZ2Shell.ApplyRSBPatch(argument, newfile, output_argument.argument);
+                            Sen.Shell.LotusModule.ApplyRSBPatch(argument, newfile, output_argument.argument);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -2661,7 +2661,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             try {
-                                Sen.Shell.PvZ2Shell.ApplyRSBPatch(arg, newfile, output_argument.argument);
+                                Sen.Shell.LotusModule.ApplyRSBPatch(arg, newfile, output_argument.argument);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }
@@ -2783,7 +2783,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         try {
-                            Sen.Shell.PvZ2Shell.ApplyRSBPatch(argument, newfile, output_argument.argument);
+                            Sen.Shell.LotusModule.ApplyRSBPatch(argument, newfile, output_argument.argument);
                         } catch (error: unknown) {
                             throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), argument);
                         }
@@ -2799,7 +2799,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             try {
-                                Sen.Shell.PvZ2Shell.ApplyRSBPatch(arg, newfile, output_argument.argument);
+                                Sen.Shell.LotusModule.ApplyRSBPatch(arg, newfile, output_argument.argument);
                             } catch (error: unknown) {
                                 throw new Sen.Script.Modules.Exceptions.RuntimeError(Sen.Script.Modules.System.Default.Localization.GetString((error as any).message), arg);
                             }

@@ -252,7 +252,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB {
             const subgroups: Array<string> = Object.keys(append[composite_shell].subgroup);
             subgroups.forEach((subgroup: string) => {
                 const rsg_original: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.import_bundle, `packet`, `${subgroup}.rsg`));
-                switch (Sen.Shell.PvZ2Shell.IsPopCapRSG(rsg_original)) {
+                switch (Sen.Shell.LotusModule.IsPopCapRSG(rsg_original)) {
                     case Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGAbnormal.Header: {
                         Sen.Script.Modules.Executable.PvZ2.ImportSubgroupFromRSB.ConvertAbnormalRSG(rsg_original, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.current_bundle, `packet`, `${subgroup}.rsg`)));
                         break;

@@ -247,7 +247,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("please_wait_for_few_minutes_to_finish_conversion"));
         Sen.Script.Modules.FileSystem.Json.WriteJson<Record<string, [bigint, bigint]>>(
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `anim.json`)),
-            Sen.Shell.PvZ2Shell.GenerateImageSequence(file_input, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `frames`)), media_path, setting),
+            Sen.Shell.LotusModule.GenerateImageSequence(file_input, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(out_folder, `frames`)), media_path, setting),
             false
         );
         switch (BigInt(setting.output_animation_render)) {

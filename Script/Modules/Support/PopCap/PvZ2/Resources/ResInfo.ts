@@ -342,7 +342,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
          */
 
         public static CreateConversion<Required_Template extends Resources_Group_Structure_Template, Res_JSON_Structure extends res_json>(file_input: string, output_file: string, expand_path: "array" | "string"): void {
-            Sen.Shell.PvZ2Shell.ConvertResourceGroupToResInfo(Sen.Script.Modules.FileSystem.Json.ReadJson(file_input), expand_path === "array" ? ExpandPath.Array : ExpandPath.String, output_file);
+            Sen.Shell.LotusModule.ConvertResourceGroupToResInfo(Sen.Script.Modules.FileSystem.Json.ReadJson(file_input), expand_path === "array" ? ExpandPath.Array : ExpandPath.String, output_file);
             return;
         }
     }
@@ -538,7 +538,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
          */
 
         public static CreateConversion(file_input: string, output_file: string): void {
-            Sen.Shell.PvZ2Shell.ConvertResInfoToResourceGroup(output_file, file_input);
+            Sen.Shell.LotusModule.ConvertResInfoToResourceGroup(output_file, file_input);
             return;
         }
     }

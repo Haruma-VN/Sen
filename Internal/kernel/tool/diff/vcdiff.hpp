@@ -5,7 +5,7 @@
 #include "../../dependencies/open_vcdiff/google/output_string.h"
 #include "../../kernel/utility/exception/common.hpp"
 
-namespace Sen::Internal::Kernel::Tool::Diff::VcDiff {
+namespace Sen::Internal::Kernel::Tool::Diff::VCDiff {
 
      inline auto encode(
         const std::vector<char>& dictionary,

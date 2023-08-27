@@ -15,7 +15,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
             .reduce((k1: Array<string>, k2: Array<string>) => k1.concat(k2), [])
             .map((e: string) => Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(rsb_dir, `packet`, `${e}.rsg`)));
         rsgs.forEach((rsg: string) => {
-            Sen.Shell.PvZ2Shell.RSGUnpack(rsg, out_dir, false);
+            Sen.Shell.LotusModule.RSGUnpack(rsg, out_dir, false);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("now_processing_rsg"));
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
         });
@@ -225,7 +225,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
         if (rsb_packing_option.use_convert) {
         }
         if (use_high_thread) {
-            const async_tasks: Array<Sen.Shell.PvZ2Shell.RSGPackTemplate> = new Array<Sen.Shell.PvZ2Shell.RSGPackTemplate>();
+            const async_tasks: Array<Sen.Shell.LotusModule.RSGPackTemplate> = new Array<Sen.Shell.LotusModule.RSGPackTemplate>();
             converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
                 group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
                     const rsg: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`));
@@ -239,12 +239,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                     Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
                 });
             });
-            Sen.Shell.PvZ2Shell.RSGPackAsync(...async_tasks);
+            Sen.Shell.LotusModule.RSGPackAsync(...async_tasks);
         } else {
             converted_manifest_for_shell.group.forEach((group: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.GroupInfo) => {
-                const async_tasks: Array<Sen.Shell.PvZ2Shell.RSGPackTemplate> = new Array<Sen.Shell.PvZ2Shell.RSGPackTemplate>();
+                const async_tasks: Array<Sen.Shell.LotusModule.RSGPackTemplate> = new Array<Sen.Shell.LotusModule.RSGPackTemplate>();
                 // group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
-                //     Sen.Shell.PvZ2Shell.RSGPack(`${unpack_directory}`, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`)), subgroup.packet_info, false);
+                //     Sen.Shell.LotusModule.RSGPack(`${unpack_directory}`, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`)), subgroup.packet_info, false);
                 // });
                 group.subgroup.forEach((subgroup: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SubGroupInfo) => {
                     const rsg: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${packet_directory}`, `${subgroup.name_packet}.rsg`));
@@ -257,7 +257,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Resource {
                     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("rsg_pack_as_result"));
                     Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${rsg}`);
                 });
-                Sen.Shell.PvZ2Shell.RSGPackAsync(...async_tasks);
+                Sen.Shell.LotusModule.RSGPackAsync(...async_tasks);
             });
         }
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(rsb_packing_option.bundle_path, rsb_packing_option.rsb_output);

@@ -567,8 +567,8 @@ const char* VCDiffEncode(
         after_t
     );
     data_size = encoded_data.size();
-    auto array = Sen::Internal::Kernel::Utility::Array::convert_vector_to_array(encoded_data);
-    return array;
+    auto c = encoded_data.data();
+    return c;
 }
 
 InternalAPI
@@ -587,5 +587,6 @@ const char* VCDiffDecode(
         patch_t
     );
     after_size = decoded_data.size();
-    return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array(decoded_data);
+    auto c = decoded_data.data();
+    return c;
 }

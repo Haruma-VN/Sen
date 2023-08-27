@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Encodings.Web;
+using Sen.Shell.Modules.Internal;
 using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Standards
@@ -34,28 +35,28 @@ namespace Sen.Shell.Modules.Standards
 
         public override unsafe string OpenFileDialog(string title, string[] filter)
         {
-            IntPtr k_ptr = SenAPI.OpenFileDialog(title, filter.Length, filter);
+            IntPtr k_ptr = LotusAPI.OpenFileDialog(title, filter.Length, filter);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
         }
 
         public override unsafe string[] OpenMultipleFileDialog(string title, string[] filter)
         {
-            IntPtr k_ptr = SenAPI.OpenMultipleFileDialog(title, filter.Length, filter);
+            IntPtr k_ptr = LotusAPI.OpenMultipleFileDialog(title, filter.Length, filter);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m.Split('|');
         }
 
         public override unsafe string OpenDirectoryDialog(string title)
         {
-            var k_ptr = SenAPI.OpenDirectoryDialog(title);
+            var k_ptr = LotusAPI.OpenDirectoryDialog(title);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
         }
 
         public override unsafe string SaveFileDialog(string title, string[] filter)
         {
-            var k_ptr = SenAPI.SaveFileDialog(title, filter.Length, filter);
+            var k_ptr = LotusAPI.SaveFileDialog(title, filter.Length, filter);
             var m = Marshal.PtrToStringUTF8(k_ptr)!;
             return m;
         }
