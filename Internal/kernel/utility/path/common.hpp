@@ -220,22 +220,6 @@ namespace Sen::Internal::Kernel::Utility::Path
 			parent_directories(path)
 		);
 	}
-	
-	inline auto join(
-		Size size,
-		std::string...
-	) -> std::string
-	{
-		va_list args;
-		auto n = std::string{ "" };
-		va_start(args, size);
-		for (auto i = 0; i < size; ++i) {
-			auto & value = va_arg(args, std::string);
-			n = ss::join({n, value}, slash);
-		}
-		va_end(args);
-		return n;
-	}
 
 	inline auto join(
 		const std::vector<std::string>& paths

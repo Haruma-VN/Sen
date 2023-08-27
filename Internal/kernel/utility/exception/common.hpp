@@ -9,7 +9,7 @@
 
 #if _WIN32
 #include <windows.h>
-#endif;
+#endif
 
 namespace Sen::Internal::Kernel::Utility::Exception {
 

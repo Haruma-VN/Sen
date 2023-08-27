@@ -2,7 +2,7 @@ project(
 	rg_etc1
 	VERSION 0 # none
 	HOMEPAGE_URL https://github.com/richgel999/rg-etc1
-	LANGUAGES CXX
+	LANGUAGES C CXX
 )
 
 add_library(

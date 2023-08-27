@@ -2,13 +2,15 @@ project(
 	etcpak
 	VERSION 1.0.0
 	HOMEPAGE_URL https://github.com/wolfpld/etcpak
-	LANGUAGES CXX
+	LANGUAGES C CXX
 )
 
 add_library(
 	${PROJECT_NAME} STATIC
 	./lz4/lz4.h
+	./lz4/lz4.c
 	./getopt/getopt.h
+	./getopt/getopt.c
 	./Bitmap.hpp
 	./BitmapDownsampled.hpp
 	./BlockData.hpp
@@ -30,8 +32,6 @@ add_library(
 	./TaskDispatch.hpp
 	./Timing.hpp
 	./Vector.hpp
-	./lz4/lz4.c
-	./getopt/getopt.c
 	./Bitmap.cpp
 	./BitmapDownsampled.cpp
 	./BlockData.cpp

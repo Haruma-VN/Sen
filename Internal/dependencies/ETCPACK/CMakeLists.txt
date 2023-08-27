@@ -2,7 +2,7 @@ project(
 	ETCPACK
 	VERSION 2.74
 	HOMEPAGE_URL https://github.com/Ericsson/ETCPACK
-	LANGUAGES CXX
+	LANGUAGES C CXX
 )
 
 add_library(

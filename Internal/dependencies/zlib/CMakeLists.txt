@@ -35,4 +35,9 @@ add_library(
 	./zutil.c
 )
 
+if(UNIX OR APPLE OR ANDROID)
+    add_definitions(-DZ_HAVE_UNISTD_H -D_LARGEFILE64_SOURCE=1)
+endif()
+
+
 set_target_properties(zlib PROPERTIES POSITION_INDEPENDENT_CODE ON)

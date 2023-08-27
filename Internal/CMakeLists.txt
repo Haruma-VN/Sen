@@ -3,7 +3,7 @@ project(
   Internal
   VERSION 4
   HOMEPAGE_URL https://github.com/Haruma-VN/Sen
-  LANGUAGES CXX
+  LANGUAGES C CXX
 )
 
 # Enable Hot Reload for MSVC compilers if supported.
@@ -37,10 +37,10 @@ add_subdirectory("./dependencies/zlib")
 add_subdirectory("./dependencies/ETCPACK")
 add_subdirectory("./dependencies/rg_etc1")
 add_subdirectory("./dependencies/libpng")
-add_subdirectory("./dependencies/etcpak")
 add_subdirectory("./dependencies/lzma")
 add_subdirectory("./dependencies/bzip2")
 add_subdirectory("./dependencies/open_vcdiff")
+add_subdirectory("./dependencies/etcpak")
 
 # tinyfiledialogs link
 
