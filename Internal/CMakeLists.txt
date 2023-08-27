@@ -35,6 +35,9 @@ add_library(
   "./Internal.cpp"
 )
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Add dependencies
 add_subdirectory("./dependencies/zlib")
 add_subdirectory("./dependencies/ETCPACK")
