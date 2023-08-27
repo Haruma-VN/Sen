@@ -132,8 +132,8 @@ UnsignedByteStream GZipUncompress(
             throw_line("Failed to initialize zlib stream");
         }
         auto uncompressed_data = std::vector<uint8_t>{};
-        std::vector<uint8_t> buffer(1024);
-        int result;
+        auto buffer = std::vector<uint8_t>(1024);
+        auto result = int{};
         do {
             stream.avail_out = buffer.size();
             stream.next_out = buffer.data();
@@ -141,7 +141,7 @@ UnsignedByteStream GZipUncompress(
             if (result == Z_STREAM_ERROR || result == Z_NEED_DICT || result == Z_DATA_ERROR || result == Z_MEM_ERROR) {
                 throw_line("Failed to uncompress data");
             }
-            size_t bytes_written = buffer.size() - stream.avail_out;
+            auto bytes_written = buffer.size() - stream.avail_out;
             uncompressed_data.insert(uncompressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
         } while (result != Z_STREAM_END);
         inflateEnd(&stream);
@@ -581,14 +581,22 @@ void* VCDiffEncode(
     size_t &data_size
 )
 {
-    auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
-    auto after_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(after, after_size);
-    auto encoded_data = Sen::Internal::Kernel::Tool::Diff::VCDiff::encode(
-        before_t,
-        after_t
-    );
-    data_size = encoded_data.size();
-    return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<char>(encoded_data);
+    try
+    {
+        auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
+        auto after_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(after, after_size);
+        auto encoded_data = Sen::Internal::Kernel::Tool::Diff::VCDiff::encode(
+            before_t,
+            after_t
+        );
+        data_size = encoded_data.size();
+        return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<char>(encoded_data);
+    }
+    catch (const std::exception& e)
+    {
+        log(e.what());
+        throw 0;
+    }
 }
 
 InternalAPI
@@ -600,12 +608,20 @@ void* VCDiffDecode(
     size_t &after_size
 )
 {
-    auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
-    auto patch_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(patch, patch_size);
-    auto decoded_data = Sen::Internal::Kernel::Tool::Diff::VCDiff::decode(
-        before_t,
-        patch_t
-    );
-    after_size = decoded_data.size();
-    return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<char>(decoded_data);
+    try
+    {
+        auto before_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(before, before_size);
+        auto patch_t = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(patch, patch_size);
+        auto decoded_data = Sen::Internal::Kernel::Tool::Diff::VCDiff::decode(
+            before_t,
+            patch_t
+        );
+        after_size = decoded_data.size();
+        return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<char>(decoded_data);
+    }
+    catch (const std::exception& e)
+    {
+        log(e.what());
+        throw 0;
+    }
 }

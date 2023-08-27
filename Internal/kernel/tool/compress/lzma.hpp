@@ -15,7 +15,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
         std::string& res
     ) -> bool
     {
-        std::string strTmp(&vecByte[0], &vecByte[0] + vecByte.size());
+        auto strTmp = std::string(&vecByte[0], &vecByte[0] + vecByte.size());
         res = strTmp;
         return true;
     }
@@ -31,7 +31,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
 
     inline auto compress_lzma(
         const ByteVector& vecIn, 
-         ByteVector& vecOut
+        ByteVector& vecOut
     ) -> void {
         auto propsSize = (size_t)LZMA_PROPS_SIZE;
         auto destLen = vecIn.size() + vecIn.size() / 3 + 128;
@@ -53,9 +53,9 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
     ) -> void {
         auto iLZMA_PROPS_SIZE = LZMA_PROPS_SIZE;
         vecOut.resize(vecIn.size() * 10);
-        size_t dstLen = vecOut.size();
-        size_t srcLen = vecIn.size() - iLZMA_PROPS_SIZE;
-        SRes res = LzmaUncompress(
+        auto dstLen = vecOut.size();
+        auto srcLen = vecIn.size() - iLZMA_PROPS_SIZE;
+        auto res = LzmaUncompress(
             &vecOut[0], &dstLen,
             &vecIn[iLZMA_PROPS_SIZE], &srcLen,
             &vecIn[0], iLZMA_PROPS_SIZE);

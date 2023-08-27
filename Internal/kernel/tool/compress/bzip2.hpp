@@ -20,8 +20,8 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             throw_line("Failed to initialize bzlib stream");
         }
         auto compressed_data = std::vector<char>{};
-        std::vector<char> buffer(1024);
-        int result;
+        auto buffer = std::vector<char>(1024);
+        auto result = int{};
         do {
             stream.avail_out = buffer.size();
             stream.next_out = buffer.data();
@@ -29,7 +29,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             if (result == BZ_SEQUENCE_ERROR || result == BZ_PARAM_ERROR || result == BZ_MEM_ERROR || result == BZ_DATA_ERROR) {
                 throw_line("Failed to compress data");
             }
-            size_t bytes_written = buffer.size() - stream.avail_out;
+            auto bytes_written = buffer.size() - stream.avail_out;
             compressed_data.insert(compressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
         } while (result != BZ_STREAM_END);
         BZ2_bzCompressEnd(&stream);
@@ -49,8 +49,8 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             throw_line("Failed to initialize bzlib stream");
         }
         auto uncompressed_data = std::vector<char>{};
-        std::vector<char> buffer(1024);
-        int result;
+        auto buffer = std::vector<char>(1024);
+        auto result = int{};
         do {
             stream.avail_out = buffer.size();
             stream.next_out = buffer.data();
@@ -58,7 +58,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             if (result == BZ_SEQUENCE_ERROR || result == BZ_PARAM_ERROR || result == BZ_MEM_ERROR || result == BZ_DATA_ERROR) {
                 throw_line("Failed to uncompress data");
             }
-            size_t bytes_written = buffer.size() - stream.avail_out;
+            auto bytes_written = buffer.size() - stream.avail_out;
             uncompressed_data.insert(uncompressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
         } while (result != BZ_STREAM_END);
         BZ2_bzDecompressEnd(&stream);

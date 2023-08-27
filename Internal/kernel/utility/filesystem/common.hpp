@@ -40,7 +40,7 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		String data
 	) -> Void 
 	{
-		OutFile file(filepath, ios::out);
+		auto file = OutFile(filepath, ios::out);
 		file << data;
 		file.close();
 		return;
@@ -53,7 +53,7 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		String data
 	) -> Void
 	{
-		OutFile file(filepath, ios::out);
+		auto file = OutFile(filepath, ios::out);
 		file << data;
 		file.close();
 		return;
@@ -65,9 +65,9 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		WString filepath
 	) -> String 
 	{
-		InFile file(filepath, ios::in);
-		String line;
-		String data;
+		auto file = InFile(filepath, ios::in);
+		auto line = String{};
+		auto data = String{};
 		while(getline(file, line)){
 			data += line;
 		}
@@ -81,9 +81,9 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		String filepath
 	) -> String
 	{
-		InFile file(filepath, ios::in);
-		String line;
-		String data;
+		auto file = InFile(filepath, ios::in);
+		auto line = String{};
+		auto data = String{};
 		while (getline(file, line)) {
 			data += line;
 		}
@@ -186,7 +186,7 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 	inline auto read_buffer(
 		const std::string& filename
 	) -> std::vector<unsigned char> {
-		InFile file(filename, std::ios::binary | std::ios::ate);
+		auto file = InFile(filename, std::ios::binary | std::ios::ate);
 		auto size = file.tellg();
 		file.seekg(0, std::ios::beg);
 		std::vector<unsigned char> buffer(size);
@@ -198,7 +198,7 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		const CharPtr filename, 
 		const std::vector<T>& buffer
 	) -> Void {
-		if (std::FILE* f = std::fopen(filename, "wb")) {
+		if (auto f = std::fopen(filename, "wb")) {
 			std::fwrite(buffer.data(), sizeof(T), buffer.size(), f);
 			std::fclose(f);
 		}

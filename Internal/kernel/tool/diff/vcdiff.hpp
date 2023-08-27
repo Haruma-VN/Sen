@@ -5,9 +5,10 @@
 #include "dependencies/open_vcdiff/google/vcdecoder.h"
 #include "dependencies/open_vcdiff/google/vcencoder.h"
 #include "dependencies/open_vcdiff/google/output_string.h"
-#include "kernel/utility/exception/common.hpp"
+#include "kernel/utility/utility.hpp"
 
-namespace Sen::Internal::Kernel::Tool::Diff::VCDiff {
+namespace Sen::Internal::Kernel::Tool::Diff::VCDiff 
+{
 
      inline auto encode(
         const std::vector<char>& dictionary,
@@ -35,4 +36,5 @@ namespace Sen::Internal::Kernel::Tool::Diff::VCDiff {
          }
          return std::vector<char>(target.data(), target.data() + target.size());
      }
+
 }

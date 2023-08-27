@@ -227,7 +227,7 @@ namespace Sen::Internal::Kernel::Utility::Path
 	) -> std::string
 	{
 		va_list args;
-		std::string n = "";
+		auto n = std::string{ "" };
 		va_start(args, size);
 		for (auto i = 0; i < size; ++i) {
 			auto & value = va_arg(args, std::string);
