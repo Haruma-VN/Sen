@@ -1,14 +1,15 @@
 project(
-	rg_etc1
-	VERSION 0 # none
-	HOMEPAGE_URL https://github.com/richgel999/rg-etc1
-	LANGUAGES C CXX
+	tinyxml2
+	VERSION 9.0.0
+	HOMEPAGE_URL https://github.com/leethomason/tinyxml2
+	LANGUAGES CXX C
 )
 
 add_library(
 	${PROJECT_NAME} STATIC
-	./rg_etc1.h
-	./rg_etc1.cpp
+	./tinyxml2.h
+	./tinyxml2.cpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+

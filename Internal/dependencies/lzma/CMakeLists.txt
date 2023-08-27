@@ -30,4 +30,4 @@ add_library(
 	./Threads.c
 )
 
-set_target_properties(lzma PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)

@@ -19,10 +19,7 @@ add_definitions(-w)
 
 # Add source to this project's shared library.
 add_library(
-  Internal SHARED 
-  "./dependencies/avir/avir.h"
-  "./dependencies/json/json.hpp"
-  "./dependencies/json/json_fwd.hpp"
+  Internal SHARED
   "./kernel/tool/compress/bzip2.hpp"
   "./kernel/tool/compress/lzma.hpp"
   "./kernel/utility/string/common.hpp"
@@ -42,6 +39,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add dependencies
+add_subdirectory("./dependencies/avir")
+add_subdirectory("./dependencies/json")
 add_subdirectory("./dependencies/zlib")
 add_subdirectory("./dependencies/ETCPACK")
 add_subdirectory("./dependencies/rg_etc1")
@@ -50,6 +49,7 @@ add_subdirectory("./dependencies/lzma")
 add_subdirectory("./dependencies/bzip2")
 add_subdirectory("./dependencies/open_vcdiff")
 add_subdirectory("./dependencies/etcpak")
+add_subdirectory("./dependencies/tinyxml2")
 
 # tinyfiledialogs link
 
@@ -83,6 +83,7 @@ target_link_libraries(
   lzma
   bzip2
   open_vcdiff
+  avir
 )
 
 # symbol visibility

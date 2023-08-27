@@ -53,4 +53,4 @@ target_link_libraries(
 	zlib
 )
 
-set_target_properties(open_vcdiff PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)

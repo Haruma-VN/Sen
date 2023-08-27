@@ -11,4 +11,4 @@ add_library(
 	./tinyfiledialogs.c
 )
 
-set_target_properties(tinyfiledialogs PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)

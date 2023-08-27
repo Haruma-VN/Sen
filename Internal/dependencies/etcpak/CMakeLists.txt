@@ -5,9 +5,6 @@ project(
 	LANGUAGES C CXX
 )
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 
 add_library(
 	${PROJECT_NAME} STATIC
@@ -74,4 +71,4 @@ target_link_libraries(
 	libpng
 )
 
-set_target_properties(etcpak PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
