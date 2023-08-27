@@ -1,6 +1,6 @@
 project(
 	lzma
-	HOMEPAGE_URL https://sourceware.org/bzip2
+	HOMEPAGE_URL https://github.com/mcmilk/7-Zip-zstd
 	LANGUAGES C
 )
 
