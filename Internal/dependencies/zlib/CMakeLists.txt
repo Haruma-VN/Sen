@@ -37,8 +37,8 @@ add_library(
 
 if(UNIX OR APPLE OR ANDROID)
     add_definitions(
-		${PROJECT_NAME} PRIVATE
-		Z_HAVE_UNISTD_H
+		-DZ_HAVE_UNISTD_H 
+		-D_LARGEFILE64_SOURCE=1
 	)
 endif()
 
