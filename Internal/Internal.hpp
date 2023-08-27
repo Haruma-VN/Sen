@@ -38,13 +38,13 @@ inline constexpr auto MInternalVersion = 4;
 #endif
 
 
-#include "dependencies/zlib/zlib.h"
-#include "dependencies/rg_etc1/rg_etc1.h"
-#include "dependencies/rg_etc1/rg_etc1.cpp"
-#include "dependencies/libpng/png.h"
-#include "dependencies/avir/avir.h"
-#include "dependencies/bzip2/bzlib.h"
-#include "dependencies/etcpak/ProcessRGB.hpp"
+#include "../../dependencies/zlib/zlib.h"
+#include "../../dependencies/rg_etc1/rg_etc1.h"
+#include "../../dependencies/rg_etc1/rg_etc1.cpp"
+#include "../../dependencies/libpng/png.h"
+#include "../../dependencies/avir/avir.h"
+#include "../../dependencies/bzip2/bzlib.h"
+#include "../../dependencies/etcpak/ProcessRGB.hpp"
 
 
 #include "kernel/utility/utility.hpp"

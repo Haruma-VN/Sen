@@ -5,8 +5,8 @@
 #include <string.h>
 #include <iostream>
 #include <filesystem>
-#include "kernel/utility/string/common.hpp"
-#include "kernel/utility/path/common.hpp"
+#include "../../kernel/utility/string/common.hpp"
+#include "../../kernel/utility/path/common.hpp"
 
 namespace Sen::Internal::Kernel::Utility::FileSystem
 {

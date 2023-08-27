@@ -61,9 +61,6 @@ elseif(WIN32)
     set(CMAKE_CXX_COMPILER "cl.exe")
 endif()
 
-
-include_directories(kernel dependencies)
-
 # Link against dependencies
 target_link_libraries(
   Internal PUBLIC 
