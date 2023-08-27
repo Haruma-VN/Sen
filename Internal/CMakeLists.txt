@@ -50,10 +50,18 @@ endif()
 
 if(APPLE)
     target_compile_options(Internal PRIVATE -Wno-implicit-function-declaration)
+    set(CMAKE_C_COMPILER "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang")
+    set(CMAKE_CXX_COMPILER "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++")
+elseif(UNIX AND NOT APPLE)
+    set(CMAKE_C_COMPILER "clang")
+    set(CMAKE_CXX_COMPILER "clang++")
+elseif(WIN32)
+    set(CMAKE_C_COMPILER "cl.exe")
+    set(CMAKE_CXX_COMPILER "cl.exe")
 endif()
 
-include_directories(kernel dependencies)
 
+include_directories(kernel dependencies)
 
 # Link against dependencies
 target_link_libraries(
