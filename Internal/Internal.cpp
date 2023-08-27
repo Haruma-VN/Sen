@@ -552,7 +552,7 @@ Void SendMessageBox(
 #endif
 
 InternalAPI
-const char* VCDiffEncode(
+void* VCDiffEncode(
     char* before,
     size_t before_size,
     char* after,
@@ -572,7 +572,7 @@ const char* VCDiffEncode(
 }
 
 InternalAPI
-const char* VCDiffDecode(
+void* VCDiffDecode(
     char* before,
     size_t before_size,
     char* patch,

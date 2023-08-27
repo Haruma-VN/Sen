@@ -45,12 +45,9 @@ inline constexpr auto MInternalVersion = 4;
 #include "dependencies/avir/avir.h"
 #include "dependencies/bzip2/bzlib.h"
 #include "dependencies/etcpak/ProcessRGB.hpp"
-#include "dependencies/open_vcdiff/google/vcencoder.h"
-#include "dependencies/open_vcdiff/google/vcdecoder.h"
 
 
 #include "kernel/utility/utility.hpp"
-#include "kernel/tool/diff/vcdiff.hpp"
 
 #pragma endregion
 

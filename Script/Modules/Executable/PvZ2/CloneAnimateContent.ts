@@ -1,5 +1,16 @@
 namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
+    /**
+     * M Structure
+     */
+
     export class Clone {
+        /**
+         *
+         * @param xfl_path - XFL Directory
+         * @param resolution - Resolution
+         * @returns
+         */
+
         public constructor(private xfl_path: string, private resolution: int) {
             return;
         }

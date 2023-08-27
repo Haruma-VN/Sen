@@ -2,7 +2,7 @@
 
 #include <filesystem>
 #include <cstdarg>
-#include "../../kernel/utility/string/common.hpp"
+#include "kernel/utility/string/common.hpp"
 
 namespace Sen::Internal::Kernel::Utility::Path
 {

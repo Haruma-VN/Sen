@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../bzip2/bzlib.h"
+#include "dependencies/bzip2/bzlib.h"
 
 namespace Sen::Internal::Kernel::Tool::Compress::Bzip2 
 {

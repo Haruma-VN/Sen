@@ -1,7 +1,7 @@
 project(
 	open_vcdiff
-	VERSION 1.0.8
-	HOMEPAGE_URL https://sourceware.org/bzip2
+	VERSION 0.8.4
+	HOMEPAGE_URL https://github.com/google/open-vcdiff
 	LANGUAGES C
 )
 

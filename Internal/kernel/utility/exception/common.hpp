@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <regex>
-#include "../../kernel/utility/string/common.hpp"
+#include "kernel/utility/string/common.hpp"
 
 #if _WIN32
 #include <windows.h>

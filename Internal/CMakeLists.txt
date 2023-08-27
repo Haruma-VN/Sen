@@ -20,12 +20,12 @@ add_library(
   "./dependencies/json/json_fwd.hpp"
   "./kernel/tool/compress/bzip2.hpp"
   "./kernel/tool/compress/lzma.hpp"
-  "./kernel/tool/diff/vcdiff.hpp"
   "./kernel/utility/string/common.hpp"
   "./kernel/utility/array/common.hpp"
   "./kernel/utility/path/common.hpp"
   "./kernel/utility/filesystem/common.hpp"
   "./kernel/utility/exception/common.hpp"
+  "./kernel/tool/diff/vcdiff.hpp"
   "./kernel/utility/utility.hpp"
   "./Internal.hpp"
   "./Internal.cpp"
@@ -51,6 +51,9 @@ endif()
 if(APPLE)
     target_compile_options(Internal PRIVATE -Wno-implicit-function-declaration)
 endif()
+
+include_directories(kernel dependencies)
+
 
 # Link against dependencies
 target_link_libraries(

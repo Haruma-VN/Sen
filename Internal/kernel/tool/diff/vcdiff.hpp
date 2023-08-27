@@ -1,9 +1,11 @@
+#pragma once
+
 #include <vector>
 #include <string>
-#include "../../dependencies/open_vcdiff/google/vcdecoder.h"
-#include "../../dependencies/open_vcdiff/google/vcencoder.h"
-#include "../../dependencies/open_vcdiff/google/output_string.h"
-#include "../../kernel/utility/exception/common.hpp"
+#include "dependencies/open_vcdiff/google/vcdecoder.h"
+#include "dependencies/open_vcdiff/google/vcencoder.h"
+#include "dependencies/open_vcdiff/google/output_string.h"
+#include "kernel/utility/exception/common.hpp"
 
 namespace Sen::Internal::Kernel::Tool::Diff::VCDiff {
 
