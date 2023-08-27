@@ -35,7 +35,7 @@ Void ZlibUncompress(
 ) {
     try
     {
-        z_stream strm{};
+        auto strm = z_stream{};
         strm.zalloc = Z_NULL;
         strm.zfree = Z_NULL;
         strm.opaque = Z_NULL;
@@ -48,8 +48,8 @@ Void ZlibUncompress(
             throw_line("Uncompress zlib failed");
             return;
         }
-        std::vector<Uint8Array> outBuffer(32768);
-        std::vector<Uint8Array> uncompressedVector;
+        auto outBuffer = std::vector<Uint8Array>(32768);
+        auto uncompressedVector = std::vector<Uint8Array>();
         do {
             strm.avail_out = outBuffer.size();
             strm.next_out = (FloatByte*)outBuffer.data();
@@ -89,7 +89,7 @@ UnsignedByteStream GZipCompress(
             throw_line("Failed to initialize zlib stream");
         }
         auto compressed_data = std::vector<uint8_t>{};
-        std::vector<uint8_t> buffer(1024);
+        auto buffer = std::vector<uint8_t>(1024);
         int result;
         do {
             stream.avail_out = buffer.size();
@@ -174,20 +174,16 @@ void DeflateCompress(
         strm.avail_in = inputSize;
         strm.next_in = (Bytef*)input;
 
-        int ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
-        if (ret != Z_OK)
-            return;
-
+        auto ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
+        if (ret != Z_OK){
+            throw_line("Deflate Compress failed");
+        }
         *outputSize = deflateBound(&strm, inputSize);
         *output = new char[*outputSize];
-
         strm.avail_out = *outputSize;
         strm.next_out = (Bytef*)*output;
-
         ret = deflate(&strm, Z_FINISH);
-
         deflateEnd(&strm);
-
         if (ret == Z_STREAM_END) {
             *outputSize = strm.total_out;
             *output = (char*)realloc(*output, *outputSize);
@@ -196,7 +192,7 @@ void DeflateCompress(
             delete[] * output;
             *output = nullptr;
             *outputSize = 0;
-            throw_line("Uncompress failed");
+            throw_line("Compress failed");
         }
     }
     catch (const std::exception& e)
@@ -237,46 +233,51 @@ Void DeflateUncompress(
     unsigned char** out, 
     int* out_len) 
 {
-    int ret;
-    unsigned have;
-    z_stream strm;
-    unsigned char out_buf[CHUNK];
-    int out_size = 0;
-
-    strm.zalloc = Z_NULL;
-    strm.zfree = Z_NULL;
-    strm.opaque = Z_NULL;
-    strm.avail_in = in_len;
-    strm.next_in = in;
-
-    ret = inflateInit2(&strm, -MAX_WBITS);
-    if (ret != Z_OK)
-        return;
-
-    do {
-        strm.avail_out = CHUNK;
-        strm.next_out = out_buf;
-        ret = inflate(&strm, Z_NO_FLUSH);
-        assert(ret != Z_STREAM_ERROR);
-        switch (ret) {
-        case Z_NEED_DICT:
-            ret = Z_DATA_ERROR;
-        case Z_DATA_ERROR:
-        case Z_MEM_ERROR:
-            (void)inflateEnd(&strm);
-            return;
+    try
+    {
+        auto ret = int{};
+        auto have = unsigned{};
+        auto strm = z_stream{};
+        unsigned char out_buf[CHUNK];
+        auto out_size = 0;
+        strm.zalloc = Z_NULL;
+        strm.zfree = Z_NULL;
+        strm.opaque = Z_NULL;
+        strm.avail_in = in_len;
+        strm.next_in = in;
+        ret = inflateInit2(&strm, -MAX_WBITS);
+        if (ret != Z_OK)
+        {
+            throw_line("Deflate Uncompress failed");
         }
-        have = CHUNK - strm.avail_out;
+        do {
+            strm.avail_out = CHUNK;
+            strm.next_out = out_buf;
+            ret = inflate(&strm, Z_NO_FLUSH);
+            assert(ret != Z_STREAM_ERROR);
+            switch (ret) {
+            case Z_NEED_DICT:
+                ret = Z_DATA_ERROR;
+            case Z_DATA_ERROR:
+            case Z_MEM_ERROR:
+                (void)inflateEnd(&strm);
+                return;
+            }
+            have = CHUNK - strm.avail_out;
+            *out = (unsigned char*)realloc(*out, out_size + have);
+            memcpy(*out + out_size, out_buf, have);
+            out_size += have;
+        } while (strm.avail_out == 0);
 
-        *out = (unsigned char*)realloc(*out, out_size + have);
-        memcpy(*out + out_size, out_buf, have);
-        out_size += have;
-
-    } while (strm.avail_out == 0);
-
-    (void)inflateEnd(&strm);
-
-    *out_len = out_size;
+        (void)inflateEnd(&strm);
+        *out_len = out_size;
+    }
+    catch(const std::exception& e)
+    {
+        log(e.what());
+        throw 0;
+    }
+    
     return;
 }
 
@@ -309,17 +310,25 @@ Void lzmaCompress(
     unsigned char** out, 
     size_t* out_len
 ) {
-    auto compressedData = std::vector<std::uint8_t>();
-    Sen::Internal::Kernel::Tool::Compress::lzma::compress_lzma(
-        Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
-        compressedData
-    );
-    auto m_vector = Sen::Internal::Kernel::Utility::Array::byte_list_to_unsigned_char_list(compressedData);
-    *out = (unsigned char*)Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<unsigned char>(
-        m_vector
-    );
-    *out_len = m_vector.size();
-    return;
+    try
+    {
+        auto compressedData = std::vector<std::uint8_t>();
+        Sen::Internal::Kernel::Tool::Compress::lzma::compress_lzma(
+            Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
+            compressedData
+        );
+        auto m_vector = Sen::Internal::Kernel::Utility::Array::byte_list_to_unsigned_char_list(compressedData);
+        *out = (unsigned char*)Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<unsigned char>(
+            m_vector
+        );
+        *out_len = m_vector.size();
+        return;
+    }
+    catch(const std::exception& e)
+    {
+        log(e.what());
+        throw 0;
+    }
 }
 
 
@@ -330,22 +339,32 @@ Void lzmaUncompress(
     unsigned char** out, 
     size_t* out_len
 ) {
-    auto uncompressedData = std::vector<std::uint8_t>();
-    Sen::Internal::Kernel::Tool::Compress::lzma::uncompress_lzma(
-        Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
-        uncompressedData
-    );
-    auto m_vector = Sen::Internal::Kernel::Utility::Array::byte_list_to_unsigned_char_list(uncompressedData);
-    *out = (unsigned char*)Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<unsigned char>(
-        m_vector
-    );
-    *out_len = m_vector.size();
-    return;
+    try
+    {
+        auto uncompressedData = std::vector<std::uint8_t>();
+        Sen::Internal::Kernel::Tool::Compress::lzma::uncompress_lzma(
+            Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(in, in_len),
+            uncompressedData
+        );
+        auto m_vector = Sen::Internal::Kernel::Utility::Array::byte_list_to_unsigned_char_list(uncompressedData);
+        *out = (unsigned char*)Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<unsigned char>(
+            m_vector
+        );
+        *out_len = m_vector.size();
+        return;
+    }
+    catch(const std::exception& e)
+    {
+        log(e.what());
+        throw 0;
+    }
 }
 
 
 InternalAPI
-Architecture GetProcessorArchitecture()
+Architecture GetProcessorArchitecture(
+
+)
 {
 #if defined(_WIN32)
     SYSTEM_INFO si;
@@ -390,7 +409,9 @@ Architecture GetProcessorArchitecture()
 }
 
 InternalAPI
-Integer InternalVersion()
+Integer InternalVersion(
+    
+)
 {
     return MInternalVersion;
 }
@@ -567,8 +588,7 @@ void* VCDiffEncode(
         after_t
     );
     data_size = encoded_data.size();
-    auto c = encoded_data.data();
-    return c;
+    return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<char>(encoded_data);
 }
 
 InternalAPI
@@ -587,6 +607,5 @@ void* VCDiffDecode(
         patch_t
     );
     after_size = decoded_data.size();
-    auto c = decoded_data.data();
-    return c;
+    return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array<char>(decoded_data);
 }

@@ -1,9 +1,10 @@
-﻿# CMakeList.txt : CMake project for Internal, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
-
-project(Internal)
+﻿cmake_minimum_required (VERSION 3.8)
+project(
+  Internal
+  VERSION 4
+  HOMEPAGE_URL https://github.com/Haruma-VN/Sen
+  LANGUAGES CXX
+)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
