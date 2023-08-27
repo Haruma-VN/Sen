@@ -5,6 +5,10 @@ project(
 	LANGUAGES C CXX
 )
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 add_library(
 	${PROJECT_NAME} STATIC
 	./lz4/lz4.h
