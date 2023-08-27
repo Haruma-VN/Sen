@@ -84,6 +84,8 @@ target_link_libraries(
   bzip2
   open_vcdiff
   avir
+  json
+  tinyxml2
 )
 
 # symbol visibility
