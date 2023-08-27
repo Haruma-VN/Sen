@@ -55,4 +55,4 @@ namespace Sen::Internal::Kernel::Utility::Exception {
 
 }
 
-#define throw_line(arg) throw Sen::Internal::Kernel::Utility::Exception::ExceptionX(arg, __FILE__, __LINE__);
+#define throw_exception(arg) throw Sen::Internal::Kernel::Utility::Exception::ExceptionX(arg, __FILE__, __LINE__);

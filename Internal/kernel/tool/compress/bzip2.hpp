@@ -17,7 +17,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
         stream.avail_in = data.size();
         stream.next_in = const_cast<char*>(data.data());
         if (BZ2_bzCompressInit(&stream, 9, 0, 0) != BZ_OK) {
-            throw_line("Failed to initialize bzlib stream");
+            throw_exception("Failed to initialize bzlib stream");
         }
         auto compressed_data = std::vector<char>{};
         auto buffer = std::vector<char>(1024);
@@ -27,7 +27,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             stream.next_out = buffer.data();
             result = BZ2_bzCompress(&stream, BZ_FINISH);
             if (result == BZ_SEQUENCE_ERROR || result == BZ_PARAM_ERROR || result == BZ_MEM_ERROR || result == BZ_DATA_ERROR) {
-                throw_line("Failed to compress data");
+                throw_exception("Failed to compress data");
             }
             auto bytes_written = buffer.size() - stream.avail_out;
             compressed_data.insert(compressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
@@ -46,7 +46,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
         stream.avail_in = data.size();
         stream.next_in = const_cast<char*>(data.data());
         if (BZ2_bzDecompressInit(&stream, 0, 0) != BZ_OK) {
-            throw_line("Failed to initialize bzlib stream");
+            throw_exception("Failed to initialize bzlib stream");
         }
         auto uncompressed_data = std::vector<char>{};
         auto buffer = std::vector<char>(1024);
@@ -56,7 +56,7 @@ namespace Sen::Internal::Kernel::Tool::Compress::Bzip2
             stream.next_out = buffer.data();
             result = BZ2_bzDecompress(&stream);
             if (result == BZ_SEQUENCE_ERROR || result == BZ_PARAM_ERROR || result == BZ_MEM_ERROR || result == BZ_DATA_ERROR) {
-                throw_line("Failed to uncompress data");
+                throw_exception("Failed to uncompress data");
             }
             auto bytes_written = buffer.size() - stream.avail_out;
             uncompressed_data.insert(uncompressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);

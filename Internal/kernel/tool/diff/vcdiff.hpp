@@ -18,7 +18,7 @@ namespace Sen::Internal::Kernel::Tool::Diff::VCDiff
          auto encoding = std::string{};
         auto encoder = open_vcdiff::VCDiffEncoder(dictionary.data(), dictionary.size());
         if (!encoder.Encode(target.data(), target.size(), &encoding)) {
-            throw_line("VCDiff Encode failed");
+            throw_exception("VCDiff Encode failed");
         }
         return std::vector<char>(encoding.begin(), encoding.end());
      }
@@ -32,7 +32,7 @@ namespace Sen::Internal::Kernel::Tool::Diff::VCDiff
          auto decoder = open_vcdiff::VCDiffStreamingDecoder();
          decoder.StartDecoding(dictionary.data(), dictionary.size());
          if (!decoder.DecodeChunk(delta.data(), delta.size(), &target)) {
-             throw_line("VCDiff Decode failed");
+             throw_exception("VCDiff Decode failed");
          }
          return std::vector<char>(target.data(), target.data() + target.size());
      }

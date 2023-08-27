@@ -14,7 +14,7 @@ UnsignedByteStream ZlibCompress(
         auto result = compress2(compressedData, &destSize, data, dataSize, level);
         if (result != Z_OK) {
             delete[] compressedData;
-            throw_line("Compression failed");
+            throw_exception("Compression failed");
         }
         compressedSize = destSize;
         return compressedData;
@@ -45,7 +45,7 @@ Void ZlibUncompress(
         if (ret != Z_OK) {
             *uncompressedData = nullptr;
             *uncompressedDataSize = 0;
-            throw_line("Uncompress zlib failed");
+            throw_exception("Uncompress zlib failed");
             return;
         }
         auto outBuffer = std::vector<Uint8Array>(32768);
@@ -86,7 +86,7 @@ UnsignedByteStream GZipCompress(
         stream.avail_in = data_size;
         stream.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(data));
         if (deflateInit2(&stream, Z_DEFAULT_COMPRESSION, Z_DEFLATED, 15 | 16, 8, Z_DEFAULT_STRATEGY) != Z_OK) {
-            throw_line("Failed to initialize zlib stream");
+            throw_exception("Failed to initialize zlib stream");
         }
         auto compressed_data = std::vector<uint8_t>{};
         auto buffer = std::vector<uint8_t>(1024);
@@ -96,7 +96,7 @@ UnsignedByteStream GZipCompress(
             stream.next_out = buffer.data();
             result = deflate(&stream, Z_FINISH);
             if (result == Z_STREAM_ERROR) {
-                throw_line("Failed to compress data");
+                throw_exception("Failed to compress data");
             }
             auto bytes_written = buffer.size() - stream.avail_out;
             compressed_data.insert(compressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
@@ -129,7 +129,7 @@ UnsignedByteStream GZipUncompress(
         stream.avail_in = data_size;
         stream.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(data));
         if (inflateInit2(&stream, 15 | 16) != Z_OK) {
-            throw_line("Failed to initialize zlib stream");
+            throw_exception("Failed to initialize zlib stream");
         }
         auto uncompressed_data = std::vector<uint8_t>{};
         auto buffer = std::vector<uint8_t>(1024);
@@ -139,7 +139,7 @@ UnsignedByteStream GZipUncompress(
             stream.next_out = buffer.data();
             result = inflate(&stream, Z_NO_FLUSH);
             if (result == Z_STREAM_ERROR || result == Z_NEED_DICT || result == Z_DATA_ERROR || result == Z_MEM_ERROR) {
-                throw_line("Failed to uncompress data");
+                throw_exception("Failed to uncompress data");
             }
             auto bytes_written = buffer.size() - stream.avail_out;
             uncompressed_data.insert(uncompressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
@@ -176,7 +176,7 @@ void DeflateCompress(
 
         auto ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
         if (ret != Z_OK){
-            throw_line("Deflate Compress failed");
+            throw_exception("Deflate Compress failed");
         }
         *outputSize = deflateBound(&strm, inputSize);
         *output = new char[*outputSize];
@@ -192,7 +192,7 @@ void DeflateCompress(
             delete[] * output;
             *output = nullptr;
             *outputSize = 0;
-            throw_line("Compress failed");
+            throw_exception("Compress failed");
         }
     }
     catch (const std::exception& e)
@@ -248,7 +248,7 @@ Void DeflateUncompress(
         ret = inflateInit2(&strm, -MAX_WBITS);
         if (ret != Z_OK)
         {
-            throw_line("Deflate Uncompress failed");
+            throw_exception("Deflate Uncompress failed");
         }
         do {
             strm.avail_out = CHUNK;
