@@ -15,7 +15,7 @@
 #ifndef OPEN_VCDIFF_LOGGING_H_
 #define OPEN_VCDIFF_LOGGING_H_
 
-#include "config.h"
+#include <config.h>
 #include <stdlib.h>  // exit
 #include <iostream>
 

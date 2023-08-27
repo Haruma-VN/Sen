@@ -7,14 +7,15 @@ project(
   LANGUAGES C CXX
 )
 
+# Disable Warning Log
+add_definitions(-w)
+
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-# Disable Warning Log
-add_definitions(-w)
 
 
 # Add source to this project's shared library.
@@ -33,14 +34,10 @@ add_library(
   "./Internal.cpp"
 )
 
-
-# C++ Standards
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # Add dependencies
 add_subdirectory("./dependencies/avir")
 add_subdirectory("./dependencies/json")
+add_subdirectory("./dependencies/tinyxml2")
 add_subdirectory("./dependencies/zlib")
 add_subdirectory("./dependencies/ETCPACK")
 add_subdirectory("./dependencies/rg_etc1")
@@ -49,7 +46,6 @@ add_subdirectory("./dependencies/lzma")
 add_subdirectory("./dependencies/bzip2")
 add_subdirectory("./dependencies/open_vcdiff")
 add_subdirectory("./dependencies/etcpak")
-add_subdirectory("./dependencies/tinyxml2")
 
 # tinyfiledialogs link
 
@@ -75,7 +71,10 @@ endif()
 # Link against dependencies
 target_link_libraries(
   Internal PUBLIC 
+  avir
+  json
   zlib 
+  tinyxml2
   ETCPACK 
   rg_etc1 
   libpng 
@@ -83,19 +82,16 @@ target_link_libraries(
   lzma
   bzip2
   open_vcdiff
-  avir
-  json
-  tinyxml2
 )
 
-# symbol visibility
+# Symbol visibility
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-# position independent code
+# Pos Independent
 set(CMAKE_POSITION_INDEPENDENT_CODE true)
 
-# Compilation define
+# Compilation definition
 
 target_compile_definitions( 
     ${PROJECT_NAME} PRIVATE 

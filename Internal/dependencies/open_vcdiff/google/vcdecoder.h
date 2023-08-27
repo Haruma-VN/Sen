@@ -17,7 +17,7 @@
 
 #include <stddef.h>  // size_t
 #include <string>
-#include "output_string.h"
+#include "google/output_string.h"
 
 namespace open_vcdiff {
 

@@ -15,7 +15,7 @@
 #ifndef OPEN_VCDIFF_COMPILE_ASSERT_H_
 #define OPEN_VCDIFF_COMPILE_ASSERT_H_
 
-#include "config.h"
+#include <config.h>
 
 namespace open_vcdiff {
 

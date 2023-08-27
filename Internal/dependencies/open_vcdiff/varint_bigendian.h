@@ -34,7 +34,7 @@
 // 64th bit would indicate a negative value and therefore an error.
 //
 
-#include "config.h"
+#include <config.h>
 #include <stdint.h>  // int32_t, int64_t
 #include <string>
 #include "vcdiff_defs.h"  // RESULT_ERROR

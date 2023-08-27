@@ -18,7 +18,7 @@
 //     RFC 3284 - The VCDIFF Generic Differencing and Compression Data Format.
 //     The RFC text can be found at http://www.faqs.org/rfcs/rfc3284.html
 
-#include "config.h"
+#include <config.h>
 #include "addrcache.h"
 #include "codetable.h"
 #include "logging.h"

@@ -6,7 +6,7 @@ project(
 )
 
 add_library(
-	${PROJECT_NAME} STATIC
+	${PROJECT_NAME} INTERFACE
 	./avir.h
 	./avir_dil.h
 	./avir_float4_sse.h
@@ -14,5 +14,4 @@ add_library(
 	./lancir.h
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
-
+set_target_properties(avir PROPERTIES LINKER_LANGUAGE C)

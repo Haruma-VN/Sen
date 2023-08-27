@@ -20,7 +20,7 @@
 #ifndef OPEN_VCDIFF_CODETABLE_H_
 #define OPEN_VCDIFF_CODETABLE_H_
 
-#include "config.h"
+#include <config.h>
 #include <stdint.h>             // uint16_t
 
 namespace open_vcdiff {

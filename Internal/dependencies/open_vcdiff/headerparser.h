@@ -15,7 +15,7 @@
 #ifndef OPEN_VCDIFF_HEADERPARSER_H_
 #define OPEN_VCDIFF_HEADERPARSER_H_
 
-#include "config.h"
+#include <config.h>
 #include <stddef.h>  // NULL
 #include <stdint.h>  // int32_t, uint32_t
 #include "checksum.h"  // VCDChecksum

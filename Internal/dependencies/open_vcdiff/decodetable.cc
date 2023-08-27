@@ -15,7 +15,7 @@
 // VCDiffCodeTableReader is a class to interpret a stream of opcodes
 // as VCDIFF instruction types, based on a VCDiffCodeTableData structure.
 
-#include "config.h"
+#include <config.h>
 #include "decodetable.h"
 #include "codetable.h"
 #include "logging.h"

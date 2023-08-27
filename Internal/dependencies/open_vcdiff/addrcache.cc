@@ -25,7 +25,7 @@
 //     INT_MAX - (dictionary size) bytes, the encoder must
 //     break it up into multiple target windows.
 
-#include "config.h"
+#include <config.h>
 #include "addrcache.h"
 #include "logging.h"
 #include "varint_bigendian.h"

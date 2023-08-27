@@ -21,4 +21,4 @@ add_library(
 	
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(bzip2 PROPERTIES POSITION_INDEPENDENT_CODE ON)

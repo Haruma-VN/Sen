@@ -15,7 +15,7 @@
 #ifndef OPEN_VCDIFF_VCDIFFENGINE_H_
 #define OPEN_VCDIFF_VCDIFFENGINE_H_
 
-#include "config.h"
+#include <config.h>
 #include <stddef.h>  // size_t
 #include <stdint.h>  // uint32_t
 

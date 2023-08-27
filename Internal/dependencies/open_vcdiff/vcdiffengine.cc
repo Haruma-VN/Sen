@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "config.h"
+#include <config.h>
 #include "vcdiffengine.h"
 #include <stdint.h>  // uint32_t
 #include <string.h>  // memcpy

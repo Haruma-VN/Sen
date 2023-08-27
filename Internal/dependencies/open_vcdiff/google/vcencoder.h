@@ -16,8 +16,8 @@
 #define OPEN_VCDIFF_VCENCODER_H_
 
 #include <stddef.h>  // size_t
-#include "format_extension_flags.h"
-#include "output_string.h"
+#include "google/format_extension_flags.h"
+#include "google/output_string.h"
 
 namespace open_vcdiff {
 

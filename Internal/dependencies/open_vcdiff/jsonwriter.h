@@ -17,7 +17,7 @@
 #ifndef OPEN_VCDIFF_JSONWRITER_H_
 #define OPEN_VCDIFF_JSONWRITER_H_
 
-#include "config.h"
+#include <config.h>
 #include <string>
 #include "addrcache.h"
 #include "checksum.h"

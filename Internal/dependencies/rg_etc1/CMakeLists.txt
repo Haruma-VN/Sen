@@ -11,4 +11,10 @@ add_library(
 	./rg_etc1.cpp
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+# Set Kind
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+set_target_properties(rg_etc1 PROPERTIES POSITION_INDEPENDENT_CODE ON)

@@ -5,6 +5,12 @@ project(
 	LANGUAGES C CXX
 )
 
+# Set Kind
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 add_library(
 	${PROJECT_NAME} STATIC
 	./image.h
@@ -18,5 +24,5 @@ target_link_libraries(
 	zlib
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(ETCPACK PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

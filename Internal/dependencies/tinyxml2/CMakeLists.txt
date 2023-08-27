@@ -10,6 +10,11 @@ add_library(
 	./tinyxml2.h
 	./tinyxml2.cpp
 )
+# Set Kind
 
-set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+set_target_properties(tinyxml2 PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

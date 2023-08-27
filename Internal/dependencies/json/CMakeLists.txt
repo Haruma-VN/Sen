@@ -6,9 +6,15 @@ project(
 )
 
 add_library(
-	${PROJECT_NAME} STATIC
+	${PROJECT_NAME} INTERFACE
 	./json_fwd.hpp
 	./json.hpp
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+# Set Kind
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+set_target_properties(json PROPERTIES LINKER_LANGUAGE CXX)

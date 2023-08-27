@@ -15,7 +15,7 @@
 #ifndef OPEN_VCDIFF_ROLLING_HASH_H_
 #define OPEN_VCDIFF_ROLLING_HASH_H_
 
-#include "config.h"
+#include <config.h>
 #include <stdint.h>  // uint32_t
 #include "compile_assert.h"
 #include "logging.h"

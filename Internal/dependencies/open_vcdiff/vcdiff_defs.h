@@ -20,7 +20,7 @@
 #ifndef OPEN_VCDIFF_VCDIFF_DEFS_H_
 #define OPEN_VCDIFF_VCDIFF_DEFS_H_
 
-#include "config.h"
+#include <config.h>
 #include <limits.h>             // UCHAR_MAX
 #include <stdint.h>             // int32_t
 

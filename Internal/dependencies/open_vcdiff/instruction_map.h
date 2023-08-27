@@ -25,7 +25,7 @@
 #ifndef OPEN_VCDIFF_INSTRUCTION_MAP_H_
 #define OPEN_VCDIFF_INSTRUCTION_MAP_H_
 
-#include "config.h"
+#include <config.h>
 #include "codetable.h"
 #include "vcdiff_defs.h"
 

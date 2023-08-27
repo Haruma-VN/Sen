@@ -15,7 +15,7 @@
 #ifndef OPEN_VCDIFF_DECODETABLE_H_
 #define OPEN_VCDIFF_DECODETABLE_H_
 
-#include "config.h"
+#include <config.h>
 #include <stddef.h>     // NULL
 #include <stdint.h>     // int32_t
 #include <memory>       // auto_ptr

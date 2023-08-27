@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "config.h"
+#include <config.h>
 #include "varint_bigendian.h"
 #include <stdint.h>  // int32_t, int64_t
 #include <string.h>  // memcpy

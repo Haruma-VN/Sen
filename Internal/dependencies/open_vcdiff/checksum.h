@@ -18,7 +18,7 @@
 #ifndef OPEN_VCDIFF_CHECKSUM_H_
 #define OPEN_VCDIFF_CHECKSUM_H_
 
-#include "config.h"
+#include <config.h>
 #include "zlib.h"
 
 namespace open_vcdiff {
