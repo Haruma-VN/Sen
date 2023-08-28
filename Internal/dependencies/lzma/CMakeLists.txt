@@ -1,5 +1,6 @@
 project(
 	lzma
+	VERSION 23.01
 	HOMEPAGE_URL https://github.com/mcmilk/7-Zip-zstd
 	LANGUAGES C
 )
