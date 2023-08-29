@@ -298,7 +298,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                         }
                         if (resources_x.x is null)
                         {
-                            if (resources_x.aw != 0 && resources_x.ah != 0)
+                            if (resources_x.aw is not null && resources_x.aw != 0 && resources_x.ah is not null && resources_x.ah != 0)
                             {
                                 newton.writeInt32LE(0x00);
                             }

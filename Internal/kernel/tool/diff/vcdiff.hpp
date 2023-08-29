@@ -17,6 +17,7 @@ namespace Sen::Internal::Kernel::Tool::Diff::VCDiff
      {
          auto encoding = std::string{};
         auto encoder = open_vcdiff::VCDiffEncoder(dictionary.data(), dictionary.size());
+        encoder.SetFormatFlags(open_vcdiff::VCD_FORMAT_INTERLEAVED);
         if (!encoder.Encode(target.data(), target.size(), &encoding)) {
             throw_exception("VCDiff Encode failed");
         }

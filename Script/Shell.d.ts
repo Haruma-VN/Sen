@@ -1559,6 +1559,61 @@ declare namespace Sen {
         declare namespace LotusModule {
             /**
              *
+             * @param object - Object
+             * @param indent - Indent
+             * @param allow_null - Write null or not
+             */
+            export function SerializeJson<T>(object: T, indent?: string | number, allow_null?: boolean): string;
+
+            /**
+             * Decode REANIM
+             * @param inFile In file REANIM
+             *
+             */
+            export function ReanimToReanimJson(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim;
+
+            /**
+             * Encode REANIM
+             * @param reanim - Deserialize REANIM
+             * @param version - Version
+             * @param outFile - Out file
+             */
+
+            export function ReanimFromReanimJson(reanim: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim, version: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Version, outFile: string): void;
+
+            /**
+             * JSON to Flash
+             * @param reanim - REANIM Deserialize
+             * @param out_dir - Out directory
+             */
+
+            export function ReanimJsonToFlashXfl(reanim: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim, out_dir: string): void;
+
+            /**
+             * Flash to JSON
+             * @param inDir - In directory
+             */
+
+            export function ReaimJsonFromFlashXfl(inDir: string): Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim;
+
+            /**
+             * REANIM to Flash
+             * @param inFile - In file
+             * @param outDir - Out directory
+             */
+
+            export function ReanimToFlashXfl(inFile: string, outDir: string): void;
+
+            /**
+             * Reanim from Flash
+             * @param inDir - In directory
+             * @param outFile - Out file
+             */
+
+            export function ReanimFromFlashXfl(inDir: string, outFile: string): void;
+
+            /**
+             *
              * @param inFile - Pass RTON
              * @param outFile - Out RTON
              * @param decryptRTON - RTON Cipher

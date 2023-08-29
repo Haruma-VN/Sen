@@ -9,10 +9,6 @@ using Sen.Shell.Modules.Standards;
 using WEMSharp;
 using Sen.Shell.Modules.Support.WWise;
 using static Sen.Shell.Modules.Support.PvZ2.RTON.RTONProcession;
-using VCDiff.Includes;
-using VCDiff.Encoders;
-using VCDiff.Decoders;
-using VCDiff.Shared;
 using static Sen.Shell.Modules.Support.PvZ2.RSG.RSGFunction;
 using Newtonsoft.Json;
 using static Sen.Shell.Modules.Support.PvZ2Thread;
@@ -21,6 +17,8 @@ using Newtonsoft.Json.Linq;
 using Sen.Shell.Modules.Support.PvZ2.Helper;
 using Sen.Shell.Modules.Support.PvZ2.RenderEffect;
 using Sen.Shell.Modules.Support.PvZ2;
+using Sen.Shell.Modules.Support.PVZ.Reanim;
+using Jint.Runtime;
 
 namespace Sen.Shell.Modules.Support
 {
@@ -49,7 +47,7 @@ namespace Sen.Shell.Modules.Support
 
     #endregion
 
-    #region PvZ2Shell Abstract
+    #region Lotus Module Abstract
 
     public abstract class PvZ2ShellAbstract
     {
@@ -154,6 +152,20 @@ namespace Sen.Shell.Modules.Support
         public abstract void CryptDataEncrypt(string inFile, string outFile, string key);
 
         public abstract void CryptDataDecrypt(string inFile, string outFile, string key);
+
+        public abstract Reanim ReanimToReanimJson(string inFile);
+
+        public abstract void ReanimFromReanimJson(Reanim reanim, ReanimVersion version, string outFile);
+
+        public abstract void ReanimJsonToFlashXfl(Reanim reanim, string outFolder);
+
+        public abstract Reanim ReaimJsonFromFlashXfl(string inFolder);
+
+        public abstract void ReanimToFlashXfl(string inFile, string outFolder);
+
+        public abstract void ReanimFromFlashXfl(string inFolder, string outFile, ReanimVersion version);
+
+        public abstract string SerializeJson(object json, char? indent, bool? handle_null);
 
     }
 
@@ -1256,31 +1268,22 @@ namespace Sen.Shell.Modules.Support
 
         public unsafe override sealed void VCDiffEncode(string OldFile, string NewFile, string PatchOutFile, bool interleaved)
         {
-            using var output = new FileStream(PatchOutFile, FileMode.Create, FileAccess.Write);
-            using var dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read);
-            using var target = new FileStream(NewFile, FileMode.Open, FileAccess.Read);
-            {
-                var coder = new VcEncoder(dict, target, output, 64);
-                var result = coder.Encode(interleaved: interleaved, checksumFormat: ChecksumFormat.SDCH);
-                if (result != VCDiffResult.SUCCESS)
-                {
-                    throw new Exception("invalid_vcdiff_encode");
-                }
-            }
+
+            var before = File.ReadAllBytes(OldFile);
+            var after = File.ReadAllBytes(NewFile);
+            var vcdiff = new Internal.VCDiff();
+            var encode = vcdiff.Encode(before, after);
+            File.WriteAllBytes(PatchOutFile, encode);
             return;
         }
 
         public unsafe override sealed void VCDiffDecode(string OldFile, string PatchFile, string NewFile)
         {
-            using var output = new FileStream(NewFile, FileMode.Create, FileAccess.Write);
-            using var dict = new FileStream(OldFile, FileMode.Open, FileAccess.Read);
-            using var target = new FileStream(PatchFile, FileMode.Open, FileAccess.Read);
-            var decoder = new VcDecoder(dict, target, output, 0xFFFFFFF);
-            var result = decoder.Decode(out long bytesWritten);
-            if (result != VCDiffResult.SUCCESS)
-            {
-                throw new Exception("invalid_vcdiff_decode");
-            }
+            var before = File.ReadAllBytes(OldFile);
+            var after = File.ReadAllBytes(PatchFile);
+            var vcdiff = new Internal.VCDiff();
+            var decode = vcdiff.Decode(before, after);
+            File.WriteAllBytes(NewFile, decode);
             return;
         }
 
@@ -1336,6 +1339,54 @@ namespace Sen.Shell.Modules.Support
             var sen = Shell.Modules.Support.PvZ.CryptData.Decrypt(inFile, key);
             sen.OutFile(outFile);
             return;
+        }
+
+        public override Reanim ReanimToReanimJson(string inFile)
+        {
+            var reanim = Reanim_Function.ParseReanim(inFile);
+            return reanim;
+        }
+
+        public override void ReanimFromReanimJson(Reanim reanim, ReanimVersion version, string outFile)
+        {
+            var sen = Reanim_Function.WriteReanim(reanim, version);
+            sen.OutFile(outFile);
+            return;
+        }
+
+        public override void ReanimJsonToFlashXfl(Reanim reanim, string outFolder)
+        {
+            Reanim_Aniamtion.Encode(reanim, outFolder);
+            return;
+        }
+
+        public override Reanim ReaimJsonFromFlashXfl(string inFolder)
+        {
+            var reanim = Reanim_Aniamtion.Decode(inFolder);
+            return reanim;
+        }
+
+        public override void ReanimToFlashXfl(string inFile, string outFolder)
+        {
+            var reanim = Reanim_Function.ParseReanim(inFile);
+            Reanim_Aniamtion.Encode(reanim, outFolder);
+            return;
+        }
+
+        public override void ReanimFromFlashXfl(string inFolder, string outFile, ReanimVersion version)
+        {
+            var reanim = Reanim_Aniamtion.Decode(inFolder);
+            var sen = Reanim_Function.WriteReanim(reanim, version);
+            sen.OutFile(outFile);
+            return;
+        }
+
+        public override string SerializeJson(object json, char? indent, bool? allow_null)
+        {
+            return RSBFunction.JsonPrettify(JsonConvert.SerializeObject(json, Formatting.Indented, 
+                new JsonSerializerSettings { 
+                    NullValueHandling = allow_null is not null && (bool)allow_null ? NullValueHandling.Include : NullValueHandling.Ignore
+                }), indent ?? '\t');
         }
 
 

@@ -497,5 +497,47 @@
         "exclude": [],
         "is_enabled": true,
         "type": "file"
+    },
+    "popcap_reanim_to_json": {
+        "func_number": 72,
+        "include": [".reanim"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_reanim_from_json": {
+        "func_number": 73,
+        "include": [".reanim.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_reanim_json_to_flash": {
+        "func_number": 74,
+        "include": [".reanim.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_reanim_json_from_flash": {
+        "func_number": 75,
+        "include": [".xfl"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
+    },
+    "popcap_reanim_to_flash": {
+        "func_number": 76,
+        "include": [".reanim"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_reanim_from_flash": {
+        "func_number": 77,
+        "include": [".xfl"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
     }
 }

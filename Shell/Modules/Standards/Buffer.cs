@@ -488,9 +488,22 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             return str;
         }
 
-        public string readStringByInt16LE(long offset = -1) {
+        public string readStringByInt8(long offset = -1)
+        {
+            fixReadOffset(offset);
+            return readString(readInt8());
+        }
+
+        public string readStringByInt16LE(long offset = -1)
+        {
             fixReadOffset(offset);
             return readString(readInt16LE());
+        }
+
+        public string readStringByInt32LE(long offset = -1)
+        {
+            fixReadOffset(offset);
+            return readString(readInt32LE());
         }
 
         public string readStringByVarInt32(long offset = -1)
@@ -974,15 +987,42 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             writeVarInt64((number << 1) ^ (number >> 63));
         }
 
-        public void writeStringByInt16LE(string? str, long offset = -1) {
+        public void writeStringByInt8(string? str, long offset = -1)
+        {
             fixWriteOffset(offset);
-            if (str is null) {
+            if (str is null)
+            {
+                writeInt8(0);
+                return;
+            }
+            writeInt8((sbyte)str!.Length);
+            writeString(str!);
+        }
+
+        public void writeStringByInt16LE(string? str, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            if (str is null)
+            {
                 writeInt16LE(0);
                 return;
             }
             writeInt16LE((short)str!.Length);
             writeString(str!);
         }
+
+        public void writeStringByInt32LE(string str, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            if (str is null)
+            {
+                writeInt32LE(0);
+                return;
+            }
+            writeInt32LE(str!.Length);
+            writeString(str!);
+        }
+
         public void writeStringByVarInt32(string? str, long offset = -1)
         {
             fixWriteOffset(offset);

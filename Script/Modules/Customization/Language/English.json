@@ -588,5 +588,19 @@
     "xor_encrypt": "XOR Encrypt",
     "input_dir": "Input Directory",
     "important_notification": "Important Notification:",
-    "multiple_files": "Multiple Files"
+    "multiple_files": "Multiple Files",
+    "popcap_reanim_to_json": "PopCap Re-Animation: Decode",
+    "popcap_reanim_from_json": "PopCap Re-Animation: Encode",
+    "popcap_reanim_to_flash": "PopCap Re-Animation: Convert to Flash Animation",
+    "popcap_reanim_from_flash": "PopCap Re-Animation: Convert from Flash Animation",
+    "popcap_reanim_json_to_flash": "PopCap Re-Animation: JSON to Flash Animation",
+    "popcap_reanim_json_from_flash": "PopCap Re-Animation: JSON from Flash Animation",
+    "unsupported_reanim_platform": "Unsupported reanim platform",
+    "reanim_cannot_be_null": "Reanim cannot be null object",
+    "invalid_reanim_magic": "Invalid reanim magic",
+    "invalid_track": "Invalid Track",
+    "reanim_platform": "Reanim Platform",
+    "pc": "PC",
+    "32bit_phone": "32bit Phone",
+    "64bit_phone": "64bit Phone"
 }

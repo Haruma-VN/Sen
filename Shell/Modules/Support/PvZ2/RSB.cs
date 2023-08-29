@@ -1684,14 +1684,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
 
         private static byte[] RSBVCDiff(byte[] RSBBeforeHeaderSectionByte, byte[] RSBAfterHeaderSectionByte)
         {
-            var outPutStream = new MemoryStream();
-            var coder = new VcEncoder(new MemoryStream(RSBBeforeHeaderSectionByte), new MemoryStream(RSBAfterHeaderSectionByte), outPutStream, 64);
-            var result = coder.Encode(interleaved: true);
-            if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
-            {
-                throw new Exception("invalid_vcdiff_encode");
-            }
-            return outPutStream.ToArray();
+            var vcdiff = new Internal.VCDiff();
+            var encode = vcdiff.Encode(RSBBeforeHeaderSectionByte, RSBAfterHeaderSectionByte);
+            return encode;
         }
 
         /* RSB Section Mapping
@@ -1728,15 +1723,9 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             }
             else
             {
-                var outPutStream = new MemoryStream();
-                var decoder = new VcDecoder(new MemoryStream(RSBBeforeHeadSectionByte), new MemoryStream(RSBPatchFile.readBytes(RSGPatchHeadInfo.RSBHeadSectionPatchSize)), outPutStream, 0xFFFFFFF);
-                long bytesWritten = 0;
-                var result = decoder.Decode(out bytesWritten);
-                if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
-                {
-                    throw new Exception("invalid_vcdiff_decode");
-                }
-                RSBAfterHeadSectionByte = outPutStream.ToArray();
+                var vcdiff = new Internal.VCDiff();
+                var decode = vcdiff.Decode(RSBBeforeHeadSectionByte, RSBPatchFile.readBytes(RSGPatchHeadInfo.RSBHeadSectionPatchSize));
+                RSBAfterHeadSectionByte = decode;
             }
             var RSBBuilder = new SenBuffer();
             RSBBuilder.writeBytes(RSBAfterHeadSectionByte);
