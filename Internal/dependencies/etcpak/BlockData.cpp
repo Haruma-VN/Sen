@@ -17,6 +17,7 @@
 
 #if defined __SSE4_1__ || defined __AVX2__ || defined _MSC_VER
 #  ifdef _MSC_VER
+#define NOMINMAX
 #    include <intrin.h>
 #    include <Windows.h>
 #    define _bswap(x) _byteswap_ulong(x)

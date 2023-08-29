@@ -8,9 +8,7 @@ project(
 add_library(
 	${PROJECT_NAME} STATIC
 	./lz4/lz4.h
-	./lz4/lz4.c
 	./getopt/getopt.h
-	./getopt/getopt.c
 	./Bitmap.hpp
 	./BitmapDownsampled.hpp
 	./BlockData.hpp
@@ -32,6 +30,8 @@ add_library(
 	./TaskDispatch.hpp
 	./Timing.hpp
 	./Vector.hpp
+	./lz4/lz4.c
+	./getopt/getopt.c
 	./Bitmap.cpp
 	./BitmapDownsampled.cpp
 	./BlockData.cpp
@@ -50,24 +50,22 @@ add_library(
 	./Application.cpp
 )
 
-target_include_directories(
-	${PROJECT_NAME} PUBLIC
-	../zlib
-)
+target_include_directories(${PROJECT_NAME} PUBLIC ..)
+
 
 target_include_directories(
-	${PROJECT_NAME} PUBLIC
-	../libpng
-)
-
-target_link_libraries(
 	${PROJECT_NAME} PRIVATE
-	zlib
+	../libpng
 )
 
 target_link_libraries(
 	${PROJECT_NAME} PRIVATE
 	libpng
 )
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+    add_definitions(-DNOMINMAX)
+endif()
+
 
 set_target_properties(etcpak PROPERTIES POSITION_INDEPENDENT_CODE ON)
