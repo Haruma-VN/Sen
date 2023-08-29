@@ -2,7 +2,7 @@ project(
 	open_vcdiff
 	VERSION 0.8.4
 	HOMEPAGE_URL https://github.com/google/open-vcdiff
-	LANGUAGES C
+	LANGUAGES C CXX
 )
 
 add_library(
