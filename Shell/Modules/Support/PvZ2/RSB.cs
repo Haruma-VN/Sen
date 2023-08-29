@@ -1,8 +1,6 @@
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
 using Sen.Shell.Modules.Standards.IOModule;
 using Sen.Shell.Modules.Support.PvZ2.RSG;
-using VCDiff.Encoders;
-using VCDiff.Decoders;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Sen.Shell.Modules.Standards;
@@ -1724,8 +1722,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             else
             {
                 var vcdiff = new Internal.VCDiff();
-                var decode = vcdiff.Decode(RSBBeforeHeadSectionByte, RSBPatchFile.readBytes(RSGPatchHeadInfo.RSBHeadSectionPatchSize));
-                RSBAfterHeadSectionByte = decode;
+                RSBAfterHeadSectionByte = vcdiff.Decode(RSBBeforeHeadSectionByte, RSBPatchFile.readBytes(RSGPatchHeadInfo.RSBHeadSectionPatchSize));
             }
             var RSBBuilder = new SenBuffer();
             RSBBuilder.writeBytes(RSBAfterHeadSectionByte);
@@ -1761,19 +1758,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 }
                 if (rsbPatchPacketInfo.packetPatchSize > 0)
                 {
-                    var outPutStream = new MemoryStream();
-                    var decoder = new VcDecoder(new MemoryStream(packetBefore), new MemoryStream(RSBPatchFile.readBytes(rsbPatchPacketInfo.packetPatchSize)), outPutStream, 0xFFFFFFF);
-                    long bytesWritten = 0;
-                    var result = decoder.Decode(out bytesWritten);
-                    if (result != VCDiff.Includes.VCDiffResult.SUCCESS)
-                    {
-                        throw new Exception("invalid_vcdiff_decode");
-                    }
-                    if (UseRawPacket)
-                    {
-                        throw new Exception("raw_packet_is_not_supported");
-                    }
-                    packetAfter = outPutStream.ToArray();
+                    var vcdiff = new Internal.VCDiff();
+                    packetAfter = vcdiff.Decode(packetBefore, RSBPatchFile.readBytes(rsbPatchPacketInfo.packetPatchSize));
                 }
                 else
                 {

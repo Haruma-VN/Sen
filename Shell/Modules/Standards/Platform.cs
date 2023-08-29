@@ -210,11 +210,10 @@ namespace Sen.Shell.Modules.Standards
                 WindowStyle = ProcessWindowStyle.Hidden
             };
 
-            using (var process = new Process { StartInfo = startInfo })
-            {
-                process.Start();
-                process.WaitForExit();
-            }
+            using var process = new Process { StartInfo = startInfo };
+            process.Start();
+            process.WaitForExit();
+            return;
         }
 
         public override void SendNotification(string message, string title)
