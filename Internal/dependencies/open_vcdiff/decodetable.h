@@ -133,7 +133,8 @@ class VCDiffCodeTableReader {
   // management for the non-standard code table, whose contents have
   // been read as part of the encoded data file/stream.
   //
-  std::auto_ptr<VCDiffCodeTableData> non_default_code_table_data_;
+  // Haruma : Fix
+  std::unique_ptr<VCDiffCodeTableData> non_default_code_table_data_;
 
   const char** instructions_and_sizes_;
   const char* instructions_and_sizes_end_;
