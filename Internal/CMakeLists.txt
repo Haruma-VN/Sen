@@ -42,10 +42,10 @@ add_subdirectory("./dependencies/zlib")
 add_subdirectory("./dependencies/ETCPACK")
 add_subdirectory("./dependencies/rg_etc1")
 add_subdirectory("./dependencies/libpng")
-add_subdirectory("./dependencies/open_vcdiff")
-add_subdirectory("./dependencies/etcpak")
 add_subdirectory("./dependencies/lzma")
 add_subdirectory("./dependencies/bzip2")
+add_subdirectory("./dependencies/etcpak")
+add_subdirectory("./dependencies/open_vcdiff")
 
 # tinyfiledialogs link
 
@@ -70,7 +70,7 @@ endif()
 
 # Link against dependencies
 target_link_libraries(
-  Internal PUBLIC 
+  Internal PRIVATE 
   avir
   json
   tinyxml2
@@ -78,9 +78,9 @@ target_link_libraries(
   ETCPACK 
   rg_etc1 
   libpng 
-  etcpak
   lzma
   bzip2
+  etcpak
   open_vcdiff
 )
 
@@ -110,8 +110,12 @@ endif()
 
 # CMake Strict
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
+if (CMAKE_VERSION VERSION_GREATER 3.12 AND WIN32)
   set_property(TARGET Internal PROPERTY CXX_STANDARD 20)
+elseif (CMAKE_VERSION VERSION_GREATER 3.12 AND UNIX)
+  set_property(TARGET Internal PROPERTY CXX_STANDARD 23)
+else(CMAKE_VERSION VERSION_GREATER 3.12 AND APPLE)
+  set_property(TARGET Internal PROPERTY CXX_STANDARD 17)
 endif()
 
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")

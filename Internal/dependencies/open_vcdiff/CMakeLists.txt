@@ -43,13 +43,8 @@ add_library(
 	
 )
 
-# Set Kind
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 target_include_directories(
-	${PROJECT_NAME} PUBLIC
+	${PROJECT_NAME} PRIVATE
 	../zlib
 )
 
@@ -59,13 +54,20 @@ target_include_directories(
 )
 
 target_link_libraries(
-	${PROJECT_NAME} PUBLIC
+	${PROJECT_NAME} PRIVATE
 	zlib
 )
 
 # Set Kind
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
+
 set_target_properties(open_vcdiff PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# LLVM clang
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-deprecated-declarations)
+endif()
