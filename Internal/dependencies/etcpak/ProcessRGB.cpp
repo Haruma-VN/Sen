@@ -1,5 +1,4 @@
 #include <array>
-#include <iostream>
 #include <string.h>
 #include <limits>
 #ifdef __ARM_NEON
@@ -1753,21 +1752,19 @@ static etcpak_force_inline void FindBestFit( uint32_t terr[2][8], uint16_t tsel[
 }
 #endif
 
-using namespace std;
-
 static etcpak_force_inline uint8_t convert6(float f)
 {
-    int i = (min(max(static_cast<int>(f), 0), 1023) - 15) >> 1;
+    int i = (std::min(std::max(static_cast<int>(f), 0), 1023) - 15) >> 1;
     return (i + 11 - ((i + 11) >> 7) - ((i + 4) >> 7)) >> 3;
 }
 
 static etcpak_force_inline uint8_t convert7(float f)
 {
-    int i = (min(max(static_cast<int>(f), 0), 1023) - 15) >> 1;
+    int i = (std::min(std::max(static_cast<int>(f), 0), 1023) - 15) >> 1;
     return (i + 9 - ((i + 9) >> 8) - ((i + 6) >> 8)) >> 2;
 }
 
-static etcpak_force_inline pair<uint64_t, uint64_t> Planar( const uint8_t* src, const uint8_t mode, bool useHeuristics )
+static etcpak_force_inline std::pair<uint64_t, uint64_t> Planar( const uint8_t* src, const uint8_t mode, bool useHeuristics )
 {
     int32_t r = 0;
     int32_t g = 0;
@@ -3791,7 +3788,7 @@ static etcpak_force_inline uint64_t ProcessAlpha_ETC2( const uint8_t* src )
     int srcMid = min + srcRange / 2;
 
     uint8_t buf[16][16];
-    int err = 0;
+    int err = std::numeric_limits<int>::max();
     int sel;
     int selmul;
     for( int r=0; r<16; r++ )

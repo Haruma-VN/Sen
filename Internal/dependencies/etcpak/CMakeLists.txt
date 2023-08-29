@@ -2,7 +2,6 @@ project(
 	etcpak
 	VERSION 1.0.0
 	HOMEPAGE_URL https://github.com/wolfpld/etcpak
-	LANGUAGES C CXX
 )
 
 

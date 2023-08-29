@@ -42,10 +42,10 @@ add_subdirectory("./dependencies/zlib")
 add_subdirectory("./dependencies/ETCPACK")
 add_subdirectory("./dependencies/rg_etc1")
 add_subdirectory("./dependencies/libpng")
-add_subdirectory("./dependencies/lzma")
-add_subdirectory("./dependencies/bzip2")
 add_subdirectory("./dependencies/open_vcdiff")
 add_subdirectory("./dependencies/etcpak")
+add_subdirectory("./dependencies/lzma")
+add_subdirectory("./dependencies/bzip2")
 
 # tinyfiledialogs link
 
@@ -73,8 +73,8 @@ target_link_libraries(
   Internal PUBLIC 
   avir
   json
-  zlib 
   tinyxml2
+  zlib 
   ETCPACK 
   rg_etc1 
   libpng 

@@ -43,6 +43,11 @@ add_library(
 	
 )
 
+# Set Kind
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 target_include_directories(
 	${PROJECT_NAME} PUBLIC
 	../zlib
@@ -57,5 +62,10 @@ target_link_libraries(
 	${PROJECT_NAME} PUBLIC
 	zlib
 )
+
+# Set Kind
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_target_properties(open_vcdiff PROPERTIES POSITION_INDEPENDENT_CODE ON)
