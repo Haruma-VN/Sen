@@ -500,11 +500,13 @@ namespace Sen.Shell.Modules.Support.Download
                 UserPlatform.Windows => path.Resolve($"{path.Dirname($"{script_dir}")}/Internal.dll"),
                 UserPlatform.Linux => path.Resolve($"{path.Dirname($"{script_dir}")}/Internal.so"),
                 UserPlatform.Macintosh => path.Resolve($"{path.Dirname($"{script_dir}")}/Internal.dylib"),
+                _ => throw new Exception("Unknown"),
             };
             await DownloadFileAsync(github_api_json.Assets.Find(e => e.Name == Platform.CurrentPlatform() switch
             {
                 UserPlatform.Windows => "Internal.dll",
                 UserPlatform.Linux => "Internal.so",
+                UserPlatform.Macintosh => "Internal.dylib",
                 _ => throw new Exception("Please compile the Internal yourself"),
             } )!.Browser_download_url, (internal_x), $"Sen");
             return;

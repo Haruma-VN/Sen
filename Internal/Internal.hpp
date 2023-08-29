@@ -2,7 +2,7 @@
 
 #pragma region version
 
-inline constexpr auto MInternalVersion = 4;
+inline constexpr auto MInternalVersion = 5;
 
 #pragma endregion
 
