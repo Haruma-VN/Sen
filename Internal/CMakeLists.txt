@@ -84,6 +84,14 @@ target_link_libraries(
   open_vcdiff
 )
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CMAKE_C_STANDARD 99)
+    set(CMAKE_C_EXTENSIONS ON)
+else()
+    set(CMAKE_C_STANDARD 17)
+endif()
+
+
 # Symbol visibility
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -110,14 +118,101 @@ endif()
 
 # CMake Strict
 
-if (CMAKE_VERSION VERSION_GREATER 3.12 AND WIN32)
+if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Internal PROPERTY CXX_STANDARD 20)
-elseif (CMAKE_VERSION VERSION_GREATER 3.12 AND UNIX)
-  set_property(TARGET Internal PROPERTY CXX_STANDARD 23)
-else(CMAKE_VERSION VERSION_GREATER 3.12 AND APPLE)
-  set_property(TARGET Internal PROPERTY CXX_STANDARD 17)
 endif()
 
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-strict-prototypes")
+endif()
+
+if(MSVC)
+    target_compile_options(
+      ${PROJECT_NAME} PRIVATE
+        /utf-8
+        /bigobj
+        /permissive-
+        /Zc:preprocessor
+    )
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+        _CRT_SECURE_NO_WARNINGS
+        NOMINMAX
+    )
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(
+      ${PROJECT_NAME} PRIVATE
+        -fPIC
+        -fvisibility=hidden
+    )
+endif()
+
+if(MSVC)
+    target_compile_options(
+      ${PROJECT_NAME} PRIVATE
+        /w
+    )
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(
+      ${PROJECT_NAME} PRIVATE
+        -w
+        -Wno-c++11-narrowing
+    )
+endif()
+
+if(MSVC)
+    target_compile_options(
+      ${PROJECT_NAME} PRIVATE
+        /Wall
+        /wd4820
+        /wd4100
+        /wd4189
+        /wd4458
+        /wd4514
+        /wd4710
+        /wd4711
+        /wd4668
+        /wd4061
+        /wd5264
+        /wd5045
+        /wd4927
+        /wd4065
+        /wd4946
+        /wd5262
+    )
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(
+      ${PROJECT_NAME} PRIVATE
+        -Weverything
+        -Wno-c++98-compat
+        -Wno-c++98-compat-pedantic
+        -Wno-pre-c++14-compat
+        -Wno-pre-c++17-compat
+        -Wno-c++20-compat
+        -Wno-c99-extensions
+        -Wno-padded
+        -Wno-redundant-parens
+        -Wno-missing-field-initializers
+        -Wno-unused-parameter
+        -Wno-unused-variable
+        -Wno-missing-noreturn
+        -Wno-gnu-zero-variadic-macro-arguments
+        -Wno-ctad-maybe-unsupported
+        -Wno-global-constructors
+        -Wno-exit-time-destructors
+        -Wno-weak-vtables
+        -Wno-self-assign
+        -Wno-switch-enum
+        -Wno-shadow-field 
+        -Wno-shadow-field-in-constructor 
+        -Wno-shadow-uncaptured-local 
+        -Wno-unsafe-buffer-usage 
+        -Wno-float-equal 
+        -Wno-gnu-line-marker 
+)
 endif()
