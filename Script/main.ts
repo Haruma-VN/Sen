@@ -22,6 +22,7 @@ namespace Sen.Script {
             `Modules/System/Default/Timer`,
             `Modules/Support/PopCap/PvZ/CryptData/Encrypt`,
             `Modules/Support/PopCap/PvZ/ReAnimation/Encode`,
+            `Modules/Support/PopCap/PvZ/Particles/Encode`,
             `Modules/Support/PopCap/PvZ2/Resources/ResInfo`,
             `Modules/Support/PopCap/PvZ2/Resources/ResourceGroup`,
             `Modules/Support/PopCap/PvZ2/Atlas/Split`,
@@ -71,18 +72,18 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 20 as const;
+    export const ScriptVersion: int = 21 as const;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 14 as const;
+    export const ShellRequirement: int = 15 as const;
 
     /**
      * Tool Version
      */
 
-    export const M_Version: string = `2.9.0` as const;
+    export const M_Version: string = `3.0.0` as const;
 
     /**
      *

@@ -603,6 +603,6 @@
     "pc": "PC",
     "32bit_phone": "32-битный телефон",
     "64bit_phone": "64-битный телефон",
-    "popcap_compiled_text_decode": "PopCap Compiled Text: Декодировать",
-    "popcap_compiled_text_encode": "PopCap Compiled Text: Закодировать"    
+    "popcap_compiled_text_decode": "PopCap Compiled-Text: Декодировать",
+    "popcap_compiled_text_encode": "PopCap Compiled-Text: Закодировать"
 }

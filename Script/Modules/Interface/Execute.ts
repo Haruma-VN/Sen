@@ -164,7 +164,11 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_reanim_to_flash"
         | "popcap_reanim_from_flash"
         | "popcap_compiled_text_decode"
-        | "popcap_compiled_text_encode";
+        | "popcap_compiled_text_encode"
+        | "popcap_particles_decode"
+        | "popcap_particles_encode"
+        | "popcap_particles_to_xml"
+        | "popcap_particles_from_xml";
 
     /**
      * Structure
@@ -190,6 +194,114 @@ namespace Sen.Script.Modules.Interface.Execute {
                         Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(argument, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), argument.replaceAll(`/`, `\\`));
                     } else {
                         argument.forEach((arg: string) => Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(arg, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), arg.replaceAll(`/`, `\\`)));
+                    }
+                    break;
+                }
+                case "popcap_particles_to_xml": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.xml`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.JSONToXML(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.xml`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.JSONToXML(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_particles_from_xml": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
+                        };
+                        if (argument.toLowerCase().endsWith(".compiled")) {
+                            output_argument.argument = `${Sen.Shell.Path.Parse(output_argument.argument).name_without_extension}`;
+                        }
+                        output_argument.argument = `${output_argument.argument}.xml`;
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.XMLtoJSON(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
+                            };
+                            if (arg.toLowerCase().endsWith(".compiled")) {
+                                output_argument.argument = `${Sen.Shell.Path.Parse(output_argument.argument).name_without_extension}`;
+                            }
+                            output_argument.argument = `${output_argument.argument}.xml`;
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.XMLtoJSON(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_particles_decode": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.json`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Decode(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.json`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Decode(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_particles_encode": {
+                    if (!Array.isArray(argument)) {
+                        const platform: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("particles_platform"),
+                            [1, 2, 3],
+                            {
+                                "1": [Sen.Script.Modules.System.Default.Localization.GetString("pc"), Sen.Script.Modules.System.Default.Localization.GetString("pc")],
+                                "2": [Sen.Script.Modules.System.Default.Localization.GetString("32bit_phone"), Sen.Script.Modules.System.Default.Localization.GetString("32bit_phone")],
+                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("64bit_phone"), Sen.Script.Modules.System.Default.Localization.GetString("64bit_phone")],
+                            },
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_particles.json`)),
+                            `platform`
+                        ) as 1 | 2 | 3;
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
+                        };
+                        if (!output_argument.argument.toLowerCase().endsWith(".compiled")) {
+                            output_argument.argument = `${output_argument.argument}.compiled`;
+                        }
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Encode(argument, output_argument.argument, platform);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const platform: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("particles_platform"),
+                                [1, 2, 3],
+                                {
+                                    "1": [Sen.Script.Modules.System.Default.Localization.GetString("pc"), Sen.Script.Modules.System.Default.Localization.GetString("pc")],
+                                    "2": [Sen.Script.Modules.System.Default.Localization.GetString("32bit_phone"), Sen.Script.Modules.System.Default.Localization.GetString("32bit_phone")],
+                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("64bit_phone"), Sen.Script.Modules.System.Default.Localization.GetString("64bit_phone")],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_particles.json`)),
+                                `platform`
+                            ) as 1 | 2 | 3;
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
+                            };
+                            if (!output_argument.argument.toLowerCase().endsWith(".compiled")) {
+                                output_argument.argument = `${output_argument.argument}.compiled`;
+                            }
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Encode(arg, output_argument.argument, platform);
+                        });
                     }
                     break;
                 }
@@ -232,7 +344,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_reanim_from_json": {
                     if (!Array.isArray(argument)) {
                         const platform: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                            Sen.Script.Modules.System.Default.Localization.GetString("popcap_re_animation"),
+                            Sen.Script.Modules.System.Default.Localization.GetString("reanim_platform"),
                             [1, 2, 3],
                             {
                                 "1": [Sen.Script.Modules.System.Default.Localization.GetString("pc"), Sen.Script.Modules.System.Default.Localization.GetString("pc")],
@@ -250,7 +362,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     } else {
                         argument.forEach((arg: string) => {
                             const platform: 1 | 2 | 3 = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
-                                Sen.Script.Modules.System.Default.Localization.GetString("popcap_re_animation"),
+                                Sen.Script.Modules.System.Default.Localization.GetString("reanim_platform"),
                                 [1, 2, 3],
                                 {
                                     "1": [Sen.Script.Modules.System.Default.Localization.GetString("pc"), Sen.Script.Modules.System.Default.Localization.GetString("pc")],
@@ -900,44 +1012,116 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_compiled_text_decode": {
                     if (!Array.isArray(argument)) {
+                        const use_64bit_variant: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                [0, 1],
+                                {
+                                    "0": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                    ],
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    ],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_compiled_text.json`)),
+                                `use_64_bit_variant`
+                            ) as 0 | 1
+                        );
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.plain.txt`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.LotusModule.DecodeCompiledText(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
+                        Sen.Shell.LotusModule.DecodeCompiledText(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key, use_64bit_variant);
                     } else {
                         argument.forEach((arg: string) => {
+                            const use_64bit_variant: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    [0, 1],
+                                    {
+                                        "0": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                        ],
+                                        "1": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                        ],
+                                    },
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_compiled_text.json`)),
+                                    `use_64_bit_variant`
+                                ) as 0 | 1
+                            );
                             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
                             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.plain.txt`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.LotusModule.DecodeCompiledText(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
+                            Sen.Shell.LotusModule.DecodeCompiledText(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key, use_64bit_variant);
                         });
                     }
                     break;
                 }
                 case "popcap_compiled_text_encode": {
                     if (!Array.isArray(argument)) {
+                        const use_64bit_variant: boolean = Boolean(
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                [0, 1],
+                                {
+                                    "0": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                    ],
+                                    "1": [
+                                        Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                        Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    ],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_compiled_text.json`)),
+                                `use_64_bit_variant`
+                            ) as 0 | 1
+                        );
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.crypt.txt`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                        Sen.Shell.LotusModule.EncodeCompiledText(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
+                        Sen.Shell.LotusModule.EncodeCompiledText(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key, use_64bit_variant);
                     } else {
                         argument.forEach((arg: string) => {
+                            const use_64bit_variant: boolean = Boolean(
+                                Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                    Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                    [0, 1],
+                                    {
+                                        "0": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("False")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("not_use_64_bit_variant"),
+                                        ],
+                                        "1": [
+                                            Sen.Script.Modules.System.Default.Localization.GetString("set_the_argument_to").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("True")),
+                                            Sen.Script.Modules.System.Default.Localization.GetString("use_64_bit_variant"),
+                                        ],
+                                    },
+                                    Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_compiled_text.json`)),
+                                    `use_64_bit_variant`
+                                ) as 0 | 1
+                            );
                             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
                             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.crypt.txt`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
-                            Sen.Shell.LotusModule.EncodeCompiledText(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
+                            Sen.Shell.LotusModule.EncodeCompiledText(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key, use_64bit_variant);
                         });
                     }
                     break;

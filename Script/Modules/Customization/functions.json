@@ -500,7 +500,7 @@
     },
     "popcap_reanim_to_json": {
         "func_number": 72,
-        "include": [".reanim"],
+        "include": [".reanim", ".reanim.compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
@@ -528,7 +528,7 @@
     },
     "popcap_reanim_to_flash": {
         "func_number": 76,
-        "include": [".reanim"],
+        "include": [".reanim", ".reanim.compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
@@ -550,6 +550,34 @@
     "popcap_compiled_text_encode": {
         "func_number": 79,
         "include": [".txt"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_particles_decode": {
+        "func_number": 80,
+        "include": [".xml", ".xml.compiled"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_particles_encode": {
+        "func_number": 81,
+        "include": [".xml.json", ".xml.compiled.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_particles_to_xml": {
+        "func_number": 82,
+        "include": [".xml.json", ".xml.compiled.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_particles_from_xml": {
+        "func_number": 83,
+        "include": [".xml"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"

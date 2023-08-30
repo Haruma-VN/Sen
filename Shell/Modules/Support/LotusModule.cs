@@ -19,6 +19,7 @@ using Sen.Shell.Modules.Support.PvZ2.RenderEffect;
 using Sen.Shell.Modules.Support.PvZ2;
 using Sen.Shell.Modules.Support.PVZ.Reanim;
 using Jint.Runtime;
+using Sen.Shell.Modules.Support.PVZ.Particles;
 
 namespace Sen.Shell.Modules.Support
 {
@@ -51,6 +52,7 @@ namespace Sen.Shell.Modules.Support
 
     public abstract class PvZ2ShellAbstract
     {
+        public abstract void ConvertResInfoToResourceGroup(string outFile, string inFile);
         public abstract void RTONDecode(string inFile, string outFile, RTONCipher DecryptRTON);
 
         public abstract void RTONEncode(string inFile, string outFile, RTONCipher DecryptRTON);
@@ -167,9 +169,21 @@ namespace Sen.Shell.Modules.Support
 
         public abstract string SerializeJson(object json, char? indent, bool? handle_null);
 
-        public abstract void DecodeCompiledText(string inFile, string outFile, string encryptionKey);
+        public abstract void DecodeCompiledText(string inFile, string outFile, string encryptionKey, bool use64bitVariant);
 
-        public abstract void EncodeCompiledText(string inFile, string outFile, string encryptionKey);
+        public abstract void EncodeCompiledText(string inFile, string outFile, string encryptionKey, bool use64bitVariant);
+
+        public abstract void ReanimToXML(Reanim reanim, string outFile);
+
+        public abstract Reanim ReanimFromXML(string inFile);
+
+        public abstract Particles ParticlesToJson(string inFile);
+
+        public abstract void ParticlesFromJson(Particles particles, ParticlesVersion version, string outFile);
+
+        public abstract void ParticlesToXML(Particles particles, string outFile);
+
+        public abstract Particles ParticlesFromXML(string inFile);
 
     }
 
@@ -853,7 +867,7 @@ namespace Sen.Shell.Modules.Support
     public unsafe sealed class LotusModule : PvZ2ShellAbstract
     {
 
-        public unsafe void ConvertResInfoToResourceGroup(string outFile, string inFile)
+        public override unsafe void ConvertResInfoToResourceGroup(string outFile, string inFile)
         {
             var fs = new FileSystem();
             var resourceGroup = PvZ2ResourceConversion.ConvertResInfoToResourceGroup(JsonConvert.DeserializeObject<ResInfo>(fs.ReadText(inFile, EncodingType.UTF8))!);
@@ -1385,28 +1399,66 @@ namespace Sen.Shell.Modules.Support
             return;
         }
 
+        public override void ReanimToXML(Reanim reanim, string outFile)
+        {
+            Reanim_RawXML.Encode(reanim, outFile);
+            return;
+        }
+
+        public override Reanim ReanimFromXML(string inFile)
+        {
+            var reanim = Reanim_RawXML.Decode(inFile);
+            return reanim;
+        }
+
+        public override Particles ParticlesToJson(string inFile)
+        {
+            var particles = Particles_Function.ParseParticles(inFile);
+            return particles;
+        }
+
+        public override void ParticlesFromJson(Particles particles, ParticlesVersion version, string outFile)
+        {
+            var sen = Particles_Function.WriteParticles(particles, version);
+            sen.OutFile(outFile);
+            return;
+        }
+
+        public override void ParticlesToXML(Particles particles, string outFile)
+        {
+            Particles_RawXml.Encode(particles, outFile);
+            return;
+        }
+
+        public override Particles ParticlesFromXML(string inFile)
+        {
+            var particles = Particles_RawXml.Decode(inFile);
+            return particles;
+        }
+
         public override string SerializeJson(object json, char? indent, bool? allow_null)
         {
-            return RSBFunction.JsonPrettify(JsonConvert.SerializeObject(json, Formatting.Indented, 
-                new JsonSerializerSettings { 
+            return RSBFunction.JsonPrettify(JsonConvert.SerializeObject(json, Formatting.Indented,
+                new JsonSerializerSettings
+                {
                     NullValueHandling = allow_null is not null && (bool)allow_null ? NullValueHandling.Include : NullValueHandling.Ignore
                 }), indent ?? '\t');
         }
 
-        public override void DecodeCompiledText(string inFile, string outFile, string encryptionKey)
+        public override void DecodeCompiledText(string inFile, string outFile, string encryptionKey, bool use64bitVariant)
         {
             var rijndael = new SenBuffer(bytes: Org.BouncyCastle.Utilities.Encoders.Base64.Decode(new SenBuffer(inFile).toBytes())!);
             var compiled = Decrypt(rijndael, encryptionKey);
             var zlib = new PopCapZlib();
-            var string_x = new SenBuffer(zlib.ZlibUncompress(compiled, false));
+            var string_x = new SenBuffer(zlib.ZlibUncompress(compiled, use64bitVariant));
             string_x.OutFile(outFile);
             return;
         }
 
-        public override void EncodeCompiledText(string inFile, string outFile, string encryptionKey)
+        public override void EncodeCompiledText(string inFile, string outFile, string encryptionKey, bool use64bitVariant)
         {
             var zlib = new PopCapZlib();
-            var byte_x = zlib.ZlibCompress(new SenBuffer(inFile), false, ZlibCompressionLevel.BEST_COMPRESSION);
+            var byte_x = zlib.ZlibCompress(new SenBuffer(inFile), use64bitVariant, ZlibCompressionLevel.BEST_COMPRESSION);
             var rijndael = Encrypt(byte_x, encryptionKey);
             var compiled = new SenBuffer(bytes: Org.BouncyCastle.Utilities.Encoders.Base64.Encode(rijndael.toBytes())!);
             compiled.OutFile(outFile);

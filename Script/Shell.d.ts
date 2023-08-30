@@ -1596,7 +1596,7 @@ declare namespace Sen {
              * @param encryptionKey - Key
              */
 
-            export function DecodeCompiledText(inFile: string, outFile: string, encryptionKey: string): void;
+            export function DecodeCompiledText(inFile: string, outFile: string, encryptionKey: string, use_64_bit_variant: boolean): void;
             /**
              *
              * @param inFile - In file
@@ -1604,7 +1604,7 @@ declare namespace Sen {
              * @param encryptionKey - Key
              */
 
-            export function EncodeCompiledText(inFile: string, outFile: string, encryptionKey: string): void;
+            export function EncodeCompiledText(inFile: string, outFile: string, encryptionKey: string, use_64_bit_variant: boolean): void;
 
             /**
              * Flash to JSON
@@ -2071,6 +2071,37 @@ declare namespace Sen {
              */
 
             export function PopcapRenderEffectEncode(inFile: string, outFile: string): void;
+
+            /**
+             *
+             * @param inFile - In file
+             */
+
+            export function ParticlesToJson(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Particles;
+
+            /**
+             *
+             * @param particle - Particles
+             * @param version - Version
+             * @param outFile - Output file
+             */
+
+            export function ParticlesFromJson(particle: Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Particles, version: Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Version, outFile: string): void;
+
+            /**
+             *
+             * @param particle - Particles
+             * @param outfile - Output file
+             */
+
+            export function ParticlesToXML(particle: Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Particles, outfile: string): void;
+
+            /**
+             *
+             * @param inFile - Input file
+             */
+
+            export function ParticlesFromXML(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Particles;
         }
 
         /**
