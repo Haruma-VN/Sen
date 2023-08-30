@@ -539,5 +539,19 @@
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
+    },
+    "popcap_compiled_text_decode": {
+        "func_number": 78,
+        "include": [".txt"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_compiled_text_encode": {
+        "func_number": 79,
+        "include": [".txt"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
     }
 }

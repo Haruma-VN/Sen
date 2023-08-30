@@ -543,7 +543,7 @@
     "subgroup_count_cannot_be_zero": "Số lượng Subgroup không thể bằng 0",
     "check_length_layer_is_missing": "Không tìm thấy lớp trống, nên tạo lớp trống \"0\"",
     "evaluate_fs": "Thực thi Tập lệnh đang Tiến hành:",
-    "android_rsb_to_ios_rsb": "PopCap RSB: Chuyển đổi OBB Android sang RSB iOS",
+    "android_rsb_to_ios_rsb": "PopCap RSB: Chuyển đổi RS Android sang RSB iOS",
     "erase_plant_levels": "PopCap JSON-Patch: Xóa Cấp độ Cây",
     "extract_cn_rsb": "PopCap RSB: Giải nén RSB Trung Quốc",
     "import_custom_content": "PopCap RSB: Nhập Nội dung Tùy chỉnh",
@@ -602,5 +602,7 @@
     "unsupported_reanim_platform": "Nền tảng reanim không được hỗ trợ",
     "reanim_cannot_be_null": "Reanim không thể là đối tượng rỗng",
     "invalid_reanim_magic": "Magic reanim không hợp lệ",
-    "invalid_track": "Track không hợp lệ"
+    "invalid_track": "Track không hợp lệ",
+    "popcap_compiled_text_decode": "PopCap Compiled Text: Giải Mã",
+    "popcap_compiled_text_encode": "PopCap Compiled Text: Mã Hoá"
 }

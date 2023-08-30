@@ -543,7 +543,7 @@
     "subgroup_count_cannot_be_zero": "Subgroup count cannot be 0",
     "check_length_layer_is_missing": "Does not find empty layer, should create empty layer \"0\"",
     "evaluate_fs": "Evaluate Script in Progress:",
-    "android_rsb_to_ios_rsb": "PopCap RSB: Convert Android OBB to iOS RSB",
+    "android_rsb_to_ios_rsb": "PopCap RSB: Convert Android RSB to iOS RSB",
     "erase_plant_levels": "PopCap JSON-Patch: Erase Plant Levels",
     "extract_cn_rsb": "PopCap RSB: Extract Chinese RSBs",
     "import_custom_content": "PopCap RSB: Import Custom Content",
@@ -602,5 +602,7 @@
     "unsupported_reanim_platform": "Unsupported reanim platform",
     "reanim_cannot_be_null": "Reanim cannot be null object",
     "invalid_reanim_magic": "Invalid reanim magic",
-    "invalid_track": "Invalid track"
+    "invalid_track": "Invalid track",
+    "popcap_compiled_text_decode": "PopCap Compiled Text: Decode",
+    "popcap_compiled_text_encode": "PopCap Compiled Text: Encode"
 }

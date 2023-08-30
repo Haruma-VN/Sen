@@ -49,10 +49,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack {
         const standard: PacketInfo = Sen.Shell.LotusModule.RSGUnpack(rsg_in, out_dir);
         const packet_info: PacketInfo = { ...standard, res: [] };
         standard.res.forEach((resx: ResInfo) => {
-            packet_info.res.push({
+            const m_object = {
                 path: (resx.path as string).split("\\"),
                 ptx_info: resx.ptx_info,
-            });
+            };
+            packet_info.res.push(m_object);
+            // if (m_object.path.at(-1)!.endsWith(".PTX")) {
+            //     Sen.Shell.Console.Print(null, `${m_object.path.at(-1)!}: ${m_object.ptx_info?.width!} & ${m_object.ptx_info?.height!}`);
+            // }
         });
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${out_dir}`, `packet.json`)), packet_info, use_res);
         return;

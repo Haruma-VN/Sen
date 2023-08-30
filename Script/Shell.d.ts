@@ -1590,6 +1590,23 @@ declare namespace Sen {
             export function ReanimJsonToFlashXfl(reanim: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim, out_dir: string): void;
 
             /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
+             * @param encryptionKey - Key
+             */
+
+            export function DecodeCompiledText(inFile: string, outFile: string, encryptionKey: string): void;
+            /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
+             * @param encryptionKey - Key
+             */
+
+            export function EncodeCompiledText(inFile: string, outFile: string, encryptionKey: string): void;
+
+            /**
              * Flash to JSON
              * @param inDir - In directory
              */

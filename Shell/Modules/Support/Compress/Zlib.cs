@@ -16,7 +16,7 @@ namespace Sen.Shell.Modules.Support.Compress
     {
         public abstract SenBuffer ZlibCompress(ZlibCompress options);
 
-        public abstract byte[] ZlibUncompress(string ripefile, bool use64bitvariant);
+        public abstract byte[] ZlibUncompress(SenBuffer ripefile, bool use64bitvariant);
 
         public abstract void CheckPopCapZlibMagic(byte[] header, string? filepath);
 
@@ -52,6 +52,7 @@ namespace Sen.Shell.Modules.Support.Compress
             {
                 throw new Exception($"mismatch_popcap_zlib_magic");
             };
+            return;
         }
 
         public override unsafe SenBuffer ZlibCompress(ZlibCompress options)
@@ -74,10 +75,28 @@ namespace Sen.Shell.Modules.Support.Compress
             return buffer;
         }
 
-
-        public unsafe override byte[] ZlibUncompress(string ripefile, bool use64bitvariant)
+        public unsafe SenBuffer ZlibCompress(SenBuffer destination, bool use64bitVariant, ZlibCompressionLevel level)
         {
-            var buffer = new SenBuffer(ripefile);
+            var buffer = new SenBuffer();
+            buffer.writeBytes([0xD4, 0xFE, 0xAD, 0xDE]);
+            if (use64bitVariant)
+            {
+                buffer.writeNull(4);
+            }
+            buffer.writeUInt32LE((uint)destination.length);
+            if (use64bitVariant)
+            {
+                buffer.writeNull(4);
+            }
+            var compress = new Standards.Compress();
+            var data = compress.CompressZlib(destination.toBytes(), level);
+            buffer.writeBytes(data);
+            return buffer;
+        }
+
+
+        public unsafe override byte[] ZlibUncompress(SenBuffer buffer, bool use64bitvariant)
+        {
             var magic = buffer.readUInt32LE();
             if (magic != 0xDEADFED4)
             {

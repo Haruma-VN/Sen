@@ -125,32 +125,6 @@ namespace Sen.Script {
     }
 
     /**
-     * External Libraries
-     */
-
-    export function DownloadInternal(): void {
-        switch (Sen.Shell.DotNetPlatform.CurrentUserPlatform()) {
-            case "Windows": {
-                const internal_path = `${Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(Sen.Shell.MainScriptDirectory)}/Internal.dll`)}`;
-                if (!Sen.Shell.FileSystem.FileExists(internal_path)) {
-                    Sen.Shell.Console.Print(null, `Internal Not Found, redownload Internal from server`);
-                    Sen.Shell.ShellUpdate.DownloadFromServer(`https://github.com/Haruma-VN/Sen/releases/download/internal/Internal.dll`, internal_path, "Sen");
-                }
-                break;
-            }
-            case "Linux": {
-                const internal_path = `${Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Dirname(Sen.Shell.MainScriptDirectory)}/Internal.so`)}`;
-                if (!Sen.Shell.FileSystem.FileExists(internal_path)) {
-                    Sen.Shell.Console.Print(null, `Internal Not Found, redownload Internal from server`);
-                    Sen.Shell.ShellUpdate.DownloadFromServer(`https://github.com/Haruma-VN/Sen/releases/download/internal/Internal.so`, internal_path, "Sen");
-                }
-                break;
-            }
-        }
-        return;
-    }
-
-    /**
      *
      * @param argument - Pass arguments from .NET here
      */
@@ -195,7 +169,7 @@ namespace Sen.Script {
         }
         Sen.Script.Modules.System.Default.Localization.CountDown(10);
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
-        const wrapper = { success: 0, fail: 0 };
+        const wrapper: Sen.Script.Modules.Interface.Assert.Wrapper = { success: 0, fail: 0, has_argument: false };
         try {
             Sen.Script.Modules.Interface.Assert.Evaluate(argument, wrapper);
         } catch (error: unknown) {

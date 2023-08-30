@@ -167,6 +167,10 @@ namespace Sen.Shell.Modules.Support
 
         public abstract string SerializeJson(object json, char? indent, bool? handle_null);
 
+        public abstract void DecodeCompiledText(string inFile, string outFile, string encryptionKey);
+
+        public abstract void EncodeCompiledText(string inFile, string outFile, string encryptionKey);
+
     }
 
     #endregion
@@ -1070,7 +1074,7 @@ namespace Sen.Shell.Modules.Support
         public unsafe sealed override void PopCapZlibUncompress(string ripefile, bool use64bitvariant, string outFile)
         {
             var zlib = new PopCapZlib();
-            var uncompresszlib_data = zlib.ZlibUncompress(ripefile, use64bitvariant);
+            var uncompresszlib_data = zlib.ZlibUncompress(new SenBuffer(ripefile), use64bitvariant);
             var fs = new FileSystem();
             fs.OutFile(outFile, uncompresszlib_data);
             return;
@@ -1387,6 +1391,26 @@ namespace Sen.Shell.Modules.Support
                 new JsonSerializerSettings { 
                     NullValueHandling = allow_null is not null && (bool)allow_null ? NullValueHandling.Include : NullValueHandling.Ignore
                 }), indent ?? '\t');
+        }
+
+        public override void DecodeCompiledText(string inFile, string outFile, string encryptionKey)
+        {
+            var rijndael = new SenBuffer(bytes: Org.BouncyCastle.Utilities.Encoders.Base64.Decode(new SenBuffer(inFile).toBytes())!);
+            var compiled = Decrypt(rijndael, encryptionKey);
+            var zlib = new PopCapZlib();
+            var string_x = new SenBuffer(zlib.ZlibUncompress(compiled, false));
+            string_x.OutFile(outFile);
+            return;
+        }
+
+        public override void EncodeCompiledText(string inFile, string outFile, string encryptionKey)
+        {
+            var zlib = new PopCapZlib();
+            var byte_x = zlib.ZlibCompress(new SenBuffer(inFile), false, ZlibCompressionLevel.BEST_COMPRESSION);
+            var rijndael = Encrypt(byte_x, encryptionKey);
+            var compiled = new SenBuffer(bytes: Org.BouncyCastle.Utilities.Encoders.Base64.Encode(rijndael.toBytes())!);
+            compiled.OutFile(outFile);
+            return;
         }
 
 

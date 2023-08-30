@@ -162,7 +162,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_reanim_json_to_flash"
         | "popcap_reanim_json_from_flash"
         | "popcap_reanim_to_flash"
-        | "popcap_reanim_from_flash";
+        | "popcap_reanim_from_flash"
+        | "popcap_compiled_text_decode"
+        | "popcap_compiled_text_encode";
 
     /**
      * Structure
@@ -892,6 +894,50 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecrypt(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_compiled_text_decode": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
+                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.plain.txt`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.LotusModule.DecodeCompiledText(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
+                            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.plain.txt`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.LotusModule.DecodeCompiledText(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_compiled_text_encode": {
+                    if (!Array.isArray(argument)) {
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
+                        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.crypt.txt`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.LotusModule.EncodeCompiledText(argument, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("pvz2_chinese_encryption_key_obtained").replace(/\{\}/g, ""));
+                            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key}`);
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.crypt.txt`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.LotusModule.EncodeCompiledText(arg, output_argument.argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONEncrypt.key);
                         });
                     }
                     break;

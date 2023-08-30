@@ -65,6 +65,7 @@ namespace Sen.Script.Modules.Interface.Assert {
     export interface Wrapper {
         success: number;
         fail: number;
+        has_argument: boolean;
     }
 
     /**
@@ -83,6 +84,9 @@ namespace Sen.Script.Modules.Interface.Assert {
         let evaluate_more_argument: boolean = false;
         if (host.length > 1 && host.filter((value: RequestArgument<string>) => value.method !== null).length === 0) {
             evaluate_more_argument = Sen.Script.Modules.Interface.Assert.EvaluateMoreArgument();
+        }
+        if (host.length !== 0) {
+            wrapper.has_argument = true;
         }
         if (evaluate_more_argument) {
             const execute_argument: Array<string> = host.map((e) => e.argument!);
@@ -120,6 +124,10 @@ namespace Sen.Script.Modules.Interface.Assert {
                 }
             });
         }
+        // if (wrapper.has_argument) {
+        //     argument = [];
+        //     Evaluate(argument, wrapper);
+        // }
         return;
     }
 
@@ -444,6 +452,9 @@ namespace Sen.Script.Modules.Interface.Assert {
             }
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, `${Sen.Script.Modules.System.Default.Localization.GetString("execution_size").replace(/\{\}/g, `${argument.length}`)}`);
             arg = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
+        }
+        if (argument.length === 0) {
+            wrapper.has_argument = false;
         }
         return;
     }

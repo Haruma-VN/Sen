@@ -4,8 +4,6 @@ using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Runtime.InteropServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Reflection.Emit;
 using Sen.Shell.Modules.Internal;
 
 namespace Sen.Shell.Modules.Standards
