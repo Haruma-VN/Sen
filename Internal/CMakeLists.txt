@@ -21,14 +21,14 @@ endif()
 # Add source to this project's shared library.
 add_library(
   Internal SHARED
-  "./kernel/tool/compress/bzip2.hpp"
-  "./kernel/tool/compress/lzma.hpp"
   "./kernel/utility/string/common.hpp"
   "./kernel/utility/array/common.hpp"
   "./kernel/utility/path/common.hpp"
   "./kernel/utility/filesystem/common.hpp"
   "./kernel/utility/exception/common.hpp"
   "./kernel/tool/diff/vcdiff.hpp"
+  "./kernel/tool/compress/bzip2.hpp"
+  "./kernel/tool/compress/lzma.hpp"
   "./kernel/utility/utility.hpp"
   "./Internal.hpp"
   "./Internal.cpp"
@@ -46,6 +46,9 @@ add_subdirectory("./dependencies/lzma")
 add_subdirectory("./dependencies/bzip2")
 add_subdirectory("./dependencies/etcpak")
 add_subdirectory("./dependencies/open_vcdiff")
+
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 
 # tinyfiledialogs link
 
