@@ -81,11 +81,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
         const text_list: Array<string> = text.split("\n");
         const dict: Array<string> = new Array<string>();
         for (let i: int = 0; i < text_list.length; ++i) {
-            if (text_list[i].startsWith("[") && text_list[i].endsWith("]")) {
+            if (/^\[.*\]\s*$/.test(text_list[i])) {
                 dict.push(text_list[i].slice(1, -1));
                 let destination: int = -1;
                 find_next: for (let j: int = i + 1; j < text_list.length; ++j) {
-                    if (text_list[j].startsWith("[") && text_list[j].endsWith("]")) {
+                    if (/^\[.*\]\s*$/.test(text_list[j])) {
                         destination = j;
                         break find_next;
                     }
@@ -154,6 +154,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert {
             version: 1n,
         };
         const list_text: Array<string> = Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.ExtractListFromLawnstringText(text);
+        if (list_text.length < 1) {
+            return json_map;
+        }
         for (let i: int = 0; i < list_text.length; ++i) {
             json_map.objects[0].objdata.LocStringValues[list_text[i]] = list_text[i + 1];
             i++;

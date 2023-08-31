@@ -605,13 +605,15 @@
     "invalid_track": "Invalid track",
     "popcap_compiled_text_decode": "PopCap Compiled-Text: Decode",
     "popcap_compiled_text_encode": "PopCap Compiled-Text: Encode",
-    "popcap_particles_decode": "PopCap Particles: Decode",
     "popcap_particles_encode": "PopCap Particles: Encode",
+    "popcap_particles_decode": "PopCap Particles: Decode",
     "popcap_particles_to_xml": "PopCap Particles: Particles JSON to XML",
-    "popcap_particles_from_xml": "PopCap Particles: Particles JSON from XML",
+    "popcap_particles_from_xml": "PopCap Particles: XML to Particles JSON",
+    "particles_platform": "Particles Platform",
     "unsupported_particles_platform": "Unsupported Particles platform",
-    "particles_cannot_be_null": "Particles cannot be null",
     "unsupported_particles": "Unsupported Particles Dataview",
+    "particles_cannot_be_null": "Particles cannot be null",
     "particle_name_must_be_emitter": "Particles name must be \"Emitter\"",
-    "particles_platform": "Particles Platform"
+    "popcap_resource_manager_split": "PopCap Resource-Manager: Split",
+    "popcap_resource_manager_merge": "PopCap Resource-Manager: Merge"
 }

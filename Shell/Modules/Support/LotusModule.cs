@@ -77,11 +77,11 @@ namespace Sen.Shell.Modules.Support
 
         public abstract void RSGPack(string inFolder, string outFile, PacketInfo packet_info, bool useResDirectory);
 
-        public abstract MainfestInfo RSBUnpack(string inRSBpath, string outFolder);
+        public abstract ManifestInfo RSBUnpack(string inRSBpath, string outFolder);
 
-        public abstract void RSBPack(string RSBDirectory, string outRSB, MainfestInfo mainfestInfo);
+        public abstract void RSBPack(string RSBDirectory, string outRSB, ManifestInfo ManifestInfo);
 
-        public abstract MainfestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory);
+        public abstract ManifestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory);
 
         public abstract void RSBObfuscate(string RSBin, string outRSB);
 
@@ -1030,19 +1030,19 @@ namespace Sen.Shell.Modules.Support
             return;
         }
 
-        public unsafe sealed override MainfestInfo RSBUnpack(string inRSBpath, string outFolder)
+        public unsafe sealed override ManifestInfo RSBUnpack(string inRSBpath, string outFolder)
         {
             var buffer = new SenBuffer(inRSBpath);
             return RSBFunction.Unpack(buffer, outFolder);
         }
 
-        public unsafe sealed override void RSBPack(string RSBDirectory, string outRSB, MainfestInfo mainfestInfo)
+        public unsafe sealed override void RSBPack(string RSBDirectory, string outRSB, ManifestInfo ManifestInfo)
         {
-            RSBFunction.Pack(RSBDirectory, outRSB, mainfestInfo);
+            RSBFunction.Pack(RSBDirectory, outRSB, ManifestInfo);
             return;
         }
 
-        public unsafe sealed override MainfestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory)
+        public unsafe sealed override ManifestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory)
         {
             var buffer = new SenBuffer(RSBin);
             var manifest = RSBFunction.UnpackByLooseConstraints(buffer, outRSBdirectory);

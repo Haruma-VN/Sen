@@ -581,5 +581,19 @@
         "exclude": [],
         "is_enabled": true,
         "type": "file"
+    },
+    "popcap_resource_manager_split": {
+        "func_number": 84,
+        "include": ["description.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_resource_manager_merge": {
+        "func_number": 85,
+        "include": [".rsm"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
     }
 }

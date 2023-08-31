@@ -168,7 +168,9 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_particles_decode"
         | "popcap_particles_encode"
         | "popcap_particles_to_xml"
-        | "popcap_particles_from_xml";
+        | "popcap_particles_from_xml"
+        | "popcap_resource_manager_split"
+        | "popcap_resource_manager_merge";
 
     /**
      * Structure
@@ -765,6 +767,42 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Manifest.SplitManifest<string, string>(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_resource_manager_split": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.rsm`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Script.Modules.Support.PopCap.PvZ.ResourceManager.Convert.Split(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.rsm`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            Sen.Script.Modules.Support.PopCap.PvZ.ResourceManager.Convert.Split(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_resource_manager_merge": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Script.Modules.Support.PopCap.PvZ.ResourceManager.Convert.Merge(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Script.Modules.Support.PopCap.PvZ.ResourceManager.Convert.Merge(arg, output_argument.argument);
                         });
                     }
                     break;

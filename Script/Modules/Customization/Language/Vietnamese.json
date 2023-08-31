@@ -604,5 +604,14 @@
     "invalid_reanim_magic": "Magic reanim không hợp lệ",
     "invalid_track": "Track không hợp lệ",
     "popcap_compiled_text_decode": "PopCap Compiled-Text: Giải Mã",
-    "popcap_compiled_text_encode": "PopCap Compiled-Text: Mã Hoá"
+    "popcap_compiled_text_encode": "PopCap Compiled-Text: Mã Hoá",
+    "popcap_particles_encode": "PopCap Particles: Mã hóa",
+    "popcap_particles_decode": "PopCap Particles: Giải mã",
+    "popcap_particles_to_xml": "PopCap Particles: Particles JSON sang XML",
+    "popcap_particles_from_xml": "PopCap Particles: XML sang Particles JSON",
+    "particles_platform": "Nền tảng Particles",
+    "unsupported_particles_platform": "Nền tảng Particles không được hỗ trợ",
+    "unsupported_particles": "Chế độ xem dữ liệu Particles không được hỗ trợ",
+    "particles_cannot_be_null": "Particles không thể rỗng",
+    "particle_name_must_be_emitter": "Tên Particles phải là \"Emitter\""
 }

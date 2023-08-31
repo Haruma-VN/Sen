@@ -7,7 +7,7 @@ using Sen.Shell.Modules.Standards;
 
 namespace Sen.Shell.Modules.Support.PvZ2.RSB
 {
-    public class MainfestInfo
+    public class ManifestInfo
     {
         public required int version { get; set; }
 
@@ -263,7 +263,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
     public class RSBFunction
     {
 
-        public static MainfestInfo Unpack(SenBuffer RSBFile, string outFolder)
+        public static ManifestInfo Unpack(SenBuffer RSBFile, string outFolder)
         {
             var path = new ImplementPath();
             var rsbHeadInfo = ReadHead(RSBFile);
@@ -415,7 +415,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     subgroup = subGroupList.ToArray(),
                 });
             }
-            var mainfest_info = new MainfestInfo
+            var mainfest_info = new ManifestInfo
             {
                 version = rsbHeadInfo.version,
                 ptx_info_size = rsbHeadInfo.ptxInfo_EachLength,
@@ -797,7 +797,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             }
         }
 
-        public static void Pack(string inFolder, string outFile, MainfestInfo manifestInfo)
+        public static void Pack(string inFolder, string outFile, ManifestInfo manifestInfo)
         {
             var RSBFile = new SenBuffer();
             var path = new ImplementPath();
@@ -1283,7 +1283,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             return;
         }
 
-        public static MainfestInfo UnpackByLooseConstraints(SenBuffer RSBFile, string outFolder)
+        public static ManifestInfo UnpackByLooseConstraints(SenBuffer RSBFile, string outFolder)
         {
             var rsbHeadInfo = ReadHead(RSBFile);
             var path = new ImplementPath();
@@ -1383,7 +1383,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                     subgroup = subGroupList.ToArray(),
                 });
             }
-            var mainfest_info = new MainfestInfo
+            var mainfest_info = new ManifestInfo
             {
                 version = rsbHeadInfo.version,
                 ptx_info_size = rsbHeadInfo.ptxInfo_EachLength,

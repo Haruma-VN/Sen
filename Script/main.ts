@@ -23,6 +23,7 @@ namespace Sen.Script {
             `Modules/Support/PopCap/PvZ/CryptData/Encrypt`,
             `Modules/Support/PopCap/PvZ/ReAnimation/Encode`,
             `Modules/Support/PopCap/PvZ/Particles/Encode`,
+            `Modules/Support/PopCap/PvZ/ResourceManager/Convert`,
             `Modules/Support/PopCap/PvZ2/Resources/ResInfo`,
             `Modules/Support/PopCap/PvZ2/Resources/ResourceGroup`,
             `Modules/Support/PopCap/PvZ2/Atlas/Split`,
@@ -165,9 +166,7 @@ namespace Sen.Script {
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3))
         );
-        if (Sen.Script.Modules.System.Default.Localization.GetString("language.author") !== "Haruma") {
-            Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("this_translation_by"), Sen.Script.Modules.System.Default.Localization.GetString("language.author"));
-        }
+        Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("this_translation_by"), Sen.Script.Modules.System.Default.Localization.GetString("language.author"));
         Sen.Script.Modules.System.Default.Localization.CountDown(10);
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         const wrapper: Sen.Script.Modules.Interface.Assert.Wrapper = { success: 0, fail: 0, has_argument: false };
