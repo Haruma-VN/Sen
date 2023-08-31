@@ -90,7 +90,7 @@ UnsignedByteStream GZipCompress(
         }
         auto compressed_data = std::vector<uint8_t>{};
         auto buffer = std::vector<uint8_t>(1024);
-        int result;
+        auto result = int{};
         do {
             stream.avail_out = buffer.size();
             stream.next_out = buffer.data();
@@ -158,7 +158,7 @@ UnsignedByteStream GZipUncompress(
 }
 
 InternalAPI
-void DeflateCompress(
+Void DeflateCompress(
     const char* input,
     int inputSize,
     char** output,
@@ -238,7 +238,7 @@ Void DeflateUncompress(
         auto ret = int{};
         auto have = unsigned{};
         auto strm = z_stream{};
-        unsigned char out_buf[CHUNK];
+        unsigned char out_buf[CHUNK]{};
         auto out_size = 0;
         strm.zalloc = Z_NULL;
         strm.zfree = Z_NULL;
@@ -264,7 +264,7 @@ Void DeflateUncompress(
                 return;
             }
             have = CHUNK - strm.avail_out;
-            *out = (unsigned char*)realloc(*out, out_size + have);
+            *out = (unsigned char*)realloc(*out, out_size + static_cast<size_t>(have));
             memcpy(*out + out_size, out_buf, have);
             out_size += have;
         } while (strm.avail_out == 0);

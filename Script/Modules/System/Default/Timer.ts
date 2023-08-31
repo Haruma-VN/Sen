@@ -15,11 +15,11 @@ namespace Sen.Script.Modules.System.Default.Timer {
      * @returns Fixed number as string
      */
 
-    export function CalculateTime(begin_time: number, end_time: number, to_fixed: number = 3): string {
+    export function CalculateTime(begin_time: number, end_time: number, decimal_symbol: string, to_fixed: number = 3): string {
         if (Sen.Script.Modules.System.Default.Localization.EntryJson.default.format_time) {
-            return Sen.Script.Modules.System.Default.Timer.FormatTime((end_time - begin_time) / 1000, to_fixed);
+            return Sen.Script.Modules.System.Default.Timer.FormatTime((end_time - begin_time) / 1000, to_fixed, decimal_symbol);
         }
-        return ((end_time - begin_time) / 1000).toFixed(to_fixed);
+        return ((end_time - begin_time) / 1000).toFixed(to_fixed).replaceAll(`.`, decimal_symbol);
     }
 
     /**
@@ -28,25 +28,19 @@ namespace Sen.Script.Modules.System.Default.Timer {
      * @returns Formated string
      */
 
-    export function FormatTime(seconds: number, fixed: number): string {
+    export function FormatTime(seconds: number, fixed: number, decimal_symbol: string): string {
         let result: string = "";
         const hours: number = Math.floor(seconds / 3600);
         const minutes: number = Math.floor(Number((seconds % 3600) / 60));
 
         if (hours > 0) {
-            result += `${hours} ${
-                hours > 1 ? Sen.Script.Modules.System.Default.Localization.GetString("hours") : Sen.Script.Modules.System.Default.Localization.GetString("hour")
-            } `;
+            result += `${hours} ${hours > 1 ? Sen.Script.Modules.System.Default.Localization.GetString("hours") : Sen.Script.Modules.System.Default.Localization.GetString("hour")} `;
         }
         if (minutes > 0) {
-            result += `${minutes} ${
-                minutes > 1
-                    ? Sen.Script.Modules.System.Default.Localization.GetString("minutes")
-                    : Sen.Script.Modules.System.Default.Localization.GetString("minute")
-            } `;
+            result += `${minutes} ${minutes > 1 ? Sen.Script.Modules.System.Default.Localization.GetString("minutes") : Sen.Script.Modules.System.Default.Localization.GetString("minute")} `;
         }
         if (seconds > 0 || result === "") {
-            result += `${(seconds % 60).toFixed(fixed)}`;
+            result += `${(seconds % 60).toFixed(fixed).replaceAll(`.`, decimal_symbol)}`;
         }
         return result;
     }

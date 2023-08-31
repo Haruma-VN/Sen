@@ -27,11 +27,16 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract string SaveFileDialog(string title, string[] filter);
 
+        public abstract string ObtainCurrentArchitectureDecimalSymbols();
+
     }
 
 
     public class SystemImplement : SystemAbstract
     {
+        public override string ObtainCurrentArchitectureDecimalSymbols() 
+            => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+
 
         public override unsafe string OpenFileDialog(string title, string[] filter)
         {

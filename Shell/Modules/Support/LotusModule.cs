@@ -20,6 +20,12 @@ using Sen.Shell.Modules.Support.PvZ2;
 using Sen.Shell.Modules.Support.PVZ.Reanim;
 using Jint.Runtime;
 using Sen.Shell.Modules.Support.PVZ.Particles;
+using Jint;
+using Jint.Native;
+using Sen.Shell.Modules.Standards.Bitmap;
+using Sen.Shell.Modules.Support.Download;
+using Sen.Shell.Modules.Support.TextureEncode.RSB;
+using System.IO;
 
 namespace Sen.Shell.Modules.Support
 {
@@ -957,10 +963,25 @@ namespace Sen.Shell.Modules.Support
 
         public unsafe sealed override void RTONDecode(string inFile, string outFile, RTONCipher DecryptRTON)
         {
-            var RtonFile = new SenBuffer(inFile);
-            var JsonFile = Decode(RtonFile, DecryptRTON);
-            JsonFile.OutFile(outFile);
-            return;
+            {
+                var RtonFile = new SenBuffer(inFile);
+                var JsonFile = Decode(RtonFile, DecryptRTON);
+                JsonFile.OutFile(outFile);
+                return;
+            }
+
+        //public void ThrowError(Exception e)
+        //{
+        //    var engine = new Engine();
+        //    var ns = new JsObject(engine);
+        //    var dictionary = new Dictionary<string, object>
+        //        {
+        //            { "Console", new SystemImplement() },
+        //        };
+        //    ns.Set("Shell", JsValue.FromObject(engine, dictionary));
+        //    engine.SetValue("Sen", ns);
+        //    engine.Evaluate($"throw new Error({SerializeJson(e.StackTrace, '\t', true)})");
+        //    return;
         }
 
         public unsafe sealed override void RTONEncode(string inFile, string outFile, RTONCipher EncryptRTON)

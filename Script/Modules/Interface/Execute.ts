@@ -3322,7 +3322,7 @@ namespace Sen.Script.Modules.Interface.Execute {
             }
         }
         const func_time_end: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
-        const time_spent: string = Sen.Script.Modules.System.Default.Timer.CalculateTime(func_time_start, func_time_end, 3);
+        const time_spent: string = Sen.Script.Modules.System.Default.Timer.CalculateTime(func_time_start, func_time_end, Sen.Shell.Console.ObtainCurrentArchitectureDecimalSymbols(), 3);
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, time_spent));
         if (Sen.Script.Modules.System.Default.Localization.notification && notify) {
             Sen.Shell.DotNetPlatform.SendNotification(

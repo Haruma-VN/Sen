@@ -369,6 +369,12 @@ declare namespace Sen {
              */
 
             export function SaveFileDialog(title: string, filter: Array<string>): string;
+
+            /**
+             * Current machine decimal symbols
+             */
+
+            export function ObtainCurrentArchitectureDecimalSymbols(): string;
         }
         /**
          * @packages Implementing File System based on C# & JS

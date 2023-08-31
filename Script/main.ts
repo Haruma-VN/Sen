@@ -164,7 +164,10 @@ namespace Sen.Script {
         );
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, 3))
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_time").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(time_start, time_end, Sen.Shell.Console.ObtainCurrentArchitectureDecimalSymbols(), 3)
+            )
         );
         Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("this_translation_by"), Sen.Script.Modules.System.Default.Localization.GetString("language.author"));
         Sen.Script.Modules.System.Default.Localization.CountDown(10);
@@ -183,7 +186,10 @@ namespace Sen.Script {
         );
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-            Sen.Script.Modules.System.Default.Localization.GetString("total_time_spent").replace(/\{\}/g, Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, 3))
+            Sen.Script.Modules.System.Default.Localization.GetString("total_time_spent").replace(
+                /\{\}/g,
+                Sen.Script.Modules.System.Default.Timer.CalculateTime(Sen_module_time_start, Sen_module_time_end, Sen.Shell.Console.ObtainCurrentArchitectureDecimalSymbols(), 3)
+            )
         );
         Sen.Script.Modules.Platform.Constraints.ExitProgram();
         return;
