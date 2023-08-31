@@ -487,17 +487,33 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             readOffset = tempOffset;
             return str;
         }
+        public string readStringByUInt8(long offset = -1)
+        {
+            fixReadOffset(offset);
+            return readString(readUInt8());
+        }
 
         public string readStringByInt8(long offset = -1)
         {
             fixReadOffset(offset);
             return readString(readInt8());
         }
+        public string readStringByUInt16LE(long offset = -1)
+        {
+            fixReadOffset(offset);
+            return readString(readUInt16LE());
+        }
 
         public string readStringByInt16LE(long offset = -1)
         {
             fixReadOffset(offset);
             return readString(readInt16LE());
+        }
+
+        public string readStringByUInt32LE(long offset = -1)
+        {
+            fixReadOffset(offset);
+            return readString(readInt32LE());
         }
 
         public string readStringByInt32LE(long offset = -1)
@@ -987,6 +1003,18 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             writeVarInt64((number << 1) ^ (number >> 63));
         }
 
+        public void writeStringByUInt8(string? str, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            if (str is null)
+            {
+                writeUInt8(0);
+                return;
+            }
+            writeUInt8((byte)str!.Length);
+            writeString(str!);
+        }
+
         public void writeStringByInt8(string? str, long offset = -1)
         {
             fixWriteOffset(offset);
@@ -996,6 +1024,18 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
                 return;
             }
             writeInt8((sbyte)str!.Length);
+            writeString(str!);
+        }
+
+        public void writeStringByUInt16LE(string? str, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            if (str is null)
+            {
+                writeInt16LE(0);
+                return;
+            }
+            writeUInt16LE((ushort)str!.Length);
             writeString(str!);
         }
 
@@ -1011,7 +1051,19 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             writeString(str!);
         }
 
-        public void writeStringByInt32LE(string str, long offset = -1)
+        public void writeStringByUInt32LE(string? str, long offset = -1)
+        {
+            fixWriteOffset(offset);
+            if (str is null)
+            {
+                writeUInt32LE(0);
+                return;
+            }
+            writeUInt32LE((uint)str!.Length);
+            writeString(str!);
+        }
+
+        public void writeStringByInt32LE(string? str, long offset = -1)
         {
             fixWriteOffset(offset);
             if (str is null)
