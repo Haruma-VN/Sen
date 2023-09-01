@@ -2108,6 +2108,38 @@ declare namespace Sen {
              */
 
             export function ParticlesFromXML(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Particles;
+
+            /**
+             *
+             * @param inFile - In file
+             * @param outFile - Out file
+             */
+
+            export function DecodeCFW2(inFile: string, outFile: string): void;
+
+            /**
+             *
+             * @param inFile - in file
+             * @param outFile - out file
+             */
+
+            export function EncodeCFW2(inFile: string, outFile: string): void;
+
+            /**
+             *
+             * @param inFile - in file
+             * @param out_dir - out directory
+             */
+
+            export function UnpackPackage(inFile: string, out_dir: string): void;
+
+            /**
+             *
+             * @param inDirectory - In directory
+             * @param outFile - Out file
+             */
+
+            export function PackPackage(inDirectory: string, outFile: string): void;
         }
 
         /**

@@ -1291,6 +1291,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             {
                 throw new Exception("unsupported_trash_structure");
             }
+            if(rsbHeadInfo.version != 3 && rsbHeadInfo.version != 4)
+            {
+                rsbHeadInfo.version = 4;
+            }
             var rsgList = new List<FileListInfo>();
             FileListSplit(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, ref rsgList);
             var compositeInfo = new List<CompositeInfo>();

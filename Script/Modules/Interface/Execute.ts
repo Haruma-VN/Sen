@@ -11,7 +11,7 @@ namespace Sen.Script.Modules.Interface.Execute {
         );
         if (Array.isArray(argument)) {
             for (const func of Sen.Script.Modules.Interface.Assert.FunctionCollection) {
-                if (func === "popcap_official_atlas_split" || func === "popcap_resinfo_atlas_split") {
+                if (func === "popcap_official_atlas_split" || func === "popcap_resinfo_atlas_split" || func === "popcap_rsm_atlas_split") {
                     if (Sen.Script.Modules.Interface.Assert.CheckForJsonAndPng(argument) && Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].is_enabled) {
                         Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number}. ${Sen.Script.Modules.System.Default.Localization.GetString(func)}`);
                         available.push(Sen.Script.Modules.Interface.Assert.FunctionJsonObject[func].func_number);
@@ -170,7 +170,13 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_particles_to_xml"
         | "popcap_particles_from_xml"
         | "popcap_resource_manager_split"
-        | "popcap_resource_manager_merge";
+        | "popcap_resource_manager_merge"
+        | "popcap_rsm_atlas_split"
+        | "popcap_rsm_atlas_merge"
+        | "popcap_character_font_widget_2_decode"
+        | "popcap_character_font_widget_2_encode"
+        | "popcap_package_unpack"
+        | "popcap_package_pack";
 
     /**
      * Structure
@@ -321,6 +327,78 @@ namespace Sen.Script.Modules.Interface.Execute {
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Shell.LotusModule.DecodeNewtonResource(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_package_unpack": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.data`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Shell.LotusModule.UnpackPackage(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.data`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            Sen.Shell.LotusModule.UnpackPackage(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_package_pack": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.LotusModule.PackPackage(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.LotusModule.PackPackage(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_character_font_widget_2_decode": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.json`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.LotusModule.DecodeCFW2(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.json`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.LotusModule.DecodeCFW2(arg, output_argument.argument);
+                        });
+                    }
+                    break;
+                }
+                case "popcap_character_font_widget_2_encode": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
+                        };
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                        Sen.Shell.LotusModule.EncodeCFW2(argument, output_argument.argument);
+                    } else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
+                            };
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
+                            Sen.Shell.LotusModule.EncodeCFW2(arg, output_argument.argument);
                         });
                     }
                     break;

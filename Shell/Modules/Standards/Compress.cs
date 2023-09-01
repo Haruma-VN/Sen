@@ -5,6 +5,8 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Runtime.InteropServices;
 using Sen.Shell.Modules.Internal;
+using ICSharpCode.SharpZipLib.GZip;
+using ICSharpCode.SharpZipLib.Tar;
 
 namespace Sen.Shell.Modules.Standards
 {
@@ -39,6 +41,8 @@ namespace Sen.Shell.Modules.Standards
 
         public abstract byte[] UncompressLzma(byte[] zlibData);
 
+        public abstract void TarGzCompress(string inDirectory, string outDirectory);
+
     }
     public enum ZlibCompressionLevel
     {
@@ -52,6 +56,36 @@ namespace Sen.Shell.Modules.Standards
 
     public class Compress : Abstract_Compress
     {
+        public unsafe override void TarGzCompress(string sourceDirectory, string tgzFilename)
+        {
+            using var outStream = File.Create(tgzFilename);
+            using var gzoStream = new GZipOutputStream(outStream);
+            using var tarArchive = TarArchive.CreateOutputTarArchive(gzoStream);
+            tarArchive.RootPath = sourceDirectory.Replace('\\', '/');
+            AddDirectoryFilesToTar(tarArchive, sourceDirectory, true);
+            return;
+        }
+
+        private static void AddDirectoryFilesToTar(TarArchive tarArchive, string sourceDirectory, bool is_recursive)
+        { 
+            if (is_recursive)
+            {
+               var directories = Directory.GetDirectories(sourceDirectory);
+               foreach (var directory in directories)
+                    {
+
+                        AddDirectoryFilesToTar(tarArchive, directory, is_recursive);
+                    }
+            }
+            var filenames = Directory.GetFiles(sourceDirectory);
+            foreach (var filename in filenames)
+            {
+                var tarEntry = TarEntry.CreateEntryFromFile(filename);
+                tarEntry.Name = filename.Substring(sourceDirectory.Length + 1);
+                tarArchive.WriteEntry(tarEntry, true);
+            }
+            return;
+        }
 
         public override byte[] UncompressZlib(byte[] zlibData)
         {

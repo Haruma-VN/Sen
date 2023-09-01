@@ -613,5 +613,19 @@
     "unsupported_particles_platform": "Nền tảng Particles không được hỗ trợ",
     "unsupported_particles": "Chế độ xem dữ liệu Particles không được hỗ trợ",
     "particles_cannot_be_null": "Particles không thể rỗng",
-    "particle_name_must_be_emitter": "Tên Particles phải là \"Emitter\""
+    "particle_name_must_be_emitter": "Tên Particles phải là \"Emitter\"",
+    "popcap_resource_manager_merge": "PopCap Resource-Manager: Hợp nhất",
+    "popcap_resource_manager_split": "PopCap Resource-Manager: Tách",
+    "popcap_rsm_atlas_merge": "PopCap Resource-Manager: Hợp nhất Atlas",
+    "popcap_rsm_atlas_split": "PopCap Resource-Manager: Tách Atlas",
+    "popcap_character_font_widget_2_encode": "PopCap CFW2: Mã hóa",
+    "popcap_character_font_widget_2_decode": "PopCap CFW2: Giải mã",
+    "popcap_package_pack": "PopCap PAK: Đóng gói",
+    "popcap_package_unpack": "PopCap PAK: Giải nén",
+    "invalid_package_magic": "Magic Package không hợp lệ",
+    "invalid_package_version": "Phiên bản Package không hợp lệ",
+    "popcap_animation_error_detected": "PopCap Animation: Tìm thấy ngoại lệ",
+    "frame_rate_not_found": "Thuộc tính \"frameRate\" không tìm thấy trong DOMDocument",
+    "width_not_found": "Thuộc tính \"width\" không tìm thấy trong DOMDocument",
+    "height_not_found": "Thuộc tính \"height\" không tìm thấy trong DOMDocument"
 }

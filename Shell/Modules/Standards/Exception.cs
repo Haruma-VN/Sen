@@ -63,9 +63,12 @@
 
     public class PAMException : RuntimeException
     {
-        public PAMException(string message, string errorCode) : base(Localization.GetString(message), errorCode)
+        public PAMException(string message, string errorCode, string filepath) : base(Localization.GetString(message), errorCode)
         {
             this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMException;
+            var system = new SystemImplement();
+            system.Print(ConsoleColor.Red, Localization.GetString("popcap_animation_error_detected"));
+            system.Printf(ConsoleColor.White, $"      {filepath}");
         }
     }
 

@@ -26,6 +26,8 @@ using Sen.Shell.Modules.Standards.Bitmap;
 using Sen.Shell.Modules.Support.Download;
 using Sen.Shell.Modules.Support.TextureEncode.RSB;
 using System.IO;
+using Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2;
+using Sen.Shell.Modules.Support.PvZ.PAK;
 
 namespace Sen.Shell.Modules.Support
 {
@@ -190,6 +192,15 @@ namespace Sen.Shell.Modules.Support
         public abstract void ParticlesToXML(Particles particles, string outFile);
 
         public abstract Particles ParticlesFromXML(string inFile);
+
+        public abstract void DecodeCFW2(string inFile, string outFile);
+
+        public abstract void EncodeCFW2(string inFile, string outFile);
+
+        public abstract void UnpackPackage(string inFile, string outDirectory);
+
+        public abstract void PackPackage(string inDirectory, string outFile);
+
 
     }
 
@@ -873,6 +884,55 @@ namespace Sen.Shell.Modules.Support
     public unsafe sealed class LotusModule : PvZ2ShellAbstract
     {
 
+        public unsafe override void DecodeCFW2(string inFile, string outFile)
+        {
+            var decode_data = CharacterFontWidget2_Function.Decode(new SenBuffer(inFile));
+            var fs = new FileSystem();
+            var path = new ImplementPath();
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+            fs.OutFile<string>(path.Resolve(outFile), 
+                RSBFunction.JsonPrettify(JsonConvert.SerializeObject(decode_data, settings)));
+            return;
+        }
+
+        public unsafe override void EncodeCFW2(string inFile, string outFile)
+        {
+            var fs = new FileSystem();
+            var encode_data = CharacterFontWidget2_Function.Encode(JsonConvert.DeserializeObject<CharacterFontWidget2>(fs.ReadText(inFile, 
+                EncodingType.UTF8))!);
+            encode_data.OutFile(outFile);
+            return;
+        }
+
+        public override unsafe void UnpackPackage(string inFile, string outDirectory)
+        {
+            var fs = new FileSystem();
+            var path = new ImplementPath();
+            var m_bundle = path.Join(outDirectory, "bundle");
+            fs.CreateDirectory(m_bundle);
+            var info = PAK_Function.Unpack(new SenBuffer(inFile), m_bundle);
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+            fs.OutFile<string>(path.Resolve(path.Join(outDirectory, "info.json")),
+                RSBFunction.JsonPrettify(JsonConvert.SerializeObject(info, settings)));
+            return;
+        }
+
+        public override unsafe void PackPackage(string inDirectory, string outFile)
+        {
+            var path = new ImplementPath();
+            var m_bundle = path.Join(inDirectory, "bundle");
+            var info_file = path.Join(inDirectory, "info.json");
+            PAK_Function.Pack(JsonConvert.DeserializeObject<PAK_Info>(info_file)!, m_bundle, outFile);
+            return;
+        }
+
+
         public override unsafe void ConvertResInfoToResourceGroup(string outFile, string inFile)
         {
             var fs = new FileSystem();
@@ -996,14 +1056,14 @@ namespace Sen.Shell.Modules.Support
         public unsafe sealed override PAMInfo PAMtoPAMJSON(string inFile)
         {
             var PAMFile = new SenBuffer(inFile);
-            var PAMJson = PAM_Binary.Decode(PAMFile);
+            var PAMJson = PAM_Binary.Decode(PAMFile, inFile);
             return PAMJson;
         }
 
         public unsafe sealed override void PAMJSONtoPAM(string PAMJson, string outFile)
         {
             var fs = new FileSystem();
-            var PAMFile = PAM_Binary.Encode(fs.ReadJson<PAMInfo>(PAMJson));
+            var PAMFile = PAM_Binary.Encode(fs.ReadJson<PAMInfo>(PAMJson), PAMJson);
             PAMFile.OutFile(outFile);
             return;
         }
@@ -1024,7 +1084,7 @@ namespace Sen.Shell.Modules.Support
         public unsafe sealed override ExtraInfo PAMtoFlashAnimation(string inFile, string outFolder, int resolution)
         {
             var PAMFile = new SenBuffer(inFile);
-            var PamInfo = PAM_Binary.Decode(PAMFile);
+            var PamInfo = PAM_Binary.Decode(PAMFile, inFile);
             var extraInfo = PAM_Animation.Decode(PamInfo, outFolder, resolution);
             return extraInfo;
         }
@@ -1032,7 +1092,7 @@ namespace Sen.Shell.Modules.Support
         public unsafe sealed override void FlashAnimationtoPAM(string inFolder, string outFile, ExtraInfo extraInfo)
         {
             var PAMJson = PAM_Animation.Encode(inFolder, extraInfo);
-            var PAMFile = PAM_Binary.Encode(PAMJson);
+            var PAMFile = PAM_Binary.Encode(PAMJson, inFolder);
             PAMFile.OutFile(outFile);
             return;
         }
