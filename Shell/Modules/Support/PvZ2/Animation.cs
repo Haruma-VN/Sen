@@ -1643,6 +1643,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
         private static FrameInfo[] ParseSpriteDocument(XElement x_DOMSymbolItem, int index, string sprite_path)
         {
+            sprite_path = index == -1 ? "main.xml" : $"sprite_{index + 1}.xml";
             Model? model = null;
             List<FrameInfo> result = new();
             if (x_DOMSymbolItem.Name.LocalName != "DOMSymbolItem")
@@ -1727,10 +1728,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 };
                 x_DOMFrame_list.ForEach((x_DOMFrame) =>
                 {
-                    int frame_index = (int)x_DOMFrame.Attribute("index")!;
-                    int frame_duration = int.Parse((string)x_DOMFrame.Attribute("duration")! ?? "1");
-                    double[] transform;
-                    double[] color;
+                    var frame_index = (int)x_DOMFrame.Attribute("index")!;
+                    var frame_duration = int.Parse((string)x_DOMFrame.Attribute("duration")! ?? "1");
+                    var transform = Array.Empty<double>();
+                    var color = Array.Empty<double>();
                     var x_elements_list = x_DOMFrame.Elements("elements").ToArray();
                     if (x_elements_list.Length == 0)
                     {

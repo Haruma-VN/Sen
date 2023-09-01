@@ -55,11 +55,13 @@ namespace Sen.Shell.Modules.Support.Compress
             return;
         }
 
+        private readonly byte[] magic = new byte[] { 0xD4, 0xFE, 0xAD, 0xDE, };
+
         public override unsafe SenBuffer ZlibCompress(ZlibCompress options)
         {
             var buffer = new SenBuffer();
             var destination = new SenBuffer(options.RipeFile);
-            buffer.writeBytes([0xD4, 0xFE, 0xAD, 0xDE]);
+            buffer.writeBytes(magic);
             if (options.Use64BitVariant)
             {
                 buffer.writeNull(4);
@@ -78,7 +80,7 @@ namespace Sen.Shell.Modules.Support.Compress
         public unsafe SenBuffer ZlibCompress(SenBuffer destination, bool use64bitVariant, ZlibCompressionLevel level)
         {
             var buffer = new SenBuffer();
-            buffer.writeBytes([0xD4, 0xFE, 0xAD, 0xDE]);
+            buffer.writeBytes(magic);
             if (use64bitVariant)
             {
                 buffer.writeNull(4);

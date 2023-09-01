@@ -942,7 +942,8 @@ namespace Sen.Shell.Modules.Support
             {
                 NullValueHandling = NullValueHandling.Ignore,
             };
-            fs.WriteText(path.Resolve(outFile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resourceGroup, settings)), EncodingType.UTF8);
+            fs.OutFile<string>(path.Resolve(outFile), 
+                RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resourceGroup, settings)));
             return;
         }
 
@@ -951,7 +952,8 @@ namespace Sen.Shell.Modules.Support
             var res_info = PvZ2ResourceConversion.ConvertResourceGroupToResInfo(ResourceGroup, version);
             var path = new ImplementPath();
             var fs = new FileSystem();
-            fs.WriteText(path.Resolve(outFile), RSBFunction.JsonPrettify(JsonConvert.SerializeObject(res_info)), EncodingType.UTF8);
+            fs.OutFile<string>(path.Resolve(outFile), 
+                RSBFunction.JsonPrettify(JsonConvert.SerializeObject(res_info)));
             return;
         }
 
