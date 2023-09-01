@@ -850,7 +850,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
                                 "4": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
                             },
-                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstring_convert.json`)),
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
                             `output`
                         ) as Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option;
                         const option: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Parameter = {
@@ -900,7 +900,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                     "3": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_map")],
                                     "4": [Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text"), Sen.Script.Modules.System.Default.Localization.GetString("lawnstring_json_text")],
                                 },
-                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstring_convert.json`)),
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_lawnstrings_convert.json`)),
                                 `output`
                             ) as Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Option;
                             const option: Sen.Script.Modules.Support.PopCap.PvZ2.Lawnstrings.Convert.Parameter = {

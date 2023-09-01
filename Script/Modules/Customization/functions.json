@@ -22,7 +22,7 @@
     },
     "popcap_official_resources_split": {
         "func_number": 4,
-        "include": ["resources.json"],
+        "include": ["resources.json", "resources.newton.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
@@ -594,6 +594,49 @@
         "include": [".rsm"],
         "exclude": [],
         "is_enabled": true,
+        "type": "directory"
+    },
+    "popcap_rsm_atlas_split": {
+        "#comment": "This function can only be executed when you drag a png & json to tool",
+        "func_number": 86,
+        "include": [],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "unknown"
+    },
+    "popcap_rsm_atlas_merge": {
+        "func_number": 87,
+        "include": [".sprite"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
+    },
+    "popcap_character_font_widget_2_decode": {
+        "func_number": 88,
+        "include": [".cfw2"],
+        "exclude": [],
+        "is_enabled": true,
         "type": "file"
+    },
+    "popcap_character_font_widget_2_encode": {
+        "func_number": 89,
+        "include": [".cfw2.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_package_unpack": {
+        "func_number": 90,
+        "include": [".pak"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_package_pack": {
+        "func_number": 91,
+        "include": [".data"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
     }
 }

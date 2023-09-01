@@ -615,5 +615,13 @@
     "particles_cannot_be_null": "Particles cannot be null",
     "particle_name_must_be_emitter": "Particles name must be \"Emitter\"",
     "popcap_resource_manager_split": "PopCap Resource-Manager: Split",
-    "popcap_resource_manager_merge": "PopCap Resource-Manager: Merge"
+    "popcap_resource_manager_merge": "PopCap Resource-Manager: Merge",
+    "popcap_rsm_atlas_split": "PopCap Resource-Manager: Atlas Split",
+    "popcap_rsm_atlas_merge": "PopCap Resource-Manager: Atlas Merge",
+    "popcap_character_font_widget_2_decode": "PopCap Character-Font-Widget-2: Decode",
+    "popcap_character_font_widget_2_encode": "PopCap Character-Font-Widget-2: Encode",
+    "popcap_package_unpack": "PopCap Package: Unpack",
+    "popcap_package_pack": "PopCap Package: Pack",
+    "invalid_package_magic": "Invalid Package magic",
+    "invalid_package_version": "Invalid Package version"
 }
