@@ -1622,7 +1622,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             }
             var width = double.Parse(x_DOMDocument.Attribute("width")!.Value);
             var height = double.Parse(x_DOMDocument.Attribute("height")!.Value);
-            PAMInfo PamInfo = new PAMInfo
+            var PamInfo = new PAMInfo
             {
                 version = PAMRipe.extra.version,
                 frame_rate = frame_rate,

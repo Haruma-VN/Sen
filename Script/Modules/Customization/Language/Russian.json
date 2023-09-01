@@ -623,5 +623,11 @@
     "popcap_package_unpack": "PopCap Package: Распаковать",
     "popcap_package_pack": "PopCap Package: Запаковать",
     "invalid_package_magic": "Неверный заголовок пакета",
-    "invalid_package_version": "Неверная версия пакета"                
+    "invalid_package_version": "Неверная версия пакета",
+    "popcap_animation_error_detected": "PopCap Animation: Обнаружена ошибка",
+    "frame_rate_not_found": "\"frameRate\" не найден в  DOMDocument",
+    "width_not_found": "\"width\" не найден в DOMDocument",
+    "height_not_found": "\"height\" не найден в DOMDocument",
+    "popcap_animation_error_message": "PopCap Animation: Сообщение об ошибке",
+    "json_patch": "JSON-Patch"
 }

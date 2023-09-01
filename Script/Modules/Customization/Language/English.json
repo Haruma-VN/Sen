@@ -618,14 +618,16 @@
     "popcap_resource_manager_split": "PopCap Resource-Manager: Split",
     "popcap_rsm_atlas_merge": "PopCap Resource-Manager: Atlas Merge",
     "popcap_rsm_atlas_split": "PopCap Resource-Manager: Atlas Split",
-    "popcap_character_font_widget_2_encode": "PopCap CFW2: Encode",
-    "popcap_character_font_widget_2_decode": "PopCap CFW2: Decode",
-    "popcap_package_pack": "PopCap PAK: Pack",
-    "popcap_package_unpack": "PopCap PAK: Unpack",
+    "popcap_character_font_widget_2_encode": "PopCap Character-Font-Widget-2: Encode",
+    "popcap_character_font_widget_2_decode": "PopCap Character-Font-Widget-2: Decode",
+    "popcap_package_pack": "PopCap Package: Pack",
+    "popcap_package_unpack": "PopCap Package: Unpack",
     "invalid_package_magic": "Invalid Package magic",
     "invalid_package_version": "Invalid Package version",
     "popcap_animation_error_detected": "PopCap Animation: Error Detected",
     "frame_rate_not_found": "\"frameRate\" property not found in DOMDocument",
     "width_not_found": "\"width\" property not found in DOMDocument",
-    "height_not_found": "\"height\" property not found in DOMDocument"
+    "height_not_found": "\"height\" property not found in DOMDocument",
+    "popcap_animation_error_message": "PopCap Animation: Error Message",
+    "json_patch": "JSON-Patch"
 }

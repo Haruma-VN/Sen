@@ -1415,8 +1415,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 if (characterByte == 0x0)
                 {
                     FileBuffer.writeUInt8((byte)characterByte, FileBuffer.readOffset - 1);
-
-                    var tempByte = FileBuffer.readInt24LE();
+                    _ = FileBuffer.readInt24LE();
                     if (isRSG)
                     {
                         if (FileBuffer.readUInt32LE() == 1)
@@ -1436,8 +1435,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
                 else
                 {
                     FileBuffer.writeUInt8((byte)characterByte, FileBuffer.readOffset - 1);
-
-                    var tempByte = FileBuffer.readInt24LE();
+                    _ = FileBuffer.readInt24LE();
                 }
             }
             CheckEndOffset(FileBuffer, offsetLimit);
@@ -1703,15 +1701,16 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
 
         private static void TestHash(byte[] data, byte[] md5)
         {
-            int bytesWritten;
-            var correctHash = System.Security.Cryptography.MD5.TryHashData(data, md5, out bytesWritten);
+            var correctHash = System.Security.Cryptography.MD5.TryHashData(data, md5, out int bytesWritten);
             if (!correctHash)
             {
                 throw new Exception("invalid_md5_data");
             }
             return;
         }
+
         //Apply RSBPatch
+
         public static SenBuffer RSBPatchDecode(SenBuffer RSBBeforeFile, SenBuffer RSBPatchFile, bool UseRawPacket = false)
         {
             var RSBBeforeHeaderInfomation = ReadHead(RSBBeforeFile);
