@@ -1607,9 +1607,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     var x_DOMLayer_sprite = x_DOMLayer_list[2];
                 }
             }
-            if(x_DOMDocument.Attribute("frameRate") is null)
+            var frame_rate = 24;
+            if (x_DOMDocument.Attribute("frameRate") is not null)
             {
-                throw new PAMException(Localization.GetString("frame_rate_not_found"), "undefined", "DOMDocument.xml");
+                frame_rate = int.Parse(x_DOMDocument.Attribute("frameRate")!.Value);
             }
             if (x_DOMDocument.Attribute("width") is null)
             {
@@ -1619,7 +1620,6 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 throw new PAMException(Localization.GetString("height_not_found"), "undefined", "DOMDocument.xml");
             }
-            var frame_rate = int.Parse(x_DOMDocument.Attribute("frameRate")!.Value);
             var width = double.Parse(x_DOMDocument.Attribute("width")!.Value);
             var height = double.Parse(x_DOMDocument.Attribute("height")!.Value);
             PAMInfo PamInfo = new PAMInfo
