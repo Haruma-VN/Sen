@@ -487,6 +487,11 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             readOffset = tempOffset;
             return str;
         }
+
+        public char readCharByInt16LE(long offset = -1) {
+            var charstr = Convert.ToChar(Encoding.Unicode.GetString(readBytes(2)));
+            return charstr;
+        }
         public string readStringByUInt8(long offset = -1)
         {
             fixReadOffset(offset);
@@ -1001,6 +1006,14 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         {
             fixWriteOffset(offset);
             writeVarInt64((number << 1) ^ (number >> 63));
+        }
+
+        public void writeCharByInt16LE(char charstr, long offset = -1) {
+            
+
+          var strBytes = Encoding.Unicode.GetBytes(Convert.ToString(charstr));
+          Console.WriteLine($"{charstr} | {strBytes[0]}, {strBytes[1]} | {writeOffset}");
+            writeBytes(strBytes);
         }
 
         public void writeStringByUInt8(string? str, long offset = -1)
