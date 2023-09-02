@@ -3,7 +3,7 @@ namespace Sen.Script {
      * @package Script loaded to the Sen
      */
     export const ScriptModules: Array<string> = [
-        ...new Set([
+        ...new Set<string>([
             `Modules/Constraints/Compression`,
             `Modules/Constraints/Crypto`,
             `Modules/Constraints/FileSystem`,

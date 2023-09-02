@@ -6,6 +6,10 @@
             "launch": "~/Modules/Executable/PvZ2/AndroidRSBtoIOSRSB"
         },
         {
+            "id": "import_pvz2c_bundle",
+            "launch": "~/Modules/Executable/PvZ2/PvZ2CBundlePortToPvZ2IBundle"
+        },
+        {
             "id": "extract_cn_rsb",
             "launch": "~/Modules/Executable/PvZ2/ExtractCNRSBfromIPAandAPK"
         },
