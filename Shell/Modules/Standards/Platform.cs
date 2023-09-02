@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
+#pragma warning disable
+
 namespace Sen.Shell.Modules.Standards
 {
 

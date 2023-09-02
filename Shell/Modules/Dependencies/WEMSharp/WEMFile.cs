@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+#pragma warning disable
+
 namespace WEMSharp
 {
     public class WEMFile

@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 
+#pragma warning disable
+
 namespace WEMSharp
 {
     internal class CodebookLibrary

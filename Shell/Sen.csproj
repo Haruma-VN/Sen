@@ -9,7 +9,7 @@
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
 	  <ApplicationIcon>Other\Sen.ico</ApplicationIcon>
-	  <Version>2.2.0</Version>
+	  <Version>3.0.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(OS)' == 'Unix' ">
     <RuntimeIdentifier>linux-x64;osx-x64</RuntimeIdentifier>
