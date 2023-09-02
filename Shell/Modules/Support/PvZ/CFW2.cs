@@ -8,7 +8,7 @@ namespace Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2
         public int ascent_padding;
         public int height;
         public int line_sepacing_offset;
-        public bool initailized;
+        public bool initialized;
         public int default_point_size;
         public CharacterItem[]? character;
         public FontLayer[]? layer;
@@ -87,14 +87,14 @@ namespace Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2
             cfw2_json.ascent_padding = senFile.readInt32LE();
             cfw2_json.height = senFile.readInt32LE();
             cfw2_json.line_sepacing_offset = senFile.readInt32LE();
-            cfw2_json.initailized = senFile.readBool();
+            cfw2_json.initialized = senFile.readBool();
             cfw2_json.default_point_size = senFile.readInt32LE();
             var characterCount = senFile.readUInt32LE();
             cfw2_json.character = new CharacterItem[characterCount];
             for (var i = 0; i < characterCount; i++) {
                 cfw2_json.character[i] = new CharacterItem {
-                    index = Convert.ToChar(senFile.readStringByEmpty()),
-                    vaule = Convert.ToChar(senFile.readStringByEmpty())
+                    index = senFile.readCharByInt16LE(),
+                    vaule = senFile.readCharByInt16LE()
                 };
             }
             var layerCount = senFile.readUInt32LE();
@@ -114,16 +114,16 @@ namespace Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2
                 var kerning_count = senFile.readUInt32LE();
                 var kerning = new FontKerning[kerning_count];
                 for (var k = 0; k < kerning_count; k++) {
-                    kerning[i] = new FontKerning {
+                    kerning[k] = new FontKerning {
                         offset = senFile.readUInt16LE(),
-                        index = Convert.ToChar(senFile.readStringByEmpty())
+                        index = senFile.readCharByInt16LE()
                     };
                 }
                 var character_count = senFile.readUInt32LE();
                 var character = new FontCharacter[character_count];
                 for (var k = 0; k < character_count; k++) {
-                    character[i] = new FontCharacter{
-                        index = Convert.ToChar(senFile.readStringByEmpty()),
+                    character[k] = new FontCharacter{
+                        index = senFile.readCharByInt16LE(),
                         image_rect_x = senFile.readInt32LE(),
                         image_rect_y = senFile.readInt32LE(),
                         image_rect_width = senFile.readInt32LE(),
@@ -187,13 +187,13 @@ namespace Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2
             senFile.writeInt32LE(cfw2_json.ascent_padding);
             senFile.writeInt32LE(cfw2_json.height);
             senFile.writeInt32LE(cfw2_json.line_sepacing_offset);
-            senFile.writeBool(cfw2_json.initailized);
+            senFile.writeBool(cfw2_json.initialized);
             senFile.writeInt32LE(cfw2_json.default_point_size);
             var characterCount = cfw2_json.character!.Length;
             senFile.writeUInt32LE((uint)characterCount);
             for (var i = 0; i < characterCount; i++) {
-                senFile.writeStringByEmpty(cfw2_json.character[i].index.ToString());
-                senFile.writeStringByEmpty(cfw2_json.character[i].vaule.ToString());
+                senFile.writeCharByInt16LE(cfw2_json.character[i].index);
+                senFile.writeCharByInt16LE(cfw2_json.character[i].vaule);
             }
             var layerCount = cfw2_json.layer!.Length;
             senFile.writeUInt32LE((uint)layerCount);
@@ -214,13 +214,13 @@ namespace Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2
                 senFile.writeUInt32LE((uint)kerning_count);
                 for (var k = 0; k < kerning_count; k++) {
                     senFile.writeUInt16LE(layer.kerning[k].offset);
-                    senFile.writeStringByEmpty(layer.kerning[k].index.ToString());
+                    senFile.writeCharByInt16LE(layer.kerning[k].index);
                 }
                 var character_count = layer.character!.Length;
                 senFile.writeUInt32LE((uint)character_count);
                 for (var k = 0; k < character_count; k++) {
                     var character = layer.character[k];
-                    senFile.writeStringByEmpty(character.index.ToString());
+                    senFile.writeCharByInt16LE(character.index);
                     senFile.writeInt32LE(character.image_rect_x);
                     senFile.writeInt32LE(character.image_rect_y);
                     senFile.writeInt32LE(character.image_rect_width);

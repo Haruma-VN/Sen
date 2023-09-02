@@ -79,7 +79,7 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
                             senFile.readStringByUInt8();
                             senFile.readOffset += 0x10;
                             var bp = senFile.readUInt8();
-                            compress_zlib = (bp != 0x0 || bp == 0x80) ? true : false;
+                            compress_zlib = (bp == 0x0 || bp == 0x80) ? true : false;
                             senFile.RestoreReadOffset();
                         }
                         fileInfo_library.Add(ReadFileInfo(senFile, compress_zlib));
@@ -134,7 +134,9 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
         private static FileInfo ReadFileInfo(SenBuffer senFile, bool? compress)
         {
             var file_info = new FileInfo();
-            file_info.file_name = senFile.readStringByUInt8();
+            var file_name = senFile.readStringByUInt8();
+            Console.WriteLine(compress);
+            file_info.file_name = file_name;
             file_info.size = senFile.readInt32LE();
             if (compress == true)
             {

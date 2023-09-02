@@ -49,7 +49,6 @@ namespace Sen.Shell.Modules.JavaScript
                 {"PvZ2XML", new Support.Flash.XML()},
                 {"XMLHelper", new Support.Flash.XmlHelper()},
                 {"PvZ2Lawnstrings", new Sen.Shell.Modules.Support.PvZ2.Lawnstrings()},
-                {"ChatGPT", new Sen.Modules.Support.Misc.ChatGPT()},
                 {"ADBHelper", new Sen.Shell.Modules.Support.Misc.ADBHelper()},
                 { "SenBuffer", TypeReference.CreateTypeReference(Engine, typeof(SenBuffer)) },
             };
