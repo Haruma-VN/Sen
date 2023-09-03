@@ -228,21 +228,19 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render {
         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(pam_json);
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
-            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("provide_sprite_directory"))
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("provide_media_folder"))
         );
-        const split_sprited_folder: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
-        const media_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${split_sprited_folder}`, `media`));
-        if (!Sen.Shell.FileSystem.DirectoryExists(media_path)) {
-            throw new Sen.Script.Modules.Exceptions.MissingDirectory(`${Sen.Script.Modules.System.Default.Localization.GetString(`no_such_directory`).replace(/\{\}/g, Sen.Shell.Path.GetFileName(media_path))}`, media_path);
-        }
-        const atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${split_sprited_folder}`, `atlas.json`));
-        if (!Sen.Shell.FileSystem.FileExists(atlas_json_path)) {
-            throw new Sen.Script.Modules.Exceptions.MissingFile(`${Sen.Script.Modules.System.Default.Localization.GetString(`no_such_file`).replace(/\{\}/g, Sen.Shell.Path.GetFileName(atlas_json_path))}`, atlas_json_path);
-        }
-        const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
-            atlas_json_path
-        ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
-        const use_media_images_by_path: boolean = (atlas_json.method as string) === `path`;
+        const media_path: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
+        const use_media_images_by_path: boolean = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+            Sen.Script.Modules.System.Default.Localization.GetString("animation_render_use_image_by_path"),
+            [0, 1],
+            {
+                "0": [Sen.Script.Modules.System.Default.Localization.GetString("use_image_by_id"), Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_image")],
+                "1": [Sen.Script.Modules.System.Default.Localization.GetString("use_image_by_path"), Sen.Script.Modules.System.Default.Localization.GetString("output_animation_render_gif")],
+            },
+            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation_render.json`)),
+            `output_file_type`
+        ) as 1 | 2 == 1;
         const setting: Sen.Shell.AnimationHelperSetting = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Render.LoadSetting(pam_json, use_media_images_by_path);
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.DarkGreen, Sen.Script.Modules.System.Default.Localization.GetString("please_wait_for_few_minutes_to_finish_conversion"));
         Sen.Script.Modules.FileSystem.Json.WriteJson<Record<string, [bigint, bigint]>>(

@@ -189,7 +189,7 @@ namespace Sen.Shell.Modules.Support
 
         public abstract void ParticlesFromJson(Particles particles, ParticlesVersion version, string outFile);
 
-        public abstract void ParticlesToXML(Particles particles, string outFile);
+        public abstract void ParticlesToXML(string inFile, string outFile);
 
         public abstract Particles ParticlesFromXML(string inFile);
 
@@ -893,7 +893,7 @@ namespace Sen.Shell.Modules.Support
             {
                 NullValueHandling = NullValueHandling.Ignore,
             };
-            fs.OutFile<string>(path.Resolve(outFile), 
+            fs.OutFile<string>(path.Resolve(outFile),
                 RSBFunction.JsonPrettify(JsonConvert.SerializeObject(decode_data, settings)));
             return;
         }
@@ -901,7 +901,7 @@ namespace Sen.Shell.Modules.Support
         public unsafe override void EncodeCFW2(string inFile, string outFile)
         {
             var fs = new FileSystem();
-            var encode_data = CharacterFontWidget2_Function.Encode(JsonConvert.DeserializeObject<CharacterFontWidget2>(fs.ReadText(inFile, 
+            var encode_data = CharacterFontWidget2_Function.Encode(JsonConvert.DeserializeObject<CharacterFontWidget2>(fs.ReadText(inFile,
                 EncodingType.UTF8))!);
             encode_data.OutFile(outFile);
             return;
@@ -909,17 +909,16 @@ namespace Sen.Shell.Modules.Support
 
         public override unsafe void UnpackPackage(string inFile, string outDirectory)
         {
-            var fs = new FileSystem();
             var path = new ImplementPath();
-            var m_bundle = path.Join(outDirectory, "bundle");
-            fs.CreateDirectory(m_bundle);
-            var info = PAK_Function.Unpack(new SenBuffer(inFile), m_bundle);
+            var fs = new FileSystem();
+            var outBundle = path.Resolve(path.Join(outDirectory, "bundle"));
+            var pak_info = PAK_Function.Unpack(new SenBuffer(inFile), outBundle);
             var settings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
             };
             fs.OutFile<string>(path.Resolve(path.Join(outDirectory, "info.json")),
-                RSBFunction.JsonPrettify(JsonConvert.SerializeObject(info, settings)));
+                RSBFunction.JsonPrettify(JsonConvert.SerializeObject(pak_info, settings)));
             return;
         }
 
@@ -928,7 +927,7 @@ namespace Sen.Shell.Modules.Support
             var path = new ImplementPath();
             var m_bundle = path.Join(inDirectory, "bundle");
             var info_file = path.Join(inDirectory, "info.json");
-            PAK_Function.Pack(JsonConvert.DeserializeObject<PAK_Info>(info_file)!, m_bundle, outFile);
+            PAK_Function.Pack(JsonConvert.DeserializeObject<PAK_Info>(File.ReadAllText(info_file))!, m_bundle, outFile);
             return;
         }
 
@@ -942,7 +941,7 @@ namespace Sen.Shell.Modules.Support
             {
                 NullValueHandling = NullValueHandling.Ignore,
             };
-            fs.OutFile<string>(path.Resolve(outFile), 
+            fs.OutFile<string>(path.Resolve(outFile),
                 RSBFunction.JsonPrettify(JsonConvert.SerializeObject(resourceGroup, settings)));
             return;
         }
@@ -952,7 +951,7 @@ namespace Sen.Shell.Modules.Support
             var res_info = PvZ2ResourceConversion.ConvertResourceGroupToResInfo(ResourceGroup, version);
             var path = new ImplementPath();
             var fs = new FileSystem();
-            fs.OutFile<string>(path.Resolve(outFile), 
+            fs.OutFile<string>(path.Resolve(outFile),
                 RSBFunction.JsonPrettify(JsonConvert.SerializeObject(res_info)));
             return;
         }
@@ -1032,18 +1031,18 @@ namespace Sen.Shell.Modules.Support
                 return;
             }
 
-        //public void ThrowError(Exception e)
-        //{
-        //    var engine = new Engine();
-        //    var ns = new JsObject(engine);
-        //    var dictionary = new Dictionary<string, object>
-        //        {
-        //            { "Console", new SystemImplement() },
-        //        };
-        //    ns.Set("Shell", JsValue.FromObject(engine, dictionary));
-        //    engine.SetValue("Sen", ns);
-        //    engine.Evaluate($"throw new Error({SerializeJson(e.StackTrace, '\t', true)})");
-        //    return;
+            //public void ThrowError(Exception e)
+            //{
+            //    var engine = new Engine();
+            //    var ns = new JsObject(engine);
+            //    var dictionary = new Dictionary<string, object>
+            //        {
+            //            { "Console", new SystemImplement() },
+            //        };
+            //    ns.Set("Shell", JsValue.FromObject(engine, dictionary));
+            //    engine.SetValue("Sen", ns);
+            //    engine.Evaluate($"throw new Error({SerializeJson(e.StackTrace, '\t', true)})");
+            //    return;
         }
 
         public unsafe sealed override void RTONEncode(string inFile, string outFile, RTONCipher EncryptRTON)
@@ -1507,8 +1506,9 @@ namespace Sen.Shell.Modules.Support
             return;
         }
 
-        public override void ParticlesToXML(Particles particles, string outFile)
+        public override void ParticlesToXML(string inFile, string outFile)
         {
+            var particles = JsonConvert.DeserializeObject<Particles>(File.ReadAllText(inFile))!;
             Particles_RawXml.Encode(particles, outFile);
             return;
         }

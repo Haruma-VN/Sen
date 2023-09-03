@@ -75,10 +75,35 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode {
 
     /**
      *
+     * @param inFile - REANIM JSON
+     * @param outFile - XML
+     * @returns
+     */
+
+    export function ToXml(inFile: string, outFile: string): void {
+        Sen.Shell.LotusModule.ReanimToXML(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim>(inFile), outFile);
+    }
+
+    /**
+     *
+     * @param inFile - REANIM XML
+     * @param outFile - REANIM JSON
+     * @returns
+     */
+
+    export function FromXml(inFile: string, outFile: string): void {
+        Sen.Shell.FileSystem.WriteFile(outFile, Sen.Shell.LotusModule.SerializeJson<Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim>(Sen.Shell.LotusModule.ReanimFromXML(inFile), "\t", false));
+    }
+
+
+
+    /**
+     *
      * @param inFile - In REANIM
      * @param outDir - Out XFL
      * @returns
      */
+    
 
     export function ToFlash(inFile: string, outDir: string): void {
         Sen.Shell.LotusModule.ReanimToFlashXfl(inFile, outDir);
@@ -92,8 +117,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode {
      * @returns
      */
 
-    export function FromFlash(inDir: string, outFile: string): void {
-        Sen.Shell.LotusModule.ReanimFromFlashXfl(inDir, outFile);
+    export function FromFlash(inDir: string, outFile: string, version: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Version): void {
+        Sen.Shell.LotusModule.ReanimFromFlashXfl(inDir, outFile, version);
         return;
     }
 
@@ -120,4 +145,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode {
         Sen.Shell.FileSystem.WriteFile(outFile, Sen.Shell.LotusModule.SerializeJson<Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim>(Sen.Shell.LotusModule.ReaimJsonFromFlashXfl(inDir), "\t", false));
         return;
     }
+
+    
 }

@@ -136,7 +136,7 @@
     },
     "popcap_pam_from_flash_animation": {
         "func_number": 20,
-        "include": [".xfl"],
+        "include": [".pam.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -150,7 +150,7 @@
     },
     "popcap_pam_json_from_flash_animation": {
         "func_number": 22,
-        "include": [".xfl"],
+        "include": [".pam.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -276,14 +276,14 @@
     },
     "popcap_add_image_to_flash_animation_adobe": {
         "func_number": 40,
-        "include": [".xfl"],
+        "include": [".pam.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "flash_animation_resize": {
         "func_number": 41,
-        "include": [".xfl"],
+        "include": [".pam.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -521,7 +521,7 @@
     },
     "popcap_reanim_json_from_flash": {
         "func_number": 75,
-        "include": [".xfl"],
+        "include": [".reanim.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -535,62 +535,76 @@
     },
     "popcap_reanim_from_flash": {
         "func_number": 77,
-        "include": [".xfl"],
+        "include": [".reanim.xfl"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
+    },
+    "popcap_reanim_json_to_xml": {
+        "func_number": 78,
+        "include": [".reanim.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_reanim_json_from_xml": {
+        "func_number": 79,
+        "include": [".reanim.xml"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_compiled_text_decode": {
-        "func_number": 78,
+        "func_number": 80,
         "include": [".txt"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_compiled_text_encode": {
-        "func_number": 79,
+        "func_number": 81,
         "include": [".txt"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_particles_decode": {
-        "func_number": 80,
+        "func_number": 82,
         "include": [".xml", ".xml.compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_particles_encode": {
-        "func_number": 81,
+        "func_number": 83,
         "include": [".xml.json", ".xml.compiled.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_particles_to_xml": {
-        "func_number": 82,
+        "func_number": 84,
         "include": [".xml.json", ".xml.compiled.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_particles_from_xml": {
-        "func_number": 83,
+        "func_number": 85,
         "include": [".xml"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_resource_manager_split": {
-        "func_number": 84,
+        "func_number": 86,
         "include": ["description.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_resource_manager_merge": {
-        "func_number": 85,
+        "func_number": 87,
         "include": [".rsm"],
         "exclude": [],
         "is_enabled": true,
@@ -598,42 +612,42 @@
     },
     "popcap_rsm_atlas_split": {
         "#comment": "This function can only be executed when you drag a png & json to tool",
-        "func_number": 86,
+        "func_number": 88,
         "include": [],
         "exclude": [],
         "is_enabled": true,
         "type": "unknown"
     },
     "popcap_rsm_atlas_merge": {
-        "func_number": 87,
+        "func_number": 89,
         "include": [".sprite"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_character_font_widget_2_decode": {
-        "func_number": 88,
+        "func_number": 90,
         "include": [".cfw2"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_character_font_widget_2_encode": {
-        "func_number": 89,
+        "func_number": 91,
         "include": [".cfw2.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_package_unpack": {
-        "func_number": 90,
+        "func_number": 92,
         "include": [".pak"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_package_pack": {
-        "func_number": 91,
+        "func_number": 93,
         "include": [".data"],
         "exclude": [],
         "is_enabled": true,

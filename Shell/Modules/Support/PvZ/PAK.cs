@@ -4,7 +4,7 @@ using Sen.Shell.Modules.Standards.IOModule.Buffer;
 
 namespace Sen.Shell.Modules.Support.PvZ.PAK
 {
-    public enum PAK_Version
+    public enum PAK_Platform
     {
         PC,
         XBox_360,
@@ -13,7 +13,7 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
 
     public class PAK_Info
     {
-        public PAK_Version pak_version;
+        public required string pak_platform; //"PC" "Xbox_360" "TV"
         public bool windows_path_separate;
         public bool zlib_compress;
     }
@@ -31,13 +31,16 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
         public static PAK_Info Unpack(SenBuffer rawFile, string outFolder)
         {
             var senFile = new SenBuffer();
-            var pak_info = new PAK_Info();
+            var pak_info = new PAK_Info
+            {
+                pak_platform = "Xbox_360"
+            };
             var magic = rawFile.peekInt32LE();
             var path = new ImplementPath();
             var compress = new Standards.Compress();
             if (magic == 1295498551)
             { //37 BD 37 4D
-                pak_info.pak_version = PAK_Version.PC;
+                pak_info.pak_platform = "PC";
                 var length = rawFile.length;
                 for (var i = 0; i < length; i++)
                 {
@@ -50,10 +53,10 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
             }
             else if (magic == 67324752) //50 4B 03 04
             {
-                pak_info.pak_version = PAK_Version.TV;
+                pak_info.pak_platform = "TV";
             }
             senFile.readOffset = 0;
-            if (pak_info.pak_version == PAK_Version.TV)
+            if (pak_info.pak_platform == "TV")
             {
                 compress.UncompressZip(rawFile.filePath!, outFolder);
             }
@@ -92,6 +95,7 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
                     fileInfo_library = new List<FileInfo>();
                     fileInfo_library.Add(ReadFileInfo(senFile, compress_zlib));
                 }
+                pak_info.windows_path_separate = true;
                 foreach (FileInfo file in fileInfo_library)
                 {
                     if (file.file_name!.IndexOf('/') > -1)
@@ -108,11 +112,11 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
                 if (fileInfo_library == null) return pak_info;
                 for (var i = 0; i < fileInfo_library.Count; i++)
                 {
-                    if (pak_info.pak_version == PAK_Version.PC)
+                    if (pak_info.pak_platform != "PC")
                     {
                         var pak_360 = false;
                         pak_360 |= Jump(senFile);
-                        if (pak_360) pak_info.pak_version = PAK_Version.XBox_360;
+                        if (pak_360) pak_info.pak_platform = "Xbox_360";
                     }
                     var file_path_out = path.Resolve(path.Join(outFolder, fileInfo_library[i].file_name!));
                     var file_data = senFile.readBytes(fileInfo_library[i].size);
@@ -135,7 +139,6 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
         {
             var file_info = new FileInfo();
             var file_name = senFile.readStringByUInt8();
-            Console.WriteLine(compress);
             file_info.file_name = file_name;
             file_info.size = senFile.readInt32LE();
             if (compress == true)
@@ -156,24 +159,26 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
 
         public static void Pack(PAK_Info pak_info, string inFolder, string outFile)
         {
+            if (pak_info.pak_platform != "PC" && pak_info.pak_platform != "Xbox_360" && pak_info.pak_platform != "TV")
+            {
+                throw new Exception("Pak platform must be in of list [PC, Xbox_360, TV]");
+            }
             var path = new ImplementPath();
             var fs = new FileSystem();
             var temp = inFolder.Length + 1;
             var compress = new Standards.Compress();
             var compress_zlib = pak_info.zlib_compress;
-            if (pak_info.pak_version == PAK_Version.TV)
+            if (pak_info.pak_platform == "TV")
             {
                 compress.CompressZip(outFile, new string[0], new string[] { inFolder });
             }
             else
             {
                 var filePathList = fs.ReadDirectory(inFolder, ReadDirectory.AllNestedDirectory);
-                var json_path = ""; // unfinished
                 var senFile = new SenBuffer();
                 var fileInfo_library = new List<FileInfo>();
                 for (var i = 0; i < filePathList.Length; i++)
                 {
-                    if (filePathList[i] == json_path) continue;
                     var info = new FileInfo();
                     if (pak_info.windows_path_separate)
                     {
@@ -186,48 +191,51 @@ namespace Sen.Shell.Modules.Support.PvZ.PAK
                     fileInfo_library.Add(info);
                 }
                 Write(senFile, fileInfo_library, compress_zlib);
-                var json_path_index = 0;
                 for (var i = 0; i < filePathList.Length; i++)
                 {
-                    if (filePathList[i] == json_path)
+                    if (pak_info.pak_platform != "PC")
                     {
-                        json_path_index++;
-                        continue;
-                    }
-                    if (pak_info.pak_version != PAK_Version.PC)
-                    {
-                        if (pak_info.pak_version != PAK_Version.XBox_360 && path.Extname(filePathList[i]).ToLower() == ".ptx")
+                        if (pak_info.pak_platform != "Xbox_360" && path.Extname(filePathList[i]).ToLower() == ".ptx")
                         {
                             Fill0x1000(senFile);
                         }
-                        else {
+                        else
+                        {
                             Fill(senFile);
                         }
                     }
-                    var file_info = fileInfo_library[i - json_path_index];
+                    var file_info = fileInfo_library[i];
                     var file_data = File.ReadAllBytes(filePathList[i]);
-                    if (compress_zlib) {
+                    file_info.size = file_data.Length;
+                    if (compress_zlib)
+                    {
                         var zlib_data = compress.CompressZlib(file_data, ZlibCompressionLevel.BEST_COMPRESSION);
                         senFile.writeBytes(zlib_data);
+                        file_info.zlib_size = zlib_data.Length;
                     }
-                    else {
+                    else
+                    {
                         senFile.writeBytes(file_data);
                     }
                 }
                 senFile.writeOffset = 0;
                 Write(senFile, fileInfo_library, compress_zlib);
-                if (pak_info.pak_version != PAK_Version.PC) {
+                if (pak_info.pak_platform == "PC")
+                {
                     var senWrite = new SenBuffer();
                     var length = senFile.length;
                     senFile.readOffset = 0;
-                    for (var i = 0; i < length; i++) {
+                    for (var i = 0; i < length; i++)
+                    {
                         senWrite.writeUInt8((byte)(senFile.readUInt8() ^ 0xF7));
                     }
                     senWrite.OutFile(outFile);
                 }
-                senFile.OutFile(outFile);
+                else {
+                    senFile.OutFile(outFile);
+                }
             }
-            
+
 
         }
 

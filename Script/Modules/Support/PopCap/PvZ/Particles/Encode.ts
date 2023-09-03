@@ -128,7 +128,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode {
      */
 
     export function JSONToXML(inFile: string, outFile: string): void {
-        Sen.Shell.LotusModule.ParticlesToXML(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Particles>(inFile), outFile);
+        Sen.Shell.LotusModule.ParticlesToXML(inFile, outFile);
         return;
     }
 

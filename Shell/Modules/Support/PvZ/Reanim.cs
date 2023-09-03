@@ -7,10 +7,11 @@ using static Sen.Shell.Modules.Support.PvZ2.PAM.FlashPackage;
 
 namespace Sen.Shell.Modules.Support.PVZ.Reanim
 {
-    public enum ReanimVersion { 
-      PC = 1,
-      Phone_32,
-      Phone_64
+    public enum ReanimVersion
+    {
+        PC = 1,
+        Phone_32,
+        Phone_64
     }
 
 
@@ -1086,7 +1087,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
                         f = 0,
                         a = 1
                     };
-                    var temp_name = -1;
+                    object temp_name = "-1";
                     var frame_switch = false;
                     x_DOMFrame_list.ForEach(x_DOMFrame =>
                     {
@@ -1122,12 +1123,24 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
                         {
                             throw new Exception("invalid_dom_symbol_instance");
                         }
-                        var name_int = int.Parse(name_item);
-                        if (temp_name != name_int)
+                        try
                         {
-                            thisTransform.i = name_int;
-                            temp_name = name_int;
+                            var name_int = int.Parse(name_item);
+                            if ((int)temp_name != name_int)
+                            {
+                                thisTransform.i = name_int;
+                                temp_name = name_int;
+                            }
                         }
+                        catch
+                        {
+                            if ((string)temp_name != name_item)
+                            {
+                                thisTransform.i = name_item;
+                                temp_name = name_item;
+                            }
+                        }
+
                         var x_matrix_list = x_DOMSymbolInstance.Elements("matrix").ToArray();
                         if (x_matrix_list.Length == 0)
                         {
@@ -1214,7 +1227,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
                             throw new Exception("invalid_sprite_dom_symbol_instance_matrix_length");
                         }
                         var x_color_list = x_DOMSymbolInstance.Elements("color").ToArray();
-                        
+
                         if (x_color_list.Length == 0)
                         {
                         }
@@ -1228,7 +1241,8 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
                             }
                             var x_Color = x_Color_list[0];
                             var a = float.Parse((string)x_Color!.Attribute("alphaMultiplier")!);
-                            if (defaultTransform.a != a) {
+                            if (defaultTransform.a != a)
+                            {
                                 defaultTransform.a = a;
                                 thisTransform.a = a;
                             }
