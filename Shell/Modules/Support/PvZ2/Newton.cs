@@ -152,7 +152,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             ah = data.readUInt32LE(),
                             cols = data.readUInt32LE(),
                             rows = data.readUInt32LE(),
-                            atlas = data.readUInt8() != 0
+                            atlas = data.readUInt8() != 0x00,
                         };
                             var is_sprite = m_wrapper.aw != 0 && m_wrapper.ah != 0;
                             resource_x.slot = m_wrapper.slot!;

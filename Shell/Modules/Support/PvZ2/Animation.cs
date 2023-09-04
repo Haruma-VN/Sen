@@ -78,14 +78,14 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
 
     public class FlashRequest
     {
-        public required string[] mediaFolder;
-        public required string outFolder;
-        public required string imageResourceName;
-        public required int resolution;
-        public int frame_rate = 30;
-        public int position_x = 0;
-        public int position_y = 0;
-        public int num_sprites = 0;
+        public required string[] mediaFolder { get; set; }
+        public required string outFolder { get; set; }
+        public required string imageResourceName { get; set; }
+        public required int resolution { get; set; }
+        public int frame_rate { get; set; }
+        public int position_x { get; set; }
+        public int position_y { get; set; }
+        public required int num_sprites { get; set; }
     }
 
 
@@ -1990,6 +1990,10 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     (string)x_DOMSymbolInstance.Attribute("libraryItemName")!, image_path);
             }
             var x_matrix_list = x_DOMSymbolInstance.Elements("matrix").ToArray();
+            if (x_matrix_list.Length == 0)
+            {
+                return k_initial_transform;
+            }
             if (x_matrix_list.Length != 1)
             {
                 throw new PAMException("invalid_image_dom_symbol_instance_matrix_length",
@@ -2545,25 +2549,49 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             {
                 var image = new SenBuffer(mediaFolder[i]);
                 var imageData = image.getImage();
+                var imageName = path.Parse(mediaFolder[i]).name_without_extension;
                 pamImage[i] = new ImageInfo
                 {
-                    name = $"{path.Parse(mediaFolder[i]).name_without_extension}|{package_n.imageResourceName}",
-                    size = [imageData.Width, imageData.Height],
+                    name = $"{imageName}|{package_n.imageResourceName}{imageName.ToUpper()}",
+                    size = new int[] { imageData.Width, imageData.Height },
                     transform = PAM_Animation.k_initial_transform,
                 };
                 image.OutFile(path.Resolve(path.Join(package_n.outFolder, "library", "media", path.Parse(mediaFolder[i]).name)));
             }
+            var pamSprite = new SpriteInfo[package_n.num_sprites];
+            for (var i = 0; i < package_n.num_sprites; i++) {
+                pamSprite[i] = WriteDefaultSpriteInfo("sprite_name_null", package_n.frame_rate);
+            }
             var pamInfo = new PAMInfo
             {
                 frame_rate = package_n.frame_rate,
-                position = [package_n.position_x, package_n.position_y],
-                size = [390, 390],
+                position = new double[] { package_n.position_x, package_n.position_y },
+                size = new double[] { 390, 390 },
                 image = pamImage,
-                sprite = new SpriteInfo[package_n.num_sprites],
-                main_sprite = new SpriteInfo(),
+                sprite = pamSprite, 
+                main_sprite = WriteDefaultSpriteInfo("", package_n.frame_rate),
             };
             var extraInfo = PAM_Animation.Decode(pamInfo, package_n.outFolder, package_n.resolution);
             return extraInfo;
+        }
+
+        private static SpriteInfo WriteDefaultSpriteInfo(string name, int frameRate) {
+            return new SpriteInfo {
+                name = name,
+                description = "",
+                frame_rate = frameRate,
+                work_area = new int[] {0, 1},
+                frame = new FrameInfo[] {
+                    new FrameInfo {
+                        label = "",
+                        stop = false,
+                        command = new List<string[]>(),
+                        remove = new List<FrameInfo.RemovesInfo>(),
+                        append = new List<FrameInfo.AddsInfo>(),
+                        change = new List<FrameInfo.MovesInfo>(),
+                    }
+                },
+            };
         }
     }
 }
