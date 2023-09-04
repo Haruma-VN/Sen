@@ -202,10 +202,11 @@ namespace Sen.Shell.Modules.Support
 
         public abstract void PackPackage(string inDirectory, string outFile);
 
-
+        public abstract ExtraInfo CreatePamFlashEmpty(FlashRequest package_n);
     }
 
     #endregion
+
 
     #region Asynchronous Task
 
@@ -940,6 +941,11 @@ namespace Sen.Shell.Modules.Support
             return;
         }
 
+        public override ExtraInfo CreatePamFlashEmpty(FlashRequest package_n) {
+            var extra_info = AnimationHelper.CreatePamFlashEmpty(package_n);
+            return extra_info;
+        }
+        
 
         #endregion
     }

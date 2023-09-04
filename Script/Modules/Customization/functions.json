@@ -155,456 +155,463 @@
         "is_enabled": true,
         "type": "directory"
     },
-    "popcap_rsg_unpack": {
+    "popcap_create_empty_flash_animation": {
         "func_number": 23,
+        "include": [""],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
+    },
+    "popcap_rsg_unpack": {
+        "func_number": 24,
         "include": [".rsg"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_rsg_pack": {
-        "func_number": 24,
+        "func_number": 25,
         "include": [".packet"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_rsb_unpack": {
-        "func_number": 25,
+        "func_number": 26,
         "include": [".rsb", ".obb"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_rsb_pack": {
-        "func_number": 26,
+        "func_number": 27,
         "include": [".bundle"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_rsb_obfuscate": {
-        "func_number": 27,
-        "include": [".rsb", ".obb"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "file"
-    },
-    "popcap_rsb_unpack_by_loose_constraints": {
         "func_number": 28,
         "include": [".rsb", ".obb"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "wwise_soundbank_decode": {
+    "popcap_rsb_unpack_by_loose_constraints": {
         "func_number": 29,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "wwise_soundbank_decode": {
+        "func_number": 30,
         "include": [".bnk"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "wwise_soundbank_encode": {
-        "func_number": 30,
+        "func_number": 31,
         "include": [".soundbank"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_zlib_compress": {
-        "func_number": 31,
+        "func_number": 32,
         "include": [".rsb"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_zlib_uncompress": {
-        "func_number": 32,
+        "func_number": 33,
         "include": [".smf", ".compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_rsb_unpack_simple": {
-        "func_number": 33,
+        "func_number": 34,
         "include": [".rsb", ".obb"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_rsb_pack_simple": {
-        "func_number": 34,
+        "func_number": 35,
         "include": [".bundle"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "wwise_media_to_ogg": {
-        "func_number": 35,
+        "func_number": 36,
         "include": [".wem"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_rton_encrypt": {
-        "func_number": 36,
-        "include": [".rton"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "file"
-    },
-    "popcap_rton_decrypt": {
         "func_number": 37,
         "include": [".rton"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_rton_decrypt_and_decode": {
+    "popcap_rton_decrypt": {
         "func_number": 38,
         "include": [".rton"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_rton_encode_and_encrypt": {
+    "popcap_rton_decrypt_and_decode": {
         "func_number": 39,
+        "include": [".rton"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_rton_encode_and_encrypt": {
+        "func_number": 40,
         "include": [".json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_add_image_to_flash_animation_adobe": {
-        "func_number": 40,
-        "include": [".pam.xfl"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "directory"
-    },
-    "flash_animation_resize": {
         "func_number": 41,
         "include": [".pam.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
-    "popcap_rsb_unpack_resource": {
+    "flash_animation_resize": {
         "func_number": 42,
-        "include": [".bundle"],
+        "include": [".pam.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
-    "popcap_rsb_pack_resource": {
+    "popcap_rsb_unpack_resource": {
         "func_number": 43,
         "include": [".bundle"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
-    "popcap_rsb_unpack_with_simplified_manifest": {
+    "popcap_rsb_pack_resource": {
         "func_number": 44,
+        "include": [".bundle"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "directory"
+    },
+    "popcap_rsb_unpack_with_simplified_manifest": {
+        "func_number": 45,
         "include": [".rsb", ".obb"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_rsb_pack_with_simplified_manifest": {
-        "func_number": 45,
+        "func_number": 46,
         "include": [".bundle"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_official_resource_path_convert": {
-        "func_number": 46,
+        "func_number": 47,
         "include": ["resources.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_animation_render": {
-        "func_number": 47,
+        "func_number": 48,
         "include": [".pam.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_rsb_patch_decode": {
-        "func_number": 48,
-        "include": [".rsb", ".obb"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "file"
-    },
-    "popcap_rsb_patch_encode": {
         "func_number": 49,
         "include": [".rsb", ".obb"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_lawnstring_convert": {
+    "popcap_rsb_patch_encode": {
         "func_number": 50,
+        "include": [".rsb", ".obb"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_lawnstring_convert": {
+        "func_number": 51,
         "include": [".txt", ".json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_atlas_merge_multi_resolution": {
-        "func_number": 51,
+        "func_number": 52,
         "include": [".sprite"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_rsb_bundle_manifest_split": {
-        "func_number": 52,
+        "func_number": 53,
         "include": ["manifest.json"],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
     "popcap_rsb_bundle_manifest_merge": {
-        "func_number": 53,
+        "func_number": 54,
         "include": [".package"],
         "exclude": [],
         "is_enabled": false,
         "type": "directory"
     },
     "pvz2_remote_android_helper": {
-        "func_number": 54,
+        "func_number": 55,
         "include": [".android.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_render_effect_decode": {
-        "func_number": 55,
+        "func_number": 56,
         "include": [".popfx"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_render_effect_encode": {
-        "func_number": 56,
+        "func_number": 57,
         "include": [".popfx.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_image_sequence_to_pam_json": {
-        "func_number": 57,
+        "func_number": 58,
         "include": [".render.animation"],
         "exclude": [],
         "is_enabled": false,
         "type": "directory"
     },
     "zlib_compress": {
-        "func_number": 58,
-        "include": [""],
-        "exclude": [],
-        "is_enabled": false,
-        "type": "file"
-    },
-    "zlib_uncompress": {
         "func_number": 59,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "gzip_compress": {
+    "zlib_uncompress": {
         "func_number": 60,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "gzip_uncompress": {
+    "gzip_compress": {
         "func_number": 61,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "deflate_compress": {
+    "gzip_uncompress": {
         "func_number": 62,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "deflate_uncompress": {
+    "deflate_compress": {
         "func_number": 63,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "lzma_compress": {
+    "deflate_uncompress": {
         "func_number": 64,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "lzma_uncompress": {
+    "lzma_compress": {
         "func_number": 65,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "bzip2_compress": {
+    "lzma_uncompress": {
         "func_number": 66,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "bzip2_uncompress": {
+    "bzip2_compress": {
         "func_number": 67,
         "include": [""],
         "exclude": [],
         "is_enabled": false,
         "type": "file"
     },
-    "popcap_newton_decode": {
+    "bzip2_uncompress": {
         "func_number": 68,
+        "include": [""],
+        "exclude": [],
+        "is_enabled": false,
+        "type": "file"
+    },
+    "popcap_newton_decode": {
+        "func_number": 69,
         "include": [".newton"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_newton_encode": {
-        "func_number": 69,
+        "func_number": 70,
         "include": [".newton.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_crypt_data_decrypt": {
-        "func_number": 70,
+        "func_number": 71,
         "include": [".cdat"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_crypt_data_encrypt": {
-        "func_number": 71,
+        "func_number": 72,
         "include": [".bin"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_reanim_to_json": {
-        "func_number": 72,
+        "func_number": 73,
         "include": [".reanim", ".reanim.compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_reanim_from_json": {
-        "func_number": 73,
-        "include": [".reanim.json"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "file"
-    },
-    "popcap_reanim_json_to_flash": {
         "func_number": 74,
         "include": [".reanim.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_reanim_json_from_flash": {
+    "popcap_reanim_json_to_flash": {
         "func_number": 75,
+        "include": [".reanim.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_reanim_json_from_flash": {
+        "func_number": 76,
         "include": [".reanim.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_reanim_to_flash": {
-        "func_number": 76,
+        "func_number": 77,
         "include": [".reanim", ".reanim.compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_reanim_from_flash": {
-        "func_number": 77,
+        "func_number": 78,
         "include": [".reanim.xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_reanim_json_to_xml": {
-        "func_number": 78,
+        "func_number": 79,
         "include": [".reanim.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_reanim_json_from_xml": {
-        "func_number": 79,
+        "func_number": 80,
         "include": [".reanim.xml"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_compiled_text_decode": {
-        "func_number": 80,
-        "include": [".txt"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "file"
-    },
-    "popcap_compiled_text_encode": {
         "func_number": 81,
         "include": [".txt"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_particles_decode": {
+    "popcap_compiled_text_encode": {
         "func_number": 82,
+        "include": [".txt"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_particles_decode": {
+        "func_number": 83,
         "include": [".xml", ".xml.compiled"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_particles_encode": {
-        "func_number": 83,
-        "include": [".xml.json", ".xml.compiled.json"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "file"
-    },
-    "popcap_particles_to_xml": {
         "func_number": 84,
         "include": [".xml.json", ".xml.compiled.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
-    "popcap_particles_from_xml": {
+    "popcap_particles_to_xml": {
         "func_number": 85,
+        "include": [".xml.json", ".xml.compiled.json"],
+        "exclude": [],
+        "is_enabled": true,
+        "type": "file"
+    },
+    "popcap_particles_from_xml": {
+        "func_number": 86,
         "include": [".xml"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_resource_manager_split": {
-        "func_number": 86,
+        "func_number": 87,
         "include": ["description.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_resource_manager_merge": {
-        "func_number": 87,
+        "func_number": 88,
         "include": [".rsm"],
         "exclude": [],
         "is_enabled": true,
@@ -612,42 +619,42 @@
     },
     "popcap_rsm_atlas_split": {
         "#comment": "This function can only be executed when you drag a png & json to tool",
-        "func_number": 88,
+        "func_number": 89,
         "include": [],
         "exclude": [],
         "is_enabled": true,
         "type": "unknown"
     },
     "popcap_rsm_atlas_merge": {
-        "func_number": 89,
+        "func_number": 90,
         "include": [".sprite"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "popcap_character_font_widget_2_decode": {
-        "func_number": 90,
+        "func_number": 91,
         "include": [".cfw2"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_character_font_widget_2_encode": {
-        "func_number": 91,
+        "func_number": 92,
         "include": [".cfw2.json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_package_unpack": {
-        "func_number": 92,
+        "func_number": 93,
         "include": [".pak"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"
     },
     "popcap_package_pack": {
-        "func_number": 93,
+        "func_number": 94,
         "include": [".data"],
         "exclude": [],
         "is_enabled": true,

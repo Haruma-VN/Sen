@@ -117,6 +117,7 @@ namespace Sen.Script.Modules.Interface.Execute {
         | "popcap_rton_encode_and_encrypt"
         | "popcap_rton_decrypt_and_decode"
         | "popcap_add_image_to_flash_animation_adobe"
+        | "popcap_create_empty_flash_animation"
         | "flash_animation_resize"
         | "popcap_rsb_unpack_by_loose_constraints"
         | "popcap_rsb_unpack_resource"
@@ -206,6 +207,24 @@ namespace Sen.Script.Modules.Interface.Execute {
                         argument.forEach((arg: string) => Sen.Shell.JavaScriptCoreEngine.Evaluate(Sen.Shell.FileSystem.ReadText(arg, 0 as Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), arg.replaceAll(`/`, `\\`)));
                     }
                     break;
+                }
+                case "popcap_create_empty_flash_animation": {
+                    if (!Array.isArray(argument)) {
+                        const output_argument: Argument = {
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam.xfl`)),
+                        };  
+                        Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.CreatePamFlashEmpty(argument, output_argument.argument);
+                    }
+                    else {
+                        argument.forEach((arg: string) => {
+                            const output_argument: Argument = {
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.pam.xfl`)),
+                            };  
+                            Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
+                            Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.CreatePamFlashEmpty(arg, output_argument.argument);
+                        });
+                    }
                 }
                 case "popcap_reanim_json_to_xml": {
                     if (!Array.isArray(argument)) {

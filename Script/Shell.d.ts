@@ -1731,6 +1731,14 @@ declare namespace Sen {
              */
 
             export function PAMJSONtoPAM(PamJson: string, outFile: string): void;
+            /**
+             *
+             * @param package_n - FlashRequest
+             * @param outFolder - Out dir
+             * @param resolution - Pass resize resolution
+             */
+
+            export function CreatePamFlashEmpty(package_n: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.FlashRequest): Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo;
 
             /**
              *
