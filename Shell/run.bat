@@ -1,7 +1,9 @@
 @echo off
-echo Start building
-dotnet publish >NUL
 
+taskkill /f /im Sen.exe >nul 2>&1
+
+echo Start building
+dotnet publish 
 
 
 set "makelink="
@@ -10,9 +12,9 @@ set "rebuildscript="
 set mypath=%~dp0
 
 for %%x in (%*) do (
-	if %%x == l ( set /a makelink=y )
-	if %%x == s ( set /a startsen=y )
-	if %%x == b ( set /a rebuildscript=y )
+	if %%x == l ( set makelink=y )
+	if %%x == s ( set startsen=y )
+	if %%x == b ( set rebuildscript=y )
 )
 
 if defined rebuildscript (
@@ -26,6 +28,7 @@ if not exist bin\Release\net8.0\win-x64\publish\Scripts\ (
 	cd bin\Release\net8.0\win-x64\publish\Script
 	call link.bat >NUL
 	cd %mypath:~0,-1%
+	EXIT /B 0
 ) 
 
 set SCRIPT="%TEMP%\%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%.vbs"
@@ -45,3 +48,4 @@ if defined startsen (
 echo Starting Sen
 start %mypath:~0,-1%\bin\Release\net8.0\win-x64\publish\Sen.exe
 )
+
