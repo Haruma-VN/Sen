@@ -25,7 +25,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             Dictionary<string, PoolInfo> stringPool;
             long position;
             int index;
-            bool autoPool = false;
+            readonly bool autoPool = false;
 
             public StringPool(bool autoPool)
             {
@@ -60,7 +60,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             {
                 get
                 {
-                    if (!stringPool.ContainsKey(id))
+                    if (!stringPool.TryGetValue(id, out PoolInfo? value))
                     {
                         if (autoPool)
                         {
@@ -68,7 +68,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                         }
                         return null;
                     }
-                    return stringPool[id];
+                    return value;
                 }
             }
 
@@ -85,26 +85,21 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             }
             public PoolInfo ThrowInPool(string poolKey)
             {
-                if (!stringPool.ContainsKey(poolKey))
+                if (!stringPool.TryGetValue(poolKey, out PoolInfo? value))
                 {
-                    stringPool.Add(poolKey, new PoolInfo(position, index++, poolKey));
+                    value = new PoolInfo(position, index++, poolKey);
+                    stringPool.Add(poolKey, value);
                     position += poolKey.Length + 1;
                 }
-                return stringPool[poolKey];
+                return value;
             }
         }
 
-        public class PoolInfo
+        public class PoolInfo(long offset, int index, string value)
         {
-            public long Offset;
-            public int Index;
-            public string Value;
-            public PoolInfo(long offset, int index, string value)
-            {
-                Offset = offset;
-                Index = index;
-                Value = value;
-            }
+            public long Offset = offset;
+            public int Index = index;
+            public string Value = value;
         }
     }
 
@@ -155,7 +150,12 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             var keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
             byte[] ivBytes = new byte[24];
             Array.Copy(keyBytes, 4, ivBytes, 0, 24);
-            return new SenBuffer(Crypto.RTONRijndaelDecrypt(RtonFile.getBytes((int)(RtonFile.length - 2), 2), ivBytes, keyBytes, new Org.BouncyCastle.Crypto.Paddings.ZeroBytePadding()));
+            return new SenBuffer(Crypto.RTONRijndaelDecrypt(
+                RtonFile.getBytes((int)(RtonFile.length - 2), 2), 
+                ivBytes, 
+                keyBytes,
+                new Org.BouncyCastle.Crypto.Paddings.ZeroBytePadding())
+            );
         }
 
         public struct RTONCipher
@@ -163,17 +163,21 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
             public required bool crypt;
             public required string key;
         }
+
         // Rton_to_Json
+
         public static SenBuffer Decode(SenBuffer RtonFile, RTONCipher decrypt)
         {
             R0x90List.Clear();
             R0x92List.Clear();
             var stream = new MemoryStream();
             var streamWriter = new StreamWriter(stream);
-            var jsonWriter = new JsonTextWriter(streamWriter);
-            jsonWriter.Formatting = Formatting.Indented;
-            jsonWriter.IndentChar = '\t';
-            jsonWriter.Indentation = 1;
+            var jsonWriter = new JsonTextWriter(streamWriter)
+            {
+                Formatting = Formatting.Indented,
+                IndentChar = '\t',
+                Indentation = 1,
+            };
             if (decrypt.crypt)
             {
                 RtonFile = Decrypt(RtonFile, decrypt.key);

@@ -16,7 +16,8 @@ namespace Sen.Shell.Modules.Internal
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         public static partial IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
 
-        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] 
+        public static partial void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr OpenFileDialog(string title, int size, string[] filters);

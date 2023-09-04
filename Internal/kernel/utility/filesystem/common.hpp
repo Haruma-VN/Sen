@@ -183,6 +183,35 @@ namespace Sen::Internal::Kernel::Utility::FileSystem
 		return;
 	}
 
+	inline auto out_file(
+		String filepath,
+		String data
+	) -> Void
+	{
+		auto new_path = Sen::Internal::Kernel::Utility::Path::resolve(filepath);
+		auto constexpr delimeter = "/";
+		auto constexpr backslashs = "\\";
+		Sen::Internal::Kernel::Utility::String::replace(new_path, backslashs, delimeter);
+		auto list = Sen::Internal::Kernel::Utility::String::split(new_path, delimeter);
+		list.pop_back();
+		Sen::Internal::Kernel::Utility::FileSystem::create_directories(
+			Sen::Internal::Kernel::Utility::String::join(list, delimeter)
+		);
+		Sen::Internal::Kernel::Utility::FileSystem::write_file(new_path, data);
+		return;
+	}
+
+	inline auto write_buffer(
+		const std::string& filepath, 
+		const char* buffer, 
+		std::size_t size
+	) -> void
+	{
+		auto file = OutFile(filepath, std::ios::binary);
+		file.write(buffer, size);
+		return;
+	}
+
 	inline auto read_buffer(
 		const std::string& filename
 	) -> std::vector<unsigned char> {
