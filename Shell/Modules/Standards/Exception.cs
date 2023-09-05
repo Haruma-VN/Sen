@@ -67,7 +67,7 @@
         {
             this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMException;
             var system = new SystemImplement();
-            if(errorCode != "undefined")
+            if(errorCode != "undefined" && errorCode != "")
             {
                 system.Print(ConsoleColor.Red, Localization.GetString("popcap_animation_error_detected"));
                 system.Printf(ConsoleColor.White, $"      {errorCode}");

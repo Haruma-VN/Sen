@@ -212,15 +212,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam.xfl`)),
-                        };  
+                        };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.CreatePamFlashEmpty(argument, output_argument.argument);
-                    }
-                    else {
+                    } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.pam.xfl`)),
-                            };  
+                            };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.CreatePamFlashEmpty(arg, output_argument.argument);
                         });
@@ -265,18 +264,26 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_particles_to_xml": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, 
-                            Sen.Shell.Path.Parse(argument).name_without_extension.toLowerCase().endsWith(".xml") ?`${Sen.Shell.Path.Parse(argument).name_without_extension}` : 
-                            `${Sen.Shell.Path.Parse(argument).name_without_extension}.xml`)),
+                            argument: Sen.Shell.Path.Resolve(
+                                Sen.Shell.Path.Join(
+                                    `${Sen.Shell.Path.Dirname(argument)}`,
+                                    Sen.Shell.Path.Parse(argument).name_without_extension.toLowerCase().endsWith(".xml")
+                                        ? `${Sen.Shell.Path.Parse(argument).name_without_extension}`
+                                        : `${Sen.Shell.Path.Parse(argument).name_without_extension}.xml`
+                                )
+                            ),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.JSONToXML(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, 
-                                Sen.Shell.Path.Parse(arg).name_without_extension.toLowerCase().endsWith(".xml") ?`${Sen.Shell.Path.Parse(arg).name_without_extension}` : 
-                                `${Sen.Shell.Path.Parse(arg).name_without_extension}.xml`)),
+                                argument: Sen.Shell.Path.Resolve(
+                                    Sen.Shell.Path.Join(
+                                        `${Sen.Shell.Path.Dirname(arg)}`,
+                                        Sen.Shell.Path.Parse(arg).name_without_extension.toLowerCase().endsWith(".xml") ? `${Sen.Shell.Path.Parse(arg).name_without_extension}` : `${Sen.Shell.Path.Parse(arg).name_without_extension}.xml`
+                                    )
+                                ),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.JSONToXML(arg, output_argument.argument);
@@ -305,17 +312,28 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_particles_decode": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`,
-                                Sen.Shell.Path.Parse(argument).name_without_extension.toLocaleLowerCase().endsWith(".xml") ?
-                                    `${Sen.Shell.Path.Parse(argument).name_without_extension}.json` : `${Sen.Shell.Path.Parse(argument).name_without_extension}.xml.json`)),
+                            argument: Sen.Shell.Path.Resolve(
+                                Sen.Shell.Path.Join(
+                                    `${Sen.Shell.Path.Dirname(argument)}`,
+                                    Sen.Shell.Path.Parse(argument).name_without_extension.toLocaleLowerCase().endsWith(".xml")
+                                        ? `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`
+                                        : `${Sen.Shell.Path.Parse(argument).name_without_extension}.xml.json`
+                                )
+                            ),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Decode(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, Sen.Shell.Path.Parse(arg).name_without_extension.toLocaleLowerCase().endsWith(".xml") ?
-                                    `${Sen.Shell.Path.Parse(arg).name_without_extension}.json` : `${Sen.Shell.Path.Parse(arg).name_without_extension}.xml.json`)),
+                                argument: Sen.Shell.Path.Resolve(
+                                    Sen.Shell.Path.Join(
+                                        `${Sen.Shell.Path.Dirname(arg)}`,
+                                        Sen.Shell.Path.Parse(arg).name_without_extension.toLocaleLowerCase().endsWith(".xml")
+                                            ? `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`
+                                            : `${Sen.Shell.Path.Parse(arg).name_without_extension}.xml.json`
+                                    )
+                                ),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ.Particles.Encode.Decode(arg, output_argument.argument);
@@ -462,18 +480,28 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_reanim_to_json": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`,
-                                Sen.Shell.Path.Parse(argument.toLowerCase()).name_without_extension.endsWith(".reanim") ? `${Sen.Shell.Path.Parse(argument).name_without_extension}.json` :
-                                    `${Sen.Shell.Path.Parse(argument).name_without_extension}.reanim.json`)),
+                            argument: Sen.Shell.Path.Resolve(
+                                Sen.Shell.Path.Join(
+                                    `${Sen.Shell.Path.Dirname(argument)}`,
+                                    Sen.Shell.Path.Parse(argument.toLowerCase()).name_without_extension.endsWith(".reanim")
+                                        ? `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`
+                                        : `${Sen.Shell.Path.Parse(argument).name_without_extension}.reanim.json`
+                                )
+                            ),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Decode(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`,
-                                    Sen.Shell.Path.Parse(arg.toLowerCase()).name_without_extension.endsWith(".reanim") ? `${Sen.Shell.Path.Parse(arg).name_without_extension}.json` :
-                                        `${Sen.Shell.Path.Parse(arg).name_without_extension}.reanim.json`)),
+                                argument: Sen.Shell.Path.Resolve(
+                                    Sen.Shell.Path.Join(
+                                        `${Sen.Shell.Path.Dirname(arg)}`,
+                                        Sen.Shell.Path.Parse(arg.toLowerCase()).name_without_extension.endsWith(".reanim")
+                                            ? `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`
+                                            : `${Sen.Shell.Path.Parse(arg).name_without_extension}.reanim.json`
+                                    )
+                                ),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Decode(arg, output_argument.argument);
@@ -524,18 +552,28 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_reanim_to_flash": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`,
-                                Sen.Shell.Path.Parse(argument.toLowerCase()).name_without_extension.endsWith(".reanim") ? `${Sen.Shell.Path.Parse(argument).name_without_extension}.xfl` :
-                                    `${Sen.Shell.Path.Parse(argument).name_without_extension}.reanim.xfl`)),
+                            argument: Sen.Shell.Path.Resolve(
+                                Sen.Shell.Path.Join(
+                                    `${Sen.Shell.Path.Dirname(argument)}`,
+                                    Sen.Shell.Path.Parse(argument.toLowerCase()).name_without_extension.endsWith(".reanim")
+                                        ? `${Sen.Shell.Path.Parse(argument).name_without_extension}.xfl`
+                                        : `${Sen.Shell.Path.Parse(argument).name_without_extension}.reanim.xfl`
+                                )
+                            ),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                         Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.ToFlash(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`,
-                                    Sen.Shell.Path.Parse(arg.toLowerCase()).name_without_extension.endsWith(".reanim") ? `${Sen.Shell.Path.Parse(arg).name_without_extension}.xfl` :
-                                        `${Sen.Shell.Path.Parse(arg).name_without_extension}.reanim.xfl`)),
+                                argument: Sen.Shell.Path.Resolve(
+                                    Sen.Shell.Path.Join(
+                                        `${Sen.Shell.Path.Dirname(arg)}`,
+                                        Sen.Shell.Path.Parse(arg.toLowerCase()).name_without_extension.endsWith(".reanim")
+                                            ? `${Sen.Shell.Path.Parse(arg).name_without_extension}.xfl`
+                                            : `${Sen.Shell.Path.Parse(arg).name_without_extension}.reanim.xfl`
+                                    )
+                                ),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
                             Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.ToFlash(arg, output_argument.argument);
@@ -557,7 +595,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             `platform`
                         ) as 1 | 2 | 3;
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.compiled`)),
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.reanim.compiled`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.FromFlash(argument, output_argument.argument, platform);
@@ -575,7 +613,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                                 `platform`
                             ) as 1 | 2 | 3;
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.compiled`)),
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.reanim.compiled`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.FromFlash(arg, output_argument.argument, platform);
@@ -604,14 +642,14 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_reanim_json_from_flash": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`)),
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.reanim.json`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.JSONFromFlash(argument, output_argument.argument);
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`)),
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.reanim.json`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.JSONFromFlash(arg, output_argument.argument);
@@ -2121,7 +2159,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_pam_from_flash_animation": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}`)),
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
@@ -2135,7 +2173,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                     } else {
                         argument.forEach((arg: string) => {
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}`)),
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.pam`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             const extra: Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraInfo = Sen.Script.Modules.Support.PopCap.PvZ2.Animation.ExtraJsonConvertBack(
@@ -2524,7 +2562,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                 case "popcap_pam_json_from_flash_animation": {
                     if (!Array.isArray(argument)) {
                         const output_argument: Argument = {
-                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.json`)),
+                            argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name_without_extension}.pam.json`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                         Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(argument, output_argument.argument);
@@ -2532,7 +2570,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                         argument.forEach((arg: string) => {
                             Sen.Script.Modules.Support.PopCap.PvZ2.Animation.CheckPamJson(Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Animation.SexyAppFrameworkAnimationPamJson>(arg));
                             const output_argument: Argument = {
-                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.json`)),
+                                argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name_without_extension}.pam.json`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "file");
                             Sen.Script.Modules.Support.PopCap.PvZ2.Animation.AnimateAdobeFlashAnimationToPopCapAnimationJson(arg, output_argument.argument);

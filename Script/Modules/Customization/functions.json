@@ -136,7 +136,7 @@
     },
     "popcap_pam_from_flash_animation": {
         "func_number": 20,
-        "include": [".pam.xfl"],
+        "include": [".xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -150,7 +150,7 @@
     },
     "popcap_pam_json_from_flash_animation": {
         "func_number": 22,
-        "include": [".pam.xfl"],
+        "include": [".xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -159,7 +159,7 @@
         "func_number": 23,
         "include": [""],
         "exclude": [],
-        "is_enabled": true,
+        "is_enabled": false,
         "type": "directory"
     },
     "popcap_rsg_unpack": {
@@ -283,14 +283,14 @@
     },
     "popcap_add_image_to_flash_animation_adobe": {
         "func_number": 41,
-        "include": [".pam.xfl"],
+        "include": [".xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
     },
     "flash_animation_resize": {
         "func_number": 42,
-        "include": [".pam.xfl"],
+        "include": [".xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -528,7 +528,7 @@
     },
     "popcap_reanim_json_from_flash": {
         "func_number": 76,
-        "include": [".reanim.xfl"],
+        "include": [".xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
@@ -542,7 +542,7 @@
     },
     "popcap_reanim_from_flash": {
         "func_number": 78,
-        "include": [".reanim.xfl"],
+        "include": [".xfl"],
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
