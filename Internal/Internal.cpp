@@ -625,3 +625,23 @@ void* VCDiffDecode(
         throw 0;
     }
 }
+
+
+InternalAPI
+void EncodeETC1(
+    const void* sourceBgra32, 
+    uint64_t destRgb24, 
+    unsigned int width, 
+    unsigned int height
+)
+{
+    auto Size = 4 * width * height;
+    auto Block = static_cast<void*>(nullptr);
+    auto v10 = static_cast<void*>(nullptr);
+    Block = malloc(Size);
+    v10 = malloc(Size / 8);
+    memcpy(Block, sourceBgra32, Size);
+    CompressEtc1RgbDither((uint32_t*)Block, (uint64_t*)v10, width * height * 0x10, width);
+    memcpy((void*)(destRgb24), v10, Size / 8);
+    return;
+}

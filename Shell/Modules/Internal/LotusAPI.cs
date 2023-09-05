@@ -79,5 +79,9 @@ namespace Sen.Shell.Modules.Internal
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         public static partial Architecture GetProcessorArchitecture();
 
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial void EncodeETC1(byte[] source, long size, uint width, uint height);
+
     }
 }
