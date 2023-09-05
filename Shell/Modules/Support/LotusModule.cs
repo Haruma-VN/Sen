@@ -29,6 +29,8 @@ using System.IO;
 using Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2;
 using Sen.Shell.Modules.Support.PvZ.PAK;
 using ResInfo = Sen.Shell.Modules.Support.PvZ2.ResInfo;
+using SixLabors.ImageSharp.PixelFormats;
+using Sen.Shell.Modules.Internal;
 
 namespace Sen.Shell.Modules.Support
 {
@@ -945,7 +947,32 @@ namespace Sen.Shell.Modules.Support
             var extra_info = AnimationHelper.CreatePamFlashEmpty(package_n);
             return extra_info;
         }
-        
+
+        public unsafe void EncodeETC1(string inFile, string outFile)
+        {
+            var senFile = new SenBuffer(inFile);
+            var image = senFile.getImage();
+            var width = image.Width;
+            var height = image.Height;
+            var array = new byte[width * height * System.Runtime.CompilerServices.Unsafe.SizeOf<Bgra32>()];
+            if (typeof(TPixel) != typeof(Bgra32))
+            {
+                Image<Bgra32> obj = ((Image)image).CloneAs<Bgra32>();
+                obj.CopyPixelDataTo(System.Span<byte>.op_Implicit(array));
+                ((Image)obj).Dispose();
+            }
+            var sourceArray = new byte[width * height / 2];
+            fixed (byte* destRgb = sourceArray)
+            {
+                fixed (byte* sourceBgra = array)
+                {
+                    Internal.LotusAPI.EncodeETC1(sourceBgra, destRgb, (uint)width, (uint)height);
+                    var senWriter = new SenBuffer(sourceArray);
+                    senWriter.OutFile(outFile);
+                }
+            }
+            return;
+        }
 
         #endregion
     }
