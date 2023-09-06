@@ -29,6 +29,8 @@ class _HomePageState extends State<HomePage> {
     'popcap.resource_group.merge_atlas',
     'popcap.resinfo.split_atlas',
     'popcap.resinfo.merge_atlas',
+    'popcap.ptx.decode',
+    'popcap.ptx.encode',
     'popcap.animation.decode_to_json',
     'popcap.animation.encode_from_json',
     'popcap.animation.pam_to_flash',

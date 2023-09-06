@@ -53,7 +53,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
               child: const Text(
                 'PopCap Resource: Split',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 30,
                 ),
               ),
             ),
@@ -63,7 +63,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
               child: const Text(
                 'Data File',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -104,7 +104,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
               child: const Text(
                 'Output Directory',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -188,7 +188,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                   child: const Text(
                     'Execute',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                     ),
                   ),
                 ),

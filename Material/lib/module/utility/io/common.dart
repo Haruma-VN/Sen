@@ -131,7 +131,7 @@ class FileSystem {
   static Future<String?> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      return result.files.single.path!;
+      return result.files.single.path!.replaceAll('\\', '/');
     }
     return null;
   }
@@ -142,6 +142,9 @@ class FileSystem {
 
   static Future<String?> pickDirectory() async {
     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-    return selectedDirectory;
+    if (selectedDirectory != null) {
+      return selectedDirectory.replaceAll('\\', '/');
+    }
+    return null;
   }
 }
