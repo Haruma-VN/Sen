@@ -140,9 +140,49 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton(
                   onPressed: allowExecute
-                      ? () {
-                          splitResourceGroup(
-                              controllerInput.text, controllerOutput.text);
+                      ? () async {
+                          final DateTime startTime = DateTime.now();
+                          try {
+                            splitResourceGroup(
+                              controllerInput.text,
+                              controllerOutput.text,
+                            );
+                            final DateTime endTime = DateTime.now();
+                            final Duration difference =
+                                endTime.difference(startTime);
+                            WidgetsBinding.instance.addPostFrameCallback(
+                              (_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Center(
+                                      child: Text(
+                                        'Command execute success! Time spent: ${(difference.inSeconds / 60).toStringAsFixed(3)}s',
+                                      ),
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              },
+                            );
+                          } catch (e) {
+                            WidgetsBinding.instance.addPostFrameCallback(
+                              (_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Center(
+                                      child: Text(
+                                        'Command execute failed! Error: $e',
+                                      ),
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                          return;
                         }
                       : null,
                   child: const Text(

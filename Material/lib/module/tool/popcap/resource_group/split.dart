@@ -1,8 +1,13 @@
+import 'package:sen_material_design/module/utility/exception/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as path;
 
 void splitResourceGroup(String inFile, String outDirectory) {
   final dynamic resourceGroup = FileSystem.readJson(inFile);
+  assertTest(
+    resourceGroup['groups'] != null,
+    'Not resource-group, does not find property "groups"',
+  );
   Map<String, Object> content = {};
   for (var i = 0; i < resourceGroup['groups'].length; i++) {
     dynamic current = resourceGroup['groups'][i];
