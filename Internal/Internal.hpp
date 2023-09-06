@@ -45,6 +45,7 @@ inline constexpr auto MInternalVersion = 6;
 #include "../../dependencies/avir/avir.h"
 #include "../../dependencies/bzip2/bzlib.h"
 #include "../../dependencies/etcpak/ProcessRGB.hpp"
+#include "../../dependencies/rg_etc1/rg_etc1.h"
 
 
 #include "kernel/utility/utility.hpp"

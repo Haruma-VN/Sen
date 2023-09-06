@@ -954,23 +954,33 @@ namespace Sen.Shell.Modules.Support
             var image = senFile.getImage();
             var width = image.Width;
             var height = image.Height;
-            var array = new byte[width * height * System.Runtime.CompilerServices.Unsafe.SizeOf<Bgra32>()];
-            if (typeof(TPixel) != typeof(Bgra32))
+            var image_block = new uint[16];
+            var data = new ulong[width * height];
+            fixed (ulong* data_ptr = data)
             {
-                Image<Bgra32> obj = ((Image)image).CloneAs<Bgra32>();
-                obj.CopyPixelDataTo(System.Span<byte>.op_Implicit(array));
-                ((Image)obj).Dispose();
-            }
-            var sourceArray = new byte[width * height / 2];
-            fixed (byte* destRgb = sourceArray)
-            {
-                fixed (byte* sourceBgra = array)
+                for (var block_y = 0; block_y < height / 4; block_y++)
                 {
-                    Internal.LotusAPI.EncodeETC1(sourceBgra, destRgb, (uint)width, (uint)height);
-                    var senWriter = new SenBuffer(sourceArray);
-                    senWriter.OutFile(outFile);
+                    for (var block_x = 0; block_x < width / 4; block_x++)
+                    {
+                        for (var pixel_y = 0; pixel_y < 4; pixel_y++)
+                        {
+                            for (var pixel_x = 0; pixel_x < 4; pixel_x++)
+                            {
+                                var pixel = image[block_y * 4 + pixel_y, block_x * 4 + pixel_x];
+                                image_block[(pixel_y * 4 + pixel_x) * 4 + 0] = pixel.B;
+                                image_block[(pixel_y * 4 + pixel_x) * 4 + 1] = pixel.G;
+                                image_block[(pixel_y * 4 + pixel_x) * 4 + 2] = pixel.R;
+                                image_block[(pixel_y * 4 + pixel_x) * 4 + 3] = 255;
+                            }
+                        }
+                    }
+                    LotusAPI.EncodeETC1Fast(image_block, data_ptr, 1, (uint)width);
                 }
             }
+            byte[] outputBytes = new byte[data.Length * sizeof(ulong)];
+            Buffer.BlockCopy(data, 0, outputBytes, 0, outputBytes.Length);
+            var SenWriter = new SenBuffer(outputBytes);
+            SenWriter.OutFile(outFile);
             return;
         }
 

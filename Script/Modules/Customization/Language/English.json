@@ -631,5 +631,6 @@
     "width_not_found": "\"width\" property not found in DOMDocument",
     "height_not_found": "\"height\" property not found in DOMDocument",
     "popcap_animation_error_message": "PopCap Animation: Error Message",
-    "json_patch": "JSON-Patch"
+    "json_patch": "JSON-Patch",
+    "popcap_create_empty_flash_animation": "PopCap Animation: Create Empty Flash Project"
 }
