@@ -17,6 +17,8 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
 
   String text = '';
 
+  bool allowExecute = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +35,8 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
 
   @override
   Widget build(BuildContext context) {
+    final double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+    final double btnSize = 75 / devicePixelRatio;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sen: Material App'),
@@ -84,6 +88,9 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                         controllerInput.text = path;
                         controllerOutput.text =
                             '${p.withoutExtension(path)}.res';
+                        setState(() {
+                          allowExecute = true;
+                        });
                       }
                     },
                     child: const Text('Browse'),
@@ -127,14 +134,23 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                 ],
               ),
             ),
-            TextButton(
-              onPressed: () {
-                splitResourceGroup(controllerInput.text, controllerOutput.text);
-              },
-              child: const Text(
-                'Execute',
-                style: TextStyle(
-                  fontSize: 20,
+            SizedBox(
+              height: btnSize,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextButton(
+                  onPressed: allowExecute
+                      ? () {
+                          splitResourceGroup(
+                              controllerInput.text, controllerOutput.text);
+                        }
+                      : null,
+                  child: const Text(
+                    'Execute',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ),
             ),
