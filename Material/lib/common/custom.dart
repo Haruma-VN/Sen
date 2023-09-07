@@ -51,7 +51,6 @@ class Customization {
       final contents = FileSystem.readFile(file);
       // ignore: non_constant_identifier_names
       final decode_data = jsonDecode(contents);
-      debugPrint(decode_data['theme']);
       switch (decode_data['theme']) {
         case 'dark':
           {

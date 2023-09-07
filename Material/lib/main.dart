@@ -71,10 +71,8 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text('Sen: Material App'),
-        ),
-        centerTitle: true,
+        title: const Text('Sen: Material App'),
+        centerTitle: false,
         elevation: 3,
         scrolledUnderElevation: 3,
       ),

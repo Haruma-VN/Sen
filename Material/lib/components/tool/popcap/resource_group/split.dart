@@ -40,7 +40,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sen: Material App'),
-        centerTitle: true,
+        centerTitle: false,
         elevation: 3,
         scrolledUnderElevation: 3,
       ),
@@ -156,7 +156,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                                   SnackBar(
                                     content: Center(
                                       child: Text(
-                                        'Command execute success! Time spent: ${(difference.inSeconds / 60).toStringAsFixed(3)}s',
+                                        'Command execute success! Time spent: ${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
                                       ),
                                     ),
                                     duration: const Duration(seconds: 2),

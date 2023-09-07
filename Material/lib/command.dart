@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 Future<void> refreshModule() async {
   await Future.delayed(
     const Duration(
-      seconds: 1,
+      milliseconds: 500,
     ),
   );
   return;
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                             return Scaffold(
                               appBar: AppBar(
                                 title: const Text('Sen: Material App'),
-                                centerTitle: true,
+                                centerTitle: false,
                                 elevation: 3,
                                 scrolledUnderElevation: 3,
                               ),
