@@ -135,8 +135,6 @@ class ConvertToResInfo {
           element,
           useString,
         );
-        {}
-        ;
       }
     }
     return result;

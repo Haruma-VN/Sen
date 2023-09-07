@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/module/tool/popcap/resource_group/merge.dart';
+import 'package:sen_material_design/module/tool/popcap/resource_group/to_resinfo.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
-class MergePopCapResourceGroup extends StatefulWidget {
-  const MergePopCapResourceGroup({super.key});
+class FromResInfo extends StatefulWidget {
+  const FromResInfo({super.key});
 
   @override
-  State<MergePopCapResourceGroup> createState() =>
-      _MergePopCapResourceGroupState();
+  State<FromResInfo> createState() => _FromResInfoState();
 }
 
-class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
+class _FromResInfoState extends State<FromResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -33,6 +32,10 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
     super.dispose();
   }
 
+  String dropDownDefault = '10.3 or below';
+
+  bool customIcon = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +53,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
               margin: const EdgeInsets.all(10.0),
               child: const Center(
                 child: Text(
-                  'PopCap Resource-Group: Merge',
+                  'PopCap Resource-Group: Convert from Res-Info',
                   style: TextStyle(
                     fontSize: 25,
                   ),
@@ -61,7 +64,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'Data Directory',
+                'Data File',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -81,19 +84,32 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                       },
                     ),
                   ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      final String? path = await FileSystem.pickDirectory();
-                      if (path != null) {
-                        controllerInput.text = path;
-                        controllerOutput.text =
-                            '${p.withoutExtension(path)}.json';
-                        setState(() {
-                          allowExecute = true;
-                        });
-                      }
-                    },
-                    child: const Text('Browse'),
+                  SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        final String? path = await FileSystem.pickFile();
+                        if (path != null) {
+                          controllerInput.text = path;
+                          controllerOutput.text = p
+                              .join(
+                                p.dirname(
+                                  path,
+                                ),
+                                'res.json',
+                              )
+                              .replaceAll(
+                                '\\',
+                                '/',
+                              );
+                          setState(() {
+                            allowExecute = true;
+                          });
+                        }
+                      },
+                      child: const Text('Browse'),
+                    ),
                   ),
                 ],
               ),
@@ -134,17 +150,83 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                 ],
               ),
             ),
+            ExpansionTile(
+              initiallyExpanded: customIcon,
+              title: const Text(
+                'Using PopCap Resource-Group path',
+              ),
+              trailing: Icon(
+                customIcon
+                    ? Icons.arrow_drop_down_rounded
+                    : Icons.arrow_drop_up_rounded,
+              ),
+              children: <Widget>[
+                const ListTile(
+                  title: Text(
+                    'There are two resources kind, set range in the version 10.4 of PvZ 2. The older version will use the older path, and newer version use the newer path.',
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: DropdownButton<String>(
+                      value: dropDownDefault,
+                      isExpanded: true,
+                      underline: Container(),
+                      items: const [
+                        DropdownMenuItem(
+                          value: '10.3 or below',
+                          child: Center(
+                            // Center the text
+                            child: Text(
+                              '10.3 or below',
+                            ),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: '10.4 or above',
+                          child: Center(
+                            // Center the text
+                            child: Text(
+                              '10.4 or above',
+                            ),
+                          ),
+                        )
+                      ],
+                      onChanged: (String? value) {
+                        setState(
+                          () {
+                            dropDownDefault = value!;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+              onExpansionChanged: (bool value) {
+                setState(() {
+                  customIcon = value;
+                });
+              },
+            ),
             SizedBox(
-              child: Padding(
+              width: 200,
+              height: 50,
+              child: Container(
                 padding: const EdgeInsets.all(10.0),
                 child: OutlinedButton(
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
                           try {
-                            mergeResourceGroup(
+                            ConvertToResInfo.process(
                               controllerInput.text,
                               controllerOutput.text,
+                              (dropDownDefault == '10.3 or below')
+                                  ? ExpandPath.array
+                                  : ExpandPath.string,
                             );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =

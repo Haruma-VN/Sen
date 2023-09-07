@@ -32,6 +32,10 @@ class _ToResInfoState extends State<ToResInfo> {
     super.dispose();
   }
 
+  String dropDownDefault = '10.3 or below';
+
+  bool customIcon = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,10 +51,12 @@ class _ToResInfoState extends State<ToResInfo> {
             Container(
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
-              child: const Text(
-                'PopCap Resource-Group: Convert to Res-Info',
-                style: TextStyle(
-                  fontSize: 30,
+              child: const Center(
+                child: Text(
+                  'PopCap Resource-Group: Convert to Res-Info',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
                 ),
               ),
             ),
@@ -144,6 +150,67 @@ class _ToResInfoState extends State<ToResInfo> {
                 ],
               ),
             ),
+            ExpansionTile(
+              initiallyExpanded: customIcon,
+              title: const Text(
+                'Using PopCap Resource-Group path',
+              ),
+              trailing: Icon(
+                customIcon
+                    ? Icons.arrow_drop_down_rounded
+                    : Icons.arrow_drop_up_rounded,
+              ),
+              children: <Widget>[
+                const ListTile(
+                  title: Text(
+                    'There are two resources kind, set range in the version 10.4 of PvZ 2. The older version will use the older path, and newer version use the newer path.',
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: DropdownButton<String>(
+                      value: dropDownDefault,
+                      isExpanded: true,
+                      underline: Container(),
+                      items: const [
+                        DropdownMenuItem(
+                          value: '10.3 or below',
+                          child: Center(
+                            // Center the text
+                            child: Text(
+                              '10.3 or below',
+                            ),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: '10.4 or above',
+                          child: Center(
+                            // Center the text
+                            child: Text(
+                              '10.4 or above',
+                            ),
+                          ),
+                        )
+                      ],
+                      onChanged: (String? value) {
+                        setState(
+                          () {
+                            dropDownDefault = value!;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+              onExpansionChanged: (bool value) {
+                setState(() {
+                  customIcon = value;
+                });
+              },
+            ),
             SizedBox(
               width: 200,
               height: 50,
@@ -157,7 +224,9 @@ class _ToResInfoState extends State<ToResInfo> {
                             ConvertToResInfo.process(
                               controllerInput.text,
                               controllerOutput.text,
-                              ExpandPath.string,
+                              (dropDownDefault == '10.3 or below')
+                                  ? ExpandPath.array
+                                  : ExpandPath.string,
                             );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
