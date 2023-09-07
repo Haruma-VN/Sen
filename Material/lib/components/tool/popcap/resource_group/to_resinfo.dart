@@ -34,8 +34,6 @@ class _ToResInfoState extends State<ToResInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final double btnSize = 75 / devicePixelRatio;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sen: Material App'),
@@ -80,28 +78,32 @@ class _ToResInfoState extends State<ToResInfo> {
                       },
                     ),
                   ),
-                  TextButton(
-                    onPressed: () async {
-                      final String? path = await FileSystem.pickFile();
-                      if (path != null) {
-                        controllerInput.text = path;
-                        controllerOutput.text = p
-                            .join(
-                              p.dirname(
-                                path,
-                              ),
-                              'res.json',
-                            )
-                            .replaceAll(
-                              '\\',
-                              '/',
-                            );
-                        setState(() {
-                          allowExecute = true;
-                        });
-                      }
-                    },
-                    child: const Text('Browse'),
+                  SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        final String? path = await FileSystem.pickFile();
+                        if (path != null) {
+                          controllerInput.text = path;
+                          controllerOutput.text = p
+                              .join(
+                                p.dirname(
+                                  path,
+                                ),
+                                'res.json',
+                              )
+                              .replaceAll(
+                                '\\',
+                                '/',
+                              );
+                          setState(() {
+                            allowExecute = true;
+                          });
+                        }
+                      },
+                      child: const Text('Browse'),
+                    ),
                   ),
                 ],
               ),
@@ -130,7 +132,7 @@ class _ToResInfoState extends State<ToResInfo> {
                       },
                     ),
                   ),
-                  TextButton(
+                  OutlinedButton(
                     onPressed: () async {
                       final String? path = await FileSystem.pickFile();
                       if (path != null) {
@@ -143,16 +145,20 @@ class _ToResInfoState extends State<ToResInfo> {
               ),
             ),
             SizedBox(
-              height: btnSize,
-              child: Padding(
+              width: 200,
+              height: 50,
+              child: Container(
                 padding: const EdgeInsets.all(10.0),
-                child: TextButton(
+                child: OutlinedButton(
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
                           try {
-                            ConvertToResInfo.process(controllerInput.text,
-                                controllerOutput.text, ExpandPath.string);
+                            ConvertToResInfo.process(
+                              controllerInput.text,
+                              controllerOutput.text,
+                              ExpandPath.string,
+                            );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);

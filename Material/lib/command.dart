@@ -66,17 +66,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final double adjustedHeight = 50 / devicePixelRatio;
     return ListView.builder(
       itemCount: functionsName.length,
       itemBuilder: (context, index) {
         return ListTile(
           title: SizedBox(
             width: double.infinity,
-            height: adjustedHeight,
+            height: 50,
             child: TextButton(
-              child: Text(functionsName[index]),
+              child: Text(
+                functionsName[index],
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

@@ -35,8 +35,6 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
 
   @override
   Widget build(BuildContext context) {
-    final double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final double btnSize = 75 / devicePixelRatio;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sen: Material App'),
@@ -81,7 +79,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                       },
                     ),
                   ),
-                  TextButton(
+                  OutlinedButton(
                     onPressed: () async {
                       final String? path = await FileSystem.pickDirectory();
                       if (path != null) {
@@ -122,7 +120,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                       },
                     ),
                   ),
-                  TextButton(
+                  OutlinedButton(
                     onPressed: () async {
                       final String? path = await FileSystem.pickFile();
                       if (path != null) {
@@ -135,10 +133,9 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
               ),
             ),
             SizedBox(
-              height: btnSize,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextButton(
+                child: OutlinedButton(
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
