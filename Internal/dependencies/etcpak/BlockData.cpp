@@ -1295,3 +1295,21 @@ BitmapPtr BlockData::DecodeDxt5()
 
     return ret;
 }
+
+// Haruma :: Add
+
+void BlockData::PubDecodeETCRGB(uint64_t* src, uint32_t* dst, uint32_t width, uint32_t height)
+{
+    for (auto y = 0; y < height / 4; y++)
+    {
+        for (auto x = 0; x < width / 4; x++)
+        {
+            auto d = *src++;
+            DecodeRGBPart(d, dst, width);
+            dst += 4;
+        }
+        dst += width * 3;
+    }
+
+    return;
+}

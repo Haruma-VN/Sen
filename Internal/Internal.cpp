@@ -635,7 +635,7 @@ void EncodeETC1Fast(
     size_t width
 )
 {
-    CompressEtc1RgbDither(src, dst, blocks, width);
+    CompressEtc1Rgb(src, dst, blocks, width);
     return;
 }
 
@@ -647,5 +647,16 @@ void EncodeETC1Slow(
 {
     auto etc1_pack_params = rg_etc1::etc1_pack_params{};
     rg_etc1::pack_etc1_block(block, pixel, etc1_pack_params);
+    return;
+}
+
+InternalAPI
+void DecodeETCRGB(
+    uint64_t* src,
+    uint32_t* dst,
+    uint32_t width,
+    uint32_t height
+) {
+    BlockData::PubDecodeETCRGB(src, dst, width, height);
     return;
 }

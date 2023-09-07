@@ -34,6 +34,7 @@ public:
 
     void Process( const uint32_t* src, uint32_t blocks, size_t offset, size_t width, Channels type, bool dither, bool useHeuristics );
     void ProcessRGBA( const uint32_t* src, uint32_t blocks, size_t offset, size_t width, bool useHeuristics );
+    static void PubDecodeETCRGB(uint64_t* src, uint32_t* dst, uint32_t width, uint32_t height);
 
     const v2i& Size() const { return m_size; }
 
@@ -42,6 +43,7 @@ private:
     etcpak_no_inline BitmapPtr DecodeRGBA();
     etcpak_no_inline BitmapPtr DecodeDxt1();
     etcpak_no_inline BitmapPtr DecodeDxt5();
+
 
     uint8_t* m_data;
     v2i m_size;
