@@ -1587,7 +1587,6 @@ declare namespace Sen {
 
             export function ReanimFromReanimJson(reanim: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim, version: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Version, outFile: string): void;
 
-
             /**
              * JSON to XML
              * @param reanim - Deserialize REANIM
@@ -1597,12 +1596,11 @@ declare namespace Sen {
             export function ReanimToXML(reanim: Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim, outFile: string): void;
 
             /**
-           * JSON from XML
-           * @param inFile In file REANIM XML
-           *
-           */
+             * JSON from XML
+             * @param inFile In file REANIM XML
+             *
+             */
             export function ReanimFromXML(inFile: string): Sen.Script.Modules.Support.PopCap.PvZ.ReAnimation.Encode.Reanim;
-
 
             /**
              * JSON to Flash
@@ -1889,7 +1887,7 @@ declare namespace Sen {
              * @param outFolder - Out directory unpacked
              */
 
-            export function RSBUnpackByLooseConstraints(inFile: string, outFolder: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
+            export function RSBUnpackByLooseConstraints(inFile: string, outFolder: string, version: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.Version): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo;
             /**
              *
              * @param inFile - Pass input path
@@ -2385,7 +2383,7 @@ declare namespace Sen {
              * @param endIndex - End index
              */
 
-            export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: bigint?= null): bigint;
+            export function IndexOf(value: Buffer.JSBuffer, startIndex: int = 0, endIndex: bigint? = null): bigint;
 
             /**
              *
@@ -2394,7 +2392,7 @@ declare namespace Sen {
              * @param endIndex - End index
              */
 
-            export function LastIndexOf(value: Buffer.JSBuffer, startIndex: bigint = 0, endIndex: bigint?= null): bigint;
+            export function LastIndexOf(value: Buffer.JSBuffer, startIndex: bigint = 0, endIndex: bigint? = null): bigint;
 
             /**
              *
@@ -2402,7 +2400,7 @@ declare namespace Sen {
              * @param endIndex - End slice
              */
 
-            export function Slice(startIndex: bigint = 0, endIndex: bigint?= null): Buffer.JSBuffer;
+            export function Slice(startIndex: bigint = 0, endIndex: bigint? = null): Buffer.JSBuffer;
 
             /**
              * JS Buffer

@@ -1204,22 +1204,42 @@ namespace Sen.Script.Modules.Interface.Execute {
                 }
                 case "popcap_rsb_unpack_by_loose_constraints": {
                     if (!Array.isArray(argument)) {
+                        const version: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.Version = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                            Sen.Script.Modules.System.Default.Localization.GetString("version_number"),
+                            [Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.Version.Other, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.Version.PvZ2],
+                            {
+                                "3": [Sen.Script.Modules.System.Default.Localization.GetString("other_popcap_game"), Sen.Script.Modules.System.Default.Localization.GetString("other_popcap_game")],
+                                "4": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2_related"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2_related")],
+                            },
+                            Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_unpack_by_loose_constraints.json`)),
+                            `version`
+                        );
                         const output_argument: Argument = {
                             argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(argument)}`, `${Sen.Shell.Path.Parse(argument).name}.bundle`)),
                         };
                         Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(argument, output_argument.argument);
+                        Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(argument, output_argument.argument, version);
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("for_packing_rsb_purpose_please_use"));
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource")}`);
                         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("argument_option"));
                         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("use_unpack_directory")}`);
                     } else {
                         argument.forEach((arg: string) => {
+                            const version: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.Version = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputArgument.InputInteger(
+                                Sen.Script.Modules.System.Default.Localization.GetString("version_number"),
+                                [Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.Version.Other, Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.Version.PvZ2],
+                                {
+                                    "3": [Sen.Script.Modules.System.Default.Localization.GetString("other_popcap_game"), Sen.Script.Modules.System.Default.Localization.GetString("other_popcap_game")],
+                                    "4": [Sen.Script.Modules.System.Default.Localization.GetString("pvz2_related"), Sen.Script.Modules.System.Default.Localization.GetString("pvz2_related")],
+                                },
+                                Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_rsb_unpack_by_loose_constraints.json`)),
+                                `version`
+                            );
                             const output_argument: Argument = {
                                 argument: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(arg)}`, `${Sen.Shell.Path.Parse(arg).name}.bundle`)),
                             };
                             Sen.Script.Modules.Interface.Arguments.ArgumentPrint(output_argument, "directory");
-                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(arg, output_argument.argument);
+                            Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackAbnormalRSBByLooseConstraints(arg, output_argument.argument, version);
                             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("for_packing_rsb_purpose_please_use"));
                             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("popcap_rsb_pack_resource")}`);
                             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("argument_option"));

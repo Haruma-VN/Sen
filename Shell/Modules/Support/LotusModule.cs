@@ -92,7 +92,7 @@ namespace Sen.Shell.Modules.Support
 
         public abstract void RSBPack(string RSBDirectory, string outRSB, ManifestInfo ManifestInfo);
 
-        public abstract ManifestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory);
+        public abstract ManifestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory, RSBFunction.Version version);
 
         public abstract void RSBObfuscate(string RSBin, string outRSB);
 
@@ -519,10 +519,10 @@ namespace Sen.Shell.Modules.Support
             return;
         }
 
-        public unsafe sealed override ManifestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory)
+        public unsafe sealed override ManifestInfo RSBUnpackByLooseConstraints(string RSBin, string outRSBdirectory, RSBFunction.Version version)
         {
             var buffer = new SenBuffer(RSBin);
-            var manifest = RSBFunction.UnpackByLooseConstraints(buffer, outRSBdirectory);
+            var manifest = RSBFunction.UnpackByLooseConstraints(buffer, outRSBdirectory, version);
             return manifest;
         }
 

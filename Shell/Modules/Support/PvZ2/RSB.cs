@@ -1283,18 +1283,22 @@ namespace Sen.Shell.Modules.Support.PvZ2.RSB
             return;
         }
 
-        public static ManifestInfo UnpackByLooseConstraints(SenBuffer RSBFile, string outFolder)
+        public enum Version
+        {
+            Other = 3,
+            PvZ2,
+            Trash,
+        }
+
+        public static ManifestInfo UnpackByLooseConstraints(SenBuffer RSBFile, string outFolder, Version version)
         {
             var rsbHeadInfo = ReadHead(RSBFile);
             var path = new ImplementPath();
-            if (rsbHeadInfo.version == 5)
+            if (version == Version.Trash)
             {
                 throw new Exception("unsupported_trash_structure");
             }
-            if(rsbHeadInfo.version != 3 && rsbHeadInfo.version != 4)
-            {
-                rsbHeadInfo.version = 4;
-            }
+            rsbHeadInfo.version = (int)version;
             var rsgList = new List<FileListInfo>();
             FileListSplit(RSBFile, rsbHeadInfo.rsgList_BeginOffset, rsbHeadInfo.rsgListLength, ref rsgList);
             var compositeInfo = new List<CompositeInfo>();

@@ -23,6 +23,12 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup {
         };
     };
 
+    export type ResourceComposite = {
+        id: string;
+        subgroups: { id: string; res?: string }[];
+        type: "composite";
+    };
+
     export class PopCapResources extends Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.CheckResourceGroupResources {
         /**
          *
@@ -144,7 +150,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup {
             const subgroup_json: official_subgroup_json = Sen.Script.Modules.FileSystem.Json.ReadJson<official_subgroup_json>(content_json_path);
             const subgroup_dir: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `subgroup`));
             this.CheckDirectoryContainsSubgroups<official_subgroup_json>(subgroup_json, subgroup_dir);
-            const directory_files: Array<string> = Sen.Shell.FileSystem.ReadDirectory(subgroup_dir, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory);
             const resources_json: Generic_T = {
                 version: 1,
                 content_version: 1,
@@ -155,11 +160,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup {
             for (const parent of parents) {
                 const subgroups: Array<string> = Object.keys(subgroup_json[parent].subgroups);
                 if (subgroup_json[parent].is_composite) {
-                    const composite_object: {
-                        id: string;
-                        subgroups: { id: string; res?: string }[];
-                        type: "composite";
-                    } = {
+                    const composite_object: ResourceComposite = {
                         id: parent,
                         type: "composite",
                         subgroups: [],

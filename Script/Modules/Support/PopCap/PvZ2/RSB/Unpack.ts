@@ -1,5 +1,14 @@
 namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
     /**
+     * Version number
+     */
+
+    export enum Version {
+        Other = 3,
+        PvZ2,
+    }
+
+    /**
      * RSB Header Interface
      */
 
@@ -274,8 +283,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      * @returns RSB Unpack
      */
 
-    export function UnpackAbnormalRSBByLooseConstraints(inRSB: string, outDirectory: string): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
-        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.LotusModule.RSBUnpackByLooseConstraints(inRSB, outDirectory);
+    export function UnpackAbnormalRSBByLooseConstraints(inRSB: string, outDirectory: string, version: Version): Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo {
+        const manifest_json: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ManifestInfo = Sen.Shell.LotusModule.RSBUnpackByLooseConstraints(inRSB, outDirectory, version);
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `manifest.json`)),
             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ConvertToManifest(manifest_json),
