@@ -11,7 +11,7 @@ class ConvertToResInfo {
 
   dynamic convertAtlasData(dynamic subgroup, bool useString) {
     dynamic result = {
-      'type': subgroup['type'],
+      'type': subgroup['res'],
       'packet': {},
     };
     final atlas = (subgroup['resources'] as List<dynamic>)
@@ -102,16 +102,19 @@ class ConvertToResInfo {
     };
     for (var element in (resourceGroup['groups'] as List<dynamic>)) {
       if (element['subgroups'] != null) {
-        var subgroup = {};
+        var subgroup = {
+          'is_composite': true,
+          'subgroup': {},
+        };
         for (var k in element['subgroups']) {
           if (k['res'] != null && k['res'] != '0') {
-            subgroup[k['id']] = convertAtlasData(
+            (subgroup['subgroup'] as dynamic)[k['id']] = convertAtlasData(
               (resourceGroup['groups'] as List<dynamic>)
                   .firstWhere((m) => m['id'] == k['id']),
               useString,
             );
           } else {
-            subgroup[k['id']] = convertCommonData(
+            (subgroup['subgroup'] as dynamic)[k['id']] = convertCommonData(
               (resourceGroup['groups'] as List<dynamic>)
                   .firstWhere((m) => m['id'] == k['id']),
               useString,
@@ -119,6 +122,21 @@ class ConvertToResInfo {
           }
         }
         (result['groups'] as dynamic)[element['id']] = subgroup;
+      }
+      if (element['parent'] == null && element['resources'] != null) {
+        (result['groups'] as dynamic)[element['id']] = {
+          'is_composite': false,
+          'subgroup': {},
+        };
+        ((result['groups'] as dynamic)[element['id']] as dynamic)['subgroup'] =
+            {};
+        ((result['groups'] as dynamic)[element['id']] as dynamic)['subgroup']
+            [element['id']] = convertCommonData(
+          element,
+          useString,
+        );
+        {}
+        ;
       }
     }
     return result;

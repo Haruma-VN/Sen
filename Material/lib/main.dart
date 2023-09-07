@@ -17,11 +17,11 @@ Future<void> main() async {
   var setting = Customization.init();
   await setting.read();
   // ignore: await_only_futures
-  runApp(await MyApp(setting: setting));
+  runApp(await Application(setting: setting));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({
+class Application extends StatelessWidget {
+  const Application({
     super.key,
     required this.setting,
   });
