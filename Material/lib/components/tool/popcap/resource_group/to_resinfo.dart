@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/module/tool/popcap/resource_group/merge.dart';
+import 'package:sen_material_design/module/tool/popcap/resource_group/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
-class MergePopCapResourceGroup extends StatefulWidget {
-  const MergePopCapResourceGroup({super.key});
+class ToResInfo extends StatefulWidget {
+  const ToResInfo({super.key});
 
   @override
-  State<MergePopCapResourceGroup> createState() =>
-      _MergePopCapResourceGroupState();
+  State<ToResInfo> createState() => _ToResInfoState();
 }
 
-class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
+class _ToResInfoState extends State<ToResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -51,7 +50,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'PopCap Resource-Group: Merge',
+                'PopCap Resource-Group: Convert to Res-Info',
                 style: TextStyle(
                   fontSize: 30,
                 ),
@@ -61,7 +60,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'Data Directory',
+                'Data File',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -83,11 +82,10 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                   ),
                   TextButton(
                     onPressed: () async {
-                      final String? path = await FileSystem.pickDirectory();
+                      final String? path = await FileSystem.pickFile();
                       if (path != null) {
                         controllerInput.text = path;
-                        controllerOutput.text =
-                            '${p.withoutExtension(path)}.json';
+                        controllerOutput.text = '${p.dirname(path)}/res.json';
                         setState(() {
                           allowExecute = true;
                         });
@@ -143,7 +141,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                       ? () async {
                           final DateTime startTime = DateTime.now();
                           try {
-                            mergeResourceGroup(
+                            splitResourceGroup(
                               controllerInput.text,
                               controllerOutput.text,
                             );

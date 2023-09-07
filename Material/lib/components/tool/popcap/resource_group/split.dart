@@ -51,7 +51,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'PopCap Resource: Split',
+                'PopCap Resource-Group: Split',
                 style: TextStyle(
                   fontSize: 30,
                 ),

@@ -948,42 +948,6 @@ namespace Sen.Shell.Modules.Support
             return extra_info;
         }
 
-        public unsafe void EncodeETC1(string inFile, string outFile)
-        {
-            var senFile = new SenBuffer(inFile);
-            var image = senFile.getImage();
-            var width = image.Width;
-            var height = image.Height;
-            var image_block = new uint[16];
-            var data = new ulong[width * height];
-            fixed (ulong* data_ptr = data)
-            {
-                for (var block_y = 0; block_y < height / 4; block_y++)
-                {
-                    for (var block_x = 0; block_x < width / 4; block_x++)
-                    {
-                        for (var pixel_y = 0; pixel_y < 4; pixel_y++)
-                        {
-                            for (var pixel_x = 0; pixel_x < 4; pixel_x++)
-                            {
-                                var pixel = image[block_y * 4 + pixel_y, block_x * 4 + pixel_x];
-                                image_block[(pixel_y * 4 + pixel_x) * 4 + 0] = pixel.B;
-                                image_block[(pixel_y * 4 + pixel_x) * 4 + 1] = pixel.G;
-                                image_block[(pixel_y * 4 + pixel_x) * 4 + 2] = pixel.R;
-                                image_block[(pixel_y * 4 + pixel_x) * 4 + 3] = 255;
-                            }
-                        }
-                    }
-                    LotusAPI.EncodeETC1Fast(image_block, data_ptr, 1, (uint)width);
-                }
-            }
-            byte[] outputBytes = new byte[data.Length * sizeof(ulong)];
-            Buffer.BlockCopy(data, 0, outputBytes, 0, outputBytes.Length);
-            var SenWriter = new SenBuffer(outputBytes);
-            SenWriter.OutFile(outFile);
-            return;
-        }
-
         #endregion
     }
 }

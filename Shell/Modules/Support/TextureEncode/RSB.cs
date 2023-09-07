@@ -1,5 +1,6 @@
 using Sen.Shell.Modules.Support.TextureEncode.TextureCoder;
 using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Modules.Internal;
 namespace Sen.Shell.Modules.Support.TextureEncode.RSB
 {
 
@@ -1792,27 +1793,26 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
             return imageData;
         }
 
-        private static SenBuffer Encode_ETC1_Block(Rgba32[] imageData, int width, int height)
+        private unsafe static SenBuffer Encode_ETC1_Block(Rgba32[] imageData, int width, int height)
         {
-            var image_encode = new SenBuffer();
-            var color_buffer = new Rgba32[16];
-            for (var y = 0; y < height; y += 4)
+            var uintArray = new uint[width * height];
+            var index = 0;
+            for (var i = 0; i < imageData.Length; i++)
             {
-                for (var x = 0; x < width; x += 4)
+                uintArray[index++] = (uint)(imageData[i].A << 24 | imageData[i].R << 16 | imageData[i].G << 8 | imageData[i].B);
+            }
+            var data = new ulong[width * height / 16];
+            fixed (uint* source_block = uintArray)
+            {
+                fixed (ulong* destination_block = data)
                 {
-                    for (var i = 0; i < 4; i++)
-                    {
-                        for (var j = 0; j < 4; j++)
-                        {
-                            color_buffer[(i << 2) | j] =
-                                ((y + i) < height && (x + j) < width)
-                                ? imageData[(y + i) * width + x + j]
-                                : new Rgba32(0, 0, 0, 255);
-                        }
-                    }
-                    var pixels_ulong = ETC1.VerticalETC1(color_buffer);
-                    image_encode.writeBigUInt64BE(pixels_ulong);
+                    LotusAPI.EncodeETC1Fast(source_block, destination_block, (uint)(width * height / 16), (uint)width);
                 }
+            }
+            var image_encode = new SenBuffer();
+            for (var i = 0; i < data.Length; i++)
+            {
+                image_encode.writeBigUInt64LE(data[i]);
             }
             return image_encode;
         }

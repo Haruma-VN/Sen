@@ -81,7 +81,7 @@ namespace Sen.Shell.Modules.Internal
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public unsafe static partial void EncodeETC1Fast(uint[] src, ulong* dst, uint width, uint height);
+        public unsafe static partial void EncodeETC1Fast(uint* src, ulong* dst, uint block, uint width);
 
     }
 }
