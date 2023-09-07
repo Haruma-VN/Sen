@@ -635,5 +635,7 @@
     "popcap_create_empty_flash_animation": "PopCap Animation: Create Empty Flash Project",
     "other_popcap_game": "Other PopCap Games",
     "pvz2_related": "PvZ 2 Related",
-    "version_number": "Version Number"
+    "version_number": "Version Number",
+    "image_name_is_not_same": "Image name mismatch information between Struct and Source",
+    "image_count_is_not_same": "Image count is not the same with Source"
 }

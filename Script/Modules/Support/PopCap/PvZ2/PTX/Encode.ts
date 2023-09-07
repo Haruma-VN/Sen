@@ -27,21 +27,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
 
         PVRTC1_4BPP_RGBA_A8,
 
-        A8,
+        // A8,
 
-        ARGB1555,
+        // ARGB1555,
 
-        ARGB4444,
+        // ARGB4444,
 
-        ETC1_RGB,
+        // ETC1_RGB,
 
-        L8,
+        // L8,
 
-        LA44,
+        // LA44,
 
-        LA88,
+        // LA88,
 
-        PVRTC1_4BPP_RGB,
+        // PVRTC1_4BPP_RGB,
     }
 
     /**
@@ -49,17 +49,17 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
      */
 
     export const EncodeOption: Array<Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial> = [
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.A8,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.A8,
         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB8888,
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB1555,
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB4444,
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB1555,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB4444,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB,
         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A_Palette,
         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A8,
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.L8,
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA44,
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA88,
-        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGB,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.L8,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA44,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA88,
+        // Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGB,
         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA,
         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8,
         Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGB565,
@@ -93,16 +93,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
             }
         }
         switch (encode) {
-            case TextureEncoderUnofficial.A8: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_A8_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_A8_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
+            // case TextureEncoderUnofficial.A8: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_A8_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_A8_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
             case TextureEncoderUnofficial.ARGB8888: {
                 if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
                     Sen.Shell.TextureHandler.Create_ARGB8888_Decode(that_in, that_out, width as int, height as int);
@@ -113,36 +113,36 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
                 }
                 break;
             }
-            case TextureEncoderUnofficial.ARGB1555: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_ARGB1555_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_ARGB1555_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.ARGB4444: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_ARGB4444_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_ARGB4444_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.ETC1_RGB: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_ETC1_RGB_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_ETC1_RGB_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
+            // case TextureEncoderUnofficial.ARGB1555: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_ARGB1555_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_ARGB1555_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.ARGB4444: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_ARGB4444_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_ARGB4444_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.ETC1_RGB: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_ETC1_RGB_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_ETC1_RGB_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
             case TextureEncoderUnofficial.ETC1_RGB_A_Palette: {
                 if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
                     Sen.Shell.TextureHandler.Create_ETC1_RGB_A_Palette_Decode(that_in, that_out, width as int, height as int);
@@ -163,46 +163,46 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
                 }
                 break;
             }
-            case TextureEncoderUnofficial.L8: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_L8_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_L8_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.LA44: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_LA44_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_LA44_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.LA88: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_LA88_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_LA88_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.PVRTC1_4BPP_RGB: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Decode(that_in, that_out, width as int, height as int);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
-                    });
-                }
-                break;
-            }
+            // case TextureEncoderUnofficial.L8: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_L8_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_L8_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.LA44: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_LA44_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_LA44_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.LA88: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_LA88_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_LA88_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.PVRTC1_4BPP_RGB: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Decode(that_in, that_out, width as int, height as int);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Decode(element, (that_out as Array<string>)[index], (width as Array<int>)[index], (height as Array<int>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
             case TextureEncoderUnofficial.PVRTC1_4BPP_RGBA: {
                 if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
                     Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGBA_Decode(that_in, that_out, width as int, height as int);
@@ -318,16 +318,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
             }
         }
         switch (encode) {
-            case TextureEncoderUnofficial.A8: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_A8_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_A8_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
+            // case TextureEncoderUnofficial.A8: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_A8_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_A8_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
             case TextureEncoderUnofficial.ARGB8888: {
                 if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
                     Sen.Shell.TextureHandler.Create_ARGB8888_Encode(that_in, that_out);
@@ -338,36 +338,36 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
                 }
                 break;
             }
-            case TextureEncoderUnofficial.ARGB1555: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_ARGB1555_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_ARGB1555_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.ARGB4444: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_ARGB4444_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_ARGB4444_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.ETC1_RGB: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_ETC1_RGB_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_ETC1_RGB_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
+            // case TextureEncoderUnofficial.ARGB1555: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_ARGB1555_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_ARGB1555_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.ARGB4444: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_ARGB4444_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_ARGB4444_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.ETC1_RGB: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_ETC1_RGB_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_ETC1_RGB_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
             case TextureEncoderUnofficial.ETC1_RGB_A_Palette: {
                 if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
                     Sen.Shell.TextureHandler.Create_ETC1_RGB_A_Palette_Encode(that_in, that_out);
@@ -388,46 +388,46 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
                 }
                 break;
             }
-            case TextureEncoderUnofficial.L8: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_L8_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_L8_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.LA44: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_LA44_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_LA44_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.LA88: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_LA88_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_LA88_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
-            case TextureEncoderUnofficial.PVRTC1_4BPP_RGB: {
-                if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
-                    Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Encode(that_in, that_out);
-                } else {
-                    (that_in as Array<string>).forEach((element: string, index: number) => {
-                        Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Encode(element, (that_out as Array<string>)[index]);
-                    });
-                }
-                break;
-            }
+            // case TextureEncoderUnofficial.L8: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_L8_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_L8_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.LA44: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_LA44_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_LA44_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.LA88: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_LA88_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_LA88_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
+            // case TextureEncoderUnofficial.PVRTC1_4BPP_RGB: {
+            //     if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
+            //         Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Encode(that_in, that_out);
+            //     } else {
+            //         (that_in as Array<string>).forEach((element: string, index: number) => {
+            //             Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGB_Encode(element, (that_out as Array<string>)[index]);
+            //         });
+            //     }
+            //     break;
+            // }
             case TextureEncoderUnofficial.PVRTC1_4BPP_RGBA: {
                 if (!Array.isArray(that_in) && !Array.isArray(that_out)) {
                     Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGBA_Encode(that_in, that_out);
@@ -641,78 +641,78 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
                 `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
             ])}`
         );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.A8}`,
-                `a_8`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-            ])}`
-        );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB1555}`,
-                `argb_1555`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
-            ])}`
-        );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB4444}`,
-                `argb_4444`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
-            ])}`
-        );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB}`,
-                `rgb_etc1`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("android")}`,
-            ])}`
-        );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.L8}`,
-                `l_8`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-            ])}`
-        );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA44}`,
-                `la_44`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-            ])}`
-        );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA88}`,
-                `la_88`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-            ])}`
-        );
-        Sen.Shell.Console.Printf(
-            null,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
-                `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGB}`,
-                `rgb_pvrtc4`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
-                `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
-            ])}`
-        );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.A8}`,
+        //         `a_8`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //     ])}`
+        // );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB1555}`,
+        //         `argb_1555`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+        //     ])}`
+        // );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB4444}`,
+        //         `argb_4444`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+        //     ])}`
+        // );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB}`,
+        //         `rgb_etc1`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("android")}`,
+        //     ])}`
+        // );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.L8}`,
+        //         `l_8`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //     ])}`
+        // );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA44}`,
+        //         `la_44`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //     ])}`
+        // );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.LA88}`,
+        //         `la_88`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //     ])}`
+        // );
+        // Sen.Shell.Console.Printf(
+        //     null,
+        //     `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("popcap_ptx_option"), [
+        //         `${Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGB}`,
+        //         `rgb_pvrtc4`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("unknown")}`,
+        //         `${Sen.Script.Modules.System.Default.Localization.GetString("ios")}`,
+        //     ])}`
+        // );
         let input: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         while (Sen.Script.Modules.Interface.Assert.MatchInputWithNumbers(input, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodeOption) === null) {
             Sen.Shell.Console.Print(
@@ -769,28 +769,28 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
 
     export function SwapTextureFormatInformation(format: string): Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial {
         switch (format) {
-            case "a_8":
-                return TextureEncoderUnofficial.A8;
+            // case "a_8":
+            //     return TextureEncoderUnofficial.A8;
             case "argb_8888":
                 return TextureEncoderUnofficial.ARGB8888;
-            case "argb_1555":
-                return TextureEncoderUnofficial.ARGB1555;
-            case "argb_4444":
-                return TextureEncoderUnofficial.ARGB4444;
-            case "rgb_etc1":
-                return TextureEncoderUnofficial.ETC1_RGB;
+            // case "argb_1555":
+            //     return TextureEncoderUnofficial.ARGB1555;
+            // case "argb_4444":
+            //     return TextureEncoderUnofficial.ARGB4444;
+            // case "rgb_etc1":
+            //     return TextureEncoderUnofficial.ETC1_RGB;
             case "rgb_etc1_a_palette":
                 return TextureEncoderUnofficial.ETC1_RGB_A_Palette;
             case "rgb_etc1_a_8":
                 return TextureEncoderUnofficial.ETC1_RGB_A8;
-            case "l_8":
-                return TextureEncoderUnofficial.L8;
-            case "la_44":
-                return TextureEncoderUnofficial.LA44;
-            case "la_88":
-                return TextureEncoderUnofficial.LA88;
-            case "rgb_pvrtc4":
-                return TextureEncoderUnofficial.PVRTC1_4BPP_RGB;
+            // case "l_8":
+            //     return TextureEncoderUnofficial.L8;
+            // case "la_44":
+            //     return TextureEncoderUnofficial.LA44;
+            // case "la_88":
+            //     return TextureEncoderUnofficial.LA88;
+            // case "rgb_pvrtc4":
+            //     return TextureEncoderUnofficial.PVRTC1_4BPP_RGB;
             case "rgba_pvrtc4":
                 return TextureEncoderUnofficial.PVRTC1_4BPP_RGBA;
             case "rgb_pvrtc4_a_8":
