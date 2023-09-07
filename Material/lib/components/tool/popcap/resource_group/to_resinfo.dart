@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/module/tool/popcap/resource_group/split.dart';
+import 'package:sen_material_design/module/tool/popcap/resource_group/to_resinfo.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
@@ -151,10 +151,8 @@ class _ToResInfoState extends State<ToResInfo> {
                       ? () async {
                           final DateTime startTime = DateTime.now();
                           try {
-                            splitResourceGroup(
-                              controllerInput.text,
-                              controllerOutput.text,
-                            );
+                            ConvertToResInfo.process(controllerInput.text,
+                                controllerOutput.text, ExpandPath.string);
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);
