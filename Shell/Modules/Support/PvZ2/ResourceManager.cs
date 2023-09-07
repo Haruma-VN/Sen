@@ -540,7 +540,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                     var subgroup = new Dictionary<string, MSubgroupData>();
                     foreach (var k in e.subgroups)
                     {
-                        if (k.res is not null)
+                        if (k.res is not null && k.res != "0")
                         {
                             subgroup.Add(k.id, ConvertAtlasSubgroupData(resourceGroup.groups.First((m) => m.id == k.id), version));
                         }

@@ -85,7 +85,17 @@ class _ToResInfoState extends State<ToResInfo> {
                       final String? path = await FileSystem.pickFile();
                       if (path != null) {
                         controllerInput.text = path;
-                        controllerOutput.text = '${p.dirname(path)}/res.json';
+                        controllerOutput.text = p
+                            .join(
+                              p.dirname(
+                                path,
+                              ),
+                              'res.json',
+                            )
+                            .replaceAll(
+                              '\\',
+                              '/',
+                            );
                         setState(() {
                           allowExecute = true;
                         });
