@@ -649,14 +649,3 @@ void EncodeETC1Slow(
     rg_etc1::pack_etc1_block(block, pixel, etc1_pack_params);
     return;
 }
-
-InternalAPI
-void DecodeETCRGB(
-    uint64_t* src,
-    uint32_t* dst,
-    uint32_t width,
-    uint32_t height
-) {
-    BlockData::PubDecodeETCRGB(src, dst, width, height);
-    return;
-}

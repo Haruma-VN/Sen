@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 3.10)
 
 project(
   Internal
-  VERSION 5
+  VERSION 6
   HOMEPAGE_URL https://github.com/Haruma-VN/Sen
   LANGUAGES C CXX
 )
