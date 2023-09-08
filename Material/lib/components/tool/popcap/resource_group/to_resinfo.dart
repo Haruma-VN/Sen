@@ -174,6 +174,7 @@ class _ToResInfoState extends State<ToResInfo> {
                     child: DropdownButton<String>(
                       value: dropDownDefault,
                       isExpanded: true,
+                      focusColor: Colors.transparent,
                       underline: Container(),
                       items: const [
                         DropdownMenuItem(
