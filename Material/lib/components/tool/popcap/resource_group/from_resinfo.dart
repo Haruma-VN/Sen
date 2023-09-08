@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/module/tool/popcap/resource_group/to_resinfo.dart';
+import 'package:sen_material_design/module/tool/popcap/resource_group/from_resinfo.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
@@ -31,8 +31,6 @@ class _FromResInfoState extends State<FromResInfo> {
     controllerOutput.dispose();
     super.dispose();
   }
-
-  String dropDownDefault = '10.3 or below';
 
   bool customIcon = true;
 
@@ -97,7 +95,7 @@ class _FromResInfoState extends State<FromResInfo> {
                                 p.dirname(
                                   path,
                                 ),
-                                'res.json',
+                                'resx.json',
                               )
                               .replaceAll(
                                 '\\',
@@ -150,67 +148,6 @@ class _FromResInfoState extends State<FromResInfo> {
                 ],
               ),
             ),
-            ExpansionTile(
-              initiallyExpanded: customIcon,
-              title: const Text(
-                'Using PopCap Resource-Group path',
-              ),
-              trailing: Icon(
-                customIcon
-                    ? Icons.arrow_drop_down_rounded
-                    : Icons.arrow_drop_up_rounded,
-              ),
-              children: <Widget>[
-                const ListTile(
-                  title: Text(
-                    'There are two resources kind, set range in the version 10.4 of PvZ 2. The older version will use the older path, and newer version use the newer path.',
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: DropdownButton<String>(
-                      value: dropDownDefault,
-                      isExpanded: true,
-                      underline: Container(),
-                      items: const [
-                        DropdownMenuItem(
-                          value: '10.3 or below',
-                          child: Center(
-                            // Center the text
-                            child: Text(
-                              '10.3 or below',
-                            ),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: '10.4 or above',
-                          child: Center(
-                            // Center the text
-                            child: Text(
-                              '10.4 or above',
-                            ),
-                          ),
-                        )
-                      ],
-                      onChanged: (String? value) {
-                        setState(
-                          () {
-                            dropDownDefault = value!;
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-              onExpansionChanged: (bool value) {
-                setState(() {
-                  customIcon = value;
-                });
-              },
-            ),
             SizedBox(
               width: 200,
               height: 50,
@@ -220,14 +157,15 @@ class _FromResInfoState extends State<FromResInfo> {
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
+                          ConvertFromResInfo.process(
+                            controllerInput.text,
+                            controllerOutput.text,
+                          );
                           try {
-                            ConvertToResInfo.process(
-                              controllerInput.text,
-                              controllerOutput.text,
-                              (dropDownDefault == '10.3 or below')
-                                  ? ExpandPath.array
-                                  : ExpandPath.string,
-                            );
+                            // ConvertFromResInfo.process(
+                            //   controllerInput.text,
+                            //   controllerOutput.text,
+                            // );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);

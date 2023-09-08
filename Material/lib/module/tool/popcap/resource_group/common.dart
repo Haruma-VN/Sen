@@ -18,3 +18,15 @@ void rewriteSlot(dynamic data) {
   }
   return;
 }
+
+enum ExpandPath {
+  string,
+  array,
+}
+
+class SubInformation {
+  String id;
+  dynamic parent;
+
+  SubInformation(this.id, this.parent);
+}

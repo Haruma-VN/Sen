@@ -1,10 +1,6 @@
+import 'package:sen_material_design/module/tool/popcap/resource_group/common.dart';
 import 'package:sen_material_design/module/utility/exception/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
-
-enum ExpandPath {
-  string,
-  array,
-}
 
 class ConvertToResInfo {
   ConvertToResInfo();

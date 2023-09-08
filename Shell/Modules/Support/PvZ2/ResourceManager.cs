@@ -490,7 +490,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                     foreach (var subgroup_name in group.subgroup.Keys)
                     {
                         var subgroup = group.subgroup[subgroup_name];
-                        if (subgroup.type is not null)
+                        if (subgroup.type is not null && subgroup.type != "0")
                         {
                             resourceGroup.groups.Add(GenerateImageInfo(new ExtraInformation()
                             {

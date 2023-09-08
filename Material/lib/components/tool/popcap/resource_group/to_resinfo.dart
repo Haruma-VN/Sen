@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/to_resinfo.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
+import 'package:sen_material_design/module/tool/popcap/resource_group/common.dart';
 
 class ToResInfo extends StatefulWidget {
   const ToResInfo({super.key});
