@@ -95,7 +95,7 @@ class _FromResInfoState extends State<FromResInfo> {
                                 p.dirname(
                                   path,
                                 ),
-                                'resx.json',
+                                'resources.json',
                               )
                               .replaceAll(
                                 '\\',
@@ -157,15 +157,11 @@ class _FromResInfoState extends State<FromResInfo> {
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
-                          ConvertFromResInfo.process(
-                            controllerInput.text,
-                            controllerOutput.text,
-                          );
                           try {
-                            // ConvertFromResInfo.process(
-                            //   controllerInput.text,
-                            //   controllerOutput.text,
-                            // );
+                            ConvertFromResInfo.process(
+                              controllerInput.text,
+                              controllerOutput.text,
+                            );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);
