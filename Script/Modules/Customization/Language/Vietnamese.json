@@ -629,5 +629,13 @@
     "width_not_found": "Thuộc tính \"width\" không tìm thấy trong DOMDocument",
     "height_not_found": "Thuộc tính \"height\" không tìm thấy trong DOMDocument",
     "popcap_animation_error_message": "PopCap Animation: Tin Nhắn Lỗi",
-    "json_patch": "Vá JSON"
+    "json_patch": "Vá JSON",
+    "popcap_create_empty_flash_animation": "PopCap Animation: Tạo một bản thiết kế Flash rỗng",
+    "other_popcap_game": "Games khác của PopCap",
+    "pvz2_related": "Liên Quan PvZ 2",
+    "version_number": "Số Phiên Bản",
+    "image_name_is_not_same": "Tên ảnh không khớp giữa Struct và Source",
+    "image_count_is_not_same": "Số lượng ảnh không khớp Source",
+    "popcap_reanim_json_to_xml": "PopCap Re-Animation: JSON sang XML",
+    "popcap_reanim_json_from_xml": "PopCap Re-Animation: XML sang JSON"
 }

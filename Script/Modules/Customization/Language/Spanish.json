@@ -629,5 +629,11 @@
     "width_not_found": "La propiedad \"width\" no se encontró en DOMDocument",
     "height_not_found": "La propiedad \"height\" no se encontró en DOMDocument",
     "popcap_animation_error_message": "PopCap Animation: Mensaje de error",
-    "json_patch": "JSON-Patch"
+    "json_patch": "JSON-Patch",
+    "popcap_create_empty_flash_animation": "PopCap Animation: Crear un proyecto Flash vacío",
+    "other_popcap_game": "Otros juegos de PopCap",
+    "pvz2_related": "Relacionados con PvZ 2",
+    "version_number": "Número de versión",
+    "image_name_is_not_same": "El nombre de la imagen no coincide con la información entre Struct y Source",
+    "image_count_is_not_same": "El recuento de imágenes no es el mismo con Source"
 }

@@ -629,5 +629,13 @@
     "popcap_ptx_option": "{1}. {2} ({3}, {4})",
     "android_and_ios": "Android和iOS",
     "popcap_animation_error_message": "PopCap Animation: 错误信息",
-    "json_patch": "JSON-Patch"
+    "json_patch": "JSON-Patch",
+    "popcap_create_empty_flash_animation": "PopCap Animation: 创建空 Flash 项目",
+    "other_popcap_game": "其他 PopCap 游戏",
+    "pvz2_related": "PvZ 2 相关",
+    "version_number": "版本号",
+    "image_name_is_not_same": "Struct 和 Source 之间的图像名称不匹配信息",
+    "image_count_is_not_same": "图像计数与 Source 不同",
+    "popcap_reanim_json_to_xml": "PopCap Re-Animation: JSON 至 XML",
+    "popcap_reanim_json_from_xml": "PopCap Re-Animation: XML 至 JSON"
 }
