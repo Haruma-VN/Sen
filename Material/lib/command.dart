@@ -62,6 +62,8 @@ class _HomePageState extends State<HomePage> {
     'popcap.lawnstring.convert',
     'popcap.newton.decode',
     'popcap.newton.encode',
+    'popcap.compiled_text.decode',
+    'popcap.compiled_text.encode',
   ];
 
   @override
@@ -70,47 +72,53 @@ class _HomePageState extends State<HomePage> {
       itemCount: functionsName.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: TextButton(
-              child: Text(
-                functionsName[index],
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return FutureBuilder(
-                        future: refreshModule(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return materialWidget[index];
-                          } else {
-                            return Scaffold(
-                              appBar: AppBar(
-                                title: const Text('Sen: Material App'),
-                                centerTitle: false,
-                                elevation: 3,
-                                scrolledUnderElevation: 3,
-                              ),
-                              body: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    },
+          title: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: TextButton(
+                child: Text(
+                  functionsName[index],
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
-                );
-              },
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return FutureBuilder(
+                          future: refreshModule(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return materialWidget[index];
+                            } else {
+                              return Scaffold(
+                                appBar: AppBar(
+                                  title: const Text('Sen: Material App'),
+                                  centerTitle: false,
+                                  elevation: 3,
+                                  scrolledUnderElevation: 3,
+                                ),
+                                body: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/module/tool/popcap/resource_group/split.dart';
+import 'package:sen_material_design/module/tool/popcap/resinfo/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
@@ -85,8 +85,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                       final String? path = await FileSystem.pickFile();
                       if (path != null) {
                         controllerInput.text = path;
-                        controllerOutput.text =
-                            '${p.withoutExtension(path)}.res';
+                        controllerOutput.text = '${p.normalize(path)}.info';
                         setState(() {
                           allowExecute = true;
                         });
@@ -141,7 +140,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                       ? () async {
                           final DateTime startTime = DateTime.now();
                           try {
-                            splitResourceGroup(
+                            splitResInfo.process(
                               controllerInput.text,
                               controllerOutput.text,
                             );
