@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 3.10)
 
 project(
   Internal
-  VERSION 6
+  VERSION 7
   HOMEPAGE_URL https://github.com/Haruma-VN/Sen
   LANGUAGES C CXX
 )
@@ -50,6 +50,7 @@ add_library(
 
 # Add dependencies
 
+add_subdirectory("./dependencies/md5")
 add_subdirectory("./dependencies/avir")
 add_subdirectory("./dependencies/json")
 add_subdirectory("./dependencies/tinyxml2")
@@ -75,24 +76,11 @@ if(NOT (CMAKE_SYSTEM_NAME MATCHES "iOS" OR CMAKE_SYSTEM_NAME MATCHES "Android"))
     target_link_libraries(Internal PRIVATE tinyfiledialogs)
 endif()
 
-# Set compiler
-
-if(APPLE)
-    target_compile_options(Internal PRIVATE -Wno-implicit-function-declaration)
-    set(CMAKE_C_COMPILER "/usr/local/opt/llvm/bin/clang")
-    set(CMAKE_CXX_COMPILER "/usr/local/opt/llvm/bin/clang++")
-elseif(UNIX AND NOT APPLE)
-    set(CMAKE_C_COMPILER "clang")
-    set(CMAKE_CXX_COMPILER "clang++")
-elseif(WIN32)
-    set(CMAKE_C_COMPILER "cl.exe")
-    set(CMAKE_CXX_COMPILER "cl.exe")
-endif()
-
 # Link against dependencies
 
 target_link_libraries(
   Internal PRIVATE 
+  md5
   avir
   json
   tinyxml2
@@ -141,6 +129,9 @@ target_compile_definitions(
 if(UNIX OR ANDROID OR APPLE OR IOS)
     set_target_properties(Internal PROPERTIES PREFIX "" OUTPUT_NAME "Internal")
 endif()
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # CMake Strict
 
