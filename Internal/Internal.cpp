@@ -649,3 +649,42 @@ void EncodeETC1Slow(
     rg_etc1::pack_etc1_block(block, pixel, etc1_pack_params);
     return;
 }
+
+InternalAPI
+Void MakeKey(
+    char const* key,
+    char const* chain,
+    int keyLength,
+    int blockSize
+)
+{
+    auto rijndael = CRijndael{};
+    rijndael.MakeKey(key, chain, keyLength, blockSize);
+    return;
+}
+
+InternalAPI
+Void Decrypt(
+    char const* in,
+    char* result,
+    size_t n,
+    int iMode
+)
+{
+    auto rijndael = CRijndael{};
+    rijndael.Decrypt(in, result, n, iMode);
+    return;
+}
+
+InternalAPI
+Void Encrypt(
+    char const* in,
+    char* result,
+    size_t n,
+    int iMode
+)
+{
+    auto rijndael = CRijndael{};
+    rijndael.Encrypt(in, result, n, iMode);
+    return;
+}

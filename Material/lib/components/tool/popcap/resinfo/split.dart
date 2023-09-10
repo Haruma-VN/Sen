@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/module/tool/popcap/resinfo/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
-import 'package:path/path.dart' as p;
 
 class SplitResInfo extends StatefulWidget {
   const SplitResInfo({super.key});
@@ -85,7 +84,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                       final String? path = await FileSystem.pickFile();
                       if (path != null) {
                         controllerInput.text = path;
-                        controllerOutput.text = '${path}.info';
+                        controllerOutput.text = '$path.info';
                         setState(() {
                           allowExecute = true;
                         });

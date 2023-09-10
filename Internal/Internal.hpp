@@ -47,6 +47,11 @@ inline constexpr auto MInternalVersion = 6;
 #include "../../dependencies/etcpak/ProcessRGB.hpp"
 #include "../../dependencies/etcpak/BlockData.hpp"
 #include "../../dependencies/rg_etc1/rg_etc1.h"
+#include "../../dependencies/Rijndael/Rijndael.h"
+#include "../../dependencies/PVRTCCompressor/PvrTcDecoder.h"
+#include "../../dependencies/PVRTCCompressor/PvrTcEncoder.h"
+#include "../../dependencies/PVRTCCompressor/RgbBitmap.h"
+#include "../../dependencies/PVRTCCompressor/RgbaBitmap.h"
 
 
 #include "kernel/utility/utility.hpp"

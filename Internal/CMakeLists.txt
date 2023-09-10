@@ -61,6 +61,8 @@ add_subdirectory("./dependencies/lzma")
 add_subdirectory("./dependencies/bzip2")
 add_subdirectory("./dependencies/etcpak")
 add_subdirectory("./dependencies/open_vcdiff")
+add_subdirectory("./dependencies/Rijndael")
+add_subdirectory("./dependencies/PVRTCCompressor")
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
@@ -101,6 +103,8 @@ target_link_libraries(
   bzip2
   etcpak
   open_vcdiff
+  Rijndael
+  PVRTCCompressor
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
