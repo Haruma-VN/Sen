@@ -70,6 +70,7 @@ add_subdirectory("./dependencies/open_vcdiff")
 add_subdirectory("./dependencies/Rijndael")
 add_subdirectory("./dependencies/PVRTCCompressor")
 add_subdirectory("./dependencies/brotli")
+add_subdirectory("./dependencies/RectangleBinPack")
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
@@ -100,6 +101,7 @@ target_link_libraries(
   Rijndael
   PVRTCCompressor
   brotli
+  RectangleBinPack
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")

@@ -9,6 +9,33 @@ project(
 
 set(
 	brotli_sources
+    ./common/constants.h
+    ./common/context.h
+    ./common/dictionary.h
+    ./common/platform.h
+    ./common/transform.h
+    ./dec/bit_reader.h
+    ./dec/huffman.h
+    ./dec/state.h
+    ./enc/backward_references.h
+    ./enc/backward_references_hq.h
+    ./enc/bit_cost.h
+    ./enc/block_splitter.h
+    ./enc/brotli_bit_stream.h
+    ./enc/cluster.h
+    ./enc/command.h
+    ./enc/compress_fragment.h
+    ./enc/compress_fragment_two_pass.h
+    ./enc/dictionary_hash.h
+    ./enc/encoder_dict.h
+    ./enc/entropy_encode.h
+    ./enc/fast_log.h
+    ./enc/histogram.h
+    ./enc/literal_cost.h
+    ./enc/memory.h
+    ./enc/metablock.h
+    ./enc/static_dict.h
+    ./enc/utf8_util.h
     ./common/constants.c
     ./common/context.c
     ./common/dictionary.c
