@@ -19,7 +19,7 @@ class _SettingState extends State<Setting> {
             child: Row(
               children: [],
             ),
-          )
+          ),
         ],
       ),
     );

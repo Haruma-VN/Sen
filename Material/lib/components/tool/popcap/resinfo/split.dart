@@ -85,7 +85,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                       final String? path = await FileSystem.pickFile();
                       if (path != null) {
                         controllerInput.text = path;
-                        controllerOutput.text = '${p.normalize(path)}.info';
+                        controllerOutput.text = '${path}.info';
                         setState(() {
                           allowExecute = true;
                         });

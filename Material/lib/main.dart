@@ -86,7 +86,7 @@ class _RootPageState extends State<RootPage> {
           NavigationDestination(
             icon: Icon(Icons.settings),
             label: 'Settings',
-          )
+          ),
         ],
         onDestinationSelected: (value) => {
           setState(

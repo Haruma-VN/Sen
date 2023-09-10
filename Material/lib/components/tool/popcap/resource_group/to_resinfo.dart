@@ -194,7 +194,7 @@ class _ToResInfoState extends State<ToResInfo> {
                               '10.4 or above',
                             ),
                           ),
-                        )
+                        ),
                       ],
                       onChanged: (String? value) {
                         setState(
