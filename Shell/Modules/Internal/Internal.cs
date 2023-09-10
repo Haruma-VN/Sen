@@ -57,9 +57,14 @@ namespace Sen.Shell.Modules.Internal
 
     }
 
-    public class Crypto
+    public abstract class Encryption
     {
-        public string MD5Hash(string str)
+        public abstract string MD5Hash(string str);
+    }
+
+    public class Crypto : Encryption
+    {
+        public unsafe override string MD5Hash(string str)
         {
             var hash = LotusAPI.MD5Hash(str, str.Length);
             var data = Marshal.PtrToStringUTF8(hash);

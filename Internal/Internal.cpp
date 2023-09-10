@@ -1,5 +1,7 @@
 ﻿#include "Internal.hpp"
 
+#pragma region zlib
+
 InternalAPI
 UnsignedByteStream ZlibCompress(
     const UnsignedByteStream data,
@@ -70,6 +72,10 @@ Void ZlibUncompress(
         throw 0;
     }
 }
+
+#pragma endregion
+
+#pragma region gzip
 
 InternalAPI
 UnsignedByteStream GZipCompress(
@@ -157,6 +163,10 @@ UnsignedByteStream GZipUncompress(
     }
 }
 
+#pragma endregion
+
+#pragma region deflate
+
 InternalAPI
 Void DeflateCompress(
     const char* input,
@@ -203,28 +213,6 @@ Void DeflateCompress(
     return;
 }
 
-
-InternalAPI
-const char* BZip2Compress(
-    const char* data,
-    size_t data_size,
-    size_t* compressed_data_size
-) {
-    try
-    {
-        auto inputString = std::string(data, data_size);
-        auto outputVector = Sen::Internal::Kernel::Tool::Compress::Bzip2::compress_bzip2(inputString);
-        auto outputData = new char[outputVector.size()];
-        std::copy(outputVector.begin(), outputVector.end(), outputData);
-        *compressed_data_size = outputVector.size();
-        return outputData;
-    }
-    catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
-    {
-        log(e.what());
-        throw 0;
-    }
-}
 
 InternalAPI
 Void DeflateUncompress(
@@ -281,6 +269,32 @@ Void DeflateUncompress(
     return;
 }
 
+#pragma endregion
+
+#pragma region bzip2
+
+InternalAPI
+const char* BZip2Compress(
+    const char* data,
+    size_t data_size,
+    size_t* compressed_data_size
+) {
+    try
+    {
+        auto inputString = std::string(data, data_size);
+        auto outputVector = Sen::Internal::Kernel::Tool::Compress::Bzip2::compress_bzip2(inputString);
+        auto outputData = new char[outputVector.size()];
+        std::copy(outputVector.begin(), outputVector.end(), outputData);
+        *compressed_data_size = outputVector.size();
+        return outputData;
+    }
+    catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
+    {
+        log(e.what());
+        throw 0;
+    }
+}
+
 InternalAPI
 const char* BZip2Uncompress(
     const char* data,
@@ -302,6 +316,10 @@ const char* BZip2Uncompress(
         throw 0;
     }
 }
+
+#pragma endregion
+
+#pragma region lzma
 
 InternalAPI
 Void lzmaCompress(
@@ -360,6 +378,9 @@ Void lzmaUncompress(
     }
 }
 
+#pragma endregion
+
+#pragma region tinyfiledialogs
 
 InternalAPI
 Architecture GetProcessorArchitecture(
@@ -572,6 +593,10 @@ Void SendMessageBox(
 }
 #endif
 
+#pragma endregion
+
+#pragma region open_vcdiff
+
 InternalAPI
 void* VCDiffEncode(
     char* before,
@@ -626,6 +651,9 @@ void* VCDiffDecode(
     }
 }
 
+#pragma endregion
+
+#pragma region etcpak
 
 InternalAPI
 void EncodeETC1Fast(
@@ -639,6 +667,10 @@ void EncodeETC1Fast(
     return;
 }
 
+#pragma endregion
+
+#pragma region rg_etc1
+
 InternalAPI
 void EncodeETC1Slow(
     void* block, 
@@ -650,44 +682,50 @@ void EncodeETC1Slow(
     return;
 }
 
+#pragma endregion
+
+#pragma region Rijndael
+
 InternalAPI
-Void MakeKey(
-    char const* key,
-    char const* chain,
-    int keyLength,
-    int blockSize
-)
-{
-    auto rijndael = CRijndael{};
-    rijndael.MakeKey(key, chain, keyLength, blockSize);
+void Decrypt(
+    char* cipher, 
+    char* plain, 
+    char* key, 
+    char* iv
+) {
+    auto oRijndael = CRijndael{};
+    oRijndael.MakeKey(key, iv, 16, 16);
+    auto nLen = strlen((const char*)cipher);
+    char szHex[33]{};
+    auto nNumOfBlocks = nLen / 16 + (nLen % 16 ? 1 : 0);
+    auto nPaddingLen = nNumOfBlocks * 16 - nLen;
+    memset(cipher + nLen, 0, nPaddingLen);
+    oRijndael.Decrypt(cipher, plain, nNumOfBlocks * 16, CRijndael::CBC);
     return;
 }
 
 InternalAPI
-Void Decrypt(
-    char const* in,
-    char* result,
-    size_t n,
-    int iMode
-)
-{
-    auto rijndael = CRijndael{};
-    rijndael.Decrypt(in, result, n, iMode);
+void Encrypt(
+    char* plain,
+    char* cipher, 
+    char* key, 
+    char* iv
+) {
+    auto oRijndael = CRijndael{};
+    oRijndael.MakeKey(key, iv, 16, 16);
+    auto nLen = strlen((const char*)plain);
+    char szHex[33]{};
+    auto nNumOfBlocks = nLen / 16 + (nLen % 16 ? 1 : 0);
+    auto nPaddingLen = nNumOfBlocks * 16 - nLen;
+    memset(plain + nLen, 0, nPaddingLen);
+    oRijndael.Encrypt(plain, cipher, nNumOfBlocks * 16, CRijndael::CBC);
     return;
 }
 
-InternalAPI
-Void Encrypt(
-    char const* in,
-    char* result,
-    size_t n,
-    int iMode
-)
-{
-    auto rijndael = CRijndael{};
-    rijndael.Encrypt(in, result, n, iMode);
-    return;
-}
+
+#pragma endregion
+
+#pragma region md5
 
 InternalAPI
 const char* MD5Hash(
@@ -697,5 +735,8 @@ const char* MD5Hash(
 {
     auto span = std::span<unsigned char>(data, size);
     auto c = MD5(span).toStr();
-    return c.data();
+    auto str = c.data();
+    return str;
 }
+
+#pragma endregion
