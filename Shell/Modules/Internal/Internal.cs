@@ -57,6 +57,16 @@ namespace Sen.Shell.Modules.Internal
 
     }
 
+    public class Crypto
+    {
+        public string MD5Hash(string str)
+        {
+            var hash = LotusAPI.MD5Hash(str, str.Length);
+            var data = Marshal.PtrToStringUTF8(hash);
+            return data!;
+        }
+    }
+
     public class Uncompress
     {
 

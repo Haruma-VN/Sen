@@ -89,9 +89,7 @@ namespace Sen.Shell.Modules.Standards
 
         public override byte[] UncompressZlib(byte[] zlibData)
         {
-            IntPtr uncompressedDataPtr;
-            int uncompressedDataSize;
-            LotusAPI.ZlibUncompress(zlibData, zlibData.Length, out uncompressedDataPtr, out uncompressedDataSize);
+            LotusAPI.ZlibUncompress(zlibData, zlibData.Length, out var uncompressedDataPtr, out var uncompressedDataSize);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(uncompressedDataPtr);

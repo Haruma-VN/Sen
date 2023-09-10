@@ -688,3 +688,14 @@ Void Encrypt(
     rijndael.Encrypt(in, result, n, iMode);
     return;
 }
+
+InternalAPI
+const char* MD5Hash(
+    unsigned char* data,
+    size_t size
+) 
+{
+    auto span = std::span<unsigned char>(data, size);
+    auto c = MD5(span).toStr();
+    return c.data();
+}

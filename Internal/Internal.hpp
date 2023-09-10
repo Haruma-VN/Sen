@@ -32,6 +32,7 @@ inline constexpr auto MInternalVersion = 7;
 #include <cstdio>
 #include <cstring>
 #include <exception>
+#include <span>
 #if defined(_WIN32)
 #include <windows.h>
 #include <codecvt>
@@ -52,6 +53,7 @@ inline constexpr auto MInternalVersion = 7;
 #include "../../dependencies/PVRTCCompressor/PvrTcEncoder.h"
 #include "../../dependencies/PVRTCCompressor/RgbBitmap.h"
 #include "../../dependencies/PVRTCCompressor/RgbaBitmap.h"
+#include "../../dependencies/md5/md5.h"
 
 
 #include "kernel/utility/utility.hpp"

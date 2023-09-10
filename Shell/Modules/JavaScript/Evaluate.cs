@@ -59,6 +59,7 @@ namespace Sen.Shell.Modules.JavaScript
                 {"Compress", new Internal.Compress() },
                 {"VCDiff", new Internal.VCDiff() },
                 {"Uncompress", new Internal.Uncompress() },
+                {"Crypto", new Internal.Crypto() },
             };
             ns.Set("Internal", JsValue.FromObject(Engine, k_dictionary));
             Engine.SetValue("Sen", ns);

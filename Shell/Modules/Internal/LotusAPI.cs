@@ -83,5 +83,8 @@ namespace Sen.Shell.Modules.Internal
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         public unsafe static partial void EncodeETC1Fast(uint* src, ulong* dst, uint block, uint width);
 
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr MD5Hash(string str, int size);
+
     }
 }
