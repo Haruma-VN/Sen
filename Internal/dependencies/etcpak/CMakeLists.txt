@@ -67,5 +67,14 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
     add_definitions(-DNOMINMAX)
 endif()
 
+# UTF8 Support
+if(MSVC)
+  add_compile_options(/utf-8)
+  add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+  add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+else()
+  add_compile_options(-finput-charset=UTF-8)
+endif()
+
 
 set_target_properties(etcpak PROPERTIES POSITION_INDEPENDENT_CODE ON)

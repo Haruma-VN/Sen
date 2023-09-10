@@ -67,6 +67,15 @@ add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
 
 set_target_properties(open_vcdiff PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+# UTF8 Support
+if(MSVC)
+  add_compile_options(/utf-8)
+  add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+  add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+else()
+  add_compile_options(-finput-charset=UTF-8)
+endif()
+
 # LLVM clang
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE -Wno-deprecated-declarations)

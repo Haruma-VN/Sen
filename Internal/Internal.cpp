@@ -687,25 +687,26 @@ void EncodeETC1Slow(
 #pragma region Rijndael
 
 InternalAPI
-void Decrypt(
-    char* cipher, 
-    char* plain, 
-    char* key, 
-    char* iv
+void RijndaelDecrypt(
+    unsigned char* cipher,
+    unsigned char* plain,
+    unsigned char* key,
+    unsigned char* iv,
+    size_t &size
 ) {
     auto oRijndael = CRijndael{};
-    oRijndael.MakeKey(key, iv, 16, 16);
-    auto nLen = strlen((const char*)cipher);
-    char szHex[33]{};
-    auto nNumOfBlocks = nLen / 16 + (nLen % 16 ? 1 : 0);
-    auto nPaddingLen = nNumOfBlocks * 16 - nLen;
-    memset(cipher + nLen, 0, nPaddingLen);
-    oRijndael.Decrypt(cipher, plain, nNumOfBlocks * 16, CRijndael::CBC);
+    oRijndael.MakeKey(reinterpret_cast<char*>(key), reinterpret_cast<char*>(iv), 24, 24);
+    auto nLen = strlen(reinterpret_cast<const char*>(cipher));
+    auto nNumOfBlocks = nLen / 24 + (nLen % 24 ? 1 : 0);
+    auto nPaddingLen = nNumOfBlocks * 24 - nLen;
+    memset(cipher + nLen, '0', nPaddingLen);
+    oRijndael.Decrypt(reinterpret_cast<char*>(cipher), reinterpret_cast<char*>(plain), nNumOfBlocks * 24, CRijndael::CBC);
+    size = nNumOfBlocks * 24;
     return;
 }
 
 InternalAPI
-void Encrypt(
+void RijndaelEncrypt(
     char* plain,
     char* cipher, 
     char* key, 
@@ -714,7 +715,6 @@ void Encrypt(
     auto oRijndael = CRijndael{};
     oRijndael.MakeKey(key, iv, 16, 16);
     auto nLen = strlen((const char*)plain);
-    char szHex[33]{};
     auto nNumOfBlocks = nLen / 16 + (nLen % 16 ? 1 : 0);
     auto nPaddingLen = nNumOfBlocks * 16 - nLen;
     memset(plain + nLen, 0, nPaddingLen);

@@ -147,8 +147,8 @@ namespace Sen.Shell.Modules.Support.PvZ2.RTON
                 throw new Exception($"rton_is_not_encrypted");
             }
             var Crypto = new ImplementCrypto();
-            var keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
             byte[] ivBytes = new byte[24];
+            var keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
             Array.Copy(keyBytes, 4, ivBytes, 0, 24);
             return new SenBuffer(Crypto.RTONRijndaelDecrypt(
                 RtonFile.getBytes((int)(RtonFile.length - 2), 2), 
