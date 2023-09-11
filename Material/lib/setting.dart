@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/basic.dart';
 import 'package:sen_material_design/common/custom.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
+import 'package:path/path.dart' as p;
+import 'package:sen_material_design/subprocess/lotus_api.dart';
 
 // ignore: must_be_immutable
 class Setting extends StatefulWidget {
@@ -69,6 +71,17 @@ class _SettingState extends State<Setting> {
                             : 'dark',
                         ApplicationInformation.internalPath.value,
                       );
+                      if (FileSystem.fileExists(
+                        p.join(
+                          text,
+                          'Internal.${getExtension()}',
+                        ),
+                      )) {
+                        displayDialog(
+                          'Internal Module Found',
+                          'Found Internal Module in this workspace',
+                        );
+                      }
                     },
                   ),
                 ),
@@ -84,6 +97,17 @@ class _SettingState extends State<Setting> {
                             : 'dark',
                         ApplicationInformation.internalPath.value,
                       );
+                      if (FileSystem.fileExists(
+                        p.join(
+                          path,
+                          'Internal.${getExtension()}',
+                        ),
+                      )) {
+                        displayDialog(
+                          'Internal Module Found',
+                          'Found Internal Module in this workspace',
+                        );
+                      }
                     }
                   },
                   child: const Text('Browse'),
