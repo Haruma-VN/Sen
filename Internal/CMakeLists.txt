@@ -41,7 +41,7 @@ endif()
 # Add library
 
 add_library(
-  Internal SHARED
+  ${PROJECT_NAME} SHARED
   ./kernel/utility/string/common.hpp
   ./kernel/utility/array/common.hpp
   ./kernel/utility/path/common.hpp
@@ -81,13 +81,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 
 if(NOT (CMAKE_SYSTEM_NAME MATCHES "iOS" OR CMAKE_SYSTEM_NAME MATCHES "Android"))
     add_subdirectory(./dependencies/tinyfiledialogs)
-    target_link_libraries(Internal PRIVATE tinyfiledialogs)
+    target_link_libraries(${PROJECT_NAME} PRIVATE tinyfiledialogs)
 endif()
 
 # Link against dependencies
 
 target_link_libraries(
-  Internal PRIVATE 
+  ${PROJECT_NAME} PRIVATE 
   md5
   avir
   json
@@ -136,7 +136,7 @@ target_compile_definitions(
 
 # Output name
 if(UNIX OR ANDROID OR APPLE OR IOS)
-    set_target_properties(Internal PROPERTIES PREFIX "" OUTPUT_NAME "Internal")
+    set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" OUTPUT_NAME "Internal")
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
@@ -145,7 +145,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # CMake Strict
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET Internal PROPERTY CXX_STANDARD 20)
+  set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 endif()
 
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
