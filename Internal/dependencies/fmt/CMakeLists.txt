@@ -2,7 +2,7 @@ project(
 	fmt
 	VERSION 10.0.0
 	HOMEPAGE_URL https://github.com/fmtlib/fmt
-	LANGUAGES C
+	LANGUAGES CXX
 )
 
 add_library(
@@ -22,17 +22,10 @@ add_library(
 	./include/fmt/xchar.h
 )
 
-# UTF8 Support
-if(MSVC)
-  target_compile_options(${PROJECT_NAME} INTERFACE /utf-8)
-else()
-  target_compile_options(${PROJECT_NAME} INTERFACE -finput-charset=UTF-8)
-endif()
-
 # Definition
 
 target_compile_definitions(${PROJECT_NAME} INTERFACE FMT_HEADER_ONLY)
 
 target_include_directories(${PROJECT_NAME} INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include") 
 
-set_target_properties(fmt PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(fmt PROPERTIES LINKER_LANGUAGE CXX)

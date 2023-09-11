@@ -22,10 +22,11 @@ class Customization {
   }
 
   // ignore: non_constant_identifier_names
-  Future<void> write(String theme_data) async {
+  Future<void> write(String theme_data, String internalPath) async {
     final file = await get_local_data();
     var userData = <String, dynamic>{};
     userData['theme'] = theme_data;
+    userData['internalPath'] = internalPath;
     FileSystem.writeFile(file, jsonEncode(userData));
     return;
   }
@@ -55,7 +56,7 @@ class Customization {
       }
     } catch (e) {
       theme_data = ThemeMode.system;
-      write('light');
+      write('light', '');
     }
     return;
   }
@@ -68,6 +69,17 @@ class Customization {
       return data['theme'] == 'light';
     } catch (e) {
       return true;
+    }
+  }
+
+  static Future<String> getWorkspace() async {
+    try {
+      var custom = Customization.init();
+      var path = await custom.get_local_data();
+      var data = FileSystem.readJson(path);
+      return data['internalPath'];
+    } catch (e) {
+      return "";
     }
   }
 }

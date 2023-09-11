@@ -181,8 +181,7 @@ namespace Sen.Shell.Modules.Standards
                 ZlibCompressionLevel.DEFLATED => Deflater.DEFLATED,
                 _ => Deflater.DEFAULT_COMPRESSION,
             };
-            int compressedSize;
-            IntPtr compressedDataPtr = LotusAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out compressedSize);
+            IntPtr compressedDataPtr = LotusAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out var compressedSize);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
             return compressedData;

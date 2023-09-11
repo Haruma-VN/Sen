@@ -5,12 +5,16 @@ import 'package:sen_material_design/components/tool/popcap/resource_group/from_r
 import 'package:sen_material_design/components/tool/popcap/resource_group/merge.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/split.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/to_resinfo.dart';
+import 'package:sen_material_design/components/tool/popcap/zlib/compress.dart';
+import 'package:sen_material_design/components/tool/popcap/zlib/uncompress.dart';
 
-List<Widget> materialWidget = const [
-  SplitPopCapResourceGroup(),
-  MergePopCapResourceGroup(),
-  ToResInfo(),
-  FromResInfo(),
-  SplitResInfo(),
-  MergeResInfo(),
-];
+Map<String, Widget> materialWidget = const {
+  'popcap.resource_group.split': SplitPopCapResourceGroup(),
+  'popcap.resource_group.merge': MergePopCapResourceGroup(),
+  'popcap.resource_group.to_resinfo': ToResInfo(),
+  'popcap.resource_group.from_resinfo': FromResInfo(),
+  'popcap.resinfo.split': SplitResInfo(),
+  'popcap.resinfo.merge': MergeResInfo(),
+  'popcap.zlib.compress': PopCapZlibCompress(),
+  'popcap.zlib.uncompress': PopCapZlibUncompress(),
+};

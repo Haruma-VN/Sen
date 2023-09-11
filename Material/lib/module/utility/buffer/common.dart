@@ -705,6 +705,7 @@ class _SenBuffer implements SenBuffer {
     _mNumber = ByteData.sublistView(
       readBytes(
         count,
+        offset,
       ),
     );
     return;
@@ -2186,7 +2187,7 @@ class _SenBuffer implements SenBuffer {
     file.createSync(
       recursive: true,
     );
-    file.writeAsBytes(
+    file.writeAsBytesSync(
       _buffer,
     );
     clear();

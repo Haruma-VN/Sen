@@ -99,7 +99,18 @@ class _HomePageState extends State<HomePage> {
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              return materialWidget[index];
+                              return materialWidget[functionsName[index]] ??
+                                  Scaffold(
+                                    appBar: AppBar(
+                                      title: const Text(
+                                        ApplicationInformation.applicationName,
+                                      ),
+                                      centerTitle: false,
+                                      elevation: 3,
+                                      scrolledUnderElevation: 3,
+                                    ),
+                                    body: const Text('Have not implemented'),
+                                  );
                             } else {
                               return Scaffold(
                                 appBar: AppBar(

@@ -9,6 +9,10 @@ Future<void> main() async {
   if (!await Customization.getCurrentTheme()) {
     ApplicationInformation.isLightMode.value = false;
   }
+  final String internalPath = await Customization.getWorkspace();
+  if (internalPath != '') {
+    ApplicationInformation.internalPath.value = internalPath;
+  }
   // ignore: await_only_futures
   runApp(await Application(setting: setting));
 }
