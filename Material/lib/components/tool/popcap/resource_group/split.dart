@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sen_material_design/common/basic.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
@@ -37,7 +38,9 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sen: Material App'),
+        title: const Text(
+          ApplicationInformation.applicationName,
+        ),
         centerTitle: false,
         elevation: 3,
         scrolledUnderElevation: 3,

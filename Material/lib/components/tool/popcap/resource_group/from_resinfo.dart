@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sen_material_design/common/basic.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/from_resinfo.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
@@ -38,7 +39,9 @@ class _FromResInfoState extends State<FromResInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sen: Material App'),
+        title: const Text(
+          ApplicationInformation.applicationName,
+        ),
         centerTitle: false,
         elevation: 3,
         scrolledUnderElevation: 3,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/command.dart';
+import 'package:sen_material_design/common/basic.dart';
 import 'package:sen_material_design/setting.dart';
 import 'common/custom.dart';
 
@@ -71,7 +72,9 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sen: Material App'),
+        title: const Text(
+          ApplicationInformation.applicationName,
+        ),
         centerTitle: false,
         elevation: 3,
         scrolledUnderElevation: 3,

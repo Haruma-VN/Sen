@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/basic.dart';
-import 'package:sen_material_design/module/tool/popcap/resinfo/split.dart';
+import 'package:sen_material_design/module/tool/popcap/resource_group/merge.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
+import 'package:path/path.dart' as p;
 
-class SplitResInfo extends StatefulWidget {
-  const SplitResInfo({super.key});
+class MergeResInfo extends StatefulWidget {
+  const MergeResInfo({super.key});
 
   @override
-  State<SplitResInfo> createState() => _SplitResInfoState();
+  State<MergeResInfo> createState() => _MergeResInfoState();
 }
 
-class _SplitResInfoState extends State<SplitResInfo> {
+class _MergeResInfoState extends State<MergeResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -51,7 +52,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
               margin: const EdgeInsets.all(10.0),
               child: const Center(
                 child: Text(
-                  'PopCap Res-Info: Split',
+                  'PopCap Res-Info: Merge',
                   style: TextStyle(
                     fontSize: 25,
                   ),
@@ -62,7 +63,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'Data File',
+                'Data Directory',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -84,10 +85,11 @@ class _SplitResInfoState extends State<SplitResInfo> {
                   ),
                   OutlinedButton(
                     onPressed: () async {
-                      final String? path = await FileSystem.pickFile();
+                      final String? path = await FileSystem.pickDirectory();
                       if (path != null) {
                         controllerInput.text = path;
-                        controllerOutput.text = '$path.info';
+                        controllerOutput.text =
+                            '${p.withoutExtension(path)}.json';
                         setState(() {
                           allowExecute = true;
                         });
@@ -102,7 +104,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'Output Directory',
+                'Output File',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -124,7 +126,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                   ),
                   OutlinedButton(
                     onPressed: () async {
-                      final String? path = await FileSystem.pickDirectory();
+                      final String? path = await FileSystem.pickFile();
                       if (path != null) {
                         controllerOutput.text = path;
                       }
@@ -142,7 +144,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                       ? () async {
                           final DateTime startTime = DateTime.now();
                           try {
-                            splitResInfo.process(
+                            mergeResourceGroup(
                               controllerInput.text,
                               controllerOutput.text,
                             );
