@@ -81,6 +81,11 @@ class _SettingState extends State<Setting> {
                           'Internal Module Found',
                           'Found Internal Module in this workspace',
                         );
+                      } else {
+                        displayDialog(
+                          'Internal Module Not Found',
+                          'Not Found Internal Module in this workspace, please select other workspace',
+                        );
                       }
                     },
                   ),
@@ -106,6 +111,11 @@ class _SettingState extends State<Setting> {
                         displayDialog(
                           'Internal Module Found',
                           'Found Internal Module in this workspace',
+                        );
+                      } else {
+                        displayDialog(
+                          'Internal Module Not Found',
+                          'Not Found Internal Module in this workspace, please select other workspace',
                         );
                       }
                     }

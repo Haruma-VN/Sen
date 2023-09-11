@@ -15,7 +15,9 @@ String getExtension() {
   } else if (Platform.isWindows) {
     return 'dll';
   } else {
-    throw Exception('Architecture is not supported');
+    throw Exception(
+      'Architecture is not supported',
+    );
   }
 }
 
@@ -40,22 +42,30 @@ var internal = path.join(
   internalFile,
 );
 
-final dylib = DynamicLibrary.open(internal);
+final dylib = DynamicLibrary.open(
+  internal,
+);
 
 final zlibcompress ZlibCompress =
-    dylib.lookupFunction<zlib_compress_func, zlibcompress>('ZlibCompress');
+    dylib.lookupFunction<zlib_compress_func, zlibcompress>(
+  'ZlibCompress',
+);
 
 typedef ZlibUncompressC = Void Function(
-    Pointer<Uint8> data,
-    Int32 dataSize,
-    Pointer<Pointer<Uint8>> uncompressedData,
-    Pointer<Int32> uncompressedDataSize);
+  Pointer<Uint8> data,
+  Int32 dataSize,
+  Pointer<Pointer<Uint8>> uncompressedData,
+  Pointer<Int32> uncompressedDataSize,
+);
 
 typedef ZlibUncompressDart = void Function(
-    Pointer<Uint8> data,
-    int dataSize,
-    Pointer<Pointer<Uint8>> uncompressedData,
-    Pointer<Int32> uncompressedDataSize);
+  Pointer<Uint8> data,
+  int dataSize,
+  Pointer<Pointer<Uint8>> uncompressedData,
+  Pointer<Int32> uncompressedDataSize,
+);
 
 final ZlibUncompressDart ZlibUncompress =
-    dylib.lookupFunction<ZlibUncompressC, ZlibUncompressDart>('ZlibUncompress');
+    dylib.lookupFunction<ZlibUncompressC, ZlibUncompressDart>(
+  'ZlibUncompress',
+);

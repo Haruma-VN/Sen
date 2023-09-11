@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sen_material_design/components/tool/popcap/newton/decode.dart';
+import 'package:sen_material_design/components/tool/popcap/newton/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/merge.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/split.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/from_resinfo.dart';
@@ -17,4 +19,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.resinfo.merge': MergeResInfo(),
   'popcap.zlib.compress': PopCapZlibCompress(),
   'popcap.zlib.uncompress': PopCapZlibUncompress(),
+  'popcap.newton.decode': PopCapNewtonDecode(),
+  'popcap.newton.encode': PopCapNewtonEncode(),
 };

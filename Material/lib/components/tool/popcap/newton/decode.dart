@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/basic.dart';
-import 'package:sen_material_design/module/tool/popcap/resource_group/split.dart';
+import 'package:sen_material_design/module/tool/popcap/newton/decode.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
-import 'package:path/path.dart' as p;
 
-class SplitPopCapResourceGroup extends StatefulWidget {
-  const SplitPopCapResourceGroup({super.key});
+class PopCapNewtonDecode extends StatefulWidget {
+  const PopCapNewtonDecode({super.key});
 
   @override
-  State<SplitPopCapResourceGroup> createState() =>
-      _SplitPopCapResourceGroupState();
+  State<PopCapNewtonDecode> createState() => _PopCapNewtonDecodeState();
 }
 
-class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
+class _PopCapNewtonDecodeState extends State<PopCapNewtonDecode> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -53,7 +51,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
               margin: const EdgeInsets.all(10.0),
               child: const Center(
                 child: Text(
-                  'PopCap Resource-Group: Split',
+                  'PopCap Newton: Decode',
                   style: TextStyle(
                     fontSize: 25,
                   ),
@@ -79,24 +77,30 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                     child: TextField(
                       controller: controllerInput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (String text) {
+                      onSubmitted: (text) {
                         this.text = text;
                       },
                     ),
                   ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      final String? path = await FileSystem.pickFile();
-                      if (path != null) {
-                        controllerInput.text = path;
-                        controllerOutput.text =
-                            '${p.withoutExtension(path)}.res';
-                        setState(() {
-                          allowExecute = true;
-                        });
-                      }
-                    },
-                    child: const Text('Browse'),
+                  SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        final String? path = await FileSystem.pickFile();
+                        if (path != null) {
+                          controllerInput.text = path;
+                          controllerOutput.text = '$path.json'.replaceAll(
+                            '\\',
+                            '/',
+                          );
+                          setState(() {
+                            allowExecute = true;
+                          });
+                        }
+                      },
+                      child: const Text('Browse'),
+                    ),
                   ),
                 ],
               ),
@@ -105,7 +109,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'Output Directory',
+                'Output File',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -127,7 +131,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                   ),
                   OutlinedButton(
                     onPressed: () async {
-                      final String? path = await FileSystem.pickDirectory();
+                      final String? path = await FileSystem.pickFile();
                       if (path != null) {
                         controllerOutput.text = path;
                       }
@@ -138,14 +142,16 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
               ),
             ),
             SizedBox(
-              child: Padding(
+              width: 200,
+              height: 50,
+              child: Container(
                 padding: const EdgeInsets.all(10.0),
                 child: OutlinedButton(
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
                           try {
-                            splitResourceGroup(
+                            decodeNewton(
                               controllerInput.text,
                               controllerOutput.text,
                             );
