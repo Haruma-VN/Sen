@@ -21,26 +21,11 @@ class Customization {
     return '$path/Sen/user.json';
   }
 
-  Future<void> write() async {
+  // ignore: non_constant_identifier_names
+  Future<void> write(String theme_data) async {
     final file = await get_local_data();
     var userData = <String, dynamic>{};
-    switch (theme_data) {
-      case ThemeMode.dark:
-        {
-          userData['theme'] = 'dark';
-          break;
-        }
-      case ThemeMode.light:
-        {
-          userData['theme'] = 'light';
-          break;
-        }
-      default:
-        {
-          userData['theme'] = 'system';
-          break;
-        }
-    }
+    userData['theme'] = theme_data;
     FileSystem.writeFile(file, jsonEncode(userData));
     return;
   }
@@ -70,8 +55,19 @@ class Customization {
       }
     } catch (e) {
       theme_data = ThemeMode.system;
-      write();
+      write('light');
     }
     return;
+  }
+
+  static Future<bool> getCurrentTheme() async {
+    try {
+      var custom = Customization.init();
+      var path = await custom.get_local_data();
+      var data = FileSystem.readJson(path);
+      return data['theme'] == 'light';
+    } catch (e) {
+      return true;
+    }
   }
 }

@@ -4,19 +4,11 @@ import 'package:sen_material_design/common/basic.dart';
 import 'package:sen_material_design/setting.dart';
 import 'common/custom.dart';
 
-final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.light);
-
-void switchThemeMode() {
-  if (themeMode.value == ThemeMode.light) {
-    themeMode.value = ThemeMode.dark;
-  } else {
-    themeMode.value = ThemeMode.light;
-  }
-}
-
 Future<void> main() async {
   var setting = Customization.init();
-  await setting.read();
+  if (!await Customization.getCurrentTheme()) {
+    ApplicationInformation.isLightMode.value = false;
+  }
   // ignore: await_only_futures
   runApp(await Application(setting: setting));
 }
@@ -31,9 +23,9 @@ class Application extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeMode,
-      builder: (context, mode, child) => MaterialApp(
+    return ValueListenableBuilder<bool>(
+      valueListenable: ApplicationInformation.isLightMode,
+      builder: (context, isLightMode, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
@@ -46,7 +38,7 @@ class Application extends StatelessWidget {
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
-          brightness: Brightness.dark,
+          brightness: isLightMode ? Brightness.light : Brightness.dark,
         ),
         themeMode: setting.theme_data,
         home: const RootPage(),
@@ -66,7 +58,12 @@ class _RootPageState extends State<RootPage> {
   // ignore: non_constant_identifier_names
   int current_page = 0;
 
-  List<Widget> pages = const [HomePage(), Setting()];
+  /// Pages
+
+  List<Widget> pages = const [
+    HomePage(),
+    Setting(),
+  ];
 
   @override
   Widget build(BuildContext context) {
