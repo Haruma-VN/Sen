@@ -540,6 +540,10 @@ class Newton {
           newton.writeString(
             resource_x['id'],
           );
+          assertTest(
+            (resource_x['path'] is String),
+            '"path" must be string',
+          );
           var path = resource_x['path'].toString();
           newton.writeUInt32LE(
             path.length,

@@ -1456,7 +1456,10 @@ class _SenBuffer implements SenBuffer {
     int count, [
     int offset = -1,
   ]) {
-    writeBytes(new Uint8List(count), offset);
+    writeBytes(
+      Uint8List(count),
+      offset,
+    );
     return;
   }
 
@@ -2234,13 +2237,12 @@ class _SenBuffer implements SenBuffer {
     int newSize = writeOffset + bufferCount;
     if (newSize < _buffer.length) {
       return;
+    } else {
+      final addSize = newSize - _buffer.length;
+      for (var i = 0; i < addSize; i++) {
+        _buffer.add(0);
+      }
     }
-		else {
-			final addSize = newSize - _buffer.length;
-			for (var i = 0; i < addSize; i++) {
-				_buffer.add(0);
-			}
-		}
     return;
   }
 }

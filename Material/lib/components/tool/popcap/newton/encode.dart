@@ -154,15 +154,11 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
-                          encodeNewton(
-                            controllerInput.text,
-                            controllerOutput.text,
-                          );
                           try {
-                            // encodeNewton(
-                            //   controllerInput.text,
-                            //   controllerOutput.text,
-                            // );
+                            encodeNewton(
+                              controllerInput.text,
+                              controllerOutput.text,
+                            );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);
