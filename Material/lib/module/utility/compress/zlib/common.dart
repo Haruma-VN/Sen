@@ -2,7 +2,7 @@
 
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
-import 'package:sen_material_design/subprocess/lotus_api.dart';
+import 'package:sen_material_design/bridge/executor.dart';
 import 'dart:typed_data';
 
 class Zlib {

@@ -21,20 +21,6 @@ String getExtension() {
   }
 }
 
-typedef zlib_compress_func = Pointer<Uint8> Function(
-  Pointer<Uint8> data,
-  Int32 dataSize,
-  Int32 level,
-  Pointer<Int32> compressedSize,
-);
-
-typedef zlibcompress = Pointer<Uint8> Function(
-  Pointer<Uint8> data,
-  int dataSize,
-  int level,
-  Pointer<Int32> compressedSize,
-);
-
 final String internalFile = 'Internal.${getExtension()}';
 
 var internal = path.join(
@@ -46,10 +32,22 @@ final dylib = DynamicLibrary.open(
   internal,
 );
 
-final zlibcompress ZlibCompress =
-    dylib.lookupFunction<zlib_compress_func, zlibcompress>(
-  'ZlibCompress',
+typedef ZlibCompressC = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  Int32 dataSize,
+  Int32 level,
+  Pointer<Int32> compressedSize,
 );
+typedef ZlibCompressDart = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  int dataSize,
+  int level,
+  Pointer<Int32> compressedSize,
+);
+
+final ZlibCompress = dylib
+    .lookup<NativeFunction<ZlibCompressC>>('ZlibCompress')
+    .asFunction<ZlibCompressDart>();
 
 typedef ZlibUncompressC = Void Function(
   Pointer<Uint8> data,
@@ -57,7 +55,6 @@ typedef ZlibUncompressC = Void Function(
   Pointer<Pointer<Uint8>> uncompressedData,
   Pointer<Int32> uncompressedDataSize,
 );
-
 typedef ZlibUncompressDart = void Function(
   Pointer<Uint8> data,
   int dataSize,
@@ -65,7 +62,6 @@ typedef ZlibUncompressDart = void Function(
   Pointer<Int32> uncompressedDataSize,
 );
 
-final ZlibUncompressDart ZlibUncompress =
-    dylib.lookupFunction<ZlibUncompressC, ZlibUncompressDart>(
-  'ZlibUncompress',
-);
+final ZlibUncompress = dylib
+    .lookup<NativeFunction<ZlibUncompressC>>('ZlibUncompress')
+    .asFunction<ZlibUncompressDart>();

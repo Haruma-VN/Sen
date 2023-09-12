@@ -82,14 +82,14 @@ class _RootPageState extends State<RootPage> {
       ),
       body: pages[current_page],
       bottomNavigationBar: NavigationBar(
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.terminal_rounded),
-            label: 'Commands',
+            icon: const Icon(Icons.terminal_rounded),
+            label: ApplicationInformation.commandPage,
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings),
+            label: ApplicationInformation.settingPage,
           ),
         ],
         onDestinationSelected: (value) => {

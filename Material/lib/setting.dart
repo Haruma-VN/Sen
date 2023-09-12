@@ -3,7 +3,7 @@ import 'package:sen_material_design/common/basic.dart';
 import 'package:sen_material_design/common/custom.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
-import 'package:sen_material_design/subprocess/lotus_api.dart';
+import 'package:sen_material_design/bridge/executor.dart';
 
 // ignore: must_be_immutable
 class Setting extends StatefulWidget {
