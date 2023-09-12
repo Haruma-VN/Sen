@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/basic.dart';
-import 'package:sen_material_design/module/tool/popcap/resource_group/merge.dart';
+import 'package:sen_material_design/module/tool/popcap/resinfo/merge.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
@@ -17,7 +17,7 @@ class _MergeResInfoState extends State<MergeResInfo> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {
@@ -88,8 +88,7 @@ class _MergeResInfoState extends State<MergeResInfo> {
                       final String? path = await FileSystem.pickDirectory();
                       if (path != null) {
                         controllerInput.text = path;
-                        controllerOutput.text =
-                            '${p.withoutExtension(path)}.json';
+                        controllerOutput.text = p.withoutExtension(path);
                         setState(() {
                           allowExecute = true;
                         });
@@ -143,11 +142,11 @@ class _MergeResInfoState extends State<MergeResInfo> {
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
+                          mergeResInfo.process(
+                            controllerInput.text,
+                            controllerOutput.text,
+                          );
                           try {
-                            mergeResourceGroup(
-                              controllerInput.text,
-                              controllerOutput.text,
-                            );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);

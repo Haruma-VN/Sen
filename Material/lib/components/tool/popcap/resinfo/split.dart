@@ -16,7 +16,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {

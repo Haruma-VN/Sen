@@ -18,7 +18,7 @@ class _ToResInfoState extends State<ToResInfo> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {

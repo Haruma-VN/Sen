@@ -16,7 +16,7 @@ class _PopCapZlibUncompressState extends State<PopCapZlibUncompress> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {

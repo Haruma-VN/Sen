@@ -17,7 +17,7 @@ class _FromResInfoState extends State<FromResInfo> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {

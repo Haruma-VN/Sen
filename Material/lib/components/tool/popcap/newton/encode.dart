@@ -17,7 +17,7 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {

@@ -40,15 +40,22 @@ class ImageIO {
     DimensionExpand newDimension,
     String newFile,
   ) {
-    final file = File(sourceFile);
+    final file = File(
+      sourceFile,
+    );
     final bytes = file.readAsBytesSync();
-    final image = decodeImage(bytes)!;
+    final image = decodeImage(
+      bytes,
+    )!;
     final result = copyResize(
       image,
       width: newDimension.width,
       height: newDimension.height,
     );
-    saveImage(newFile, result);
+    saveImage(
+      newFile,
+      result,
+    );
     return;
   }
 
@@ -57,20 +64,33 @@ class ImageIO {
     DimensionExpand newDimension,
     String newFile,
   ) async {
-    final file = File(sourceFile);
+    final file = File(
+      sourceFile,
+    );
     final bytes = file.readAsBytesSync();
-    final image = decodeImage(bytes)!;
+    final image = decodeImage(
+      bytes,
+    )!;
     final result = copyResize(
       image,
       width: newDimension.width,
       height: newDimension.height,
     );
-    await saveImageAsync(newFile, result);
+    await saveImageAsync(
+      newFile,
+      result,
+    );
     return;
   }
 
-  static Image readImage(String filepath) =>
-      decodeImage(FileSystem.readBuffer(filepath))!;
+  static Image readImage(
+    String filepath,
+  ) =>
+      decodeImage(
+        FileSystem.readBuffer(
+          filepath,
+        ),
+      )!;
 
   static void cropImage(
     String originalFile,
@@ -80,10 +100,20 @@ class ImageIO {
     int height,
     String outputFile,
   ) {
-    Image original = readImage(originalFile);
-    final destination =
-        copyCrop(original, x: x, y: y, width: width, height: height);
-    saveImage(originalFile, destination);
+    Image original = readImage(
+      originalFile,
+    );
+    final destination = copyCrop(
+      original,
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+    );
+    saveImage(
+      originalFile,
+      destination,
+    );
     return;
   }
 
@@ -95,10 +125,20 @@ class ImageIO {
     int height,
     String outputFile,
   ) async {
-    Image original = readImage(originalFile);
-    final destination =
-        copyCrop(original, x: x, y: y, width: width, height: height);
-    await saveImageAsync(originalFile, destination);
+    Image original = readImage(
+      originalFile,
+    );
+    final destination = copyCrop(
+      original,
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+    );
+    await saveImageAsync(
+      originalFile,
+      destination,
+    );
     return;
   }
 
@@ -123,7 +163,10 @@ class ImageIO {
         dstH: element.height,
       );
     }
-    saveImage(outputData.filepath, outputFile);
+    saveImage(
+      outputData.filepath,
+      outputFile,
+    );
     return;
   }
 }
@@ -149,5 +192,11 @@ class DimensionExpand extends Dimension {
 class ImageChild extends DimensionExpand {
   int x;
   int y;
-  ImageChild(super.width, super.height, super.filepath, this.x, this.y);
+  ImageChild(
+    super.width,
+    super.height,
+    super.filepath,
+    this.x,
+    this.y,
+  );
 }

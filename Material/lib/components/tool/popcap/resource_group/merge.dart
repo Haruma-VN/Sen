@@ -18,7 +18,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {

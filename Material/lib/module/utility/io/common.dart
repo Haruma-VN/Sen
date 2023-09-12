@@ -13,12 +13,18 @@ class FileSystem {
   ///
   /// return: Read file as string, false will throw an exception file not found
 
-  static String readFile(String path) {
-    var file = File(path);
+  static String readFile(
+    String path,
+  ) {
+    var file = File(
+      path,
+    );
     if (file.existsSync()) {
       return file.readAsStringSync();
     } else {
-      throw 'File not found: $path';
+      throw Exception(
+        'File not found: $path',
+      );
     }
   }
 
@@ -26,10 +32,19 @@ class FileSystem {
   ///
   /// return
 
-  static void writeFile(String path, String data) {
-    var file = File(path);
-    file.createSync(recursive: true);
-    file.writeAsStringSync(data);
+  static void writeFile(
+    String path,
+    String data,
+  ) {
+    var file = File(
+      path,
+    );
+    file.createSync(
+      recursive: true,
+    );
+    file.writeAsStringSync(
+      data,
+    );
     return;
   }
 
@@ -37,12 +52,18 @@ class FileSystem {
   ///
   /// Return: Uint 8 List
 
-  static Uint8List readBuffer(String path) {
-    var file = File(path);
+  static Uint8List readBuffer(
+    String path,
+  ) {
+    var file = File(
+      path,
+    );
     if (file.existsSync()) {
       return file.readAsBytesSync();
     } else {
-      throw 'File not found: $path';
+      throw Exception(
+        'File not found: $path',
+      );
     }
   }
 
@@ -50,18 +71,31 @@ class FileSystem {
   ///
   /// Write file as buffer
 
-  static void writeBuffer(String path, Uint8List data) {
-    var file = File(path);
-    file.createSync(recursive: true);
-    file.writeAsBytesSync(data);
+  static void writeBuffer(
+    String path,
+    Uint8List data,
+  ) {
+    var file = File(
+      path,
+    );
+    file.createSync(
+      recursive: true,
+    );
+    file.writeAsBytesSync(
+      data,
+    );
     return;
   }
 
   /// Provide [path] to check if file exists
   ///
 
-  static bool fileExists(String path) {
-    var file = File(path);
+  static bool fileExists(
+    String path,
+  ) {
+    var file = File(
+      path,
+    );
     return file.existsSync();
   }
 
@@ -69,9 +103,15 @@ class FileSystem {
   ///
   /// Return: Created directory
 
-  static void createDirectory(String path) {
-    var directory = Directory(path);
-    directory.createSync(recursive: true);
+  static void createDirectory(
+    String path,
+  ) {
+    var directory = Directory(
+      path,
+    );
+    directory.createSync(
+      recursive: true,
+    );
     return;
   }
 
@@ -79,8 +119,12 @@ class FileSystem {
   ///
   /// If directory exists return true, else false
 
-  static bool directoryExists(String path) {
-    var directory = Directory(path);
+  static bool directoryExists(
+    String path,
+  ) {
+    var directory = Directory(
+      path,
+    );
     return directory.existsSync();
   }
 
@@ -88,10 +132,19 @@ class FileSystem {
   ///
   /// return an async function
 
-  static Future<void> writeFileAsync(String path, String data) async {
-    var file = File(path);
-    await file.create(recursive: true);
-    await file.writeAsString(data);
+  static Future<void> writeFileAsync(
+    String path,
+    String data,
+  ) async {
+    var file = File(
+      path,
+    );
+    await file.create(
+      recursive: true,
+    );
+    await file.writeAsString(
+      data,
+    );
     return;
   }
 
@@ -99,10 +152,19 @@ class FileSystem {
   ///
   /// Write file as buffer in Async task
 
-  static Future<void> writeBufferAsync(String path, Uint8List data) async {
-    var file = File(path);
-    await file.create(recursive: true);
-    await file.writeAsBytes(data);
+  static Future<void> writeBufferAsync(
+    String path,
+    Uint8List data,
+  ) async {
+    var file = File(
+      path,
+    );
+    await file.create(
+      recursive: true,
+    );
+    await file.writeAsBytes(
+      data,
+    );
     return;
   }
 
@@ -110,17 +172,34 @@ class FileSystem {
   ///
   /// Return: JSON Decode
 
-  static dynamic readJson(String path) {
-    return jsonDecode(readFile(path));
+  static dynamic readJson(
+    String path,
+  ) {
+    return jsonDecode(
+      readFile(
+        path,
+      ),
+    );
   }
 
   /// Provide [data] in [path] to write json
   ///
   /// Return: JSON Decode
 
-  static void writeJson(String path, dynamic data, String? indent) {
-    var encoder = JsonEncoder.withIndent(indent ?? '\t');
-    writeFile(path, encoder.convert(data));
+  static void writeJson(
+    String path,
+    dynamic data,
+    String? indent,
+  ) {
+    var encoder = JsonEncoder.withIndent(
+      indent ?? '\t',
+    );
+    writeFile(
+      path,
+      encoder.convert(
+        data,
+      ),
+    );
     return;
   }
 
@@ -146,8 +225,47 @@ class FileSystem {
   static Future<String?> pickDirectory() async {
     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
     if (selectedDirectory != null) {
-      return selectedDirectory.replaceAll('\\', '/');
+      return selectedDirectory.replaceAll(
+        '\\',
+        '/',
+      );
     }
     return null;
+  }
+
+  /// Support Old Pvz2 Lawnstrings
+
+  static String readUTF16LE(
+    String inFile,
+  ) {
+    var file = File(
+      inFile,
+    );
+    var bytes = file.readAsBytesSync();
+    var utf16leData = Uint16List.view(
+      bytes.buffer,
+    );
+    var contents = String.fromCharCodes(
+      utf16leData,
+    );
+    return contents;
+  }
+
+  /// Support Old Pvz2 Lawnstrings
+
+  static void writeUTF16LE(String outFile, String data) {
+    var outputFile = File(
+      outFile,
+    );
+    outputFile.createSync(
+      recursive: true,
+    );
+    var dataToWrite = Uint8List.fromList(
+      data.codeUnits,
+    );
+    outputFile.writeAsBytesSync(
+      dataToWrite.buffer.asUint8List(),
+    );
+    return;
   }
 }

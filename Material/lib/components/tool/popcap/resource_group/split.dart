@@ -18,7 +18,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
 
   String text = '';
 
-  bool allowExecute = false;
+  bool allowExecute = true;
 
   @override
   void initState() {
