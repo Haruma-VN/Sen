@@ -120,7 +120,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                     child: TextField(
                       controller: controllerOutput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),

@@ -77,7 +77,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                     child: TextField(
                       controller: controllerInput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),
@@ -117,7 +117,7 @@ class _SplitResInfoState extends State<SplitResInfo> {
                     child: TextField(
                       controller: controllerOutput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),

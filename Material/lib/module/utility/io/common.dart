@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// File System for Sen: UI
 
@@ -131,7 +132,15 @@ class FileSystem {
   static Future<String?> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      return result.files.single.path!.replaceAll('\\', '/');
+      if (Platform.isAndroid) {
+        File tempFile = File(result.files.single.path!);
+        final tempDir = await getTemporaryDirectory();
+        final file = await tempFile
+            .copy('${tempDir.path}/${tempFile.path.split('/').last}');
+        return file.path;
+      } else {
+        return result.files.single.path;
+      }
     }
     return null;
   }

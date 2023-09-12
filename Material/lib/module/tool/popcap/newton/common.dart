@@ -1,5 +1,4 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names, constant_pattern_never_matches_value_type, unused_local_variable
-import 'package:flutter/material.dart';
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import 'package:sen_material_design/module/utility/exception/common.dart';
 import 'dart:core';
@@ -556,7 +555,6 @@ class Newton {
               resource_x['parent']!,
             );
           }
-          debugPrint(group_index.toString());
         }
       }
     }

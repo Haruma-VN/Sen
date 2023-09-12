@@ -5,11 +5,7 @@ import "dart:convert";
 import "dart:typed_data";
 
 abstract interface class SenBuffer {
-  factory SenBuffer() => _SenBuffer(
-        Uint8List(
-          0,
-        ),
-      );
+  factory SenBuffer() => _SenBuffer([]);
 
   // ignore: non_constant_identifier_names
   factory SenBuffer.OpenFile(String path) {
@@ -36,7 +32,7 @@ abstract interface class SenBuffer {
     }
     raFile.closeSync();
     return _SenBuffer(
-      bytes,
+      bytes.toList(),
     );
   }
 
@@ -56,7 +52,7 @@ abstract interface class SenBuffer {
     return _SenBuffer(
       Uint8List(
         length,
-      ),
+      ).toList(),
     );
   }
 
@@ -316,6 +312,11 @@ abstract interface class SenBuffer {
     EncodingType encodingType = EncodingType.ASCII,
   ]);
 
+  void writeNull(
+    int count, [
+    int offset = -1,
+  ]);
+
   void writeUInt8(
     int number, [
     int offset = -1,
@@ -520,18 +521,20 @@ enum EncodingType {
   BASE64,
 }
 
-Uint8List _copyBuffer(
-  buffer, [
+List<int> _copyBuffer(
+  List<int> buffer, [
   int? length,
   int? offset,
 ]) {
-  return Uint8List.fromList(
-    Uint8List.view(
-      buffer.buffer,
-      offset ?? buffer.offsetInBytes,
-      length ?? buffer.length,
-    ),
-  );
+  if (length == null && offset == null) {
+    return [...buffer];
+  } else {
+    List<int> newList = [];
+    for (var i = 0; i < (length ?? 0); i++) {
+      newList.add(buffer[offset ?? 0 + i]);
+    }
+    return newList;
+  }
 }
 
 // ignore
@@ -544,7 +547,7 @@ class _SenBuffer implements SenBuffer {
   int _tempWriteOffset = 0;
 
   _SenBuffer(
-    Uint8List buffer,
+    List<int> buffer,
   ) {
     this._buffer = _copyBuffer(
       buffer,
@@ -597,7 +600,7 @@ class _SenBuffer implements SenBuffer {
   @override
   Uint8List toBytes() {
     if (_buffer.length == 0) return _emptyList;
-    return _copyBuffer(_buffer);
+    return Uint8List.fromList(_copyBuffer(_buffer));
   }
 
   @override
@@ -610,11 +613,7 @@ class _SenBuffer implements SenBuffer {
         "Offset is outside the bounds of the DataView",
       );
     }
-    return _copyBuffer(
-      _buffer,
-      count,
-      offset,
-    );
+    return Uint8List.fromList(_copyBuffer(_buffer, count, offset));
   }
 
   void _readOffsetPostion(
@@ -703,10 +702,7 @@ class _SenBuffer implements SenBuffer {
     int offset,
   ) {
     _mNumber = ByteData.sublistView(
-      readBytes(
-        count,
-        offset,
-      ),
+      readBytes(count, offset),
     );
     return;
   }
@@ -1452,6 +1448,15 @@ class _SenBuffer implements SenBuffer {
     _mNumber = ByteData(
       count,
     );
+    return;
+  }
+
+  @override
+  void writeNull(
+    int count, [
+    int offset = -1,
+  ]) {
+    writeBytes(new Uint8List(count), offset);
     return;
   }
 
@@ -2228,17 +2233,14 @@ class _SenBuffer implements SenBuffer {
   ) {
     int newSize = writeOffset + bufferCount;
     if (newSize < _buffer.length) {
-      newSize = _buffer.length;
+      return;
     }
-    var newBuffer = Uint8List(
-      newSize,
-    );
-    newBuffer.setRange(
-      0,
-      _buffer.length,
-      _buffer,
-    );
-    _buffer = newBuffer;
+		else {
+			final addSize = newSize - _buffer.length;
+			for (var i = 0; i < addSize; i++) {
+				_buffer.add(0);
+			}
+		}
     return;
   }
 }

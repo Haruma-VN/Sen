@@ -81,7 +81,7 @@ class _PopCapZlibUncompressState extends State<PopCapZlibUncompress> {
                     child: TextField(
                       controller: controllerInput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),
@@ -128,7 +128,7 @@ class _PopCapZlibUncompressState extends State<PopCapZlibUncompress> {
                     child: TextField(
                       controller: controllerOutput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),

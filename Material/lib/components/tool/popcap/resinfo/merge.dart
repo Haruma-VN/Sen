@@ -78,7 +78,7 @@ class _MergeResInfoState extends State<MergeResInfo> {
                     child: TextField(
                       controller: controllerInput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),
@@ -119,7 +119,7 @@ class _MergeResInfoState extends State<MergeResInfo> {
                     child: TextField(
                       controller: controllerOutput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),

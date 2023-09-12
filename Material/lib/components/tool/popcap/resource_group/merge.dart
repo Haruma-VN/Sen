@@ -79,7 +79,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                     child: TextField(
                       controller: controllerInput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),
@@ -120,7 +120,7 @@ class _MergePopCapResourceGroupState extends State<MergePopCapResourceGroup> {
                     child: TextField(
                       controller: controllerOutput,
                       textAlign: TextAlign.center,
-                      onSubmitted: (text) {
+                      onChanged: (String text) {
                         this.text = text;
                       },
                     ),
