@@ -55,6 +55,7 @@ typedef ZlibUncompressC = Void Function(
   Pointer<Pointer<Uint8>> uncompressedData,
   Pointer<Int32> uncompressedDataSize,
 );
+
 typedef ZlibUncompressDart = void Function(
   Pointer<Uint8> data,
   int dataSize,
@@ -62,6 +63,38 @@ typedef ZlibUncompressDart = void Function(
   Pointer<Int32> uncompressedDataSize,
 );
 
+typedef GZipCompressC = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  Int32 data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
+typedef GZipCompressDart = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  int data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
+typedef GZipUncompressC = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  Int32 data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
+typedef GZipUncompressDart = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  int data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
 final ZlibUncompress = dylib
     .lookup<NativeFunction<ZlibUncompressC>>('ZlibUncompress')
     .asFunction<ZlibUncompressDart>();
+
+final GZipCompress = dylib
+    .lookup<NativeFunction<GZipCompressC>>('GZipCompress')
+    .asFunction<GZipCompressDart>();
+
+final GZipUncompress = dylib
+    .lookup<NativeFunction<GZipUncompressC>>('GZipUncompress')
+    .asFunction<GZipUncompressDart>();

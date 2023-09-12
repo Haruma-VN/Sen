@@ -7,7 +7,10 @@ import 'dart:typed_data';
 
 class Zlib {
   /// Pass [dataStream] and [compressionLevel] to compress zlib
-  static Uint8List compress(Uint8List dataStream, int compressionLevel) {
+  static Uint8List compress(
+    Uint8List dataStream,
+    int compressionLevel,
+  ) {
     final dataPointer = calloc<Uint8>(dataStream.length)
       ..asTypedList(dataStream.length).setAll(0, dataStream);
     final compressedSizePointer = calloc<Int32>();
@@ -26,7 +29,9 @@ class Zlib {
   }
 
   /// Pass [dataStream] to uncompress zlib
-  static Uint8List uncompress(Uint8List dataStream) {
+  static Uint8List uncompress(
+    Uint8List dataStream,
+  ) {
     final dataPointer = calloc<Uint8>(dataStream.length)
       ..asTypedList(dataStream.length).setAll(0, dataStream);
     final uncompressedDataPointer = calloc<Pointer<Uint8>>();

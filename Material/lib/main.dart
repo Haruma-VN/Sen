@@ -14,7 +14,11 @@ Future<void> main() async {
     ApplicationInformation.internalPath.value = internalPath;
   }
   // ignore: await_only_futures
-  runApp(await Application(setting: setting));
+  runApp(
+    Application(
+      setting: setting,
+    ),
+  );
 }
 
 class Application extends StatelessWidget {
