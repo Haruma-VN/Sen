@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    namespace "com.example.sen_material_design"
+    namespace "com.haruma.sen.gui"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

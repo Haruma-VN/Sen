@@ -1,7 +1,10 @@
+// ignore_for_file: body_might_complete_normally_nullable, non_constant_identifier_names, unnecessary_cast
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
+import 'package:sen_material_design/bridge/service.dart';
 
 /// File System for Sen: UI
 
@@ -208,14 +211,20 @@ class FileSystem {
   /// Return: File Path or Null
 
   static Future<String?> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      if (Platform.isAndroid) {
-      } else {
-        return result.files.single.path;
+    var result = null as String?;
+    if (Platform.isAndroid) {
+      result = await MainActivity.pickPath(
+        false,
+        '',
+      );
+    } else {
+      FilePickerResult? m_result = await FilePicker.platform.pickFiles();
+      if (m_result != null) {
+        result = m_result.files.single.path;
+        FilePicker.platform.clearTemporaryFiles();
       }
     }
-    return null;
+    return result;
   }
 
   ///
