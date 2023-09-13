@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:sen_material_design/bridge/executor.dart';
+import 'package:sen_material_design/module/utility/buffer/common.dart';
 
 class Gzip {
   // Constructor
@@ -58,5 +59,41 @@ class Gzip {
     return Uint8List.fromList(
       compressedData,
     );
+  }
+
+  static compressFile(
+    String inFile,
+    String outFile,
+  ) {
+    var inFs = SenBuffer.OpenFile(
+      inFile,
+    );
+    var outFs = SenBuffer.fromBytes(
+      Gzip.compress(
+        inFs.toBytes(),
+      ),
+    );
+    outFs.outFile(
+      outFile,
+    );
+    return;
+  }
+
+  static uncompressFile(
+    String inFile,
+    String outFile,
+  ) {
+    var inFs = SenBuffer.OpenFile(
+      inFile,
+    );
+    var outFs = SenBuffer.fromBytes(
+      Gzip.uncompress(
+        inFs.toBytes(),
+      ),
+    );
+    outFs.outFile(
+      outFile,
+    );
+    return;
   }
 }

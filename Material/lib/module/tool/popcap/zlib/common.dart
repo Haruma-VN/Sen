@@ -55,10 +55,10 @@ class PopCapZlib {
     SenBuffer data,
     bool use64BitVariant,
   ) {
-    final int magic = data.readUInt32LE();
+    final magic = data.readUInt32LE();
     if (magic != 0xDEADFED4) {
       throw Exception(
-        "Mismatch PopCap Zlib magic, should begins with 0xDEADFED4",
+        "Mismatch PopCap Zlib magic, should begins with 0xDEADFED4, received 0x${(magic.toRadixString(16)).toUpperCase()}",
       );
     }
     var header = 8;

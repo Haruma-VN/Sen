@@ -221,7 +221,6 @@ class FileSystem {
       FilePickerResult? m_result = await FilePicker.platform.pickFiles();
       if (m_result != null) {
         result = m_result.files.single.path;
-        FilePicker.platform.clearTemporaryFiles();
       }
     }
     return result;

@@ -217,9 +217,10 @@ Void DeflateCompress(
 InternalAPI
 Void DeflateUncompress(
     unsigned char* in,
-    int in_len, 
+    size_t in_len, 
     unsigned char** out, 
-    int* out_len) 
+    int* out_len
+) 
 {
     try
     {
