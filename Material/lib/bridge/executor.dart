@@ -23,10 +23,12 @@ String getExtension() {
 
 final String internalFile = 'Internal.${getExtension()}';
 
-var internal = path.join(
-  ApplicationInformation.internalPath.value,
-  internalFile,
-);
+var internal = Platform.isAndroid
+    ? "libInternal.so"
+    : path.join(
+        ApplicationInformation.internalPath.value,
+        internalFile,
+      );
 
 final dylib = DynamicLibrary.open(
   internal,

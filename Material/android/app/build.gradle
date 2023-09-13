@@ -33,6 +33,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -41,7 +42,11 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        main {
+            jniLibs.srcDirs 'src/main/jniLibs'
+        }
     }
+    
 
     defaultConfig {
         applicationId "com.haruma.sen.gui"
@@ -49,6 +54,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -64,4 +70,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }

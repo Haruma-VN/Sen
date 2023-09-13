@@ -440,3 +440,4 @@ Shell/Properties/launchSettings.json
 Updater
 Newton.md
 Material/compile.py
+Material/android/app/src/main/jniLibs/arm64-v8a/libInternal.so

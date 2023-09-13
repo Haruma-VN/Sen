@@ -115,7 +115,13 @@ else()
     set(CMAKE_C_STANDARD 17)
 endif()
 
-
+if(ANDROID)
+  set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -stdlib=libc++")
+  set_target_properties(${TARGET_NAME} PROPERTIES
+    ANDROID_STL c++_shared
+  )
+endif()
 
 # Symbol visibility
 set(CMAKE_C_VISIBILITY_PRESET hidden)
@@ -137,7 +143,7 @@ target_compile_definitions(
 )
 
 # Output name
-if(UNIX OR ANDROID OR APPLE OR IOS)
+if(UNIX OR APPLE OR IOS)
     set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" OUTPUT_NAME "Internal")
 endif()
 
@@ -174,6 +180,12 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         -fPIC
         -fvisibility=hidden
     )
+endif()
+
+if(ANDROID)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -stdlib=libc++")
+    set(CMAKE_EXE_LINKER_FLAGS "-lc++abi")
+    set(BUILD_SHARED_LIBS ON)
 endif()
 
 if(MSVC)
