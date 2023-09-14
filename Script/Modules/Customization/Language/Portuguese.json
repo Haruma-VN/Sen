@@ -637,5 +637,6 @@
     "image_name_is_not_same": "Nome de Imagem contém informação não-correspondente entre Struct e Source",
     "image_count_is_not_same": "O Número de Imagens não corresponde com Source",
     "popcap_reanim_json_to_xml": "PopCap Re-Animação: JSON para XML",
-    "popcap_reanim_json_from_xml": "PopCap Re-Animação: XML para JSON"
+    "popcap_reanim_json_from_xml": "PopCap Re-Animação: XML para JSON",
+    "invalid_source_domsymbolitem_name": "Nome inválido do DOMSymbolItem de origem"
 }

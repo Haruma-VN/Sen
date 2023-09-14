@@ -637,5 +637,6 @@
     "pvz2_related": "PvZ 2 Related",
     "version_number": "Version Number",
     "image_name_is_not_same": "Image name mismatch information between Struct and Source",
-    "image_count_is_not_same": "Image count is not the same with Source"
+    "image_count_is_not_same": "Image count is not the same with Source",
+    "invalid_source_domsymbolitem_name": "Invalid Source DOMSymbolItem Name"
 }

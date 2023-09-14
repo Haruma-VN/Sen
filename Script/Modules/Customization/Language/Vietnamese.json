@@ -637,5 +637,6 @@
     "image_name_is_not_same": "Tên ảnh không khớp giữa Struct và Source",
     "image_count_is_not_same": "Số lượng ảnh không khớp Source",
     "popcap_reanim_json_to_xml": "PopCap Re-Animation: JSON sang XML",
-    "popcap_reanim_json_from_xml": "PopCap Re-Animation: XML sang JSON"
+    "popcap_reanim_json_from_xml": "PopCap Re-Animation: XML sang JSON",
+    "invalid_source_domsymbolitem_name": "Tên nguồn DOMSymbolItem không hợp lệ"
 }

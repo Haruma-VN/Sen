@@ -637,5 +637,6 @@
     "image_name_is_not_same": "Несоответствие названия изображений между Struct и Source",
     "image_count_is_not_same": "Количество изображений не соотвествует значению в Source",
     "popcap_reanim_json_to_xml": "PopCap Re-Animation: Конвертировать JSON в XML",
-    "popcap_reanim_json_from_xml": "PopCap Re-Animation: Конвертировать XML в JSON"    
+    "popcap_reanim_json_from_xml": "PopCap Re-Animation: Конвертировать XML в JSON",
+    "invalid_source_domsymbolitem_name": "Недопустимое имя исходного DOMSymbolItem"
 }
