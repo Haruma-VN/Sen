@@ -195,6 +195,10 @@ typedef DeflateUncompressFuncDart = void Function(
   Pointer<Int32> outLen,
 );
 
+typedef InternalVersion = int Function();
+
+typedef InternalVersionC = Int32 Function();
+
 final DeflateCompressFuncDart DeflateCompress = dylib
     .lookup<NativeFunction<DeflateCompressFunc>>(
       'DeflateCompress',
@@ -204,5 +208,11 @@ final DeflateCompressFuncDart DeflateCompress = dylib
 final DeflateUncompressFuncDart DeflateUncompress = dylib
     .lookup<NativeFunction<DeflateUncompressFunc>>(
       'DeflateUncompress',
+    )
+    .asFunction();
+
+final InternalVersion internalVersion = dylib
+    .lookup<NativeFunction<InternalVersionC>>(
+      'InternalVersion',
     )
     .asFunction();
