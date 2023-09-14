@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/command.dart';
 import 'package:sen_material_design/common/basic.dart';
-import 'package:sen_material_design/module/utility/compress/deflate/common.dart';
 import 'package:sen_material_design/setting.dart';
 import 'common/custom.dart';
 
@@ -14,10 +13,6 @@ Future<void> main() async {
   if (internalPath != '') {
     ApplicationInformation.internalPath.value = internalPath;
   }
-  Deflate.uncompressFile(
-    "D:/Workspace/k.png.bix",
-    "D:/Workspace/k.pngx",
-  );
   // ignore: await_only_futures
   runApp(
     Application(

@@ -12,6 +12,8 @@ dependencies:
     path: ^1.8.3
     permission_handler: ^10.4.5
     image: ^4.0.17
+    flutter_local_notifications: ^15.1.1
+    local_notifier: ^0.1.5
 dev_dependencies:
     flutter_test:
         sdk: flutter
