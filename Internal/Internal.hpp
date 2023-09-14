@@ -34,6 +34,7 @@ inline constexpr auto MInternalVersion = 7;
 #include <exception>
 #include <span>
 #if defined(_WIN32)
+#define NOMINMAX
 #include <windows.h>
 #include <codecvt>
 #endif

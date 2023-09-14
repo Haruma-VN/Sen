@@ -741,3 +741,8 @@ const char* MD5Hash(
 }
 
 #pragma endregion
+
+#pragma region RectangleBinPack
+
+
+#pragma endregion

@@ -26,6 +26,12 @@ struct RectSize
 	int height;
 };
 
+// Haruma :: Add :: Comment
+
+/// <summary>
+/// x, y, width, height
+/// </summary>
+
 struct Rect
 {
 	int x;

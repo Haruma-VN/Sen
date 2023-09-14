@@ -50,6 +50,7 @@ add_library(
   ./kernel/tool/diff/vcdiff.hpp
   ./kernel/tool/compress/bzip2.hpp
   ./kernel/tool/compress/lzma.hpp
+  ./kernel/tool/algorithm/max_rects.hpp
   ./kernel/utility/utility.hpp
   ./Internal.hpp
   ./Internal.cpp
