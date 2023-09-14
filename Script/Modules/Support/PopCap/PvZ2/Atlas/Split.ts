@@ -20,6 +20,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                     x: int;
                     y: int;
                     cols?: int;
+                    rows?: int;
                 };
             };
         };
@@ -325,6 +326,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                         );
                     }
                 }
+                if ("rows" in res) {
+                    if (!Number.isInteger(res.rows)) {
+                        throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                            Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                `rows`,
+                                `${res.id}`,
+                                `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`,
+                                `${typeof res.rows}`,
+                            ]),
+                            `rows`,
+                            (file_path ??= "undefined"),
+                            `${Sen.Script.Modules.System.Default.Localization.GetString("integer")}`
+                        );
+                    }
+                }
             });
             return;
         }
@@ -371,23 +387,20 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
             };
             for (const subgroup of official_subgroup.resources) {
                 if ("id" in subgroup && "ax" in subgroup && "ay" in subgroup && "ah" in subgroup && "aw" in subgroup && "path" in subgroup) {
-                    atlas_json.groups[subgroup.id] =
-                        subgroup.cols !== undefined && subgroup.cols !== null && subgroup.cols !== void 0
-                            ? ({
-                                  default: {
-                                      x: (subgroup.x ??= 0),
-                                      y: (subgroup.y ??= 0),
-                                      cols: subgroup.cols,
-                                  },
-                                  path: subgroup.path,
-                              } as any)
-                            : {
-                                  default: {
-                                      x: (subgroup.x ??= 0),
-                                      y: (subgroup.y ??= 0),
-                                  },
-                                  path: subgroup.path,
-                              };
+                    const m_wrapper: any = {
+                        default: {
+                            x: (subgroup.x ??= 0),
+                            y: (subgroup.y ??= 0),
+                        },
+                        path: subgroup.path,
+                    } as any;
+                    if (subgroup.cols) {
+                        m_wrapper.default.cols = subgroup.cols;
+                    }
+                    if ((subgroup as any).rows) {
+                        m_wrapper.default.rows = (subgroup as any).rows;
+                    }
+                    atlas_json.groups[subgroup.id] = m_wrapper;
                 }
             }
             return atlas_json;
@@ -657,6 +670,21 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                                     resinfo_subgroup.packet[parent].data[children].default.cols !== undefined ? (resinfo_subgroup.packet[parent].data[children].default.cols as number).toString() : "undefined",
                                 ]),
                                 `cols`,
+                                (file_path ??= "undefined"),
+                                Sen.Script.Modules.System.Default.Localization.GetString("integer")
+                            );
+                        }
+                    }
+                    if ("rows" in resinfo_subgroup.packet[parent].data[children]) {
+                        if (!Number.isInteger((resinfo_subgroup.packet[parent].data[children].default as any).rows)) {
+                            throw new Sen.Script.Modules.Exceptions.WrongDataType(
+                                Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("this_property_must_be"), [
+                                    `rows`,
+                                    children,
+                                    Sen.Script.Modules.System.Default.Localization.GetString("integer"),
+                                    (resinfo_subgroup.packet[parent].data[children].default as any).rows !== undefined ? ((resinfo_subgroup.packet[parent].data[children].default as any).rows as number).toString() : "undefined",
+                                ]),
+                                `rows`,
                                 (file_path ??= "undefined"),
                                 Sen.Script.Modules.System.Default.Localization.GetString("integer")
                             );

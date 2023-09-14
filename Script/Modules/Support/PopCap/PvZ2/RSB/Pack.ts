@@ -117,7 +117,15 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 `resource`,
                 ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
             ).replace(/((\.rton))?$/i, ".json");
-            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)), Sen.Shell.Path.Resolve(resource_file));
+            const res_info_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`));
+            //// Merge Split Res
+            // const res_info_split_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json.info`));
+            // if (Sen.Shell.FileSystem.DirectoryExists(res_info_split_path)) {
+            //     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, `For you Blaze <3`));
+            //     Sen.Shell.Console.Printf(null, `      ${`Find Splitted Res-Info directory, merge Res-Info`}`);
+            //     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeResInfoJson.CreateConversion(res_info_split_path, res_info_path);
+            // }
+            Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(Sen.Shell.Path.Resolve(res_info_path), Sen.Shell.Path.Resolve(resource_file));
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted_resinfo_to_resourcegroup")}`);
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(resource_file, resource_file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
@@ -132,6 +140,13 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 `resource`,
                 ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
             ).replace(/((\.rton))?$/i, ".json");
+            //// Merge Split Res
+            // const resource_file_splitted_directory: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.res`);
+            // if (Sen.Shell.FileSystem.DirectoryExists(resource_file_splitted_directory)) {
+            //     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, `For you Blaze <3`));
+            //     Sen.Shell.Console.Printf(null, `      ${`Find Splitted Resource-Group directory, merge Resource-Group`}`);
+            //     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(resource_file_splitted_directory, resource_file);
+            // }
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(
                 resource_file,
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`)),
@@ -268,6 +283,11 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.SimplifiedManifest<string>>(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `pvz2.json`))),
             inDirectory
         );
+        // Sen.Shell.FileSystem.ReadDirectory(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`)), Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.OnlyCurrentDirectory).forEach((e: string) => {
+        //     if (Sen.Shell.FileSystem.DirectoryExists(e) && /\.packet$/i.test(e)) {
+        //         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(e, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(e)}`, `${Sen.Shell.Path.Parse(e).name_without_extension}.rsg`)));
+        //     }
+        // });
         Sen.Shell.LotusModule.RSBPack(inDirectory, outFile, manifest);
         return;
     }

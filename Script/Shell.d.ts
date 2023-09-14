@@ -2947,6 +2947,10 @@ declare namespace Sen {
             public static GetProcessorArchitecture(): string;
         }
 
+        export class Crypto {
+            public static MD5Hash(str: string): string;
+        }
+
         /**
          * Compress
          */
