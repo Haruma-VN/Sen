@@ -276,4 +276,21 @@ class FileSystem {
     );
     return;
   }
+
+  static List<String> readDirectory(
+    String inDirectory,
+    bool recursive,
+  ) {
+    final dir = Directory(
+      inDirectory,
+    );
+    final list = dir.listSync(
+      recursive: recursive,
+    );
+    var result = List<String>.empty();
+    for (var ripe in list) {
+      result.add(ripe.path);
+    }
+    return result;
+  }
 }

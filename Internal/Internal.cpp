@@ -1,5 +1,7 @@
 ﻿#include "Internal.hpp"
 
+using namespace Sen::Internal::Kernel::Tool::Algorithm;
+
 #pragma region zlib
 
 InternalAPI
@@ -751,14 +753,14 @@ struct Box {
         int padding;
 };
 
-InternalAPI
-Sen::Internal::Kernel::Tool::Algorithm::Sprite* packSprites(
-    Sen::Internal::Kernel::Tool::Algorithm::Sprite* list,
-    size_t size,
+Sprite* packAtlas(
+    Sprite* list,
+    int size,
     Box box
 ) {
-    auto c = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(list, size);
-    Sen::Internal::Kernel::Tool::Algorithm::packSprites(
+    auto m_size = (size_t)size;
+    auto c = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(list, m_size);
+    packSprites(
         c,
         box.width,
         box.height,
