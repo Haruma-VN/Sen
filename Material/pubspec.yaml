@@ -16,14 +16,15 @@ dependencies:
     local_notifier: ^0.1.5
     flutter_localizations:
         sdk: flutter
+    intl: ^0.18.1
     curved_navigation_bar: ^1.0.3
 dev_dependencies:
     flutter_test:
         sdk: flutter
+    flutter_lints: ^2.0.0
 flutter:
+    generate: true
     uses-material-design: true
-    assets:
-        - language/
 msix_config:
     identity_name: Sen.Material.App
     publisher: CN=Haruma

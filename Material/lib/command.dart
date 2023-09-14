@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/components/widget.dart';
@@ -89,25 +91,25 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Container(
                       height: 90,
-                      margin: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.symmetric(
                         vertical: 8.0,
                         horizontal: 15.0,
                       ),
                       decoration: BoxDecoration(
                         color: isHovering
                             ? ApplicationInformation.isLightMode.value
-                                ? Color.fromARGB(255, 255, 183, 207)
+                                ? const Color.fromARGB(255, 255, 183, 207)
                                     .withOpacity(0.7)
                                 : const Color.fromARGB(255, 66, 115, 140)
                                     .withOpacity(0.7)
                             : ApplicationInformation.isLightMode.value
-                                ? Color.fromARGB(255, 255, 183, 207)
+                                ? const Color.fromARGB(255, 255, 183, 207)
                                 : const Color.fromARGB(255, 66, 115, 140),
                         borderRadius: BorderRadius.circular(20.0),
                         boxShadow: !ApplicationInformation.isLightMode.value
                             ? null
                             : [
-                                BoxShadow(
+                                const BoxShadow(
                                   color: Colors.grey,
                                   blurRadius: 5,
                                   spreadRadius: 3,
@@ -116,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                       ),
                       child: ListTile(
-                        leading: Column(
+                        leading: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Icon(
@@ -127,11 +129,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                         title: Text(
                           e,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 25,
                           ),
                         ),
-                        subtitle: Text('Subtitle'),
+                        subtitle: const Text('Subtitle'),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(

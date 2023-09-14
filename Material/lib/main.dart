@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/command.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/l10n/l10n.dart';
 import 'package:sen_material_design/setting.dart';
 import 'common/custom.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   var setting = Customization.init();
@@ -46,8 +49,16 @@ class Application extends StatelessWidget {
         darkTheme: ThemeData(
           useMaterial3: true,
           brightness: isLightMode ? Brightness.light : Brightness.dark,
-          colorSchemeSeed: Color(0xFF1750A4),
+          colorSchemeSeed: const Color(0xFF1750A4),
         ),
+        supportedLocales: L10n.all,
+        locale: const Locale('en'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+        ],
         themeMode: setting.theme_data,
         home: const RootPage(),
       ),
@@ -91,16 +102,16 @@ class _RootPageState extends State<RootPage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.terminal_rounded),
-            label: ApplicationInformation.commandPage,
+            icon: const Icon(Icons.terminal_rounded),
+            label: AppLocalizations.of(context)!.command_page,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: ApplicationInformation.settingPage,
+            icon: const Icon(Icons.settings),
+            label: AppLocalizations.of(context)!.setting_page,
           ),
         ],
         currentIndex: current_page,
-        onTap: (value) {
+        onTap: (int value) {
           setState(() {
             current_page = value;
           });
