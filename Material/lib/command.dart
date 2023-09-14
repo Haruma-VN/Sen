@@ -65,6 +65,8 @@ class _HomePageState extends State<HomePage> {
     'popcap.newton.encode',
     'popcap.compiled_text.decode',
     'popcap.compiled_text.encode',
+    'popcap.render.effects.decode',
+    'popcap.render.effects.encode',
   ];
 
   @override

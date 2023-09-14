@@ -216,3 +216,79 @@ final InternalVersion internalVersion = dylib
       'InternalVersion',
     )
     .asFunction();
+
+typedef BrotliUncompressC = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  Int32 data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
+typedef BrotliUncompressDart = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  int data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
+final BrotliUncompressDart BrotliUncompress = dylib
+    .lookup<NativeFunction<BrotliUncompressC>>(
+      'BrotliUncompress',
+    )
+    .asFunction();
+
+typedef BrotliCompressC = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  Int32 data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
+typedef BrotliCompressDart = Pointer<Uint8> Function(
+  Pointer<Uint8> data,
+  int data_size,
+  Pointer<Int32> compressed_data_size,
+);
+
+final BrotliCompressDart BrotliCompress = dylib
+    .lookup<NativeFunction<BrotliCompressC>>(
+      'BrotliCompress',
+    )
+    .asFunction();
+
+typedef lzmaCompressFunc = Void Function(
+  Pointer<Uint8> input,
+  Int32 inLen,
+  Pointer<Pointer<Uint8>> out,
+  Pointer<Int32> outLen,
+);
+
+typedef lzmaCompressFuncDart = void Function(
+  Pointer<Uint8> input,
+  int inLen,
+  Pointer<Pointer<Uint8>> out,
+  Pointer<Int32> outLen,
+);
+
+final lzmaCompressFuncDart lzmaCompress = dylib
+    .lookup<NativeFunction<lzmaCompressFunc>>(
+      'lzmaCompress',
+    )
+    .asFunction();
+
+typedef lzmaUncompressFunc = Void Function(
+  Pointer<Uint8> input,
+  Int32 inLen,
+  Pointer<Pointer<Uint8>> out,
+  Pointer<Int32> outLen,
+);
+
+typedef lzmaUncompressFuncDart = void Function(
+  Pointer<Uint8> input,
+  int inLen,
+  Pointer<Pointer<Uint8>> out,
+  Pointer<Int32> outLen,
+);
+
+final lzmaUncompressFuncDart lzmaUncompress = dylib
+    .lookup<NativeFunction<lzmaUncompressFunc>>(
+      'lzmaUncompress',
+    )
+    .asFunction();

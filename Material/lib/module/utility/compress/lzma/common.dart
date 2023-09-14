@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, camel_case_types
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -6,11 +6,11 @@ import 'package:ffi/ffi.dart';
 import 'package:sen_material_design/bridge/executor.dart';
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 
-class Deflate {
+class lzma {
   static Uint8List compress(
     Uint8List dataStream,
   ) {
-    final data = calloc<Int8>(
+    final data = calloc<Uint8>(
       dataStream.length,
     )..asTypedList(
         dataStream.length,
@@ -18,15 +18,15 @@ class Deflate {
         0,
         dataStream,
       );
-    Pointer<Pointer<Int8>> outputPtr = calloc<Pointer<Int8>>();
+    Pointer<Pointer<Uint8>> outputPtr = calloc<Pointer<Uint8>>();
     Pointer<Int32> outputSizePtr = calloc<Int32>();
-    DeflateCompress(
+    lzmaCompress(
       data,
       dataStream.length,
       outputPtr,
       outputSizePtr,
     );
-    Pointer<Int8> resultPtr = outputPtr.value;
+    Pointer<Uint8> resultPtr = outputPtr.value;
     int resultSize = outputSizePtr.value;
     final result = resultPtr.asTypedList(resultSize);
     return Uint8List.fromList(result);
@@ -39,7 +39,7 @@ class Deflate {
     dataPtr.asTypedList(data.length).setAll(0, data);
     Pointer<Pointer<Uint8>> outputPtr = calloc<Pointer<Uint8>>();
     Pointer<Int32> outputSizePtr = calloc<Int32>();
-    DeflateUncompress(
+    lzmaUncompress(
       dataPtr,
       data.length,
       outputPtr,
@@ -59,7 +59,7 @@ class Deflate {
       inFile,
     );
     var outFs = SenBuffer.fromBytes(
-      Deflate.compress(
+      lzma.compress(
         inFs.toBytes(),
       ),
     );
@@ -77,7 +77,7 @@ class Deflate {
       inFile,
     );
     var outFs = SenBuffer.fromBytes(
-      Deflate.uncompress(
+      lzma.uncompress(
         inFs.toBytes(),
       ),
     );
