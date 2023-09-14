@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/common/basic.dart';
+import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/components/widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -69,76 +69,126 @@ class _HomePageState extends State<HomePage> {
     'popcap.render.effects.encode',
   ];
 
+  bool isHovering = false;
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: functionsName.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: TextButton(
-                child: Text(
-                  functionsName[index],
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return FutureBuilder(
-                          future: refreshModule(),
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return materialWidget[functionsName[index]] ??
-                                  Scaffold(
-                                    appBar: AppBar(
-                                      title: const Text(
-                                        ApplicationInformation.applicationName,
-                                      ),
-                                      centerTitle: false,
-                                      elevation: 3,
-                                      scrolledUnderElevation: 3,
-                                    ),
-                                    body: const Text('Have not implemented'),
-                                  );
-                            } else {
-                              return Scaffold(
-                                appBar: AppBar(
-                                  title: const Text(
-                                    ApplicationInformation.applicationName,
-                                  ),
-                                  centerTitle: false,
-                                  elevation: 3,
-                                  scrolledUnderElevation: 3,
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: ListView(
+        children: [
+          Column(
+            children: functionsName
+                .map(
+                  (e) => InkWell(
+                    onHover: (value) {
+                      setState(() {
+                        isHovering = value;
+                      });
+                    },
+                    child: Container(
+                      height: 90,
+                      margin: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 15.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isHovering
+                            ? ApplicationInformation.isLightMode.value
+                                ? Color.fromARGB(255, 255, 183, 207)
+                                    .withOpacity(0.7)
+                                : const Color.fromARGB(255, 66, 115, 140)
+                                    .withOpacity(0.7)
+                            : ApplicationInformation.isLightMode.value
+                                ? Color.fromARGB(255, 255, 183, 207)
+                                : const Color.fromARGB(255, 66, 115, 140),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: !ApplicationInformation.isLightMode.value
+                            ? null
+                            : [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 5,
+                                  spreadRadius: 3,
+                                  offset: Offset(4, 2),
                                 ),
-                                body: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                      },
+                              ],
+                      ),
+                      child: ListTile(
+                        leading: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.terminal,
+                              size: 30.0,
+                            ),
+                          ],
+                        ),
+                        title: Text(
+                          e,
+                          style: TextStyle(
+                            fontSize: 25,
+                          ),
+                        ),
+                        subtitle: Text('Subtitle'),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return FutureBuilder(
+                                  future: refreshModule(),
+                                  builder: (
+                                    BuildContext context,
+                                    AsyncSnapshot snapshot,
+                                  ) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      return materialWidget[e] ??
+                                          Scaffold(
+                                            appBar: AppBar(
+                                              title: const Text(
+                                                ApplicationInformation
+                                                    .applicationName,
+                                              ),
+                                              centerTitle: false,
+                                              elevation: 3,
+                                              scrolledUnderElevation: 3,
+                                            ),
+                                            body: const Text(
+                                              'Have not implemented',
+                                            ),
+                                          );
+                                    } else {
+                                      return Scaffold(
+                                        appBar: AppBar(
+                                          title: const Text(
+                                            ApplicationInformation
+                                                .applicationName,
+                                          ),
+                                          centerTitle: false,
+                                          elevation: 3,
+                                          scrolledUnderElevation: 3,
+                                        ),
+                                        body: const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                )
+                .toList(),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

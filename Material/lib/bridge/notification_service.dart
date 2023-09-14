@@ -3,7 +3,7 @@
 import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:local_notifier/local_notifier.dart';
-import 'package:sen_material_design/common/basic.dart';
+import 'package:sen_material_design/common/default.dart';
 
 class Notification {
   static FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/command.dart';
-import 'package:sen_material_design/common/basic.dart';
+import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/setting.dart';
 import 'common/custom.dart';
 
@@ -13,7 +13,6 @@ Future<void> main() async {
   if (internalPath != '') {
     ApplicationInformation.internalPath.value = internalPath;
   }
-  // ignore: await_only_futures
   runApp(
     Application(
       setting: setting,
@@ -47,6 +46,7 @@ class Application extends StatelessWidget {
         darkTheme: ThemeData(
           useMaterial3: true,
           brightness: isLightMode ? Brightness.light : Brightness.dark,
+          colorSchemeSeed: Color(0xFF1750A4),
         ),
         themeMode: setting.theme_data,
         home: const RootPage(),
@@ -85,23 +85,26 @@ class _RootPageState extends State<RootPage> {
         scrolledUnderElevation: 3,
       ),
       body: pages[current_page],
-      bottomNavigationBar: NavigationBar(
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.terminal_rounded),
+      bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.terminal_rounded),
             label: ApplicationInformation.commandPage,
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
             label: ApplicationInformation.settingPage,
           ),
         ],
-        onDestinationSelected: (value) => {
-          setState(
-            () => current_page = value,
-          ),
+        currentIndex: current_page,
+        onTap: (value) {
+          setState(() {
+            current_page = value;
+          });
         },
-        selectedIndex: current_page,
       ),
     );
   }

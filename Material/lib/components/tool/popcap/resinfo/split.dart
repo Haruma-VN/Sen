@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/common/basic.dart';
+import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/module/tool/popcap/resinfo/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 

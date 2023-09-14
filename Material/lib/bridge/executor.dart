@@ -5,7 +5,7 @@ import 'package:ffi/ffi.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:path/path.dart' as path;
-import 'package:sen_material_design/common/basic.dart';
+import 'package:sen_material_design/common/default.dart';
 
 String getExtension() {
   if (Platform.isAndroid || Platform.isLinux) {

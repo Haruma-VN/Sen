@@ -14,6 +14,13 @@ class splitAtlas {
     caseSensitive: false,
   );
 
+  static void process(
+    dynamic data,
+    List<String> imgPath,
+  ) {
+    return;
+  }
+
   static void process_fs(
     String inDirectory,
     String outDirectory,
@@ -42,6 +49,17 @@ class splitAtlas {
           ),
         )
         .toList();
+    for (var element in jsons) {
+      final dynamic jsonData = FileSystem.readJson(
+        element,
+      );
+      if (jsonData['resources'] != null) {
+        process(
+          jsonData,
+          pngs,
+        );
+      }
+    }
     return;
   }
 }

@@ -14,12 +14,16 @@ dependencies:
     image: ^4.0.17
     flutter_local_notifications: ^15.1.1
     local_notifier: ^0.1.5
+    flutter_localizations:
+        sdk: flutter
+    curved_navigation_bar: ^1.0.3
 dev_dependencies:
     flutter_test:
         sdk: flutter
-    flutter_lints: ^2.0.0
 flutter:
     uses-material-design: true
+    assets:
+        - language/
 msix_config:
     identity_name: Sen.Material.App
     publisher: CN=Haruma
@@ -27,3 +31,15 @@ msix_config:
     publisher_display_name: Sen
     languages: en-us
     trim_logo: false
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: assets/icon.png
+    min_sdk_android: 21
+    windows:
+        generate: true
+        image_path: assets/icon.png
+        icon_size: 48
+    macos:
+        generate: true
+        image_path: assets/icon.png
