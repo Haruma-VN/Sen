@@ -23,4 +23,4 @@ else()
   add_compile_options(-finput-charset=UTF-8)
 endif()
 
-set_target_properties(avir PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)

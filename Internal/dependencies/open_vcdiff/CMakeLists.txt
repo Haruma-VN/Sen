@@ -65,7 +65,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
 
-set_target_properties(open_vcdiff PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # UTF8 Support
 if(MSVC)

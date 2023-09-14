@@ -9,3 +9,4 @@
 #include "../../kernel/tool/compress/bzip2.hpp"
 #include "../../kernel/tool/compress/lzma.hpp"
 #include "../../kernel/tool/diff/vcdiff.hpp"
+#include "../../kernel/tool/algorithm/max_rects.hpp"

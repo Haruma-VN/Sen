@@ -36,4 +36,4 @@ else()
   add_compile_options(-finput-charset=UTF-8)
 endif()
 
-set_target_properties(RectangleBinPack PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)

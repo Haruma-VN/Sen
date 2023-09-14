@@ -744,5 +744,27 @@ const char* MD5Hash(
 
 #pragma region RectangleBinPack
 
+struct Box {
+    public:
+        int height;
+        int width;
+        int padding;
+};
+
+InternalAPI
+Sen::Internal::Kernel::Tool::Algorithm::Sprite* packSprites(
+    Sen::Internal::Kernel::Tool::Algorithm::Sprite* list,
+    size_t size,
+    Box box
+) {
+    auto c = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(list, size);
+    Sen::Internal::Kernel::Tool::Algorithm::packSprites(
+        c,
+        box.width,
+        box.height,
+        box.padding
+    );
+    return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array(c);
+}
 
 #pragma endregion

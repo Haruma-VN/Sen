@@ -28,4 +28,4 @@ target_compile_definitions(${PROJECT_NAME} INTERFACE FMT_HEADER_ONLY)
 
 target_include_directories(${PROJECT_NAME} INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include") 
 
-set_target_properties(fmt PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)

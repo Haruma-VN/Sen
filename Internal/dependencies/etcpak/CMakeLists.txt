@@ -77,4 +77,4 @@ else()
 endif()
 
 
-set_target_properties(etcpak PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
