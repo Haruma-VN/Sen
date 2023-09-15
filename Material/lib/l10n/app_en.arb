@@ -1,4 +1,25 @@
 {
 	"command_page": "Commands",
-	"setting_page": "Settings"
+	"setting_page": "Settings",
+	"have_not_implemented": "Have not implemented",
+	"popcap_resource_group_split": "PopCap Resource-Group: Split",
+	"popcap_resource_group_split_subtitle": "This function will help you split resources.json to a directory",
+	"popcap_resource_group_merge": "PopCap Resource-Group: Merge",
+	"popcap_resource_group_merge_subtitle": "This function will give you resources.json from a directory",
+	"popcap_resource_group_to_resinfo": "PopCap Resource-Group: To Res-Info",
+	"popcap_resource_group_to_resinfo_subtitle": "Through Res-Info, editing resources simpler",
+	"popcap_resource_group_from_resinfo": "PopCap Resource-Group: From Res-Info",
+	"popcap_resource_group_from_resinfo_subtitle": "After edit Res-Info, must merge to Resource-Group before launch",
+	"popcap_resinfo_split": "PopCap Res-Info: Split",
+	"popcap_resinfo_split_subtitle": "This function will help you split res.json to a directory",
+	"popcap_resinfo_merge": "PopCap Res-Info: Merge",
+	"popcap_resinfo_merge_subtitle": "This function will give you res.json from a directory",
+	"popcap_resource_group_split_atlas": "PopCap Atlas: Split with Resource-Group Structure",
+	"popcap_resource_group_split_atlas_subtitle": "Through split atlas, obtain sprite directory to work with",
+	"popcap_resource_group_merge_atlas": "PopCap Atlas: Merge with Resource-Group Structure",
+	"popcap_resource_group_merge_atlas_subtitle": "Through merge atlas, obtain working spritesheet in-game",
+	"popcap_resinfo_split_atlas": "PopCap Atlas: Split with Res-Info Structure",
+	"popcap_resinfo_split_atlas_subtitle": "Through split atlas, obtain sprite directory to work with",
+	"popcap_resinfo_merge_atlas": "PopCap Atlas: Merge with Res-Info Structure",
+	"popcap_resinfo_merge_atlas_subtitle": "Through merge atlas, obtain working spritesheet in-game and json"
 }

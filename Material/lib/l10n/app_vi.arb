@@ -1,4 +1,25 @@
 {
 	"command_page": "Lệnh",
-	"setting_page": "Tuỳ Chỉnh"
+	"setting_page": "Tuỳ Chỉnh",
+	"have_not_implemented": "Chưa cải thiện",
+	"popcap_resource_group_split": "PopCap Resource-Group: Tách",
+	"popcap_resource_group_split_subtitle": "Hàm này sẽ giúp bạn tách resources.json thành thư mục",
+	"popcap_resource_group_merge": "PopCap Resource-Group: Gộp",
+	"popcap_resource_group_merge_subtitle": "Hàm này sẽ giúp bạn gộp resources.json từ thư mục",
+	"popcap_resource_group_to_resinfo": "PopCap Resource-Group: Sang Res-Info",
+	"popcap_resource_group_to_resinfo_subtitle": "Thông qua Res-Info, sửa đổi tài nguyên đơn giản hơn",
+	"popcap_resource_group_from_resinfo": "PopCap Resource-Group: Từ Res-Info",
+	"popcap_resource_group_from_resinfo_subtitle": "Sau khi sửa Res-Info, phải hợp nhất thành Resource-Group trước khi chạy",
+	"popcap_resinfo_split": "PopCap Res-Info: Tách",
+	"popcap_resinfo_split_subtitle": "Hàm này sẽ giúp bạn tách res.json thành thư mục",
+	"popcap_resinfo_merge": "PopCap Res-Info: Gộp",
+	"popcap_resinfo_merge_subtitle": "Hàm này sẽ giúp bạn gộp res.json từ thư mục",
+	"popcap_resource_group_split_atlas": "PopCap Atlas: Tách với cấu trúc Resource-Group",
+	"popcap_resource_group_split_atlas_subtitle": "Thông qua tách atlas, nhận được thư mục sprite để làm việc",
+	"popcap_resource_group_merge_atlas": "PopCap Atlas: Hợp nhất với cấu trúc Resource-Group",
+	"popcap_resource_group_merge_atlas_subtitle": "Thông qua hợp nhất, nhận được spritesheet chạy trong game",
+	"popcap_resinfo_split_atlas": "PopCap Atlas: Tách với cấu trúc Res-Info",
+	"popcap_resinfo_split_atlas_subtitle": "Thông qua tách atlas, nhận được thư mục sprite để làm việc",
+	"popcap_resinfo_merge_atlas": "PopCap Atlas: Hợp nhất với cấu trúc Res-Info",
+	"popcap_resinfo_merge_atlas_subtitle": "Thông qua hợp nhất, nhận được spritesheet chạy trong game và tệp json"
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/command.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/l10n/l10n.dart';
 import 'package:sen_material_design/setting.dart';
 import 'common/custom.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:sen_material_design/l10n/l10n.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   var setting = Customization.init();
   if (!await Customization.getCurrentTheme()) {
     ApplicationInformation.isLightMode.value = false;

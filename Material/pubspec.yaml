@@ -17,7 +17,7 @@ dependencies:
     flutter_localizations:
         sdk: flutter
     intl: ^0.18.1
-    curved_navigation_bar: ^1.0.3
+    window_manager: ^0.3.6
 dev_dependencies:
     flutter_test:
         sdk: flutter
