@@ -638,5 +638,7 @@
     "image_count_is_not_same": "图像计数与 Source 不同",
     "popcap_reanim_json_to_xml": "PopCap Re-Animation: JSON 至 XML",
     "popcap_reanim_json_from_xml": "PopCap Re-Animation: XML 至 JSON",
-    "invalid_source_domsymbolitem_name": "无效源 DOMSymbolItem 名称"
+    "invalid_source_domsymbolitem_name": "无效源 DOMSymbolItem 名称",
+    "width_out_of_range": "\"id\" {1} 宽度超出范围。资源宽度：{2}，图像宽度：{3}。",
+    "height_out_of_range": "\"id\" {1}处的高度超出范围。资源高度：{2}，图像高度：{3}。"
 }

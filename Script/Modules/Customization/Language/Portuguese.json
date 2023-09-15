@@ -638,5 +638,7 @@
     "image_count_is_not_same": "O Número de Imagens não corresponde com Source",
     "popcap_reanim_json_to_xml": "PopCap Re-Animação: JSON para XML",
     "popcap_reanim_json_from_xml": "PopCap Re-Animação: XML para JSON",
-    "invalid_source_domsymbolitem_name": "Nome inválido do DOMSymbolItem de origem"
+    "invalid_source_domsymbolitem_name": "Nome inválido do DOMSymbolItem de origem",
+    "width_out_of_range": "Largura fora do intervalo em \"id\" {1}. Largura dos recursos: {2}, largura da imagem: {3}",
+    "height_out_of_range": "Altura fora do intervalo em \"id\" {1}. Altura dos recursos: {2}, altura da imagem: {3}"
 }

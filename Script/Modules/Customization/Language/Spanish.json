@@ -636,5 +636,7 @@
     "version_number": "Número de versión",
     "image_name_is_not_same": "El nombre de la imagen no coincide con la información entre Struct y Source",
     "image_count_is_not_same": "El recuento de imágenes no es el mismo con Source",
-    "invalid_source_domsymbolitem_name": "Nombre de elemento DOMSymbolItem de origen no válido"
+    "invalid_source_domsymbolitem_name": "Nombre de elemento DOMSymbolItem de origen no válido",
+    "width_out_of_range": "Anchura fuera de rango en \"id\" {1}. Anchura de los recursos: {2}, anchura de la imagen: {3}.",
+    "height_out_of_range": "Altura fuera de rango en \"id\" {1}. Altura de los recursos: {2}, altura de la imagen: {3}"
 }

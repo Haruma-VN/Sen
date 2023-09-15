@@ -807,7 +807,30 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                                     .toUpperCase()
                             )
                         ) {
+                            const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<number> = Sen.Shell.DotNetBitmap.GetDimension<number>(file);
                             subgroup_children.path = expand_path === "array" ? subgroup_children.path : (subgroup_children.path as string).split("\\");
+                            if (subgroup_children.ax! + subgroup_children.aw! > dimension.width) {
+                                throw new Sen.Script.Modules.Exceptions.DimensionError(
+                                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("width_out_of_range"), [
+                                        `${subgroup_children.id}`,
+                                        `${subgroup_children.ax! + subgroup_children.aw!}`,
+                                        `${dimension.width}`,
+                                    ])}`,
+                                    file,
+                                    "width"
+                                );
+                            }
+                            if (subgroup_children.ah! + subgroup_children.ay! > dimension.height) {
+                                throw new Sen.Script.Modules.Exceptions.DimensionError(
+                                    `${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("height_out_of_range"), [
+                                        `${subgroup_children.id}`,
+                                        `${subgroup_children.ah! + subgroup_children.ay!}`,
+                                        `${dimension.height}`,
+                                    ])}`,
+                                    file,
+                                    "height"
+                                );
+                            }
                             async_task.push({
                                 sourceImagePath: file,
                                 outputImagePath: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_contains_sprite}`, `${method === "path" ? subgroup_children.path[subgroup_children.path.length - 1] : subgroup_children.id}.png`)),
@@ -904,6 +927,29 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
                                         .replace(/((.png))?$/i, "")
                                 )
                             ) {
+                                const dimension: Sen.Script.Modules.BitMap.Constraints.DimensionInterface<number> = Sen.Shell.DotNetBitmap.GetDimension<number>(file);
+                                if (resinfo_subgroup.packet[parent].data[id].default.ax! + resinfo_subgroup.packet[parent].data[id].default.aw! > dimension.width) {
+                                    throw new Sen.Script.Modules.Exceptions.DimensionError(
+                                        `${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("width_out_of_range"), [
+                                            `${id}`,
+                                            `${resinfo_subgroup.packet[parent].data[id].default.ax! + resinfo_subgroup.packet[parent].data[id].default.aw!}`,
+                                            `${dimension.width}`,
+                                        ])}`,
+                                        file,
+                                        "width"
+                                    );
+                                }
+                                if (resinfo_subgroup.packet[parent].data[id].default.ah! + resinfo_subgroup.packet[parent].data[id].default.ay! > dimension.height) {
+                                    throw new Sen.Script.Modules.Exceptions.DimensionError(
+                                        `${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("height_out_of_range"), [
+                                            `${id}`,
+                                            `${resinfo_subgroup.packet[parent].data[id].default.ah! + resinfo_subgroup.packet[parent].data[id].default.ay!}`,
+                                            `${dimension.height}`,
+                                        ])}`,
+                                        file,
+                                        "height"
+                                    );
+                                }
                                 async_task.push({
                                     sourceImagePath: file,
                                     outputImagePath: Sen.Shell.Path.Resolve(

@@ -638,5 +638,7 @@
     "version_number": "Version Number",
     "image_name_is_not_same": "Image name mismatch information between Struct and Source",
     "image_count_is_not_same": "Image count is not the same with Source",
-    "invalid_source_domsymbolitem_name": "Invalid Source DOMSymbolItem Name"
+    "invalid_source_domsymbolitem_name": "Invalid Source DOMSymbolItem Name",
+    "width_out_of_range": "Width out of range at \"id\" {1}. Resources width: {2}, image width: {3}",
+    "height_out_of_range": "Height out of range at \"id\" {1}. Resources height: {2}, image height: {3}"
 }
