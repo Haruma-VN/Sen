@@ -149,6 +149,7 @@ class ImageIO {
     var outputFile = Image(
       width: outputData.width,
       height: outputData.height,
+      numChannels: 4,
     );
     for (var element in list) {
       final src = readImage(

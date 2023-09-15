@@ -35,7 +35,7 @@ class PopCapZlib {
       );
     }
     result.writeUInt32LE(
-      data.size(),
+      data.length,
     );
     if (use64BitVariant) {
       result.writeBytes(
@@ -71,7 +71,7 @@ class PopCapZlib {
     var result = SenBuffer.fromBytes(
       Zlib.uncompress(
         data.readBytes(
-          data.size() - header,
+          data.length - header,
         ),
       ),
     );

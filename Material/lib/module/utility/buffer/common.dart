@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, unnecessary_this, prefer_const_constructors, constant_identifier_names, non_constant_identifier_names
+// ignore_for_file: prefer_typing_uninitialized_variables, unnecessary_this, prefer_const_constructors, constant_identifier_names, non_constant_identifier_names, require_trailing_commas
 import "dart:io";
 import "dart:convert";
 import "dart:typed_data";
 
 abstract interface class SenBuffer {
   factory SenBuffer() => _SenBuffer(Uint8List(0));
+
   factory SenBuffer.OpenFile(String path) {
     final file = File((path));
     final length = file.lengthSync();
@@ -17,7 +18,7 @@ abstract interface class SenBuffer {
       pos += chunkSize;
     }
     raFile.closeSync();
-    return _SenBuffer(bytes);
+    return _SenBuffer(bytes, path);
   }
 
   factory SenBuffer.fromBytes(Uint8List buffer) {
@@ -37,6 +38,8 @@ abstract interface class SenBuffer {
   int get readOffset;
 
   int get bufferSize;
+
+  String get filePath;
 
   set bufferSize(int value);
 
@@ -76,7 +79,9 @@ abstract interface class SenBuffer {
 
   int readBigUInt64BE([int offset = -1]);
 
-  int readVarUInt32([int offset = -1]);
+  int readUVarInt32([int offset = -1]);
+
+  int readUVarInt64([int offset = -1]);
 
   int readInt8([int offset = -1]);
 
@@ -103,6 +108,12 @@ abstract interface class SenBuffer {
   bool readBool([int offset = -1]);
 
   int readVarInt32([int offset = -1]);
+
+  int readVarInt64([int offset = -1]);
+
+  int readZigZag32([int offset = -1]);
+
+  int readZigZag64([int offset = -1]);
 
   String readStringByEmpty([
     int offset = -1,
@@ -182,6 +193,12 @@ abstract interface class SenBuffer {
     EncodingType encodingType = EncodingType.ASCII,
   ]);
 
+  void writeStringByEmpty(
+    String? str, [
+    int offset = -1,
+    EncodingType encodingType = EncodingType.UTF8,
+  ]);
+
   void writeNull(int count, [int offset = -1]);
 
   void writeUInt8(int number, [int offset = -1]);
@@ -212,6 +229,8 @@ abstract interface class SenBuffer {
 
   void writeUVarInt32(int number, [int offset = -1]);
 
+  void writeUVarInt64(int number, [int offset = -1]);
+
   void writeInt8(int number, [int offset = -1]);
 
   void writeInt16LE(int number, [int offset = -1]);
@@ -230,7 +249,13 @@ abstract interface class SenBuffer {
 
   void writeVarInt64(int number, [int offset = -1]);
 
+  void writeZigZag32(int number, [int offset = -1]);
+
+  void writeZigZag64(int number, [int offset = -1]);
+
   void writeBool(bool value, [int offset = -1]);
+
+  void writeStringByVarInt32(String? str, [int offset = -1]);
 
   void writeCharByInt16LE(String charStr, [int offset = -1]);
 
@@ -267,8 +292,6 @@ abstract interface class SenBuffer {
   void outBytes(String outFile, int count, int offset);
 
   void clear();
-
-  int size();
 }
 
 enum EncodingType {
@@ -292,8 +315,10 @@ class _SenBuffer implements SenBuffer {
   int _tempWriteOffset = 0;
   int _length = 0;
   int _bufferSize = 64000000;
+  String _filePath = "";
 
-  _SenBuffer(Uint8List buffer) {
+  _SenBuffer(Uint8List buffer, [String? path]) {
+    if (path != null) _filePath = path;
     this._buffer = buffer;
     this._length = _buffer.length;
     this._writeOffset = _length;
@@ -331,6 +356,9 @@ class _SenBuffer implements SenBuffer {
   int get lengthInBuffer => _buffer.length;
 
   @override
+  String get filePath => _filePath;
+
+  @override
   int get length => _length;
 
   // ignore: unnecessary_getters_setters
@@ -352,7 +380,7 @@ class _SenBuffer implements SenBuffer {
   }
 
   var _mBuffer = Uint8List(0);
-  var _mNumber = ByteData(0);
+  var _mNumber = ByteData(8);
 
   @override
   Uint8List toBytes() {
@@ -409,11 +437,8 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
-  String readString(
-    int count, [
-    int offset = -1,
-    EncodingType encodingType = EncodingType.UTF8,
-  ]) {
+  String readString(int count,
+      [int offset = -1, EncodingType encodingType = EncodingType.UTF8]) {
     _mBuffer = readBytes(count, offset);
     final encoding = _setEncoding(encodingType);
     final str = encoding.decode(_mBuffer);
@@ -480,11 +505,19 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
-  int readVarUInt32([int offset = -1]) {
+  int readUVarInt32([int offset = -1]) {
     final varInt32 = readVarInt32(offset);
-    _mNumber = ByteData(4);
+    _writeByteData();
     _mNumber.setInt32(0, varInt32, Endian.little);
     return _mNumber.getUint32(0, Endian.little);
+  }
+
+  @override
+  int readUVarInt64([int offset = -1]) {
+    final varInt64 = readVarInt64(offset);
+    _writeByteData();
+    _mNumber.setInt64(0, varInt64, Endian.little);
+    return _mNumber.getUint64(0, Endian.little);
   }
 
   @override
@@ -576,10 +609,39 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
-  String readStringByEmpty([
-    int offset = -1,
-    EncodingType encodingType = EncodingType.UTF8,
-  ]) {
+  int readVarInt64([int offset = -1]) {
+    _fixReadOffset(offset);
+    int num = 0;
+    int num_2 = 0;
+    int byte;
+    do {
+      if (num_2 == 70) {
+        throw Exception();
+      }
+      byte = readUInt8();
+      num |= (byte & 0x7F) << num_2;
+      num_2 += 7;
+    } while ((byte & 0x80) != 0);
+    return num;
+  }
+
+  @override
+  int readZigZag32([int offset = -1]) {
+    _fixReadOffset(offset);
+    final num = readUVarInt32();
+    return (((num << 31).toSigned(32)) >> 31) ^ ((num >> 1).toSigned(32));
+  }
+
+  @override
+  int readZigZag64([int offset = -1]) {
+    _fixReadOffset(offset);
+    final num = readUVarInt64();
+    return ((num >> 1).toSigned(64) ^ (-(num & 0x1).toSigned(64)));
+  }
+
+  @override
+  String readStringByEmpty(
+      [int offset = -1, EncodingType encodingType = EncodingType.UTF8]) {
     _fixReadOffset(offset);
     var length = 0;
     final startOffset = _readOffset;
@@ -594,10 +656,8 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
-  String getStringByEmpty(
-    int offset, [
-    EncodingType encodingType = EncodingType.UTF8,
-  ]) {
+  String getStringByEmpty(int offset,
+      [EncodingType encodingType = EncodingType.UTF8]) {
     final startOffset = _readOffset;
     final str = readStringByEmpty(offset);
     _readOffset = startOffset;
@@ -773,11 +833,8 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
-  String peekString(
-    int count, [
-    int offset = -1,
-    EncodingType encodingType = EncodingType.UTF8,
-  ]) {
+  String peekString(int count,
+      [int offset = -1, EncodingType encodingType = EncodingType.UTF8]) {
     _fixReadOffset(offset);
     final startOffset = _readOffset;
     final str = readString(count);
@@ -820,11 +877,8 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
-  void writeString(
-    String str, [
-    int offset = -1,
-    EncodingType encodingType = EncodingType.UTF8,
-  ]) {
+  void writeString(String str,
+      [int offset = -1, EncodingType encodingType = EncodingType.UTF8]) {
     final encoding = _setEncoding(encodingType);
     final strBytes = encoding.encode(str);
     writeBytes(strBytes, offset);
@@ -838,11 +892,8 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
-  void writeStringFourByte(
-    String str, [
-    int offset = -1,
-    EncodingType encodingType = EncodingType.ASCII,
-  ]) {
+  void writeStringFourByte(String str,
+      [int offset = -1, EncodingType encodingType = EncodingType.ASCII]) {
     final strLength = str.length;
     final codeUnits = str.codeUnits;
     final strBytes = Uint8List(strLength * 4 + 4);
@@ -980,6 +1031,18 @@ class _SenBuffer implements SenBuffer {
   }
 
   @override
+  void writeUVarInt64(int number, [int offset = -1]) {
+    var num = number;
+    List<int> bytes = [];
+    for (; num >= 128; num >>= 7) {
+      bytes.add(num | 0x80);
+    }
+    bytes.add(num);
+    writeBytes(Uint8List.fromList(bytes), offset);
+    return;
+  }
+
+  @override
   void writeInt8(int number, [int offset = -1]) {
     _writeByteData();
     _mNumber.setInt8(0, number);
@@ -1040,9 +1103,9 @@ class _SenBuffer implements SenBuffer {
     _fixWriteOffset(offset);
     var num = number;
     for (; num >= 128; num >>= 7) {
-      writeUInt8(number | 0x80);
+      writeUInt8(num | 0x80);
     }
-    writeUInt8(number);
+    writeUInt8(num);
     return;
   }
 
@@ -1052,15 +1115,55 @@ class _SenBuffer implements SenBuffer {
     _fixWriteOffset(offset);
     var num = number;
     for (; num >= 128; num >>= 7) {
-      writeUInt8(number | 0x80);
+      writeUInt8(num | 0x80);
     }
-    writeUInt8(number);
+    writeUInt8(num);
+    return;
+  }
+
+  @override
+  void writeZigZag32(int number, [int offset = -1]) {
+    _fixWriteOffset(offset);
+    writeVarInt32((number << 1) ^ (number >> 31));
+    return;
+  }
+
+  // same varInt32
+  @override
+  void writeZigZag64(int number, [int offset = -1]) {
+    _fixWriteOffset(offset);
+    writeVarInt64((number << 1) ^ (number >> 63));
     return;
   }
 
   @override
   void writeBool(bool value, [int offset = -1]) {
     writeUInt8(value ? 1 : 0, offset);
+    return;
+  }
+
+  @override
+  void writeStringByEmpty(String? str,
+      [int offset = -1, EncodingType encodingType = EncodingType.UTF8]) {
+    _fixWriteOffset(offset);
+    if (str == null) {
+      writeUInt8(0);
+      return;
+    }
+    writeString(str);
+    writeUInt8(0);
+    return;
+  }
+
+  @override
+  void writeStringByVarInt32(String? str, [int offset = -1]) {
+    _fixWriteOffset(offset);
+    if (str == null) {
+      writeVarInt32(0);
+      return;
+    }
+    writeVarInt32(str.length);
+    writeString(str);
     return;
   }
 
@@ -1237,7 +1340,4 @@ class _SenBuffer implements SenBuffer {
     _writeOffset = 0;
     return;
   }
-
-  @override
-  int size() => this.length;
 }

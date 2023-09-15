@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_resource_group_split,
               AppLocalizations.of(context)!
                   .popcap_resource_group_split_subtitle,
-              Icons.splitscreen,
+              Icons.terminal,
             );
           }
         case 'popcap.resource_group.merge':
@@ -190,49 +190,70 @@ class _HomePageState extends State<HomePage> {
                         subtitle: Text(exchangeFunction(e).subtitle),
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return FutureBuilder(
-                                  future: refreshModule(),
-                                  builder: (
-                                    BuildContext context,
-                                    AsyncSnapshot snapshot,
-                                  ) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.done) {
-                                      return materialWidget[e] ??
-                                          Scaffold(
-                                            appBar: AppBar(
-                                              title: const Text(
-                                                ApplicationInformation
-                                                    .applicationName,
-                                              ),
-                                              centerTitle: false,
-                                              elevation: 3,
-                                              scrolledUnderElevation: 3,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      FutureBuilder(
+                                future: refreshModule(),
+                                builder: (
+                                  BuildContext context,
+                                  AsyncSnapshot snapshot,
+                                ) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return materialWidget[e] ??
+                                        Scaffold(
+                                          appBar: AppBar(
+                                            title: const Text(
+                                              ApplicationInformation
+                                                  .applicationName,
                                             ),
-                                            body: Text(
-                                              AppLocalizations.of(context)!
-                                                  .have_not_implemented,
-                                            ),
-                                          );
-                                    } else {
-                                      return Scaffold(
-                                        appBar: AppBar(
-                                          title: const Text(
-                                            ApplicationInformation
-                                                .applicationName,
+                                            centerTitle: false,
+                                            elevation: 3,
+                                            scrolledUnderElevation: 3,
                                           ),
-                                          centerTitle: false,
-                                          elevation: 3,
-                                          scrolledUnderElevation: 3,
+                                          body: Text(
+                                            AppLocalizations.of(context)!
+                                                .have_not_implemented,
+                                          ),
+                                        );
+                                  } else {
+                                    return Scaffold(
+                                      appBar: AppBar(
+                                        title: const Text(
+                                          ApplicationInformation
+                                              .applicationName,
                                         ),
-                                        body: const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      );
-                                    }
-                                  },
+                                        centerTitle: false,
+                                        elevation: 3,
+                                        scrolledUnderElevation: 3,
+                                      ),
+                                      body: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                              transitionsBuilder: (
+                                context,
+                                animation,
+                                secondaryAnimation,
+                                child,
+                              ) {
+                                var begin = const Offset(
+                                  1.0,
+                                  0.0,
+                                );
+                                var end = Offset.zero;
+                                var curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
                                 );
                               },
                             ),
