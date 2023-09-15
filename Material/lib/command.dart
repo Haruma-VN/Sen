@@ -499,7 +499,12 @@ class _HomePageState extends State<HomePage> {
                             fontSize: 25,
                           ),
                         ),
-                        subtitle: Text(exchangeFunction(e).subtitle),
+                        subtitle: Text(
+                          exchangeFunction(e).subtitle,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
                         onTap: () {
                           Navigator.of(context).push(
                             PageRouteBuilder(

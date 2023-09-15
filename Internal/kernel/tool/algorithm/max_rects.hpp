@@ -1,14 +1,16 @@
 #include <vector>
 #include <algorithm>
 #include "../../dependencies/RectangleBinPack/MaxRectsBinPack.h"
+#include "./common.hpp"
 
 
 namespace Sen::Internal::Kernel::Tool::Algorithm 
 {
 
     namespace RectangleBinPack = rbp;
-	
+
     struct Sprite {
+    public:
         int width;
         int height;
         int x;
@@ -26,9 +28,9 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
 
     inline auto packSprites(
         std::vector<Sprite>& sprites, 
-        int sheetWidth,
-        int sheetHeight, 
-        int padding
+        const int &sheetWidth,
+        const int &sheetHeight, 
+        const int &padding
     ) -> void {
         std::sort(sprites.begin(), sprites.end(), best_sort);
         auto bins = std::vector<RectangleBinPack::MaxRectsBinPack>{};
@@ -39,6 +41,7 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
                 sprite.x = -1;
                 sprite.y = -1;
                 sprite.hasOversized = true;
+                sprite.imageIndex = -1;
                 continue;
             }
             auto bin = bins.begin();

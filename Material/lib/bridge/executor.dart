@@ -293,18 +293,6 @@ final lzmaUncompressFuncDart lzmaUncompress = dylib
     )
     .asFunction();
 
-typedef PackSpritesFunc = Pointer<Sprite> Function(
-  Pointer<Sprite> list,
-  Int32 size,
-  Pointer<Box> box,
-);
-
-typedef PackSprites = Pointer<Sprite> Function(
-  Pointer<Sprite> list,
-  int size,
-  Pointer<Box> box,
-);
-
 base class Box extends Struct {
   @Int32()
   external int height;
@@ -336,7 +324,23 @@ base class Sprite extends Struct {
   external bool hasOversized;
 }
 
-final PackSprites packSprites = dylib
+typedef PackSpritesFunc = Pointer<Sprite> Function(
+  Pointer<Sprite> list,
+  Int32 size,
+  Pointer<Box> box,
+);
+
+/// [list] - [Sprite] list
+/// [size] - array size
+/// [box] the box
+
+typedef PackSprites = Pointer<Sprite> Function(
+  Pointer<Sprite> list,
+  int size,
+  Pointer<Box> box,
+);
+
+final PackSprites packAtlas = dylib
     .lookup<NativeFunction<PackSpritesFunc>>(
       'packAtlas',
     )

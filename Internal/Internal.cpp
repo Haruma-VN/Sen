@@ -753,18 +753,19 @@ struct Box {
         int padding;
 };
 
+InternalAPI
 Sprite* packAtlas(
     Sprite* list,
     int size,
-    Box box
+    Box* box
 ) {
     auto m_size = (size_t)size;
     auto c = Sen::Internal::Kernel::Utility::Array::convert_array_to_vector(list, m_size);
     packSprites(
         c,
-        box.width,
-        box.height,
-        box.padding
+        box->width,
+        box->height,
+        box->padding
     );
     return Sen::Internal::Kernel::Utility::Array::convert_vector_to_array(c);
 }

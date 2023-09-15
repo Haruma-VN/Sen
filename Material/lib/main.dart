@@ -36,7 +36,8 @@ class Application extends StatelessWidget {
   build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: ApplicationInformation.isLightMode,
-      builder: (context, isLightMode, child) => MaterialApp(
+      builder: (BuildContext context, bool isLightMode, Widget? child) =>
+          MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
