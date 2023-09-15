@@ -287,7 +287,7 @@ class FileSystem {
     final list = dir.listSync(
       recursive: recursive,
     );
-    var result = List<String>.empty();
+    List<String> result = [];
     for (var ripe in list) {
       result.add(ripe.path);
     }

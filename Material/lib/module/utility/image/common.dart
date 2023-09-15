@@ -111,7 +111,7 @@ class ImageIO {
       height: height,
     );
     saveImage(
-      originalFile,
+      outputFile,
       destination,
     );
     return;

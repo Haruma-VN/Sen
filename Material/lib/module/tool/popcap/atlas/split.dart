@@ -36,10 +36,6 @@ class splitAtlas {
           subgroup['path'] != null) {
         dynamic wrapper = {
           'default': {
-            'ax': subgroup['ax'],
-            'ay': subgroup['ay'],
-            'aw': subgroup['aw'],
-            'ah': subgroup['ah'],
             'x': (subgroup['x'] ??= 0),
             'y': (subgroup['x'] ??= 0),
           },
@@ -51,7 +47,7 @@ class splitAtlas {
         if (subgroup['rows'] != null && subgroup['rows'] != 1) {
           wrapper['default']['rows'] = subgroup['rows'];
         }
-        atlas_json['groups'][subgroup.id] = wrapper;
+        atlas_json['groups'][subgroup['id']] = wrapper;
       }
     }
     return atlas_json;
@@ -83,12 +79,15 @@ class splitAtlas {
           subgroup_children['aw'] != null &&
           subgroup_children['path'] != null) {
         for (var png in imgPath) {
-          if (subgroup_children['parents'] != null &&
-              png
-                  .replaceAll(pngExpression, '')
-                  .toUpperCase()
-                  .toString()
-                  .endsWith(subgroup_children['parents'] as String)) {
+          var currentParent =
+              png.replaceAll(pngExpression, '').toUpperCase().toString();
+          if (subgroup_children['parent'] != null &&
+              currentParent.endsWith(
+                (subgroup_children['parent'] as String).replaceAll(
+                  'ATLASIMAGE_ATLAS_',
+                  '',
+                ),
+              )) {
             subgroup_children['path'] = expandPath == 'string'
                 ? (subgroup_children['path'] as String).split('\\')
                 : subgroup_children['path'];
@@ -111,8 +110,15 @@ class splitAtlas {
       }
     }
     FileSystem.writeJson(
-      p.join(outputDirectory, 'atlas.json'),
-      convertFromResourceGroup(resources_used, method, expandPath),
+      p.join(
+        outputDirectory,
+        'atlas.json',
+      ),
+      convertFromResourceGroup(
+        resources_used,
+        method,
+        expandPath,
+      ),
       '\t',
     );
     return;
@@ -158,7 +164,10 @@ class splitAtlas {
           pngs,
           method,
           expandPath,
-          outDirectory,
+          p.join(
+            outDirectory,
+            '${jsonData['id']}.sprite',
+          ),
         );
       }
     }

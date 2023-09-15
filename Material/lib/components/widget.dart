@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sen_material_design/components/tool/popcap/atlas/split.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/merge.dart';
@@ -21,4 +22,5 @@ Map<String, Widget> materialWidget = const {
   'popcap.zlib.uncompress': PopCapZlibUncompress(),
   'popcap.newton.decode': PopCapNewtonDecode(),
   'popcap.newton.encode': PopCapNewtonEncode(),
+  'popcap.resource_group.split_atlas': PopCapAtlasSplit(),
 };
