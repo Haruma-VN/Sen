@@ -1,7 +1,6 @@
 #include <vector>
 #include <algorithm>
 #include "../../dependencies/RectangleBinPack/MaxRectsBinPack.h"
-#include "./common.hpp"
 
 
 namespace Sen::Internal::Kernel::Tool::Algorithm 
