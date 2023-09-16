@@ -16,6 +16,13 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
         int y;
         int imageIndex;
         bool hasOversized;
+        char* id;
+        int infoX;
+        int infoY;
+        int cols;
+        int rows;
+        char** path;
+        int pathSize;
     };
 
     inline auto best_sort(

@@ -1,5 +1,4 @@
 // ignore_for_file: unused_local_variable, unused_element
-
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/functions.dart';
 import 'package:sen_material_design/common/default.dart';
@@ -25,6 +24,30 @@ Future<void> refreshModule() async {
 
 class _HomePageState extends State<HomePage> {
   bool isHovering = false;
+
+  static double exchangeNameFont(double num) {
+    double fontSize = 20;
+    if (num > 800) {
+      fontSize = 30;
+    } else if (num > 600) {
+      fontSize = 24;
+    } else {
+      fontSize = 20;
+    }
+    return fontSize;
+  }
+
+  static double exchangeSubtitleFont(double num) {
+    double fontSize = 20;
+    if (num > 800) {
+      fontSize = 20;
+    } else if (num > 600) {
+      fontSize = 15;
+    } else {
+      fontSize = 13;
+    }
+    return fontSize;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -495,14 +518,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                         title: Text(
                           (exchangeFunction(e).name),
-                          style: const TextStyle(
-                            fontSize: 25,
+                          style: TextStyle(
+                            fontSize: exchangeNameFont(screenWidth),
                           ),
                         ),
                         subtitle: Text(
                           exchangeFunction(e).subtitle,
-                          style: const TextStyle(
-                            fontSize: 15,
+                          style: TextStyle(
+                            fontSize: screenWidth > 600 ? 15 : 10,
                           ),
                         ),
                         onTap: () {

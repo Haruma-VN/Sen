@@ -322,6 +322,23 @@ base class Sprite extends Struct {
 
   @Bool()
   external bool hasOversized;
+
+  external Pointer<Utf8> id;
+  @Int32()
+  external int infoX;
+
+  @Int32()
+  external int infoY;
+  @Int32()
+  external int cols;
+
+  @Int32()
+  external int rows;
+
+  external Pointer<Pointer<Utf8>> path;
+
+  @Int32()
+  external int pathSize;
 }
 
 typedef PackSpritesFunc = Pointer<Sprite> Function(
