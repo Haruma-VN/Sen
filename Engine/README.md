@@ -24,9 +24,9 @@
 
     -   For android, you need to compile [Internal](https://github.com/Haruma-VN/Sen/tree/master/Internal) yourself, put it in `android/app/src/main/jniLibs/<your-support>/` as `libInternal.so` along with `libc++_shared.so` from Android Studio NDK.
 
-    > The version libc++\_shared.so included in the current project is NDK r25c.
+        > The version libc++\_shared.so included in the current project is NDK r25c.
 
-    > See the [Android documentation](https://source.android.com/docs/core/architecture/vndk/linker-namespace) for details.
+        > See the [Android documentation](https://source.android.com/docs/core/architecture/vndk/linker-namespace) for details.
 
     -   CMake Project Setup:
         -   Generator: Ninja
