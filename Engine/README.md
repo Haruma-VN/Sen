@@ -20,6 +20,21 @@
     -   MacOS: `flutter build macos`
     -   iOS: `flutter build ios`
 
+-   Android Development Special:
+
+    -   For android, you need to compile [Internal](https://github.com/Haruma-VN/Sen/tree/master/Internal) yourself, put it in `android/app/src/main/jniLibs/<your-support>/` as `libInternal.so` along with `libc++_shared.so` from Android Studio NDK.
+
+    > The version libc++\_shared.so included in the current project is NDK r25c.
+
+    > See the [Android documentation](https://source.android.com/docs/core/architecture/vndk/linker-namespace) for details.
+
+    -   CMake Project Setup:
+        -   Generator: Ninja
+        -   ANDROID_PLATFORM: [Android-version-you-support]
+        -   ANDROID_ABI: armeabi-v7a, arm64-v8a or x86_x64
+        -   ANDROID_STL: c++\_shared
+        -   Compiler: [Clang 14.0 for Android (NDK 25.2)](https://developer.android.com/ndk/downloads)
+
 ## Localization
 
--   If you want to add language to Lotus Engine,
+-   If you want to add language to Lotus Engine, please add an `app_[language-code].arb`, see [Example](https://github.com/Haruma-VN/Sen/tree/master/Engine/lib/l10n)
