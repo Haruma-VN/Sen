@@ -83,8 +83,8 @@ class RectangleBinPack {
     final int size = sprite.length;
     final Pointer<Sprite> spritePointer = calloc<Sprite>(size);
     for (var i = 0; i < size; i++) {
-      Pointer<Pointer<Utf8>> path = calloc<Pointer<Utf8>>(size);
       var pathSize = sprite[i].path.length;
+      Pointer<Pointer<Utf8>> path = calloc<Pointer<Utf8>>(pathSize);
       for (var j = 0; j < pathSize; ++j) {
         path[j] = sprite[i].path[j].toNativeUtf8();
       }

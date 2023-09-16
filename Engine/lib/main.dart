@@ -54,13 +54,23 @@ class Application extends StatelessWidget {
           colorSchemeSeed: const Color(0xFF1750A4),
         ),
         supportedLocales: L10n.all,
-        locale: const Locale('en'),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          for (var locale in supportedLocales) {
+            if (deviceLocale != null) {
+              if (locale.languageCode == deviceLocale.languageCode &&
+                  locale.countryCode == deviceLocale.countryCode) {
+                return deviceLocale;
+              }
+            }
+          }
+          return const Locale('en');
+        },
         themeMode: setting.theme_data,
         home: const RootPage(),
       ),
