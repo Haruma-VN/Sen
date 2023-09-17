@@ -42,7 +42,7 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
         std::sort(sprites.begin(), sprites.end(), best_sort);
         auto current_index = 0;
         auto bin = RectangleBinPack::MaxRectsBinPack(sheetWidth, sheetHeight, false);
-        auto algorithm = RectangleBinPack::MaxRectsBinPack::RectBestShortSideFit;
+        auto algorithm = RectangleBinPack::MaxRectsBinPack::RectBestAreaFit;
 
         for (auto& sprite : sprites) {
             if (sprite.width + padding > sheetWidth || sprite.height + padding > sheetHeight) {
@@ -74,7 +74,4 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
             }
         }
     }
-
-
-
 }

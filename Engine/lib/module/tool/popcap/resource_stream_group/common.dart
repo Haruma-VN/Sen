@@ -5,28 +5,34 @@ import "package:path/path.dart" as path;
 
 class ResourceStreamGroup {
   // Unpack
-  dynamic unpackRSG(SenBuffer senFile, String outFolder,
-      [bool useResFolder = true, bool getPacketInfo = false]) {
+  dynamic unpackRSG(
+    SenBuffer senFile,
+    String outFolder, [
+    bool useResFolder = true,
+    bool getPacketInfo = false,
+  ]) {
     final rsgHeadInfo = readRSGHead(senFile);
     final fileList = fileListSplit(senFile, rsgHeadInfo);
     final resInfo = [];
     final part0List = fileList["part0List"];
     final part1List = fileList["part1List"];
-    var senPart0 = new SenBuffer();
-    var senPart1 = new SenBuffer();
+    var senPart0 = SenBuffer();
+    var senPart1 = SenBuffer();
     SenBuffer? fileData;
     if (part0List.length > 0) {
       if (!getPacketInfo) {
-        senPart0 =
-            new SenBuffer.fromBytes(checkZlib(senFile, rsgHeadInfo, false));
+        senPart0 = SenBuffer.fromBytes(checkZlib(senFile, rsgHeadInfo, false));
       }
       for (var i = 0; i < part0List.length; i++) {
         if (!getPacketInfo) {
-          fileData = new SenBuffer.fromBytes(
-              senPart0.getBytes(part0List[i]["size"], part0List[i]["offset"]));
-          fileData.outFile(useResFolder
-              ? path.join(outFolder, "res", part0List[i]["path"])
-              : path.join(outFolder, part0List[i]["path"]));
+          fileData = SenBuffer.fromBytes(
+            senPart0.getBytes(part0List[i]["size"], part0List[i]["offset"]),
+          );
+          fileData.outFile(
+            useResFolder
+                ? path.join(outFolder, "res", part0List[i]["path"])
+                : path.join(outFolder, part0List[i]["path"]),
+          );
         }
         resInfo.add({
           "path": part0List[i]["path"].split("\\"),
@@ -36,16 +42,18 @@ class ResourceStreamGroup {
     }
     if (part1List.length > 0) {
       if (!getPacketInfo) {
-        senPart1 =
-            new SenBuffer.fromBytes(checkZlib(senFile, rsgHeadInfo, true));
+        senPart1 = SenBuffer.fromBytes(checkZlib(senFile, rsgHeadInfo, true));
       }
       for (var i = 0; i < part1List.length; i++) {
         if (!getPacketInfo) {
-          fileData = new SenBuffer.fromBytes(
-              senPart1.getBytes(part1List[i]["size"], part1List[i]["offset"]));
-          fileData.outFile(useResFolder
-              ? path.join(outFolder, "res", part1List[i]["path"])
-              : path.join(outFolder, part1List[i]["path"]));
+          fileData = SenBuffer.fromBytes(
+            senPart1.getBytes(part1List[i]["size"], part1List[i]["offset"]),
+          );
+          fileData.outFile(
+            useResFolder
+                ? path.join(outFolder, "res", part1List[i]["path"])
+                : path.join(outFolder, part1List[i]["path"]),
+          );
         }
         resInfo.add({
           "path": part1List[i]["path"].split("\\"),
@@ -53,7 +61,7 @@ class ResourceStreamGroup {
             "id": part1List[i]["id"],
             "width": part1List[i]["width"],
             "height": part1List[i]["height"],
-          }
+          },
         });
       }
       senPart1.clear();
@@ -64,7 +72,7 @@ class ResourceStreamGroup {
     return {
       "version": rsgHeadInfo["version"],
       "compression_flags": rsgHeadInfo["flag"],
-      "res": resInfo
+      "res": resInfo,
     };
   }
 
@@ -74,19 +82,31 @@ class ResourceStreamGroup {
           rsgHeadInfo["flag"] == 0 ||
           rsgHeadInfo["flag"] == 2) {
         return senFile.getBytes(
-            rsgHeadInfo["part1Size"], rsgHeadInfo["part1Offset"]);
+          rsgHeadInfo["part1Size"],
+          rsgHeadInfo["part1Offset"],
+        );
       } else {
-        return Zlib.uncompress(senFile.getBytes(
-            rsgHeadInfo["part1Zlib"], rsgHeadInfo["part1Offset"]));
+        return Zlib.uncompress(
+          senFile.getBytes(
+            rsgHeadInfo["part1Zlib"],
+            rsgHeadInfo["part1Offset"],
+          ),
+        );
       }
     } else {
       if (zlibHeadCheck(senFile.getBytes(2, rsgHeadInfo["part0Offset"])) ||
           rsgHeadInfo["flag"] < 2) {
         return senFile.getBytes(
-            rsgHeadInfo["part0Size"], rsgHeadInfo["part0Offset"]);
+          rsgHeadInfo["part0Size"],
+          rsgHeadInfo["part0Offset"],
+        );
       } else {
-        return Zlib.uncompress(senFile.getBytes(
-            rsgHeadInfo["part0Zlib"], rsgHeadInfo["part0Offset"]));
+        return Zlib.uncompress(
+          senFile.getBytes(
+            rsgHeadInfo["part0Zlib"],
+            rsgHeadInfo["part0Offset"],
+          ),
+        );
       }
     }
   }
@@ -133,13 +153,13 @@ class ResourceStreamGroup {
             "size": senFile.readUInt32LE(),
             "id": senFile.readUInt32LE(),
             "width": senFile.readUInt32LE(senFile.readOffset + 8),
-            "height": senFile.readUInt32LE()
+            "height": senFile.readUInt32LE(),
           });
         } else {
           part0List.add({
             "path": namePath,
             "offset": senFile.readUInt32LE(),
-            "size": senFile.readUInt32LE()
+            "size": senFile.readUInt32LE(),
           });
         }
         for (var i = 0; i < nameDict.length; i++) {
@@ -167,16 +187,16 @@ class ResourceStreamGroup {
   dynamic readRSGHead(SenBuffer senFile) {
     final magic = senFile.readString(4);
     if (magic != "pgsr") {
-      throw new Exception("invaild_rsg_magic");
+      throw Exception("invaild_rsg_magic");
     }
     final version = senFile.readUInt32LE();
     if (version != 3 && version != 4) {
-      throw new Exception("invaild_rsg_version");
+      throw Exception("invaild_rsg_version");
     }
     senFile.readOffset += 8;
     final flag = senFile.readUInt32LE();
     if (flag > 3 || flag < 0) {
-      throw new Exception("invaild_rsg_compression_flag");
+      throw Exception("invaild_rsg_compression_flag");
     }
     final fileOffset = senFile.readUInt32LE();
     final part0Offset = senFile.readUInt32LE();
@@ -200,41 +220,51 @@ class ResourceStreamGroup {
       "part1Zlib": part1Zlib,
       "part1Size": part1Size,
       "fileListLength": fileListLength,
-      "fileListOffset": fileListOffset
+      "fileListOffset": fileListOffset,
     };
   }
 
   //Pack
-  SenBuffer packRSG(String inFolder, dynamic packetInfo,
-      [bool useResFolder = true]) {
+  SenBuffer packRSG(
+    String inFolder,
+    dynamic packetInfo, [
+    bool useResFolder = true,
+  ]) {
     if (packetInfo["version"] != 3 && packetInfo["version"] != 4) {
-      throw new Exception("invaild_rsg_version");
+      throw Exception("invaild_rsg_version");
     }
     if (packetInfo["compression_flags"] < 0 ||
         packetInfo["compression_flags"] > 3) {
-      throw new Exception("invaild_rsg_compression_flag");
+      throw Exception("invaild_rsg_compression_flag");
     }
-    final senFile = new SenBuffer();
+    final senFile = SenBuffer();
     senFile.writeString("pgsr");
     senFile.writeUInt32LE(packetInfo["version"]);
     senFile.writeOffset += 8;
     senFile.writeUInt32LE(packetInfo["compression_flags"]);
     senFile.writeOffset += 72;
     final pathTemps = fileListPack(packetInfo["res"]);
-    writeRSG(senFile, pathTemps, packetInfo["compression_flags"], inFolder,
-        useResFolder);
+    writeRSG(
+      senFile,
+      pathTemps,
+      packetInfo["compression_flags"],
+      inFolder,
+      useResFolder,
+    );
     return senFile;
   }
 
   dynamic fileListPack(List<dynamic> resInfo) {
     final resInfoList = resInfo;
     resInfoList.insert(0, {
-      "path": [""]
+      "path": [""],
     });
-    resInfoList.sort((a, b) => a["path"]
-        .join("\\")
-        .toUpperCase()
-        .compareTo(b["path"].join("\\").toUpperCase()));
+    resInfoList.sort(
+      (a, b) => a["path"]
+          .join("\\")
+          .toUpperCase()
+          .compareTo(b["path"].join("\\").toUpperCase()),
+    );
     final listLength = resInfoList.length - 1;
     final pathTemps = [];
     int wPos = 0;
@@ -242,7 +272,7 @@ class ResourceStreamGroup {
       String path1 = resInfoList[i]["path"].join("\\").toUpperCase();
       String path2 = resInfoList[i + 1]["path"].join("\\").toUpperCase();
       if (isNotASCII(path2)) {
-        throw new Exception("name_path_must_be_ascii: $path2");
+        throw Exception("name_path_must_be_ascii: $path2");
       }
       final longestLength =
           path1.length >= path2.length ? path1.length : path2.length;
@@ -269,7 +299,7 @@ class ResourceStreamGroup {
             "key": k,
             "resInfo": resInfoList[i + 1],
             "isAtlas": path2.endsWith(".PTX"),
-            "positions": []
+            "positions": [],
           });
           break;
         }
@@ -288,15 +318,20 @@ class ResourceStreamGroup {
     return false;
   }
 
-  void writeRSG(SenBuffer senFile, dynamic pathTemps, int compressionFlag,
-      String inFolder, bool useResFolder) {
+  void writeRSG(
+    SenBuffer senFile,
+    dynamic pathTemps,
+    int compressionFlag,
+    String inFolder,
+    bool useResFolder,
+  ) {
     final pathTempLength = pathTemps.length;
     final fileListBeginOffset = senFile.writeOffset;
     if (fileListBeginOffset != 0x5C) {
-      throw new Exception("invalid_file_list_offset");
+      throw Exception("invalid_file_list_offset");
     }
-    var dataGroup = new SenBuffer();
-    var atlasGroup = new SenBuffer();
+    var dataGroup = SenBuffer();
+    var atlasGroup = SenBuffer();
     int dataPos = 0;
     int atlasPos = 0;
     for (var i = 0; i < pathTempLength; i++) {
@@ -309,11 +344,15 @@ class ResourceStreamGroup {
             (beginOffset + pathTemps[i]["positions"][h]["offset"] * 4 + 1)
                 .toInt();
         senFile.writeUInt24LE(
-            pathTemps[i]["positions"][h]["position"], wOffset);
+          pathTemps[i]["positions"][h]["position"],
+          wOffset,
+        );
       }
-      final senPacket = new SenBuffer.OpenFile(useResFolder
-          ? path.join(inFolder, "res", packetResInfo["path"].join("\\"))
-          : path.join(inFolder, packetResInfo["path"].join("\\")));
+      final senPacket = SenBuffer.OpenFile(
+        useResFolder
+            ? path.join(inFolder, "res", packetResInfo["path"].join("\\"))
+            : path.join(inFolder, packetResInfo["path"].join("\\")),
+      );
       final dataItem = senPacket.toBytes();
       senPacket.clear();
       final appendBytes = beautifyLengthForFile(dataItem.length);
@@ -350,8 +389,12 @@ class ResourceStreamGroup {
     return;
   }
 
-  void compressor(SenBuffer senFile, SenBuffer dataGroup, SenBuffer atlasGroup,
-      int compressionFlag) {
+  void compressor(
+    SenBuffer senFile,
+    SenBuffer dataGroup,
+    SenBuffer atlasGroup,
+    int compressionFlag,
+  ) {
     if (dataGroup.length != 0) {
       final dataBytes = dataGroup.toBytes();
       dataGroup.clear();
@@ -362,7 +405,7 @@ class ResourceStreamGroup {
       atlasGroup.clear();
       var part1Offset = 0;
       final part1Size = atlasBytes.length;
-      final dataEmpty = new SenBuffer();
+      final dataEmpty = SenBuffer();
       dataEmpty.writeUInt32LE(252536);
       dataEmpty.writeUInt32BE(1);
       dataEmpty.writeNull(4088);
@@ -370,7 +413,7 @@ class ResourceStreamGroup {
         if (compressionFlag == 2 && dataGroup.length == 0) {
           writeData(senFile, dataEmpty.toBytes(), 1, true);
         } else {
-          writeData(senFile, new Uint8List(0), 1, true);
+          writeData(senFile, Uint8List(0), 1, true);
         }
         part1Offset = senFile.writeOffset;
         senFile.writeBytes(atlasBytes);
@@ -383,7 +426,7 @@ class ResourceStreamGroup {
         if (compressionFlag == 3 && dataGroup.length == 0) {
           writeData(senFile, dataEmpty.toBytes(), 1, true);
         } else {
-          writeData(senFile, new Uint8List(0), 1, true);
+          writeData(senFile, Uint8List(0), 1, true);
         }
         part1Offset = senFile.writeOffset;
         final zlibBytes =
@@ -406,7 +449,11 @@ class ResourceStreamGroup {
   }
 
   void writeData(
-      SenBuffer senFile, Uint8List dataBytes, int flag, bool isAtlas) {
+    SenBuffer senFile,
+    Uint8List dataBytes,
+    int flag,
+    bool isAtlas,
+  ) {
     final part0Offset = senFile.writeOffset;
     final part0Size = dataBytes.length;
     if (flag < 2) {

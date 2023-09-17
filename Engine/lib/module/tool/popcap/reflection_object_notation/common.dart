@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, depend_on_referenced_packages
+// ignore_for_file: unused_import, depend_on_referenced_packages, prefer_typing_uninitialized_variables
 
 import "dart:typed_data";
 import 'package:sen_material_design/module/utility/buffer/common.dart';
@@ -19,16 +19,16 @@ class ReflectionObjectNotation {
     jsonFile = {};
     final magic = senFile.readString(4);
     if (magic != "RTON") {
-      throw new Exception("invaild_rton_magic");
+      throw Exception("invaild_rton_magic");
     }
     final version = senFile.readUInt32LE();
     if (version != 0x1) {
-      throw new Exception("invaild_rton_version");
+      throw Exception("invaild_rton_version");
     }
     jsonFile = readObject(senFile);
     final endRton = senFile.readString(4);
     if (endRton != "DONE") {
-      throw new Exception("invaild_rton_end");
+      throw Exception("invaild_rton_end");
     }
     return jsonFile;
   }
@@ -48,7 +48,7 @@ class ReflectionObjectNotation {
     final arrayTemp = [];
     var bytecode = senFile.readUInt8();
     if (bytecode != 0xFD) {
-      throw new Exception("invaild_rton_array_end");
+      throw Exception("invaild_rton_array_end");
     }
     final numArray = senFile.readVarInt32();
     for (var i = 0; i < numArray; i++) {
@@ -56,7 +56,7 @@ class ReflectionObjectNotation {
     }
     bytecode = senFile.readUInt8();
     if (bytecode != 0xFE) {
-      throw new Exception("invaild_rton_array_end");
+      throw Exception("invaild_rton_array_end");
     }
     return arrayTemp;
   }
@@ -100,8 +100,9 @@ class ReflectionObjectNotation {
         propertyName = r0x92List[senFile.readVarInt32()];
         return;
       default:
-        throw new Exception(
-            "invail_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}");
+        throw Exception(
+          "invail_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}",
+        );
     }
   }
 
@@ -185,8 +186,9 @@ class ReflectionObjectNotation {
       case 0x93:
         return r0x92List[senFile.readVarInt32()];
       default:
-        throw new Exception(
-            "invail_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}");
+        throw Exception(
+          "invail_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}",
+        );
     }
   }
 
@@ -221,7 +223,7 @@ class ReflectionObjectNotation {
         final str1 = senFile.readStringByVarInt32();
         return "RTID($str1@$str2)";
       default:
-        throw new Exception("invaild_RTID");
+        throw Exception("invaild_RTID");
     }
   }
 
@@ -233,7 +235,7 @@ class ReflectionObjectNotation {
   SenBuffer encodeRTON(dynamic jsonFile, dynamic encrypt) {
     r0x90Object.clear();
     r0x92Object.clear();
-    final senFile = new SenBuffer();
+    final senFile = SenBuffer();
     senFile.writeString("RTON");
     senFile.writeUInt32LE(0x01);
     writeObject(senFile, jsonFile);
@@ -290,7 +292,7 @@ class ReflectionObjectNotation {
       case num:
         writeNumber(senFile, value);
       default:
-        throw new Exception("invaild_vaule_type | ${value.runtimeType}");
+        throw Exception("invaild_vaule_type | ${value.runtimeType}");
     }
   }
 
@@ -427,7 +429,7 @@ class ReflectionObjectNotation {
           senFile.writeVarInt32(int.parse(intStr[0]));
           var hexBytes = hex.decode(intStr[2]);
           hexBytes = hexBytes.reversed.toList();
-          senFile.writeBytes(new Uint8List.fromList(hexBytes));
+          senFile.writeBytes(Uint8List.fromList(hexBytes));
         } else {
           senFile.writeUInt8(0x03);
           senFile.writeVarInt32(nameList[1].length);

@@ -14,7 +14,7 @@ class PopCapAnimation {
     "moves": 4,
     "frameName": 8,
     "stop": 16,
-    "commands": 32
+    "commands": 32,
   };
 
   final moveFlags = <String, int>{
@@ -23,20 +23,19 @@ class PopCapAnimation {
     "color": 8192,
     "matrix": 4096,
     "longCoords": 2048,
-    "animFrameNum": 1024
+    "animFrameNum": 1024,
   };
 
   dynamic decodeAnimation(SenBuffer senFile) {
     final magic = senFile.readUInt32LE();
     if (magic != 0xBAF01954) {
-      throw new Exception("invaild_animation_magic");
+      throw Exception("invaild_animation_magic");
     }
     final version = senFile.readUInt32LE();
     if (version > 6 || version < 1) {
-      throw new Exception("invaild_animation_version");
+      throw Exception("invaild_animation_version");
     }
     final frameRate = senFile.readUInt8();
-    print(frameRate);
     final position = <double>[0, 0];
     for (var i = 0; i < 2; i++) {
       position[i] = senFile.readUInt16LE() / 20;
@@ -72,7 +71,7 @@ class PopCapAnimation {
       "size": size,
       "image": imageList,
       "sprite": spriteList,
-      "main_sprite": mainSprite
+      "main_sprite": mainSprite,
     };
   }
 
@@ -141,7 +140,7 @@ class PopCapAnimation {
       "command": <String>[],
       "remove": [],
       "append": [],
-      "change": []
+      "change": [],
     };
     final flags = senFile.readUInt8();
     var count = 0;
@@ -299,12 +298,12 @@ class PopCapAnimation {
 
   // encode
   SenBuffer encodeAnimation(dynamic jsonFile) {
-    final senFile = new SenBuffer();
+    final senFile = SenBuffer();
     final version = jsonFile["version"];
     senFile.writeUInt32LE(0xBAF01954);
     senFile.writeUInt32LE(version);
     if (version > 6 || version < 1) {
-      throw new Exception("invaild_animation_version");
+      throw Exception("invaild_animation_version");
     }
     senFile.writeUInt8(jsonFile["frame_rate"]);
     final position = jsonFile["position"];
@@ -469,7 +468,7 @@ class PopCapAnimation {
       "moves": false,
       "frameName": false,
       "stop": false,
-      "commands": false
+      "commands": false,
     };
     if (frameInfo["remove"] != null && frameInfo["remove"].length > 0) {
       flags |= frameFlags["removes"]!;

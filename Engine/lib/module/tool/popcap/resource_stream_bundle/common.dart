@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_init_to_null
+
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import "package:path/path.dart" as path;
 import 'package:sen_material_design/module/utility/io/common.dart';
@@ -7,25 +9,32 @@ class ResourceStreamBundle {
   dynamic unpackRSB(SenBuffer senFile, String outFolder) {
     final rsbHeadInfo = readRSBHead(senFile);
     if (rsbHeadInfo["version"] != 3 && rsbHeadInfo["version"] != 4) {
-      throw new Exception("invaild_rsb_version");
+      throw Exception("invaild_rsb_version");
     }
     if (rsbHeadInfo["version"] == 3 &&
         rsbHeadInfo["fileListBeginOffset"] != 0x6C) {
-      throw new Exception("invaild_file_list_offset");
+      throw Exception("invaild_file_list_offset");
     }
     if (rsbHeadInfo["version"] == 4 &&
         rsbHeadInfo["fileListBeginOffset"] != 0x70) {
-      throw new Exception("invaild_file_list_offset");
+      throw Exception("invaild_file_list_offset");
     }
-    final fileList = fileListSplit(senFile, rsbHeadInfo["fileListBeginOffset"],
-        rsbHeadInfo["fileListLength"]);
-    final rsgList = fileListSplit(senFile, rsbHeadInfo["rsgListBeginOffset"],
-        rsbHeadInfo["rsgListLength"]);
+    final fileList = fileListSplit(
+      senFile,
+      rsbHeadInfo["fileListBeginOffset"],
+      rsbHeadInfo["fileListLength"],
+    );
+    final rsgList = fileListSplit(
+      senFile,
+      rsbHeadInfo["rsgListBeginOffset"],
+      rsbHeadInfo["rsgListLength"],
+    );
     final compositeInfo = readCompositeInfo(senFile, rsbHeadInfo);
     final compositeList = fileListSplit(
-        senFile,
-        rsbHeadInfo["compositeListBeginOffset"],
-        rsbHeadInfo["compositeListLength"]);
+      senFile,
+      rsbHeadInfo["compositeListBeginOffset"],
+      rsbHeadInfo["compositeListLength"],
+    );
     final rsgInfoList = readRSGInfo(senFile, rsbHeadInfo);
     // final autopoolInfoList = readAutoPool(senFile, rsbHeadInfo);
     final ptxInfoList = readPTXInfo(senFile, rsbHeadInfo);
@@ -33,7 +42,7 @@ class ResourceStreamBundle {
       if (rsbHeadInfo["part1BeginOffset"] == 0 &&
           rsbHeadInfo["part2BeginOffset"] == 0 &&
           rsbHeadInfo["part2BeginOffset"] == 0) {
-        throw new Exception("invaild_rsb_ver_3_resource_offset");
+        throw Exception("invaild_rsb_ver_3_resource_offset");
       }
       readResourcesDescription(senFile, rsbHeadInfo, outFolder);
     }
@@ -45,8 +54,7 @@ class ResourceStreamBundle {
           compositeList[i]["namePath"]
               .toUpperCase()
               .replaceAll("_COMPOSITESHELL", "")) {
-        throw new Exception(
-            "invaild_composite_name: ${compositeInfo[i]["name"]}");
+        throw Exception("invaild_composite_name: ${compositeInfo[i]["name"]}");
       }
       final subGroupList = {};
       for (var k = 0; k < compositeInfo[i]["packetNumber"]; k++) {
@@ -55,26 +63,28 @@ class ResourceStreamBundle {
         var rsgListCount = 0;
         while (rsgInfoList[rsgInfoCount]["poolIndex"] != packetIndex) {
           if (rsgInfoCount >= rsgInfoList.length) {
-            throw new Exception("out_of_range_1");
+            throw Exception("out_of_range_1");
           }
           rsgInfoCount++;
         }
         while (rsgList[rsgListCount]["poolIndex"] != packetIndex) {
           if (rsgInfoCount >= rsgList.length) {
-            throw new Exception("out_of_range_2");
+            throw Exception("out_of_range_2");
           }
           rsgListCount++;
         }
         if (rsgInfoList[rsgInfoCount]["name"].toUpperCase() !=
             rsgList[rsgListCount]["namePath"].toUpperCase()) {
-          throw new Exception(
-              "invaild_rsg_name: ${rsgInfoList[rsgInfoCount]["name"]} | ${rsgList[rsgListCount]["name"]}. pool_index: $packetIndex");
+          throw Exception(
+            "invaild_rsg_name: ${rsgInfoList[rsgInfoCount]["name"]} | ${rsgList[rsgListCount]["name"]}. pool_index: $packetIndex",
+          );
         }
         rsgNameList.add(rsgInfoList[rsgInfoCount]["name"]);
         final packetFile = senFile.getBytes(
-            rsgInfoList[rsgInfoCount]["rsgLength"],
-            rsgInfoList[rsgInfoCount]["rsgOffset"]);
-        final rsgFile = new SenBuffer.fromBytes(packetFile);
+          rsgInfoList[rsgInfoCount]["rsgLength"],
+          rsgInfoList[rsgInfoCount]["rsgOffset"],
+        );
+        final rsgFile = SenBuffer.fromBytes(packetFile);
         final rsgFunction = ResourceStreamGroup();
         final packetInfo = rsgFunction.unpackRSG(rsgFile, "", false, true);
         final resInfoList = [];
@@ -94,14 +104,16 @@ class ResourceStreamBundle {
                   if (ptxInfoList[ptxBeforeNumber +
                           packetInfo["res"][m]["ptx_info"]["id"]]["width"] !=
                       packetInfo["res"][m]["ptx_info"]["width"]) {
-                    throw new Exception(
-                        "invaild_packet_width: ${fileList[h]["namePath"]}");
+                    throw Exception(
+                      "invaild_packet_width: ${fileList[h]["namePath"]}",
+                    );
                   }
                   if (ptxInfoList[ptxBeforeNumber +
                           packetInfo["res"][m]["ptx_info"]["id"]]["height"] !=
                       packetInfo["res"][m]["ptx_info"]["height"]) {
-                    throw new Exception(
-                        "invaild_packet_height: ${fileList[h]["namePath"]}");
+                    throw Exception(
+                      "invaild_packet_height: ${fileList[h]["namePath"]}",
+                    );
                   }
                   resInfo["ptx_info"] = {
                     "id": packetInfo["res"][m]["ptx_info"]["id"],
@@ -125,14 +137,19 @@ class ResourceStreamBundle {
               }
             }
             if (!existItemPacket) {
-              throw new Exception("invaild_item_packet");
+              throw Exception("invaild_item_packet");
             }
             resInfoList.add(resInfo);
           }
           if (fileList[h]["poolIndex"] > packetIndex) break;
         }
-        rsgFile.outFile(path.join(
-            outFolder, "packet", "${rsgInfoList[rsgInfoCount]["name"]}.rsg"));
+        rsgFile.outFile(
+          path.join(
+            outFolder,
+            "packet",
+            "${rsgInfoList[rsgInfoCount]["name"]}.rsg",
+          ),
+        );
         final packetInfoList = {
           "version":
               senFile.readUInt32LE(rsgInfoList[rsgInfoCount]["rsgOffset"] + 4),
@@ -145,27 +162,30 @@ class ResourceStreamBundle {
             compositeInfo[i]["packetInfo"][k]["category"][0],
             compositeInfo[i]["packetInfo"][k]["category"][1] == ""
                 ? null
-                : compositeInfo[i]["packetInfo"][k]["category"][1]
+                : compositeInfo[i]["packetInfo"][k]["category"][1],
           ],
           "packet_info": packetInfoList,
         };
       }
       groupList[compositeInfo[i]["name"]] = {
         "is_composite": compositeInfo[i]["isComposite"],
-        "subgroup": subGroupList
+        "subgroup": subGroupList,
       };
     }
     final mainfest = {
       "version": rsbHeadInfo["version"],
       "ptx_info_size": rsbHeadInfo["ptxInfoEachLength"],
-      "group": groupList
+      "group": groupList,
     };
     senFile.clear();
     return mainfest;
   }
 
   void readResourcesDescription(
-      SenBuffer senFile, dynamic rsbHeadInfo, String outFolder) {
+    SenBuffer senFile,
+    dynamic rsbHeadInfo,
+    String outFolder,
+  ) {
     senFile.readOffset = rsbHeadInfo["part1BeginOffset"];
     final part2Offset = rsbHeadInfo["part2BeginOffset"];
     final part3Offset = rsbHeadInfo["part3BeginOffset"];
@@ -176,8 +196,7 @@ class ResourceStreamBundle {
       final id = senFile.getStringByEmpty(part3Offset + idOffsetPart3);
       final rsgNumber = senFile.readUInt32LE();
       final subgroup = {};
-      if (senFile.readUInt32LE() != 0x10)
-        throw new Exception("invaild_rsg_number");
+      if (senFile.readUInt32LE() != 0x10) throw Exception("invaild_rsg_number");
       final rsgInfoList = [];
       for (var k = 0; k < rsgNumber; k++) {
         final resolutionRatio = senFile.readUInt32LE();
@@ -193,19 +212,19 @@ class ResourceStreamBundle {
         subgroup[rsgId] = {
           "res": "$resolutionRatio",
           "language": language,
-          "resources": {}
+          "resources": {},
         };
         rsgInfoList.add({
           "resolutionRatio": resolutionRatio,
           "language": language,
           "id": rsgId,
           "resourcesNumber": resourcesNumber,
-          "resourcesInfoList": resourcesInfoList
+          "resourcesInfoList": resourcesInfoList,
         });
       }
       descriptionGroup[id] = {
         "composite": !id.endsWith("_CompositeShell"),
-        "subgroups": subgroup
+        "subgroups": subgroup,
       };
       compositeResoucesInfo.add({
         "id": id,
@@ -224,11 +243,13 @@ class ResourceStreamBundle {
               compositeResoucesInfo[i]["rsgInfoList"][k]["resourcesInfoList"][h]
                   ["infoOffsetPart2"];
           {
-            if (senFile.readUInt32LE() != 0x0)
-              throw new Exception("invaild_part2_offset");
+            if (senFile.readUInt32LE() != 0x0) {
+              throw Exception("invaild_part2_offset");
+            }
             final type = senFile.readUInt16LE();
-            if (senFile.readUInt16LE() != 0x1C)
-              throw new Exception("invaild_head_length");
+            if (senFile.readUInt16LE() != 0x1C) {
+              throw Exception("invaild_head_length");
+            }
             final ptxInfoEndOffsetPart2 = senFile.readUInt32LE();
             final ptxInfoBeginOffsetPart2 = senFile.readUInt32LE();
             final resIdOffsetPart3 = senFile.readUInt32LE();
@@ -252,27 +273,27 @@ class ResourceStreamBundle {
                 "rows": "${senFile.readUInt16LE()}",
                 "cols": "${senFile.readUInt16LE()}",
                 "parent": senFile
-                    .getStringByEmpty(part3Offset + senFile.readUInt32LE())
+                    .getStringByEmpty(part3Offset + senFile.readUInt32LE()),
               };
             }
             final propertiesInfoList = {};
             for (var l = 0; l < propertiesNumber; l++) {
               final keyOffsetPart3 = senFile.readUInt32LE();
               if (senFile.readUInt32LE() != 0x0) {
-                throw new Exception("rsb_is_corrupted");
+                throw Exception("rsb_is_corrupted");
               }
-              final vauleOffsetPart3 = senFile.readUInt32LE();
+              final valueOffsetPart3 = senFile.readUInt32LE();
               final key =
                   senFile.getStringByEmpty(part3Offset + keyOffsetPart3);
-              final vaule =
-                  senFile.getStringByEmpty(part3Offset + vauleOffsetPart3);
-              propertiesInfoList[key] = vaule;
+              final value =
+                  senFile.getStringByEmpty(part3Offset + valueOffsetPart3);
+              propertiesInfoList[key] = value;
             }
             final descriptionResources = {
               "type": type,
               "path": resPath,
               "ptx_info": ptxInfoList,
-              "properties": propertiesInfoList
+              "properties": propertiesInfoList,
             };
             descriptionGroup[descriptionGroupKey[i]]["subgroups"]
                 [subgroupKey[k]]["resources"][resId] = descriptionResources;
@@ -285,7 +306,10 @@ class ResourceStreamBundle {
       "groups": descriptionGroup,
     };
     FileSystem.writeJson(
-        path.join(outFolder, "description.json"), resourcesDescription, "\t");
+      path.join(outFolder, "description.json"),
+      resourcesDescription,
+      "\t",
+    );
     return;
   }
 
@@ -348,8 +372,8 @@ class ResourceStreamBundle {
           "packetIndex": senFile.readUInt32LE(),
           "category": [
             senFile.readUInt32LE(),
-            senFile.readString(4).replaceAll("\x00", "")
-          ]
+            senFile.readString(4).replaceAll("\x00", ""),
+          ],
         });
         senFile.readOffset += 4;
       }
@@ -388,7 +412,7 @@ class ResourceStreamBundle {
         "rsgLength": rsgLength,
         "poolIndex": rsgIndex,
         "ptxNumber": ptxNumber,
-        "ptxBeforeNumber": ptxBeforeNumber
+        "ptxBeforeNumber": ptxBeforeNumber,
       });
     }
     final endOffset =
@@ -426,7 +450,7 @@ class ResourceStreamBundle {
     if (rsbHeadInfo["ptxInfoEachLength"] != 0x10 &&
         rsbHeadInfo["ptxInfoEachLength"] != 0x14 &&
         rsbHeadInfo["ptxInfoEachLength"] != 0x18) {
-      throw new Exception("invaild_ptx_info_eachlength");
+      throw Exception("invaild_ptx_info_eachlength");
     }
     for (var i = 0; i < rsbHeadInfo["ptxNumber"]; i++) {
       final width = senFile.readUInt32LE();
@@ -459,13 +483,13 @@ class ResourceStreamBundle {
 
   void checkEndOffset(SenBuffer senFile, int endOffset) {
     if (senFile.readOffset != endOffset) {
-      throw new Exception("invaild: offset: ${senFile.readOffset}, $endOffset");
+      throw Exception("invaild: offset: ${senFile.readOffset}, $endOffset");
     }
   }
 
   static dynamic readRSBHead(SenBuffer senFile) {
     final magic = senFile.readString(4);
-    if (magic != "1bsr") throw new Exception("invaild_rsb_head");
+    if (magic != "1bsr") throw Exception("invaild_rsb_head");
     final version = senFile.readUInt32LE();
     senFile.readOffset += 4;
     var fileOffset = senFile.readUInt32LE();
@@ -517,13 +541,13 @@ class ResourceStreamBundle {
       "ptxInfoEachLength": ptxInfoEachLength,
       "part1BeginOffset": part1BeginOffset,
       "part2BeginOffset": part2BeginOffset,
-      "part3BeginOffset": part3BeginOffset
+      "part3BeginOffset": part3BeginOffset,
     };
   }
 
   //Pack
   void packRSG(String inFolder, String outFile, dynamic manifest) {
-    final senFile = new SenBuffer();
+    final senFile = SenBuffer();
     senFile.writeString("1bsr");
     final version = manifest["version"];
     var fileListBeginOffset = 0;
@@ -532,7 +556,7 @@ class ResourceStreamBundle {
     } else if (version == 4) {
       fileListBeginOffset = 0x70;
     } else {
-      throw new Exception("invaild_rsb_version");
+      throw Exception("invaild_rsb_version");
     }
     final rsbHeadInfo = {};
     senFile.writeInt32LE(version);
@@ -540,16 +564,16 @@ class ResourceStreamBundle {
     final ptxInfoSize = manifest["ptx_info_size"];
     rsbHeadInfo["ptxInfoEachLength"] = ptxInfoSize;
     if (ptxInfoSize != 0x10 && ptxInfoSize != 0x14 && ptxInfoSize != 0x18) {
-      throw new Exception("invaild_ptx_info_each_length");
+      throw Exception("invaild_ptx_info_each_length");
     }
     final fileList = [];
     final rsgFileList = [];
     final compositeList = [];
-    final compositeInfo = new SenBuffer();
-    final rsgInfo = new SenBuffer();
-    final autopoolInfo = new SenBuffer();
-    final ptxInfo = new SenBuffer();
-    final rsgFileBank = new SenBuffer();
+    final compositeInfo = SenBuffer();
+    final rsgInfo = SenBuffer();
+    final autopoolInfo = SenBuffer();
+    final ptxInfo = SenBuffer();
+    final rsgFileBank = SenBuffer();
     var rsgPacketIndex = 0;
     final groupKey = manifest["group"].keys.toList();
     final groupLength = groupKey.length;
@@ -570,9 +594,14 @@ class ResourceStreamBundle {
         final rsgName = subgroupKey[k];
         var rsgComposite = false;
         rsgFileList.add(
-            {"namePath": rsgName.toUpperCase(), "poolIndex": rsgPacketIndex});
-        final rsgFile = new SenBuffer.OpenFile(
-            path.join(inFolder, "packet", "${rsgName}.rsg"));
+          {
+            "namePath": rsgName.toUpperCase(),
+            "poolIndex": rsgPacketIndex,
+          },
+        );
+        final rsgFile = SenBuffer.OpenFile(
+          path.join(inFolder, "packet", "$rsgName.rsg"),
+        );
         comparePacketInfo(kSecond["packet_info"], rsgFile);
         var ptxNumber = 0;
         final resInfoLength = kSecond["packet_info"]["res"].length;
@@ -580,7 +609,7 @@ class ResourceStreamBundle {
           final kThird = kSecond["packet_info"]["res"][l];
           fileList.add({
             "namePath": kThird["path"].join("\\").toUpperCase(),
-            "poolIndex": rsgPacketIndex
+            "poolIndex": rsgPacketIndex,
           });
           if (kThird["ptx_info"] != null) {
             ptxNumber++;
@@ -612,7 +641,7 @@ class ResourceStreamBundle {
           compositeInfo.writeUInt32LE(kSecond["category"][0]);
           if (kSecond["category"][1] != null && kSecond["category"][1] != "") {
             if (kSecond["category"][1].length != 4) {
-              throw new Exception("category_out_of_length");
+              throw Exception("category_out_of_length");
             }
             compositeInfo.writeString(kSecond["category"][1]);
           } else {
@@ -632,7 +661,9 @@ class ResourceStreamBundle {
           rsgInfo.writeBytes(rsgFile.getBytes(56, 0x10));
           final rsgWriteOffset = rsgInfo.writeOffset;
           rsgInfo.writeUInt32LE(
-              rsgFile.readUInt32LE(0x20), rsgWriteOffset - 36);
+            rsgFile.readUInt32LE(0x20),
+            rsgWriteOffset - 36,
+          );
           rsgInfo.writeUInt32LE(ptxNumber, rsgWriteOffset);
           rsgInfo.writeUInt32LE(ptxBeforeNumber);
           ptxBeforeNumber += ptxNumber;
@@ -646,7 +677,8 @@ class ResourceStreamBundle {
             autopoolInfo.writeUInt32LE(rsgFile.readUInt32LE(0x30));
           } else {
             autopoolInfo.writeUInt32LE(
-                rsgFile.readUInt32LE(0x18) + rsgFile.readUInt32LE(0x20));
+              rsgFile.readUInt32LE(0x18) + rsgFile.readUInt32LE(0x20),
+            );
             autopoolInfo.writeUInt32LE(0);
           }
           autopoolInfo.writeUInt32LE(1);
@@ -699,7 +731,6 @@ class ResourceStreamBundle {
       senFile.writeBytes(ptxInfo.toBytes());
       ptxInfo.clear();
       if (version == 3) {
-        print(senFile.length);
         writeResourcesDescription(senFile, rsbHeadInfo, inFolder);
       }
       var rsgFunction = ResourceStreamGroup();
@@ -723,13 +754,16 @@ class ResourceStreamBundle {
   }
 
   void writeResourcesDescription(
-      SenBuffer senFile, dynamic rsgHeadInfo, String inFolder) {
+    SenBuffer senFile,
+    dynamic rsgHeadInfo,
+    String inFolder,
+  ) {
     final resourcesDescription =
         FileSystem.readJson(path.join(inFolder, "description.json"));
     final groupKeys = resourcesDescription["groups"].keys.toList();
-    final part1Res = new SenBuffer();
-    final part2Res = new SenBuffer();
-    final part3Res = new SenBuffer();
+    final part1Res = SenBuffer();
+    final part2Res = SenBuffer();
+    final part3Res = SenBuffer();
     Map<String, int> stringPool = <String, int>{};
     int throwInPool(String poolKey) {
       if (!stringPool.containsKey(poolKey)) {
@@ -749,8 +783,11 @@ class ResourceStreamBundle {
       part1Res.writeUInt32LE(subgroupKeys.length);
       part1Res.writeUInt32LE(0x10);
       subgroupKeys.forEach((gpKey) {
-        part1Res.writeUInt32LE(int.parse(
-            resourcesDescription["groups"][gkey]["subgroups"][gpKey]["res"]));
+        part1Res.writeUInt32LE(
+          int.parse(
+            resourcesDescription["groups"][gkey]["subgroups"][gpKey]["res"],
+          ),
+        );
         final language = resourcesDescription["groups"][gkey]["subgroups"]
             [gpKey]["language"];
         if (language == "") {
@@ -777,8 +814,10 @@ class ResourceStreamBundle {
             part2Res.backupWriteOffset();
             part2Res.writeOffset += 0x8;
             idOffsetPart3 = throwInPool(rsKey);
-            final pathOffsetPart3 = throwInPool(resourcesDescription["groups"]
-                [gkey]["subgroups"][gpKey]["resources"][rsKey]["path"]);
+            final pathOffsetPart3 = throwInPool(
+              resourcesDescription["groups"][gkey]["subgroups"][gpKey]
+                  ["resources"][rsKey]["path"],
+            );
             part2Res.writeInt32LE(idOffsetPart3);
             part2Res.writeInt32LE(pathOffsetPart3);
             Map<String, dynamic> properties = resourcesDescription["groups"]
@@ -812,10 +851,10 @@ class ResourceStreamBundle {
             }
             properties.forEach((key, value) {
               final keyOffsetInPart3 = throwInPool(key);
-              final vauleOffsetInPart3 = throwInPool(value);
+              final valueOffsetInPart3 = throwInPool(value);
               part2Res.writeUInt32LE(keyOffsetInPart3);
               part2Res.writeUInt32LE(0x0);
-              part2Res.writeUInt32LE(vauleOffsetInPart3);
+              part2Res.writeUInt32LE(valueOffsetInPart3);
             });
           }
         });
@@ -834,8 +873,10 @@ class ResourceStreamBundle {
   }
 
   dynamic fileListPack(List<dynamic> fileList) {
-    fileList.sort((a, b) =>
-        a['namePath'].toUpperCase().compareTo(b['namePath'].toUpperCase()));
+    fileList.sort(
+      (a, b) =>
+          a['namePath'].toUpperCase().compareTo(b['namePath'].toUpperCase()),
+    );
     fileList.insert(0, {"namePath": "", "poolIndex": -1});
     final listLength = fileList.length - 1;
     var wPos = 0;
@@ -844,7 +885,7 @@ class ResourceStreamBundle {
       String path1 = fileList[i]["namePath"].toUpperCase();
       String path2 = fileList[i + 1]["namePath"].toUpperCase();
       if (isNotASCII(path2)) {
-        throw new Exception("name_path_must_be_ascii: $path2");
+        throw Exception("name_path_must_be_ascii: $path2");
       }
       final longestLength =
           path1.length >= path2.length ? path1.length : path2.length;
@@ -868,7 +909,7 @@ class ResourceStreamBundle {
             "pathSlice": path2.substring(k),
             "key": k,
             "poolIndex": fileList[i + 1]["poolIndex"],
-            "positions": []
+            "positions": [],
           });
           break;
         }
@@ -911,8 +952,10 @@ class ResourceStreamBundle {
     senFile.writeStringFourByte(pathTemp["pathSlice"]);
     senFile.backupWriteOffset();
     for (var h = 0; h < pathTemp["positions"].length; h++) {
-      senFile.writeUInt24LE(pathTemp["positions"][h]["position"],
-          (beginOffset + pathTemp["positions"][h]["offset"] * 4 + 1).toInt());
+      senFile.writeUInt24LE(
+        pathTemp["positions"][h]["position"],
+        (beginOffset + pathTemp["positions"][h]["offset"] * 4 + 1).toInt(),
+      );
     }
     senFile.restoreWriteOffset();
     senFile.writeUInt32LE(pathTemp["poolIndex"]);
@@ -933,16 +976,28 @@ class ResourceStreamBundle {
     final rsgFunction = ResourceStreamGroup();
     dynamic oriPacket = rsgFunction.unpackRSG(rsgFile, "", false, true);
     if (oriPacket["version"] != modifyPacket["version"]) {
-      throwError("version", oriPacket["version"], modifyPacket["version"],
-          rsgFile.filePath);
+      throwError(
+        "version",
+        oriPacket["version"],
+        modifyPacket["version"],
+        rsgFile.filePath,
+      );
     }
     if (oriPacket["compression_flags"] != modifyPacket["compression_flags"]) {
-      throwError("compression_flags", oriPacket["compression_flags"],
-          modifyPacket["compression_flags"], rsgFile.filePath);
+      throwError(
+        "compression_flags",
+        oriPacket["compression_flags"],
+        modifyPacket["compression_flags"],
+        rsgFile.filePath,
+      );
     }
     if (oriPacket["res"].length != modifyPacket["res"].length) {
-      throwError("item_number", oriPacket["res"].length,
-          modifyPacket["res"].length, rsgFile.filePath);
+      throwError(
+        "item_number",
+        oriPacket["res"].length,
+        modifyPacket["res"].length,
+        rsgFile.filePath,
+      );
     }
     List<dynamic> resOriPacket = oriPacket["res"];
     resOriPacket
@@ -953,34 +1008,55 @@ class ResourceStreamBundle {
     for (var i = 0; i < resModifyPacket.length; i++) {
       if (resOriPacket[i]["path"].join("\\").toUpperCase() !=
           resModifyPacket[i]["path"].join("\\").toUpperCase()) {
-        throwError("item_path", resOriPacket[i]["path"].join("\\"),
-            resModifyPacket[i]["path"].join("\\"), rsgFile.filePath);
+        throwError(
+          "item_path",
+          resOriPacket[i]["path"].join("\\"),
+          resModifyPacket[i]["path"].join("\\"),
+          rsgFile.filePath,
+        );
       }
       if (resOriPacket[i]["ptx_info"] != null &&
           resModifyPacket[i]["ptx_info"] != null) {
         if (resOriPacket[i]["ptx_info"]["id"] !=
             resModifyPacket[i]["ptx_info"]["id"]) {
-          throwError("item_id", resOriPacket[i]["ptx_info"]["id"],
-              resModifyPacket[i]["ptx_info"]["id"], rsgFile.filePath);
+          throwError(
+            "item_id",
+            resOriPacket[i]["ptx_info"]["id"],
+            resModifyPacket[i]["ptx_info"]["id"],
+            rsgFile.filePath,
+          );
         }
         if (resOriPacket[i]["ptx_info"]["width"] !=
             resModifyPacket[i]["ptx_info"]["width"]) {
-          throwError("item_width", resOriPacket[i]["ptx_info"]["width"],
-              resModifyPacket[i]["ptx_info"]["width"], rsgFile.filePath);
+          throwError(
+            "item_width",
+            resOriPacket[i]["ptx_info"]["width"],
+            resModifyPacket[i]["ptx_info"]["width"],
+            rsgFile.filePath,
+          );
         }
         if (resOriPacket[i]["ptx_info"]["height"] !=
             resModifyPacket[i]["ptx_info"]["height"]) {
-          throwError("item_height", resOriPacket[i]["ptx_info"]["height"],
-              resModifyPacket[i]["ptx_info"]["height"], rsgFile.filePath);
+          throwError(
+            "item_height",
+            resOriPacket[i]["ptx_info"]["height"],
+            resModifyPacket[i]["ptx_info"]["height"],
+            rsgFile.filePath,
+          );
         }
       }
     }
     return;
   }
 
-  void throwError(String typeError, dynamic oriVaule, dynamic modifyVaule,
-      String filePath) {
-    throw new Exception(
-        "RSG $typeError is not same. In Manifest: $modifyVaule | In RSGFile: $oriVaule. RSGPath: $filePath");
+  void throwError(
+    String typeError,
+    dynamic orivalue,
+    dynamic modifyvalue,
+    String filePath,
+  ) {
+    throw Exception(
+      "RSG $typeError is not same. In Manifest: $modifyvalue | In RSGFile: $orivalue. RSGPath: $filePath",
+    );
   }
 }
