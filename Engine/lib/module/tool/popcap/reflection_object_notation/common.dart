@@ -205,17 +205,17 @@ class ReflectionObjectNotation {
       case 0x0:
         return "RTID(0)";
       case 0x1:
-        final vaule0x01_2 = senFile.readVarInt32();
-        final vaule0x01_1 = senFile.readVarInt32();
+        final value0x01_2 = senFile.readVarInt32();
+        final value0x01_1 = senFile.readVarInt32();
         final x16_1 = senFile.readUInt32LE();
-        return "RTID($vaule0x01_1.$vaule0x01_2.$x16_1@)";
+        return "RTID($value0x01_1.$value0x01_2.$x16_1@)";
       case 0x2:
         senFile.readVarInt32();
         final str = senFile.readStringByVarInt32();
-        final vaule0x02_2 = senFile.readVarInt32();
-        final vaule0x02_1 = senFile.readVarInt32();
+        final value0x02_2 = senFile.readVarInt32();
+        final value0x02_1 = senFile.readVarInt32();
         final x16_2 = senFile.readUInt32LE();
-        return "RTID($vaule0x02_2.$vaule0x02_1.$x16_2@$str)";
+        return "RTID($value0x02_2.$value0x02_1.$x16_2@$str)";
       case 0x3:
         senFile.readVarInt32();
         final str2 = senFile.readStringByVarInt32();
@@ -292,7 +292,7 @@ class ReflectionObjectNotation {
       case num:
         writeNumber(senFile, value);
       default:
-        throw Exception("invaild_vaule_type | ${value.runtimeType}");
+        throw Exception("invaild_value_type | ${value.runtimeType}");
     }
   }
 

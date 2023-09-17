@@ -3,7 +3,7 @@
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import "package:path/path.dart" as path;
 import 'package:sen_material_design/module/utility/io/common.dart';
-import "../resource_stream_group/common.dart";
+import "package:sen_material_design/module/tool/popcap/resource_stream_group/common.dart";
 
 class ResourceStreamBundle {
   dynamic unpackRSB(SenBuffer senFile, String outFolder) {

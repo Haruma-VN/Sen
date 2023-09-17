@@ -456,7 +456,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(
-                        vertical: 8.0,
+                        vertical: 5.0,
                         horizontal: 15.0,
                       ),
                       decoration: BoxDecoration(
