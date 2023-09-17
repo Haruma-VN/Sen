@@ -155,7 +155,7 @@ class mergeAtlas {
       ImageIO.joinImage(
         results[i]
             .map(
-              (e) => ImageChild(
+              (RectangleSprite e) => ImageChild(
                 e.width,
                 e.height,
                 !isPath

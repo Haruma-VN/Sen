@@ -9,21 +9,20 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
     namespace RectangleBinPack = rbp;
 
     struct Sprite {
-    public:
-        int width;
-        int height;
-        int x;
-        int y;
-        int imageIndex;
-        bool hasOversized;
-        char* id;
-        int infoX;
-        int infoY;
-        int cols;
-        int rows;
-        char** path;
-        int pathSize;
-        bool isPacked;
+        public:
+            int width;
+            int height;
+            int x;
+            int y;
+            int imageIndex;
+            bool hasOversized;
+            char* id;
+            int infoX;
+            int infoY;
+            int cols;
+            int rows;
+            char** path;
+            int pathSize;
     };
 
     inline auto best_sort(
@@ -31,6 +30,23 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
         const Sprite b
     ) -> bool {
         return std::max(a.width, a.height) > std::max(b.width, b.height);
+    }
+
+    inline auto common_sort(
+        const Sprite a,
+        const Sprite b
+    ) -> int
+    {
+        if (a.width > b.width && a.height > b.height) {
+            return 1;
+        }
+        else if (a.width == b.width && a.height == b.height)
+        {
+            return 0;
+        }
+        else {
+            return -1;
+        }
     }
 
     inline auto packSprites(
@@ -42,7 +58,7 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
         std::sort(sprites.begin(), sprites.end(), best_sort);
         auto current_index = 0;
         auto bin = RectangleBinPack::MaxRectsBinPack(sheetWidth, sheetHeight, false);
-        auto algorithm = RectangleBinPack::MaxRectsBinPack::RectBestAreaFit;
+        auto algorithm = RectangleBinPack::MaxRectsBinPack::RectBestShortSideFit;
 
         for (auto& sprite : sprites) {
             if (sprite.width + padding > sheetWidth || sprite.height + padding > sheetHeight) {
@@ -73,5 +89,6 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
                 }
             }
         }
+        return;
     }
 }
