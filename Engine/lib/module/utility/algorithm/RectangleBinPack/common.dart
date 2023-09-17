@@ -24,7 +24,7 @@ class RectangleSprite {
 
   int y;
 
-  int imageIndex = -1;
+  int imageIndex = 0;
 
   bool hasOversized = false;
 
@@ -105,8 +105,8 @@ class RectangleBinPack {
     }
     final Pointer<Box> boxPointer = calloc<Box>();
     boxPointer.ref
-      ..height = box.height
       ..width = box.width
+      ..height = box.height
       ..padding = box.padding;
     var resultPtr = packAtlas(
       spritePointer,

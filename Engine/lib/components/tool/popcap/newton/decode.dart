@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/module/tool/popcap/newton/decode.dart';
+import 'package:sen_material_design/module/tool/popcap/new_type_object_notation/decode.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 
 class PopCapNewtonDecode extends StatefulWidget {

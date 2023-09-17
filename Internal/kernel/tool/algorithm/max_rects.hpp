@@ -23,6 +23,7 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
         int rows;
         char** path;
         int pathSize;
+        bool isPacked;
     };
 
     inline auto best_sort(
@@ -34,45 +35,46 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
 
     inline auto packSprites(
         std::vector<Sprite>& sprites, 
-        const int &sheetWidth,
-        const int &sheetHeight, 
+        const int &sheetWidth, 
+        const int &sheetHeight,
         const int &padding
     ) -> void {
         std::sort(sprites.begin(), sprites.end(), best_sort);
-        auto bins = std::vector<RectangleBinPack::MaxRectsBinPack>{};
-        bins.emplace_back(sheetWidth, sheetHeight);
-        auto algorithm = RectangleBinPack::MaxRectsBinPack::RectBestAreaFit;
-        for (auto &sprite : sprites) {
-            if (sprite.width > sheetWidth || sprite.height > sheetHeight) {
+        auto current_index = 0;
+        auto bin = RectangleBinPack::MaxRectsBinPack(sheetWidth, sheetHeight, false);
+        auto algorithm = RectangleBinPack::MaxRectsBinPack::RectBestShortSideFit;
+
+        for (auto& sprite : sprites) {
+            if (sprite.width + padding > sheetWidth || sprite.height + padding > sheetHeight) {
                 sprite.x = -1;
                 sprite.y = -1;
                 sprite.hasOversized = true;
                 sprite.imageIndex = -1;
                 continue;
             }
-            auto bin = bins.begin();
-            auto packed = rbp::Rect{};
+            auto packed = bin.Insert(sprite.width + padding, sprite.height + padding, algorithm);
 
-            for (; bin != bins.end(); ++bin) {
-                packed = bin->Insert(sprite.width + padding, 
-                    sprite.height + padding,
-                    algorithm
-                );
-                if (packed.height != 0 && packed.width != 0) {
-                    break;
+            if (packed.height != 0) {
+                sprite.x = packed.x;
+                sprite.y = packed.y;
+                sprite.hasOversized = false;
+                sprite.imageIndex = current_index;
+            }
+            else {
+                current_index++;
+                bin = RectangleBinPack::MaxRectsBinPack(sheetWidth, sheetHeight, false);
+                packed = bin.Insert(sprite.width + padding, sprite.height + padding, algorithm);
+
+                if (packed.height != 0) {
+                    sprite.x = packed.x;
+                    sprite.y = packed.y;
+                    sprite.hasOversized = false;
+                    sprite.imageIndex = current_index;
                 }
             }
-            if (bin == bins.end()) {
-                bins.emplace_back(sheetWidth, sheetHeight);
-                bin = std::prev(bins.end());
-                packed = bin->Insert(sprite.width + padding, sprite.height + padding,
-                    algorithm);
-            }
-            sprite.x = packed.x;
-            sprite.y = packed.y;
-            sprite.imageIndex = std::distance(bins.begin(), bin);
         }
-        return;
     }
+
+
 
 }

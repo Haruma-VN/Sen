@@ -93,16 +93,13 @@ class ImageIO {
       )!;
 
   static void cropImage(
-    String originalFile,
+    Image original,
     int x,
     int y,
     int width,
     int height,
     String outputFile,
   ) {
-    Image original = readImage(
-      originalFile,
-    );
     final destination = copyCrop(
       original,
       x: x,
@@ -118,16 +115,13 @@ class ImageIO {
   }
 
   static Future<void> cropImageAsync(
-    String originalFile,
+    Image original,
     int x,
     int y,
     int width,
     int height,
     String outputFile,
   ) async {
-    Image original = readImage(
-      originalFile,
-    );
     final destination = copyCrop(
       original,
       x: x,
@@ -136,7 +130,7 @@ class ImageIO {
       height: height,
     );
     await saveImageAsync(
-      originalFile,
+      outputFile,
       destination,
     );
     return;

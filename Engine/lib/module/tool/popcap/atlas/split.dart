@@ -1,4 +1,5 @@
 // ignore_for_file: camel_case_types, unused_local_variable, non_constant_identifier_names
+import 'package:image/image.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'dart:core';
 import 'package:path/path.dart' as p;
@@ -72,6 +73,7 @@ class splitAtlas {
     FileSystem.createDirectory(
       spriteDirectory,
     );
+    Map<String, Image> pngMap = {};
     for (var subgroup_children in data['resources']) {
       if (subgroup_children['ax'] != null &&
           subgroup_children['ay'] != null &&
@@ -79,6 +81,9 @@ class splitAtlas {
           subgroup_children['aw'] != null &&
           subgroup_children['path'] != null) {
         for (var png in imgPath) {
+          if (!pngMap.containsKey(png)) {
+            pngMap[png] = decodeImage(FileSystem.readBuffer(png))!;
+          }
           var currentParent =
               png.replaceAll(pngExpression, '').toUpperCase().toString();
           if (subgroup_children['parent'] != null &&
@@ -92,7 +97,7 @@ class splitAtlas {
                 ? (subgroup_children['path'] as String).split('\\')
                 : subgroup_children['path'];
             ImageIO.cropImage(
-              png,
+              pngMap[png]!,
               subgroup_children['ax'],
               subgroup_children['ay'],
               subgroup_children['aw'],

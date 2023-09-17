@@ -1,4 +1,4 @@
-import 'package:sen_material_design/module/tool/popcap/newton/common.dart';
+import 'package:sen_material_design/module/tool/popcap/new_type_object_notation/common.dart';
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 

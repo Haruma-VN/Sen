@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:path/path.dart' as p;
-import 'package:sen_material_design/module/tool/popcap/new_type_object_notation/encode.dart';
+import 'package:sen_material_design/module/tool/popcap/atlas/merge.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 
-class PopCapNewtonEncode extends StatefulWidget {
-  const PopCapNewtonEncode({super.key});
+class PopCapAtlasMerge extends StatefulWidget {
+  const PopCapAtlasMerge({super.key});
 
   @override
-  State<PopCapNewtonEncode> createState() => _PopCapNewtonEncodeState();
+  State<PopCapAtlasMerge> createState() => _PopCapAtlasMergeState();
 }
 
-class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
+class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -52,7 +51,7 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
               margin: const EdgeInsets.all(10.0),
               child: const Center(
                 child: Text(
-                  'PopCap Newton: Encode',
+                  'PopCap Atlas: Merge',
                   style: TextStyle(
                     fontSize: 25,
                   ),
@@ -63,7 +62,7 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'Data File',
+                'Data Directory',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -88,13 +87,10 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
                     height: 40,
                     child: OutlinedButton(
                       onPressed: () async {
-                        final String? path = await FileSystem.pickFile();
+                        final String? path = await FileSystem.pickDirectory();
                         if (path != null) {
                           controllerInput.text = path;
-                          controllerOutput.text = '${p.withoutExtension(
-                            path,
-                          )}.newton'
-                              .replaceAll(
+                          controllerOutput.text = path.replaceAll(
                             '\\',
                             '/',
                           );
@@ -113,7 +109,7 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(10.0),
               child: const Text(
-                'Output File',
+                'Output Directory',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -154,11 +150,12 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
                   onPressed: allowExecute
                       ? () async {
                           final DateTime startTime = DateTime.now();
+                          mergeAtlas.process(
+                            controllerInput.text,
+                            requiresData.has(4096, 4096, 1),
+                            controllerOutput.text,
+                          );
                           try {
-                            encodeNewton(
-                              controllerInput.text,
-                              controllerOutput.text,
-                            );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);
