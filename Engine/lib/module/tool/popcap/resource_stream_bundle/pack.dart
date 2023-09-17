@@ -14,7 +14,7 @@ class Pack {
   static void process_package(String inFolder, String outFile) {
     final rsb = ResourceStreamBundle();
     final manifest = FileSystem.readJson(path.join(inFolder, "manifest.json"));
-    rsb.packRSG(inFolder, outFile, manifest);
+    rsb.packRSB(inFolder, outFile, manifest);
     return;
   }
 }

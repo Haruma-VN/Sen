@@ -42,16 +42,15 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       body: Column(
         children: [
           Container(
             padding: const EdgeInsets.all(10.0),
-            child: const Text(
-              'Sen: Workspace Directory',
-              style: TextStyle(
-                fontSize: 30,
-              ),
+            child: Text(
+              'Workspace Directory',
+              style: theme.textTheme.titleMedium!,
             ),
           ),
           Container(

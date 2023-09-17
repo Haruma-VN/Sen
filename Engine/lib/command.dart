@@ -24,31 +24,6 @@ Future<void> refreshModule() async {
 
 class _HomePageState extends State<HomePage> {
   bool isHovering = false;
-
-  static double exchangeNameFont(double num) {
-    double fontSize = 20;
-    if (num > 800) {
-      fontSize = 30;
-    } else if (num > 600) {
-      fontSize = 24;
-    } else {
-      fontSize = 20;
-    }
-    return fontSize;
-  }
-
-  static double exchangeSubtitleFont(double num) {
-    double fontSize = 20;
-    if (num > 800) {
-      fontSize = 20;
-    } else if (num > 600) {
-      fontSize = 15;
-    } else {
-      fontSize = 13;
-    }
-    return fontSize;
-  }
-
   @override
   Widget build(BuildContext context) {
     Method exchangeFunction(
@@ -464,6 +439,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
+    var theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -479,7 +455,6 @@ class _HomePageState extends State<HomePage> {
                       });
                     },
                     child: Container(
-                      height: 100,
                       margin: const EdgeInsets.symmetric(
                         vertical: 8.0,
                         horizontal: 15.0,
@@ -512,21 +487,17 @@ class _HomePageState extends State<HomePage> {
                           children: <Widget>[
                             Icon(
                               exchangeFunction(e).icon,
-                              size: 30.0,
+                              size: 20.0,
                             ),
                           ],
                         ),
                         title: Text(
                           (exchangeFunction(e).name),
-                          style: TextStyle(
-                            fontSize: exchangeNameFont(screenWidth),
-                          ),
+                          style: theme.textTheme.titleMedium,
                         ),
                         subtitle: Text(
                           exchangeFunction(e).subtitle,
-                          style: TextStyle(
-                            fontSize: screenWidth > 600 ? 15 : 10,
-                          ),
+                          style: theme.textTheme.bodySmall,
                         ),
                         onTap: () {
                           Navigator.of(context).push(

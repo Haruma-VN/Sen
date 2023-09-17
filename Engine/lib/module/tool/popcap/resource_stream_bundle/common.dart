@@ -546,7 +546,7 @@ class ResourceStreamBundle {
   }
 
   //Pack
-  void packRSG(String inFolder, String outFile, dynamic manifest) {
+  void packRSB(String inFolder, String outFile, dynamic manifest) {
     final senFile = SenBuffer();
     senFile.writeString("1bsr");
     final version = manifest["version"];

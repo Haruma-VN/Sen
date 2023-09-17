@@ -98,10 +98,12 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           ApplicationInformation.applicationName,
+          style: theme.textTheme.titleLarge!,
         ),
         centerTitle: false,
         elevation: 3,
