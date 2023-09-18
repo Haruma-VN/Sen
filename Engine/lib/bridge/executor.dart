@@ -26,7 +26,7 @@ final String internalFile = 'Internal.${getExtension()}';
 var internal = Platform.isAndroid
     ? "libInternal.so"
     : path.join(
-        ApplicationInformation.internalPath.value,
+        ApplicationInformation.libraryPath.value,
         internalFile,
       );
 

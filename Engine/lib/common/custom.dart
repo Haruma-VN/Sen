@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:sen_material_design/module/utility/io/common.dart';
+import 'package:path/path.dart' as p;
 
 class Customization {
   // ignore: non_constant_identifier_names
@@ -22,16 +23,16 @@ class Customization {
     }
     var directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
-    return '$path/Sen/interface/user.json';
+    return p.join(path, 'SenGUI', 'interface', 'user.json');
   }
 
   // ignore: non_constant_identifier_names
-  Future<void> write(String theme_data, String internalPath) async {
+  Future<void> write(String theme_data, String libraryPath) async {
     final file = await getLocalData();
     var userData = <String, dynamic>{};
     userData['theme'] = theme_data;
-    userData['internalPath'] = internalPath;
-    FileSystem.writeFile(file, jsonEncode(userData));
+    userData['libraryPath'] = libraryPath;
+    FileSystem.writeJson(file, userData, '\t');
     return;
   }
 
@@ -81,9 +82,16 @@ class Customization {
       var custom = Customization.init();
       var path = await custom.getLocalData();
       var data = FileSystem.readJson(path);
-      return data['internalPath'];
+      return data['libraryPath'];
     } catch (e) {
-      return "";
+      if (Platform.isAndroid) {
+        return '/storage/emulated/0/SenGUI';
+      } else {
+        return p.join(
+          (await getApplicationDocumentsDirectory()).path,
+          'SenGUI',
+        );
+      }
     }
   }
 }

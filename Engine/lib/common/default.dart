@@ -5,5 +5,5 @@ class ApplicationInformation {
   static String commandPage = 'Commands';
   static String settingPage = 'Settings';
   static ValueNotifier<bool> isLightMode = ValueNotifier(true);
-  static ValueNotifier<String> internalPath = ValueNotifier("");
+  static ValueNotifier<String> libraryPath = ValueNotifier("");
 }

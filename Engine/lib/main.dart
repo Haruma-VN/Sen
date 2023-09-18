@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:sen_material_design/bridge/http/connect.dart';
 import 'package:sen_material_design/command.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:sen_material_design/setting.dart';
 import 'common/custom.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sen_material_design/l10n/l10n.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart' as p;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +18,20 @@ Future<void> main() async {
   if (!await Customization.getCurrentTheme()) {
     ApplicationInformation.isLightMode.value = false;
   }
-  final String internalPath = await Customization.getWorkspace();
-  if (internalPath != '') {
-    ApplicationInformation.internalPath.value = internalPath;
+  final String libraryPath = await Customization.getWorkspace();
+  if (libraryPath != '') {
+    ApplicationInformation.libraryPath.value = libraryPath;
+    if (!Platform.isAndroid &&
+        !FileSystem.fileExists(
+          p.join(
+            libraryPath,
+            Connection.internalLibrary(),
+          ),
+        )) {
+      await Connection.downloadInternal(
+        ApplicationInformation.libraryPath.value,
+      );
+    }
   }
   runApp(
     Application(
@@ -90,6 +106,8 @@ class _RootPageState extends State<RootPage> {
   int current_page = 0;
 
   /// Pages
+  ///
+  ///
 
   List<Widget> pages = const [
     HomePage(),
