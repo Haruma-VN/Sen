@@ -445,7 +445,7 @@ class _SettingState extends State<Setting> {
                       displayDialog(
                         Text(AppLocalizations.of(context)!.about),
                         SizedBox(
-                          height: 100,
+                          height: 200,
                           child: Column(
                             children: [
                               ListTile(
@@ -460,7 +460,7 @@ class _SettingState extends State<Setting> {
                                 ),
                                 title: Text(
                                   'Haruma-VN',
-                                  style: theme.textTheme.titleMedium,
+                                  style: theme.textTheme.titleLarge,
                                 ),
                                 subtitle: Align(
                                   alignment: FractionalOffset.topLeft,
@@ -468,17 +468,10 @@ class _SettingState extends State<Setting> {
                                     children: [
                                       Text(
                                         'https://github.com/Haruma-VN/Sen',
-                                        style: theme.textTheme.bodySmall,
+                                        style: theme.textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text(
-                                  AppLocalizations.of(context)!.copyright_sen,
-                                  style: theme.textTheme.titleMedium,
                                 ),
                               ),
                             ],

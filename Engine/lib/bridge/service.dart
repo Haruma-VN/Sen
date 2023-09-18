@@ -26,8 +26,9 @@ class MainActivity {
   static Future<bool> requestStoragePermission() async {
     try {
       final bool state = await platform.invokeMethod(
-        'REQUEST_STORAGE_PERMISSION',
-      );
+        'requestStoragePermission',
+        <String, dynamic>{},
+      ) as bool;
       return state;
     } catch (e) {
       return false;
@@ -35,8 +36,8 @@ class MainActivity {
   }
 
   static Future<bool> checkStoragePermission() async {
-    var result = (await platform
-        .invokeMethod('checkStoragePermission', <String, dynamic>{}) as bool);
+    var result = await platform
+        .invokeMethod('checkStoragePermission', <String, dynamic>{}) as bool;
     return result;
   }
 }
