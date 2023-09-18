@@ -33,4 +33,10 @@ class MainActivity {
       return false;
     }
   }
+
+  static Future<bool> checkStoragePermission() async {
+    var result = (await platform
+        .invokeMethod('checkStoragePermission', <String, dynamic>{}) as bool);
+    return result;
+  }
 }

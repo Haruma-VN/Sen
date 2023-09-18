@@ -461,16 +461,16 @@ class _HomePageState extends State<HomePage> {
                       ),
                       decoration: BoxDecoration(
                         color: isHovering
-                            ? ApplicationInformation.isLightMode.value
+                            ? !ApplicationInformation.isDarkMode.value
                                 ? const Color.fromARGB(255, 255, 183, 207)
                                     .withOpacity(0.7)
                                 : const Color.fromARGB(255, 66, 115, 140)
                                     .withOpacity(0.7)
-                            : ApplicationInformation.isLightMode.value
+                            : !ApplicationInformation.isDarkMode.value
                                 ? const Color.fromARGB(255, 255, 183, 207)
                                 : const Color.fromARGB(255, 66, 115, 140),
                         borderRadius: BorderRadius.circular(20.0),
-                        boxShadow: !ApplicationInformation.isLightMode.value
+                        boxShadow: ApplicationInformation.isDarkMode.value
                             ? null
                             : [
                                 const BoxShadow(

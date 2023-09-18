@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -6,7 +8,6 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
 class Customization {
-  // ignore: non_constant_identifier_names
   ThemeMode theme_data;
 
   Customization(this.theme_data);
@@ -16,23 +17,30 @@ class Customization {
           ThemeMode.system,
         );
 
-  // ignore: non_constant_identifier_names
   Future<String> getLocalData() async {
     if (Platform.isAndroid) {
-      return '/storage/emulated/0/Android/data/com.haruma.sen.gui/interface/user.json';
+      return '/storage/emulated/0/SenGUI/interface/user.json';
     }
     var directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
     return p.join(path, 'SenGUI', 'interface', 'user.json');
   }
 
-  // ignore: non_constant_identifier_names
-  Future<void> write(String theme_data, String libraryPath) async {
+  Future<void> write(
+    String theme_data,
+    String libraryPath,
+    String language,
+    bool storagePermission,
+    bool allowNotification,
+  ) async {
     final file = await getLocalData();
     var userData = <String, dynamic>{};
     userData['theme'] = theme_data;
     userData['libraryPath'] = libraryPath;
-    FileSystem.writeJson(file, userData, '\t');
+    userData['language'] = language;
+    userData['storagePermission'] = storagePermission;
+    userData['allowNotification'] = allowNotification;
+    FileSystem.writeFile(file, jsonEncode(userData));
     return;
   }
 
@@ -40,7 +48,6 @@ class Customization {
     try {
       final file = await getLocalData();
       final contents = FileSystem.readFile(file);
-      // ignore: non_constant_identifier_names
       final decode_data = jsonDecode(contents);
       switch (decode_data['theme']) {
         case 'dark':
@@ -61,7 +68,7 @@ class Customization {
       }
     } catch (e) {
       theme_data = ThemeMode.system;
-      write('light', '');
+      write('light', '', 'English', !Platform.isAndroid, true);
     }
     return;
   }
@@ -71,7 +78,7 @@ class Customization {
       var custom = Customization.init();
       var path = await custom.getLocalData();
       var data = FileSystem.readJson(path);
-      return data['theme'] == 'light';
+      return data['theme'] == 'dark';
     } catch (e) {
       return true;
     }
@@ -92,6 +99,17 @@ class Customization {
           'SenGUI',
         );
       }
+    }
+  }
+
+  static Future<String> getLocalization() async {
+    try {
+      var custom = Customization.init();
+      var path = await custom.getLocalData();
+      var data = FileSystem.readJson(path);
+      return data['language'];
+    } catch (e) {
+      return 'en';
     }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/http/connect.dart';
+import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/command.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
@@ -16,7 +17,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var setting = Customization.init();
   if (!await Customization.getCurrentTheme()) {
-    ApplicationInformation.isLightMode.value = false;
+    ApplicationInformation.isDarkMode.value = false;
   }
   final String libraryPath = await Customization.getWorkspace();
   if (libraryPath != '') {
@@ -32,6 +33,14 @@ Future<void> main() async {
         ApplicationInformation.libraryPath.value,
       );
     }
+  }
+  if (Platform.isAndroid) {
+    ApplicationInformation.storagePermission.value =
+        await MainActivity.checkStoragePermission();
+  }
+  final String language = await Customization.getLocalization();
+  if (language != 'en') {
+    ApplicationInformation.language.value = language;
   }
   runApp(
     Application(
@@ -51,8 +60,8 @@ class Application extends StatelessWidget {
   @override
   build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: ApplicationInformation.isLightMode,
-      builder: (BuildContext context, bool isLightMode, Widget? child) =>
+      valueListenable: ApplicationInformation.isDarkMode,
+      builder: (BuildContext context, bool isDarkMode, Widget? child) =>
           MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -66,7 +75,7 @@ class Application extends StatelessWidget {
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
-          brightness: isLightMode ? Brightness.light : Brightness.dark,
+          brightness: isDarkMode ? Brightness.dark : Brightness.light,
           colorSchemeSeed: const Color(0xFF1750A4),
         ),
         supportedLocales: L10n.all,
@@ -76,17 +85,7 @@ class Application extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          for (var locale in supportedLocales) {
-            if (deviceLocale != null) {
-              if (locale.languageCode == deviceLocale.languageCode &&
-                  locale.countryCode == deviceLocale.countryCode) {
-                return deviceLocale;
-              }
-            }
-          }
-          return const Locale('en');
-        },
+        locale: Locale(ApplicationInformation.language.value),
         themeMode: setting.theme_data,
         home: const RootPage(),
       ),
