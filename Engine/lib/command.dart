@@ -475,7 +475,7 @@ class _HomePageState extends State<HomePage> {
                             : [
                                 const BoxShadow(
                                   color: Colors.grey,
-                                  blurRadius: 5,
+                                  blurRadius: 2,
                                   spreadRadius: 3,
                                   offset: Offset(4, 2),
                                 ),
@@ -487,7 +487,7 @@ class _HomePageState extends State<HomePage> {
                           children: <Widget>[
                             Icon(
                               exchangeFunction(e).icon,
-                              size: 20.0,
+                              size: theme.iconTheme.size,
                             ),
                           ],
                         ),
@@ -498,6 +498,12 @@ class _HomePageState extends State<HomePage> {
                         subtitle: Text(
                           exchangeFunction(e).subtitle,
                           style: theme.textTheme.bodySmall,
+                        ),
+                        trailing: SizedBox(
+                          child: Icon(
+                            Icons.arrow_right_sharp,
+                            size: theme.iconTheme.size,
+                          ),
                         ),
                         onTap: () {
                           Navigator.of(context).push(

@@ -37,4 +37,4 @@
 
 ## Localization
 
--   If you want to add language to Lotus Engine, please add an `app_[language-code].arb`, see [Example](https://github.com/Haruma-VN/Sen/tree/master/Engine/lib/l10n)
+-   If you want to add language to Lotus Engine, please add an `app_[language-code].arb`, see [Example](https://github.com/Haruma-VN/Sen/tree/master/Engine/lib/l10n/app_en.arb) and sign the language code to [l10n.dart](https://github.com/Haruma-VN/Sen/tree/master/Engine/lib/l10n/l10n.dart)
