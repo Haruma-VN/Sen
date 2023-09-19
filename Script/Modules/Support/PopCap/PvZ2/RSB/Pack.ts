@@ -121,7 +121,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             //// Merge Split Res
             // const res_info_split_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json.info`));
             // if (Sen.Shell.FileSystem.DirectoryExists(res_info_split_path)) {
-            //     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, `For you Blaze <3`));
+            //     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, `Merge by automatically`));
             //     Sen.Shell.Console.Printf(null, `      ${`Find Splitted Res-Info directory, merge Res-Info`}`);
             //     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.MergeResInfoJson.CreateConversion(res_info_split_path, res_info_path);
             // }
@@ -143,7 +143,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             //// Merge Split Res
             // const resource_file_splitted_directory: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.res`);
             // if (Sen.Shell.FileSystem.DirectoryExists(resource_file_splitted_directory)) {
-            //     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, `For you Blaze <3`));
+            //     Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, `Merge by automatically`));
             //     Sen.Shell.Console.Printf(null, `      ${`Find Splitted Resource-Group directory, merge Resource-Group`}`);
             //     Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(resource_file_splitted_directory, resource_file);
             // }
