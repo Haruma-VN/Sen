@@ -1076,6 +1076,11 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     }
                     if (layer.state == true)
                     {
+                        var firstFrame = "0";
+                        try {
+                            firstFrame = $"{(i - (layer.frame_start)) % (sub_sprite[(layer.resource)].frame!.Length)}";
+                        }
+                        catch (Exception) {}
                         frame_node.Add(
                             new XElement("DOMFrame",
                                 new XAttribute("index", i),
@@ -1095,7 +1100,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                                                 new XAttribute("libraryItemName", $"sprite/sprite_{layer.resource + 1}"),
                                                 new XAttribute("symbolType", "graphic"),
                                                 new XAttribute("loop", "loop"),
-                                                new XAttribute("firstFrame", (i - (layer.frame_start)) % (sub_sprite[(layer.resource)].frame!.Length)),
+                                                new XAttribute("firstFrame", firstFrame),
                                             },
                                             new XElement("matrix",
                                                 new XElement("Matrix",
@@ -1447,7 +1452,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                     main_sprite = SenBuffer.ReadXml(path.Resolve(path.Join(inFolder, "library", "main.xml")))
                 }
             };
-            PAMInfo AnimationJson = ParseMainDocument(PAMRipe, inFolder);
+            PAMInfo AnimationJson = ParseMainDocument(PAMRipe, "DomDocument.xml");
             return AnimationJson;
         }
 
@@ -1460,7 +1465,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
             sourceFolder.Select((e) => path.Parse(e).ext.ToLower() == ".xml");
             if (extra.image!.Length != sourceFolder.Count)
             {
-                throw new PAMException("image_count_is_not_same", $"Image Count: {extra.image!.Length}, Source Count: {sourceFolder.Count}", sourcePath);
+                throw new PAMException("image_count_is_not_same", $"Image Count: {extra.image!.Length}, Source Count: {sourceFolder.Count}", $"library/source");
             }
             sourceFolder.Sort(new AlphanumericStringComparer());
             for (var i = 0; i < sourceFolder.Count; i++)
@@ -1470,7 +1475,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var imageName = extra.image[i].name!.Split("|")[0];
                 if (sourceImageName != imageName)
                 {
-                    throw new PAMException("image_name_is_not_same", $"In Struct: {imageName}, In Source: {sourceImageName}", sourceFolder[i]);
+                    throw new PAMException("image_name_is_not_same", $"In Struct: {imageName}, In Source: {sourceImageName}", $"source_{i + 1}.xml");
                 }
             }
         }
@@ -1500,7 +1505,7 @@ namespace Sen.Shell.Modules.Support.PvZ2.PAM
                 var x_symbols = x_symbols_list[0];
                 var x_Include_list = x_symbols.Elements("Include").ToArray();
             }
-            var main_sprite_frame = ParseSpriteDocument(PAMRipe.library.main_sprite, -1, main_path);
+            var main_sprite_frame = ParseSpriteDocument(PAMRipe.library.main_sprite, -1, "library/main.xml");
             var lastFrame = main_sprite_frame.Length;
             {
                 var x_timelines_list = x_DOMDocument.Elements("timelines").ToArray();
