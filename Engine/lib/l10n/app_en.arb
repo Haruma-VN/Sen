@@ -127,5 +127,14 @@
     "done": "Done",
     "input_library_path": "Input library path",
     "new_language_will_be_applied_after_the_application_is_restarted": "New language will be applied once the application is restarted",
-    "russian": "Russian"
+    "russian": "Russian",
+    "browse": "Browse",
+    "enter_path": "Enter path or browse path here",
+    "output_directory": "Output Directory",
+    "data_file": "Data File",
+    "input_directory": "Input Directory",
+    "output_file": "Output File",
+    "command_execute_success": "Command execute success. Time spent: {time}",
+    "command_execute_error": "Command execute error. Exception found: {exception}",
+    "execute": "Execute"
 }

@@ -3,6 +3,7 @@ import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplitPopCapResourceGroup extends StatefulWidget {
   const SplitPopCapResourceGroup({super.key});
@@ -36,6 +37,7 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -49,42 +51,37 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               margin: const EdgeInsets.all(10.0),
-              child: const Center(
+              child: Align(
+                alignment: FractionalOffset.bottomLeft,
                 child: Text(
-                  'PopCap Resource-Group: Split',
-                  style: TextStyle(
-                    fontSize: 25,
-                  ),
+                  AppLocalizations.of(context)!.popcap_resource_group_split,
+                  style: theme.textTheme.titleLarge,
                 ),
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               margin: const EdgeInsets.all(10.0),
-              child: const Text(
-                'Data File',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              margin: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: controllerInput,
-                      textAlign: TextAlign.center,
-                      onSubmitted: (String text) {
-                        this.text = text;
-                      },
-                    ),
+              child: TextField(
+                controller: controllerInput,
+                textAlign: TextAlign.center,
+                onChanged: (String text) {
+                  this.text = text;
+                },
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.0),
+                    ), // Rounded border
                   ),
-                  OutlinedButton(
+                  labelText: AppLocalizations.of(context)!.data_file,
+                  alignLabelWithHint: true,
+                  suffixIcon: IconButton(
+                    iconSize: 30.0,
+                    icon: const Icon(Icons.open_in_new),
+                    tooltip: AppLocalizations.of(context)!.browse,
                     onPressed: () async {
                       final String? path = await FileSystem.pickFile();
                       if (path != null) {
@@ -96,48 +93,43 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                         });
                       }
                     },
-                    child: const Text('Browse'),
                   ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              margin: const EdgeInsets.all(10.0),
-              child: const Text(
-                'Output Directory',
-                style: TextStyle(
-                  fontSize: 20,
                 ),
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               margin: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: controllerOutput,
-                      textAlign: TextAlign.center,
-                      onChanged: (String text) {
-                        this.text = text;
-                      },
+              child: TextField(
+                controller: controllerOutput,
+                textAlign: TextAlign.center,
+                onChanged: (String text) {
+                  this.text = text;
+                },
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.0),
                     ),
                   ),
-                  OutlinedButton(
+                  labelText: AppLocalizations.of(context)!.output_directory,
+                  alignLabelWithHint: true,
+                  suffixIcon: IconButton(
+                    iconSize: 30.0,
+                    icon: const Icon(Icons.open_in_new),
+                    tooltip: AppLocalizations.of(context)!.browse,
                     onPressed: () async {
                       final String? path = await FileSystem.pickDirectory();
                       if (path != null) {
                         controllerOutput.text = path;
                       }
                     },
-                    child: const Text('Browse'),
                   ),
-                ],
+                ),
               ),
             ),
             SizedBox(
+              width: MediaQuery.of(context).size.width * 0.3,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: OutlinedButton(
@@ -156,13 +148,26 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                               (_) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Center(
-                                      child: Text(
-                                        'Command execute success! Time spent: ${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
+                                    content: Text(
+                                      AppLocalizations.of(context)!
+                                          .command_execute_success(
+                                        '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
                                       ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(color: Colors.white),
+                                      textAlign: TextAlign.center,
                                     ),
                                     duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.green,
+                                    backgroundColor:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.green[600]
+                                            : Colors.green[500],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
                                   ),
                                 );
                               },
@@ -172,13 +177,24 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                               (_) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Center(
-                                      child: Text(
-                                        'Command execute failed! Error: $e',
-                                      ),
+                                    content: Text(
+                                      AppLocalizations.of(context)!
+                                          .command_execute_error(e),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(color: Colors.white),
+                                      textAlign: TextAlign.center,
                                     ),
                                     duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.red,
+                                    backgroundColor:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.red[300]
+                                            : Colors.red[900],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
                                   ),
                                 );
                               },
@@ -187,11 +203,29 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                           return;
                         }
                       : null,
-                  child: const Text(
-                    'Execute',
-                    style: TextStyle(
-                      fontSize: 18,
+                  style: OutlinedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      // This is the shape of the button
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
                     ),
+                    padding: const EdgeInsets.all(
+                      20.0,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: Container()),
+                      Align(
+                        alignment: FractionalOffset.center,
+                        child: Text(
+                          AppLocalizations.of(context)!.execute,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ),
+                      Expanded(child: Container()),
+                    ],
                   ),
                 ),
               ),

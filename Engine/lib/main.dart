@@ -124,30 +124,32 @@ class _RootPageState extends State<RootPage> {
         ),
         centerTitle: false,
         elevation: 3,
-        scrolledUnderElevation: 3,
+        scrolledUnderElevation: 2,
       ),
       body: pages[current_page],
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: true,
-        showUnselectedLabels: false,
-        elevation: 3,
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.terminal_rounded),
-            label: AppLocalizations.of(context)!.command_page,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: AppLocalizations.of(context)!.setting_page,
-          ),
-        ],
-        currentIndex: current_page,
-        onTap: (int value) {
-          setState(() {
-            current_page = value;
-          });
-        },
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          backgroundColor:
+              Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        ),
+        child: NavigationBar(
+          selectedIndex: current_page,
+          onDestinationSelected: (int index) {
+            setState(() {
+              current_page = index;
+            });
+          },
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.terminal_outlined),
+              label: AppLocalizations.of(context)!.command_page,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.settings_outlined),
+              label: AppLocalizations.of(context)!.setting_page,
+            ),
+          ],
+        ),
       ),
     );
   }

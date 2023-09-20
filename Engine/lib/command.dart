@@ -442,148 +442,141 @@ class _HomePageState extends State<HomePage> {
     var theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: ListView(
-        children: [
-          Column(
-            children: functionsName
-                .map(
-                  (e) => InkWell(
-                    onHover: (value) {
-                      setState(() {
-                        isHovering = value;
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 5.0,
-                        horizontal: 15.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isHovering
-                            ? !ApplicationInformation.isDarkMode.value
-                                ? const Color.fromARGB(255, 255, 183, 207)
-                                    .withOpacity(0.7)
-                                : const Color.fromARGB(255, 66, 115, 140)
-                                    .withOpacity(0.7)
-                            : !ApplicationInformation.isDarkMode.value
-                                ? const Color.fromARGB(255, 255, 183, 207)
-                                : const Color.fromARGB(255, 66, 115, 140),
-                        borderRadius: BorderRadius.circular(20.0),
-                        boxShadow: ApplicationInformation.isDarkMode.value
-                            ? null
-                            : [
-                                const BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 2,
-                                  spreadRadius: 3,
-                                  offset: Offset(4, 2),
-                                ),
-                              ],
-                      ),
-                      child: ListTile(
-                        leading: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              exchangeFunction(e).icon,
-                              size: theme.iconTheme.size,
-                            ),
-                          ],
-                        ),
-                        title: Text(
-                          (exchangeFunction(e).name),
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        subtitle: Text(
-                          exchangeFunction(e).subtitle,
-                          style: theme.textTheme.bodySmall,
-                        ),
-                        trailing: SizedBox(
-                          child: Icon(
-                            Icons.arrow_right_sharp,
-                            size: theme.iconTheme.size,
+    return ListView(
+      children: [
+        Column(
+          children: functionsName
+              .map(
+                (String e) => InkWell(
+                  onHover: (value) {
+                    setState(() {
+                      isHovering = value;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 6.0,
+                      horizontal: 20.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isHovering
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onSecondary
+                              .withOpacity(0.7)
+                          : Theme.of(context).colorScheme.onSecondary,
+                      borderRadius: BorderRadius.circular(30.0),
+                      boxShadow: [
+                        if (!(Theme.of(context).brightness == Brightness.dark))
+                          const BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                            offset: Offset(4, 2),
                           ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            exchangeFunction(e).icon,
+                            size: Theme.of(context).iconTheme.size,
+                          ),
+                        ],
+                      ),
+                      title: Text(
+                        (exchangeFunction(e).name),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      subtitle: Text(
+                        exchangeFunction(e).subtitle,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      trailing: SizedBox(
+                        child: Icon(
+                          Icons.arrow_right_sharp,
+                          size: Theme.of(context).iconTheme.size,
                         ),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      FutureBuilder(
-                                future: refreshModule(),
-                                builder: (
-                                  BuildContext context,
-                                  AsyncSnapshot snapshot,
-                                ) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return materialWidget[e] ??
-                                        Scaffold(
-                                          appBar: AppBar(
-                                            title: const Text(
-                                              ApplicationInformation
-                                                  .applicationName,
-                                            ),
-                                            centerTitle: false,
-                                            elevation: 3,
-                                            scrolledUnderElevation: 3,
-                                          ),
-                                          body: Text(
-                                            AppLocalizations.of(context)!
-                                                .have_not_implemented,
-                                          ),
-                                        );
-                                  } else {
-                                    return Scaffold(
-                                      appBar: AppBar(
-                                        title: const Text(
-                                          ApplicationInformation
-                                              .applicationName,
-                                        ),
-                                        centerTitle: false,
-                                        elevation: 3,
-                                        scrolledUnderElevation: 3,
-                                      ),
-                                      body: const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              transitionsBuilder: (
-                                context,
-                                animation,
-                                secondaryAnimation,
-                                child,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    FutureBuilder(
+                              future: refreshModule(),
+                              builder: (
+                                BuildContext context,
+                                AsyncSnapshot snapshot,
                               ) {
-                                var begin = const Offset(
-                                  1.0,
-                                  0.0,
-                                );
-                                var end = Offset.zero;
-                                var curve = Curves.ease;
-
-                                var tween = Tween(begin: begin, end: end)
-                                    .chain(CurveTween(curve: curve));
-
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return materialWidget[e] ??
+                                      Scaffold(
+                                        appBar: AppBar(
+                                          title: const Text(
+                                            ApplicationInformation
+                                                .applicationName,
+                                          ),
+                                          centerTitle: false,
+                                          elevation: 3,
+                                          scrolledUnderElevation: 3,
+                                        ),
+                                        body: Text(
+                                          AppLocalizations.of(context)!
+                                              .have_not_implemented,
+                                        ),
+                                      );
+                                } else {
+                                  return Scaffold(
+                                    appBar: AppBar(
+                                      title: const Text(
+                                        ApplicationInformation.applicationName,
+                                      ),
+                                      centerTitle: false,
+                                      elevation: 3,
+                                      scrolledUnderElevation: 3,
+                                    ),
+                                    body: const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
                               },
                             ),
-                          );
-                        },
-                      ),
+                            transitionsBuilder: (
+                              context,
+                              animation,
+                              secondaryAnimation,
+                              child,
+                            ) {
+                              var begin = const Offset(
+                                1.0,
+                                0.0,
+                              );
+                              var end = Offset.zero;
+                              var curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
-                )
-                .toList(),
-          ),
-        ],
-      ),
+                ),
+              )
+              .toList(),
+        ),
+      ],
     );
   }
 }
