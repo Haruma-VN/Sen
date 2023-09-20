@@ -366,15 +366,15 @@ namespace Sen.Shell.Modules.Support.WWise
         {
             var volumeValue = CreateHexString(BNKFile.readBytes(2));
             var volumeNumber = BNKFile.readUInt16LE();
-            var volumePointPoint = new string[volumeNumber];
+            var volumePoint = new string[volumeNumber];
             for (var i = 0; i < volumeNumber; i++)
             {
-                volumePointPoint[i] = CreateHexString(BNKFile.readBytes(12));
+                volumePoint[i] = CreateHexString(BNKFile.readBytes(12));
             }
             var lowPassFilterValue = CreateHexString(BNKFile.readBytes(2));
             var lowPassFilterNumber = BNKFile.readUInt16LE();
             var lowPassFilterPoint = new string[volumeNumber];
-            for (var i = 0; i < volumeNumber; i++)
+            for (var i = 0; i < lowPassFilterNumber; i++)
             {
                 lowPassFilterPoint[i] = CreateHexString(BNKFile.readBytes(12));
             }
@@ -383,7 +383,7 @@ namespace Sen.Shell.Modules.Support.WWise
                 var highPassFilterValue = CreateHexString(BNKFile.readBytes(2));
                 var highPassFilterNumber = BNKFile.readUInt16LE();
                 var highPassFilterPoint = new string[volumeNumber];
-                for (var i = 0; i < volumeNumber; i++)
+                for (var i = 0; i < highPassFilterNumber; i++)
                 {
                     highPassFilterPoint[i] = CreateHexString(BNKFile.readBytes(12));
                 }
@@ -392,7 +392,7 @@ namespace Sen.Shell.Modules.Support.WWise
                     volume = new ENVSVolume
                     {
                         volume_value = volumeValue,
-                        volume_point = volumePointPoint
+                        volume_point = volumePoint
                     },
                     low_pass_filter = new ENVSLowPassFilter
                     {
@@ -413,7 +413,7 @@ namespace Sen.Shell.Modules.Support.WWise
                     volume = new ENVSVolume
                     {
                         volume_value = volumeValue,
-                        volume_point = volumePointPoint
+                        volume_point = volumePoint
                     },
                     low_pass_filter = new ENVSLowPassFilter
                     {
@@ -456,7 +456,7 @@ namespace Sen.Shell.Modules.Support.WWise
                 dataList[i] = new STIDData
                 {
                     id = BNKFile.readUInt32LE(),
-                    name = BNKFile.readString(BNKFile.readUInt8()),
+                    name = BNKFile.readStringByUInt8(),
                 };
             }
             WwiseInfo.reference = new STID
@@ -678,7 +678,7 @@ namespace Sen.Shell.Modules.Support.WWise
             var ENVSLengthOffset = BNKFile.writeOffset;
             BNKFile.writeNull(4);
             EncodeENVSItem(BNKFile, ENVSInfo.obstruction, version);
-            EncodeENVSItem(BNKFile, ENVSInfo.obstruction, version);
+            EncodeENVSItem(BNKFile, ENVSInfo.occlusion, version);
             InsertTypeLength(BNKFile, ENVSLengthOffset);
         }
 
@@ -740,7 +740,7 @@ namespace Sen.Shell.Modules.Support.WWise
             {
                 BNKFile.writeUInt32LE(STIDInfo.data[i].id);
                 BNKFile.writeUInt8((byte)STIDInfo.data[i].name.Length);
-                BNKFile.writeString(STIDInfo.data[i].name);
+                BNKFile.writeStringByUInt8(STIDInfo.data[i].name);
             }
             InsertTypeLength(BNKFile, STIDLengthOffset);
         }
