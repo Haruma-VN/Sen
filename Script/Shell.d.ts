@@ -29,7 +29,7 @@ declare namespace Sen {
          * @implements Hold arguments and do process with arguments
          */
 
-        declare const argument: string[];
+        declare const argument: Array<string>;
 
         /**
          * Buffer
@@ -584,7 +584,7 @@ declare namespace Sen {
          */
 
         declare namespace Path {
-            export function Basename(path: string, ...suffix: string[]): string;
+            export function Basename(path: string, ...suffix: Array<string>): string;
 
             /**
              * @returns - Provides the platform-specific path delimiter:
@@ -632,7 +632,7 @@ declare namespace Sen {
              * @returns Joined path
              */
 
-            export function Join(...paths: string[]): string;
+            export function Join(...paths: Array<string>): string;
 
             /**
              *
@@ -929,7 +929,7 @@ declare namespace Sen {
              */
 
             export interface GenerateAPNG {
-                imageList: string[];
+                imageList: Array<string>;
                 outFile: string;
                 framesPerSecond: bigint;
             }
@@ -1437,7 +1437,7 @@ declare namespace Sen {
              * @param directories - Directory array, pass an empty array if nothing were added
              * @returns Created zip
              */
-            export function CompressZip(zip_output: string, files: string[], directories: string[]): void;
+            export function CompressZip(zip_output: string, files: Array<string>, directories: Array<string>): void;
             /**
              *
              * @param zip_output - Created zip output path
@@ -1446,7 +1446,7 @@ declare namespace Sen {
              * @returns Created zip, this function is asynchronous, please provide await from ES6
              */
 
-            export async function CompressZipAsync(zip_output: string, files?: string[], directories?: string[]): Promise<void>;
+            export async function CompressZipAsync(zip_output: string, files?: Array<string>, directories?: Array<string>): Promise<void>;
 
             /**
              *
@@ -2258,7 +2258,7 @@ declare namespace Sen {
              * @param user_agent - Pass User agent
              */
 
-            export function DownloadFromMultipleThread(fileUrls: string[], filePaths: string[], user_agent: string): void;
+            export function DownloadFromMultipleThread(fileUrls: Array<string>, filePaths: Array<string>, user_agent: string): void;
         }
 
         declare interface GitHubReleases {
@@ -2527,10 +2527,10 @@ declare namespace Sen {
              */
 
             export interface DOMDocumentAddon {
-                media: string[];
-                sprite: string[];
-                source: string[];
-                image: string[];
+                media: Array<string>;
+                sprite: Array<string>;
+                source: Array<string>;
+                image: Array<string>;
             }
 
             /**

@@ -62,7 +62,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
 
     export interface STMGStageGroupData {
         default_transition_time: string;
-        custom_transition: string[];
+        custom_transition: Array<string>;
     }
 
     /**
@@ -81,7 +81,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
     export interface STMGSwitchGroupData {
         parameter: number;
         parameter_category: number;
-        point: string[];
+        point: Array<string>;
     }
 
     export interface STMGGameParameter {
@@ -120,7 +120,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
 
     export interface ENVSVolume {
         volume_value: string;
-        volume_point: string[];
+        volume_point: Array<string>;
     }
 
     /**
@@ -129,7 +129,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
 
     export interface ENVSLowPassFilter {
         low_pass_filter_vaule: string;
-        low_pass_filter_point: string[];
+        low_pass_filter_point: Array<string>;
     }
 
     /**
@@ -138,7 +138,7 @@ namespace Sen.Script.Modules.Support.WWise.Soundbank.Encode {
 
     export interface ENVSHighPassFilter {
         high_pass_filter_vaule: string;
-        high_pass_filter_point: string[];
+        high_pass_filter_point: Array<string>;
     }
 
     /**

@@ -479,7 +479,7 @@ namespace Sen.Script.Modules.Interface.Assert {
      * @returns If contains, return true
      */
 
-    export function CheckForJsonAndPng(argument: string[]): boolean {
+    export function CheckForJsonAndPng(argument: Array<string>): boolean {
         const jsonRegex: RegExp = /\.json$/i;
         const pngRegex: RegExp = /\.png$/i;
         let hasJson: boolean = false;

@@ -156,7 +156,7 @@ namespace Sen.Script.Modules.Interface.Arguments {
      * @returns File path input by the user
      */
 
-    export function SavePath(type: "file" | "directory" | "unknown", filter: string[]): string {
+    export function SavePath(type: "file" | "directory" | "unknown", filter: Array<string>): string {
         let arg: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan);
         assert_view: while (arg !== "") {
             if (arg === ":p") {

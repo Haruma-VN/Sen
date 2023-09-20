@@ -196,7 +196,7 @@ namespace Sen.Script.Modules.Interface.Execute {
      * @returns Evaluate the tool
      */
 
-    export function Evaluate(function_name: Sen.Script.Modules.Interface.Execute.function_name, argument: string | string[], wrapper: Sen.Script.Modules.Interface.Assert.Wrapper, notify: boolean): void {
+    export function Evaluate(function_name: Sen.Script.Modules.Interface.Execute.function_name, argument: string | Array<string>, wrapper: Sen.Script.Modules.Interface.Assert.Wrapper, notify: boolean): void {
         const func_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         try {
             switch (function_name) {

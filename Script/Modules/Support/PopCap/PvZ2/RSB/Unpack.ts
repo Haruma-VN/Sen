@@ -55,7 +55,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      */
 
     export interface RSBPathInfo {
-        rsgs: string[];
+        rsgs: Array<string>;
         packet_path: string;
     }
 
@@ -94,7 +94,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
      */
 
     export interface ResInfo {
-        path: string | string[];
+        path: string | Array<string>;
         ptx_info?: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo;
         ptx_property?: PtxProperty;
     }

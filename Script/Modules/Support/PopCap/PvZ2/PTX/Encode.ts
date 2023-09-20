@@ -81,7 +81,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
      * @returns Encoded PTX
      */
 
-    export function DecodePopCapPTX(that_in: string | string[], that_out: string | string[], width: int | int[], height: int | int[], encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void {
+    export function DecodePopCapPTX(that_in: string | Array<string>, that_out: string | Array<string>, width: int | int[], height: int | int[], encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void {
         if (Array.isArray(that_in)) {
             if (Array.isArray(that_out)) {
                 if (!(that_in.length === that_out.length)) {
@@ -306,7 +306,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode {
      * @returns Encoded PTX
      */
 
-    export function EncodePopCapPTX(that_in: string | string[], that_out: string | string[], encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void {
+    export function EncodePopCapPTX(that_in: string | Array<string>, that_out: string | Array<string>, encode: Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial): void {
         if (Array.isArray(that_in)) {
             if (Array.isArray(that_out)) {
                 if (!(that_in.length === that_out.length)) {

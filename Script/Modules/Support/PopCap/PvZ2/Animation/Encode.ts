@@ -60,7 +60,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation {
      */
 
     export type CommandsInfo = {
-        command: string[];
+        command: Array<string>;
     };
 
     /**

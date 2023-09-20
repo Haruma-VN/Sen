@@ -289,7 +289,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     image: null | "1536" | "768" | "384" | "640" | "1200";
                 }>;
             }> = [];
-            const subgroups_independent_construct: string[] = [];
+            const subgroups_independent_construct: Array<string> = [];
             for (const M_Wrapper of resources_group.groups) {
                 if ("subgroups" in M_Wrapper) {
                     const subgroup_template_container_parent = M_Wrapper.subgroups.map(({ id, res }: any) => ({

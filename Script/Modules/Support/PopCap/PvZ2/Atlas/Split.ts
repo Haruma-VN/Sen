@@ -760,9 +760,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split {
          * @returns - Array of duplicates only
          */
 
-        public static FindDuplicates(array: string[]): string[] {
+        public static FindDuplicates(array: Array<string>): Array<string> {
             const countMap: { [key: string]: number } = {};
-            const duplicates: string[] = [];
+            const duplicates: Array<string> = [];
             for (const item of array) {
                 countMap[item] = (countMap[item] || 0) + 1;
             }

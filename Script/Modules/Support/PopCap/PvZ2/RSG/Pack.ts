@@ -13,7 +13,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack {
      */
 
     export interface ResInfo {
-        path: string | string[];
+        path: string | Array<string>;
         ptx_info?: PtxInfo;
     }
 

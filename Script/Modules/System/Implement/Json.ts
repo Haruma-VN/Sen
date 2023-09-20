@@ -37,12 +37,12 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      */
 
     export type PatchOperation =
-        | { op: "add"; path: string[]; value: any }
-        | { op: "remove"; path: string[] }
-        | { op: "replace"; path: string[]; value: any }
-        | { op: "move"; from: string[]; path: string[] }
-        | { op: "copy"; from: string[]; path: string[] }
-        | { op: "test"; path: string[]; value: any };
+        | { op: "add"; path: Array<string>; value: any }
+        | { op: "remove"; path: Array<string> }
+        | { op: "replace"; path: Array<string>; value: any }
+        | { op: "move"; from: Array<string>; path: Array<string> }
+        | { op: "copy"; from: Array<string>; path: Array<string> }
+        | { op: "test"; path: Array<string>; value: any };
 
     /**
      *
@@ -51,7 +51,7 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      * @returns Get current property
      */
 
-    function get(obj: any, path: string[]): any {
+    function get(obj: any, path: Array<string>): any {
         let current = obj;
 
         for (const token of path) {
@@ -71,7 +71,7 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      * @param value - Set property inside JSON Obj
      */
 
-    function set(obj: any, path: string[], value: any): void {
+    function set(obj: any, path: Array<string>, value: any): void {
         let current = obj;
 
         for (let i = 0; i < path.length - 1; i++) {
@@ -91,7 +91,7 @@ namespace Sen.Script.Modules.FileSystem.Implement.JsonLibrary {
      * @returns
      */
 
-    function remove(obj: any, path: string[]): void {
+    function remove(obj: any, path: Array<string>): void {
         let current = obj;
 
         for (let i = 0; i < path.length - 1; i++) {
