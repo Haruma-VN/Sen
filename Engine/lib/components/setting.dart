@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/custom.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/language.dart';
+import 'package:sen_material_design/components/page/language.dart';
 import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 

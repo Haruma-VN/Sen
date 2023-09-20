@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/functions.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/components/widget.dart';
+import 'package:sen_material_design/components/page/widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/bridge/method.dart';
 

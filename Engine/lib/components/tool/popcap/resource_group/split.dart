@@ -78,21 +78,26 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                   ),
                   labelText: AppLocalizations.of(context)!.data_file,
                   alignLabelWithHint: true,
-                  suffixIcon: IconButton(
-                    iconSize: 30.0,
-                    icon: const Icon(Icons.open_in_new),
-                    tooltip: AppLocalizations.of(context)!.browse,
-                    onPressed: () async {
-                      final String? path = await FileSystem.pickFile();
-                      if (path != null) {
-                        controllerInput.text = path;
-                        controllerOutput.text =
-                            '${p.withoutExtension(path)}.res';
-                        setState(() {
-                          allowExecute = true;
-                        });
-                      }
-                    },
+                  suffixIcon: Container(
+                    margin: const EdgeInsets.only(
+                      right: 10.0,
+                    ),
+                    child: IconButton(
+                      iconSize: 30.0,
+                      icon: const Icon(Icons.open_in_new),
+                      tooltip: AppLocalizations.of(context)!.browse,
+                      onPressed: () async {
+                        final String? path = await FileSystem.pickFile();
+                        if (path != null) {
+                          controllerInput.text = path;
+                          controllerOutput.text =
+                              '${p.withoutExtension(path)}.res';
+                          setState(() {
+                            allowExecute = true;
+                          });
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -114,16 +119,21 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                   ),
                   labelText: AppLocalizations.of(context)!.output_directory,
                   alignLabelWithHint: true,
-                  suffixIcon: IconButton(
-                    iconSize: 30.0,
-                    icon: const Icon(Icons.open_in_new),
-                    tooltip: AppLocalizations.of(context)!.browse,
-                    onPressed: () async {
-                      final String? path = await FileSystem.pickDirectory();
-                      if (path != null) {
-                        controllerOutput.text = path;
-                      }
-                    },
+                  suffixIcon: Container(
+                    margin: const EdgeInsets.only(
+                      right: 10.0,
+                    ),
+                    child: IconButton(
+                      iconSize: 30.0,
+                      icon: const Icon(Icons.open_in_new),
+                      tooltip: AppLocalizations.of(context)!.browse,
+                      onPressed: () async {
+                        final String? path = await FileSystem.pickDirectory();
+                        if (path != null) {
+                          controllerOutput.text = path;
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
