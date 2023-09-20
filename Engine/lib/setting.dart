@@ -153,7 +153,7 @@ class _SettingState extends State<Setting> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(
-                          Icons.translate,
+                          Icons.language_outlined,
                           size: theme.iconTheme.size,
                         ),
                       ],
