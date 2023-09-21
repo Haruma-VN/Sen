@@ -9,6 +9,8 @@ import 'package:sen_material_design/components/tool/popcap/resource_group/from_r
 import 'package:sen_material_design/components/tool/popcap/resource_group/merge.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/split.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/to_resinfo.dart';
+import 'package:sen_material_design/components/tool/popcap/rsb/pack.dart';
+import 'package:sen_material_design/components/tool/popcap/rsb/unpack.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/compress.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/uncompress.dart';
 
@@ -25,4 +27,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.newton.encode': PopCapNewtonEncode(),
   'popcap.resource_group.split_atlas': PopCapAtlasSplit(),
   'popcap.resource_group.merge_atlas': PopCapAtlasMerge(),
+  'popcap.rsb.unpack': PopCapRSBUnpack(),
+  'popcap.rsb.pack': PopCapRSBPack(),
 };

@@ -159,5 +159,11 @@
     "select_height": "Select height",
     "select_height_subtitle": "Select height to merge atlas",
     "select_padding": "Select padding",
-    "select_padding_subtitle": "Select distance between two sprites"
+    "select_padding_subtitle": "Select distance between two sprites",
+    "use_64bit_variant": "Use 64-bit variant",
+    "true_argument": "Set the default argument to true",
+    "false_argument": "Set the default argument to false",
+    "most_popcap_games_using_non_64bit": "Most PopCap Games on Android using 32-bit variant",
+    "true_val": "true",
+    "false_val": "false"
 }
