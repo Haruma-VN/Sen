@@ -48,8 +48,6 @@ class _HomePageState extends State<HomePage> {
     return methodFile;
   }
 
-  String view = 'List item 1';
-
   @override
   Widget build(BuildContext context) {
     Method exchangeFunction(
@@ -62,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_resource_group_split,
               AppLocalizations.of(context)!
                   .popcap_resource_group_split_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.resource_group.merge':
@@ -71,7 +69,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_resource_group_merge,
               AppLocalizations.of(context)!
                   .popcap_resource_group_merge_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.resource_group.to_resinfo':
@@ -80,7 +78,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_resource_group_to_resinfo,
               AppLocalizations.of(context)!
                   .popcap_resource_group_to_resinfo_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.resource_group.from_resinfo':
@@ -89,7 +87,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_resource_group_from_resinfo,
               AppLocalizations.of(context)!
                   .popcap_resource_group_from_resinfo_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.resinfo.split':
@@ -97,7 +95,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_resinfo_split,
               AppLocalizations.of(context)!.popcap_resinfo_split_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.resinfo.merge':
@@ -105,7 +103,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_resinfo_merge,
               AppLocalizations.of(context)!.popcap_resinfo_merge_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.resource_group.split_atlas':
@@ -114,7 +112,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_resource_group_split_atlas,
               AppLocalizations.of(context)!
                   .popcap_resource_group_split_atlas_subtitle,
-              Icons.perm_media_rounded,
+              Icons.perm_media_outlined,
             );
           }
         case 'popcap.resource_group.merge_atlas':
@@ -123,7 +121,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_resource_group_merge_atlas,
               AppLocalizations.of(context)!
                   .popcap_resource_group_merge_atlas_subtitle,
-              Icons.perm_media_rounded,
+              Icons.perm_media_outlined,
             );
           }
         case 'popcap.resinfo.split_atlas':
@@ -131,7 +129,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_resinfo_split_atlas,
               AppLocalizations.of(context)!.popcap_resinfo_split_atlas_subtitle,
-              Icons.perm_media_rounded,
+              Icons.perm_media_outlined,
             );
           }
         case 'popcap.resinfo.merge_atlas':
@@ -139,7 +137,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_resinfo_merge_atlas,
               AppLocalizations.of(context)!.popcap_resinfo_merge_atlas_subtitle,
-              Icons.perm_media_rounded,
+              Icons.perm_media_outlined,
             );
           }
         case 'popcap.ptx.decode':
@@ -147,7 +145,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_ptx_decode,
               AppLocalizations.of(context)!.popcap_ptx_decode_subtitle,
-              Icons.photo_size_select_actual_rounded,
+              Icons.photo_size_select_actual_outlined,
             );
           }
         case 'popcap.ptx.encode':
@@ -155,7 +153,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_ptx_encode,
               AppLocalizations.of(context)!.popcap_ptx_encode_subtitle,
-              Icons.photo_size_select_actual_rounded,
+              Icons.photo_size_select_actual_outlined,
             );
           }
         case 'popcap.animation.decode_to_json':
@@ -164,7 +162,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_animation_decode_to_json,
               AppLocalizations.of(context)!
                   .popcap_animation_decode_to_json_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.animation.encode_from_json':
@@ -173,7 +171,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_animation_encode_from_json,
               AppLocalizations.of(context)!
                   .popcap_animation_encode_from_json_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.animation.pam_to_flash':
@@ -182,7 +180,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_animation_pam_to_flash,
               AppLocalizations.of(context)!
                   .popcap_animation_pam_to_flash_subtitle,
-              Icons.motion_photos_auto,
+              Icons.motion_photos_auto_outlined,
             );
           }
         case 'popcap.animation.pam_from_flash':
@@ -191,7 +189,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_animation_pam_from_flash,
               AppLocalizations.of(context)!
                   .popcap_animation_pam_from_flash_subtitle,
-              Icons.motion_photos_auto,
+              Icons.motion_photos_auto_outlined,
             );
           }
         case 'popcap.animation.json_to_flash':
@@ -200,7 +198,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_animation_json_to_flash,
               AppLocalizations.of(context)!
                   .popcap_animation_json_to_flash_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.animation.json_from_flash':
@@ -209,7 +207,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_animation_json_from_flash,
               AppLocalizations.of(context)!
                   .popcap_animation_json_from_flash_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.rton.decode':
@@ -217,7 +215,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rton_decode,
               AppLocalizations.of(context)!.popcap_rton_decode_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.rton.encode':
@@ -225,7 +223,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rton_encode,
               AppLocalizations.of(context)!.popcap_rton_encode_subtitle,
-              Icons.data_object,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.rton.decrypt':
@@ -233,7 +231,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rton_decrypt,
               AppLocalizations.of(context)!.popcap_rton_decrypt_subtitle,
-              Icons.no_encryption,
+              Icons.no_encryption_outlined,
             );
           }
         case 'popcap.rton.encrypt':
@@ -241,7 +239,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rton_encrypt,
               AppLocalizations.of(context)!.popcap_rton_encrypt_subtitle,
-              Icons.lock,
+              Icons.lock_outlined,
             );
           }
         case 'popcap.rton.decrypt_and_decode':
@@ -250,7 +248,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_rton_decrypt_and_decode,
               AppLocalizations.of(context)!
                   .popcap_rton_decrypt_and_decode_subtitle,
-              Icons.data_object_sharp,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.rton.encode_and_encrypt':
@@ -259,7 +257,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_rton_encode_and_encrypt,
               AppLocalizations.of(context)!
                   .popcap_rton_encode_and_encrypt_subtitle,
-              Icons.data_object_sharp,
+              Icons.data_object_outlined,
             );
           }
         case 'popcap.rsg.unpack':
@@ -267,7 +265,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsg_unpack,
               AppLocalizations.of(context)!.popcap_rsg_unpack_subtitle,
-              Icons.data_array,
+              Icons.data_array_outlined,
             );
           }
         case 'popcap.rsg.pack':
@@ -275,7 +273,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsg_pack,
               AppLocalizations.of(context)!.popcap_rsg_pack_subtitle,
-              Icons.data_array,
+              Icons.data_array_outlined,
             );
           }
         case 'popcap.rsb.unpack':
@@ -283,7 +281,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsb_unpack,
               AppLocalizations.of(context)!.popcap_rsb_unpack_subtitle,
-              Icons.data_array,
+              Icons.data_array_outlined,
             );
           }
         case 'popcap.rsb.pack':
@@ -291,7 +289,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsb_pack,
               AppLocalizations.of(context)!.popcap_rsb_pack_subtitle,
-              Icons.data_array,
+              Icons.data_array_outlined,
             );
           }
         case 'popcap.rsb.unpack_simple':
@@ -299,7 +297,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsb_unpack_simple,
               AppLocalizations.of(context)!.popcap_rsb_unpack_simple_subtitle,
-              Icons.data_array,
+              Icons.data_array_outlined,
             );
           }
         case 'popcap.rsb.pack_simple':
@@ -307,7 +305,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsb_pack_simple,
               AppLocalizations.of(context)!.popcap_rsb_pack_simple_subtitle,
-              Icons.data_array,
+              Icons.data_array_outlined,
             );
           }
         case 'popcap.rsb.unpack_by_loose_constraints':
@@ -317,7 +315,7 @@ class _HomePageState extends State<HomePage> {
                   .popcap_rsb_unpack_by_loose_constraints,
               AppLocalizations.of(context)!
                   .popcap_rsb_unpack_by_loose_constraints_subtitle,
-              Icons.data_array,
+              Icons.data_array_outlined,
             );
           }
         case 'popcap.rsb.unpack_resource':
@@ -383,7 +381,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsbpatch_decode,
               AppLocalizations.of(context)!.popcap_rsbpatch_decode_subtitle,
-              Icons.description,
+              Icons.description_outlined,
             );
           }
         case 'popcap.rsbpatch.encode':
@@ -391,7 +389,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_rsbpatch_encode,
               AppLocalizations.of(context)!.popcap_rsbpatch_encode_subtitle,
-              Icons.description,
+              Icons.description_outlined,
             );
           }
         case 'popcap.lawnstring.convert':
@@ -407,7 +405,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_newton_decode,
               AppLocalizations.of(context)!.popcap_newton_decode_subtitle,
-              Icons.description,
+              Icons.description_outlined,
             );
           }
         case 'popcap.newton.encode':
@@ -415,7 +413,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               AppLocalizations.of(context)!.popcap_newton_encode,
               AppLocalizations.of(context)!.popcap_newton_encode_subtitle,
-              Icons.description,
+              Icons.description_outlined,
             );
           }
         case 'popcap.compiled_text.decode':
@@ -442,7 +440,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_render_effects_decode,
               AppLocalizations.of(context)!
                   .popcap_render_effects_decode_subtitle,
-              Icons.description,
+              Icons.description_outlined,
             );
           }
         case 'popcap.render.effects.encode':
@@ -451,7 +449,7 @@ class _HomePageState extends State<HomePage> {
               AppLocalizations.of(context)!.popcap_render_effects_encode,
               AppLocalizations.of(context)!
                   .popcap_render_effects_encode_subtitle,
-              Icons.description,
+              Icons.description_outlined,
             );
           }
         default:
@@ -459,7 +457,7 @@ class _HomePageState extends State<HomePage> {
             return Method.hasIcon(
               'name',
               'subtitle',
-              Icons.terminal,
+              Icons.terminal_outlined,
             );
           }
       }
