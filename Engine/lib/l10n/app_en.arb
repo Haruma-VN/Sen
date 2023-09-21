@@ -136,5 +136,9 @@
     "output_file": "Output File",
     "command_execute_success": "Command execute success. Time spent: {time}",
     "command_execute_error": "Command execute error. Exception found: {exception}",
-    "execute": "Execute"
+    "execute": "Execute",
+    "does_not_have_permission": "Does not have permission",
+    "does_not_have_permission_subtitle": "Sen does not have the permission to write/read file in the sdcard, please allow the permission to access the file system on Android",
+    "grant_permission": "Grant Permission",
+    "grant_permission_subtitle": "Click here to open Settings, and allow permission for Sen to access file system on Android"
 }

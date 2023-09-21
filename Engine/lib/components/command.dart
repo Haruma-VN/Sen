@@ -1,10 +1,15 @@
 // ignore_for_file: unused_local_variable, unused_element
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/functions.dart';
+import 'package:sen_material_design/bridge/service.dart';
+import 'package:sen_material_design/common/custom.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/components/page/widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/bridge/method.dart';
+import 'package:sen_material_design/module/utility/io/common.dart';
+import 'package:path/path.dart' as p;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,6 +29,18 @@ Future<void> refreshModule() async {
 
 class _HomePageState extends State<HomePage> {
   bool isHovering = false;
+
+  String methodFile = p.join(
+    ApplicationInformation.libraryPath.value,
+    'interface',
+    'methods.json',
+  );
+
+  String initMethod() {
+    Customization.initMethod(methodFile);
+    return methodFile;
+  }
+
   @override
   Widget build(BuildContext context) {
     Method exchangeFunction(
@@ -444,16 +461,153 @@ class _HomePageState extends State<HomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
     return ListView(
       children: [
-        Column(
-          children: functionsName
-              .map(
-                (String e) => InkWell(
-                  onHover: (value) {
-                    setState(() {
-                      isHovering = value;
-                    });
-                  },
-                  child: Container(
+        ApplicationInformation.storagePermission.value
+            ? Column(
+                children: List<MethodItem>.from(
+                  FileSystem.readJson(
+                    FileSystem.fileExists(methodFile)
+                        ? methodFile
+                        : initMethod(),
+                  ).map((dynamic e) => MethodItem.fromJson(e)),
+                )
+                    .map(
+                      (MethodItem e) => InkWell(
+                        onHover: (value) {
+                          setState(() {
+                            isHovering = value;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 6.0,
+                            horizontal: 20.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isHovering
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onSecondary
+                                    .withOpacity(0.7)
+                                : Theme.of(context).colorScheme.onSecondary,
+                            borderRadius: BorderRadius.circular(30.0),
+                            boxShadow: [
+                              if (!(Theme.of(context).brightness ==
+                                  Brightness.dark))
+                                const BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
+                                  offset: Offset(4, 2),
+                                ),
+                            ],
+                          ),
+                          child: ListTile(
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  exchangeFunction(e.method).icon,
+                                  size: Theme.of(context).iconTheme.size,
+                                ),
+                              ],
+                            ),
+                            title: Text(
+                              (exchangeFunction(e.method).name),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            subtitle: Text(
+                              exchangeFunction(e.method).subtitle,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            trailing: SizedBox(
+                              child: Icon(
+                                Icons.arrow_right_sharp,
+                                size: Theme.of(context).iconTheme.size,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  pageBuilder: (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                  ) =>
+                                      FutureBuilder(
+                                    future: refreshModule(),
+                                    builder: (
+                                      BuildContext context,
+                                      AsyncSnapshot snapshot,
+                                    ) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return materialWidget[e.method] ??
+                                            Scaffold(
+                                              appBar: AppBar(
+                                                title: const Text(
+                                                  ApplicationInformation
+                                                      .applicationName,
+                                                ),
+                                                centerTitle: false,
+                                                elevation: 3,
+                                                scrolledUnderElevation: 3,
+                                              ),
+                                              body: Text(
+                                                AppLocalizations.of(context)!
+                                                    .have_not_implemented,
+                                              ),
+                                            );
+                                      } else {
+                                        return Scaffold(
+                                          appBar: AppBar(
+                                            title: const Text(
+                                              ApplicationInformation
+                                                  .applicationName,
+                                            ),
+                                            centerTitle: false,
+                                            elevation: 3,
+                                            scrolledUnderElevation: 3,
+                                          ),
+                                          body: const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  transitionsBuilder: (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child,
+                                  ) {
+                                    var begin = const Offset(
+                                      1.0,
+                                      0.0,
+                                    );
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              )
+            : Column(
+                children: [
+                  Container(
                     margin: const EdgeInsets.symmetric(
                       vertical: 6.0,
                       horizontal: 20.0,
@@ -481,101 +635,86 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Icon(
-                            exchangeFunction(e).icon,
-                            size: Theme.of(context).iconTheme.size,
+                            Icons.error_outline,
+                            size: theme.iconTheme.size,
+                            color: Colors.red,
                           ),
                         ],
                       ),
                       title: Text(
-                        (exchangeFunction(e).name),
-                        style: Theme.of(context).textTheme.titleLarge,
+                        (AppLocalizations.of(context)!
+                            .does_not_have_permission),
+                        style: theme.textTheme.titleMedium,
                       ),
                       subtitle: Text(
-                        exchangeFunction(e).subtitle,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        AppLocalizations.of(context)!
+                            .does_not_have_permission_subtitle,
+                        style: theme.textTheme.bodySmall,
                       ),
-                      trailing: SizedBox(
-                        child: Icon(
-                          Icons.arrow_right_sharp,
-                          size: Theme.of(context).iconTheme.size,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    FutureBuilder(
-                              future: refreshModule(),
-                              builder: (
-                                BuildContext context,
-                                AsyncSnapshot snapshot,
-                              ) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  return materialWidget[e] ??
-                                      Scaffold(
-                                        appBar: AppBar(
-                                          title: const Text(
-                                            ApplicationInformation
-                                                .applicationName,
-                                          ),
-                                          centerTitle: false,
-                                          elevation: 3,
-                                          scrolledUnderElevation: 3,
-                                        ),
-                                        body: Text(
-                                          AppLocalizations.of(context)!
-                                              .have_not_implemented,
-                                        ),
-                                      );
-                                } else {
-                                  return Scaffold(
-                                    appBar: AppBar(
-                                      title: const Text(
-                                        ApplicationInformation.applicationName,
-                                      ),
-                                      centerTitle: false,
-                                      elevation: 3,
-                                      scrolledUnderElevation: 3,
-                                    ),
-                                    body: const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                            transitionsBuilder: (
-                              context,
-                              animation,
-                              secondaryAnimation,
-                              child,
-                            ) {
-                              var begin = const Offset(
-                                1.0,
-                                0.0,
-                              );
-                              var end = Offset.zero;
-                              var curve = Curves.ease;
-
-                              var tween = Tween(begin: begin, end: end)
-                                  .chain(CurveTween(curve: curve));
-
-                              return SlideTransition(
-                                position: animation.drive(tween),
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                      },
                     ),
                   ),
-                ),
-              )
-              .toList(),
-        ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 6.0,
+                      horizontal: 20.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isHovering
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onSecondary
+                              .withOpacity(0.7)
+                          : Theme.of(context).colorScheme.onSecondary,
+                      borderRadius: BorderRadius.circular(30.0),
+                      boxShadow: [
+                        if (!(Theme.of(context).brightness == Brightness.dark))
+                          const BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                            offset: Offset(4, 2),
+                          ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.sd_storage_outlined,
+                            size: theme.iconTheme.size,
+                          ),
+                        ],
+                      ),
+                      title: Text(
+                        (AppLocalizations.of(context)!.grant_permission),
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        AppLocalizations.of(context)!.grant_permission_subtitle,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      trailing: SizedBox(
+                        child: Platform.isAndroid
+                            ? Icon(
+                                Icons.open_in_new,
+                                size: theme.iconTheme.size,
+                              )
+                            : null,
+                      ),
+                      onTap: Platform.isAndroid
+                          ? () async {
+                              setState(() async {
+                                ApplicationInformation.storagePermission.value =
+                                    await MainActivity
+                                        .requestStoragePermission();
+                              });
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
       ],
     );
   }

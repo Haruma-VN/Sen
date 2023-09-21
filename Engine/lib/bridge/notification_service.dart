@@ -5,7 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:local_notifier/local_notifier.dart';
 import 'package:sen_material_design/common/default.dart';
 
-class Notification {
+class NotificationService {
   static FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
 
   static Future<void> initialize() async {
@@ -29,7 +29,7 @@ class Notification {
         linux: LinuxInitializationSettings(
           defaultActionName: '',
           defaultIcon: AssetsLinuxIcon(
-            'asset/logo.png',
+            'asset/icon.png',
           ),
         ),
       );

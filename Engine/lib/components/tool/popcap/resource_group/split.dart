@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
@@ -156,13 +157,22 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                                 endTime.difference(startTime);
                             WidgetsBinding.instance.addPostFrameCallback(
                               (_) {
+                                String description =
+                                    AppLocalizations.of(context)!
+                                        .command_execute_success(
+                                  '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
+                                );
+                                if (ApplicationInformation
+                                    .allowNotification.value) {
+                                  NotificationService.push(
+                                    ApplicationInformation.applicationName,
+                                    description,
+                                  );
+                                }
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      AppLocalizations.of(context)!
-                                          .command_execute_success(
-                                        '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
-                                      ),
+                                      description,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -185,11 +195,20 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                           } catch (e) {
                             WidgetsBinding.instance.addPostFrameCallback(
                               (_) {
+                                String description =
+                                    AppLocalizations.of(context)!
+                                        .command_execute_error(e);
+                                if (ApplicationInformation
+                                    .allowNotification.value) {
+                                  NotificationService.push(
+                                    ApplicationInformation.applicationName,
+                                    description,
+                                  );
+                                }
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      AppLocalizations.of(context)!
-                                          .command_execute_error(e),
+                                      description,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!

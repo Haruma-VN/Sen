@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sen_material_design/bridge/method.dart';
 import 'dart:io';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
@@ -24,6 +25,15 @@ class Customization {
     var directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
     return p.join(path, 'SenGUI', 'interface', 'user.json');
+  }
+
+  static Future<String> getMethod() async {
+    if (Platform.isAndroid) {
+      return '/storage/emulated/0/SenGUI/interface/methods.json';
+    }
+    var directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    return p.join(path, 'SenGUI', 'interface', 'methods.json');
   }
 
   Future<void> write(
@@ -100,6 +110,15 @@ class Customization {
         );
       }
     }
+  }
+
+  static void initMethod(String path) {
+    FileSystem.writeJson(
+      path,
+      defaultMethods,
+      '\t',
+    );
+    return;
   }
 
   static Future<String> getLocalization() async {
