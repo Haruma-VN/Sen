@@ -42,6 +42,8 @@ Future<void> main() async {
   if (language != 'en') {
     ApplicationInformation.language.value = language;
   }
+  ApplicationInformation.allowNotification.value =
+      await Customization.getNotificationDetail();
   runApp(
     Application(
       setting: setting,

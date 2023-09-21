@@ -27,6 +27,13 @@ Future<void> refreshModule() async {
   return;
 }
 
+class RipeValue {
+  late String value;
+  late String display;
+  RipeValue();
+  RipeValue.has(this.value, this.display);
+}
+
 class _HomePageState extends State<HomePage> {
   bool isHovering = false;
 
@@ -40,6 +47,8 @@ class _HomePageState extends State<HomePage> {
     Customization.initMethod(methodFile);
     return methodFile;
   }
+
+  String view = 'List item 1';
 
   @override
   Widget build(BuildContext context) {
@@ -513,11 +522,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                             title: Text(
                               (exchangeFunction(e.method).name),
-                              style: Theme.of(context).textTheme.titleLarge,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                             subtitle: Text(
                               exchangeFunction(e.method).subtitle,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                             trailing: SizedBox(
                               child: Icon(

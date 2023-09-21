@@ -140,5 +140,12 @@
     "does_not_have_permission": "Does not have permission",
     "does_not_have_permission_subtitle": "Sen does not have the permission to write/read file in the sdcard, please allow the permission to access the file system on Android",
     "grant_permission": "Grant Permission",
-    "grant_permission_subtitle": "Click here to open Settings, and allow permission for Sen to access file system on Android"
+    "grant_permission_subtitle": "Click here to open Settings, and allow permission for Sen to access file system on Android",
+    "execution_argument": "Execution Argument: {argument}",
+    "using_popcap_resource_path": "Using PopCap's Resources Path",
+    "using_popcap_resource_path_subtitle": "From version 10.4, PvZ2 has two path style represent for older and newer versions",
+    "old_version_path": "For 10.3 or below",
+    "new_version_path": "For 10.4 or above",
+    "old_version_path_subtitle": "Using Array of String for path",
+    "new_version_path_subtitle": "Using String follows Windows style for path"
 }

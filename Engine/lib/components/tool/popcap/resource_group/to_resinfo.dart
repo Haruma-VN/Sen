@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/module/tool/popcap/resource_group/common.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/to_resinfo.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
-import 'package:sen_material_design/module/tool/popcap/resource_group/common.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ToResInfo extends StatefulWidget {
   const ToResInfo({super.key});
@@ -20,6 +22,27 @@ class _ToResInfoState extends State<ToResInfo> {
 
   bool allowExecute = true;
 
+  String view = 'old';
+
+  ExpandPath exchangeViewValue(
+    String value,
+  ) {
+    switch (value) {
+      case 'old':
+        {
+          return ExpandPath.array;
+        }
+      case 'new':
+        {
+          return ExpandPath.string;
+        }
+      default:
+        {
+          throw Exception('Invalid resource type');
+        }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,12 +57,9 @@ class _ToResInfoState extends State<ToResInfo> {
     super.dispose();
   }
 
-  String dropDownDefault = '10.3 or below';
-
-  bool customIcon = true;
-
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -53,173 +73,214 @@ class _ToResInfoState extends State<ToResInfo> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               margin: const EdgeInsets.all(10.0),
-              child: const Center(
+              child: Align(
+                alignment: FractionalOffset.bottomLeft,
                 child: Text(
-                  'PopCap Resource-Group: Convert to Res-Info',
-                  style: TextStyle(
-                    fontSize: 25,
+                  AppLocalizations.of(context)!
+                      .popcap_resource_group_to_resinfo,
+                  style: theme.textTheme.titleLarge,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              margin: const EdgeInsets.all(10.0),
+              child: TextField(
+                controller: controllerInput,
+                textAlign: TextAlign.center,
+                onChanged: (String text) {
+                  this.text = text;
+                },
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.0),
+                    ), // Rounded border
                   ),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              margin: const EdgeInsets.all(10.0),
-              child: const Text(
-                'Data File',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              margin: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: controllerInput,
-                      textAlign: TextAlign.center,
-                      onChanged: (String text) {
-                        this.text = text;
-                      },
+                  labelText: AppLocalizations.of(context)!.data_file,
+                  alignLabelWithHint: true,
+                  suffixIcon: Container(
+                    margin: const EdgeInsets.only(
+                      right: 10.0,
                     ),
-                  ),
-                  SizedBox(
-                    width: 100,
-                    height: 40,
-                    child: OutlinedButton(
+                    child: IconButton(
+                      iconSize: 30.0,
+                      icon: const Icon(Icons.open_in_new),
+                      tooltip: AppLocalizations.of(context)!.browse,
                       onPressed: () async {
                         final String? path = await FileSystem.pickFile();
                         if (path != null) {
                           controllerInput.text = path;
-                          controllerOutput.text = p
-                              .join(
-                                p.dirname(
-                                  path,
-                                ),
-                                'res.json',
-                              )
-                              .replaceAll(
-                                '\\',
-                                '/',
-                              );
+                          controllerOutput.text =
+                              p.join(p.dirname(path), 'res.json');
                           setState(() {
                             allowExecute = true;
                           });
                         }
                       },
-                      child: const Text('Browse'),
                     ),
                   ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              margin: const EdgeInsets.all(10.0),
-              child: const Text(
-                'Output File',
-                style: TextStyle(
-                  fontSize: 20,
                 ),
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               margin: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: controllerOutput,
-                      textAlign: TextAlign.center,
-                      onChanged: (String text) {
-                        this.text = text;
+              child: TextField(
+                controller: controllerOutput,
+                textAlign: TextAlign.center,
+                onChanged: (String text) {
+                  this.text = text;
+                },
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20.0),
+                    ),
+                  ),
+                  labelText: AppLocalizations.of(context)!.output_file,
+                  alignLabelWithHint: true,
+                  suffixIcon: Container(
+                    margin: const EdgeInsets.only(
+                      right: 10.0,
+                    ),
+                    child: IconButton(
+                      iconSize: 30.0,
+                      icon: const Icon(Icons.open_in_new),
+                      tooltip: AppLocalizations.of(context)!.browse,
+                      onPressed: () async {
+                        final String? path = await FileSystem.pickFile();
+                        if (path != null) {
+                          controllerOutput.text = path;
+                        }
                       },
                     ),
                   ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      final String? path = await FileSystem.pickFile();
-                      if (path != null) {
-                        controllerOutput.text = path;
-                      }
-                    },
-                    child: const Text('Browse'),
-                  ),
-                ],
+                ),
               ),
             ),
-            ExpansionTile(
-              initiallyExpanded: customIcon,
-              title: const Text(
-                'Using PopCap Resource-Group path',
-              ),
-              trailing: Icon(
-                customIcon
-                    ? Icons.arrow_drop_down_rounded
-                    : Icons.arrow_drop_up_rounded,
-              ),
-              children: <Widget>[
-                const ListTile(
-                  title: Text(
-                    'There are two resources kind, set range in the version 10.4 of PvZ 2. The older version will use the older path, and newer version use the newer path.',
-                  ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              margin: const EdgeInsets.all(8.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: DropdownButton<String>(
-                      value: dropDownDefault,
-                      isExpanded: true,
-                      focusColor: Colors.transparent,
-                      underline: Container(),
-                      items: const [
-                        DropdownMenuItem(
-                          value: '10.3 or below',
-                          child: Center(
-                            // Center the text
-                            child: Text(
-                              '10.3 or below',
-                            ),
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.question_mark_outlined,
+                            size: theme.iconTheme.size,
+                            color: Colors.cyan,
                           ),
+                        ],
+                      ),
+                      title: Text(
+                        AppLocalizations.of(context)!.execution_argument(
+                          AppLocalizations.of(context)!
+                              .using_popcap_resource_path,
                         ),
-                        DropdownMenuItem(
-                          value: '10.4 or above',
-                          child: Center(
-                            // Center the text
-                            child: Text(
-                              '10.4 or above',
-                            ),
-                          ),
-                        ),
-                      ],
-                      onChanged: (String? value) {
-                        setState(
-                          () {
-                            dropDownDefault = value!;
-                          },
-                        );
-                      },
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(color: Colors.cyan),
+                      ),
+                      subtitle: Text(
+                        AppLocalizations.of(context)!
+                            .using_popcap_resource_path_subtitle,
+                        style: theme.textTheme.bodySmall,
+                      ),
                     ),
-                  ),
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      margin: const EdgeInsets.all(8.0),
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: view,
+                        focusColor: Colors.transparent,
+                        underline: Container(),
+                        items: [
+                          DropdownMenuItem<String>(
+                            value: 'old',
+                            child: Row(
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.data_object_outlined,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .old_version_path,
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .old_version_path_subtitle,
+                                        style: theme.textTheme.bodySmall!,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              setState(() {
+                                view = 'old';
+                              });
+                            },
+                          ),
+                          DropdownMenuItem<String>(
+                            value: 'new',
+                            child: Row(
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.data_object_outlined,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .new_version_path,
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .new_version_path_subtitle,
+                                        style: theme.textTheme.bodySmall!,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              setState(() {
+                                view = 'new';
+                              });
+                            },
+                          ),
+                        ],
+                        onChanged: (_) {},
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-              onExpansionChanged: (bool value) {
-                setState(() {
-                  customIcon = value;
-                });
-              },
+              ),
             ),
             SizedBox(
-              width: 200,
-              height: 50,
-              child: Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: OutlinedButton(
                   onPressed: allowExecute
@@ -229,24 +290,44 @@ class _ToResInfoState extends State<ToResInfo> {
                             ConvertToResInfo.process(
                               controllerInput.text,
                               controllerOutput.text,
-                              (dropDownDefault == '10.3 or below')
-                                  ? ExpandPath.array
-                                  : ExpandPath.string,
+                              exchangeViewValue(view),
                             );
                             final DateTime endTime = DateTime.now();
                             final Duration difference =
                                 endTime.difference(startTime);
                             WidgetsBinding.instance.addPostFrameCallback(
                               (_) {
+                                String description =
+                                    AppLocalizations.of(context)!
+                                        .command_execute_success(
+                                  '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
+                                );
+                                if (ApplicationInformation
+                                    .allowNotification.value) {
+                                  NotificationService.push(
+                                    ApplicationInformation.applicationName,
+                                    description,
+                                  );
+                                }
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Center(
-                                      child: Text(
-                                        'Command execute success! Time spent: ${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
-                                      ),
+                                    content: Text(
+                                      description,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(color: Colors.white),
+                                      textAlign: TextAlign.center,
                                     ),
                                     duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.green,
+                                    backgroundColor:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.green[600]
+                                            : Colors.green[500],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
                                   ),
                                 );
                               },
@@ -254,15 +335,35 @@ class _ToResInfoState extends State<ToResInfo> {
                           } catch (e) {
                             WidgetsBinding.instance.addPostFrameCallback(
                               (_) {
+                                String description =
+                                    AppLocalizations.of(context)!
+                                        .command_execute_error(e);
+                                if (ApplicationInformation
+                                    .allowNotification.value) {
+                                  NotificationService.push(
+                                    ApplicationInformation.applicationName,
+                                    description,
+                                  );
+                                }
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Center(
-                                      child: Text(
-                                        'Command execute failed! Error: $e',
-                                      ),
+                                    content: Text(
+                                      description,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(color: Colors.white),
+                                      textAlign: TextAlign.center,
                                     ),
                                     duration: const Duration(seconds: 2),
-                                    backgroundColor: Colors.red,
+                                    backgroundColor:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.red[300]
+                                            : Colors.red[900],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
                                   ),
                                 );
                               },
@@ -271,11 +372,19 @@ class _ToResInfoState extends State<ToResInfo> {
                           return;
                         }
                       : null,
-                  child: const Text(
-                    'Execute',
-                    style: TextStyle(
-                      fontSize: 18,
+                  style: OutlinedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
                     ),
+                    padding: const EdgeInsets.all(
+                      20.0,
+                    ),
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.execute,
+                    style: theme.textTheme.titleMedium,
                   ),
                 ),
               ),

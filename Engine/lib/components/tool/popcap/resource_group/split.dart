@@ -234,7 +234,6 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                       : null,
                   style: OutlinedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
-                      // This is the shape of the button
                       borderRadius: BorderRadius.all(
                         Radius.circular(20),
                       ),
@@ -243,18 +242,9 @@ class _SplitPopCapResourceGroupState extends State<SplitPopCapResourceGroup> {
                       20.0,
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(child: Container()),
-                      Align(
-                        alignment: FractionalOffset.center,
-                        child: Text(
-                          AppLocalizations.of(context)!.execute,
-                          style: theme.textTheme.titleMedium,
-                        ),
-                      ),
-                      Expanded(child: Container()),
-                    ],
+                  child: Text(
+                    AppLocalizations.of(context)!.execute,
+                    style: theme.textTheme.titleMedium,
                   ),
                 ),
               ),

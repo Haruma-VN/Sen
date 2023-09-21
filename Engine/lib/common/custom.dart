@@ -90,6 +90,17 @@ class Customization {
       var data = FileSystem.readJson(path);
       return data['theme'] == 'dark';
     } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> getNotificationDetail() async {
+    try {
+      var custom = Customization.init();
+      var path = await custom.getLocalData();
+      var data = FileSystem.readJson(path);
+      return data['allowNotification'] as bool;
+    } catch (e) {
       return true;
     }
   }

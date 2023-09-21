@@ -136,7 +136,11 @@ class ConvertToResInfo {
     return result;
   }
 
-  static void process(String inFile, String outFile, ExpandPath expandPath) {
+  static void process(
+    String inFile,
+    String outFile,
+    ExpandPath expandPath,
+  ) {
     ConvertToResInfo convert = ConvertToResInfo();
     var data =
         convert.convertWholeData(FileSystem.readJson(inFile), expandPath);
