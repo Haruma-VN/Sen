@@ -56,7 +56,7 @@ class _PopCapAtlasSplitState extends State<PopCapAtlasSplit> {
     }
   }
 
-  String splitMethod = 'id';
+  String splitMethod = 'path';
 
   @override
   Widget build(BuildContext context) {
