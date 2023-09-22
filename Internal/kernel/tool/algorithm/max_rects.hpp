@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <algorithm>
 #include "../../dependencies/RectangleBinPack/MaxRectsBinPack.h"

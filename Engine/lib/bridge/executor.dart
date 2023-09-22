@@ -362,3 +362,39 @@ final PackSprites packAtlas = dylib
       'packAtlas',
     )
     .asFunction();
+
+typedef EncodeETC1FastC = Void Function(
+  Pointer<Uint32>,
+  Pointer<Uint64>,
+  Uint32,
+  IntPtr,
+);
+
+typedef EncodeETC1FastDart = void Function(
+  Pointer<Uint32>,
+  Pointer<Uint64>,
+  int,
+  int,
+);
+
+final EncodeETC1FastDart EncodeETC1Fast = dylib
+    .lookup<NativeFunction<EncodeETC1FastC>>(
+      'EncodeETC1Fast',
+    )
+    .asFunction();
+
+typedef EncodeETC1SlowC = Void Function(
+  Pointer<Uint32>,
+  Pointer<Uint32>,
+);
+
+typedef EncodeETC1SlowDart = void Function(
+  Pointer<Uint32>,
+  Pointer<Uint32>,
+);
+
+final EncodeETC1SlowDart EncodeETC1Slow = dylib
+    .lookup<NativeFunction<EncodeETC1SlowC>>(
+      'EncodeETC1Slow',
+    )
+    .asFunction();

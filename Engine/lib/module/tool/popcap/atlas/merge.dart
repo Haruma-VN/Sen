@@ -190,4 +190,139 @@ class mergeAtlas {
     );
     return subgroup;
   }
+
+  static process_fs(
+    String directoryPath,
+    requiresData packData,
+    String outputDirectory,
+    String? error,
+  ) {
+    final String atlas_json_path = p.join(
+      directoryPath,
+      'atlas.json',
+    );
+    final String media_path = p.join(
+      directoryPath,
+      'media',
+    );
+    final dynamic atlasJson = FileSystem.readJson(
+      atlas_json_path,
+    );
+    final bool isPath = atlasJson['method'] == 'path';
+    final List<dynamic> packable_datas =
+        auto_conversion_to_packable_data(atlasJson, atlas_json_path);
+    for (var data in packable_datas) {
+      var file_name =
+          '${isPath ? data['path'][data['path'].length - 1] : data['id']}.png';
+      var dimension = ImageIO.getDimension(
+        p.join(
+          media_path,
+          file_name,
+        ),
+      );
+      data['width'] = dimension.width;
+      data['height'] = dimension.height;
+    }
+    var mData = RectangleBinPack.process(
+      RectangleBox(
+        packData.width,
+        packData.height,
+        packData.padding,
+      ),
+      packable_datas.map((e) {
+        List<String> path = [];
+        e['path'].forEach((dynamic item) => path.add(item.toString()));
+        return RectangleSprite(
+          e['width'],
+          e['height'],
+          e['x'],
+          e['y'],
+          e['id'],
+          e['infoX'],
+          e['infoY'],
+          e['cols'],
+          e['rows'],
+          path,
+        );
+      }).toList(),
+    );
+    List<List<RectangleSprite>> results = Texture2DAlgorithm.extract(
+      mData,
+      error,
+    );
+    dynamic subgroup = {
+      [atlasJson['subgroup']]: {
+        'type': atlasJson['res'],
+        'packet': {},
+      },
+    };
+    for (var i = 0; i < results.length; ++i) {
+      var dimension = Dimension(packData.width, packData.height);
+      String parent_name = '${atlasJson['subgroup']}_${i < 10 ? '0$i' : i}';
+      String parent_packet = 'ATLASIMAGE_ATLAS_${parent_name.toUpperCase()}';
+      subgroup[atlasJson[['subgroup']]]['packet'][parent_packet] = {
+        'type': 'Image',
+        'path': ['atlases', parent_name],
+        'dimension': {
+          'width': dimension.width,
+          'height': dimension.height,
+        },
+        'data': {},
+      };
+      for (var j = 0; j < results[i].length; ++j) {
+        dynamic rawData = {
+          'default': {
+            'ax': results[i][j].x,
+            'ay': results[i][j].y,
+            'aw': results[i][j].width,
+            'ah': results[i][j].height,
+            'x': results[i][j].infoX,
+            'y': results[i][j].infoY,
+          },
+          'path': results[i][j].path,
+          'type': 'Image',
+        };
+        if (results[i][j].cols != 1) {
+          rawData['default']['cols'] = results[i][j].cols;
+        }
+        if (results[i][j].rows != 1) {
+          rawData['default']['rows'] = results[i][j].rows;
+        }
+        subgroup[atlasJson['subgroup']]['packet'][parent_packet]['data']
+            [results[i][j].id] = rawData;
+      }
+      ImageIO.joinImage(
+        results[i]
+            .map(
+              (RectangleSprite e) => ImageChild(
+                e.width,
+                e.height,
+                !isPath
+                    ? p.join(
+                        media_path,
+                        '${e.id}.png',
+                      )
+                    : p.join(media_path, '${e.path[e.path.length - 1]}.png'),
+                e.x,
+                e.y,
+              ),
+            )
+            .toList(),
+        DimensionExpand(
+          dimension.width,
+          dimension.height,
+          p.join(
+            outputDirectory,
+            '${parent_name.toUpperCase()}.png',
+          ),
+        ),
+      );
+    }
+    FileSystem.writeJson(
+      p.join(outputDirectory, '${atlasJson['subgroup']}.json'),
+      subgroup,
+      '\t',
+    );
+    return;
+  }
 }
