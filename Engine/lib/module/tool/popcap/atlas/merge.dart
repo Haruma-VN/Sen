@@ -20,7 +20,7 @@ class requiresData {
 class mergeAtlas {
   static List<dynamic> auto_conversion_to_packable_data(
     dynamic atlasJson,
-    String? filepath,
+    String? error,
   ) {
     final groups_member = atlasJson['groups'].keys.toList();
     List<dynamic> data = [];
@@ -52,6 +52,7 @@ class mergeAtlas {
     String directoryPath,
     requiresData packData,
     String outputDirectory,
+    String? error,
   ) {
     final String atlas_json_path = p.join(
       directoryPath,
@@ -102,7 +103,10 @@ class mergeAtlas {
         );
       }).toList(),
     );
-    List<List<RectangleSprite>> results = Texture2DAlgorithm.extract(mData);
+    List<List<RectangleSprite>> results = Texture2DAlgorithm.extract(
+      mData,
+      error,
+    );
     dynamic subgroup = {
       'id': atlasJson['subgroup'],
       'parent': (atlasJson['subgroup'] as String)

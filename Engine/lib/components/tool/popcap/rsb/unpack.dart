@@ -140,7 +140,7 @@ class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
@@ -246,7 +246,7 @@ class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.execute,
-                        style: theme.textTheme.titleMedium,
+                        style: theme.textTheme.titleSmall,
                       ),
                     ),
                   ),

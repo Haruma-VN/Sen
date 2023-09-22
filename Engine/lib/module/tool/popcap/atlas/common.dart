@@ -58,6 +58,7 @@ class Texture2DAlgorithm {
 
   static List<List<RectangleSprite>> extract(
     List<RectangleSprite> data,
+    String? error,
   ) {
     Map<int, List<RectangleSprite>> groupedData = {};
     List<List<RectangleSprite>> result = [];
@@ -72,7 +73,7 @@ class Texture2DAlgorithm {
       groupedData[element]?.forEach((element) {
         if (element.hasOversized) {
           throw Exception(
-            'Cannot merge with oversized image: ${element.width} & ${element.height}',
+            '$error: ${element.width} & ${element.height}',
           );
         }
       });

@@ -58,7 +58,7 @@ class _PopCapRSBPackState extends State<PopCapRSBPack> {
                   child: Align(
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
-                      AppLocalizations.of(context)!.popcap_rsb_unpack,
+                      AppLocalizations.of(context)!.popcap_rsb_pack,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -141,7 +141,7 @@ class _PopCapRSBPackState extends State<PopCapRSBPack> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
@@ -247,7 +247,7 @@ class _PopCapRSBPackState extends State<PopCapRSBPack> {
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.execute,
-                        style: theme.textTheme.titleMedium,
+                        style: theme.textTheme.titleSmall,
                       ),
                     ),
                   ),

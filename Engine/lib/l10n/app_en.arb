@@ -165,5 +165,6 @@
     "false_argument": "Set the default argument to false",
     "most_popcap_games_using_non_64bit": "Most PopCap Games on Android using 32-bit variant",
     "true_val": "true",
-    "false_val": "false"
+    "false_val": "false",
+    "cannot_merge_with_oversized": "Cannot merge with oversized image"
 }

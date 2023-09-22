@@ -375,6 +375,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
                           ),
                         ),
                         Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
                           padding: const EdgeInsets.all(10.0),
                           margin: const EdgeInsets.all(8.0),
                           child: DropdownButton<String>(
@@ -427,7 +428,6 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
@@ -443,6 +443,8 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
                                     int.parse(padding),
                                   ),
                                   controllerOutput.text,
+                                  AppLocalizations.of(context)!
+                                      .cannot_merge_with_oversized,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =
@@ -538,7 +540,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.execute,
-                        style: theme.textTheme.titleMedium,
+                        style: theme.textTheme.titleSmall,
                       ),
                     ),
                   ),

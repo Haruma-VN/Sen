@@ -325,28 +325,33 @@ class _PopCapAtlasSplitState extends State<PopCapAtlasSplit> {
                             items: [
                               DropdownMenuItem<String>(
                                 value: 'id',
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.data_object_outlined,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .split_by_id,
+                                child: ListView(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.data_object_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_id,
+                                              ),
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_id_subtitle,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .split_by_id_subtitle,
-                                            style: theme.textTheme.bodySmall!,
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -358,28 +363,33 @@ class _PopCapAtlasSplitState extends State<PopCapAtlasSplit> {
                               ),
                               DropdownMenuItem<String>(
                                 value: 'path',
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.data_object_outlined,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .split_by_path,
+                                child: ListView(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.data_object_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_path,
+                                              ),
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_path_subtitle,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .split_by_path_subtitle,
-                                            style: theme.textTheme.bodySmall!,
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -398,7 +408,7 @@ class _PopCapAtlasSplitState extends State<PopCapAtlasSplit> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
@@ -506,7 +516,7 @@ class _PopCapAtlasSplitState extends State<PopCapAtlasSplit> {
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.execute,
-                        style: theme.textTheme.titleMedium,
+                        style: theme.textTheme.titleSmall,
                       ),
                     ),
                   ),
