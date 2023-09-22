@@ -147,7 +147,7 @@
     "old_version_path": "For 10.3 or below",
     "new_version_path": "For 10.4 or above",
     "old_version_path_subtitle": "Using Array of String for path",
-    "new_version_path_subtitle": "Using String follows Windows style for path",
+    "new_version_path_subtitle": "Using String for path",
     "split_method": "Split Method",
     "split_method_subtitle": "Split Method will allows you to split with multiple kinds, which allows to work with resources simpler",
     "split_by_path": "Split by last item name in property \"path\"",

@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/http/connect.dart';
 import 'package:sen_material_design/bridge/service.dart';
+import 'package:sen_material_design/common/version.dart';
 import 'package:sen_material_design/components/command.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
@@ -44,6 +44,7 @@ Future<void> main() async {
   }
   ApplicationInformation.allowNotification.value =
       await Customization.getNotificationDetail();
+  Engine.cast_internal_executor();
   runApp(
     Application(
       setting: setting,

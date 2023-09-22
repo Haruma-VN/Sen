@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/custom.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/common/version.dart';
 import 'package:sen_material_design/components/page/language.dart';
 import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
@@ -438,7 +439,7 @@ class _SettingState extends State<Setting> {
                       style: theme.textTheme.titleMedium,
                     ),
                     subtitle: Text(
-                      AppLocalizations.of(context)!.about_this_tool,
+                      'Build version: ${Engine.version} & Engine: ${Engine.engineVersion} & Internal: ${Engine.internal}',
                       style: theme.textTheme.bodySmall,
                     ),
                     onTap: () {

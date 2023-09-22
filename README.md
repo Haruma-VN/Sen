@@ -2,7 +2,7 @@
 
 -   `Sen` is a cross platform project that will helps you create your own PvZ2-Mods.
 
--   This project was based on the project [Tre](https://github.com/Haruma-VN/Tre), both of them are made by me but `Tre` is no longer maintaining because of platform issues. `Sen` is basically the cross platform version of `Tre` and provides safer functions.
+-   `Sen` has two kinds of project: `Lotus Console` and `Lotus Engine`. `Lotus Console` is an cli-program that focuses on fast execution, `Lotus Engine` is an GUI program that support on simple execution.
 
 ## Open source Project
 
