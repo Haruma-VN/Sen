@@ -250,17 +250,16 @@ class mergeAtlas {
       mData,
       error,
     );
+    var subgroup_name = atlasJson['subgroup'];
     dynamic subgroup = {
-      [atlasJson['subgroup']]: {
-        'type': atlasJson['res'],
-        'packet': {},
-      },
+      'type': atlasJson['res'],
+      'packet': {},
     };
     for (var i = 0; i < results.length; ++i) {
       var dimension = Dimension(packData.width, packData.height);
-      String parent_name = '${atlasJson['subgroup']}_${i < 10 ? '0$i' : i}';
+      String parent_name = '${subgroup_name}_${i < 10 ? '0$i' : i}';
       String parent_packet = 'ATLASIMAGE_ATLAS_${parent_name.toUpperCase()}';
-      subgroup[atlasJson[['subgroup']]]['packet'][parent_packet] = {
+      subgroup['packet'][parent_packet] = {
         'type': 'Image',
         'path': ['atlases', parent_name],
         'dimension': {
@@ -288,8 +287,7 @@ class mergeAtlas {
         if (results[i][j].rows != 1) {
           rawData['default']['rows'] = results[i][j].rows;
         }
-        subgroup[atlasJson['subgroup']]['packet'][parent_packet]['data']
-            [results[i][j].id] = rawData;
+        subgroup['packet'][parent_packet]['data'][results[i][j].id] = rawData;
       }
       ImageIO.joinImage(
         results[i]
