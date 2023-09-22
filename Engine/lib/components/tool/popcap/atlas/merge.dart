@@ -375,7 +375,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
                           ),
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          width: MediaQuery.of(context).size.width * 0.5,
                           padding: const EdgeInsets.all(10.0),
                           margin: const EdgeInsets.all(8.0),
                           child: DropdownButton<String>(

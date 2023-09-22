@@ -1,45 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/module/tool/popcap/zlib/compress.dart';
+import 'package:sen_material_design/module/tool/popcap/atlas/split.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class PopCapZlibCompress extends StatefulWidget {
-  const PopCapZlibCompress({super.key});
+class SplitWithResInfo extends StatefulWidget {
+  const SplitWithResInfo({super.key});
 
   @override
-  State<PopCapZlibCompress> createState() => _PopCapZlibCompressState();
+  State<SplitWithResInfo> createState() => _SplitWithResInfoState();
 }
 
-class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
+class _SplitWithResInfoState extends State<SplitWithResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
   String text = '';
 
   bool allowExecute = true;
-
-  String view = '32bit';
-
-  bool exchangeBitVariant(
-    String value,
-  ) {
-    switch (value) {
-      case '32bit':
-        {
-          return false;
-        }
-      case '64bit':
-        {
-          return true;
-        }
-      default:
-        {
-          throw Exception('Unknown');
-        }
-    }
-  }
 
   @override
   void initState() {
@@ -54,6 +34,8 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
     controllerOutput.dispose();
     super.dispose();
   }
+
+  String splitMethod = 'path';
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +60,7 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                   child: Align(
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
-                      AppLocalizations.of(context)!.popcap_zlib_compress,
+                      AppLocalizations.of(context)!.popcap_resinfo_split_atlas,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -98,7 +80,7 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           Radius.circular(20.0),
                         ), // Rounded border
                       ),
-                      labelText: AppLocalizations.of(context)!.data_file,
+                      labelText: AppLocalizations.of(context)!.input_directory,
                       alignLabelWithHint: true,
                       suffixIcon: Container(
                         margin: const EdgeInsets.only(
@@ -109,13 +91,11 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           icon: const Icon(Icons.open_in_new),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
+                            final String? path =
+                                await FileSystem.pickDirectory();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text = path.replaceAll(
-                                '\\',
-                                '/',
-                              );
+                              controllerOutput.text = p.withoutExtension(path);
                               setState(() {
                                 allowExecute = true;
                               });
@@ -141,7 +121,7 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           Radius.circular(20.0),
                         ),
                       ),
-                      labelText: AppLocalizations.of(context)!.output_file,
+                      labelText: AppLocalizations.of(context)!.output_directory,
                       alignLabelWithHint: true,
                       suffixIcon: Container(
                         margin: const EdgeInsets.only(
@@ -152,7 +132,8 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           icon: const Icon(Icons.open_in_new),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
+                            final String? path =
+                                await FileSystem.pickDirectory();
                             if (path != null) {
                               controllerOutput.text = path;
                             }
@@ -184,14 +165,13 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           ),
                           title: Text(
                             AppLocalizations.of(context)!.execution_argument(
-                              AppLocalizations.of(context)!.use_64bit_variant,
+                              AppLocalizations.of(context)!.split_method,
                             ),
                             style: theme.textTheme.titleMedium!
                                 .copyWith(color: Colors.cyan),
                           ),
                           subtitle: Text(
-                            AppLocalizations.of(context)!
-                                .most_popcap_games_using_non_64bit,
+                            AppLocalizations.of(context)!.split_method_subtitle,
                             style: theme.textTheme.bodySmall,
                           ),
                         ),
@@ -200,73 +180,83 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           margin: const EdgeInsets.all(8.0),
                           child: DropdownButton<String>(
                             isExpanded: true,
-                            value: view,
+                            value: splitMethod,
                             focusColor: Colors.transparent,
                             underline: Container(),
                             items: [
                               DropdownMenuItem<String>(
-                                value: '32bit',
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.data_array_outlined,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .false_argument,
+                                value: 'id',
+                                child: ListView(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.data_object_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_id,
+                                              ),
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_id_subtitle,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .false_val,
-                                            style: theme.textTheme.bodySmall!,
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                                 onTap: () {
                                   setState(() {
-                                    view = '32bit';
+                                    splitMethod = 'id';
                                   });
                                 },
                               ),
                               DropdownMenuItem<String>(
-                                value: '64bit',
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.data_array_outlined,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .true_argument,
+                                value: 'path',
+                                child: ListView(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.data_object_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_path,
+                                              ),
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .split_by_path_subtitle,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .true_val,
-                                            style: theme.textTheme.bodySmall!,
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                                 onTap: () {
                                   setState(() {
-                                    view = '64bit';
+                                    splitMethod = 'path';
                                   });
                                 },
                               ),
@@ -287,10 +277,10 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           ? () async {
                               final DateTime startTime = DateTime.now();
                               try {
-                                popcapZlibCompress(
+                                splitAtlas.process_raw_has_fs(
                                   controllerInput.text,
                                   controllerOutput.text,
-                                  exchangeBitVariant(view),
+                                  splitMethod,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

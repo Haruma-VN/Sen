@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/components/tool/popcap/atlas/merge.dart';
 import 'package:sen_material_design/components/tool/popcap/atlas/split.dart';
+import 'package:sen_material_design/components/tool/popcap/atlas/split_with_resinfo.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/merge.dart';
@@ -29,4 +30,5 @@ Map<String, Widget> materialWidget = const {
   'popcap.resource_group.merge_atlas': PopCapAtlasMerge(),
   'popcap.rsb.unpack': PopCapRSBUnpack(),
   'popcap.rsb.pack': PopCapRSBPack(),
+  'popcap.resinfo.split_atlas': SplitWithResInfo(),
 };

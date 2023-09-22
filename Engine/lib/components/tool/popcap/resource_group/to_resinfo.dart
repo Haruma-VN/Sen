@@ -282,7 +282,7 @@ class _ToResInfoState extends State<ToResInfo> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(

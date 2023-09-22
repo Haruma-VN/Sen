@@ -178,4 +178,175 @@ class splitAtlas {
     }
     return;
   }
+
+  static dynamic create_from_resinfo(
+    dynamic resInfo,
+    String method,
+    String filePath,
+  ) {
+    dynamic atlasJson = {
+      'method': method,
+      'subgroup': p.withoutExtension(
+        p.basename(filePath),
+      ),
+      'trim': false,
+      'res': resInfo['type'],
+      'groups': {},
+    };
+    final List<dynamic> parents = resInfo['packet'].keys.toList();
+    for (var parent in parents) {
+      final List<dynamic> datas =
+          resInfo['packet'][parent]['data'].keys.toList();
+      for (var data in datas) {
+        dynamic rawData = {
+          'default': {
+            'x': (resInfo['packet'][parent]['data'][data]['default']['x'] ??=
+                0),
+            'y': (resInfo['packet'][parent]['data'][data]['default']['y'] ??=
+                0),
+          },
+          'path': [...resInfo['packet'][parent]['data'][data]['path']],
+        };
+        if ((resInfo['packet'][parent]['data'][data]['default']['cols'] !=
+                null) &&
+            (resInfo['packet'][parent]['data'][data]['default']['cols'] != 1)) {
+          rawData['default']['cols'] =
+              resInfo['packet'][parent]['data'][data]['default']['cols'];
+        }
+        if ((resInfo['packet'][parent]['data'][data]['default']['rows'] !=
+                null) &&
+            (resInfo['packet'][parent]['data'][data]['default']['rows'] != 1)) {
+          rawData['default']['rows'] =
+              resInfo['packet'][parent]['data'][data]['default']['rows'];
+        }
+        atlasJson['groups'][data] = rawData;
+      }
+    }
+    return atlasJson;
+  }
+
+  static void process_resinfo(
+    dynamic data,
+    List<String> imgPath,
+    String method,
+    String filePath,
+    String outputDirectory,
+  ) {
+    dynamic resource_used = {
+      ...data as Map,
+      'packet': {},
+    };
+    final List<dynamic> parents = data['packet'].keys.toList();
+    FileSystem.createDirectory(
+      outputDirectory,
+    );
+    final String mediaPath = p.join(
+      outputDirectory,
+      'media',
+    );
+    FileSystem.createDirectory(
+      mediaPath,
+    );
+    Map<String, Image> pngMap = {};
+    for (var parent in parents) {
+      final List<dynamic> id_collection =
+          data['packet'][parent]['data'].keys.toList();
+      resource_used['packet'][parent] = {
+        ...data['packet'][parent] as Map,
+        data: {},
+      };
+      for (var id in id_collection) {
+        var rawData = data['packet'][parent]['data'][id]['default'];
+        if (rawData['ax'] != null &&
+            rawData['ay'] != null &&
+            rawData['aw'] != null &&
+            rawData['ah'] != null) {
+          for (var png in imgPath) {
+            if (!pngMap.containsKey(png)) {
+              pngMap[png] = decodeImage(FileSystem.readBuffer(png))!;
+            }
+            var currentParent =
+                png.replaceAll(pngExpression, '').toUpperCase().toString();
+            if (currentParent.toString().endsWith(
+                  p.basename(parent).replaceFirst('ATLASIMAGE_ATLAS_', ''),
+                )) {
+              ImageIO.cropImage(
+                pngMap[png]!,
+                rawData['ax'],
+                rawData['ay'],
+                rawData['aw'],
+                rawData['ah'],
+                p.join(
+                  mediaPath,
+                  '${method == 'path' ? data['packet'][parent]['data'][id]['path'][data['packet'][parent]['data'][id]['path'].length - 1] : id}.png',
+                ),
+              );
+              resource_used['packet'][parent]['data'][id] = {
+                'default': {
+                  ...rawData as Map,
+                },
+                'path': [...data['packet'][parent]['data'][id]['path']],
+                'type': data['packet'][parent]['data'][id]['type'],
+              };
+            }
+          }
+        }
+      }
+    }
+    FileSystem.writeJson(
+      p.join(outputDirectory, 'atlas.json'),
+      create_from_resinfo(resource_used, method, filePath),
+      '\t',
+    );
+    return;
+  }
+
+  static void process_raw_has_fs(
+    String inDirectory,
+    String outDirectory,
+    String method,
+  ) {
+    final List<String> list = FileSystem.readDirectory(
+      inDirectory,
+      false,
+    );
+    final List<String> jsons = list
+        .where(
+          (
+            String element,
+          ) =>
+              jsonExpression.hasMatch(
+            element,
+          ),
+        )
+        .toList();
+    final List<String> pngs = list
+        .where(
+          (
+            String element,
+          ) =>
+              pngExpression.hasMatch(
+            element,
+          ),
+        )
+        .toList();
+    for (var element in jsons) {
+      final dynamic jsonData = FileSystem.readJson(
+        element,
+      );
+      if (jsonData['packet'] != null) {
+        process_resinfo(
+          jsonData,
+          pngs,
+          method,
+          element,
+          p.join(
+            outDirectory,
+            '${p.withoutExtension(p.basename(element))}.sprite',
+          ),
+        );
+      }
+    }
+    return;
+  }
 }
