@@ -5,6 +5,8 @@ import 'package:sen_material_design/components/tool/popcap/atlas/split.dart';
 import 'package:sen_material_design/components/tool/popcap/atlas/split_with_resinfo.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/encode.dart';
+import 'package:sen_material_design/components/tool/popcap/pam/from_json.dart';
+import 'package:sen_material_design/components/tool/popcap/pam/to_json.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/merge.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/split.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/from_resinfo.dart';
@@ -13,6 +15,8 @@ import 'package:sen_material_design/components/tool/popcap/resource_group/split.
 import 'package:sen_material_design/components/tool/popcap/resource_group/to_resinfo.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/pack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/unpack.dart';
+import 'package:sen_material_design/components/tool/popcap/rsg/pack.dart';
+import 'package:sen_material_design/components/tool/popcap/rsg/unpack.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/compress.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/uncompress.dart';
 
@@ -31,6 +35,10 @@ Map<String, Widget> materialWidget = const {
   'popcap.resource_group.merge_atlas': PopCapAtlasMerge(),
   'popcap.rsb.unpack': PopCapRSBUnpack(),
   'popcap.rsb.pack': PopCapRSBPack(),
+  'popcap.animation.decode_to_json': PopCapAnimationConvertToJson(),
+  'popcap.animation.encode_from_json': PopCapAnimationConvertFromJson(),
   'popcap.resinfo.split_atlas': SplitWithResInfo(),
   'popcap.resinfo.merge_atlas': MergeWithResInfo(),
+  'popcap.pam.unpack': PopCapRSGUnpack(),
+  'popcap.pam.pack': PopCapRSGPack(),
 };

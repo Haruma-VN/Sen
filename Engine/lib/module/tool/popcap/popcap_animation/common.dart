@@ -667,4 +667,28 @@ class PopCapAnimation {
     senFile.writeStringBytInt16LE(command[1]);
     return;
   }
+
+  static void toJson(
+    String inFile,
+    String outFile,
+  ) {
+    final anim = PopCapAnimation();
+    final data = anim.decodeAnimation(SenBuffer.OpenFile(inFile));
+    FileSystem.writeJson(
+      outFile,
+      data,
+      '\t',
+    );
+    return;
+  }
+
+  static void fromJson(
+    String inFile,
+    String outFile,
+  ) {
+    final anim = PopCapAnimation();
+    final data = anim.encodeAnimation(FileSystem.readJson(inFile));
+    data.outFile(outFile);
+    return;
+  }
 }
