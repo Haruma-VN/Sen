@@ -52,7 +52,7 @@ class Rijndael {
       key.length,
       iv.length,
       cipher.length,
-      1,
+      iMode.index,
     );
     final resultData = result.asTypedList(cipher.length);
     return Uint8List.fromList(
@@ -94,7 +94,7 @@ class Rijndael {
       key.length,
       iv.length,
       cipher.length,
-      1,
+      iMode.index,
     );
     final resultData = result.asTypedList(cipher.length);
     return Uint8List.fromList(
