@@ -10,9 +10,9 @@ class Buffer {
 
     private:
 
-        std::vector<uint8_t> data;
+        std::vector<std::uint8_t> data;
 
-        size_t position;
+        std::size_t position;
 
     public:
 
@@ -20,12 +20,12 @@ class Buffer {
             0
         ) {}
 
-        inline ~Buffer(
+        ~Buffer(
         ) = default;
 
         Buffer
         (
-            std::vector<uint8_t> data
+            std::vector<std::uint8_t> data
         ) : position(
             0
         ) 
@@ -34,8 +34,8 @@ class Buffer {
         }
 
         Buffer(
-            uint8_t* data,
-            size_t size
+            std::uint8_t* data,
+            std::size_t size
         ) : position(
             0
         ) {
@@ -53,11 +53,17 @@ class Buffer {
                 filepath, std::ios::binary
             );
             if (file) {
-                file.seekg(0, std::ios::end);
+                file.seekg(
+                    0, std::ios::end
+                );
                 auto fileSize = file.tellg();
-                file.seekg(0, std::ios::beg);
-                data.resize(fileSize);
-                file.read(reinterpret_cast<char*>(data.data()), fileSize);
+                file.seekg(
+                    0, std::ios::beg
+                );
+                this->data.resize(fileSize);
+                file.read(
+                    reinterpret_cast<char*>(this->data.data()), fileSize
+                );
                 file.close();
             }
             else {
@@ -66,25 +72,26 @@ class Buffer {
             return;
         }
 
-        inline auto get(
+        inline auto get
+        (
 
-        ) -> std::vector<uint8_t>
+        ) -> std::vector<std::uint8_t>
         {
             return this->data;
         }
 
         inline auto writeUint8
         (
-            uint8_t value
+            std::uint8_t value
         ) -> void
         {
-            this->writeLE<uint8_t>(value);
+            this->writeLE<std::uint8_t>(value);
 		    return;
 	    }
 
         inline auto changePosition
         (
-            size_t pos
+            std::size_t pos
         ) -> void
         {
             if (pos >= 0 && pos <= data.size())
@@ -96,28 +103,28 @@ class Buffer {
 
         inline auto writeUint16LE
         (
-            uint16_t value
+            std::uint16_t value
         ) -> void
         {
-            this->writeLE<uint16_t>(value);
+            this->writeLE<std::uint16_t>(value);
             return;
         }
 
         inline auto writeUint32LE
         (
-            uint32_t value
+            std::uint32_t value
         ) -> void
         {
-            this->writeLE<uint32_t>(value);
+            this->writeLE<std::uint32_t>(value);
             return;
         }
 
         inline auto writeUint64LE
         (
-            uint64_t value
+            std::uint64_t value
         ) -> void
         {
-            this->writeLE<uint64_t>(value);
+            this->writeLE<std::uint64_t>(value);
             return;
         }
 
@@ -142,98 +149,98 @@ class Buffer {
 
         inline auto writeInt8
         (
-            int8_t value
+            std::int8_t value
         ) -> void
         {
-            this->writeLE<int8_t>(value);
+            this->writeLE<std::int8_t>(value);
             return;
         }
 
         inline auto writeInt16LE
         (
-            int16_t value
+            std::int16_t value
         ) -> void
         {
-            this->writeLE<int16_t>(value);
+            this->writeLE<std::int16_t>(value);
             return;
         }
 
         inline auto writeInt32LE
         (
-            int32_t value
+            std::int32_t value
         ) -> void
         {
-            this->writeLE<int32_t>(value);
+            this->writeLE<std::int32_t>(value);
             return;
         }
 
         inline auto writeInt64LE
         (
-            int64_t value
+            std::int64_t value
         ) -> void
         {
-            this->writeLE<int64_t>(value);
+            this->writeLE<std::int64_t>(value);
             return;
 	    }
 
         inline auto writeUint16BE
         (
-            uint16_t value
+            std::uint16_t value
         ) -> void
         {
-            this->writeBE<uint16_t>(value);
+            this->writeBE<std::uint16_t>(value);
             return;
         }
 
         inline auto writeUint32BE
         (
-            uint32_t value
+            std::uint32_t value
         ) -> void
         {
-            this->writeBE<uint32_t>(value);
+            this->writeBE<std::uint32_t>(value);
             return;
         }
 
         inline auto writeUint64BE
         (
-            uint32_t value
+            std::uint32_t value
         ) -> void
         {
-            this->writeBE<uint64_t>(value);
+            this->writeBE<std::uint64_t>(value);
             return;
         }
 
         inline auto writeInt16BE
         (
-            int16_t value
+            std::int16_t value
         ) -> void
         {
-            this->writeBE<int16_t>(value);
+            this->writeBE<std::int16_t>(value);
             return;
         }
 
         inline auto writeInt32BE
         (
-            int32_t value
+            std::int32_t value
         ) -> void
         {
-            this->writeBE<int32_t>(value);
+            this->writeBE<std::int32_t>(value);
             return;
         }
 
         inline auto writeInt64BE
         (
-            int64_t value
+            std::int64_t value
         ) -> void
         {
-            this->writeBE<int64_t>(value);
+            this->writeBE<std::int64_t>(value);
             return;
         }
 
         inline auto size
         (
 
-        ) -> size_t 
+        ) -> std::size_t
         {
             return this->data.size();
         }
@@ -241,7 +248,7 @@ class Buffer {
         inline auto toBytes
         (
 
-        ) -> uint8_t*
+        ) -> std::uint8_t*
         {
             return this->data.data();
         }
@@ -249,113 +256,113 @@ class Buffer {
         inline auto readUint8
         (
     
-        ) -> uint8_t 
+        ) -> std::uint8_t 
         {
-            return this->readLE<uint8_t>();
+            return this->readLE<std::uint8_t>();
         }
 
         inline auto readUint16LE
         (
     
-        ) -> uint16_t 
+        ) -> std::uint16_t 
         {
-            return this->readLE<uint16_t>();
+            return this->readLE<std::uint16_t>();
         }
 
         inline auto readUint32LE
         (
     
-        ) -> uint32_t 
+        ) -> std::uint32_t 
         {
-            return this->readLE<uint32_t>();
+            return this->readLE<std::uint32_t>();
         }
 
         inline auto readUint64LE
         (
     
-        ) -> uint64_t 
+        ) -> std::uint64_t 
         {
-            return this->readLE<uint64_t>();
+            return this->readLE<std::uint64_t>();
         }
 
         inline auto readInt8
         (
     
-        ) -> int8_t 
+        ) -> std::int8_t
         {
-            return this->readLE<int8_t>();
+            return this->readLE<std::int8_t>();
         }
 
         inline auto readInt16LE
         (
     
-        ) -> int16_t 
+        ) -> std::int16_t
         {
-            return this->readLE<int16_t>();
+            return this->readLE<std::int16_t>();
         }
 
         inline auto readInt32LE
         (
     
-        ) -> int32_t 
+        ) -> std::int32_t
         {
-            return this->readLE<int32_t>();
+            return this->readLE<std::int32_t>();
         }
 
         inline auto readInt64LE
         (
     
-        ) -> int64_t 
+        ) -> std::int64_t
         {
-            return this->readLE<int64_t>();
+            return this->readLE<std::int64_t>();
         }
 
         inline auto readUint16BE
         (
     
-        ) -> uint16_t
+        ) -> std::uint16_t
         {
-            return this->readBE<uint16_t>();
+            return this->readBE<std::uint16_t>();
         }
 
         inline auto readUint32BE
         (
     
-        ) -> uint32_t 
+        ) -> std::uint32_t 
         {
-            return this->readBE<uint32_t>();
+            return this->readBE<std::uint32_t>();
         }
 
         inline auto readUint64BE
         (
     
-        ) -> uint64_t 
+        ) -> std::uint64_t 
         {
-            return this->readBE<uint64_t>();
+            return this->readBE<std::uint64_t>();
         }
 
         inline auto readInt16BE
         (
     
-        ) -> int16_t 
+        ) -> std::int16_t
         {
-            return this->readBE<int16_t>();
+            return this->readBE<std::int16_t>();
         }
 
         inline auto readInt32BE
         (
     
-        ) -> int32_t 
+        ) -> std::int32_t
         {
-            return this->readBE<int32_t>();
+            return this->readBE<std::int32_t>();
         }
 
         inline auto readInt64BE
         (
     
-        ) -> int64_t 
+        ) -> std::int64_t
         {
-            return this->readBE<int64_t>();
+            return this->readBE<std::int64_t>();
         }
 
         inline auto readBoolean(
@@ -367,7 +374,7 @@ class Buffer {
 
         inline auto readString
         (
-            size_t size
+            std::size_t size
         ) -> std::string
         {
             std::string c = "";
@@ -404,70 +411,70 @@ class Buffer {
 
         inline auto writeUint24LE
         (
-            uint32_t value
+            std::uint32_t value
         ) -> void 
         {
-            this->writeLE_has<uint32_t>(value, 3);
+            this->writeLE_has<std::uint32_t>(value, 3);
             return;
         }
 
         inline auto writeInt24LE
         (
-            int32_t value
+            std::int32_t value
         ) -> void 
         {
-            this->writeLE_has<int32_t>(value, 3);
+            this->writeLE_has<std::int32_t>(value, 3);
             return;
         }
 
         inline auto writeUint24BE
         (
-            uint32_t value
+            std::uint32_t value
         ) -> void 
         {
-            this->writeBE_has<uint32_t>(value, 3);
+            this->writeBE_has<std::uint32_t>(value, 3);
             return;
         }
 
         inline auto writeInt24BE
         (
-            int32_t value
+            std::int32_t value
         ) -> void 
         {
-            this->writeBE_has<int32_t>(value, 3);
+            this->writeBE_has<std::int32_t>(value, 3);
             return;
         }
 
         inline auto readUint24LE
         (
     
-        ) -> uint32_t 
+        ) -> std::uint32_t 
         {
-            return this->readLE_has<uint32_t>(3);
+            return this->readLE_has<std::uint32_t>(3);
         }
 
         inline auto readInt24LE
         (
     
-        ) -> int32_t
+        ) -> std::int32_t
         {
-            return this->readLE_has<int32_t>(3);
+            return this->readLE_has<std::int32_t>(3);
         }
 
         inline auto readUint24BE
         (
     
-        ) -> uint32_t 
+        ) -> std::uint32_t 
         {
-            return this->readBE_has<uint32_t>(3);
+            return this->readBE_has<std::uint32_t>(3);
         }
 
         inline auto readInt24BE
         (
     
-        ) -> int32_t 
+        ) -> std::int32_t
         {
-            return this->readBE_has<int32_t>(3);
+            return this->readBE_has<std::int32_t>(3);
         }
 
         inline auto flush
@@ -494,7 +501,10 @@ class Buffer {
             float value
         ) -> void 
         {
-            this->writeBytesLE(reinterpret_cast<uint8_t*>(&value), sizeof(float));
+            this->writeBytesLE(
+                reinterpret_cast<std::uint8_t*>(&value), 
+                sizeof(float)
+            );
             return;
         }
 
@@ -503,7 +513,10 @@ class Buffer {
             double value
         ) -> void 
         {
-            this->writeBytesLE(reinterpret_cast<uint8_t*>(&value), sizeof(double));
+            this->writeBytesLE(
+                reinterpret_cast<std::uint8_t*>(&value), 
+                sizeof(double)
+            );
             return;
         }
 
@@ -512,7 +525,10 @@ class Buffer {
             float value
         ) -> void
         {
-            this->writeBytesBE(reinterpret_cast<uint8_t*>(&value), sizeof(float));
+            this->writeBytesBE(
+                reinterpret_cast<std::uint8_t*>(&value), 
+                sizeof(float)
+            );
             return;
         }
 
@@ -521,7 +537,10 @@ class Buffer {
             double value
         ) -> void 
         {
-            this->writeBytesBE(reinterpret_cast<uint8_t*>(&value), sizeof(double));
+            this->writeBytesBE(
+                reinterpret_cast<std::uint8_t*>(&value), 
+                sizeof(double)
+            );
             return;
         }
 
@@ -530,7 +549,9 @@ class Buffer {
         
         ) -> float 
         {
-            return this->readBytesLE<float>(sizeof(float));
+            return this->readBytesLE<float>(
+                sizeof(float)
+            );
         }
 
         inline auto readDoubleLE
@@ -538,7 +559,9 @@ class Buffer {
         
         ) -> double 
         {
-            return this->readBytesLE<double>(sizeof(double));
+            return this->readBytesLE<double>(
+                sizeof(double)
+            );
         }
 
         inline auto readFloatBE
@@ -546,7 +569,9 @@ class Buffer {
         
         ) -> float 
         {
-            return this->readBytesBE<float>(sizeof(float));
+            return this->readBytesBE<float>(
+                sizeof(float)
+            );
         }
 
         inline auto readDoubleBE
@@ -554,7 +579,9 @@ class Buffer {
         
         ) -> double 
         {
-            return this->readBytesBE<double>(sizeof(double));
+            return this->readBytesBE<double>(
+                sizeof(double)
+            );
         }
 
         inline auto writeChar
@@ -562,7 +589,9 @@ class Buffer {
             char value
         ) -> void 
         {
-            this->data.push_back(static_cast<uint8_t>(value));
+            this->data.push_back(
+                static_cast<std::uint8_t>(value)
+            );
             return;
         }
 
@@ -571,16 +600,18 @@ class Buffer {
         
         ) -> char 
         {
-            auto value = static_cast<char>(this->data[this->position]);
-            this->position += 1;
+            auto value = static_cast<char>(
+                this->data[this->position]
+                );
+            this->position++;
             return value;
         }
 
         inline auto writeZigZag32
         (
-            int32_t value
+            std::int32_t value
         ) -> void {
-            auto zigzagEncoded = (uint32_t)((value << 1) ^ (value >> 31));
+            auto zigzagEncoded = (std::uint32_t)((value << 1) ^ (value >> 31));
             this->writeUint32LE(zigzagEncoded);
             return;
         }
@@ -588,19 +619,19 @@ class Buffer {
         inline auto readZigZag32
         (
         
-        ) -> int32_t 
+        ) -> std::int32_t
         {
             auto zigzagEncoded = this->readUint32LE();
-            auto decoded = (int32_t)((zigzagEncoded >> 1) ^ -(zigzagEncoded & 1));
+            auto decoded = (std::int32_t)((zigzagEncoded >> 1) ^ -(zigzagEncoded & 1));
             return decoded;
         }
 
         inline auto writeZigZag64
         (
-            int64_t value
+            std::int64_t value
         ) -> void 
         {
-            auto zigzagEncoded = (uint64_t)((value << 1) ^ (value >> 63));
+            auto zigzagEncoded = (std::uint64_t)((value << 1) ^ (value >> 63));
             this->writeUint64LE(zigzagEncoded);
             return;
         }
@@ -608,80 +639,80 @@ class Buffer {
         inline auto readZigZag64
         (
         
-        ) -> int64_t 
+        ) -> std::int64_t
         {
-            auto zigzagEncoded = (uint64_t)this->readInt64LE();
-            auto decoded = (int64_t)((zigzagEncoded >> 1) ^ -(zigzagEncoded & 1));
+            auto zigzagEncoded = (std::uint64_t)this->readInt64LE();
+            auto decoded = (std::int64_t)((zigzagEncoded >> 1) ^ -(zigzagEncoded & 1));
             return decoded;
         }
 
         inline auto peekUInt8
         (
-            size_t offset
-        ) -> uint8_t 
+            std::size_t offset
+        ) -> std::uint8_t 
         {
             return this->data[offset];
         }
 
         inline auto peekUInt16
         (
-            size_t offset
-        ) -> uint16_t 
+            std::size_t offset
+        ) -> std::uint16_t 
         {
             return (this->data[offset] | (this->data[offset + 1] << 8));
         }
 
         inline auto peekUInt24
         (
-            size_t offset
-        ) -> uint32_t 
+            std::size_t offset
+        ) -> std::uint32_t 
         {
             return (this->data[offset] | (this->data[offset + 1] << 8) | (this->data[offset + 2] << 16));
         }
 
         inline auto peekUInt32
         (
-            size_t offset
-        ) -> uint32_t
+            std::size_t offset
+        ) -> std::uint32_t
         {
             return (this->data[offset] | (this->data[offset + 1] << 8) | (this->data[offset + 2] << 16) | (this->data[offset + 3] << 24));
         }
 
         inline auto peekInt8
         (
-            size_t offset
-        ) -> int8_t 
+            std::size_t offset
+        ) -> std::int8_t
         {
-            return static_cast<int8_t>(this->data[offset]);
+            return static_cast<std::int8_t>(this->data[offset]);
         }
 
         inline auto peekInt16
         (
-            size_t offset
-        ) -> int16_t 
+            std::size_t offset
+        ) -> std::int16_t
         {
-            return static_cast<int16_t>(this->data[offset] | (this->data[offset + 1] << 8));
+            return static_cast<std::int16_t>(this->data[offset] | (this->data[offset + 1] << 8));
         }
 
         inline auto peekInt24
         (
-            size_t offset
-        ) -> int32_t 
+            std::size_t offset
+        ) -> std::int32_t
         {
-            return static_cast<int32_t>(this->data[offset] | (this->data[offset + 1] << 8) | (this->data[offset + 2] << 16));
+            return static_cast<std::int32_t>(this->data[offset] | (this->data[offset + 1] << 8) | (this->data[offset + 2] << 16));
         }
 
         inline auto peekInt32
         (
-            size_t offset
-        ) -> int32_t 
+            std::size_t offset
+        ) -> std::int32_t
         {
-            return static_cast<int32_t>(this->data[offset] | (this->data[offset + 1] << 8) | (this->data[offset + 2] << 16) | (this->data[offset + 3] << 24));
+            return static_cast<std::int32_t>(this->data[offset] | (this->data[offset + 1] << 8) | (this->data[offset + 2] << 16) | (this->data[offset + 3] << 24));
         }
 
         inline auto peekString(
-            size_t offset, 
-            size_t size
+            std::size_t offset,
+            std::size_t size
         ) -> std::string 
         {
             auto str = std::string{};
@@ -694,7 +725,7 @@ class Buffer {
 
         inline auto peekChar
         (
-            size_t offset
+            std::size_t offset
         ) -> char 
         {
             return static_cast<char>(this->data[offset]);
@@ -702,8 +733,8 @@ class Buffer {
 
         inline auto insertUInt8
         (
-            size_t offset, 
-            uint8_t value
+            std::size_t offset,
+            std::uint8_t value
         ) -> void 
         {
             this->data.insert(this->data.begin() + offset, value);
@@ -712,8 +743,8 @@ class Buffer {
 
         inline auto insertUInt16
         (
-            size_t offset, 
-            uint16_t value
+            std::size_t offset,
+            std::uint16_t value
         ) -> void 
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
@@ -723,8 +754,8 @@ class Buffer {
 
         inline auto insertUInt24
         (
-            size_t offset, 
-            uint32_t value
+            std::size_t offset,
+            std::uint32_t value
         ) -> void 
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
@@ -735,8 +766,8 @@ class Buffer {
 
         inline auto insertUInt32
         (
-            size_t offset, 
-            uint32_t value
+            std::size_t offset,
+            std::uint32_t value
         ) -> void 
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
@@ -748,18 +779,18 @@ class Buffer {
 
         inline auto insertInt8
         (
-            size_t offset, 
-            int8_t value
+            std::size_t offset,
+            std::int8_t value
         ) -> void 
         {
-            this->data.insert(this->data.begin() + offset, static_cast<uint8_t>(value));
+            this->data.insert(this->data.begin() + offset, static_cast<std::uint8_t>(value));
             return;
         }
 
         inline auto insertInt16
         (
-            size_t offset, 
-            int16_t value
+            std::size_t offset,
+            std::int16_t value
         ) -> void 
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
@@ -769,8 +800,8 @@ class Buffer {
 
         inline auto insertInt24
         (
-            size_t offset, 
-            int32_t value
+            std::size_t offset,
+            std::int32_t value
         ) -> void 
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
@@ -781,8 +812,8 @@ class Buffer {
 
         inline auto insertInt32
         (
-            size_t offset, 
-            int32_t value
+            std::size_t offset,
+            std::int32_t value
         ) -> void 
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
@@ -794,21 +825,28 @@ class Buffer {
 
         inline auto insertString
         (
-            size_t offset, 
+            std::size_t offset,
             const std::string& str
         ) -> void 
         {
-            this->data.insert(this->data.begin() + offset, str.begin(), str.end());
+            this->data.insert(
+                this->data.begin() + offset, 
+                str.begin(),
+                str.end()
+            );
             return;
         }
 
         inline auto insertChar
         (
-            size_t offset, 
+            std::size_t offset,
             char c
         ) -> void 
         {
-            this->data.insert(this->data.begin() + offset, static_cast<uint8_t>(c));
+            this->data.insert(
+                this->data.begin() + offset, 
+                static_cast<std::uint8_t>(c)
+            );
             return;
         }
 
@@ -871,7 +909,7 @@ class Buffer {
         inline auto writeLE_has
         (
             T value, 
-            size_t size = sizeof(T)
+            std::size_t size = sizeof(T)
         ) -> void 
         {
             for (auto i = 0; i < size; i++) {
@@ -884,7 +922,7 @@ class Buffer {
         inline auto writeBE_has
         (
             T value, 
-            size_t size = sizeof(T)
+            std::size_t size = sizeof(T)
         ) -> void 
         {
             for (auto i = 0; i < size; i++) {
@@ -896,7 +934,7 @@ class Buffer {
         template<typename T>
         inline auto readLE_has
         (
-            size_t size = sizeof(T)
+            std::size_t size = sizeof(T)
         ) -> T 
         {
             T value = 0;
@@ -910,7 +948,7 @@ class Buffer {
         template<typename T>
         inline auto readBE_has
         (
-            size_t size = sizeof(T)
+            std::size_t size = sizeof(T)
         ) -> T 
         {
             T value = 0;
@@ -923,8 +961,8 @@ class Buffer {
 
         inline auto writeBytesLE
         (
-            uint8_t* bytes, 
-            size_t size
+            std::uint8_t* bytes, 
+            std::size_t size
         ) -> void 
         {
             for (auto i = 0; i < size; i++) {
@@ -935,8 +973,8 @@ class Buffer {
 
         inline auto writeBytesBE
         (
-            uint8_t* bytes,
-            size_t size
+            std::uint8_t* bytes,
+            std::size_t size
         ) -> void 
         {
             for (auto i = 0; i < size; i++) {
@@ -948,7 +986,7 @@ class Buffer {
         template<typename T>
         inline auto readBytesLE
         (
-            size_t size
+            std::size_t size
         ) -> T 
         {
             auto value = T{};
@@ -960,11 +998,11 @@ class Buffer {
         template<typename T>
         inline auto readBytesBE
         (
-            size_t size
+            std::size_t size
         ) -> T {
             auto value = T{};
             for (auto i = 0; i < size; i++) {
-                reinterpret_cast<uint8_t*>(&value)[size - 1 - i] = this->data[position + i];
+                reinterpret_cast<std::uint8_t*>(&value)[size - 1 - i] = this->data[position + i];
             }
             position += size;
             return value;
