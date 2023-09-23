@@ -20,15 +20,6 @@ namespace Sen::Internal::Kernel::Tool::Compress::lzma
         return true;
     }
 
-    inline auto cast(
-        const std::string& strVal, 
-        ByteVector& vecByte
-    ) -> bool
-    {
-        vecByte = std::vector<std::uint8_t>(&strVal[0], &strVal[0] + strVal.length());
-        return true;
-    }
-
     inline auto compress_lzma(
         const ByteVector& vecIn, 
         ByteVector& vecOut

@@ -47,6 +47,7 @@ add_library(
   ./kernel/utility/path/common.hpp
   ./kernel/utility/filesystem/common.hpp
   ./kernel/utility/exception/common.hpp
+  ./kernel/utility/buffer/common.hpp
   ./kernel/tool/diff/vcdiff.hpp
   ./kernel/tool/compress/bzip2.hpp
   ./kernel/tool/compress/lzma.hpp
