@@ -55,6 +55,10 @@ class Rijndael {
       iMode.index,
     );
     final resultData = result.asTypedList(cipher.length);
+    calloc.free(cipherPtr);
+    calloc.free(keyPtr);
+    calloc.free(ivPtr);
+    calloc.free(result);
     return Uint8List.fromList(
       resultData,
     );
@@ -97,6 +101,10 @@ class Rijndael {
       iMode.index,
     );
     final resultData = result.asTypedList(cipher.length);
+    calloc.free(cipherPtr);
+    calloc.free(keyPtr);
+    calloc.free(ivPtr);
+    calloc.free(result);
     return Uint8List.fromList(
       resultData,
     );
