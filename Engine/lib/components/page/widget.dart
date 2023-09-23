@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/components/tool/popcap/atlas/merge.dart';
+import 'package:sen_material_design/components/tool/popcap/atlas/merge_with_resinfo.dart';
 import 'package:sen_material_design/components/tool/popcap/atlas/split.dart';
 import 'package:sen_material_design/components/tool/popcap/atlas/split_with_resinfo.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/decode.dart';
@@ -31,4 +32,5 @@ Map<String, Widget> materialWidget = const {
   'popcap.rsb.unpack': PopCapRSBUnpack(),
   'popcap.rsb.pack': PopCapRSBPack(),
   'popcap.resinfo.split_atlas': SplitWithResInfo(),
+  'popcap.resinfo.merge_atlas': MergeWithResInfo(),
 };

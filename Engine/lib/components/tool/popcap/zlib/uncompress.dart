@@ -112,10 +112,7 @@ class _PopCapZlibUncompressState extends State<PopCapZlibUncompress> {
                             final String? path = await FileSystem.pickFile();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text = path.replaceAll(
-                                '\\',
-                                '/',
-                              );
+                              controllerOutput.text = '$path.bin';
                               setState(() {
                                 allowExecute = true;
                               });

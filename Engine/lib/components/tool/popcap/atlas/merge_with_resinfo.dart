@@ -1,45 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/module/tool/popcap/zlib/compress.dart';
+import 'package:sen_material_design/module/tool/popcap/atlas/merge.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class PopCapZlibCompress extends StatefulWidget {
-  const PopCapZlibCompress({super.key});
+class MergeWithResInfo extends StatefulWidget {
+  const MergeWithResInfo({super.key});
 
   @override
-  State<PopCapZlibCompress> createState() => _PopCapZlibCompressState();
+  State<MergeWithResInfo> createState() => _MergeWithResInfoState();
 }
 
-class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
+class _MergeWithResInfoState extends State<MergeWithResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
   String text = '';
 
   bool allowExecute = true;
-
-  String view = '32bit';
-
-  bool exchangeBitVariant(
-    String value,
-  ) {
-    switch (value) {
-      case '32bit':
-        {
-          return false;
-        }
-      case '64bit':
-        {
-          return true;
-        }
-      default:
-        {
-          throw Exception('Unknown');
-        }
-    }
-  }
 
   @override
   void initState() {
@@ -54,6 +34,36 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
     controllerOutput.dispose();
     super.dispose();
   }
+
+  String height = '4096';
+
+  String width = '4096';
+
+  final List<String> available = [
+    '128',
+    '256',
+    '512',
+    '1024',
+    '2048',
+    '4096',
+    '8192',
+    '16384',
+  ];
+
+  final List<String> paddings = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+  ];
+
+  String padding = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +88,7 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                   child: Align(
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
-                      AppLocalizations.of(context)!.popcap_zlib_compress,
+                      AppLocalizations.of(context)!.popcap_resinfo_merge_atlas,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -98,7 +108,7 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           Radius.circular(20.0),
                         ), // Rounded border
                       ),
-                      labelText: AppLocalizations.of(context)!.data_file,
+                      labelText: AppLocalizations.of(context)!.input_directory,
                       alignLabelWithHint: true,
                       suffixIcon: Container(
                         margin: const EdgeInsets.only(
@@ -109,10 +119,11 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           icon: const Icon(Icons.open_in_new),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
+                            final String? path =
+                                await FileSystem.pickDirectory();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text = '$path.bin';
+                              controllerOutput.text = p.dirname(path);
                               setState(() {
                                 allowExecute = true;
                               });
@@ -138,7 +149,7 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           Radius.circular(20.0),
                         ),
                       ),
-                      labelText: AppLocalizations.of(context)!.output_file,
+                      labelText: AppLocalizations.of(context)!.output_directory,
                       alignLabelWithHint: true,
                       suffixIcon: Container(
                         margin: const EdgeInsets.only(
@@ -149,7 +160,8 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           icon: const Icon(Icons.open_in_new),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
+                            final String? path =
+                                await FileSystem.pickDirectory();
                             if (path != null) {
                               controllerOutput.text = path;
                             }
@@ -181,14 +193,13 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           ),
                           title: Text(
                             AppLocalizations.of(context)!.execution_argument(
-                              AppLocalizations.of(context)!.use_64bit_variant,
+                              AppLocalizations.of(context)!.select_width,
                             ),
                             style: theme.textTheme.titleMedium!
                                 .copyWith(color: Colors.cyan),
                           ),
                           subtitle: Text(
-                            AppLocalizations.of(context)!
-                                .most_popcap_games_using_non_64bit,
+                            AppLocalizations.of(context)!.select_width_subtitle,
                             style: theme.textTheme.bodySmall,
                           ),
                         ),
@@ -197,77 +208,216 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           margin: const EdgeInsets.all(8.0),
                           child: DropdownButton<String>(
                             isExpanded: true,
-                            value: view,
+                            value: width,
                             focusColor: Colors.transparent,
                             underline: Container(),
-                            items: [
-                              DropdownMenuItem<String>(
-                                value: '32bit',
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.data_array_outlined,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .false_argument,
+                            items: available
+                                .map(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons
+                                              .photo_size_select_actual_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                e,
+                                              ),
+                                              Text(
+                                                e,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .false_val,
-                                            style: theme.textTheme.bodySmall!,
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    view = '32bit';
-                                  });
-                                },
-                              ),
-                              DropdownMenuItem<String>(
-                                value: '64bit',
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.data_array_outlined,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .true_argument,
-                                          ),
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .true_val,
-                                            style: theme.textTheme.bodySmall!,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    view = '64bit';
-                                  });
-                                },
+                                    onTap: () {
+                                      setState(() {
+                                        width = e;
+                                      });
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  margin: const EdgeInsets.all(8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          leading: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.question_mark_outlined,
+                                size: theme.iconTheme.size,
+                                color: Colors.cyan,
                               ),
                             ],
+                          ),
+                          title: Text(
+                            AppLocalizations.of(context)!.execution_argument(
+                              AppLocalizations.of(context)!.select_height,
+                            ),
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: Colors.cyan),
+                          ),
+                          subtitle: Text(
+                            AppLocalizations.of(context)!
+                                .select_height_subtitle,
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          margin: const EdgeInsets.all(8.0),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: height,
+                            focusColor: Colors.transparent,
+                            underline: Container(),
+                            items: available
+                                .map(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons
+                                              .photo_size_select_actual_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                e,
+                                              ),
+                                              Text(
+                                                e,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        height = e;
+                                      });
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  margin: const EdgeInsets.all(8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          leading: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.question_mark_outlined,
+                                size: theme.iconTheme.size,
+                                color: Colors.cyan,
+                              ),
+                            ],
+                          ),
+                          title: Text(
+                            AppLocalizations.of(context)!.execution_argument(
+                              AppLocalizations.of(context)!.select_padding,
+                            ),
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: Colors.cyan),
+                          ),
+                          subtitle: Text(
+                            AppLocalizations.of(context)!
+                                .select_padding_subtitle,
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          margin: const EdgeInsets.all(8.0),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: padding,
+                            focusColor: Colors.transparent,
+                            underline: Container(),
+                            items: paddings
+                                .map(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons
+                                              .photo_size_select_actual_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                e,
+                                              ),
+                                              Text(
+                                                e,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        padding = e;
+                                      });
+                                    },
+                                  ),
+                                )
+                                .toList(),
                             onChanged: (_) {},
                           ),
                         ),
@@ -276,7 +426,6 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
@@ -284,10 +433,16 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                           ? () async {
                               final DateTime startTime = DateTime.now();
                               try {
-                                popcapZlibCompress(
+                                mergeAtlas.process_fs(
                                   controllerInput.text,
+                                  requiresData.has(
+                                    int.parse(width),
+                                    int.parse(height),
+                                    int.parse(padding),
+                                  ),
                                   controllerOutput.text,
-                                  exchangeBitVariant(view),
+                                  AppLocalizations.of(context)!
+                                      .cannot_merge_with_oversized,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =
