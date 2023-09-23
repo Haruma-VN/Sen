@@ -261,19 +261,21 @@ class FileSystem {
 
   /// Support Old Pvz2 Lawnstrings
 
-  static void writeUTF16LE(String outFile, String data) {
-    var outputFile = File(
-      outFile,
-    );
-    outputFile.createSync(
-      recursive: true,
-    );
-    var dataToWrite = Uint8List.fromList(
-      data.codeUnits,
-    );
-    outputFile.writeAsBytesSync(
-      dataToWrite.buffer.asUint8List(),
-    );
+  static void writeUTF16LE(
+    String outFile,
+    String data,
+  ) {
+    var outputFile = File(outFile);
+    outputFile.createSync(recursive: true);
+    List<int> utf16Bytes = data.codeUnits
+        .map((unit) {
+          var buffer = ByteData(2);
+          buffer.setUint16(0, unit, Endian.little);
+          return buffer;
+        })
+        .expand((buffer) => buffer.buffer.asUint8List())
+        .toList();
+    outputFile.writeAsBytesSync(utf16Bytes);
     return;
   }
 

@@ -1,4 +1,4 @@
-// ignore_for_file: require_trailing_commas, camel_case_types, depend_on_referenced_packages, non_constant_identifier_names, unused_import
+// ignore_for_file: require_trailing_commas, camel_case_types, depend_on_referenced_packages, non_constant_identifier_names, unused_import, constant_identifier_names
 
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
@@ -396,5 +396,57 @@ typedef EncodeETC1SlowDart = void Function(
 final EncodeETC1SlowDart EncodeETC1Slow = dylib
     .lookup<NativeFunction<EncodeETC1SlowC>>(
       'EncodeETC1Slow',
+    )
+    .asFunction();
+
+typedef RijndaelDecryptC = Pointer<Int8> Function(
+  Pointer<Int8> cipher,
+  Pointer<Int8> key,
+  Pointer<Int8> iv,
+  Int32 keyLength,
+  Int32 ivLength,
+  Int32 cipherLength,
+  Int32 iMode,
+);
+
+typedef RijndaelDecryptDart = Pointer<Int8> Function(
+  Pointer<Int8> cipher,
+  Pointer<Int8> key,
+  Pointer<Int8> iv,
+  int keyLength,
+  int ivLength,
+  int cipherLength,
+  int iMode,
+);
+
+final RijndaelDecryptDart RijndaelDecrypt = dylib
+    .lookup<NativeFunction<RijndaelDecryptC>>(
+      'RijndaelDecrypt',
+    )
+    .asFunction();
+
+typedef RijndaelEncryptC = Pointer<Int8> Function(
+  Pointer<Int8> cipher,
+  Pointer<Int8> key,
+  Pointer<Int8> iv,
+  Int32 keyLength,
+  Int32 ivLength,
+  Int32 cipherLength,
+  Int32 iMode,
+);
+
+typedef RijndaelEncryptDart = Pointer<Int8> Function(
+  Pointer<Int8> cipher,
+  Pointer<Int8> key,
+  Pointer<Int8> iv,
+  int keyLength,
+  int ivLength,
+  int cipherLength,
+  int iMode,
+);
+
+final RijndaelEncryptDart RijndaelEncrypt = dylib
+    .lookup<NativeFunction<RijndaelEncryptC>>(
+      'RijndaelEncrypt',
     )
     .asFunction();

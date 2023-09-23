@@ -148,3 +148,14 @@ typedef wchar_t* UTF8String;
 typedef std::exception Exception;
 
 #pragma endregion
+
+#pragma region Rijndael
+
+
+enum RijndaelMode {
+    ECB,
+    CBC,
+    CFB,
+};
+
+#pragma endregion

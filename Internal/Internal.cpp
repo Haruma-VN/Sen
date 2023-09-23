@@ -690,39 +690,45 @@ void EncodeETC1Slow(
 #pragma region Rijndael
 
 InternalAPI
-void RijndaelDecrypt(
-    unsigned char* cipher,
-    unsigned char* plain,
-    unsigned char* key,
-    unsigned char* iv,
-    size_t &size
+char* RijndaelDecrypt(
+    char const* cipher,
+    const char* key,
+    const char* iv,
+    const int key_len,
+    const int iv_len,
+    const int cipher_len,
+    const RijndaelMode iMode
 ) {
-    auto oRijndael = CRijndael{};
-    oRijndael.MakeKey(reinterpret_cast<char*>(key), reinterpret_cast<char*>(iv), 24, 24);
-    auto nLen = strlen(reinterpret_cast<const char*>(cipher));
-    auto nNumOfBlocks = nLen / 24 + (nLen % 24 ? 1 : 0);
-    auto nPaddingLen = nNumOfBlocks * 24 - nLen;
-    memset(cipher + nLen, '0', nPaddingLen);
-    oRijndael.Decrypt(reinterpret_cast<char*>(cipher), reinterpret_cast<char*>(plain), nNumOfBlocks * 24, CRijndael::CBC);
-    size = nNumOfBlocks * 24;
-    return;
+    auto Rijndael = CRijndael{};
+    auto key_str = std::string{};
+    key_str.assign(key, key_len);
+    auto iv_str = std::string{};
+    iv_str.assign(iv, iv_len);
+    Rijndael.MakeKey(key_str.c_str(), iv_str.c_str(), key_str.size(), iv_str.size());
+    auto result = new char[cipher_len];
+    Rijndael.Decrypt(cipher, result, cipher_len, iMode);
+    return result;
 }
 
 InternalAPI
-void RijndaelEncrypt(
-    char* plain,
-    char* cipher, 
-    char* key, 
-    char* iv
+char* RijndaelEncrypt(
+    char const* cipher,
+    const char* key,
+    const char* iv,
+    const int key_len,
+    const int iv_len,
+    const int cipher_len,
+    const RijndaelMode iMode
 ) {
-    auto oRijndael = CRijndael{};
-    oRijndael.MakeKey(key, iv, 16, 16);
-    auto nLen = strlen((const char*)plain);
-    auto nNumOfBlocks = nLen / 16 + (nLen % 16 ? 1 : 0);
-    auto nPaddingLen = nNumOfBlocks * 16 - nLen;
-    memset(plain + nLen, 0, nPaddingLen);
-    oRijndael.Encrypt(plain, cipher, nNumOfBlocks * 16, CRijndael::CBC);
-    return;
+    auto Rijndael = CRijndael{};
+    auto key_str = std::string{};
+    key_str.assign(key, key_len);
+    auto iv_str = std::string{};
+    iv_str.assign(iv, iv_len);
+    Rijndael.MakeKey(key_str.c_str(), iv_str.c_str(), key_str.size(), iv_str.size());
+    auto result = new char[cipher_len];
+    Rijndael.Encrypt(cipher, result, cipher_len, iMode);
+    return result;
 }
 
 
