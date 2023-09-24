@@ -32,6 +32,12 @@ declare namespace Sen {
         declare const argument: Array<string>;
 
         /**
+         * Internal Requirement
+         */
+
+        declare const InternalRequirement: number;
+
+        /**
          * Buffer
          */
 

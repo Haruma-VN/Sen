@@ -73,18 +73,18 @@ namespace Sen.Script {
     /**
      * Current Script version
      */
-    export const ScriptVersion: int = 26 as const;
+    export const ScriptVersion: int = 27 as const;
 
     /**
      * Requirement version for Shell
      */
-    export const ShellRequirement: int = 16 as const;
+    export const ShellRequirement: int = 18 as const;
 
     /**
      * Tool Version
      */
 
-    export const M_Version: string = `3.0.5` as const;
+    export const M_Version: string = `3.0.6` as const;
 
     /**
      *
@@ -144,6 +144,11 @@ namespace Sen.Script {
         );
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`);
+            Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
+            return;
+        }
+        if (Sen.Shell.InternalRequirement > Sen.Internal.Version.InternalVersion()) {
+            Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Internal outdated, please delete the current Internal and let the tool redownload`);
             Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
             return;
         }

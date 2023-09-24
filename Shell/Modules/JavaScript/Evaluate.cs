@@ -51,6 +51,7 @@ namespace Sen.Shell.Modules.JavaScript
                 {"PvZ2Lawnstrings", new Sen.Shell.Modules.Support.PvZ2.Lawnstrings()},
                 {"ADBHelper", new Sen.Shell.Modules.Support.Misc.ADBHelper()},
                 { "SenBuffer", TypeReference.CreateTypeReference(Engine, typeof(SenBuffer)) },
+                { "InternalRequirement", Version.InternalRequirement },
             };
             ns.Set("Shell", JsValue.FromObject(Engine, dictionary));
             var k_dictionary = new Dictionary<string, object>

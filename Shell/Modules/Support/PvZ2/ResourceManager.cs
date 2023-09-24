@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using Sen.Shell.Modules.Standards;
+using System.Text.RegularExpressions;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -256,7 +258,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
     }
 
 
-    public unsafe static class PvZ2ResourceConversion
+    public unsafe static partial class PvZ2ResourceConversion
     {
 
         private static MSubgroupData ConvertAtlasSubgroupData(SubgroupData subgroup, ExpandPath version)
@@ -398,7 +400,10 @@ namespace Sen.Shell.Modules.Support.PvZ2
             {
                 string key = property.Name;
                 JObject value = (JObject)property.Value;
-
+                if(value["path"] is not JArray)
+                {
+                    throw new Exception(MyRegex().Replace(Localization.GetString("the_property_path_at_id_is_not_an_array"), key));
+                }
                 var resource = new MSubgroupWrapper()
                 {
                     slot = 0,
@@ -598,6 +603,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
             return resoureGroup;
         }
 
+        [GeneratedRegex(@"\{\}")]
+        private static partial Regex MyRegex();
     }
 
 

@@ -49,7 +49,10 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 maxWidth: Math.max(acc.maxWidth, rect.x + rect.width),
                 maxHeight: Math.max(acc.maxHeight, rect.y + rect.height),
             }),
-            { maxWidth: 0, maxHeight: 0 }
+            {
+                maxWidth: 0,
+                maxHeight: 0,
+            }
         );
         return {
             width: maxWidth,
@@ -653,6 +656,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
      */
 
     export function IsQualified(directory_path: string) {
+        if (!/_1536$/.test(Sen.Shell.Path.GetFileNameWithoutExtension(directory_path))) {
+            throw new Sen.Script.Modules.Exceptions.UnsupportedMultiResolution(Sen.Script.Modules.System.Default.Localization.GetString("merge_for_cross_resolution_must_ends_with_1536"), directory_path);
+        }
         const atlas_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${directory_path}`, `atlas.json`));
         const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
             atlas_json_path

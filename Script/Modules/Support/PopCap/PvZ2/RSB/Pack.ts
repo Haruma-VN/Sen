@@ -93,7 +93,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             }
         }
         const manifestgroup_save: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`, `${manifest.group[manifest_group].name}.rsg`));
-        const packages_save: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`, `${manifest.group[packages].name}.rsg`));
         const properties: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PACKAGES`));
         if (Sen.Shell.FileSystem.DirectoryExists(properties)) {
             const files: Array<string> = Sen.Shell.FileSystem.ReadDirectory(properties, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory);
@@ -161,11 +160,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             }
         }
         if (manifest_group !== -1 && packages === -1) {
-            const resource_file: string = Sen.Shell.Path.Join(
-                `${inDirectory}`,
-                `resource`,
-                ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
-            ).replace(/((\.rton))?$/i, ".json");
+            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\"));
             Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
                 Sen.Shell.Path.Resolve(resource_file.replace(/((\.rton))?$/i, ".json")),
                 Sen.Shell.Path.Resolve(resource_file),
@@ -175,6 +170,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)}`);
         } else if (packages !== -1 && manifest_group === -1) {
+            const packages_save: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`, `${manifest.group[packages].name}.rsg`));
             Sen.Shell.LotusModule.RSGPack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)), packages_save, manifest.group[packages].subgroup[0].packet_info, false);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)}`);
@@ -185,6 +181,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
                 Sen.Shell.Path.Resolve(resource_file),
                 Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
             );
+            const packages_save: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`, `${manifest.group[packages].name}.rsg`));
             Sen.Shell.LotusModule.RSGPackAsync(
                 {
                     inFolder: Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)),

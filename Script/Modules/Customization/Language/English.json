@@ -640,5 +640,9 @@
     "image_count_is_not_same": "Image count is not the same with Source",
     "invalid_source_domsymbolitem_name": "Invalid Source DOMSymbolItem Name",
     "width_out_of_range": "Width out of range at \"id\" {1}. Resources width: {2}, image width: {3}",
-    "height_out_of_range": "Height out of range at \"id\" {1}. Resources height: {2}, image height: {3}"
+    "height_out_of_range": "Height out of range at \"id\" {1}. Resources height: {2}, image height: {3}",
+    "file_structure_is_not_for_resinfo_it_should_be_for_resource_group": "This JSON is not for Res-Info Structure, it should be for Resource-Group",
+    "file_structure_is_not_for_resinfo": "This JSON is not for Res-Info Structure",
+    "merge_for_cross_resolution_must_ends_with_1536": "Merge for multi resolution directory name must ends with \"_1536\" before \".sprite\"",
+    "the_property_path_at_id_is_not_an_array": "The property \"path\" at id \"{}\" is not an array of string"
 }

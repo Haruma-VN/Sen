@@ -761,9 +761,16 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion {
                     subgroup: {},
                 };
                 for (let j_index: number = 0; j_index < groups_inventory[index].subgroups.length; ++j_index) {
-                    res_json.groups[groups_inventory[index].group_parent].subgroup[groups_inventory[index].subgroups[j_index]] = Sen.Script.Modules.FileSystem.Json.ReadJson(
-                        Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${group_directory}`, `${groups_inventory[index].subgroups[j_index]}.json`))
-                    );
+                    const file_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${group_directory}`, `${groups_inventory[index].subgroups[j_index]}.json`));
+                    const json: any = Sen.Script.Modules.FileSystem.Json.ReadJson(file_path);
+                    if (!("packet" in json)) {
+                        if ("resources" in json) {
+                            throw new Sen.Script.Modules.Exceptions.JSONParseSyntaxError(Sen.Script.Modules.System.Default.Localization.GetString("file_structure_is_not_for_resinfo_it_should_be_for_resource_group"), file_path);
+                        } else {
+                            throw new Sen.Script.Modules.Exceptions.JSONParseSyntaxError(Sen.Script.Modules.System.Default.Localization.GetString("file_structure_is_not_for_resinfo"), file_path);
+                        }
+                    }
+                    res_json.groups[groups_inventory[index].group_parent].subgroup[groups_inventory[index].subgroups[j_index]] = json as any;
                 }
             }
             Sen.Script.Modules.FileSystem.Json.WriteJson(output_file, res_json, false);
