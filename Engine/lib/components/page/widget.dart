@@ -17,6 +17,8 @@ import 'package:sen_material_design/components/tool/popcap/rsb/pack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/unpack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsg/pack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsg/unpack.dart';
+import 'package:sen_material_design/components/tool/popcap/rton/decode.dart';
+import 'package:sen_material_design/components/tool/popcap/rton/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/compress.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/uncompress.dart';
 
@@ -41,4 +43,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.resinfo.merge_atlas': MergeWithResInfo(),
   'popcap.pam.unpack': PopCapRSGUnpack(),
   'popcap.pam.pack': PopCapRSGPack(),
+  'popcap.rton.decode': PopCapRTONDecode(),
+  'popcap.rton.encode': PopCapRTONEncode(),
 };

@@ -13,7 +13,7 @@ class ReflectionObjectNotation {
   var propertyName = "";
   var tempString = "";
   // Decode
-  dynamic decodeRTON(SenBuffer senFile, dynamic decrypt) {
+  dynamic decodeRTON(SenBuffer senFile, bool decrypt) {
     r0x90List.clear();
     r0x92List.clear();
     jsonFile = {};
@@ -232,7 +232,7 @@ class ReflectionObjectNotation {
   final r0x92Object = <String, int>{};
   var r0x90Index = 0;
   var r0x92Index = 0;
-  SenBuffer encodeRTON(dynamic jsonFile, dynamic encrypt) {
+  SenBuffer encodeRTON(dynamic jsonFile, bool encrypt) {
     r0x90Object.clear();
     r0x92Object.clear();
     final senFile = SenBuffer();
@@ -451,5 +451,27 @@ class ReflectionObjectNotation {
       }
     }
     return true;
+  }
+
+  // ignore: non_constant_identifier_names
+  static void decode_fs(
+    String inFile,
+    String outFile,
+  ) {
+    var rton = ReflectionObjectNotation();
+    dynamic json = rton.decodeRTON(SenBuffer.OpenFile(inFile), false);
+    FileSystem.writeJson(outFile, json, '\t');
+    return;
+  }
+
+  // ignore: non_constant_identifier_names
+  static void encode_fs(
+    String inFile,
+    String outFile,
+  ) {
+    var rton = ReflectionObjectNotation();
+    dynamic json = rton.encodeRTON(FileSystem.readJson(inFile), false);
+    FileSystem.writeJson(outFile, json, '\t');
+    return;
   }
 }
