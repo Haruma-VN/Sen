@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import
-
 import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:local_notifier/local_notifier.dart';
@@ -22,14 +20,14 @@ class NotificationService {
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
       var initializationSettings = InitializationSettings(
         android: const AndroidInitializationSettings(
-          '@mipmap/ic_launcher',
+          '@mipmap/launcher_icon',
         ),
         iOS: const DarwinInitializationSettings(),
         macOS: const DarwinInitializationSettings(),
         linux: LinuxInitializationSettings(
           defaultActionName: '',
           defaultIcon: AssetsLinuxIcon(
-            'asset/icon.png',
+            'assets/logo.png',
           ),
         ),
       );
@@ -46,15 +44,10 @@ class NotificationService {
     String description,
   ) async {
     if (Platform.isWindows) {
-      final los = localNotifier.setup(
-        appName: ApplicationInformation.applicationName,
-      );
-      los.then(
-        (value) async => await LocalNotification(
-          title: title,
-          body: description,
-        ).show(),
-      );
+      await LocalNotification(
+        title: title,
+        body: description,
+      ).show();
     }
     if (Platform.isLinux ||
         Platform.isMacOS ||

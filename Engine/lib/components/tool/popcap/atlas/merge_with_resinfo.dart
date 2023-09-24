@@ -426,6 +426,7 @@ class _MergeWithResInfoState extends State<MergeWithResInfo> {
                   ),
                 ),
                 SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(

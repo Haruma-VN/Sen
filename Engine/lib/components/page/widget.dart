@@ -37,6 +37,8 @@ Map<String, Widget> materialWidget = const {
   'popcap.resource_group.merge_atlas': PopCapAtlasMerge(),
   'popcap.rsb.unpack': PopCapRSBUnpack(),
   'popcap.rsb.pack': PopCapRSBPack(),
+  'popcap.rsg.unpack': PopCapRSGUnpack(),
+  'popcap.rsg.pack': PopCapRSGPack(),
   'popcap.animation.decode_to_json': PopCapAnimationConvertToJson(),
   'popcap.animation.encode_from_json': PopCapAnimationConvertFromJson(),
   'popcap.resinfo.split_atlas': SplitWithResInfo(),

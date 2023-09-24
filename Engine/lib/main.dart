@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/http/connect.dart';
+import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/common/version.dart';
 import 'package:sen_material_design/components/command.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:sen_material_design/components/setting.dart';
+import 'package:window_manager/window_manager.dart';
 import 'common/custom.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sen_material_design/l10n/l10n.dart';
@@ -15,6 +17,12 @@ import 'package:path/path.dart' as p;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    await WindowManager.instance.ensureInitialized();
+    await windowManager.center();
+    await windowManager.waitUntilReadyToShow();
+    await windowManager.show();
+  }
   var setting = Customization.init();
   if (!await Customization.getCurrentTheme()) {
     ApplicationInformation.isDarkMode.value = false;
@@ -45,6 +53,7 @@ Future<void> main() async {
   ApplicationInformation.allowNotification.value =
       await Customization.getNotificationDetail();
   Engine.cast_internal_executor();
+  await NotificationService.initialize();
   runApp(
     Application(
       setting: setting,

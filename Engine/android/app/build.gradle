@@ -46,7 +46,6 @@ android {
             jniLibs.srcDirs 'src/main/jniLibs'
         }
     }
-    
 
     defaultConfig {
         applicationId "com.haruma.sen.gui"

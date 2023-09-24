@@ -30,8 +30,12 @@ class ResourceStreamGroup {
           );
           fileData.outFile(
             useResFolder
-                ? path.join(outFolder, "res", part0List[i]["path"])
-                : path.join(outFolder, part0List[i]["path"]),
+                ? path
+                    .join(outFolder, "res", part0List[i]["path"])
+                    .replaceAll("\\", "/")
+                : path
+                    .join(outFolder, part0List[i]["path"])
+                    .replaceAll("\\", "/"),
           );
         }
         resInfo.add({
@@ -51,8 +55,12 @@ class ResourceStreamGroup {
           );
           fileData.outFile(
             useResFolder
-                ? path.join(outFolder, "res", part1List[i]["path"])
-                : path.join(outFolder, part1List[i]["path"]),
+                ? path
+                    .join(outFolder, "res", part1List[i]["path"])
+                    .replaceAll("\\", "/")
+                : path
+                    .join(outFolder, part1List[i]["path"])
+                    .replaceAll("\\", "/"),
           );
         }
         resInfo.add({

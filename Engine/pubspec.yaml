@@ -2,7 +2,7 @@ name: sen_material_design
 publish_to: "none"
 version: 1.0.0+1
 environment:
-    sdk: ">=3.0.6 <4.0.0"
+    sdk: ">=3.1.0 <4.0.0"
 dependencies:
     flutter:
         sdk: flutter
@@ -23,27 +23,38 @@ dev_dependencies:
     flutter_test:
         sdk: flutter
     flutter_lints: ^2.0.0
+    flutter_launcher_icons: ^0.13.1
+    msix: ^3.16.1
 flutter:
     generate: true
     uses-material-design: true
     assets:
         - assets/
+flutter_icons:
+    image_path: assets/logo.png
+    android: true
+    ios: true
+    windows:
+        generate: true
+        icon_size: 256
+    macos:
+        generate: true
 msix_config:
-    identity_name: Sen.Material.App
+    identity_name: "Sen: Lotus Engine"
     publisher: CN=Haruma
-    display_name: Sen
+    display_name: "Sen: Lotus Engine"
     publisher_display_name: Sen
     languages: en-us
     trim_logo: false
 flutter_launcher_icons:
     android: "launcher_icon"
     ios: true
-    image_path: assets/icon.png
+    image_path: assets/logo.png
     min_sdk_android: 21
     windows:
         generate: true
-        image_path: assets/icon.png
+        image_path: assets/logo.png
         icon_size: 48
     macos:
         generate: true
-        image_path: assets/icon.png
+        image_path: assets/logo.png
