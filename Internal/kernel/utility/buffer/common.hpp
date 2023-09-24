@@ -731,44 +731,70 @@ class Buffer {
             return static_cast<char>(this->data[offset]);
         }
 
-        inline auto insertUInt8
+        inline auto insertUInt16BE
         (
-            std::size_t offset,
-            std::uint8_t value
-        ) -> void 
-        {
-            this->data.insert(this->data.begin() + offset, value);
-            return;
-        }
-
-        inline auto insertUInt16
-        (
-            std::size_t offset,
+            std::size_t offset, 
             std::uint16_t value
-        ) -> void 
+        ) -> void
+        {
+            this->data.insert(this->data.begin() + offset, (value >> 8) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 1, value & 0xFF);
+            return;
+        }
+
+        inline auto insertUInt32BE
+        (
+            std::size_t offset, 
+            std::uint32_t value
+        ) -> void
+        {
+            this->data.insert(this->data.begin() + offset, (value >> 24) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 1, (value >> 16) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 2, (value >> 8) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 3, value & 0xFF);
+            return;
+        }
+
+        inline auto insertInt16BE
+        (
+            std::size_t offset, 
+            std::int16_t value
+        ) -> void
+        {
+            this->data.insert(this->data.begin() + offset, (value >> 8) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 1, value & 0xFF);
+            return;
+        }
+
+        inline auto insertInt32BE
+        (
+            std::size_t offset, 
+            std::int32_t value
+        ) -> void
+        {
+            this->data.insert(this->data.begin() + offset, (value >> 24) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 1, (value >> 16) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 2, (value >> 8) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 3, value & 0xFF);
+            return;
+        }
+
+        inline auto insertUInt16LE
+        (
+            std::size_t offset, 
+            std::uint16_t value
+        ) -> void
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
             this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
             return;
         }
 
-        inline auto insertUInt24
+        inline auto insertUInt32LE
         (
-            std::size_t offset,
+            std::size_t offset, 
             std::uint32_t value
-        ) -> void 
-        {
-            this->data.insert(this->data.begin() + offset, value & 0xFF);
-            this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
-            this->data.insert(this->data.begin() + offset + 2, (value >> 16) & 0xFF);
-            return;
-        }
-
-        inline auto insertUInt32
-        (
-            std::size_t offset,
-            std::uint32_t value
-        ) -> void 
+        ) -> void
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
             this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
@@ -777,44 +803,22 @@ class Buffer {
             return;
         }
 
-        inline auto insertInt8
+        inline auto insertInt16LE
         (
-            std::size_t offset,
-            std::int8_t value
-        ) -> void 
-        {
-            this->data.insert(this->data.begin() + offset, static_cast<std::uint8_t>(value));
-            return;
-        }
-
-        inline auto insertInt16
-        (
-            std::size_t offset,
+            std::size_t offset, 
             std::int16_t value
-        ) -> void 
+        ) -> void
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
             this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
             return;
         }
 
-        inline auto insertInt24
+        inline auto insertInt32LE
         (
-            std::size_t offset,
+            std::size_t offset, 
             std::int32_t value
-        ) -> void 
-        {
-            this->data.insert(this->data.begin() + offset, value & 0xFF);
-            this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
-            this->data.insert(this->data.begin() + offset + 2, (value >> 16) & 0xFF);
-            return;
-        }
-
-        inline auto insertInt32
-        (
-            std::size_t offset,
-            std::int32_t value
-        ) -> void 
+        ) -> void
         {
             this->data.insert(this->data.begin() + offset, value & 0xFF);
             this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
@@ -848,6 +852,43 @@ class Buffer {
                 static_cast<std::uint8_t>(c)
             );
             return;
+        }
+
+        inline auto insertUInt24BE
+        (
+            std::size_t offset, 
+            std::uint32_t value
+        ) -> void
+        {
+            this->data.insert(this->data.begin() + offset, (value >> 16) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 2, value & 0xFF);
+            return;
+        }
+
+        inline auto insertInt24BE
+        (
+            std::size_t offset, 
+            std::int32_t value
+        ) -> void
+        {
+            this->data.insert(this->data.begin() + offset, (value >> 16) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 1, (value >> 8) & 0xFF);
+            this->data.insert(this->data.begin() + offset + 2, value & 0xFF);
+            return;
+        }
+
+        inline auto toString
+        (
+
+        ) -> std::string
+        {
+            auto c = std::string{};
+            for (auto& p : this->data)
+            {
+                c.push_back((char)p);
+            }
+            return c;
         }
 
     private:
@@ -886,7 +927,7 @@ class Buffer {
             T value = 0;
             auto size = sizeof(T);
             for (auto i = 0; i < size; i++) {
-                value |= (this->data[position++] << (i * 8));
+                value |= (this->data[this->position++] << (i * 8));
             }
             return value;
         }
@@ -900,10 +941,11 @@ class Buffer {
             T value = 0;
             auto size = sizeof(T);
             for (auto i = 0; i < size; i++) {
-                value |= (this->data[position++] << ((size - 1 - i) * 8));
+                value |= (this->data[this->position++] << ((size - 1 - i) * 8));
             }
             return value;
         }
+
 
         template<typename T>
         inline auto writeLE_has
@@ -939,9 +981,9 @@ class Buffer {
         {
             T value = 0;
             for (auto i = 0; i < size; i++) {
-                value |= ((T)this->data[position + i] << (i * 8));
+                value |= ((T)this->data[this->position + i] << (i * 8));
             }
-            position += size;
+            this->position += size;
             return value;
         }
 
@@ -953,9 +995,9 @@ class Buffer {
         {
             T value = 0;
             for (auto i = 0; i < size; i++) {
-                value |= ((T)this->data[position + i] << ((size - 1 - i) * 8));
+                value |= ((T)this->data[this->position + i] << ((size - 1 - i) * 8));
             }
-            position += size;
+            this->position += size;
             return value;
         }
 
@@ -990,8 +1032,8 @@ class Buffer {
         ) -> T 
         {
             auto value = T{};
-            std::memcpy(&value, &this->data[position], size);
-            position += size;
+            std::memcpy(&value, &this->data[this->position], size);
+            this->position += size;
             return value;
         }
 
@@ -1002,9 +1044,9 @@ class Buffer {
         ) -> T {
             auto value = T{};
             for (auto i = 0; i < size; i++) {
-                reinterpret_cast<std::uint8_t*>(&value)[size - 1 - i] = this->data[position + i];
+                reinterpret_cast<std::uint8_t*>(&value)[size - 1 - i] = this->data[this->position + i];
             }
-            position += size;
+            this->position += size;
             return value;
         }
 };
