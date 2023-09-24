@@ -562,7 +562,7 @@ class PopCapReAnimation {
         transform[2],
       ];
     } else {
-      throw Exception("invaild_transform_size");
+      throw Exception("invalid_transform_size");
     }
   }
 

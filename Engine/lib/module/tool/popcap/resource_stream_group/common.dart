@@ -187,16 +187,16 @@ class ResourceStreamGroup {
   dynamic readRSGHead(SenBuffer senFile) {
     final magic = senFile.readString(4);
     if (magic != "pgsr") {
-      throw Exception("invaild_rsg_magic");
+      throw Exception("invalid_rsg_magic");
     }
     final version = senFile.readUInt32LE();
     if (version != 3 && version != 4) {
-      throw Exception("invaild_rsg_version");
+      throw Exception("invalid_rsg_version");
     }
     senFile.readOffset += 8;
     final flag = senFile.readUInt32LE();
     if (flag > 3 || flag < 0) {
-      throw Exception("invaild_rsg_compression_flag");
+      throw Exception("invalid_rsg_compression_flag");
     }
     final fileOffset = senFile.readUInt32LE();
     final part0Offset = senFile.readUInt32LE();
@@ -231,11 +231,11 @@ class ResourceStreamGroup {
     bool useResFolder = true,
   ]) {
     if (packetInfo["version"] != 3 && packetInfo["version"] != 4) {
-      throw Exception("invaild_rsg_version");
+      throw Exception("invalid_rsg_version");
     }
     if (packetInfo["compression_flags"] < 0 ||
         packetInfo["compression_flags"] > 3) {
-      throw Exception("invaild_rsg_compression_flag");
+      throw Exception("invalid_rsg_compression_flag");
     }
     final senFile = SenBuffer();
     senFile.writeString("pgsr");

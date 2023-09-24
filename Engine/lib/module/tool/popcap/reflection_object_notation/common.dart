@@ -19,16 +19,16 @@ class ReflectionObjectNotation {
     jsonFile = {};
     final magic = senFile.readString(4);
     if (magic != "RTON") {
-      throw Exception("invaild_rton_magic");
+      throw Exception("invalid_rton_magic");
     }
     final version = senFile.readUInt32LE();
     if (version != 0x1) {
-      throw Exception("invaild_rton_version");
+      throw Exception("invalid_rton_version");
     }
     jsonFile = readObject(senFile);
     final endRton = senFile.readString(4);
     if (endRton != "DONE") {
-      throw Exception("invaild_rton_end");
+      throw Exception("invalid_rton_end");
     }
     return jsonFile;
   }
@@ -48,7 +48,7 @@ class ReflectionObjectNotation {
     final arrayTemp = [];
     var bytecode = senFile.readUInt8();
     if (bytecode != 0xFD) {
-      throw Exception("invaild_rton_array_end");
+      throw Exception("invalid_rton_array_end");
     }
     final numArray = senFile.readVarInt32();
     for (var i = 0; i < numArray; i++) {
@@ -56,7 +56,7 @@ class ReflectionObjectNotation {
     }
     bytecode = senFile.readUInt8();
     if (bytecode != 0xFE) {
-      throw Exception("invaild_rton_array_end");
+      throw Exception("invalid_rton_array_end");
     }
     return arrayTemp;
   }
@@ -101,7 +101,7 @@ class ReflectionObjectNotation {
         return;
       default:
         throw Exception(
-          "invail_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}",
+          "invalid_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}",
         );
     }
   }
@@ -187,7 +187,7 @@ class ReflectionObjectNotation {
         return r0x92List[senFile.readVarInt32()];
       default:
         throw Exception(
-          "invail_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}",
+          "invalid_bytecode: $byteCode | offset: ${senFile.readOffset} | path: ${senFile.filePath}",
         );
     }
   }
@@ -223,7 +223,7 @@ class ReflectionObjectNotation {
         final str1 = senFile.readStringByVarInt32();
         return "RTID($str1@$str2)";
       default:
-        throw Exception("invaild_RTID");
+        throw Exception("invalid_RTID");
     }
   }
 
@@ -292,7 +292,7 @@ class ReflectionObjectNotation {
       case num:
         writeNumber(senFile, value);
       default:
-        throw Exception("invaild_value_type | ${value.runtimeType}");
+        throw Exception("invalid_value_type | ${value.runtimeType}");
     }
   }
 

@@ -853,7 +853,7 @@ class _SenBuffer implements SenBuffer {
       case EncodingType.BASE64:
         return Base64Codec();
       default:
-        throw Exception("Invaild encoding type");
+        throw Exception("invalid encoding type");
     }
   }
 

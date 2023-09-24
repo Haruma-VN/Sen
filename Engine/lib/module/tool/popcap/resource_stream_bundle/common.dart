@@ -9,15 +9,15 @@ class ResourceStreamBundle {
   dynamic unpackRSB(SenBuffer senFile, String outFolder) {
     final rsbHeadInfo = readRSBHead(senFile);
     if (rsbHeadInfo["version"] != 3 && rsbHeadInfo["version"] != 4) {
-      throw Exception("invaild_rsb_version");
+      throw Exception("invalid_rsb_version");
     }
     if (rsbHeadInfo["version"] == 3 &&
         rsbHeadInfo["fileListBeginOffset"] != 0x6C) {
-      throw Exception("invaild_file_list_offset");
+      throw Exception("invalid_file_list_offset");
     }
     if (rsbHeadInfo["version"] == 4 &&
         rsbHeadInfo["fileListBeginOffset"] != 0x70) {
-      throw Exception("invaild_file_list_offset");
+      throw Exception("invalid_file_list_offset");
     }
     final fileList = fileListSplit(
       senFile,
@@ -42,7 +42,7 @@ class ResourceStreamBundle {
       if (rsbHeadInfo["part1BeginOffset"] == 0 &&
           rsbHeadInfo["part2BeginOffset"] == 0 &&
           rsbHeadInfo["part2BeginOffset"] == 0) {
-        throw Exception("invaild_rsb_ver_3_resource_offset");
+        throw Exception("invalid_rsb_ver_3_resource_offset");
       }
       readResourcesDescription(senFile, rsbHeadInfo, outFolder);
     }
@@ -54,7 +54,7 @@ class ResourceStreamBundle {
           compositeList[i]["namePath"]
               .toUpperCase()
               .replaceAll("_COMPOSITESHELL", "")) {
-        throw Exception("invaild_composite_name: ${compositeInfo[i]["name"]}");
+        throw Exception("invalid_composite_name: ${compositeInfo[i]["name"]}");
       }
       final subGroupList = {};
       for (var k = 0; k < compositeInfo[i]["packetNumber"]; k++) {
@@ -76,7 +76,7 @@ class ResourceStreamBundle {
         if (rsgInfoList[rsgInfoCount]["name"].toUpperCase() !=
             rsgList[rsgListCount]["namePath"].toUpperCase()) {
           throw Exception(
-            "invaild_rsg_name: ${rsgInfoList[rsgInfoCount]["name"]} | ${rsgList[rsgListCount]["name"]}. pool_index: $packetIndex",
+            "invalid_rsg_name: ${rsgInfoList[rsgInfoCount]["name"]} | ${rsgList[rsgListCount]["name"]}. pool_index: $packetIndex",
           );
         }
         rsgNameList.add(rsgInfoList[rsgInfoCount]["name"]);
@@ -105,14 +105,14 @@ class ResourceStreamBundle {
                           packetInfo["res"][m]["ptx_info"]["id"]]["width"] !=
                       packetInfo["res"][m]["ptx_info"]["width"]) {
                     throw Exception(
-                      "invaild_packet_width: ${fileList[h]["namePath"]}",
+                      "invalid_packet_width: ${fileList[h]["namePath"]}",
                     );
                   }
                   if (ptxInfoList[ptxBeforeNumber +
                           packetInfo["res"][m]["ptx_info"]["id"]]["height"] !=
                       packetInfo["res"][m]["ptx_info"]["height"]) {
                     throw Exception(
-                      "invaild_packet_height: ${fileList[h]["namePath"]}",
+                      "invalid_packet_height: ${fileList[h]["namePath"]}",
                     );
                   }
                   resInfo["ptx_info"] = {
@@ -137,7 +137,7 @@ class ResourceStreamBundle {
               }
             }
             if (!existItemPacket) {
-              throw Exception("invaild_item_packet");
+              throw Exception("invalid_item_packet");
             }
             resInfoList.add(resInfo);
           }
@@ -196,7 +196,7 @@ class ResourceStreamBundle {
       final id = senFile.getStringByEmpty(part3Offset + idOffsetPart3);
       final rsgNumber = senFile.readUInt32LE();
       final subgroup = {};
-      if (senFile.readUInt32LE() != 0x10) throw Exception("invaild_rsg_number");
+      if (senFile.readUInt32LE() != 0x10) throw Exception("invalid_rsg_number");
       final rsgInfoList = [];
       for (var k = 0; k < rsgNumber; k++) {
         final resolutionRatio = senFile.readUInt32LE();
@@ -244,11 +244,11 @@ class ResourceStreamBundle {
                   ["infoOffsetPart2"];
           {
             if (senFile.readUInt32LE() != 0x0) {
-              throw Exception("invaild_part2_offset");
+              throw Exception("invalid_part2_offset");
             }
             final type = senFile.readUInt16LE();
             if (senFile.readUInt16LE() != 0x1C) {
-              throw Exception("invaild_head_length");
+              throw Exception("invalid_head_length");
             }
             final ptxInfoEndOffsetPart2 = senFile.readUInt32LE();
             final ptxInfoBeginOffsetPart2 = senFile.readUInt32LE();
@@ -450,7 +450,7 @@ class ResourceStreamBundle {
     if (rsbHeadInfo["ptxInfoEachLength"] != 0x10 &&
         rsbHeadInfo["ptxInfoEachLength"] != 0x14 &&
         rsbHeadInfo["ptxInfoEachLength"] != 0x18) {
-      throw Exception("invaild_ptx_info_eachlength");
+      throw Exception("invalid_ptx_info_eachlength");
     }
     for (var i = 0; i < rsbHeadInfo["ptxNumber"]; i++) {
       final width = senFile.readUInt32LE();
@@ -483,13 +483,13 @@ class ResourceStreamBundle {
 
   void checkEndOffset(SenBuffer senFile, int endOffset) {
     if (senFile.readOffset != endOffset) {
-      throw Exception("invaild: offset: ${senFile.readOffset}, $endOffset");
+      throw Exception("invalid: offset: ${senFile.readOffset}, $endOffset");
     }
   }
 
   static dynamic readRSBHead(SenBuffer senFile) {
     final magic = senFile.readString(4);
-    if (magic != "1bsr") throw Exception("invaild_rsb_head");
+    if (magic != "1bsr") throw Exception("invalid_rsb_head");
     final version = senFile.readUInt32LE();
     senFile.readOffset += 4;
     var fileOffset = senFile.readUInt32LE();
@@ -556,7 +556,7 @@ class ResourceStreamBundle {
     } else if (version == 4) {
       fileListBeginOffset = 0x70;
     } else {
-      throw Exception("invaild_rsb_version");
+      throw Exception("invalid_rsb_version");
     }
     final rsbHeadInfo = {};
     senFile.writeInt32LE(version);
@@ -564,7 +564,7 @@ class ResourceStreamBundle {
     final ptxInfoSize = manifest["ptx_info_size"];
     rsbHeadInfo["ptxInfoEachLength"] = ptxInfoSize;
     if (ptxInfoSize != 0x10 && ptxInfoSize != 0x14 && ptxInfoSize != 0x18) {
-      throw Exception("invaild_ptx_info_each_length");
+      throw Exception("invalid_ptx_info_each_length");
     }
     final fileList = [];
     final rsgFileList = [];

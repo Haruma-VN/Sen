@@ -29,11 +29,11 @@ class PopCapAnimation {
   dynamic decodeAnimation(SenBuffer senFile) {
     final magic = senFile.readUInt32LE();
     if (magic != 0xBAF01954) {
-      throw Exception("invaild_animation_magic");
+      throw Exception("invalid_animation_magic");
     }
     final version = senFile.readUInt32LE();
     if (version > 6 || version < 1) {
-      throw Exception("invaild_animation_version");
+      throw Exception("invalid_animation_version");
     }
     final frameRate = senFile.readUInt8();
     final position = <double>[0, 0];
@@ -303,7 +303,7 @@ class PopCapAnimation {
     senFile.writeUInt32LE(0xBAF01954);
     senFile.writeUInt32LE(version);
     if (version > 6 || version < 1) {
-      throw Exception("invaild_animation_version");
+      throw Exception("invalid_animation_version");
     }
     senFile.writeUInt8(jsonFile["frame_rate"]);
     final position = jsonFile["position"];
