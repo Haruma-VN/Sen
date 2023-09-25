@@ -1317,7 +1317,7 @@ class _SenBuffer implements SenBuffer {
 
   @override
   void outFile(String outFile) {
-    final file = File(outFile);
+    final file = File(outFile.replaceAll('\\', '/'));
     file.createSync(recursive: true);
     file.writeAsBytesSync(toBytes());
     clear();

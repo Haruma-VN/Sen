@@ -30,12 +30,15 @@ class ResourceStreamGroup {
           );
           fileData.outFile(
             useResFolder
-                ? path
-                    .join(outFolder, "res", part0List[i]["path"])
-                    .replaceAll("\\", "/")
-                : path
-                    .join(outFolder, part0List[i]["path"])
-                    .replaceAll("\\", "/"),
+                ? path.join(
+                    outFolder,
+                    "res",
+                    part0List[i]["path"].replaceAll("\\", "/"),
+                  )
+                : path.join(
+                    outFolder,
+                    part0List[i]["path"].replaceAll("\\", "/"),
+                  ),
           );
         }
         resInfo.add({
@@ -55,22 +58,27 @@ class ResourceStreamGroup {
           );
           fileData.outFile(
             useResFolder
-                ? path
-                    .join(outFolder, "res", part1List[i]["path"])
-                    .replaceAll("\\", "/")
-                : path
-                    .join(outFolder, part1List[i]["path"])
-                    .replaceAll("\\", "/"),
+                ? path.join(
+                    outFolder,
+                    "res",
+                    part1List[i]["path"].replaceAll("\\", "/"),
+                  )
+                : path.join(
+                    outFolder,
+                    part1List[i]["path"].replaceAll("\\", "/"),
+                  ),
           );
         }
-        resInfo.add({
-          "path": part1List[i]["path"].split("\\"),
-          "ptx_info": {
-            "id": part1List[i]["id"],
-            "width": part1List[i]["width"],
-            "height": part1List[i]["height"],
+        resInfo.add(
+          {
+            "path": part1List[i]["path"].split("\\"),
+            "ptx_info": {
+              "id": part1List[i]["id"],
+              "width": part1List[i]["width"],
+              "height": part1List[i]["height"],
+            },
           },
-        });
+        );
       }
       senPart1.clear();
     }
@@ -358,8 +366,8 @@ class ResourceStreamGroup {
       }
       final senPacket = SenBuffer.OpenFile(
         useResFolder
-            ? path.join(inFolder, "res", packetResInfo["path"].join("\\"))
-            : path.join(inFolder, packetResInfo["path"].join("\\")),
+            ? path.join(inFolder, "res", packetResInfo["path"].join("/"))
+            : path.join(inFolder, packetResInfo["path"].join("/")),
       );
       final dataItem = senPacket.toBytes();
       senPacket.clear();
