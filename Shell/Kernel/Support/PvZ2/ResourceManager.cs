@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using Sen.Shell.Modules.Standards;
 using System.Text.RegularExpressions;
+using Jint.Native;
 
 namespace Sen.Shell.Modules.Support.PvZ2
 {
@@ -261,6 +262,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
     public unsafe static partial class PvZ2ResourceConversion
     {
 
+        private static string kernel_path = "Kernel\\Modules\\Support\\PvZ2\\ResourceManager.cs";
+
         private static MSubgroupData ConvertAtlasSubgroupData(SubgroupData subgroup, ExpandPath version)
         {
             var entry = new MSubgroupData()
@@ -268,7 +271,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 type = subgroup.res,
                 packet = new Dictionary<string, AtlasWrapper>()
             };
-            var version_k = version == ExpandPath.Array;
+            var is_array = version == ExpandPath.Array;
+            JsonGeneric.Assert(subgroup.resources is not null, Localization.GetString("property_resources_cannot_be_null"), kernel_path);
             var resources = subgroup!.resources!.ToList();
             var childrenByParentId = new Dictionary<string, List<MSubgroupWrapper>>();
             foreach (var resource in resources)
@@ -287,13 +291,25 @@ namespace Sen.Shell.Modules.Support.PvZ2
 
             resources.Where((e) => e.atlas is not null && (bool)e.atlas).ToList().ForEach((e) =>
             {
+                JsonGeneric.Assert(e.id is not null, Localization.GetString("id_cannot_be_null"), kernel_path);
                 if ((bool)e.atlas!)
                 {
                     var k_current_id = e.id;
+                    JsonGeneric.Assert(e.type is not null, MyRegex().Replace(Localization.GetString("type_cannot_be_null_in_id"), e.id!), kernel_path);
+                    JsonGeneric.Assert(e.width is not null, MyRegex().Replace(Localization.GetString("width_cannot_be_null_in_id"), e.id!), kernel_path);
+                    JsonGeneric.Assert(e.height is not null, MyRegex().Replace(Localization.GetString("height_cannot_be_null_in_id"), e.id!), kernel_path);
+                    if (is_array)
+                    {
+                        JsonGeneric.Assert(e.path is not String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
+                    }
+                    else
+                    {
+                        JsonGeneric.Assert(e.path is String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
+                    }
                     var atlas = new AtlasWrapper()
                     {
-                        type = e.type,
-                        path = version_k ? e.path : (e.path as string)!.Split('\\'),
+                        type = e.type!,
+                        path = is_array ? e.path : (e.path as string)!.Split('\\'),
                         dimension = new Dimension()
                         {
                             height = (uint)e!.height!,
@@ -301,14 +317,27 @@ namespace Sen.Shell.Modules.Support.PvZ2
                         },
                         data = new Dictionary<string, SpriteData>(),
                     };
-                    if (childrenByParentId.TryGetValue(k_current_id, out List<MSubgroupWrapper>? value))
+                    if (childrenByParentId.TryGetValue(k_current_id!, out List<MSubgroupWrapper>? value))
                     {
                         foreach (var k in value)
                         {
+                            JsonGeneric.Assert(k.type is not null, MyRegex().Replace(Localization.GetString("type_cannot_be_null_in_id"), k.id!), kernel_path);
+                            if (is_array)
+                            {
+                                JsonGeneric.Assert(k.path is not String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
+                            }
+                            else
+                            {
+                                JsonGeneric.Assert(k.path is String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
+                            }
+                            JsonGeneric.Assert(k.ax is not null, MyRegex().Replace(Localization.GetString("ax_cannot_be_null_in_id"), k.id!), kernel_path);
+                            JsonGeneric.Assert(k.ay is not null, MyRegex().Replace(Localization.GetString("ay_cannot_be_null_in_id"), k.id!), kernel_path);
+                            JsonGeneric.Assert(k.ah is not null, MyRegex().Replace(Localization.GetString("ah_cannot_be_null_in_id"), k.id!), kernel_path);
+                            JsonGeneric.Assert(k.aw is not null, MyRegex().Replace(Localization.GetString("aw_cannot_be_null_in_id"), k.id!), kernel_path);
                             (atlas.data as Dictionary<string, SpriteData>)!.Add(k.id, new SpriteData()
                             {
-                                type = k.type,
-                                path = version_k ? k.path : (k.path as string)!.Split('\\'),
+                                type = k.type!,
+                                path = is_array ? k.path : (k.path as string)!.Split('\\'),
                                 @default = new DefaultProperty()
                                 {
                                     ax = (uint)k!.ax!,
@@ -323,7 +352,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                             });
                         }
                     }
-                    (entry.packet as Dictionary<string, AtlasWrapper>)!.Add(k_current_id, atlas);
+                    (entry.packet as Dictionary<string, AtlasWrapper>)!.Add(k_current_id!, atlas);
                 }
             });
             return entry;
@@ -341,14 +370,24 @@ namespace Sen.Shell.Modules.Support.PvZ2
                     data = new Dictionary<string, CommonDataWrapper>(),
                 }
             };
-            var version_k = version == ExpandPath.Array;
+            var is_array = version == ExpandPath.Array;
+            JsonGeneric.Assert(subgroup.resources is not null, Localization.GetString("property_resources_cannot_be_null"), kernel_path);
             foreach (var e in subgroup!.resources!)
             {
-                object? src_path = e.srcpath is not null ? version_k ? e.srcpath : (e.srcpath as string)!.Split('\\') : null;
+                JsonGeneric.Assert(e.type is not null, MyRegex().Replace(Localization.GetString("type_cannot_be_null_in_id"), e.id!), kernel_path);
+                if (is_array)
+                {
+                    JsonGeneric.Assert(e.path is not String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
+                }
+                else
+                {
+                    JsonGeneric.Assert(e.path is String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
+                }
+                object? src_path = e.srcpath is not null ? is_array ? e.srcpath : (e.srcpath as string)!.Split('\\') : null;
                 ((entry.packet as CommonWrapper)!.data as Dictionary<string, CommonDataWrapper>)!.Add(e.id, new CommonDataWrapper()
                 {
-                    type = e.type,
-                    path = version_k ? e.path : (e.path as string)!.Split('\\'),
+                    type = e.type!,
+                    path = is_array ? e.path : (e.path as string)!.Split('\\'),
                     forceOriginalVectorSymbolSize = e.forceOriginalVectorSymbolSize ??= null,
                     srcpath = src_path,
                 });
@@ -394,8 +433,8 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 type = "simple",
                 resources = new List<MSubgroupWrapper>(),
             };
-
-            var list = (JObject)(image_info.packet as dynamic);
+            JsonGeneric.Assert(image_info.packet is not null, (Localization.GetString("packet_cannot_be_null")), kernel_path);
+            var list = (JObject)(image_info.packet! as dynamic);
             foreach (var property in list.Properties())
             {
                 string key = property.Name;

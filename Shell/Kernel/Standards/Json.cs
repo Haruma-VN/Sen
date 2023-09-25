@@ -32,6 +32,33 @@ namespace Sen.Shell.Modules.Standards
         public required string language;
     }
 
+    public static class JsonGeneric
+    {
+
+        public static void ThrowException(String message, String sharp_kernel)
+        {
+            throw new Exception(message);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="condition">If not condition, the error will be throw</param>
+        /// <param name="message">Message</param>
+        /// <param name="sharp_kernel">Location in Kernel</param>
+
+        public static void Assert(bool condition, String message, String? sharp_kernel)
+        {
+            if (!condition)
+            {
+                ThrowException(message, sharp_kernel ?? "undefined");
+            }
+            return;
+        }
+
+    }
+
+
     public class Localization : Localization_Abstract
     {
         public Localization() { }

@@ -78,6 +78,14 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         const manifest_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `manifest.json`));
         const original_manifest: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformationForSimple =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformationForSimple>(manifest_path);
+        Sen.Script.Modules.Support.Json.Generic.PropertyView(
+            original_manifest,
+            "extends_texture_information_for_pvz2c",
+            Sen.Script.Modules.System.Default.Localization.GetString("property_is_missing").replace(/\{\}/g, "extends_texture_information_for_pvz2c"),
+            manifest_path
+        );
+        Sen.Script.Modules.Support.Json.Generic.PropertyView(original_manifest, "version", Sen.Script.Modules.System.Default.Localization.GetString("property_is_missing").replace(/\{\}/g, "version"), manifest_path);
+        Sen.Script.Modules.Support.Json.Generic.PropertyView(original_manifest, "ptx_info_size", Sen.Script.Modules.System.Default.Localization.GetString("property_is_missing").replace(/\{\}/g, "ptx_info_size"), manifest_path);
         if (BigInt(original_manifest.extends_texture_information_for_pvz2c) === 0n && BigInt(original_manifest.version) === 4n && BigInt(original_manifest.ptx_info_size) === 16n) {
             Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.StrictlyHandlePitch<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, string, string, 4n, 16n, string>(original_manifest, 4n, 16n, manifest_path);
         }
@@ -305,6 +313,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         PTXInfomation extends 16n | 20n | 24n,
         ManifestPath extends string
     >(information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation, version: Version, ptx_info: PTXInfomation, manifest_path?: ManifestPath): information is safe {
+        Sen.Script.Modules.Support.Json.Generic.PropertyView(information, "group", Sen.Script.Modules.System.Default.Localization.GetString("property_is_missing").replace(/\{\}/g, "group"), manifest_path);
         const composite_shell_list: Array<CompositeShell> = Object.keys(information.group) as Array<CompositeShell>;
         const is_pvz2: boolean = version === 4n && ptx_info === 16n;
         composite_shell_list.forEach((composite_shell: CompositeShell) => {

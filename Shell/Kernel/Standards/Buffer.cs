@@ -20,6 +20,8 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
     public class SenBuffer : BufferM
     {
 
+        public static readonly string kernel_sharp = "Shell\\Kernel\\Standards\\Buffer.cs";
+
         public Stream baseStream;
         public long length { get => baseStream.Length; set => baseStream.SetLength(value); }
         public long writeOffset { get; set; }
@@ -154,8 +156,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             
             else
             {
-                // 
-                throw new Exception("Offset not found");
+                JsonGeneric.ThrowException(Localization.GetString("offset_not_found"), kernel_sharp);
             }
 
         }
@@ -183,7 +184,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             fixReadOffset(offset);
             if (readOffset + count > length)
             {
-                throw new ArgumentException($"Offset is outside the bounds of the DataView");
+                JsonGeneric.ThrowException(Localization.GetString("offset_outside_bounds_of_data_view"), kernel_sharp);
             }   
             byte[] array = new byte[count];
             baseStream.Read(array, 0, count);
@@ -196,7 +197,7 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
             fixReadOffset(offset);
             if (readOffset + 1 > length)
             {
-                throw new ArgumentException($"Offset is outside the bounds of the DataView");
+                JsonGeneric.ThrowException(Localization.GetString("offset_outside_bounds_of_data_view"), kernel_sharp);
             }
             byte[] array = new byte[1];
             baseStream.Read(array, 0, 1);
@@ -217,7 +218,10 @@ namespace Sen.Shell.Modules.Standards.IOModule.Buffer
         public byte[] getBytes(int count, long offset)
         {
             baseStream.Position = offset;
-            if (offset + count > length) throw new ArgumentException($"Offset is outside the bounds of the DataView");
+            if (offset + count > length)
+            {
+                JsonGeneric.ThrowException(Localization.GetString("offset_outside_bounds_of_data_view"), kernel_sharp);
+            }
             byte[] array = new byte[count];
             baseStream.Read(array, 0, count);
             baseStream.Position = readOffset;
