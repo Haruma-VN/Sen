@@ -658,5 +658,10 @@
     "aw_cannot_be_null_in_id": "Свойство \"aw\" не может быть нулевым в идентификаторе \"{}\"",
     "wrong_expand_path_option": "Путь до файла ресурсов указан неверно, повторите ввод",
     "packet_cannot_be_null": "Свойство \"packet\" не может быть нулевым",
-    "property_is_missing": "Свойство \"{}\" отсутствует в json файле"    
+    "property_is_missing": "Свойство \"{}\" отсутствует в json файле",
+    "add_levels_to_bundle": "PopCap RSB: Add Levels",
+    "input_level_directory": "Input level directory",
+    "apply_to": "Apply to {}",
+    "manifest_can_only_have_one_packages_in_subgroup": "manifest can only have one Packages in subgroup",
+    "res_info_can_only_have_one_packages_in_subgroup": "Res-Info can only have one Packages in subgroup"
 }

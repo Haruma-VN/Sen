@@ -656,5 +656,10 @@
     "aw_cannot_be_null_in_id": "La propiedad \"aw\" no puede ser nula en el id \"{}\"",
     "wrong_expand_path_option": "El directorio del Resources es incorrecto, introduzcalo de nuevo",
     "packet_cannot_be_null": "La propiedad \"packet\" no puede ser nula",
-    "property_is_missing": "La propiedad \"{}\" no se encuentra en el json"
+    "property_is_missing": "La propiedad \"{}\" no se encuentra en el json",
+    "add_levels_to_bundle": "PopCap RSB: Add Levels",
+    "input_level_directory": "Input level directory",
+    "apply_to": "Apply to {}",
+    "manifest_can_only_have_one_packages_in_subgroup": "manifest can only have one Packages in subgroup",
+    "res_info_can_only_have_one_packages_in_subgroup": "Res-Info can only have one Packages in subgroup"
 }

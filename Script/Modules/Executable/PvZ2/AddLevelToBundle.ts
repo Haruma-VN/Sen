@@ -1,12 +1,6 @@
 // DT :: Share -> Haruma :: Adapt
 namespace Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle {
     /**
-     * Edit this to change path
-     */
-
-    export const path: Array<string> = Array.from(["path1", "path2"] as const);
-
-    /**
      *  Default, don't change this
      */
 
@@ -95,7 +89,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle {
          * @returns
          */
 
-        public push_back(levels: Array<string>): void {
+        public push_back(levels: Array<string>, directory_name: string): void {
             const keys: Array<string> = Object.keys(this.manifest.group);
             let index: int = -1;
             view_data: for (let i = 0; i < keys.length; ++i) {
@@ -110,18 +104,29 @@ namespace Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle {
             const resource_packages_keys: Array<string> = Object.keys(this.res_info.groups[packages].subgroup);
             Sen.Script.Modules.Support.Json.Generic.Assert(resource_packages_keys.length === 1, Sen.Script.Modules.System.Default.Localization.GetString("res_info_can_only_have_one_packages_in_subgroup"));
             for (let i = 0; i < levels.length; ++i) {
+                const path: Array<string> = [
+                    ...levels[i]
+                        .replace(new RegExp(`.*${directory_name}`), "")
+                        .replaceAll("\\", "/")
+                        .split("/"),
+                ].filter((e) => e !== "");
                 Sen.Shell.Console.Print(
                     Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                    Sen.Script.Modules.System.Default.Localization.GetString("execution_success").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("apply_to").replace(/\{\}/g, levels[i]))
+                    Sen.Script.Modules.System.Default.Localization.GetString("execution_success").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("apply_to").replace(/\{\}/g, path.join("/")))
                 );
                 this.manifest.group[packages].subgroup[manifest_packages_keys[0]].packet_info.res.push({
-                    path: [...resource_path.map((e) => e.toUpperCase()), ...path.map((e) => e.toUpperCase()), levels[i].toUpperCase()],
+                    path: [...resource_path.map((e) => e.toUpperCase()), ...path.map((e) => e.toUpperCase())],
                     ptx_info: null!,
                     ptx_property: null!,
                 });
-                this.res_info.groups[packages].subgroup[manifest_packages_keys[0]].packet.data[`RESFILE_PACKAGES_LEVELS_${Sen.Shell.Path.GetFileNameWithoutExtension(levels[i]).toUpperCase()}`] = {
+                this.res_info.groups[packages].subgroup[manifest_packages_keys[0]].packet.data[
+                    `RESFILE_PACKAGES_LEVELS_${path
+                        .map((e, i) => (i === path.length - 1 ? Sen.Shell.Path.GetFileNameWithoutExtension(e) : e))
+                        .join("_")
+                        .toUpperCase()}`
+                ] = {
                     type: `File`,
-                    path: [...resource_path, ...path, this.cast(levels[i])],
+                    path: [...resource_path, ...path.map((e, i) => (i === path.length - 1 ? this.cast(e) : e.toLowerCase()))],
                 };
             }
             return;
@@ -146,16 +151,29 @@ namespace Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle {
      * @returns
      */
 
-    export function CopyLevels(packages_path: string, levels: Array<string>) {
-        const temporary: string = Sen.Shell.Path.Join(packages_path, ...resource_path.map((e) => e.toUpperCase()), ...path.map((e) => e.toUpperCase()));
+    export function CopyLevels(packages_path: string, levels: Array<string>, directory_name: string) {
+        const temporary: string = Sen.Shell.Path.Join(packages_path, ...resource_path.map((e) => e.toUpperCase()));
         if (!Sen.Shell.FileSystem.DirectoryExists(temporary)) {
             Sen.Shell.FileSystem.CreateDirectory(temporary);
         }
         for (const level of levels) {
-            Sen.Shell.FileSystem.CopyFile(level, Sen.Shell.Path.Join(temporary, Sen.Shell.Path.Basename(level)));
+            const m: Array<string> = [
+                ...level
+                    .replace(new RegExp(`.*${directory_name}`), "")
+                    .replaceAll("\\", "/")
+                    .split("/"),
+            ].filter((e: string) => e !== "");
+            const t = Sen.Shell.Path.Join(temporary, ...m);
+            Sen.Shell.FileSystem.OutFile(t, Sen.Shell.FileSystem.ReadText(level, FileSystem.Constraints.EncodingType.UTF8));
         }
         return;
     }
+
+    /**
+     *
+     * Sen : Execute
+     *
+     */
 
     export function Evaluate(): void {
         Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("evaluate_fs"), Sen.Script.Modules.System.Default.Localization.GetString("add_levels_to_bundle"));
@@ -163,28 +181,31 @@ namespace Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle {
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle"))
         );
-        const dir_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
+        const dir_in: string = "D:/Workspace/test/New Folder/ipad3_10.8.1_main.rsb.bundle";
+        // Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_level_directory"))
         );
-        const directory: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
+        const directory: string = "D:/Workspace/test/New Folder/raw";
+        // Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         const raw: Array<string> = Sen.Shell.FileSystem.ReadDirectory(directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory).filter((e) => /((\.rton))?$/i.test(e));
         const manifest: string = Sen.Shell.Path.Join(dir_in, "manifest.json");
         const res_info: string = Sen.Shell.Path.Join(dir_in, "res.json");
         const view = new Process(manifest, res_info);
+        const directory_name: string = Sen.Shell.Path.Basename(directory);
         view.push_back(
-            raw
-                .sort((a: string, b: string) => {
-                    const numA: int = parseInt(Sen.Shell.Path.Parse(a).name_without_extension);
-                    const numB: int = parseInt(Sen.Shell.Path.Parse(b).name_without_extension);
-                    return numA - numB;
-                })
-                .map((e) => Sen.Shell.Path.Basename(e))
+            raw.sort((a: string, b: string) => {
+                const numA: int = parseInt(Sen.Shell.Path.Parse(a).name_without_extension);
+                const numB: int = parseInt(Sen.Shell.Path.Parse(b).name_without_extension);
+                return numA - numB;
+            }),
+            directory_name
         );
-        Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle.CopyLevels(Sen.Shell.Path.Join(dir_in, "resource"), raw);
+        Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle.CopyLevels(Sen.Shell.Path.Join(dir_in, "resource"), raw, directory_name);
         Sen.Script.Modules.FileSystem.Json.WriteJson(manifest, view.export_manifest(), false);
         Sen.Script.Modules.FileSystem.Json.WriteJson(res_info, view.export_res_info(), false);
+        view.release();
         return;
     }
 }
