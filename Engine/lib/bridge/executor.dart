@@ -367,7 +367,7 @@ typedef EncodeETC1FastC = Void Function(
   Pointer<Uint32>,
   Pointer<Uint64>,
   Uint32,
-  IntPtr,
+  Int32,
 );
 
 typedef EncodeETC1FastDart = void Function(

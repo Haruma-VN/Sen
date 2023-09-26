@@ -640,5 +640,8 @@
     "popcap_reanim_json_from_xml": "PopCap Re-Animation: XML sang JSON",
     "invalid_source_domsymbolitem_name": "Tên nguồn DOMSymbolItem không hợp lệ",
     "width_out_of_range": "Chiều rộng vượt vùng cho phép tại \"id\" {1}. Chiều rộng trong Resources: {2}, chiều rộng ảnh: {3}",
-    "height_out_of_range": "Chiều cao vượt vùng cho phép tại \"id\" {1}. Chiều cao trong Resources: {2}, chiều cao ảnh: {3}"
+    "height_out_of_range": "Chiều cao vượt vùng cho phép tại \"id\" {1}. Chiều cao trong Resources: {2}, chiều cao ảnh: {3}",
+    "add_levels_to_bundle": "PopCap RSB: Thêm Cấp Độ",
+    "input_level_directory": "Nhập đường dẫn thư mục chứa cấp độ",
+    "apply_to": "Áp vào {}"
 }

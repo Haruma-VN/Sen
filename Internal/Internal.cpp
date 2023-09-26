@@ -670,6 +670,32 @@ void EncodeETC1Fast(
     return;
 }
 
+InternalAPI
+void EncodeETC1FastDither(
+    const uint32_t* src,
+    uint64_t* dst,
+    uint32_t blocks,
+    size_t width
+)
+{
+    CompressEtc1RgbDither(src, dst, blocks, width);
+    return;
+}
+
+
+InternalAPI
+void EncodeETC2(
+    const uint32_t* src,
+    uint64_t* dst,
+    uint32_t blocks,
+    size_t width,
+    bool useHeuristics
+)
+{
+    CompressEtc2Rgb(src, dst, blocks, width, useHeuristics);
+    return;
+}
+
 #pragma endregion
 
 #pragma region rg_etc1

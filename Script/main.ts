@@ -141,7 +141,7 @@ namespace Sen.Script {
             14 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
             `Sen ~ ${Sen.Script.M_Version} | Shell ${
                 Sen.Shell.ShellVersion.ShellVersion
-            } & Script ${ScriptVersion} & Internal ${Sen.Internal.Version.InternalVersion()} | ${Sen.Shell.DotNetPlatform.ShellHost()} & ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()} & ${Sen.Internal.Version.GetProcessorArchitecture()}`
+            } & Script ${ScriptVersion} & Internal ${Sen.Internal.Version.InternalVersion()} | Lotus ${Sen.Shell.DotNetPlatform.ShellHost()} & ${Sen.Shell.DotNetPlatform.CurrentUserPlatform()} & ${Sen.Internal.Version.GetProcessorArchitecture()}`
         );
         if (Sen.Shell.ShellVersion.ScriptRequirement > Sen.Script.ScriptVersion) {
             Sen.Shell.Console.Print(13 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, `Execution Failed: Script outdated, please delete the current script folder and let the tool redownload`);
