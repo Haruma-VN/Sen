@@ -1,4 +1,4 @@
-namespace Sen.Shell.Modules.Support.TextureEncode.TextureCoder
+namespace Sen.Shell.Kernel.Support.TextureEncode.TextureCoder
 {
     public static class ETC1
     {

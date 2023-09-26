@@ -1,6 +1,6 @@
 ﻿using Esprima.Ast;
-using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule;
+using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,11 +13,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-[assembly: SuppressMessage ("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Sen.Shell.Modules.Support.Download.DownloadUpdate.HasAdmin~System.Boolean")]
+[assembly: SuppressMessage ("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Sen.Shell.Kernel.Support.Download.DownloadUpdate.HasAdmin~System.Boolean")]
 
 // Download script instantly
 
-namespace Sen.Shell.Modules.Support.Download
+namespace Sen.Shell.Kernel.Support.Download
 {
     
     using Compress = Standards.Compress;
@@ -442,8 +442,8 @@ namespace Sen.Shell.Modules.Support.Download
             }
             var shell_save = path.Resolve($"{path.Dirname($"{save_dir}")}/{shell_name}");
             await GitHub.DownloadFileAsync(github_api_json.Assets[index].Browser_download_url, (shell_save), $"Sen");
-            Sen.Shell.Modules.Support.Download.InternalShell.CreateExecuable();
-            Sen.Shell.Modules.Support.Download.InternalShell.ExecuteBat();
+            Sen.Shell.Kernel.Support.Download.InternalShell.CreateExecuable();
+            Sen.Shell.Kernel.Support.Download.InternalShell.ExecuteBat();
             return;
         }
 

@@ -1,21 +1,21 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Encodings.Web;
-using Sen.Shell.Modules.Internal;
-using Sen.Shell.Modules.Standards;
+using Sen.Shell.Kernel.Internal;
+using Sen.Shell.Kernel.Standards;
 
-namespace Sen.Shell.Modules.Standards
+namespace Sen.Shell.Kernel.Standards
 {
 
     public abstract class SystemAbstract
     {
-        public abstract void Print(Sen.Shell.Modules.Standards.ConsoleColor? color, params string[] texts);
+        public abstract void Print(Sen.Shell.Kernel.Standards.ConsoleColor? color, params string[] texts);
 
         public abstract void Debug(ConsoleColor? color, params object[] objects);
 
-        public abstract void Printf(Sen.Shell.Modules.Standards.ConsoleColor? color, params string[] texts);
+        public abstract void Printf(Sen.Shell.Kernel.Standards.ConsoleColor? color, params string[] texts);
 
-        public abstract string? Input<T>(Sen.Shell.Modules.Standards.ConsoleColor? color);
+        public abstract string? Input<T>(Sen.Shell.Kernel.Standards.ConsoleColor? color);
 
         public abstract void TerminateProgram();
 
@@ -66,51 +66,51 @@ namespace Sen.Shell.Modules.Standards
             return m;
         }
 
-        public override void Print(Sen.Shell.Modules.Standards.ConsoleColor? color, params string[] texts)
+        public override void Print(Sen.Shell.Kernel.Standards.ConsoleColor? color, params string[] texts)
         {
-            var platform = new Sen.Shell.Modules.Standards.Platform();
+            var platform = new Sen.Shell.Kernel.Standards.Platform();
 
             if (platform.SenShell == ShellType.Console) {
                 System.Console.ForegroundColor = color switch
                 {
-                    Sen.Shell.Modules.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
-                    Sen.Shell.Modules.Standards.ConsoleColor.White => System.ConsoleColor.White,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.White => System.ConsoleColor.White,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
                     _ => System.ConsoleColor.White,
                 };
             }
 
             var text = (platform.SenShell == ShellType.Console) ? (platform.IsUTF8Support() ? "● " : "$ ") : color switch
             {
-                Sen.Shell.Modules.Standards.ConsoleColor.Black => "\x1b[30m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Blue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Cyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => "\x1b[90m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Gray => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Green => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Magenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Red => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.White => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Yellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Black => "\x1b[30m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Blue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => "\x1b[90m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Gray => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Green => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Red => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.White => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => "\x1b[33m",
                 _ => "\x1b[0m"
             } + (platform.IsUTF8Support() ? "● " : "$ ");
 
@@ -129,52 +129,52 @@ namespace Sen.Shell.Modules.Standards
             }
         }
 
-        public override void Printf(Sen.Shell.Modules.Standards.ConsoleColor? color, params string[] texts)
+        public override void Printf(Sen.Shell.Kernel.Standards.ConsoleColor? color, params string[] texts)
         {
-            var platform = new Sen.Shell.Modules.Standards.Platform();
+            var platform = new Sen.Shell.Kernel.Standards.Platform();
 
             if (platform.SenShell == ShellType.Console)
             {
                 System.Console.ForegroundColor = color switch
                 {
-                    Sen.Shell.Modules.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
-                    Sen.Shell.Modules.Standards.ConsoleColor.White => System.ConsoleColor.White,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.White => System.ConsoleColor.White,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
                     _ => System.ConsoleColor.White,
                 };
             }
 
             var text = (platform.SenShell == ShellType.Console) ? "" : color switch
             {
-                Sen.Shell.Modules.Standards.ConsoleColor.Black => "\x1b[30m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Blue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Cyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => "\x1b[90m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Gray => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Green => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Magenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Red => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.White => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Yellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Black => "\x1b[30m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Blue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => "\x1b[90m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Gray => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Green => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Red => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.White => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => "\x1b[33m",
                 _ => "\x1b[0m"
             };
 
@@ -195,52 +195,52 @@ namespace Sen.Shell.Modules.Standards
         }
 
 
-        public override string? Input<T>(Sen.Shell.Modules.Standards.ConsoleColor? color)
+        public override string? Input<T>(Sen.Shell.Kernel.Standards.ConsoleColor? color)
         {
 #pragma warning disable CS8600
-            var platform = new Sen.Shell.Modules.Standards.Platform();
+            var platform = new Sen.Shell.Kernel.Standards.Platform();
 
             if (platform.SenShell == ShellType.Console)
             {
                 System.Console.ForegroundColor = color switch
                 {
-                    Sen.Shell.Modules.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
-                    Sen.Shell.Modules.Standards.ConsoleColor.White => System.ConsoleColor.White,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.White => System.ConsoleColor.White,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
                     _ => System.ConsoleColor.White,
                 };
             }
             var text = (platform.SenShell == ShellType.Console) ? (platform.IsUTF8Support() ? "● " : "$ ") : color switch
             {
-                Sen.Shell.Modules.Standards.ConsoleColor.Black => "\x1b[30m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Blue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Cyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => "\x1b[90m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Gray => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Green => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Magenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Red => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.White => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Yellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Black => "\x1b[30m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Blue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => "\x1b[90m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Gray => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Green => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Red => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.White => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => "\x1b[33m",
                 _ => "\x1b[0m"
             } + (platform.IsUTF8Support() ? "● " : "$ ");
             Console.Write(text);
@@ -260,50 +260,50 @@ namespace Sen.Shell.Modules.Standards
 
         public override void Debug(ConsoleColor? color, params object[] objects)
         {
-            var platform = new Sen.Shell.Modules.Standards.Platform();
+            var platform = new Sen.Shell.Kernel.Standards.Platform();
 
             if (platform.SenShell == ShellType.Console)
             {
                 System.Console.ForegroundColor = color switch
                 {
-                    Sen.Shell.Modules.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
-                    Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
-                    Sen.Shell.Modules.Standards.ConsoleColor.White => System.ConsoleColor.White,
-                    Sen.Shell.Modules.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Black => System.ConsoleColor.Black,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Blue => System.ConsoleColor.Blue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => System.ConsoleColor.Cyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => System.ConsoleColor.DarkBlue,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => System.ConsoleColor.DarkCyan,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => System.ConsoleColor.DarkGray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => System.ConsoleColor.DarkGreen,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => System.ConsoleColor.DarkMagenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => System.ConsoleColor.DarkRed,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => System.ConsoleColor.DarkYellow,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Gray => System.ConsoleColor.Gray,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Green => System.ConsoleColor.Green,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => System.ConsoleColor.Magenta,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Red => System.ConsoleColor.Red,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.White => System.ConsoleColor.White,
+                    Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => System.ConsoleColor.Yellow,
                     _ => System.ConsoleColor.White,
                 };
             }
 
             var text = (platform.SenShell == ShellType.Console) ? (platform.IsUTF8Support() ? "● " : "$ ") : color switch
             {
-                Sen.Shell.Modules.Standards.ConsoleColor.Black => "\x1b[30m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Blue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Cyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGray => "\x1b[90m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkRed => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Gray => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Green => "\x1b[32m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Magenta => "\x1b[35m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Red => "\x1b[31m",
-                Sen.Shell.Modules.Standards.ConsoleColor.White => "\x1b[37m",
-                Sen.Shell.Modules.Standards.ConsoleColor.Yellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Black => "\x1b[30m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Blue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Cyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkBlue => "\x1b[34m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkCyan => "\x1b[36m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGray => "\x1b[90m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkGreen => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkMagenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkRed => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.DarkYellow => "\x1b[33m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Gray => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Green => "\x1b[32m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Magenta => "\x1b[35m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Red => "\x1b[31m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.White => "\x1b[37m",
+                Sen.Shell.Kernel.Standards.ConsoleColor.Yellow => "\x1b[33m",
                 _ => "\x1b[0m"
             } + (platform.IsUTF8Support() ? "● " : "$ ");
             var json = new JsonImplement();

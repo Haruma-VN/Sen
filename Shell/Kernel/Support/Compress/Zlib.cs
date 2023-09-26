@@ -1,10 +1,10 @@
-﻿using Sen.Shell.Modules.Internal;
-using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+﻿using Sen.Shell.Kernel.Internal;
+using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 using System.Runtime.InteropServices;
 
-namespace Sen.Shell.Modules.Support.Compress
+namespace Sen.Shell.Kernel.Support.Compress
 {
 
     using Buffer = JavaScript.Implement.Buffer;

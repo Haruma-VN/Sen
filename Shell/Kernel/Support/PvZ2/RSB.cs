@@ -1,11 +1,11 @@
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Support.PvZ2.RSG;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Support.PvZ2.RSG;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using Sen.Shell.Modules.Standards;
+using Sen.Shell.Kernel.Standards;
 
-namespace Sen.Shell.Modules.Support.PvZ2.RSB
+namespace Sen.Shell.Kernel.Support.PvZ2.RSB
 {
     public class ManifestInfo
     {

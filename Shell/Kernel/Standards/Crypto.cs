@@ -5,7 +5,7 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
 
-namespace Sen.Shell.Modules.Standards
+namespace Sen.Shell.Kernel.Standards
 {
 
     public abstract class Crypto_Abstract

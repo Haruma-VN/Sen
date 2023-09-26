@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Sen.Shell.Modules.Support.Misc.ADBHelper;
+using static Sen.Shell.Kernel.Support.Misc.ADBHelper;
 
-namespace Sen.Shell.Modules.Support.Misc
+namespace Sen.Shell.Kernel.Support.Misc
 {
 
     public abstract class ADBHelperVirtual
@@ -14,6 +14,8 @@ namespace Sen.Shell.Modules.Support.Misc
         public abstract string ADBSendConnect(string fileName, string Command);
 
         public abstract void Sleep(uint miliseconds);
+
+        public abstract void SetDirectory(string directory);
 
 
     }
@@ -46,6 +48,12 @@ namespace Sen.Shell.Modules.Support.Misc
         public unsafe sealed override void Sleep(uint miliseconds)
         {
             Thread.Sleep((int)miliseconds);
+            return;
+        }
+
+        public unsafe sealed override void SetDirectory(string directory)
+        {
+            Directory.SetCurrentDirectory(directory);
             return;
         }
     }

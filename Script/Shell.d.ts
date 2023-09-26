@@ -192,6 +192,7 @@ declare namespace Sen {
             writeSenBuffer(sen: SenBuffer): void;
             writeSenBuffer(sen: SenBuffer, offset: bigint): void;
             toBytes(): Array<bigint>;
+            getBytes(count: bigint, count: offset): Array<bigint>;
             toString(): string;
             toString(encodingType: string): string;
             BackupReadOffset(): void;
@@ -2216,6 +2217,12 @@ declare namespace Sen {
              */
 
             export function Sleep(time: bigint): void;
+            /**
+             *
+             * @param adb - Send ADB Command
+             */
+
+            export function SetDirectory(dirPath: string): string;
         }
 
         /**

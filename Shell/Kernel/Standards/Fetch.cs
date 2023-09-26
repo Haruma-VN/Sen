@@ -1,4 +1,4 @@
-﻿namespace Sen.Shell.Modules.Standards
+﻿namespace Sen.Shell.Kernel.Standards
 {
 
     public abstract class Fetch_Abstract

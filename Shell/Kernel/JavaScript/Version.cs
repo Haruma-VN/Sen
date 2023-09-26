@@ -1,4 +1,4 @@
-﻿namespace Sen.Shell.Modules.JavaScript
+﻿namespace Sen.Shell.Kernel.JavaScript
 {
     public class Version
     {

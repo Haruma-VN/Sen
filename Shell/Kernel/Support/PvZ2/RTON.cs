@@ -1,12 +1,12 @@
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 using System.Text;
 using System.Text.Json;
-using Sen.Shell.Modules.Standards;
+using Sen.Shell.Kernel.Standards;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using Sen.Shell.Modules.JavaScript;
+using Sen.Shell.Kernel.JavaScript;
 
-namespace Sen.Shell.Modules.Support.PvZ2.RTON
+namespace Sen.Shell.Kernel.Support.PvZ2.RTON
 {
 #pragma warning disable CS0414
 #pragma warning disable CS8603

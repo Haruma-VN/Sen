@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
-using Sen.Shell.Modules.Standards;
+using Sen.Shell.Kernel.Standards;
 using System.Text.RegularExpressions;
 using Jint.Native;
 
-namespace Sen.Shell.Modules.Support.PvZ2
+namespace Sen.Shell.Kernel.Support.PvZ2
 {
     #region Resources Writing
 
@@ -433,7 +433,7 @@ namespace Sen.Shell.Modules.Support.PvZ2
                 type = "simple",
                 resources = new List<MSubgroupWrapper>(),
             };
-            JsonGeneric.Assert(image_info.packet is not null, (Localization.GetString("packet_cannot_be_null")), kernel_path);
+            JsonGeneric.Assert(image_info.packet is not null, Localization.GetString("packet_cannot_be_null"), kernel_path);
             var list = (JObject)(image_info.packet! as dynamic);
             foreach (var property in list.Properties())
             {

@@ -2,9 +2,9 @@ using System.IO.Compression;
 using Newtonsoft.Json;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
-using Sen.Shell.Modules.Support.PvZ2.RSG;
+using Sen.Shell.Kernel.Support.PvZ2.RSG;
 
-namespace Sen.Shell.Modules.Support.PvZ2.Helper
+namespace Sen.Shell.Kernel.Support.PvZ2.Helper
 {
     public abstract class PVZ2RSG_Stream
     {

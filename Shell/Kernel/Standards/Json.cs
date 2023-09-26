@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 #pragma warning disable
 
-namespace Sen.Shell.Modules.Standards
+namespace Sen.Shell.Kernel.Standards
 {
 
     public abstract class Json_Abstract
@@ -64,8 +64,8 @@ namespace Sen.Shell.Modules.Standards
         public Localization() { }
         public override string Get(string property, string ScriptDirectory, string Language)
         {
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
-            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
+            var path = new Sen.Shell.Kernel.Standards.IOModule.ImplementPath();
             var file_path = path.Resolve($"{ScriptDirectory}/{Language}.json");
             if (!fs.FileExists(file_path))
             {
@@ -86,8 +86,8 @@ namespace Sen.Shell.Modules.Standards
 
         public static string GetString(string json_key)
         {
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
-            var path = new Sen.Shell.Modules.Standards.IOModule.ImplementPath();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
+            var path = new Sen.Shell.Kernel.Standards.IOModule.ImplementPath();
             var local = new Localization();
             return local.Get(json_key,path.Join(Sen.Shell.Program.Script_Directory, "Modules", "Customization", "Language"),
                 (string)Newtonsoft.Json.JsonConvert.DeserializeObject<Entry>(fs.ReadText(path.Join(Sen.Shell.Program.Script_Directory, "Modules", "Customization", "entry.json"), IOModule.EncodingType.UTF8))!.@default!.language!
@@ -101,7 +101,7 @@ namespace Sen.Shell.Modules.Standards
     {
         public override string ToString()
         {
-            var JsonImplementTest = new Sen.Shell.Modules.Standards.JsonImplement();
+            var JsonImplementTest = new Sen.Shell.Kernel.Standards.JsonImplement();
             return JsonImplementTest.StringifyJson(this, null);
         }
     }

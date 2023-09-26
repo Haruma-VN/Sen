@@ -1,18 +1,18 @@
-﻿using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Support.PvZ2.PAM;
+﻿using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Support.PvZ2.PAM;
 using System.Xml;
-using ImageInfo = Sen.Shell.Modules.Support.PvZ2.PAM.ImageInfo;
+using ImageInfo = Sen.Shell.Kernel.Support.PvZ2.PAM.ImageInfo;
 using System.Dynamic;
 using System.Xml.Linq;
 using System.Collections;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace Sen.Shell.Modules.Support.Flash
+namespace Sen.Shell.Kernel.Support.Flash
 {
-    using Object = Shell.Modules.Standards.Object;
+    using Object = Shell.Kernel.Standards.Object;
 
-    using FileSystem = Shell.Modules.Standards.IOModule.FileSystem;
+    using FileSystem = Shell.Kernel.Standards.IOModule.FileSystem;
 
     #region Abstract XML Class
 

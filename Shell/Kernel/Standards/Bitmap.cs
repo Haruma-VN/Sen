@@ -2,10 +2,10 @@
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Formats.Gif;
 using Image = SixLabors.ImageSharp.Image;
-using Sen.Shell.Modules.Helper;
+using Sen.Shell.Kernel.Helper;
 using System.Runtime.InteropServices;
 
-namespace Sen.Shell.Modules.Standards.Bitmap
+namespace Sen.Shell.Kernel.Standards.Bitmap
 {
     public class RawStreamWrite
     {

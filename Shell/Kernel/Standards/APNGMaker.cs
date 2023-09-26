@@ -1,8 +1,8 @@
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 using NullFX.CRC;
 using System.Text.RegularExpressions;
 
-namespace Sen.Shell.Modules.Helper
+namespace Sen.Shell.Kernel.Helper
 {
 
 

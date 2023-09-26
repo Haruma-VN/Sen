@@ -1,5 +1,5 @@
-﻿using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule;
+﻿using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sen.Shell.Modules.Support.Download
+namespace Sen.Shell.Kernel.Support.Download
 {
     public class InternalShell
     {

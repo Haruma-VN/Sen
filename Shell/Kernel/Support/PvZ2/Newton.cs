@@ -1,9 +1,9 @@
-﻿using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+﻿using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 
 #pragma warning disable CS8602
 
-namespace Sen.Shell.Modules.Support.PvZ2
+namespace Sen.Shell.Kernel.Support.PvZ2
 {
     public class Newton
     {

@@ -1,7 +1,7 @@
-using Sen.Shell.Modules.Support.TextureEncode.TextureCoder;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Internal;
-namespace Sen.Shell.Modules.Support.TextureEncode.RSB
+using Sen.Shell.Kernel.Support.TextureEncode.TextureCoder;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Internal;
+namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
 {
 
 
@@ -768,7 +768,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public unsafe sealed override void Create_ARGB8888_Decode(string input_file, string output_file, int width, int height)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             using var image = bitmap.Decode_ARGB8888(fs.ReadBytes(input_file), width, height);
             {
                 image.Save(output_file);
@@ -860,7 +860,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public unsafe sealed override void Create_RGBA8888_Decode(string input_file, string output_file, int width, int height)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             using var image = bitmap.Decode_RGBA8888(fs.ReadBytes(input_file), width, height);
             {
                 image.Save(output_file);
@@ -946,7 +946,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public unsafe sealed override void Create_ARGB8888_Encode(string input_file, string output_file)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             var encodedPixels = bitmap.Encode_ARGB8888(fs.ReadBytes(input_file));
             fs.WriteBytes(output_file, encodedPixels);
             return;
@@ -1036,7 +1036,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public unsafe sealed override void Create_RGBA8888_Encode(string input_file, string output_file)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             var encodedPixels = bitmap.Encode_RGBA8888(fs.ReadBytes(input_file));
             fs.WriteBytes(output_file, encodedPixels);
             return;
@@ -1379,7 +1379,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override async Task Create_RGBA8888_Decode_Async(string input_file, string output_file, int width, int height)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             using var image = await Task.Run(() => bitmap.Decode_RGBA8888(fs.ReadBytes(input_file), width, height));
             await image.SaveAsync(output_file);
             return;
@@ -1388,7 +1388,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override async Task Create_ARGB8888_Decode_Async(string input_file, string output_file, int width, int height)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             using var image = await Task.Run(() => bitmap.Decode_ARGB8888(fs.ReadBytes(input_file), width, height));
             await image.SaveAsync(output_file);
             return;
@@ -1589,7 +1589,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override async Task Create_RGBA8888_Encode_Async(string input_file, string output_file)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             var encodedPixels = await Task.Run(() => bitmap.Encode_RGBA8888(fs.ReadBytes(input_file)));
             await fs.WriteBytesAsync(output_file, encodedPixels);
             return;
@@ -1598,7 +1598,7 @@ namespace Sen.Shell.Modules.Support.TextureEncode.RSB
         public override async Task Create_ARGB8888_Encode_Async(string input_file, string output_file)
         {
             var bitmap = new TextureFormatHandler();
-            var fs = new Sen.Shell.Modules.Standards.IOModule.FileSystem();
+            var fs = new Sen.Shell.Kernel.Standards.IOModule.FileSystem();
             var encodedPixels = await Task.Run(() => bitmap.Encode_ARGB8888(fs.ReadBytes(input_file)));
             await fs.WriteBytesAsync(output_file, encodedPixels);
             return;

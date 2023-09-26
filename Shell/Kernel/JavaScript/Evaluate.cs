@@ -1,16 +1,16 @@
-﻿using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Standards.Bitmap;
-using Sen.Shell.Modules.Support.TextureEncode.RSB;
-using Sen.Shell.Modules.Support.PvZ2;
+﻿using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Standards.Bitmap;
+using Sen.Shell.Kernel.Support.TextureEncode.RSB;
+using Sen.Shell.Kernel.Support.PvZ2;
 using Jint;
-using Sen.Shell.Modules.Support.Download;
+using Sen.Shell.Kernel.Support.Download;
 using Jint.Native;
 using Jint.Runtime.Interop;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Support;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Support;
 
-namespace Sen.Shell.Modules.JavaScript
+namespace Sen.Shell.Kernel.JavaScript
 {
     public class JSEngine
     {
@@ -48,8 +48,8 @@ namespace Sen.Shell.Modules.JavaScript
                 {"Buffer", typeof(Implement.Buffer)},
                 {"PvZ2XML", new Support.Flash.XML()},
                 {"XMLHelper", new Support.Flash.XmlHelper()},
-                {"PvZ2Lawnstrings", new Sen.Shell.Modules.Support.PvZ2.Lawnstrings()},
-                {"ADBHelper", new Sen.Shell.Modules.Support.Misc.ADBHelper()},
+                {"PvZ2Lawnstrings", new Sen.Shell.Kernel.Support.PvZ2.Lawnstrings()},
+                {"ADBHelper", new Sen.Shell.Kernel.Support.Misc.ADBHelper()},
                 { "SenBuffer", TypeReference.CreateTypeReference(Engine, typeof(SenBuffer)) },
                 { "InternalRequirement", Version.InternalRequirement },
             };

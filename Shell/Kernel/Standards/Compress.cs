@@ -4,11 +4,11 @@ using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Runtime.InteropServices;
-using Sen.Shell.Modules.Internal;
+using Sen.Shell.Kernel.Internal;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 
-namespace Sen.Shell.Modules.Standards
+namespace Sen.Shell.Kernel.Standards
 {
 
     public abstract class Abstract_Compress

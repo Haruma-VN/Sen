@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Sen.Shell.Modules.Support.PvZ2.RSB;
+using Sen.Shell.Kernel.Support.PvZ2.RSB;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sen.Shell.Modules.Standards.IOModule.Buffer
+namespace Sen.Shell.Kernel.Standards.IOModule.Buffer
 {
 
     #pragma warning disable IDE1006

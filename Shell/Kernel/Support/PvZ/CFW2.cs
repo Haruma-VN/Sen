@@ -1,6 +1,6 @@
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 
-namespace Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2
+namespace Sen.Shell.Kernel.Support.PvZ.CharacterFontWidget2
 {
     public class CharacterFontWidget2
     {

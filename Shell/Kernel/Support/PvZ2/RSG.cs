@@ -1,10 +1,10 @@
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Support.PvZ2.RSB;
-using Sen.Shell.Modules.Support.PvZ2.RTON;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Support.PvZ2.RSB;
+using Sen.Shell.Kernel.Support.PvZ2.RTON;
 
-namespace Sen.Shell.Modules.Support.PvZ2.RSG
+namespace Sen.Shell.Kernel.Support.PvZ2.RSG
 {
 #pragma warning disable SYSLIB0020
     using Compress = Standards.Compress;

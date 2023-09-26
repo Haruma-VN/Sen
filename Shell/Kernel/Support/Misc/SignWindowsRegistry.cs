@@ -1,8 +1,8 @@
 ﻿using Microsoft.Win32;
-using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule;
+using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule;
 
-namespace Sen.Shell.Modules.Support.Misc
+namespace Sen.Shell.Kernel.Support.Misc
 {
     internal class SignWindowsRegistry
     {

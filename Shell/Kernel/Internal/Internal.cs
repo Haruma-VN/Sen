@@ -1,9 +1,9 @@
-﻿using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+﻿using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Sen.Shell.Modules.Internal
+namespace Sen.Shell.Kernel.Internal
 {
     public abstract class MInternal
     {

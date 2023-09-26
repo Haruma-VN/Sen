@@ -1,7 +1,7 @@
-﻿using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.JavaScript;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Support.Download;
+﻿using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.JavaScript;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Support.Download;
 using System.Runtime.InteropServices;
 
 namespace Sen.Shell
@@ -28,7 +28,7 @@ namespace Sen.Shell
 
         public async static Task<int> Main(string[] args)
         {
-            Modules.Support.Misc.SignWindowsRegistry.AssignExtensionWithSen();
+            Kernel.Support.Misc.SignWindowsRegistry.AssignExtensionWithSen();
             var SystemConsole = new SystemImplement();
             var path = new ImplementPath();
             var fs = new FileSystem();

@@ -1,6 +1,6 @@
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Standards;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Standards;
 using System.Text.Json;
 using System.Xml;
 using System.Xml.Linq;
@@ -12,7 +12,7 @@ using SixLabors.ImageSharp.Processing;
 using System.Numerics;
 using Newtonsoft.Json.Linq;
 
-namespace Sen.Shell.Modules.Support.PvZ2.PAM
+namespace Sen.Shell.Kernel.Support.PvZ2.PAM
 {
 
     public class PAMInfo

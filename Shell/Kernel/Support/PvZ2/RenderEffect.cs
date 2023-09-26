@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Support.PvZ2.RSB;
-namespace Sen.Shell.Modules.Support.PvZ2.RenderEffect
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Support.PvZ2.RSB;
+namespace Sen.Shell.Kernel.Support.PvZ2.RenderEffect
 {
     public class PopcapRenderEffect
     {

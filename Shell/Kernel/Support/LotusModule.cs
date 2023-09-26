@@ -1,38 +1,38 @@
-﻿using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Support.PvZ2.RTON;
-using Sen.Shell.Modules.Support.PvZ2.PAM;
-using Sen.Shell.Modules.Support.PvZ2.RSG;
-using Sen.Shell.Modules.Support.PvZ2.RSB;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Support.Compress;
-using Sen.Shell.Modules.Standards;
+﻿using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Support.PvZ2.RTON;
+using Sen.Shell.Kernel.Support.PvZ2.PAM;
+using Sen.Shell.Kernel.Support.PvZ2.RSG;
+using Sen.Shell.Kernel.Support.PvZ2.RSB;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Support.Compress;
+using Sen.Shell.Kernel.Standards;
 using WEMSharp;
-using Sen.Shell.Modules.Support.WWise;
-using static Sen.Shell.Modules.Support.PvZ2.RTON.RTONProcession;
-using static Sen.Shell.Modules.Support.PvZ2.RSG.RSGFunction;
+using Sen.Shell.Kernel.Support.WWise;
+using static Sen.Shell.Kernel.Support.PvZ2.RTON.RTONProcession;
+using static Sen.Shell.Kernel.Support.PvZ2.RSG.RSGFunction;
 using Newtonsoft.Json;
-using static Sen.Shell.Modules.Support.PvZ2Thread;
+using static Sen.Shell.Kernel.Support.PvZ2Thread;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Linq;
-using Sen.Shell.Modules.Support.PvZ2.Helper;
-using Sen.Shell.Modules.Support.PvZ2.RenderEffect;
-using Sen.Shell.Modules.Support.PvZ2;
-using Sen.Shell.Modules.Support.PVZ.Reanim;
+using Sen.Shell.Kernel.Support.PvZ2.Helper;
+using Sen.Shell.Kernel.Support.PvZ2.RenderEffect;
+using Sen.Shell.Kernel.Support.PvZ2;
+using Sen.Shell.Kernel.Support.PVZ.Reanim;
 using Jint.Runtime;
-using Sen.Shell.Modules.Support.PVZ.Particles;
+using Sen.Shell.Kernel.Support.PVZ.Particles;
 using Jint;
 using Jint.Native;
-using Sen.Shell.Modules.Standards.Bitmap;
-using Sen.Shell.Modules.Support.Download;
-using Sen.Shell.Modules.Support.TextureEncode.RSB;
+using Sen.Shell.Kernel.Standards.Bitmap;
+using Sen.Shell.Kernel.Support.Download;
+using Sen.Shell.Kernel.Support.TextureEncode.RSB;
 using System.IO;
-using Sen.Shell.Modules.Support.PvZ.CharacterFontWidget2;
-using Sen.Shell.Modules.Support.PvZ.PAK;
-using ResInfo = Sen.Shell.Modules.Support.PvZ2.ResInfo;
+using Sen.Shell.Kernel.Support.PvZ.CharacterFontWidget2;
+using Sen.Shell.Kernel.Support.PvZ.PAK;
+using ResInfo = Sen.Shell.Kernel.Support.PvZ2.ResInfo;
 using SixLabors.ImageSharp.PixelFormats;
-using Sen.Shell.Modules.Internal;
+using Sen.Shell.Kernel.Internal;
 
-namespace Sen.Shell.Modules.Support
+namespace Sen.Shell.Kernel.Support
 {
 
     #region RTONHead
@@ -824,14 +824,14 @@ namespace Sen.Shell.Modules.Support
 
         public override void CryptDataEncrypt(string inFile, string outFile, string key)
         {
-            var sen = Shell.Modules.Support.PvZ.CryptData.Encrypt(inFile, key);
+            var sen = Shell.Kernel.Support.PvZ.CryptData.Encrypt(inFile, key);
             sen.OutFile(outFile);
             return;
         }
 
         public override void CryptDataDecrypt(string inFile, string outFile, string key)
         {
-            var sen = Shell.Modules.Support.PvZ.CryptData.Decrypt(inFile, key);
+            var sen = Shell.Kernel.Support.PvZ.CryptData.Decrypt(inFile, key);
             sen.OutFile(outFile);
             return;
         }

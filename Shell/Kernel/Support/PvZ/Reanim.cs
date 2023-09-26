@@ -1,11 +1,11 @@
 using System.Xml;
 using System.Xml.Linq;
-using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using static Sen.Shell.Modules.Support.PvZ2.PAM.FlashPackage;
+using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using static Sen.Shell.Kernel.Support.PvZ2.PAM.FlashPackage;
 
-namespace Sen.Shell.Modules.Support.PVZ.Reanim
+namespace Sen.Shell.Kernel.Support.PVZ.Reanim
 {
     public enum ReanimVersion
     {
@@ -98,7 +98,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
             var SenFile = new SenBuffer();
             if (rawFile.peekInt32LE() == -559022380)
             {
-                var compress = new Sen.Shell.Modules.Standards.Compress();
+                var compress = new Sen.Shell.Kernel.Standards.Compress();
                 rawFile.readOffset += 4;
                 var size = rawFile.readInt32LE();
                 SenFile = new SenBuffer(compress.UncompressZlib(rawFile.readBytes((int)rawFile.length - 8)));
@@ -250,7 +250,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
                 }
             }
             var rawFile = new SenBuffer();
-            var compress = new Sen.Shell.Modules.Standards.Compress();
+            var compress = new Sen.Shell.Kernel.Standards.Compress();
             rawFile.writeInt32LE(-559022380);
             rawFile.writeInt32LE((int)SenFile.length);
             rawFile.writeBytes(compress.CompressZlib(SenFile.toBytes(), ZlibCompressionLevel.DEFAULT_COMPRESSION));
@@ -266,7 +266,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
             var SenFile = new SenBuffer();
             if (rawFile.peekInt32LE() == -559022380)
             {
-                var compress = new Sen.Shell.Modules.Standards.Compress();
+                var compress = new Sen.Shell.Kernel.Standards.Compress();
                 rawFile.readOffset += 4;
                 var size = rawFile.readInt32LE();
                 SenFile = new SenBuffer(compress.UncompressZlib(rawFile.readBytes((int)rawFile.length - 8)));
@@ -420,7 +420,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
                 }
             }
             var rawFile = new SenBuffer();
-            var compress = new Sen.Shell.Modules.Standards.Compress();
+            var compress = new Sen.Shell.Kernel.Standards.Compress();
             rawFile.writeInt32LE(-559022380);
             rawFile.writeInt32LE((int)SenFile.length);
             rawFile.writeBytes(compress.CompressZlib(SenFile.toBytes(), ZlibCompressionLevel.DEFAULT_COMPRESSION));
@@ -436,7 +436,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
             var SenFile = new SenBuffer();
             if (rawFile.peekInt32LE() == -559022380)
             {
-                var compress = new Sen.Shell.Modules.Standards.Compress();
+                var compress = new Sen.Shell.Kernel.Standards.Compress();
                 rawFile.readOffset += 8;
                 var size = rawFile.readInt32LE();
                 rawFile.readOffset += 4;
@@ -602,7 +602,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Reanim
                 }
             }
             var rawFile = new SenBuffer();
-            var compress = new Sen.Shell.Modules.Standards.Compress();
+            var compress = new Sen.Shell.Kernel.Standards.Compress();
             rawFile.writeInt32LE(-559022380);
             SenFile.writeInt32LE(0);
             rawFile.writeInt32LE((int)SenFile.length);

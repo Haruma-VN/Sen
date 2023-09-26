@@ -1,7 +1,7 @@
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
-using Sen.Shell.Modules.Standards.IOModule;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards.IOModule;
 
-namespace Sen.Shell.Modules.Support.WWise
+namespace Sen.Shell.Kernel.Support.WWise
 {
     public class WWiseInfoSimple
     {

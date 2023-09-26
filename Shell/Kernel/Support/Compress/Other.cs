@@ -1,7 +1,7 @@
 ﻿using ICSharpCode.SharpZipLib.BZip2;
 using System.IO.Compression;
 
-namespace Sen.Shell.Modules.Support.Compress.Other
+namespace Sen.Shell.Kernel.Support.Compress.Other
 {
     public unsafe class Bzip2
 {

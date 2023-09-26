@@ -1,4 +1,4 @@
-﻿namespace Sen.Shell.Modules.Standards
+﻿namespace Sen.Shell.Kernel.Standards
 {
 
     public enum StandardsException
@@ -23,7 +23,7 @@
 
         public RuntimeException(string message, string file_path) : base(message)
         {
-            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RuntimeException;
+            this._errorCode = Sen.Shell.Kernel.Standards.StandardsException.RuntimeException;
             this._file_path = file_path;
         }
 
@@ -57,7 +57,7 @@
 
         public RTONException(string message, string file_path) : base(message, file_path)
         {
-            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RTONException;
+            this._errorCode = Sen.Shell.Kernel.Standards.StandardsException.RTONException;
         }
     }
 
@@ -65,7 +65,7 @@
     {
         public PAMException(string message, string errorCode, string filepath) : base(Localization.GetString(message), errorCode)
         {
-            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMException;
+            this._errorCode = Sen.Shell.Kernel.Standards.StandardsException.PAMException;
             var system = new SystemImplement();
             if(errorCode != "undefined" && errorCode != "")
             {
@@ -81,7 +81,7 @@
     {
         public PAMEncodeException(string message, string errorCode) : base(message, errorCode)
         {
-            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMEncodeException;
+            this._errorCode = Sen.Shell.Kernel.Standards.StandardsException.PAMEncodeException;
         }
     }
 
@@ -89,7 +89,7 @@
     {
         public PAMDecodeException(string message, string errorCode) : base(message, errorCode)
         {
-            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.PAMDecodeException;
+            this._errorCode = Sen.Shell.Kernel.Standards.StandardsException.PAMDecodeException;
         }
     }
 
@@ -97,15 +97,15 @@
     {
         public ZlibException(string message, string errorCode) : base(message, errorCode)
         {
-            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.ZlibException;
+            this._errorCode = Sen.Shell.Kernel.Standards.StandardsException.ZlibException;
         }
     }
 
     public class RTONDecodeException : RTONException
     {
 
-        private Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException _Exception;
-        public Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException exception
+        private Sen.Shell.Kernel.Support.PvZ2.RTON.RTONListException _Exception;
+        public Sen.Shell.Kernel.Support.PvZ2.RTON.RTONListException exception
         {
             get { return this._Exception; }
             set { this._Exception = value; }
@@ -113,9 +113,9 @@
 
         public string expected;
 
-        public RTONDecodeException(string message, string errorCode, string expected, Sen.Shell.Modules.Support.PvZ2.RTON.RTONListException exception) : base(message, errorCode)
+        public RTONDecodeException(string message, string errorCode, string expected, Sen.Shell.Kernel.Support.PvZ2.RTON.RTONListException exception) : base(message, errorCode)
         {
-            this._errorCode = Sen.Shell.Modules.Standards.StandardsException.RTONDecodeException;
+            this._errorCode = Sen.Shell.Kernel.Standards.StandardsException.RTONDecodeException;
             this._Exception = exception;
             this.expected = expected;
         }

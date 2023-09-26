@@ -1,8 +1,8 @@
-using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 
-namespace Sen.Shell.Modules.Support.PvZ.PAK
+namespace Sen.Shell.Kernel.Support.PvZ.PAK
 {
     public enum PAK_Platform
     {

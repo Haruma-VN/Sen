@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
-using Sen.Shell.Modules.Standards.IOModule;
+using Sen.Shell.Kernel.Standards.IOModule;
 
-namespace Sen.Shell.Modules.Support.PvZ2
+namespace Sen.Shell.Kernel.Support.PvZ2
 {
 
     [JsonSerializable(typeof(JsonMap))]

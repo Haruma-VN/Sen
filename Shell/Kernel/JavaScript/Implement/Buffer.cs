@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Sen.Shell.Modules.JavaScript.Implement
+namespace Sen.Shell.Kernel.JavaScript.Implement
 {
 
     public class Buffer

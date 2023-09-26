@@ -1,8 +1,8 @@
 using System.Xml;
-using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 
-namespace Sen.Shell.Modules.Support.PVZ.Particles
+namespace Sen.Shell.Kernel.Support.PVZ.Particles
 {
     public class Particles
     {
@@ -215,7 +215,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Particles
                 WriteTrackNodes(senFile, emitter.AnimationRate);
             }
             var rawFile = new SenBuffer();
-            var compress = new Sen.Shell.Modules.Standards.Compress();
+            var compress = new Sen.Shell.Kernel.Standards.Compress();
             rawFile.writeInt32LE(-559022380);
             rawFile.writeInt32LE((int)senFile.length);
             rawFile.writeBytes(compress.CompressZlib(senFile.toBytes(), ZlibCompressionLevel.DEFAULT_COMPRESSION));
@@ -273,7 +273,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Particles
             var senFile = new SenBuffer();
             if (rawFile.peekInt32LE() == -559022380)
             {
-                var compress = new Sen.Shell.Modules.Standards.Compress();
+                var compress = new Sen.Shell.Kernel.Standards.Compress();
                 rawFile.readOffset += 4;
                 var size = rawFile.readInt32LE();
                 senFile = new SenBuffer(compress.UncompressZlib(rawFile.readBytes((int)rawFile.length - 8)));
@@ -539,7 +539,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Particles
                 WriteTrackNodes(senFile, emitter.AnimationRate);
             }
             var rawFile = new SenBuffer();
-            var compress = new Sen.Shell.Modules.Standards.Compress();
+            var compress = new Sen.Shell.Kernel.Standards.Compress();
             rawFile.writeInt32LE(-559022380);
             rawFile.writeInt32LE((int)senFile.length);
             rawFile.writeBytes(compress.CompressZlib(senFile.toBytes(), ZlibCompressionLevel.DEFAULT_COMPRESSION));
@@ -596,7 +596,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Particles
             var senFile = new SenBuffer();
             if (rawFile.peekInt32LE() == -559022380)
             {
-                var compress = new Sen.Shell.Modules.Standards.Compress();
+                var compress = new Sen.Shell.Kernel.Standards.Compress();
                 rawFile.readOffset += 4;
                 var size = rawFile.readInt32LE();
                 senFile = new SenBuffer(compress.UncompressZlib(rawFile.readBytes((int)rawFile.length - 8)));
@@ -863,7 +863,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Particles
                 WriteTrackNodes(senFile, emitter.AnimationRate);
             }
             var rawFile = new SenBuffer();
-            var compress = new Sen.Shell.Modules.Standards.Compress();
+            var compress = new Sen.Shell.Kernel.Standards.Compress();
             rawFile.writeInt32LE(-559022380);
             rawFile.writeInt32LE(0);
             rawFile.writeInt32LE((int)senFile.length);
@@ -928,7 +928,7 @@ namespace Sen.Shell.Modules.Support.PVZ.Particles
             var senFile = new SenBuffer();
             if (rawFile.peekInt32LE() == -559022380)
             {
-                var compress = new Sen.Shell.Modules.Standards.Compress();
+                var compress = new Sen.Shell.Kernel.Standards.Compress();
                 rawFile.readOffset += 8;
                 var size = rawFile.readInt32LE();
                 rawFile.readOffset += 4;

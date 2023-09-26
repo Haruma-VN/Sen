@@ -1,11 +1,11 @@
-﻿using Sen.Shell.Modules.Internal;
+﻿using Sen.Shell.Kernel.Internal;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
 #pragma warning disable
 
-namespace Sen.Shell.Modules.Standards
+namespace Sen.Shell.Kernel.Standards
 {
 
     public enum ShellType

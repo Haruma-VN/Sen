@@ -1,8 +1,8 @@
-﻿using Sen.Shell.Modules.Standards;
-using Sen.Shell.Modules.Standards.IOModule.Buffer;
+﻿using Sen.Shell.Kernel.Standards;
+using Sen.Shell.Kernel.Standards.IOModule.Buffer;
 using System.Text;
 
-namespace Sen.Shell.Modules.Support.PvZ
+namespace Sen.Shell.Kernel.Support.PvZ
 {
     public class CryptData
     {

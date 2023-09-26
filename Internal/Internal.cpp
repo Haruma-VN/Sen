@@ -681,6 +681,7 @@ void EncodeETC1Slow(
 )
 {
     auto etc1_pack_params = rg_etc1::etc1_pack_params{};
+    rg_etc1::pack_etc1_block_init();
     rg_etc1::pack_etc1_block(block, pixel, etc1_pack_params);
     return;
 }
