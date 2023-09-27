@@ -272,7 +272,6 @@ namespace Sen.Shell.Kernel.Support.PvZ2
                 packet = new Dictionary<string, AtlasWrapper>()
             };
             var is_array = version == ExpandPath.Array;
-            JsonGeneric.Assert(subgroup.resources is not null, Localization.GetString("property_resources_cannot_be_null"), kernel_path);
             var resources = subgroup!.resources!.ToList();
             var childrenByParentId = new Dictionary<string, List<MSubgroupWrapper>>();
             foreach (var resource in resources)
@@ -291,21 +290,9 @@ namespace Sen.Shell.Kernel.Support.PvZ2
 
             resources.Where((e) => e.atlas is not null && (bool)e.atlas).ToList().ForEach((e) =>
             {
-                JsonGeneric.Assert(e.id is not null, Localization.GetString("id_cannot_be_null"), kernel_path);
                 if ((bool)e.atlas!)
                 {
                     var k_current_id = e.id;
-                    JsonGeneric.Assert(e.type is not null, MyRegex().Replace(Localization.GetString("type_cannot_be_null_in_id"), e.id!), kernel_path);
-                    JsonGeneric.Assert(e.width is not null, MyRegex().Replace(Localization.GetString("width_cannot_be_null_in_id"), e.id!), kernel_path);
-                    JsonGeneric.Assert(e.height is not null, MyRegex().Replace(Localization.GetString("height_cannot_be_null_in_id"), e.id!), kernel_path);
-                    if (is_array)
-                    {
-                        JsonGeneric.Assert(e.path is not String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
-                    }
-                    else
-                    {
-                        JsonGeneric.Assert(e.path is String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
-                    }
                     var atlas = new AtlasWrapper()
                     {
                         type = e.type!,
@@ -321,19 +308,6 @@ namespace Sen.Shell.Kernel.Support.PvZ2
                     {
                         foreach (var k in value)
                         {
-                            JsonGeneric.Assert(k.type is not null, MyRegex().Replace(Localization.GetString("type_cannot_be_null_in_id"), k.id!), kernel_path);
-                            if (is_array)
-                            {
-                                JsonGeneric.Assert(k.path is not String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
-                            }
-                            else
-                            {
-                                JsonGeneric.Assert(k.path is String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
-                            }
-                            JsonGeneric.Assert(k.ax is not null, MyRegex().Replace(Localization.GetString("ax_cannot_be_null_in_id"), k.id!), kernel_path);
-                            JsonGeneric.Assert(k.ay is not null, MyRegex().Replace(Localization.GetString("ay_cannot_be_null_in_id"), k.id!), kernel_path);
-                            JsonGeneric.Assert(k.ah is not null, MyRegex().Replace(Localization.GetString("ah_cannot_be_null_in_id"), k.id!), kernel_path);
-                            JsonGeneric.Assert(k.aw is not null, MyRegex().Replace(Localization.GetString("aw_cannot_be_null_in_id"), k.id!), kernel_path);
                             (atlas.data as Dictionary<string, SpriteData>)!.Add(k.id, new SpriteData()
                             {
                                 type = k.type!,
@@ -371,18 +345,8 @@ namespace Sen.Shell.Kernel.Support.PvZ2
                 }
             };
             var is_array = version == ExpandPath.Array;
-            JsonGeneric.Assert(subgroup.resources is not null, Localization.GetString("property_resources_cannot_be_null"), kernel_path);
             foreach (var e in subgroup!.resources!)
             {
-                JsonGeneric.Assert(e.type is not null, MyRegex().Replace(Localization.GetString("type_cannot_be_null_in_id"), e.id!), kernel_path);
-                if (is_array)
-                {
-                    JsonGeneric.Assert(e.path is not String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
-                }
-                else
-                {
-                    JsonGeneric.Assert(e.path is String, Localization.GetString("wrong_expand_path_option")!, kernel_path);
-                }
                 object? src_path = e.srcpath is not null ? is_array ? e.srcpath : (e.srcpath as string)!.Split('\\') : null;
                 ((entry.packet as CommonWrapper)!.data as Dictionary<string, CommonDataWrapper>)!.Add(e.id, new CommonDataWrapper()
                 {
@@ -433,16 +397,11 @@ namespace Sen.Shell.Kernel.Support.PvZ2
                 type = "simple",
                 resources = new List<MSubgroupWrapper>(),
             };
-            JsonGeneric.Assert(image_info.packet is not null, Localization.GetString("packet_cannot_be_null"), kernel_path);
             var list = (JObject)(image_info.packet! as dynamic);
             foreach (var property in list.Properties())
             {
                 string key = property.Name;
                 JObject value = (JObject)property.Value;
-                if(value["path"] is not JArray)
-                {
-                    throw new Exception(MyRegex().Replace(Localization.GetString("the_property_path_at_id_is_not_an_array"), key));
-                }
                 var resource = new MSubgroupWrapper()
                 {
                     slot = 0,

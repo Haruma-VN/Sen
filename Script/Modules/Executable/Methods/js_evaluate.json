@@ -32,6 +32,10 @@
         {
             "id": "animation_helper_clone_content",
             "launch": "~/Modules/Executable/PvZ2/CloneAnimateContent"
+        },
+        {
+            "id": "add_levels_to_bundle",
+            "launch": "~/Modules/Executable/PvZ2/AddLevelToBundle"
         }
     ]
 }

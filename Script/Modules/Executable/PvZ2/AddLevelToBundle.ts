@@ -181,14 +181,12 @@ namespace Sen.Script.Modules.Executable.PvZ2.AddLevelToBundle {
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_current_bundle"))
         );
-        const dir_in: string = "D:/Workspace/test/New Folder/ipad3_10.8.1_main.rsb.bundle";
-        // Sen.Script.Modules.Interface.Arguments.InputPath("directory");
+        const dir_in: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_level_directory"))
         );
-        const directory: string = "D:/Workspace/test/New Folder/raw";
-        // Sen.Script.Modules.Interface.Arguments.InputPath("directory");
+        const directory: string = Sen.Script.Modules.Interface.Arguments.InputPath("directory");
         const raw: Array<string> = Sen.Shell.FileSystem.ReadDirectory(directory, Sen.Script.Modules.FileSystem.Constraints.ReadDirectory.AllNestedDirectory).filter((e) => /((\.rton))?$/i.test(e));
         const manifest: string = Sen.Shell.Path.Join(dir_in, "manifest.json");
         const res_info: string = Sen.Shell.Path.Join(dir_in, "res.json");

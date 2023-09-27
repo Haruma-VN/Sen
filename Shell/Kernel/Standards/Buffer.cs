@@ -1016,7 +1016,6 @@ namespace Sen.Shell.Kernel.Standards.IOModule.Buffer
             
 
           var strBytes = Encoding.Unicode.GetBytes(Convert.ToString(charstr));
-          Console.WriteLine($"{charstr} | {strBytes[0]}, {strBytes[1]} | {writeOffset}");
             writeBytes(strBytes);
         }
 
