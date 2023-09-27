@@ -4,7 +4,7 @@
     {
         public Version() { }
 
-        public readonly uint ShellVersion = 18;
+        public readonly uint ShellVersion = 19;
 
 
         public readonly uint ScriptRequirement = 27;
