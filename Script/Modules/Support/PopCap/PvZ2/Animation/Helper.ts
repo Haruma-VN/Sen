@@ -291,7 +291,9 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
         );
         let resource_name: string = Sen.Shell.Console.Input(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan).toUpperCase();
         if (!resource_name.endsWith("_")) resource_name += "_";
-        const sprite_num: int = Sen.Script.Modules.Interface.Arguments.InputInteger(Sen.Script.Modules.System.Default.Localization.GetString("input_number_sprite")) as int;
+        const sprite_num: int = Sen.Script.Modules.Interface.Arguments.InputInteger(
+            Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_number_sprite"))
+        ) as int;
         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)),

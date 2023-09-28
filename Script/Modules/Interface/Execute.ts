@@ -224,6 +224,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper.CreatePamFlashEmpty(arg, output_argument.argument);
                         });
                     }
+                    break;
                 }
                 case "popcap_reanim_json_to_xml": {
                     if (!Array.isArray(argument)) {

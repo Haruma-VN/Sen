@@ -176,7 +176,6 @@ namespace Sen.Script {
             )
         );
         Sen.Script.Modules.System.Implement.JavaScript.EvaluatePrint(Sen.Script.Modules.System.Default.Localization.GetString("this_translation_by"), Sen.Script.Modules.System.Default.Localization.GetString("language.author"));
-        Sen.Script.Modules.System.Default.Localization.CountDown(10);
         const Sen_module_time_start: number = Sen.Script.Modules.System.Default.Timer.CurrentTime();
         const wrapper: Sen.Script.Modules.Interface.Assert.Wrapper = { success: 0, fail: 0, has_argument: false };
         try {

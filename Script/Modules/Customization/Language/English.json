@@ -663,5 +663,7 @@
     "input_level_directory": "Input level directory",
     "apply_to": "Apply to {}",
     "manifest_can_only_have_one_packages_in_subgroup": "manifest can only have one Packages in subgroup",
-    "res_info_can_only_have_one_packages_in_subgroup": "Res-Info can only have one Packages in subgroup"
+    "res_info_can_only_have_one_packages_in_subgroup": "Res-Info can only have one Packages in subgroup",
+    "input_animation_resource_name": "Input Animation Resource Name",
+    "input_number_sprite": "Number of sprite"
 }
