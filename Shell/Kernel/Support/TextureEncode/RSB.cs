@@ -196,9 +196,8 @@ namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
             for (var i = 0; i < square; i++)
             {
                 var temp_pixels = encodedPixels.readUInt16LE();
-                var a = temp_pixels >> 11;
-                var r = (temp_pixels & 0x7E0) >> 5;
-                var g = (temp_pixels & 0xF0) >> 4;
+                var r = temp_pixels >> 11;
+                var g = (temp_pixels & 0x7E0) >> 5;
                 var b = temp_pixels & 0x1F;
                 imageData[i] = new Rgba32((byte)((r << 3) | (r >> 2)), (byte)((g << 2) | (g >> 4)), (byte)((b << 3) | (b >> 2)));
             }
@@ -238,10 +237,10 @@ namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
             for (var i = 0; i < square; i++)
             {
                 var temp_pixels = encodedPixels.readUInt16LE();
-                var a = temp_pixels >> 12;
-                var r = (temp_pixels & 0xF00) >> 8;
-                var g = (temp_pixels & 0xF0) >> 4;
-                var b = temp_pixels & 0xF;
+                var r = temp_pixels >> 12;
+                var g = (temp_pixels & 0xF00) >> 8;
+                var b = (temp_pixels & 0xF0) >> 4;
+                var a = temp_pixels & 0xF;
                 imageData[i] = new Rgba32((byte)((r << 4) | r), (byte)((g << 4) | g), (byte)((b << 4) | b), (byte)((a << 4) | a));
             }
             var image_decode = new SenBuffer(imageData, width, height);
@@ -473,14 +472,7 @@ namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
             var imageData = imageBytes.getImageData();
             var width = imageBytes.imageWidth;
             var height = imageBytes.imageHeight;
-            var square = width * height;
             var image_encode = new SenBuffer();
-            var newwidth = width;
-            if ((newwidth & 31) != 0)
-            {
-                newwidth |= 31;
-                newwidth++;
-            }
             for (var i = 0; i < height; i += 32)
             {
                 for (var w = 0; w < width; w += 32)
@@ -575,14 +567,7 @@ namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
             var imageData = imageBytes.getImageData();
             var width = imageBytes.imageWidth;
             var height = imageBytes.imageHeight;
-            var square = width * height;
             var image_encode = new SenBuffer();
-            var newwidth = width;
-            if ((newwidth & 31) != 0)
-            {
-                newwidth |= 31;
-                newwidth++;
-            }
             for (var i = 0; i < height; i += 32)
             {
                 for (var w = 0; w < width; w += 32)
