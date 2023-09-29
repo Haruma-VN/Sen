@@ -25,7 +25,11 @@ class TextureCompress {
       ..asTypedList(uintArray.length).setAll(0, uintArray);
     final destinationBLock = calloc<Uint64>(width * height ~/ 16);
     EncodeETC1Fast(
-        sourceBlock, destinationBLock, (width * height ~/ 16), width);
+      sourceBlock,
+      destinationBLock,
+      (width * height ~/ 16),
+      width,
+    );
     final data = destinationBLock.asTypedList(destinationBLock.value);
     final imgFile = SenBuffer();
     for (var i = 0; i < data.length; i++) {
@@ -56,7 +60,6 @@ class TextureCompress {
           for (var j = 0; j < 4; j++) {
             if ((y + i) < height && (x + j) < width) {
               final color = colorBuffer.getPixel(j, i);
-              print((x + j) * width | y + i);
               imageData.setPixel(x + j, y + i, color);
             }
           }
@@ -69,7 +72,7 @@ class TextureCompress {
   static dynamic decodeETC1(int temp, dynamic result) {
     final diffBit = ((temp >> 33) & 1) == 1;
     final flipBit = ((temp >> 32) & 1) == 1;
-    var r1, r2, g1, g2, b1, b2;
+    int r1, r2, g1, g2, b1, b2;
     if (diffBit) {
       var r = (temp >> 59) & 0x1F;
       var g = (temp >> 51) & 0x1F;
@@ -99,13 +102,21 @@ class TextureCompress {
         final neg = ((temp >> (((j << 2) | i) + 16)) & 0x1) == 1;
         if ((flipBit && i < 2) || (!flipBit && j < 2)) {
           final add = etc1Modifiters[table1][val] * (neg ? -1 : 1);
-          final color = image.ColorUint8.rgba(colorClamp(r1 + add),
-              colorClamp(g1 + add), colorClamp(b1 + add), 255);
+          final color = image.ColorUint8.rgba(
+            colorClamp(r1 + add),
+            colorClamp(g1 + add),
+            colorClamp(b1 + add),
+            255,
+          );
           result.setPixel(j, i, color);
         } else {
           final add = etc1Modifiters[table2][val] * (neg ? -1 : 1);
-          final color = image.ColorUint8.rgba(colorClamp(r2 + add),
-              colorClamp(g2 + add), colorClamp(b2 + add), 255);
+          final color = image.ColorUint8.rgba(
+            colorClamp(r2 + add),
+            colorClamp(g2 + add),
+            colorClamp(b2 + add),
+            255,
+          );
           result.setPixel(j, i, color);
         }
       }

@@ -45,7 +45,9 @@ class PopCapReAnimation {
       );
     }
     final mainDocument = writeSpriteDocument(
-        -1, decodeFrameNodeList(jsonFile["main_sprite"], spriteList));
+      -1,
+      decodeFrameNodeList(jsonFile["main_sprite"], spriteList),
+    );
     FileSystem.writeFile(
       path.join(outFolder, "library", "main.xml"),
       mainDocument.toXmlString(pretty: true, indent: "\t"),
@@ -101,9 +103,10 @@ class PopCapReAnimation {
           );
         }
         var nodeElemnt = XmlElement(
-            XmlName("DOMFrame"),
-            [XmlAttribute(XmlName("index"), "$frameIndex")],
-            {XmlElement(XmlName("elements"))});
+          XmlName("DOMFrame"),
+          [XmlAttribute(XmlName("index"), "$frameIndex")],
+          {XmlElement(XmlName("elements"))},
+        );
 
         if (frame["label"] != null) {
           nodeElemnt.setAttribute("name", "${frame["label"]}");
@@ -111,156 +114,253 @@ class PopCapReAnimation {
         }
         if (frame["stop"]) {
           nodeElemnt.children.insert(
-              0,
-              XmlElement(XmlName("Actionscript"), [], {
-                XmlElement(XmlName("script"), [], {XmlCDATA("stop();")})
-              }));
+            0,
+            XmlElement(XmlName("Actionscript"), [], {
+              XmlElement(XmlName("script"), [], {XmlCDATA("stop();")}),
+            }),
+          );
         }
         flowNode.add(nodeElemnt);
         prevEnd["flow"] = frameIndex;
       }
       if (frame["command"].length > 0) {
         if (prevEnd["command"]! + 1 < frameIndex) {
-          commandNode.add(XmlElement(XmlName("DOMFrame"), [
-            XmlAttribute(XmlName("index"), "${prevEnd["command"]! + 1}"),
-            XmlAttribute(XmlName("duration"),
-                "${frameIndex - (prevEnd["command"]! + 1)}")
-          ]));
+          commandNode.add(
+            XmlElement(XmlName("DOMFrame"), [
+              XmlAttribute(XmlName("index"), "${prevEnd["command"]! + 1}"),
+              XmlAttribute(
+                XmlName("duration"),
+                "${frameIndex - (prevEnd["command"]! + 1)}",
+              ),
+            ]),
+          );
         }
-        commandNode.add(XmlElement(XmlName("DOMFrame"), [
-          XmlAttribute(XmlName("index"), "$frameIndex")
-        ], {
-          XmlElement(XmlName("Actionscript"), [], {
-            XmlElement(XmlName("script"), [], {
-              XmlCDATA(frame["command"]
-                  .map((e) => "fscommand(\"${e[0]}\", \"${e[1]}\");")
-                  .join("\n"))
-            })
-          })
-        }));
+        commandNode.add(
+          XmlElement(XmlName("DOMFrame"), [
+            XmlAttribute(XmlName("index"), "$frameIndex"),
+          ], {
+            XmlElement(XmlName("Actionscript"), [], {
+              XmlElement(XmlName("script"), [], {
+                XmlCDATA(
+                  frame["command"]
+                      .map((e) => "fscommand(\"${e[0]}\", \"${e[1]}\");")
+                      .join("\n"),
+                ),
+              }),
+            }),
+          }),
+        );
         prevEnd["command"] = frameIndex;
       }
       frameIndex++;
       return "";
     }).toList();
     if (prevEnd["flow"]! + 1 < jsonFile["main_sprite"]["frame"].length) {
-      flowNode.add(XmlElement(XmlName("DOMFrame"), [
-        XmlAttribute(XmlName("index"), "${prevEnd["flow"]! + 1}"),
-        XmlAttribute(XmlName("duration"),
-            "${jsonFile["main_sprite"]["frame"].length - (prevEnd["flow"]! + 1)}")
-      ]));
+      flowNode.add(
+        XmlElement(XmlName("DOMFrame"), [
+          XmlAttribute(XmlName("index"), "${prevEnd["flow"]! + 1}"),
+          XmlAttribute(
+            XmlName("duration"),
+            "${jsonFile["main_sprite"]["frame"].length - (prevEnd["flow"]! + 1)}",
+          ),
+        ]),
+      );
     }
     if (prevEnd["command"]! + 1 < jsonFile["main_sprite"]["frame"].length) {
-      commandNode.add(XmlElement(XmlName("DOMFrame"), [
-        XmlAttribute(XmlName("index"), "${prevEnd["command"]! + 1}"),
-        XmlAttribute(XmlName("duration"),
-            "${jsonFile["main_sprite"]["frame"].length - (prevEnd["command"]! + 1)}")
-      ]));
+      commandNode.add(
+        XmlElement(XmlName("DOMFrame"), [
+          XmlAttribute(XmlName("index"), "${prevEnd["command"]! + 1}"),
+          XmlAttribute(
+            XmlName("duration"),
+            "${jsonFile["main_sprite"]["frame"].length - (prevEnd["command"]! + 1)}",
+          ),
+        ]),
+      );
     }
     var sourceIndex = 1;
     var imageIndex = 1;
     var spriteIndex = 1;
     final builder = XmlBuilder();
-    builder.element("DOMDocument", namespaces: xmlnsAttribute, attributes: {
-      "frameRate": "${jsonFile["main_sprite"]["frame_rate"]}",
-      "width": "${jsonFile["size"][0]}",
-      "height": "${jsonFile["size"][1]}",
-      "xflVersion": "2.971",
-    }, nest: () {
-      builder.element("folders",
+    builder.element(
+      "DOMDocument",
+      namespaces: xmlnsAttribute,
+      attributes: {
+        "frameRate": "${jsonFile["main_sprite"]["frame_rate"]}",
+        "width": "${jsonFile["size"][0]}",
+        "height": "${jsonFile["size"][1]}",
+        "xflVersion": "2.971",
+      },
+      nest: () {
+        builder.element(
+          "folders",
           nest: ["media", "source", "image", "sprite"]
-              .map((e) => XmlElement(XmlName("DOMFolderItem"), [
-                    XmlAttribute(XmlName("name"), e),
-                    XmlAttribute(XmlName("isExpanded"), "true")
-                  ]))
-              .toList());
-      builder.element("media",
-          nest: jsonFile["image"]
-              .map((e) => XmlElement(XmlName("DOMBitmapItem"), [
+              .map(
+                (e) => XmlElement(XmlName("DOMFolderItem"), [
+                  XmlAttribute(XmlName("name"), e),
+                  XmlAttribute(XmlName("isExpanded"), "true"),
+                ]),
+              )
+              .toList(),
+        );
+        builder.element(
+          "media",
+          nest: jsonFile["image"].map(
+            (e) => XmlElement(XmlName("DOMBitmapItem"), [
+              XmlAttribute(
+                XmlName("name"),
+                "media/${e["name"].split("|")[0]}",
+              ),
+              XmlAttribute(
+                XmlName("href"),
+                "media/${e["name"].split("|")[0]}.png",
+              ),
+            ]),
+          ),
+        );
+        builder.element(
+          "symbols",
+          nest: [
+            jsonFile["image"]
+                .map(
+                  (e) => XmlElement(XmlName("Include"), [
                     XmlAttribute(
-                        XmlName("name"), "media/${e["name"].split("|")[0]}"),
+                      XmlName("href"),
+                      "source/source_${sourceIndex++}.xml",
+                    ),
+                  ]),
+                )
+                .toList(),
+            jsonFile["image"]
+                .map(
+                  (e) => XmlElement(XmlName("Include"), [
                     XmlAttribute(
-                        XmlName("href"), "media/${e["name"].split("|")[0]}.png")
-                  ])));
-      builder.element("symbols", nest: [
-        jsonFile["image"]
-            .map((e) => XmlElement(XmlName("Include"), [
-                  XmlAttribute(
-                      XmlName("href"), "source/source_${sourceIndex++}.xml"),
-                ]))
-            .toList(),
-        jsonFile["image"]
-            .map((e) => XmlElement(XmlName("Include"), [
-                  XmlAttribute(
-                      XmlName("href"), "image/image_${imageIndex++}.xml"),
-                ]))
-            .toList(),
-        jsonFile["sprite"]
-            .map((e) => XmlElement(XmlName("Include"), [
-                  XmlAttribute(
-                      XmlName("href"), "sprite/sprite_${spriteIndex++}.xml"),
-                ]))
-            .toList(),
-        XmlElement(XmlName("Include"), [
-          XmlAttribute(XmlName("href"), "main.xml"),
-        ]),
-      ]);
-      builder.element("timelines", nest: () {
-        builder.element("DOMTimeline", attributes: {"name": "animation"},
-            nest: () {
-          builder.element("layers", nest: () {
-            builder.element("DOMLayer", attributes: {"name": "flow"}, nest: () {
-              builder.element("frames", nest: flowNode);
-            });
-            builder.element("DOMLayer", attributes: {"name": "command"},
-                nest: () {
-              builder.element("frames", nest: commandNode);
-            });
-            builder.element("DOMLayer", attributes: {"name": "sprite"},
-                nest: () {
-              builder.element("frames", nest: () {
-                builder.element("DOMFrame", attributes: {
-                  "index": "0",
-                  "duration": "${jsonFile["main_sprite"]["frame"].length}"
-                }, nest: () {
-                  builder.element("elements", nest: () {
-                    builder.element("DOMSymbolInstance", attributes: {
-                      "libraryItemName": "main",
-                      "symbolType": "graphic",
-                      "loop": "loop"
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+                      XmlName("href"),
+                      "image/image_${imageIndex++}.xml",
+                    ),
+                  ]),
+                )
+                .toList(),
+            jsonFile["sprite"]
+                .map(
+                  (e) => XmlElement(XmlName("Include"), [
+                    XmlAttribute(
+                      XmlName("href"),
+                      "sprite/sprite_${spriteIndex++}.xml",
+                    ),
+                  ]),
+                )
+                .toList(),
+            XmlElement(XmlName("Include"), [
+              XmlAttribute(XmlName("href"), "main.xml"),
+            ]),
+          ],
+        );
+        builder.element(
+          "timelines",
+          nest: () {
+            builder.element(
+              "DOMTimeline",
+              attributes: {"name": "animation"},
+              nest: () {
+                builder.element(
+                  "layers",
+                  nest: () {
+                    builder.element(
+                      "DOMLayer",
+                      attributes: {"name": "flow"},
+                      nest: () {
+                        builder.element("frames", nest: flowNode);
+                      },
+                    );
+                    builder.element(
+                      "DOMLayer",
+                      attributes: {"name": "command"},
+                      nest: () {
+                        builder.element("frames", nest: commandNode);
+                      },
+                    );
+                    builder.element(
+                      "DOMLayer",
+                      attributes: {"name": "sprite"},
+                      nest: () {
+                        builder.element(
+                          "frames",
+                          nest: () {
+                            builder.element(
+                              "DOMFrame",
+                              attributes: {
+                                "index": "0",
+                                "duration":
+                                    "${jsonFile["main_sprite"]["frame"].length}",
+                              },
+                              nest: () {
+                                builder.element(
+                                  "elements",
+                                  nest: () {
+                                    builder.element(
+                                      "DOMSymbolInstance",
+                                      attributes: {
+                                        "libraryItemName": "main",
+                                        "symbolType": "graphic",
+                                        "loop": "loop",
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
     return builder.buildDocument();
   }
 
   XmlDocument writeSpriteDocument(int index, dynamic frameNodeList) {
     final spriteBuilder = XmlBuilder();
     for (var i = frameNodeList.keys.length - 1; i >= 0; i--) {
-      spriteBuilder.element("DOMLayer", attributes: {"name": "$i"}, nest: () {
-        spriteBuilder.element("frames", nest: frameNodeList[i]);
-      });
+      spriteBuilder.element(
+        "DOMLayer",
+        attributes: {"name": "$i"},
+        nest: () {
+          spriteBuilder.element("frames", nest: frameNodeList[i]);
+        },
+      );
     }
     final spriteDoc = spriteBuilder.buildFragment();
     final builder = XmlBuilder();
-    builder.element("DOMSymbolItem", namespaces: xmlnsAttribute, attributes: {
-      "name": index == -1 ? "main" : "sprite/sprite_${index + 1}",
-      "symbolType": "graphic",
-    }, nest: () {
-      builder.element("timeline", nest: () {
-        builder.element("DOMTimeline",
-            attributes: {"name": index == -1 ? "main" : "sprite_${index + 1}"},
-            nest: () {
-          builder.element("layers", nest: spriteDoc);
-        });
-      });
-    });
+    builder.element(
+      "DOMSymbolItem",
+      namespaces: xmlnsAttribute,
+      attributes: {
+        "name": index == -1 ? "main" : "sprite/sprite_${index + 1}",
+        "symbolType": "graphic",
+      },
+      nest: () {
+        builder.element(
+          "timeline",
+          nest: () {
+            builder.element(
+              "DOMTimeline",
+              attributes: {
+                "name": index == -1 ? "main" : "sprite_${index + 1}",
+              },
+              nest: () {
+                builder.element("layers", nest: spriteDoc);
+              },
+            );
+          },
+        );
+      },
+    );
     return builder.buildDocument();
   }
 
@@ -270,10 +370,10 @@ class PopCapReAnimation {
     frameNodeList[0] = [
       XmlElement(XmlName("DOMFrame"), [
         XmlAttribute(XmlName("index"), "0"),
-        XmlAttribute(XmlName("duration"), "${sprite["frame"].length}")
+        XmlAttribute(XmlName("duration"), "${sprite["frame"].length}"),
       ], {
-        XmlElement(XmlName("elements"))
-      })
+        XmlElement(XmlName("elements")),
+      }),
     ];
     final frameLength = sprite["frame"].length;
     for (var i = 0; i < frameLength; i++) {
@@ -293,13 +393,14 @@ class PopCapReAnimation {
         };
         frameNodeList[adds[k]["index"] + 1] = [];
         if (i > 0) {
-          frameNodeList[adds[k]["index"] + 1].add(XmlElement(
-              XmlName("DOMFrame"), [
-            XmlAttribute(XmlName("index"), "0"),
-            XmlAttribute(XmlName("duration"), "$i")
-          ], {
-            XmlElement(XmlName("elements"))
-          }));
+          frameNodeList[adds[k]["index"] + 1].add(
+            XmlElement(XmlName("DOMFrame"), [
+              XmlAttribute(XmlName("index"), "0"),
+              XmlAttribute(XmlName("duration"), "$i"),
+            ], {
+              XmlElement(XmlName("elements")),
+            }),
+          );
         }
       }
 
@@ -334,60 +435,88 @@ class PopCapReAnimation {
           try {
             firstFrame =
                 "${(i - layer["frame_start"]) % subSprite[layer["resource"]]["frame"].length}";
-          } catch (ex) {}
-          frameNode.add(XmlElement(XmlName("DOMFrame"), [
-            XmlAttribute(XmlName("index"), "$i"),
-            XmlAttribute(XmlName("duration"), "")
-          ], {
-            XmlElement(XmlName("elements"), [], {
-              XmlElement(
-                  XmlName("DOMSymbolInstance"),
-                  !layer["sprite"]
-                      ? [
-                          XmlAttribute(XmlName("libraryItemName"),
-                              "image/image_${layer["resource"] + 1}"),
-                          XmlAttribute(XmlName("symbolType"), "graphic"),
-                          XmlAttribute(XmlName("loop"), "loop")
-                        ]
-                      : [
-                          XmlAttribute(XmlName("libraryItemName"),
-                              "sprite/sprite_${layer["resource"] + 1}"),
-                          XmlAttribute(XmlName("symbolType"), "graphic"),
-                          XmlAttribute(XmlName("loop"), "loop"),
-                          XmlAttribute(XmlName("firstFrame"), firstFrame)
-                        ],
-                  {
-                    XmlElement(XmlName("matrix"), [], {
-                      XmlElement(XmlName("Matrix"), [
-                        XmlAttribute(XmlName("a"),
-                            exchangeFloaterFixed(layer["transform"][0])),
-                        XmlAttribute(XmlName("b"),
-                            exchangeFloaterFixed(layer["transform"][1])),
-                        XmlAttribute(XmlName("c"),
-                            exchangeFloaterFixed(layer["transform"][2])),
-                        XmlAttribute(XmlName("d"),
-                            exchangeFloaterFixed(layer["transform"][3])),
-                        XmlAttribute(XmlName("tx"),
-                            exchangeFloaterFixed(layer["transform"][4])),
-                        XmlAttribute(XmlName("ty"),
-                            exchangeFloaterFixed(layer["transform"][5]))
-                      ])
+          } catch (ex) {
+            throw Exception(ex);
+          }
+          frameNode.add(
+            XmlElement(XmlName("DOMFrame"), [
+              XmlAttribute(XmlName("index"), "$i"),
+              XmlAttribute(XmlName("duration"), ""),
+            ], {
+              XmlElement(XmlName("elements"), [], {
+                XmlElement(
+                    XmlName("DOMSymbolInstance"),
+                    !layer["sprite"]
+                        ? [
+                            XmlAttribute(
+                              XmlName("libraryItemName"),
+                              "image/image_${layer["resource"] + 1}",
+                            ),
+                            XmlAttribute(XmlName("symbolType"), "graphic"),
+                            XmlAttribute(XmlName("loop"), "loop"),
+                          ]
+                        : [
+                            XmlAttribute(
+                              XmlName("libraryItemName"),
+                              "sprite/sprite_${layer["resource"] + 1}",
+                            ),
+                            XmlAttribute(XmlName("symbolType"), "graphic"),
+                            XmlAttribute(XmlName("loop"), "loop"),
+                            XmlAttribute(XmlName("firstFrame"), firstFrame),
+                          ],
+                    {
+                      XmlElement(XmlName("matrix"), [], {
+                        XmlElement(XmlName("Matrix"), [
+                          XmlAttribute(
+                            XmlName("a"),
+                            exchangeFloaterFixed(layer["transform"][0]),
+                          ),
+                          XmlAttribute(
+                            XmlName("b"),
+                            exchangeFloaterFixed(layer["transform"][1]),
+                          ),
+                          XmlAttribute(
+                            XmlName("c"),
+                            exchangeFloaterFixed(layer["transform"][2]),
+                          ),
+                          XmlAttribute(
+                            XmlName("d"),
+                            exchangeFloaterFixed(layer["transform"][3]),
+                          ),
+                          XmlAttribute(
+                            XmlName("tx"),
+                            exchangeFloaterFixed(layer["transform"][4]),
+                          ),
+                          XmlAttribute(
+                            XmlName("ty"),
+                            exchangeFloaterFixed(layer["transform"][5]),
+                          ),
+                        ]),
+                      }),
+                      XmlElement(XmlName("color"), [], {
+                        XmlElement(XmlName("Color"), [
+                          XmlAttribute(
+                            XmlName("redMultiplier"),
+                            exchangeFloaterFixed(layer["color"][0]),
+                          ),
+                          XmlAttribute(
+                            XmlName("greenMultiplier"),
+                            exchangeFloaterFixed(layer["color"][1]),
+                          ),
+                          XmlAttribute(
+                            XmlName("blueMultiplier"),
+                            exchangeFloaterFixed(layer["color"][2]),
+                          ),
+                          XmlAttribute(
+                            XmlName("alphaMultiplier"),
+                            exchangeFloaterFixed(layer["color"][3]),
+                          ),
+                        ]),
+                      }),
                     }),
-                    XmlElement(XmlName("color"), [], {
-                      XmlElement(XmlName("Color"), [
-                        XmlAttribute(XmlName("redMultiplier"),
-                            exchangeFloaterFixed(layer["color"][0])),
-                        XmlAttribute(XmlName("greenMultiplier"),
-                            exchangeFloaterFixed(layer["color"][1])),
-                        XmlAttribute(XmlName("blueMultiplier"),
-                            exchangeFloaterFixed(layer["color"][2])),
-                        XmlAttribute(XmlName("alphaMultiplier"),
-                            exchangeFloaterFixed(layer["color"][3]))
-                      ])
-                    })
-                  })
-            })
-          }));
+              }),
+            }),
+          );
 
           layer["state"] = null;
           layer["frame_duration"] = 0;
@@ -424,7 +553,7 @@ class PopCapReAnimation {
         -sinValue,
         cosValue,
         transform[1],
-        transform[2]
+        transform[2],
       ];
     } else {
       throw Exception("invaild_transform_size");
@@ -433,81 +562,173 @@ class PopCapReAnimation {
 
   XmlDocument writeImageDocument(int index, dynamic imageInfo) {
     final builder = XmlBuilder();
-    builder.element("DOMSymbolItem", namespaces: xmlnsAttribute, attributes: {
-      "name": "image/image_${index + 1}",
-      "symbolType": "graphic",
-    }, nest: () {
-      builder.element("timeline", nest: () {
-        builder.element("DOMTimeline",
-            attributes: {"name": "image_${index + 1}"}, nest: () {
-          builder.element("layers", nest: () {
-            builder.element("DOMLayer", nest: () {
-              builder.element("frames", nest: () {
-                builder.element("DOMFrame", attributes: {"index": "0"},
-                    nest: () {
-                  builder.element("elements", nest: () {
-                    builder.element("DOMSymbolInstance", attributes: {
-                      "libraryItemName": "source/source_${index + 1}",
-                      "symbolType": "graphic",
-                      "loop": "loop"
-                    }, nest: () {
-                      builder.element("matrix", nest: () {
-                        builder.element("Matrix", attributes: {
-                          "a": exchangeFloaterFixed(imageInfo["transform"][0]),
-                          "b": exchangeFloaterFixed(imageInfo["transform"][1]),
-                          "c": exchangeFloaterFixed(imageInfo["transform"][2]),
-                          "d": exchangeFloaterFixed(imageInfo["transform"][3]),
-                          "tx": exchangeFloaterFixed(imageInfo["transform"][4]),
-                          "ty": exchangeFloaterFixed(imageInfo["transform"][5]),
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+    builder.element(
+      "DOMSymbolItem",
+      namespaces: xmlnsAttribute,
+      attributes: {
+        "name": "image/image_${index + 1}",
+        "symbolType": "graphic",
+      },
+      nest: () {
+        builder.element(
+          "timeline",
+          nest: () {
+            builder.element(
+              "DOMTimeline",
+              attributes: {"name": "image_${index + 1}"},
+              nest: () {
+                builder.element(
+                  "layers",
+                  nest: () {
+                    builder.element(
+                      "DOMLayer",
+                      nest: () {
+                        builder.element(
+                          "frames",
+                          nest: () {
+                            builder.element(
+                              "DOMFrame",
+                              attributes: {"index": "0"},
+                              nest: () {
+                                builder.element(
+                                  "elements",
+                                  nest: () {
+                                    builder.element(
+                                      "DOMSymbolInstance",
+                                      attributes: {
+                                        "libraryItemName":
+                                            "source/source_${index + 1}",
+                                        "symbolType": "graphic",
+                                        "loop": "loop",
+                                      },
+                                      nest: () {
+                                        builder.element(
+                                          "matrix",
+                                          nest: () {
+                                            builder.element(
+                                              "Matrix",
+                                              attributes: {
+                                                "a": exchangeFloaterFixed(
+                                                  imageInfo["transform"][0],
+                                                ),
+                                                "b": exchangeFloaterFixed(
+                                                  imageInfo["transform"][1],
+                                                ),
+                                                "c": exchangeFloaterFixed(
+                                                  imageInfo["transform"][2],
+                                                ),
+                                                "d": exchangeFloaterFixed(
+                                                  imageInfo["transform"][3],
+                                                ),
+                                                "tx": exchangeFloaterFixed(
+                                                  imageInfo["transform"][4],
+                                                ),
+                                                "ty": exchangeFloaterFixed(
+                                                  imageInfo["transform"][5],
+                                                ),
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
     return builder.buildDocument();
   }
 
   XmlDocument writeSourceDocument(
-      int index, dynamic imageInfo, double scaleResolution) {
+    int index,
+    dynamic imageInfo,
+    double scaleResolution,
+  ) {
     final builder = XmlBuilder();
-    builder.element("DOMSymbolItem", namespaces: xmlnsAttribute, attributes: {
-      "name": "source/source_${index + 1}",
-      "symbolType": "graphic",
-    }, nest: () {
-      builder.element("timeline", nest: () {
-        builder.element("DOMTimeline",
-            attributes: {"name": "source_${index + 1}"}, nest: () {
-          builder.element("layers", nest: () {
-            builder.element("DOMLayer", nest: () {
-              builder.element("frames", nest: () {
-                builder.element("DOMFrame", attributes: {"index": "0"},
-                    nest: () {
-                  builder.element("elements", nest: () {
-                    builder.element("DOMBitmapInstance", attributes: {
-                      "libraryItemName":
-                          "media/${imageInfo["name"].split("|")[0]}"
-                    }, nest: () {
-                      builder.element("matrix", nest: () {
-                        builder.element("Matrix", attributes: {
-                          "a": exchangeFloaterFixed(scaleResolution),
-                          "d": exchangeFloaterFixed(scaleResolution)
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
+    builder.element(
+      "DOMSymbolItem",
+      namespaces: xmlnsAttribute,
+      attributes: {
+        "name": "source/source_${index + 1}",
+        "symbolType": "graphic",
+      },
+      nest: () {
+        builder.element(
+          "timeline",
+          nest: () {
+            builder.element(
+              "DOMTimeline",
+              attributes: {"name": "source_${index + 1}"},
+              nest: () {
+                builder.element(
+                  "layers",
+                  nest: () {
+                    builder.element(
+                      "DOMLayer",
+                      nest: () {
+                        builder.element(
+                          "frames",
+                          nest: () {
+                            builder.element(
+                              "DOMFrame",
+                              attributes: {"index": "0"},
+                              nest: () {
+                                builder.element(
+                                  "elements",
+                                  nest: () {
+                                    builder.element(
+                                      "DOMBitmapInstance",
+                                      attributes: {
+                                        "libraryItemName":
+                                            "media/${imageInfo["name"].split("|")[0]}",
+                                      },
+                                      nest: () {
+                                        builder.element(
+                                          "matrix",
+                                          nest: () {
+                                            builder.element(
+                                              "Matrix",
+                                              attributes: {
+                                                "a": exchangeFloaterFixed(
+                                                  scaleResolution,
+                                                ),
+                                                "d": exchangeFloaterFixed(
+                                                  scaleResolution,
+                                                ),
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
     return builder.buildDocument();
   }
 
@@ -519,17 +740,22 @@ class PopCapReAnimation {
     final structInfo = FileSystem.readJson(path.join(inFolder, "struct.json"));
     checkSource(structInfo, inFolder);
     final document = XmlDocument.parse(
-        FileSystem.readFile(path.join(inFolder, "DomDocument.xml")));
+      FileSystem.readFile(path.join(inFolder, "DomDocument.xml")),
+    );
     final pamRipe = {
       "struct": structInfo,
       "document": document,
       "library": {
         "main_sprite": XmlDocument.parse(
-            FileSystem.readFile(path.join(inFolder, "library", "main.xml")))
-      }
+          FileSystem.readFile(path.join(inFolder, "library", "main.xml")),
+        ),
+      },
     };
     return parseMainDocument(
-        pamRipe, inFolder, path.join(inFolder, "DomDocument.xml"));
+      pamRipe,
+      inFolder,
+      path.join(inFolder, "DomDocument.xml"),
+    );
   }
 
   void checkSource(dynamic struct, String inFolder) {
@@ -538,13 +764,17 @@ class PopCapReAnimation {
     sourceFolder.map((e) => path.extension(e.path).toLowerCase() == ".xml");
     if (struct["image"].length != sourceFolder.length) {
       throwAnimationException(
-          "image_count_is_not_same",
-          "struct: ${struct["image"].length} | source: ${sourceFolder.length}",
-          "library/source");
+        "image_count_is_not_same",
+        "struct: ${struct["image"].length} | source: ${sourceFolder.length}",
+        "library/source",
+      );
     }
-    sourceFolder.sort((a, b) =>
-        int.parse(a.path.split('_').last.replaceAll(".xml", "")).compareTo(
-            int.parse(b.path.split('_').last.replaceAll(".xml", ""))));
+    sourceFolder.sort(
+      (a, b) =>
+          int.parse(a.path.split('_').last.replaceAll(".xml", "")).compareTo(
+        int.parse(b.path.split('_').last.replaceAll(".xml", "")),
+      ),
+    );
     for (var i = 0; i < sourceFolder.length; i++) {
       final sourceXml =
           XmlDocument.parse(FileSystem.readFile(sourceFolder[i].path));
@@ -563,18 +793,27 @@ class PopCapReAnimation {
     XmlElement domDocument = pamRipe["document"].rootElement;
     if (domDocument.localName != "DOMDocument") {
       throwAnimationException(
-          "invalid_domdocument", domDocument.localName, mainPath);
+        "invalid_domdocument",
+        domDocument.localName,
+        mainPath,
+      );
     }
     {
       final mediaList = domDocument.xpath("media").toList();
       if (mediaList.length != 1) {
         throwAnimationException(
-            "invalid_domdocument_media_length", mediaList.length, mainPath);
+          "invalid_domdocument_media_length",
+          mediaList.length,
+          mainPath,
+        );
       }
       final symbolsList = domDocument.xpath("symbols").toList();
       if (symbolsList.length != 1) {
         throwAnimationException(
-            "invalid_domdocument_symbols_length", symbolsList.length, mainPath);
+          "invalid_domdocument_symbols_length",
+          symbolsList.length,
+          mainPath,
+        );
       }
     }
     final mainSpriteFrame = parseSpriteDocument(

@@ -64,11 +64,12 @@ class SexyTexture implements PopCapSexyTexture {
   @override
   SenBuffer decodeARGB8888(SenBuffer senFile, int width, int height) {
     final imgRaw = image.Image.fromBytes(
-        width: width,
-        height: height,
-        bytes: senFile.toBytes().buffer,
-        numChannels: 4,
-        order: image.ChannelOrder.argb);
+      width: width,
+      height: height,
+      bytes: senFile.toBytes().buffer,
+      numChannels: 4,
+      order: image.ChannelOrder.argb,
+    );
     senFile.clear();
     final imgFile = SenBuffer.fromBytes(image.encodePng(imgRaw));
     return imgFile;
@@ -77,11 +78,12 @@ class SexyTexture implements PopCapSexyTexture {
   @override
   SenBuffer decodeRGBA8888(SenBuffer senFile, int width, int height) {
     final imgRaw = image.Image.fromBytes(
-        width: width,
-        height: height,
-        bytes: senFile.toBytes().buffer,
-        numChannels: 4,
-        order: image.ChannelOrder.rgba);
+      width: width,
+      height: height,
+      bytes: senFile.toBytes().buffer,
+      numChannels: 4,
+      order: image.ChannelOrder.rgba,
+    );
     senFile.clear();
     final imgFile = SenBuffer.fromBytes(image.encodePng(imgRaw));
     return imgFile;
@@ -98,7 +100,11 @@ class SexyTexture implements PopCapSexyTexture {
         final b = (tempPixels & 0xF0) >> 4;
         final a = tempPixels & 0xF;
         final color = image.ColorRgba8(
-            ((r << 4) | r), ((g << 4) | g), ((b << 4) | b), ((a << 4) | a));
+          ((r << 4) | r),
+          ((g << 4) | g),
+          ((b << 4) | b),
+          ((a << 4) | a),
+        );
         imageData.setPixel(x, y, color);
       }
     }
@@ -116,8 +122,11 @@ class SexyTexture implements PopCapSexyTexture {
         final r = tempPixels >> 12;
         final g = (tempPixels & 0x7E0) >> 5;
         final b = tempPixels & 0x1F;
-        final color = image.ColorRgb8(((r << 3) | (r >> 2)),
-            ((g << 2) | (g >> 4)), ((b << 3) | (b >> 2)));
+        final color = image.ColorRgb8(
+          ((r << 3) | (r >> 2)),
+          ((g << 2) | (g >> 4)),
+          ((b << 3) | (b >> 2)),
+        );
         imageData.setPixel(x, y, color);
       }
     }
@@ -135,8 +144,12 @@ class SexyTexture implements PopCapSexyTexture {
         final r = (tempPixels & 0xF800) >> 11;
         final g = (tempPixels & 0x7E0) >> 5;
         final b = (tempPixels & 0x3E) >> 1;
-        final color = image.ColorRgba8(((r << 3) | (r >> 2)),
-            ((g << 3) | (g >> 2)), ((b << 3) | (b >> 2)), -(tempPixels & 0x1));
+        final color = image.ColorRgba8(
+          ((r << 3) | (r >> 2)),
+          ((g << 3) | (g >> 2)),
+          ((b << 3) | (b >> 2)),
+          -(tempPixels & 0x1),
+        );
         imageData.setPixel(x, y, color);
       }
     }
@@ -158,8 +171,12 @@ class SexyTexture implements PopCapSexyTexture {
               final g = (tempPixels & 0xF00) >> 8;
               final b = (tempPixels & 0xF0) >> 4;
               final a = tempPixels & 0xF;
-              final color = image.ColorRgba8(((r << 4) | r), ((g << 4) | g),
-                  ((b << 4) | b), ((a << 4) | a));
+              final color = image.ColorRgba8(
+                ((r << 4) | r),
+                ((g << 4) | g),
+                ((b << 4) | b),
+                ((a << 4) | a),
+              );
               imageData.setPixel(w + k, i + j, color);
             }
           }
@@ -208,10 +225,11 @@ class SexyTexture implements PopCapSexyTexture {
               final g = (tempPixels & 0x7C0) >> 6;
               final b = (tempPixels & 0x3E) >> 1;
               final color = image.ColorRgba8(
-                  ((r << 3) | (r >> 2)),
-                  ((g << 3) | (g >> 2)),
-                  ((b << 3) | (b >> 2)),
-                  -(tempPixels & 0x1));
+                ((r << 3) | (r >> 2)),
+                ((g << 3) | (g >> 2)),
+                ((b << 3) | (b >> 2)),
+                -(tempPixels & 0x1),
+              );
               imageData.setPixel(w + k, i + j, color);
             }
           }
