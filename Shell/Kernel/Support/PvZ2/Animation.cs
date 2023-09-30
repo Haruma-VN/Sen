@@ -948,7 +948,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
     }
 
 
-    public class PAM_Animation
+    public partial class PAM_Animation
     {
         public const int k_standard_resolution = 1200;
 
@@ -963,6 +963,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
         public static readonly double[] k_initial_transform = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
 
         public static readonly double[] k_initial_color = { 1.0, 1.0, 1.0, 1.0 };
+        private static readonly double[] action = new double[] { 0.0, 0.0 };
 
         public static ExtraInfo Decode(PAMInfo AnimationJson, string outFolder, int resolution, bool splitLabel = true)
         {
@@ -1800,11 +1801,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                         throw new PAMException("invalid_sprite_dom_symbol_instance_length", $"DOMSymbolInstance length: {x_DOMSymbolInstance_list.Length}", sprite_path);
                     }
                     var x_DOMSymbolInstance = x_DOMSymbolInstance_list[0];
-                    var name_match = Regex.Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!, "(image|sprite)/(image|sprite)_([0-9]+)").FirstOrDefault();
-                    if (name_match is null)
-                    {
-                        throw new PAMException($"{Localization.GetString("invalid_dom_symbol_instance")}: {Localization.GetString("must_call_sprite_or_image")}", "undefined", sprite_path);
-                    }
+                    var name_match = MyRegex().Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!).FirstOrDefault() ?? throw new PAMException($"{Localization.GetString("invalid_dom_symbol_instance")}: {Localization.GetString("must_call_sprite_or_image")}", "undefined", sprite_path);
                     if (name_match.Groups[1].Value != name_match.Groups[2].Value)
                     {
                         throw new PAMException("invalid_sprite_dom_symbol_instance_x", "undefined", sprite_path);
@@ -1818,7 +1815,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                         var x_matrix_list = x_DOMSymbolInstance.Elements("matrix").ToArray();
                         if (x_matrix_list.Length == 0)
                         {
-                            transform = new double[] { 0.0, 0.0 };
+                            transform = action;
                         }
                         else if (x_matrix_list.Length == 1)
                         {
@@ -2159,6 +2156,9 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
             }
             return;
         }
+
+        [GeneratedRegex("(image|sprite)/(image|sprite)_([0-9]+)")]
+        private static partial Regex MyRegex();
     }
     public partial class AlphanumericStringComparer : IComparer<string>
     {
@@ -2234,7 +2234,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
         public Dictionary<string, int[]>? frameInfo { get; set; }
     }
 
-    public class AnimationHelper
+    public partial class AnimationHelper
     {
 
 
@@ -2378,11 +2378,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                                 $"DOMSymbolInstance length: {x_DOMSymbolInstance_list.Length}", $"sprite_{index + 1}.xml");
                         }
                         var x_DOMSymbolInstance = x_DOMSymbolInstance_list[0];
-                        var name_match = Regex.Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!, "(image|sprite)/(image|sprite)_([0-9]+)").First();
-                        if (name_match is null)
-                        {
-                            throw new PAMException("invalid_dom_symbol_instance", "undefined", $"sprite_{index + 1}.xml");
-                        }
+                        var name_match = MyRegex().Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!).FirstOrDefault() ?? throw new PAMException($"{Localization.GetString("invalid_dom_symbol_instance")}: {Localization.GetString("must_call_sprite_or_image")}", "undefined", $"sprite_{index + 1}.xml");
                         if (name_match.Groups[1].Value != name_match.Groups[2].Value)
                         {
                             throw new PAMException("invalid_sprite_dom_symbol_instance_x", "undefined", $"sprite_{index + 1}.xml");
@@ -2598,5 +2594,8 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                 },
             };
         }
+
+        [GeneratedRegex("(image|sprite)/(image|sprite)_([0-9]+)")]
+        private static partial Regex MyRegex();
     }
 }
