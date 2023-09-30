@@ -661,5 +661,7 @@
     "input_level_directory": "Input level directory",
     "apply_to": "Apply to {}",
     "manifest_can_only_have_one_packages_in_subgroup": "manifest can only have one Packages in subgroup",
-    "res_info_can_only_have_one_packages_in_subgroup": "Res-Info can only have one Packages in subgroup"
+    "res_info_can_only_have_one_packages_in_subgroup": "Res-Info can only have one Packages in subgroup",
+    "must_call_sprite_or_image": "libraryItemName must be sprite or image",
+    "invalid_source_dom_bitmap_instance_length": "Invalid source dom bitmap instance length"
 }

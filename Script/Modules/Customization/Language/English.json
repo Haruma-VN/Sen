@@ -162,7 +162,7 @@
     "invalid_domframe_script_length": "Invalid DOMFrame script length",
     "invalid_domframe_script_node_length": "Invalid DOMFrame script nodes length",
     "invalid_domframe_cdata": "Invalid DOMFrame CDATA",
-    "invalid_command_string": "Invaid command string",
+    "invalid_command_string": "Invalid command string",
     "invalid_sprite_domsymbolitem": "Invalid DOMSymbolItem Sprite",
     "invalid_sprite_domsymbolitem_name": "Invalid DOMSymbolItem Sprite name",
     "invalid_sprite_domsymbolitem_timeline_length": "Invalid DOMSymbolItem Sprite timeline length",
@@ -666,5 +666,6 @@
     "res_info_can_only_have_one_packages_in_subgroup": "Res-Info can only have one Packages in subgroup",
     "input_animation_resource_name": "Input Animation Resource Name",
     "input_number_sprite": "Number of sprite",
-    "must_call_sprite_or_image": "libraryItemName must be sprite or image"
+    "must_call_sprite_or_image": "libraryItemName must be sprite or image",
+    "invalid_source_dom_bitmap_instance_length": "Invalid source dom bitmap instance length"
 }

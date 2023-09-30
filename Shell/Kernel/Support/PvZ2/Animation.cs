@@ -2081,7 +2081,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
             {
                 throw new PAMException("invalid_source_dom_bitmap_instance_name", imageName, source_path);
             }
-            return imageName.Substring(6);
+            return imageName[6..];
         }
 
         public static double[] StandardToVariant(double[] data)

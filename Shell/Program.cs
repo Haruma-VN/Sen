@@ -2,7 +2,6 @@
 using Sen.Shell.Kernel.JavaScript;
 using Sen.Shell.Kernel.Standards.IOModule;
 using Sen.Shell.Kernel.Support.Download;
-using System.Runtime.InteropServices;
 
 namespace Sen.Shell
 {
