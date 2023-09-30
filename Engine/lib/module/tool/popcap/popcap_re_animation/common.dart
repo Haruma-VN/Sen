@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, prefer_typing_uninitialized_variables
 
 import "dart:io";
 import "dart:math";
@@ -782,8 +782,11 @@ class PopCapReAnimation {
           parseSourceDocument(sourceXml.rootElement, i, sourceFolder[i].path);
       final imageName = struct["image"]["image_${i + 1}"]["name"].split("|")[0];
       if (sourceName != imageName) {
-        throwAnimationException("image_name_is_not_same",
-            "struct: $imageName | source: $sourceName", "source_${i + 1}.xml");
+        throwAnimationException(
+          "image_name_is_not_same",
+          "struct: $imageName | source: $sourceName",
+          "source_${i + 1}.xml",
+        );
       }
     }
     return;
@@ -817,106 +820,154 @@ class PopCapReAnimation {
       }
     }
     final mainSpriteFrame = parseSpriteDocument(
-        pamRipe["library"]["main_sprite"].rootElement, -1, mainPath);
+      pamRipe["library"]["main_sprite"].rootElement,
+      -1,
+      mainPath,
+    );
     // final lastFrame = mainSpriteFrame.length;
     {
       final timelinesList = domDocument.xpath("timelines").toList();
       if (timelinesList.length != 1) {
-        throwAnimationException("invalid_domdocument_timelines_length",
-            timelinesList.length, mainPath);
+        throwAnimationException(
+          "invalid_domdocument_timelines_length",
+          timelinesList.length,
+          mainPath,
+        );
       }
       final domTimelineList = timelinesList[0].xpath("DOMTimeline").toList();
       if (domTimelineList.length != 1) {
         throwAnimationException(
-            "invalid_domtimeline_length", domTimelineList.length, mainPath);
+          "invalid_domtimeline_length",
+          domTimelineList.length,
+          mainPath,
+        );
       }
       final domTimeline = domTimelineList[0];
       if (domTimeline.getAttribute("name") != "animation") {
-        throwAnimationException("invalid_domtimeline_name",
-            domTimeline.getAttribute("name"), mainPath);
+        throwAnimationException(
+          "invalid_domtimeline_name",
+          domTimeline.getAttribute("name"),
+          mainPath,
+        );
       }
       final layersList = domTimeline.xpath("layers").toList();
       if (layersList.length != 1) {
         throwAnimationException(
-            "invalid_domtimeline_layers_length", layersList.length, mainPath);
+          "invalid_domtimeline_layers_length",
+          layersList.length,
+          mainPath,
+        );
       }
       final domLayerList = layersList[0].xpath("DOMLayer").toList();
       if (domLayerList.length != 3) {
         throwAnimationException(
-            "invalid_domlayer_length", domLayerList.length, mainPath);
+          "invalid_domlayer_length",
+          domLayerList.length,
+          mainPath,
+        );
       }
       {
         final framesList = domLayerList[0].xpath("frames").toList();
         if (framesList.length != 1) {
           throwAnimationException(
-              "invalid_domlayer_frames_length", framesList.length, mainPath);
+            "invalid_domlayer_frames_length",
+            framesList.length,
+            mainPath,
+          );
         }
         final domFrameList = framesList[0].xpath("DOMFrame").toList();
-        domFrameList.forEach((domFrame) {
+        for (var domFrame in domFrameList) {
           final frameIndex = int.parse(domFrame.getAttribute("index")!);
           if (domFrame.getAttribute("name") != null) {
             if (domFrame.getAttribute("labelType") != "name") {
-              throwAnimationException("invalid_domframe_name",
-                  domFrame.getAttribute("labelType"), mainPath);
+              throwAnimationException(
+                "invalid_domframe_name",
+                domFrame.getAttribute("labelType"),
+                mainPath,
+              );
             }
             mainSpriteFrame[frameIndex]["label"] =
                 domFrame.getAttribute("name");
           }
           final actionscriptList = domFrame.xpath("Actionscript").toList();
-          if (actionscriptList.length == 0) {
-            return;
+          if (actionscriptList.isEmpty) {
+            continue;
           }
           if (actionscriptList.length != 1) {
-            throwAnimationException("invalid_domframe_actionscript_length",
-                actionscriptList.length, mainPath);
+            throwAnimationException(
+              "invalid_domframe_actionscript_length",
+              actionscriptList.length,
+              mainPath,
+            );
           }
           final scriptList = actionscriptList[0].xpath("script").toList();
           if (scriptList.length != 1) {
             throwAnimationException(
-                "invalid_actionscript_script", scriptList.length, mainPath);
+              "invalid_actionscript_script",
+              scriptList.length,
+              mainPath,
+            );
           }
           final scriptText = scriptList[0].firstChild;
           if (scriptText!.nodeType != XmlNodeType.CDATA) {
             throwAnimationException(
-                "invalid_script_cdata", scriptText.nodeType, mainPath);
+              "invalid_script_cdata",
+              scriptText.nodeType,
+              mainPath,
+            );
           }
           if (scriptText.value!.trim() != "stop();") {
-            throwAnimationException("invalid_script_cdata_value",
-                scriptText.value!.trim(), mainPath);
+            throwAnimationException(
+              "invalid_script_cdata_value",
+              scriptText.value!.trim(),
+              mainPath,
+            );
           }
           mainSpriteFrame[frameIndex]["stop"] = true;
-        });
+        }
       }
       {
         final domLayerCommand = domLayerList[1];
         final framesList = domLayerCommand.xpath("frames").toList();
         if (framesList.length != 1) {
           throwAnimationException(
-              "invalid_domlayer_frames_length", framesList.length, mainPath);
+            "invalid_domlayer_frames_length",
+            framesList.length,
+            mainPath,
+          );
         }
         final domFrameList = framesList[0].xpath("DOMFrame").toList();
-        domFrameList.forEach((domFrame) {
+        for (var domFrame in domFrameList) {
           final frameIndex = int.parse(domFrame.getAttribute("index")!);
           final actionscriptList = domFrame.xpath("Actionscript").toList();
-          if (actionscriptList.length == 0) {
-            return;
+          if (actionscriptList.isEmpty) {
+            continue;
           }
           if (actionscriptList.length != 1) {
-            throwAnimationException("invalid_domframe_actionscript_length",
-                actionscriptList.length, mainPath);
+            throwAnimationException(
+              "invalid_domframe_actionscript_length",
+              actionscriptList.length,
+              mainPath,
+            );
           }
           final scriptList = actionscriptList[0].xpath("script").toList();
           if (scriptList.length != 1) {
             throwAnimationException(
-                "invalid_domframe_script_length", scriptList.length, mainPath);
+              "invalid_domframe_script_length",
+              scriptList.length,
+              mainPath,
+            );
           }
           final scriptText = scriptList[0].firstChild;
           if (scriptText!.nodeType != XmlNodeType.CDATA) {
             throwAnimationException(
-                "invalid_script_cdata", scriptText.nodeType, mainPath);
+              "invalid_script_cdata",
+              scriptText.nodeType,
+              mainPath,
+            );
           }
           final commandString = scriptText.value!.trim().split("\n").toList();
-          commandString.forEach((e) {
+          for (var e in commandString) {
             final regex = RegExp(r'fscommand\("(.*)", "(.*)"\);');
             final regexResult = regex.firstMatch(e.trim());
             if (regexResult == null) {
@@ -924,8 +975,8 @@ class PopCapReAnimation {
             }
             mainSpriteFrame[frameIndex]["command"]
                 .add([regexResult!.group(1), regexResult.group(2)]);
-          });
-        });
+          }
+        }
       }
     }
     var frameRate = 24;
@@ -947,14 +998,22 @@ class PopCapReAnimation {
         "name": pamRipe["struct"]["image"][imageKeys[i]]["name"],
         "size": [
           pamRipe["struct"]["image"][imageKeys[i]]["width"],
-          pamRipe["struct"]["image"][imageKeys[i]]["height"]
+          pamRipe["struct"]["image"][imageKeys[i]]["height"],
         ],
         "transform": parseImageDocument(
-            XmlDocument.parse(FileSystem.readFile(path.join(
-                    inFolder, "library", "image", "${imageKeys[i]}.xml")))
-                .rootElement,
-            i,
-            "${imageKeys[i]}.xml")
+          XmlDocument.parse(
+            FileSystem.readFile(
+              path.join(
+                inFolder,
+                "library",
+                "image",
+                "${imageKeys[i]}.xml",
+              ),
+            ),
+          ).rootElement,
+          i,
+          "${imageKeys[i]}.xml",
+        ),
       });
     }
     final spriteList = [];
@@ -974,17 +1033,20 @@ class PopCapReAnimation {
       "image": imageList,
       "sprite": spriteKeys.map((e) {
         final frame = parseSpriteDocument(
-            XmlDocument.parse(FileSystem.readFile(
-                    path.join(inFolder, "library", "sprite", "$e.xml")))
-                .rootElement,
-            spriteIndex++,
-            "$e.xml");
+          XmlDocument.parse(
+            FileSystem.readFile(
+              path.join(inFolder, "library", "sprite", "$e.xml"),
+            ),
+          ).rootElement,
+          spriteIndex++,
+          "$e.xml",
+        );
         return {
           "name": e,
           "description": "",
           "frame_rate": frameRate,
           "work_area": [0, frame.length],
-          "frame": frame
+          "frame": frame,
         };
       }).toList(),
       "main_sprite": {
@@ -992,123 +1054,189 @@ class PopCapReAnimation {
         "description": "",
         "frame_rate": frameRate,
         "work_area": [0, mainSpriteFrame.length],
-        "frame": mainSpriteFrame
-      }
+        "frame": mainSpriteFrame,
+      },
     };
     return pamInfo;
   }
 
   dynamic parseImageDocument(
-      XmlElement imageElement, int index, String imagePath) {
+    XmlElement imageElement,
+    int index,
+    String imagePath,
+  ) {
     if (imageElement.localName != "DOMSymbolItem") {
       throwAnimationException(
-          "invalid_image_domsymbolitem", imageElement.localName, imagePath);
+        "invalid_image_domsymbolitem",
+        imageElement.localName,
+        imagePath,
+      );
     }
     if (imageElement.getAttribute("name") != "image/image_${index + 1}") {
-      throwAnimationException("invalid_image_domsymbolitem_name",
-          imageElement.getAttribute("name"), imagePath);
+      throwAnimationException(
+        "invalid_image_domsymbolitem_name",
+        imageElement.getAttribute("name"),
+        imagePath,
+      );
     }
     final timelineList = imageElement.xpath("/DOMSymbolItem/timeline").toList();
     if (timelineList.length != 1) {
-      throwAnimationException("invalid_image_domsymbolitem_timeline_length",
-          timelineList.length, imagePath);
+      throwAnimationException(
+        "invalid_image_domsymbolitem_timeline_length",
+        timelineList.length,
+        imagePath,
+      );
     }
     final domTimelineList = timelineList[0].xpath("DOMTimeline").toList();
     if (domTimelineList.length != 1) {
-      throwAnimationException("invalid_image_domtimeline_length",
-          domTimelineList.length, imagePath);
+      throwAnimationException(
+        "invalid_image_domtimeline_length",
+        domTimelineList.length,
+        imagePath,
+      );
     }
     final domTimeline = domTimelineList[0];
     if (domTimeline.getAttribute("name") != "image_${index + 1}") {
-      throwAnimationException("invalid_image_domtimeline_name",
-          domTimeline.getAttribute("name"), imagePath);
+      throwAnimationException(
+        "invalid_image_domtimeline_name",
+        domTimeline.getAttribute("name"),
+        imagePath,
+      );
     }
     final layersList = domTimeline.xpath("layers").toList();
     if (layersList.length != 1) {
-      throwAnimationException("invalid_image_domtimeline_layers_length",
-          layersList.length, imagePath);
+      throwAnimationException(
+        "invalid_image_domtimeline_layers_length",
+        layersList.length,
+        imagePath,
+      );
     }
     final domLayerList = layersList[0].xpath("DOMLayer").toList();
     if (domLayerList.length != 1) {
       throwAnimationException(
-          "invalid_image_domlayer_length", domLayerList.length, imagePath);
+        "invalid_image_domlayer_length",
+        domLayerList.length,
+        imagePath,
+      );
     }
     final frameList = domLayerList[0].xpath("frames").toList();
     if (frameList.length != 1) {
       throwAnimationException(
-          "invalid_image_domlayer_frames_length", frameList.length, imagePath);
+        "invalid_image_domlayer_frames_length",
+        frameList.length,
+        imagePath,
+      );
     }
     final domFrameList = frameList[0].xpath("DOMFrame").toList();
     if (domFrameList.length != 1) {
       throwAnimationException(
-          "invalid_image_domframe_length", domFrameList.length, imagePath);
+        "invalid_image_domframe_length",
+        domFrameList.length,
+        imagePath,
+      );
     }
     final elementsList = domFrameList[0].xpath("elements").toList();
     if (elementsList.length != 1) {
-      throwAnimationException("invalid_image_domframe_elements_length",
-          elementsList.length, imagePath);
+      throwAnimationException(
+        "invalid_image_domframe_elements_length",
+        elementsList.length,
+        imagePath,
+      );
     }
     final domSymbolInstanceList =
         elementsList[0].xpath("DOMSymbolInstance").toList();
     if (domSymbolInstanceList.length != 1) {
-      throwAnimationException("invalid_image_dom_symbol_instance_length",
-          domSymbolInstanceList.length, imagePath);
+      throwAnimationException(
+        "invalid_image_dom_symbol_instance_length",
+        domSymbolInstanceList.length,
+        imagePath,
+      );
     }
     final imageName = domSymbolInstanceList[0].getAttribute("libraryItemName")!;
     if (imageName != "source/source_${index + 1}") {
       throwAnimationException(
-          "invalid_image_dom_symbol_instance_name", imageName, imagePath);
+        "invalid_image_dom_symbol_instance_name",
+        imageName,
+        imagePath,
+      );
     }
     final matrixList = domSymbolInstanceList[0].xpath("matrix").toList();
-    if (matrixList.length == 0) {
+    if (matrixList.isEmpty) {
       return [...initialTransform];
     }
     if (matrixList.length != 1) {
-      throwAnimationException("invalid_image_dom_symbol_instance_matrix_length",
-          matrixList.length, imagePath);
+      throwAnimationException(
+        "invalid_image_dom_symbol_instance_matrix_length",
+        matrixList.length,
+        imagePath,
+      );
     }
     final matrixDList = matrixList[0].xpath("Matrix").toList();
     if (matrixDList.length != 1) {
       throwAnimationException(
-          "invalid_image_matrix_length", matrixDList.length, imagePath);
+        "invalid_image_matrix_length",
+        matrixDList.length,
+        imagePath,
+      );
     }
     final transform = parseTransform(matrixDList[0]);
     return transform;
   }
 
   dynamic parseSpriteDocument(
-      XmlElement spriteElement, int index, String spritePath) {
-    var model = null;
+    XmlElement spriteElement,
+    int index,
+    String spritePath,
+  ) {
+    var model;
     final result = [];
     if (spriteElement.localName != "DOMSymbolItem") {
       throwAnimationException(
-          "invalid_sprite_domsymbolitem", spriteElement.localName, spritePath);
+        "invalid_sprite_domsymbolitem",
+        spriteElement.localName,
+        spritePath,
+      );
     }
     if (spriteElement.getAttribute("name") !=
         (index == -1 ? "main" : "sprite/sprite_${index + 1}")) {
-      throwAnimationException("invalid_sprite_domsymbolitem_name",
-          spriteElement.getAttribute("name"), spritePath);
+      throwAnimationException(
+        "invalid_sprite_domsymbolitem_name",
+        spriteElement.getAttribute("name"),
+        spritePath,
+      );
     }
     final timelineList = spriteElement.xpath("timeline").toList();
     if (timelineList.length != 1) {
-      throwAnimationException("invalid_sprite_domsymbolitem_timeline_length",
-          timelineList.length, spritePath);
+      throwAnimationException(
+        "invalid_sprite_domsymbolitem_timeline_length",
+        timelineList.length,
+        spritePath,
+      );
     }
     final domTimelineList = timelineList[0].xpath("DOMTimeline").toList();
     if (domTimelineList.length != 1) {
-      throwAnimationException("invalid_sprite_domtimeline_length",
-          domTimelineList.length, spritePath);
+      throwAnimationException(
+        "invalid_sprite_domtimeline_length",
+        domTimelineList.length,
+        spritePath,
+      );
     }
     final domTimeline = domTimelineList[0];
     if (domTimeline.getAttribute("name") !=
         (index == -1 ? "main" : "sprite_${index + 1}")) {
-      throwAnimationException("invalid_sprite_domtimeline_name",
-          domTimeline.getAttribute("name"), spritePath);
+      throwAnimationException(
+        "invalid_sprite_domtimeline_name",
+        domTimeline.getAttribute("name"),
+        spritePath,
+      );
     }
     final layersList = domTimeline.xpath("layers").toList();
     if (layersList.length != 1) {
-      throwAnimationException("invalid_sprite_domtimeline_layers_length",
-          layersList.length, spritePath);
+      throwAnimationException(
+        "invalid_sprite_domtimeline_layers_length",
+        layersList.length,
+        spritePath,
+      );
     }
     final domLayerList =
         layersList[0].xpath("DOMLayer").toList().reversed.toList();
@@ -1116,14 +1244,19 @@ class PopCapReAnimation {
     domLayerList.removeAt(0);
     var layerCount = 0;
     if (domLayerCheck.getAttribute("name") != "0") {
-      throwAnimationException("check_length_layer_is_missing",
-          domLayerCheck.getAttribute("name"), spritePath);
+      throwAnimationException(
+        "check_length_layer_is_missing",
+        domLayerCheck.getAttribute("name"),
+        spritePath,
+      );
     }
-    final allFrames = int.parse(domLayerCheck
-            .xpath("frames/DOMFrame")
-            .toList()[0]
-            .getAttribute("duration") ??
-        "1");
+    final allFrames = int.parse(
+      domLayerCheck
+              .xpath("frames/DOMFrame")
+              .toList()[0]
+              .getAttribute("duration") ??
+          "1",
+    );
     dynamic getFrameAt(int index) {
       if (result.length <= index) {
         final count = index - result.length + 1;
@@ -1134,7 +1267,7 @@ class PopCapReAnimation {
             "command": [],
             "remove": [],
             "append": [],
-            "change": []
+            "change": [],
           });
         }
       }
@@ -1145,48 +1278,58 @@ class PopCapReAnimation {
           "command": [],
           "remove": [],
           "append": [],
-          "change": []
+          "change": [],
         };
       }
       return result[index];
     }
 
-    domLayerList.forEach((domLayer) {
+    for (var domLayer in domLayerList) {
       final framesList = domLayer.xpath("frames").toList();
       if (framesList.length != 1) {
-        throwAnimationException("invalid_sprite_domtimeline_frames_length",
-            framesList.length, spritePath);
+        throwAnimationException(
+          "invalid_sprite_domtimeline_frames_length",
+          framesList.length,
+          spritePath,
+        );
       }
       final domFrameList = framesList[0].xpath("DOMFrame").toList();
-      final closeCurrentModelIfNeed = () {
+      closeCurrentModelIfNeed() {
         if (model != null) {
           final targetFrame =
               getFrameAt(model["frame_start"] + model["frame_duration"]);
           targetFrame["remove"].add({"index": model["index"]});
           model = null;
         }
-      };
-      domFrameList.forEach((domFrame) {
+      }
+
+      for (var domFrame in domFrameList) {
         final frameIndex = int.parse(domFrame.getAttribute("index")!);
         final frameDuration =
             int.parse(domFrame.getAttribute("duration") ?? "1");
         var transform;
         var color;
         final elementList = domFrame.xpath("elements").toList();
-        if (elementList.length == 0) {
+        if (elementList.isEmpty) {
           closeCurrentModelIfNeed();
-          return;
+          continue;
         }
         if (elementList.length != 1) {
-          throwAnimationException("invalid_sprite_domframe_elements_length",
-              elementList.length, spritePath);
+          throwAnimationException(
+            "invalid_sprite_domframe_elements_length",
+            elementList.length,
+            spritePath,
+          );
         }
         final domSymbolInstanceList =
             elementList[0].xpath("DOMSymbolInstance").toList();
-        if (domSymbolInstanceList.length == 0) return;
+        if (domSymbolInstanceList.isEmpty) continue;
         if (domSymbolInstanceList.length != 1) {
-          throwAnimationException("invalid_sprite_dom_symbol_instance_length",
-              domSymbolInstanceList.length, spritePath);
+          throwAnimationException(
+            "invalid_sprite_dom_symbol_instance_length",
+            domSymbolInstanceList.length,
+            spritePath,
+          );
         }
         final domSymbolInstance = domSymbolInstanceList[0];
         final nameMatch = RegExp(r"(image|sprite)/(image|sprite)_([0-9]+)");
@@ -1194,50 +1337,64 @@ class PopCapReAnimation {
             .firstMatch(domSymbolInstance.getAttribute("libraryItemName")!);
         if (firstMatch == null) {
           throwAnimationException(
-              "invalid_dom_symbol_instance", firstMatch, spritePath);
+            "invalid_dom_symbol_instance",
+            firstMatch,
+            spritePath,
+          );
         }
         if (firstMatch!.group(1) != firstMatch.group(2)) {
           throwAnimationException(
-              "invalid_sprite_dom_symbol_instance_x", firstMatch, spritePath);
+            "invalid_sprite_dom_symbol_instance_x",
+            firstMatch,
+            spritePath,
+          );
         }
         final currentInstance = {
           "resource": int.parse(firstMatch.group(3)!) - 1,
-          "sprite": firstMatch.group(1) == "sprite"
+          "sprite": firstMatch.group(1) == "sprite",
         };
         {
           final matrixList = domSymbolInstance.xpath("matrix").toList();
-          if (matrixList.length == 0) {
+          if (matrixList.isEmpty) {
             transform = [0, 0];
           } else if (matrixList.length == 1) {
             final matrixDList = matrixList[0].xpath("Matrix").toList();
             if (matrixDList.length != 1) {
-              throwAnimationException("invalid_sprite_matrix_length",
-                  matrixDList.length, spritePath);
+              throwAnimationException(
+                "invalid_sprite_matrix_length",
+                matrixDList.length,
+                spritePath,
+              );
             }
             transform = standardToVariant(parseTransform(matrixDList[0]));
           } else {
             throwAnimationException(
-                "invalid_sprite_dom_symbol_instance_matrix_length",
-                matrixList.length,
-                spritePath);
+              "invalid_sprite_dom_symbol_instance_matrix_length",
+              matrixList.length,
+              spritePath,
+            );
           }
         }
         {
           final colorList = domSymbolInstance.xpath("color").toList();
-          if (colorList.length == 0) {
+          if (colorList.isEmpty) {
             color = [...initialColor];
           } else if (colorList.length == 1) {
             final colorDList = colorList[0].xpath("Color").toList();
             if (colorDList.length != 1) {
               throwAnimationException(
-                  "invalid_sprite_color_length", colorDList.length, spritePath);
+                "invalid_sprite_color_length",
+                colorDList.length,
+                spritePath,
+              );
             }
             color = parseColor(colorDList[0]);
           } else {
             throwAnimationException(
-                "invalid_sprite_dom_symbol_instance_color_length",
-                colorList.length,
-                spritePath);
+              "invalid_sprite_dom_symbol_instance_color_length",
+              colorList.length,
+              spritePath,
+            );
           }
         }
         final targetFrame = getFrameAt(frameIndex);
@@ -1249,20 +1406,23 @@ class PopCapReAnimation {
             "frame_start": frameIndex,
             "frame_duration": frameDuration,
             "color": [...initialColor],
-            "transform": [0, 0]
+            "transform": [0, 0],
           };
           targetFrame["append"].add({
             "index": model["index"],
             "name": null,
             "resource": currentInstance["resource"],
-            "sprite": currentInstance["sprite"]
+            "sprite": currentInstance["sprite"],
           });
           layerCount++;
         } else {
           if (currentInstance["resource"] != model["resource"] ||
               currentInstance["sprite"] != model["sprite"]) {
             throwAnimationException(
-                "invalid_sprite_dom_resource", "", spritePath);
+              "invalid_sprite_dom_resource",
+              "",
+              spritePath,
+            );
           }
         }
         model["frame_start"] = frameIndex;
@@ -1277,11 +1437,11 @@ class PopCapReAnimation {
         targetFrame["change"].add({
           "index": model["index"],
           "transform": transform,
-          "color": colorChanged ? color : null
+          "color": colorChanged ? color : null,
         });
-      });
+      }
       closeCurrentModelIfNeed();
-    });
+    }
     if (result.length <= allFrames) {
       for (var i = 0; i < index - result.length + 1; i++) {
         result.add({
@@ -1290,7 +1450,7 @@ class PopCapReAnimation {
           "command": [],
           "remove": [],
           "append": [],
-          "change": []
+          "change": [],
         });
       }
     }
@@ -1302,7 +1462,7 @@ class PopCapReAnimation {
           "command": [],
           "remove": [],
           "append": [],
-          "change": []
+          "change": [],
         };
       }
     }
@@ -1336,88 +1496,136 @@ class PopCapReAnimation {
 
   dynamic parseColorCompute(String? multiplier, String? offset) {
     return max(
-            0,
-            min(
-                255,
-                double.parse(multiplier ?? "1") * 255 +
-                    double.parse(offset ?? "0"))) /
+          0,
+          min(
+            255,
+            double.parse(multiplier ?? "1") * 255 + double.parse(offset ?? "0"),
+          ),
+        ) /
         255;
   }
 
   dynamic parseColor(XmlNode matrix) {
     return [
-      parseColorCompute(matrix.getAttribute("redMultiplier"),
-          matrix.getAttribute("redOffset")),
-      parseColorCompute(matrix.getAttribute("greenMultiplier"),
-          matrix.getAttribute("greenOffset")),
-      parseColorCompute(matrix.getAttribute("blueMultiplier"),
-          matrix.getAttribute("blueOffset")),
-      parseColorCompute(matrix.getAttribute("alphaMultiplier"),
-          matrix.getAttribute("blueOffset")),
+      parseColorCompute(
+        matrix.getAttribute("redMultiplier"),
+        matrix.getAttribute("redOffset"),
+      ),
+      parseColorCompute(
+        matrix.getAttribute("greenMultiplier"),
+        matrix.getAttribute("greenOffset"),
+      ),
+      parseColorCompute(
+        matrix.getAttribute("blueMultiplier"),
+        matrix.getAttribute("blueOffset"),
+      ),
+      parseColorCompute(
+        matrix.getAttribute("alphaMultiplier"),
+        matrix.getAttribute("blueOffset"),
+      ),
     ];
   }
 
   String parseSourceDocument(
-      XmlElement sourceElement, int index, String sourcePath) {
+    XmlElement sourceElement,
+    int index,
+    String sourcePath,
+  ) {
     if (sourceElement.localName != "DOMSymbolItem") {
       throwAnimationException(
-          "invalid_source_domsymbolitem", sourceElement.localName, sourcePath);
+        "invalid_source_domsymbolitem",
+        sourceElement.localName,
+        sourcePath,
+      );
     }
     if (sourceElement.getAttribute("name") != "source/source_${index + 1}") {
-      throwAnimationException("invalid_source_domsymbolitem_name",
-          sourceElement.getAttribute("name"), sourcePath);
+      throwAnimationException(
+        "invalid_source_domsymbolitem_name",
+        sourceElement.getAttribute("name"),
+        sourcePath,
+      );
     }
     final timelineList =
         sourceElement.xpath("/DOMSymbolItem/timeline").toList();
     if (timelineList.length != 1) {
-      throwAnimationException("invalid_source_domsymbolitem_timeline_length",
-          timelineList.length, sourcePath);
+      throwAnimationException(
+        "invalid_source_domsymbolitem_timeline_length",
+        timelineList.length,
+        sourcePath,
+      );
     }
     final domTimelineList = timelineList[0].xpath("DOMTimeline").toList();
     if (domTimelineList.length != 1) {
-      throwAnimationException("invalid_source_domtimeline_length",
-          domTimelineList.length, sourcePath);
+      throwAnimationException(
+        "invalid_source_domtimeline_length",
+        domTimelineList.length,
+        sourcePath,
+      );
     }
     final domTimeline = domTimelineList[0];
     if (domTimeline.getAttribute("name") != "source_${index + 1}") {
-      throwAnimationException("invalid_source_domtimeline_name",
-          domTimeline.getAttribute("name"), sourcePath);
+      throwAnimationException(
+        "invalid_source_domtimeline_name",
+        domTimeline.getAttribute("name"),
+        sourcePath,
+      );
     }
     final layersList = domTimeline.xpath("layers").toList();
     if (layersList.length != 1) {
-      throwAnimationException("invalid_source_domtimeline_layers_length",
-          layersList.length, sourcePath);
+      throwAnimationException(
+        "invalid_source_domtimeline_layers_length",
+        layersList.length,
+        sourcePath,
+      );
     }
     final domLayerList = layersList[0].xpath("DOMLayer").toList();
     if (domLayerList.length != 1) {
       throwAnimationException(
-          "invalid_source_domlayer_length", domLayerList.length, sourcePath);
+        "invalid_source_domlayer_length",
+        domLayerList.length,
+        sourcePath,
+      );
     }
     final frameList = domLayerList[0].xpath("frames").toList();
     if (frameList.length != 1) {
-      throwAnimationException("invalid_source_domtimeline_frames_length",
-          frameList.length, sourcePath);
+      throwAnimationException(
+        "invalid_source_domtimeline_frames_length",
+        frameList.length,
+        sourcePath,
+      );
     }
     final domFrameList = frameList[0].xpath("DOMFrame").toList();
     if (domFrameList.length != 1) {
       throwAnimationException(
-          "invalid_source_domframe_length", domFrameList.length, sourcePath);
+        "invalid_source_domframe_length",
+        domFrameList.length,
+        sourcePath,
+      );
     }
     final elementsList = domFrameList[0].xpath("elements").toList();
     if (elementsList.length != 1) {
-      throwAnimationException("invalid_source_domframe_elements_length",
-          elementsList.length, sourcePath);
+      throwAnimationException(
+        "invalid_source_domframe_elements_length",
+        elementsList.length,
+        sourcePath,
+      );
     }
     final domBitmapInstanceList =
         elementsList[0].xpath("DOMBitmapInstance").toList();
     if (domBitmapInstanceList.length != 1) {
-      throwAnimationException("invalid_source_dom_bitmap_instance_length",
-          domBitmapInstanceList.length, sourcePath);
+      throwAnimationException(
+        "invalid_source_dom_bitmap_instance_length",
+        domBitmapInstanceList.length,
+        sourcePath,
+      );
     }
     final imageName = domBitmapInstanceList[0].getAttribute("libraryItemName")!;
     if (!imageName.contains("media")) {
       throwAnimationException(
-          "invalid_source_dom_bitmap_instance_name", imageName, sourcePath);
+        "invalid_source_dom_bitmap_instance_name",
+        imageName,
+        sourcePath,
+      );
     }
     return imageName.substring(6);
   }
@@ -1431,24 +1639,30 @@ class PopCapReAnimation {
     final directory = Directory(path.join(inFolder, "library", "source"));
     final sourceFolder = directory.listSync();
     sourceFolder.map((e) => path.extension(e.path).toLowerCase() == ".xml");
-    sourceFolder.sort((a, b) =>
-        int.parse(a.path.split('_').last.replaceAll(".xml", "")).compareTo(
-            int.parse(b.path.split('_').last.replaceAll(".xml", ""))));
+    sourceFolder.sort(
+      (a, b) =>
+          int.parse(a.path.split('_').last.replaceAll(".xml", "")).compareTo(
+        int.parse(b.path.split('_').last.replaceAll(".xml", "")),
+      ),
+    );
     for (var i = 0; i < sourceFolder.length; i++) {
       final sourceXml =
           XmlDocument.parse(FileSystem.readFile(sourceFolder[i].path));
       final sourceName =
           parseSourceDocument(sourceXml.rootElement, i, sourceFolder[i].path);
       final sourceDocument = writeSourceDocument(
-          i,
-          {
-            "name": sourceName,
-            "size": [0, 0],
-            "transform": [0, 0, 0, 0]
-          },
-          scaleResolution);
-      FileSystem.writeFile(sourceFolder[i].path,
-          sourceDocument.toXmlString(pretty: true, indent: "\t"));
+        i,
+        {
+          "name": sourceName,
+          "size": [0, 0],
+          "transform": [0, 0, 0, 0],
+        },
+        scaleResolution,
+      );
+      FileSystem.writeFile(
+        sourceFolder[i].path,
+        sourceDocument.toXmlString(pretty: true, indent: "\t"),
+      );
     }
     return;
   }
