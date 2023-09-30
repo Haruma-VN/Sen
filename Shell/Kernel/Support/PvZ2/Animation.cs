@@ -1800,10 +1800,10 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                         throw new PAMException("invalid_sprite_dom_symbol_instance_length", $"DOMSymbolInstance length: {x_DOMSymbolInstance_list.Length}", sprite_path);
                     }
                     var x_DOMSymbolInstance = x_DOMSymbolInstance_list[0];
-                    var name_match = Regex.Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!, "(image|sprite)/(image|sprite)_([0-9]+)").First();
+                    var name_match = Regex.Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!, "(image|sprite)/(image|sprite)_([0-9]+)").FirstOrDefault();
                     if (name_match is null)
                     {
-                        throw new PAMException("invalid_dom_symbol_instance", "undefined", sprite_path);
+                        throw new PAMException($"{Localization.GetString("invalid_dom_symbol_instance")}: {Localization.GetString("must_call_sprite_or_image")}", "undefined", sprite_path);
                     }
                     if (name_match.Groups[1].Value != name_match.Groups[2].Value)
                     {
