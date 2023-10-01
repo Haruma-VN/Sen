@@ -114,6 +114,7 @@ namespace Sen.Shell.Kernel.Internal
             var patch = LotusAPI.VCDiffEncode(before, before.Length, after, after.Length, out var size);
             byte[] patchData = new byte[size];
             Marshal.Copy(patch, patchData, 0, size);
+            Marshal.FreeHGlobal(patch);
             return patchData;
         }
 
