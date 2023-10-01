@@ -139,15 +139,9 @@ class RectangleBinPack {
         ),
       );
     }
-    calloc.free(
-      spritePointer,
-    );
-    calloc.free(
-      boxPointer,
-    );
-    calloc.free(
-      resultPtr,
-    );
+    calloc.free(spritePointer);
+    calloc.free(boxPointer);
+    calloc.free(resultPtr);
     return result;
   }
 

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Sen.Shell.Kernel.Internal;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace Sen.Shell.Kernel.Standards
 {
@@ -137,6 +138,7 @@ namespace Sen.Shell.Kernel.Standards
             IntPtr compressedDataPtr = LotusAPI.GZipCompress(dataStream, dataStream.Length, out var compressedSize);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            Marshal.FreeHGlobal(compressedDataPtr);
             return compressedData;
 
         }
@@ -146,6 +148,7 @@ namespace Sen.Shell.Kernel.Standards
             IntPtr compressedDataPtr = LotusAPI.BZip2Compress(dataStream, dataStream.Length, out var compressedSize);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            Marshal.FreeHGlobal(compressedDataPtr);
             return compressedData;
 
         }
@@ -155,6 +158,7 @@ namespace Sen.Shell.Kernel.Standards
             LotusAPI.lzmaCompress(dataStream, dataStream.Length, out IntPtr compressData ,out int compressedSize);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressData, compressedData, 0, compressedSize);
+            Marshal.FreeHGlobal(compressData);
             return compressedData;
 
         }
@@ -184,6 +188,7 @@ namespace Sen.Shell.Kernel.Standards
             IntPtr compressedDataPtr = LotusAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out var compressedSize);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
+            Marshal.FreeHGlobal(compressedDataPtr);
             return compressedData;
 
         }
@@ -246,6 +251,7 @@ namespace Sen.Shell.Kernel.Standards
             {
                 CompressFolder(folder, zipStream, folderOffset);
             }
+            return;
         }
 
         public override async Task CompressZipAsync(string zipOutput, string[] files, string[] directories)
