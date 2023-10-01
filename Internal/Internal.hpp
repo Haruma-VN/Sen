@@ -2,7 +2,7 @@
 
 #pragma region version
 
-inline constexpr auto MInternalVersion = 7;
+inline constexpr auto MInternalVersion = 8;
 
 #pragma endregion
 
@@ -50,6 +50,7 @@ inline constexpr auto MInternalVersion = 7;
 #include "../../dependencies/etcpak/BlockData.hpp"
 #include "../../dependencies/rg_etc1/rg_etc1.h"
 #include "../../dependencies/Rijndael/Rijndael.h"
+#include "../../dependencies/PVRTCCompressor/AlphaBitmap.h"
 #include "../../dependencies/PVRTCCompressor/PvrTcDecoder.h"
 #include "../../dependencies/PVRTCCompressor/PvrTcEncoder.h"
 #include "../../dependencies/PVRTCCompressor/RgbBitmap.h"

@@ -1,5 +1,6 @@
 Write-Host "Start compilation"
 
+
 # Windows
 dotnet publish -c Release -r win-x64 --self-contained true
 dotnet publish -c Release -r win-x86 --self-contained true
@@ -19,7 +20,6 @@ dotnet publish -c Release -r linux-arm64 --self-contained true
 # Rename and remove directories
 $publishPath = "./bin/Release/net8.0"
 $movePath = "./bin/Release/net8.0/"
-
 
 
 

@@ -804,3 +804,22 @@ Sprite* packAtlas(
 }
 
 #pragma endregion
+
+using namespace Javelin;
+
+#pragma region PVRTC Compressor
+
+InternalAPI
+void EncodeRGBAPVRTC4BPP(
+    void *result,
+    void* image,
+    int width,
+    int height
+)
+{
+    auto javelin = AlphaBitmap(width, height);
+    PvrTcEncoder::EncodeAlpha4Bpp(result, javelin);
+    return;
+}
+
+#pragma endregion
