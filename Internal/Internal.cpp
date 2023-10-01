@@ -391,7 +391,7 @@ Architecture GetProcessorArchitecture(
 )
 {
 #if defined(_WIN32)
-    SYSTEM_INFO si;
+    auto si = SYSTEM_INFO{};
     GetNativeSystemInfo(&si);
 
     switch (si.wProcessorArchitecture)

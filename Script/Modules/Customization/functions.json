@@ -486,7 +486,7 @@
     },
     "popcap_newton_encode": {
         "func_number": 70,
-        "include": [".newton.json"],
+        "include": [".newton.json", ".json"],
         "exclude": [],
         "is_enabled": true,
         "type": "file"

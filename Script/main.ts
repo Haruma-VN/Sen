@@ -187,7 +187,7 @@ namespace Sen.Script {
         Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/{\}/g, ""));
         Sen.Shell.Console.Printf(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.White,
-            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("command_executed_with"), [`${wrapper.success}`, `${wrapper.fail}`])}`
+            `      ${Sen.Script.Modules.System.Default.Localization.RegexReplace(Sen.Script.Modules.System.Default.Localization.GetString("command_executed_with"), [`${wrapper.success!}`, `${wrapper.fail!}`])}`
         );
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
