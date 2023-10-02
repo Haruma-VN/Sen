@@ -5,7 +5,6 @@ echo "Start compilation"
 # Windows
 dotnet publish -c Release -r win-x64 --self-contained true
 dotnet publish -c Release -r win-x86 --self-contained true
-dotnet publish -c Release -r win-arm --self-contained true
 dotnet publish -c Release -r win-arm64 --self-contained true
 
 # Macintosh
