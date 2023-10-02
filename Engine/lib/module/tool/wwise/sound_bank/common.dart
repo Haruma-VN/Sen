@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names
 
 import "dart:typed_data";
 import 'package:sen_material_design/module/utility/buffer/common.dart';
@@ -6,7 +6,26 @@ import "package:path/path.dart" as path;
 import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:convert/convert.dart";
 
-class WwiseMediaBank {
+class WWiseSoundBank {
+  static void decode_fs(
+    String inFile,
+    String outDirectory,
+  ) {
+    final wwise = WWiseSoundBank();
+    wwise.decodeSoundBank(SenBuffer.OpenFile(inFile), outDirectory);
+    return;
+  }
+
+  static void encode_fs(
+    String inDirectory,
+    String outFile,
+  ) {
+    final wwise = WWiseSoundBank();
+    final soundbank = wwise.encodeSoundBank(inDirectory);
+    soundbank.outFile(outFile);
+    return;
+  }
+
   void decodeSoundBank(SenBuffer senFile, String outFolder) {
     final jsonFile = {};
     final bankHeaderMagic = senFile.readString(4);

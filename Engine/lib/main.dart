@@ -70,7 +70,7 @@ class Application extends StatelessWidget {
   final Customization setting;
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: ApplicationInformation.isDarkMode,
       builder: (BuildContext context, bool isDarkMode, Widget? child) =>

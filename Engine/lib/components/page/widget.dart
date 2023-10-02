@@ -21,6 +21,8 @@ import 'package:sen_material_design/components/tool/popcap/rton/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/rton/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/compress.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/uncompress.dart';
+import 'package:sen_material_design/components/tool/wwise/decode.dart';
+import 'package:sen_material_design/components/tool/wwise/encode.dart';
 
 Map<String, Widget> materialWidget = const {
   'popcap.resource_group.split': SplitPopCapResourceGroup(),
@@ -47,4 +49,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.pam.pack': PopCapRSGPack(),
   'popcap.rton.decode': PopCapRTONDecode(),
   'popcap.rton.encode': PopCapRTONEncode(),
+  'wwise.soundbank.decode': WWiseSoundBankDecode(),
+  'wwise.soundbank.encode': WWiseSoundBankEncode(),
 };
