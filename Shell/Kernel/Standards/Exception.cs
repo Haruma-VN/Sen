@@ -77,6 +77,18 @@
         }
     }
 
+    public class RSBException : Exception
+    {
+        public RSBException(string message, string manifest, string rsgPath) : base(message) 
+        {
+            var system = new SystemImplement();
+            system.Print(ConsoleColor.Red, Localization.GetString("in_manifest_file"));
+            system.Printf(ConsoleColor.White, $"      {manifest}");
+            system.Print(ConsoleColor.Red, Localization.GetString("rsg_error_path"));
+            system.Printf(ConsoleColor.White, $"      {rsgPath}");
+        }
+    }
+
     public class PAMEncodeException : RuntimeException
     {
         public PAMEncodeException(string message, string errorCode) : base(message, errorCode)

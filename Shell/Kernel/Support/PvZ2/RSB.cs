@@ -363,11 +363,11 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
                                     {
                                         if (ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].width != packetInfo.res[m].ptx_info!.width)
                                         {
-                                            throw new Exception($"{Localization.GetString("invalid_packet_width")}: {fileList[h].namePath}");
+                                            throw new Exception($"{Localization.GetString("invalid_packet_width")}: {fileList[h].namePath}, In Manifest: {ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].width}, In RSG: {packetInfo.res[m].ptx_info!.width}");
                                         }
                                         if (ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].height != packetInfo.res[m].ptx_info!.height)
                                         {
-                                            throw new Exception($"Invalid item packet height: {fileList[h].namePath}");
+                                            throw new Exception($"{Localization.GetString("invalid_packet_height")}: {fileList[h].namePath}, In Manifest: {ptxInfoList[ptxBeforeNumber + packetInfo.res[m].ptx_info!.id].height}, In RSG: {packetInfo.res[m].ptx_info!.height}");
                                         }
                                         resInfo.ptx_info = new RSG.PtxInfo
                                         {
@@ -1199,7 +1199,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
             PacketInfo oriPacketInfo = RSGFunction.Unpack(RSGFile, "", false, true);
             if (oriPacketInfo.version != modifyPacketInfo.version) ThrowError("version", oriPacketInfo.version, modifyPacketInfo.version);
             if (oriPacketInfo.compression_flags != modifyPacketInfo.compression_flags) ThrowError("compression flags", oriPacketInfo.compression_flags, modifyPacketInfo.compression_flags);
-            if (oriPacketInfo.res.Length != modifyPacketInfo.res.Length) ThrowError("item number", oriPacketInfo.res.Length, modifyPacketInfo.res.Length);
+            if (oriPacketInfo.res.Length != modifyPacketInfo.res.Length) ThrowError("item index", oriPacketInfo.res.Length, modifyPacketInfo.res.Length);
             var oriPacketResInfo = oriPacketInfo.res;
             Array.Sort(oriPacketResInfo, (a, b) => a.path.CompareTo(b.path));
             var modifyPacketResInfo = modifyPacketInfo.res;
