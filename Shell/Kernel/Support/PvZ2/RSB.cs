@@ -388,7 +388,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
                             }
                             if (!existItemPacket)
                             {
-                                throw new Exception("invalid_item_packet");
+                                throw new Exception($"{Localization.GetString("invalid_item_packet")}: {rsgList[rsgListCount].namePath}");
                             }
                             resInfoList.Add(resInfo);
                         }

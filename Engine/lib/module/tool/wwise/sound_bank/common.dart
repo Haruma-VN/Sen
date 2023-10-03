@@ -90,7 +90,7 @@ class WWiseSoundBank {
       case "FXPR":
         throw Exception("unsupported_fxpr");
       default:
-        throw Exception("invaild_bak_in_offset: ${senFile.readOffset}");
+        throw Exception("invaild_bnk_in_offset: ${senFile.readOffset}");
     }
   }
 

@@ -483,7 +483,8 @@ class ResourceStreamBundle {
 
   void checkEndOffset(SenBuffer senFile, int endOffset) {
     if (senFile.readOffset != endOffset) {
-      throw Exception("invalid: offset: ${senFile.readOffset}, $endOffset");
+      throw Exception(
+          "invalid_end_offset: offset: ${senFile.readOffset}, $endOffset");
     }
   }
 
