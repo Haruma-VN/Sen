@@ -1214,6 +1214,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
                     if (oriPacketResInfo[i].ptx_info!.height != modifyPacketResInfo[i].ptx_info!.height) ThrowError("item height", oriPacketResInfo[i].ptx_info!.height, modifyPacketResInfo[i].ptx_info!.height);
                 }
             }
+            return;
         }
 
         private static void FileListPack(List<FileListInfo> fileList, ref List<RSBPathTemp> pathTempList)
@@ -1262,6 +1263,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
                     }
                 }
             }
+            return;
         }
         // Misc 
         public static void RSBObfuscate(SenBuffer RSBFile)
@@ -1528,6 +1530,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
             }
             var endOffset = rsbHeadInfo.rsgInfo_EachLength * rsbHeadInfo.rsgNumber + rsbHeadInfo.rsgInfo_BeginOffset;
             CheckEndOffset(RSBFile, endOffset);
+            return;
         }
 
         private static bool IsNotRSG(SenBuffer RSBFile, long rsgOffset)
@@ -1536,7 +1539,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
             var fileListOffset = RSBFile.readInt32LE(rsgOffset + 76);
             RSBFile.BackupReadOffset();
             if (fileListOffset != 0x5C && fileListOffset != 0x1000) return true;
-            else return false;
+            return false;
         }
         //Create RSBPatch
         public static SenBuffer RSBPatchEncode(SenBuffer RSBBeforeFile, SenBuffer RSBAfterFile, bool UseRawPacket = false)

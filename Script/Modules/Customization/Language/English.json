@@ -667,5 +667,10 @@
     "input_animation_resource_name": "Input Animation Resource Name",
     "input_number_sprite": "Number of sprite",
     "must_call_sprite_or_image": "libraryItemName must be sprite or image",
-    "invalid_source_dom_bitmap_instance_length": "Invalid source dom bitmap instance length"
+    "invalid_source_dom_bitmap_instance_length": "Invalid source dom bitmap instance length",
+    "is_not_the_same_packet_data": "is not the same when compare packet data. Decline to pack RSB until all mismatch data get fixed.",
+    "in_manifest_file": "Execution Traceback: RSB Manifest",
+    "rsg_error_path": "Execution Error: RSG Path",
+    "in_manifest": "In Manifest",
+    "in_rsg": "In RSG"
 }
