@@ -244,7 +244,14 @@ namespace Sen.Shell.Kernel.Support
             var tasks = new List<Task>();
             foreach (var ki in kn)
             {
-                tasks.Add(Task.Run(() => { shell.RSGPack(ki.inFolder, ki.outFile, ki.packet, ki.useResDirectory); }));
+                tasks.Add(Task.Run(() => {
+                    shell.RSGPack(
+                    ki.inFolder,
+                    ki.outFile, 
+                    ki.packet,
+                    ki.useResDirectory
+                    ); 
+                }));
             }
             await Task.WhenAll(tasks);
             return;

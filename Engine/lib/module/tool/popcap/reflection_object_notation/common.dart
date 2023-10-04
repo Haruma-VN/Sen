@@ -3,10 +3,22 @@
 import "dart:typed_data";
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import "package:path/path.dart" as path;
+import "package:sen_material_design/module/utility/encryption/Rijndael/common.dart";
 import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:convert/convert.dart";
 
 class ReflectionObjectNotation {
+  SenBuffer decryptRTON(SenBuffer raw) {
+    return SenBuffer.fromBytes(
+      Rijndael.decrypt(
+        raw.getBytes(raw.length - 2, 2),
+        '65bd1b2305f46eb2806b935aab7630bb',
+        '1b2305f46eb2806b935aab76',
+        RijndaelMode.CBC,
+      ),
+    );
+  }
+
   final r0x90List = <String>[];
   final r0x92List = <String>[];
   dynamic jsonFile = {};
@@ -17,6 +29,9 @@ class ReflectionObjectNotation {
     r0x90List.clear();
     r0x92List.clear();
     jsonFile = {};
+    if (decrypt) {
+      senFile = decryptRTON(senFile);
+    }
     final magic = senFile.readString(4);
     if (magic != "RTON") {
       throw Exception("invalid_rton_magic");
@@ -472,6 +487,17 @@ class ReflectionObjectNotation {
     var rton = ReflectionObjectNotation();
     dynamic json = rton.encodeRTON(FileSystem.readJson(inFile), false);
     FileSystem.writeJson(outFile, json, '\t');
+    return;
+  }
+
+  // ignore: non_constant_identifier_names
+  static void decrypt_fs(
+    String inFile,
+    String outFile,
+  ) {
+    var rton = ReflectionObjectNotation();
+    SenBuffer plain = rton.decryptRTON(SenBuffer.OpenFile(inFile));
+    plain.outFile(outFile);
     return;
   }
 }
