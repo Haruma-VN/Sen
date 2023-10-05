@@ -19,6 +19,17 @@ class ReflectionObjectNotation {
     );
   }
 
+  SenBuffer encryptRTON(SenBuffer raw) {
+    return SenBuffer.fromBytes(
+      Rijndael.encrypt(
+        raw.toBytes(),
+        '65bd1b2305f46eb2806b935aab7630bb',
+        '1b2305f46eb2806b935aab76',
+        RijndaelMode.CBC,
+      ),
+    );
+  }
+
   final r0x90List = <String>[];
   final r0x92List = <String>[];
   dynamic jsonFile = {};
