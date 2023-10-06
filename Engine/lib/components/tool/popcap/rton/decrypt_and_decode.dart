@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
@@ -6,14 +8,16 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 
-class PopCapRTONEncode extends StatefulWidget {
-  const PopCapRTONEncode({super.key});
+class PopCapRTONDecryptAndDecode extends StatefulWidget {
+  const PopCapRTONDecryptAndDecode({super.key});
 
   @override
-  State<PopCapRTONEncode> createState() => _PopCapRTONEncodeState();
+  State<PopCapRTONDecryptAndDecode> createState() =>
+      _PopCapRTONDecryptAndDecodeState();
 }
 
-class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
+class _PopCapRTONDecryptAndDecodeState
+    extends State<PopCapRTONDecryptAndDecode> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -58,7 +62,8 @@ class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
                   child: Align(
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
-                      AppLocalizations.of(context)!.popcap_rton_encode,
+                      AppLocalizations.of(context)!
+                          .popcap_rton_decrypt_and_decode,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -93,7 +98,7 @@ class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
                             if (path != null) {
                               controllerInput.text = path;
                               controllerOutput.text =
-                                  '${p.withoutExtension(path)}.rton';
+                                  '${p.withoutExtension(path)}.json';
                               setState(() {
                                 allowExecute = true;
                               });
@@ -149,11 +154,14 @@ class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
                           ? () async {
                               final DateTime startTime = DateTime.now();
                               try {
-                                ReflectionObjectNotation.encode_fs(
+                                ReflectionObjectNotation.decode_fs(
                                   controllerInput.text,
                                   controllerOutput.text,
-                                  false,
-                                  null,
+                                  true,
+                                  RijndaelC.has(
+                                    '65bd1b2305f46eb2806b935aab7630bb',
+                                    '1b2305f46eb2806b935aab76',
+                                  ),
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
@@ -6,14 +8,16 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 
-class PopCapRTONEncode extends StatefulWidget {
-  const PopCapRTONEncode({super.key});
+class PopCapRTONEncodeAndEncrypt extends StatefulWidget {
+  const PopCapRTONEncodeAndEncrypt({super.key});
 
   @override
-  State<PopCapRTONEncode> createState() => _PopCapRTONEncodeState();
+  State<PopCapRTONEncodeAndEncrypt> createState() =>
+      _PopCapRTONEncodeAndEncryptState();
 }
 
-class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
+class _PopCapRTONEncodeAndEncryptState
+    extends State<PopCapRTONEncodeAndEncrypt> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -58,7 +62,8 @@ class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
                   child: Align(
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
-                      AppLocalizations.of(context)!.popcap_rton_encode,
+                      AppLocalizations.of(context)!
+                          .popcap_rton_encode_and_encrypt,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -152,8 +157,11 @@ class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
                                 ReflectionObjectNotation.encode_fs(
                                   controllerInput.text,
                                   controllerOutput.text,
-                                  false,
-                                  null,
+                                  true,
+                                  RijndaelC.has(
+                                    '65bd1b2305f46eb2806b935aab7630bb',
+                                    '1b2305f46eb2806b935aab76',
+                                  ),
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

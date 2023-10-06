@@ -23,19 +23,28 @@ class ReflectionObjectNotation {
     );
   }
 
+  void fillRijndaelBlock(SenBuffer raw) {
+    while (raw.length % 32 != 0x00) {
+      raw.writeNull(0x01);
+    }
+    return;
+  }
+
   SenBuffer encryptRTON(
     SenBuffer raw,
-    String key,
-    String iv,
+    RijndaelC rijndael,
   ) {
-    return SenBuffer.fromBytes(
+    fillRijndaelBlock(raw);
+    var ripe = SenBuffer.fromBytes(Uint8List.fromList([0x80, 0x00]));
+    ripe.writeBytes(
       Rijndael.encrypt(
         raw.toBytes(),
-        '65bd1b2305f46eb2806b935aab7630bb',
-        '1b2305f46eb2806b935aab76',
+        rijndael.key,
+        rijndael.iv,
         RijndaelMode.CBC,
       ),
     );
+    return ripe;
   }
 
   final r0x90List = <String>[];
@@ -47,6 +56,7 @@ class ReflectionObjectNotation {
   dynamic decodeRTON(
     SenBuffer senFile,
     bool decrypt,
+    RijndaelC? rijndael,
   ) {
     r0x90List.clear();
     r0x92List.clear();
@@ -54,8 +64,8 @@ class ReflectionObjectNotation {
     if (decrypt) {
       senFile = decryptRTON(
         senFile,
-        '65bd1b2305f46eb2806b935aab7630bb',
-        '1b2305f46eb2806b935aab76',
+        rijndael!.key,
+        rijndael.iv,
       );
     }
     final magic = senFile.readString(4);
@@ -274,7 +284,11 @@ class ReflectionObjectNotation {
   var r0x90Index = 0;
   var r0x92Index = 0;
 
-  SenBuffer encodeRTON(dynamic jsonFile, bool encrypt) {
+  SenBuffer encodeRTON(
+    dynamic jsonFile,
+    bool encrypt,
+    RijndaelC? rijndael,
+  ) {
     r0x90Object.clear();
     r0x92Object.clear();
     final senFile = SenBuffer();
@@ -287,8 +301,7 @@ class ReflectionObjectNotation {
     } else {
       return encryptRTON(
         senFile,
-        '65bd1b2305f46eb2806b935aab7630bb',
-        '1b2305f46eb2806b935aab76',
+        rijndael!,
       );
     }
   }
@@ -507,9 +520,15 @@ class ReflectionObjectNotation {
   static void decode_fs(
     String inFile,
     String outFile,
+    bool decrypt,
+    RijndaelC? rijndael,
   ) {
     var rton = ReflectionObjectNotation();
-    dynamic json = rton.decodeRTON(SenBuffer.OpenFile(inFile), false);
+    dynamic json = rton.decodeRTON(
+      SenBuffer.OpenFile(inFile),
+      decrypt,
+      rijndael,
+    );
     FileSystem.writeJson(outFile, json, '\t');
     return;
   }
@@ -518,9 +537,15 @@ class ReflectionObjectNotation {
   static void encode_fs(
     String inFile,
     String outFile,
+    bool encrypt,
+    RijndaelC? rijndael,
   ) {
     var rton = ReflectionObjectNotation();
-    dynamic json = rton.encodeRTON(FileSystem.readJson(inFile), false);
+    dynamic json = rton.encodeRTON(
+      FileSystem.readJson(inFile),
+      encrypt,
+      rijndael,
+    );
     FileSystem.writeJson(outFile, json, '\t');
     return;
   }

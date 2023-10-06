@@ -152,6 +152,8 @@ class _PopCapRTONDecodeState extends State<PopCapRTONDecode> {
                                 ReflectionObjectNotation.decode_fs(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  false,
+                                  null,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

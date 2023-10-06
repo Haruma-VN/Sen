@@ -19,7 +19,10 @@ import 'package:sen_material_design/components/tool/popcap/rsg/pack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsg/unpack.dart';
 import 'package:sen_material_design/components/tool/popcap/rton/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/rton/decrypt.dart';
+import 'package:sen_material_design/components/tool/popcap/rton/decrypt_and_decode.dart';
 import 'package:sen_material_design/components/tool/popcap/rton/encode.dart';
+import 'package:sen_material_design/components/tool/popcap/rton/encode_and_encrypt.dart';
+import 'package:sen_material_design/components/tool/popcap/rton/encrypt.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/compress.dart';
 import 'package:sen_material_design/components/tool/popcap/zlib/uncompress.dart';
 import 'package:sen_material_design/components/tool/wwise/decode.dart';
@@ -46,11 +49,12 @@ Map<String, Widget> materialWidget = const {
   'popcap.animation.encode_from_json': PopCapAnimationConvertFromJson(),
   'popcap.resinfo.split_atlas': SplitWithResInfo(),
   'popcap.resinfo.merge_atlas': MergeWithResInfo(),
-  'popcap.pam.unpack': PopCapRSGUnpack(),
-  'popcap.pam.pack': PopCapRSGPack(),
   'popcap.rton.decode': PopCapRTONDecode(),
-  'popcap.rton.decrypt': PopCapRTONDecrypt(),
   'popcap.rton.encode': PopCapRTONEncode(),
+  'popcap.rton.decrypt': PopCapRTONDecrypt(),
+  'popcap.rton.encrypt': PopCapRTONEncrypt(),
   'wwise.soundbank.decode': WWiseSoundBankDecode(),
   'wwise.soundbank.encode': WWiseSoundBankEncode(),
+  'popcap.rton.decrypt_and_decode': PopCapRTONDecryptAndDecode(),
+  'popcap.rton.encode_and_encrypt': PopCapRTONEncodeAndEncrypt(),
 };
