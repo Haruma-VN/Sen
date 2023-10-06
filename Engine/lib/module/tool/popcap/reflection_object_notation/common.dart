@@ -8,18 +8,26 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:convert/convert.dart";
 
 class ReflectionObjectNotation {
-  SenBuffer decryptRTON(SenBuffer raw) {
+  SenBuffer decryptRTON(
+    SenBuffer raw,
+    String key,
+    String iv,
+  ) {
     return SenBuffer.fromBytes(
       Rijndael.decrypt(
         raw.getBytes(raw.length - 2, 2),
-        '65bd1b2305f46eb2806b935aab7630bb',
-        '1b2305f46eb2806b935aab76',
+        key,
+        iv,
         RijndaelMode.CBC,
       ),
     );
   }
 
-  SenBuffer encryptRTON(SenBuffer raw) {
+  SenBuffer encryptRTON(
+    SenBuffer raw,
+    String key,
+    String iv,
+  ) {
     return SenBuffer.fromBytes(
       Rijndael.encrypt(
         raw.toBytes(),
@@ -36,12 +44,19 @@ class ReflectionObjectNotation {
   var propertyName = "";
   var tempString = "";
   // Decode
-  dynamic decodeRTON(SenBuffer senFile, bool decrypt) {
+  dynamic decodeRTON(
+    SenBuffer senFile,
+    bool decrypt,
+  ) {
     r0x90List.clear();
     r0x92List.clear();
     jsonFile = {};
     if (decrypt) {
-      senFile = decryptRTON(senFile);
+      senFile = decryptRTON(
+        senFile,
+        '65bd1b2305f46eb2806b935aab7630bb',
+        '1b2305f46eb2806b935aab76',
+      );
     }
     final magic = senFile.readString(4);
     if (magic != "RTON") {
@@ -258,6 +273,7 @@ class ReflectionObjectNotation {
   final r0x92Object = <String, int>{};
   var r0x90Index = 0;
   var r0x92Index = 0;
+
   SenBuffer encodeRTON(dynamic jsonFile, bool encrypt) {
     r0x90Object.clear();
     r0x92Object.clear();
@@ -266,7 +282,15 @@ class ReflectionObjectNotation {
     senFile.writeUInt32LE(0x01);
     writeObject(senFile, jsonFile);
     senFile.writeString("DONE");
-    return senFile;
+    if (!encrypt) {
+      return senFile;
+    } else {
+      return encryptRTON(
+        senFile,
+        '65bd1b2305f46eb2806b935aab7630bb',
+        '1b2305f46eb2806b935aab76',
+      );
+    }
   }
 
   void writeObject(SenBuffer senFile, Map<String, dynamic> jsonFile) {
@@ -505,10 +529,35 @@ class ReflectionObjectNotation {
   static void decrypt_fs(
     String inFile,
     String outFile,
+    RijndaelC rijndael,
   ) {
     var rton = ReflectionObjectNotation();
-    SenBuffer plain = rton.decryptRTON(SenBuffer.OpenFile(inFile));
+    SenBuffer plain = rton.decryptRTON(
+      SenBuffer.OpenFile(inFile),
+      rijndael.key,
+      rijndael.iv,
+    );
     plain.outFile(outFile);
     return;
   }
+
+  // ignore: non_constant_identifier_names
+  static void encrypt_fs(
+    String inFile,
+    String outFile,
+    RijndaelC rijndael,
+  ) {
+    var rton = ReflectionObjectNotation();
+    SenBuffer plain =
+        rton.decryptRTON(SenBuffer.OpenFile(inFile), rijndael.key, rijndael.iv);
+    plain.outFile(outFile);
+    return;
+  }
+}
+
+class RijndaelC {
+  late String key;
+  late String iv;
+  RijndaelC();
+  RijndaelC.has(this.key, this.iv);
 }

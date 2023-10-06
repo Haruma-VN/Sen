@@ -6,14 +6,14 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 
-class PopCapRTONDecrypt extends StatefulWidget {
-  const PopCapRTONDecrypt({super.key});
+class PopCapRTONEncrypt extends StatefulWidget {
+  const PopCapRTONEncrypt({super.key});
 
   @override
-  State<PopCapRTONDecrypt> createState() => _PopCapRTONDecryptState();
+  State<PopCapRTONEncrypt> createState() => _PopCapRTONEncryptState();
 }
 
-class _PopCapRTONDecryptState extends State<PopCapRTONDecrypt> {
+class _PopCapRTONEncryptState extends State<PopCapRTONEncrypt> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -58,7 +58,7 @@ class _PopCapRTONDecryptState extends State<PopCapRTONDecrypt> {
                   child: Align(
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
-                      AppLocalizations.of(context)!.popcap_rton_decrypt,
+                      AppLocalizations.of(context)!.popcap_rton_encrypt,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -93,7 +93,7 @@ class _PopCapRTONDecryptState extends State<PopCapRTONDecrypt> {
                             if (path != null) {
                               controllerInput.text = path;
                               controllerOutput.text =
-                                  '${p.withoutExtension(path)}.plain.rton';
+                                  '${p.withoutExtension(path)}.crypt.rton';
                               setState(() {
                                 allowExecute = true;
                               });
@@ -149,7 +149,7 @@ class _PopCapRTONDecryptState extends State<PopCapRTONDecrypt> {
                           ? () async {
                               final DateTime startTime = DateTime.now();
                               try {
-                                ReflectionObjectNotation.decrypt_fs(
+                                ReflectionObjectNotation.encrypt_fs(
                                   controllerInput.text,
                                   controllerOutput.text,
                                   RijndaelC.has(
