@@ -411,12 +411,12 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
             uint PAM_magic = PamFile.readUInt32LE();
             if (PAM_magic != Magic.MagicNumber)
             {
-                throw new PAMException("invalid_pam_magic", PamFile.filePath ?? "undefined", path);
+                throw new PAMException("invalid_pam_magic", PamFile.filePath ?? PAM_magic.ToString(), path);
             }
             int version = PamFile.readInt32LE();
             if (version > 6 || version < 1)
             {
-                throw new PAMException("pam_version_out_of_range", PamFile.filePath ?? "undefined", path);
+                throw new PAMException("pam_version_out_of_range", PamFile.filePath ?? version.ToString(), path);
             }
             int frame_rate = (int)PamFile.readUInt8();
             double[] position = new double[2];
@@ -621,7 +621,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
             PamBinary.writeInt32LE(version);
             if (version > 6 || version < 1)
             {
-                throw new PAMException("pam_version_out_of_range", "undefined", inFile);
+                throw new PAMException("pam_version_out_of_range", version.ToString(), inFile);
             }
             PamBinary.writeUInt8((byte)(AnimationJson.frame_rate));
             if (AnimationJson.position is null || AnimationJson.position.Length < 2)
@@ -1584,7 +1584,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                         var x_script_text = x_script.FirstNode;
                         if (x_script_text!.NodeType != XmlNodeType.CDATA)
                         {
-                            throw new PAMException("invalid_script_cdata", "undefined", main_path);
+                            throw new PAMException("invalid_script_cdata", x_script_text!.NodeType.ToString(), main_path);
                         }
                         if (((XCData)x_script_text).Value.Trim() != "stop();")
                         {
@@ -1632,12 +1632,12 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                         var x_script_text = x_script.FirstNode;
                         if (x_script_text!.NodeType != XmlNodeType.CDATA)
                         {
-                            throw new PAMException("invalid_domframe_cdata", "undefined", main_path);
+                            throw new PAMException("invalid_domframe_cdata", x_script_text!.NodeType.ToString(), main_path);
                         }
                         var command_string = ((XCData)x_script_text).Value.Trim().Split("\n");
                         foreach (var e in command_string)
                         {
-                            var regex_result = MyRegex1().Matches(e.Trim()).FirstOrDefault() ?? throw new PAMException("invalid_command_string", "undefined", main_path);
+                            var regex_result = MyRegex1().Matches(e.Trim()).FirstOrDefault() ?? throw new PAMException("invalid_command_string", e, main_path);
                             main_sprite_frame[frame_index].command!.Add(new string[2] { regex_result.Groups[1].Value, regex_result.Groups[2].Value });
                         }
                     });
@@ -1800,7 +1800,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                     var name_match = MyRegex().Matches((string)x_DOMSymbolInstance.Attribute("libraryItemName")!).FirstOrDefault() ?? throw new PAMException($"{Localization.GetString("invalid_dom_symbol_instance")}: {Localization.GetString("must_call_sprite_or_image")}", "undefined", sprite_path);
                     if (name_match.Groups[1].Value != name_match.Groups[2].Value)
                     {
-                        throw new PAMException("invalid_sprite_dom_symbol_instance_x", "undefined", sprite_path);
+                        throw new PAMException("invalid_sprite_dom_symbol_instance_x", $"{name_match.Groups[1].Value} != ${name_match.Groups[2].Value}", sprite_path);
                     }
                     FrameInfo.AddsInfo current_instance = new()
                     {
@@ -1877,7 +1877,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                     {
                         if (current_instance.resource != model.resource || current_instance.sprite != model.sprite)
                         {
-                            throw new PAMException("invalid_sprite_dom_resource", "undefined", sprite_path);
+                            throw new PAMException("invalid_sprite_dom_resource", "current_instance.resource != model.resource || current_instance.sprite != model.sprite", sprite_path);
                         }
                     }
                     model.frame_start = frame_index;
