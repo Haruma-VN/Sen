@@ -5,7 +5,9 @@ import 'package:sen_material_design/components/tool/popcap/atlas/split.dart';
 import 'package:sen_material_design/components/tool/popcap/atlas/split_with_resinfo.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/encode.dart';
+import 'package:sen_material_design/components/tool/popcap/pam/from_flash.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/from_json.dart';
+import 'package:sen_material_design/components/tool/popcap/pam/to_flash.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/to_json.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/merge.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/split.dart';
@@ -57,4 +59,6 @@ Map<String, Widget> materialWidget = const {
   'wwise.soundbank.encode': WWiseSoundBankEncode(),
   'popcap.rton.decrypt_and_decode': PopCapRTONDecryptAndDecode(),
   'popcap.rton.encode_and_encrypt': PopCapRTONEncodeAndEncrypt(),
+  'popcap.animation.pam_to_flash': PopCapAnimationConvertToFlash(),
+  'popcap.animation.pam_from_flash': PopCapAnimationConvertFromFlash(),
 };

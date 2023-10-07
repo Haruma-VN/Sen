@@ -3,9 +3,11 @@
 import "dart:io";
 import "dart:math";
 import "package:path/path.dart" as path;
+import "package:sen_material_design/module/utility/buffer/common.dart";
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:xml/xpath.dart';
 import "package:xml/xml.dart";
+import 'package:sen_material_design/module/tool/popcap/popcap_animation/common.dart';
 
 class PopCapReAnimation {
   final xmlnsAttribute = {
@@ -16,6 +18,53 @@ class PopCapReAnimation {
   final initialTransform = <double>[1, 0, 0, 1, 0, 0];
 
   final initialColor = <double>[1, 1, 1, 1];
+
+  static void jsonToFlash(
+    String inFile,
+    String outFolder,
+    int resolution,
+  ) {
+    final PopCapReAnimation mWrapper = PopCapReAnimation();
+    mWrapper.convertToFlash(FileSystem.readJson(inFile), outFolder, resolution);
+    return;
+  }
+
+  static void pamToFlash(
+    String inFile,
+    String outFolder,
+    int resolution,
+  ) {
+    final PopCapReAnimation mWrapper = PopCapReAnimation();
+    final PopCapAnimation mAnim = PopCapAnimation();
+    mWrapper.convertToFlash(
+      mAnim.decodeAnimation(SenBuffer.OpenFile(inFile)),
+      outFolder,
+      resolution,
+    );
+    return;
+  }
+
+  static void flashToJson(
+    String inDirectory,
+    String outFile,
+  ) {
+    final PopCapReAnimation mWrapper = PopCapReAnimation();
+    final pamJson = mWrapper.convertFromFlash(inDirectory);
+    FileSystem.writeJson(outFile, pamJson, '\t');
+    return;
+  }
+
+  static void flashToPam(
+    String inDirectory,
+    String outFile,
+  ) {
+    final PopCapReAnimation mWrapper = PopCapReAnimation();
+    final PopCapAnimation mAnim = PopCapAnimation();
+    final pamJson = mWrapper.convertFromFlash(inDirectory);
+    final SenBuffer ripe = mAnim.encodeAnimation(pamJson);
+    ripe.outFile(outFile);
+    return;
+  }
 
   void convertToFlash(dynamic jsonFile, String outFolder, int resolution) {
     final imageList = jsonFile["image"];
