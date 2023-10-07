@@ -7,6 +7,8 @@ import 'package:sen_material_design/components/tool/popcap/newton/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/newton/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/from_flash.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/from_json.dart';
+import 'package:sen_material_design/components/tool/popcap/pam/json_from_flash.dart';
+import 'package:sen_material_design/components/tool/popcap/pam/json_to_flash.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/to_flash.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/to_json.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/merge.dart';
@@ -61,4 +63,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.rton.encode_and_encrypt': PopCapRTONEncodeAndEncrypt(),
   'popcap.animation.pam_to_flash': PopCapAnimationConvertToFlash(),
   'popcap.animation.pam_from_flash': PopCapAnimationConvertFromFlash(),
+  'popcap.animation.json_to_flash': PopCapAnimationJsonConvertToFlash(),
+  'popcap.animation.json_from_flash': PopCapAnimationJsonConvertFromFlash(),
 };

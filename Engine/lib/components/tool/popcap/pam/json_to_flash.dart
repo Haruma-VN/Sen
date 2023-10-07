@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/module/tool/popcap/popcap_animation/common.dart';
+import 'package:sen_material_design/module/tool/popcap/popcap_re_animation/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 
-class PopCapAnimationConvertFromJson extends StatefulWidget {
-  const PopCapAnimationConvertFromJson({super.key});
+class PopCapAnimationJsonConvertToFlash extends StatefulWidget {
+  const PopCapAnimationJsonConvertToFlash({super.key});
 
   @override
-  State<PopCapAnimationConvertFromJson> createState() =>
-      _PopCapAnimationConvertFromJsonState();
+  State<PopCapAnimationJsonConvertToFlash> createState() =>
+      _PopCapAnimationJsonConvertToFlashState();
 }
 
-class _PopCapAnimationConvertFromJsonState
-    extends State<PopCapAnimationConvertFromJson> {
+class _PopCapAnimationJsonConvertToFlashState
+    extends State<PopCapAnimationJsonConvertToFlash> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -36,6 +36,10 @@ class _PopCapAnimationConvertFromJsonState
     controllerOutput.dispose();
     super.dispose();
   }
+
+  String view = '1536';
+
+  List<String> available = ['1536', '768', '384', '1200', '640'];
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +65,7 @@ class _PopCapAnimationConvertFromJsonState
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
                       AppLocalizations.of(context)!
-                          .popcap_animation_encode_from_json,
+                          .popcap_animation_json_to_flash,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -96,7 +100,7 @@ class _PopCapAnimationConvertFromJsonState
                             if (path != null) {
                               controllerInput.text = path;
                               controllerOutput.text =
-                                  '${p.withoutExtension(path)}.json';
+                                  '${p.withoutExtension(path)}.xfl';
                               setState(() {
                                 allowExecute = true;
                               });
@@ -143,6 +147,91 @@ class _PopCapAnimationConvertFromJsonState
                     ),
                   ),
                 ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  margin: const EdgeInsets.all(8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          leading: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.question_mark_outlined,
+                                size: theme.iconTheme.size,
+                                color: Colors.cyan,
+                              ),
+                            ],
+                          ),
+                          title: Text(
+                            AppLocalizations.of(context)!.execution_argument(
+                              AppLocalizations.of(context)!
+                                  .using_popcap_resource_path,
+                            ),
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: Colors.cyan),
+                          ),
+                          subtitle: Text(
+                            AppLocalizations.of(context)!
+                                .using_popcap_resource_path_subtitle,
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          margin: const EdgeInsets.all(8.0),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: view,
+                            focusColor: Colors.transparent,
+                            underline: Container(),
+                            items: available
+                                .map(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.data_array_outlined,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                e,
+                                              ),
+                                              Text(
+                                                e,
+                                                style:
+                                                    theme.textTheme.bodySmall!,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        view = e;
+                                      });
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: Padding(
@@ -152,9 +241,10 @@ class _PopCapAnimationConvertFromJsonState
                           ? () async {
                               final DateTime startTime = DateTime.now();
                               try {
-                                PopCapAnimation.fromJson(
+                                PopCapReAnimation.pamToFlash(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  int.parse(view),
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

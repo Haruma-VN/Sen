@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/module/tool/popcap/popcap_animation/common.dart';
+import 'package:sen_material_design/module/tool/popcap/popcap_re_animation/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 
-class PopCapAnimationConvertFromJson extends StatefulWidget {
-  const PopCapAnimationConvertFromJson({super.key});
+class PopCapAnimationJsonConvertFromFlash extends StatefulWidget {
+  const PopCapAnimationJsonConvertFromFlash({super.key});
 
   @override
-  State<PopCapAnimationConvertFromJson> createState() =>
-      _PopCapAnimationConvertFromJsonState();
+  State<PopCapAnimationJsonConvertFromFlash> createState() =>
+      _PopCapAnimationJsonConvertFromFlashState();
 }
 
-class _PopCapAnimationConvertFromJsonState
-    extends State<PopCapAnimationConvertFromJson> {
+class _PopCapAnimationJsonConvertFromFlashState
+    extends State<PopCapAnimationJsonConvertFromFlash> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
@@ -61,7 +61,7 @@ class _PopCapAnimationConvertFromJsonState
                     alignment: FractionalOffset.bottomLeft,
                     child: Text(
                       AppLocalizations.of(context)!
-                          .popcap_animation_encode_from_json,
+                          .popcap_animation_json_from_flash,
                       style: theme.textTheme.titleLarge,
                     ),
                   ),
@@ -95,8 +95,7 @@ class _PopCapAnimationConvertFromJsonState
                             final String? path = await FileSystem.pickFile();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text =
-                                  '${p.withoutExtension(path)}.json';
+                              controllerOutput.text = p.withoutExtension(path);
                               setState(() {
                                 allowExecute = true;
                               });
@@ -152,7 +151,7 @@ class _PopCapAnimationConvertFromJsonState
                           ? () async {
                               final DateTime startTime = DateTime.now();
                               try {
-                                PopCapAnimation.fromJson(
+                                PopCapReAnimation.flashToJson(
                                   controllerInput.text,
                                   controllerOutput.text,
                                 );

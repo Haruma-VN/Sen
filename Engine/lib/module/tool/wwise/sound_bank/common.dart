@@ -248,7 +248,10 @@ class WWiseSoundBank {
         highPassFilterPoint.add(createHexString(senFile.readBytes(12)));
       }
       return {
-        "volume": {"volume_value": volumeValue, "volume_point": volumePoint},
+        "volume": {
+          "volume_value": volumeValue,
+          "volume_point": volumePoint,
+        },
         "low_pass_filter": {
           "low_pass_filter_vaule": lowPassFilterValue,
           "low_pass_filter_point": lowPassFilterPoint,
@@ -297,7 +300,10 @@ class WWiseSoundBank {
         },
       );
     }
-    jsonFile["reference"] = {"data": dataList, "unknown_type": unknownType};
+    jsonFile["reference"] = {
+      "data": dataList,
+      "unknown_type": unknownType,
+    };
     return;
   }
 
