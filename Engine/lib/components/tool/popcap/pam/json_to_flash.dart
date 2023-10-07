@@ -170,14 +170,13 @@ class _PopCapAnimationJsonConvertToFlashState
                           title: Text(
                             AppLocalizations.of(context)!.execution_argument(
                               AppLocalizations.of(context)!
-                                  .using_popcap_resource_path,
+                                  .flash_animation_resize,
                             ),
                             style: theme.textTheme.titleMedium!
                                 .copyWith(color: Colors.cyan),
                           ),
                           subtitle: Text(
-                            AppLocalizations.of(context)!
-                                .using_popcap_resource_path_subtitle,
+                            AppLocalizations.of(context)!.originally_is_1200,
                             style: theme.textTheme.bodySmall,
                           ),
                         ),

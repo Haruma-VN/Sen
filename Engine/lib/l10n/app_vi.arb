@@ -166,5 +166,7 @@
     "most_popcap_games_using_non_64bit": "Most PopCap Games on Android using 32-bit variant",
     "true_val": "true",
     "false_val": "false",
-    "cannot_merge_with_oversized": "Cannot merge with oversized image"
+    "cannot_merge_with_oversized": "Cannot merge with oversized image",
+    "flash_animation_resize": "Flash Animation Resize",
+    "originally_is_1200": "Scale or Downscale to fits actual resolution"
 }

@@ -34,8 +34,10 @@ class ReflectionObjectNotation {
     SenBuffer raw,
     RijndaelC rijndael,
   ) {
+    print(raw.length);
     fillRijndaelBlock(raw);
-    var ripe = SenBuffer.fromBytes(Uint8List.fromList([0x80, 0x00]));
+    print(raw.length);
+    var ripe = SenBuffer.fromBytes(Uint8List.fromList([0x10, 0x00]));
     ripe.writeBytes(
       Rijndael.encrypt(
         raw.toBytes(),
@@ -573,8 +575,7 @@ class ReflectionObjectNotation {
     RijndaelC rijndael,
   ) {
     var rton = ReflectionObjectNotation();
-    SenBuffer plain =
-        rton.decryptRTON(SenBuffer.OpenFile(inFile), rijndael.key, rijndael.iv);
+    SenBuffer plain = rton.encryptRTON(SenBuffer.OpenFile(inFile), rijndael);
     plain.outFile(outFile);
     return;
   }
