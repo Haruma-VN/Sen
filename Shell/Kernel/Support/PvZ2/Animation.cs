@@ -1637,11 +1637,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
                         var command_string = ((XCData)x_script_text).Value.Trim().Split("\n");
                         foreach (var e in command_string)
                         {
-                            var regex_result = Regex.Matches(e.Trim(), "fscommand\\(\"(.*)\", \"(.*)\"\\);").First();
-                            if (regex_result is null)
-                            {
-                                throw new PAMException("invalid_command_string", "undefined", main_path);
-                            }
+                            var regex_result = MyRegex1().Matches(e.Trim()).FirstOrDefault() ?? throw new PAMException("invalid_command_string", "undefined", main_path);
                             main_sprite_frame[frame_index].command!.Add(new string[2] { regex_result.Groups[1].Value, regex_result.Groups[2].Value });
                         }
                     });
@@ -2159,6 +2155,8 @@ namespace Sen.Shell.Kernel.Support.PvZ2.PAM
 
         [GeneratedRegex("(image|sprite)/(image|sprite)_([0-9]+)")]
         private static partial Regex MyRegex();
+        [GeneratedRegex("fscommand\\(\"(.*)\", \"(.*)\"\\);")]
+        private static partial Regex MyRegex1();
     }
     public partial class AlphanumericStringComparer : IComparer<string>
     {

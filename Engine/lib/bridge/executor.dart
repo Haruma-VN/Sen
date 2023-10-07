@@ -377,7 +377,7 @@ typedef EncodeETC1FastDart = void Function(
   int,
 );
 
-final EncodeETC1FastDart EncodeETC1Fast = dylib
+final EncodeETC1FastDart CompressEtc1Rgb = dylib
     .lookup<NativeFunction<EncodeETC1FastC>>(
       'EncodeETC1Fast',
     )

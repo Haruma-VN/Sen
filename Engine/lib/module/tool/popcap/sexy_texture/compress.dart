@@ -23,18 +23,21 @@ class TextureCompress {
     }
     final sourceBlock = calloc<Uint32>(uintArray.length)
       ..asTypedList(uintArray.length).setAll(0, uintArray);
-    final destinationBLock = calloc<Uint64>(width * height ~/ 16);
-    EncodeETC1Fast(
+    final currentSize = width * height ~/ 16;
+    final destinationBLock = calloc<Uint64>(currentSize);
+    CompressEtc1Rgb(
       sourceBlock,
       destinationBLock,
-      (width * height ~/ 16),
+      (currentSize),
       width,
     );
-    final data = destinationBLock.asTypedList(destinationBLock.value);
+    final data = destinationBLock.asTypedList(currentSize);
     final imgFile = SenBuffer();
     for (var i = 0; i < data.length; i++) {
-      imgFile.writeBigUInt64BE(data[i]);
+      imgFile.writeBigUInt64LE(data[i]);
     }
+    calloc.free(sourceBlock);
+    calloc.free(destinationBLock);
     return imgFile;
   }
 
