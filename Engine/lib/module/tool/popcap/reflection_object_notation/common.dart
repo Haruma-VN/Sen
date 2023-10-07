@@ -23,10 +23,12 @@ class ReflectionObjectNotation {
     );
   }
 
-  void fillRijndaelBlock(SenBuffer raw) {
-    while (raw.length % 32 != 0x00) {
-      raw.writeNull(0x01);
-    }
+  static void fillRijndaelBlock(
+    SenBuffer raw,
+    SenBuffer iv,
+  ) {
+    final padding = iv.length - ((raw.length + iv.length - 1) % iv.length + 1);
+    raw.writeNull(padding);
     return;
   }
 
@@ -34,9 +36,10 @@ class ReflectionObjectNotation {
     SenBuffer raw,
     RijndaelC rijndael,
   ) {
-    print(raw.length);
-    fillRijndaelBlock(raw);
-    print(raw.length);
+    ReflectionObjectNotation.fillRijndaelBlock(
+      raw,
+      SenBuffer.fromBytes(Uint8List.fromList(rijndael.iv.codeUnits)),
+    );
     var ripe = SenBuffer.fromBytes(Uint8List.fromList([0x10, 0x00]));
     ripe.writeBytes(
       Rijndael.encrypt(

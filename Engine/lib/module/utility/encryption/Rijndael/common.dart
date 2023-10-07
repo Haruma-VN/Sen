@@ -58,7 +58,6 @@ class Rijndael {
     calloc.free(cipherPtr);
     calloc.free(keyPtr);
     calloc.free(ivPtr);
-    calloc.free(result);
     return Uint8List.fromList(
       resultData,
     );

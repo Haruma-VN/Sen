@@ -146,6 +146,8 @@ typedef char* CString;
 
 typedef wchar_t* UTF8String;
 
+typedef void (__stdcall *callback)(const char*);
+
 typedef std::exception Exception;
 
 #pragma endregion
@@ -179,3 +181,4 @@ inline auto m_abort(
 }
 
 #pragma endregion
+
