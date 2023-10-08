@@ -137,6 +137,22 @@ class _RootPageState extends State<RootPage> {
         centerTitle: false,
         elevation: 3,
         scrolledUnderElevation: 2,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              ApplicationInformation.hasSearch.value
+                  ? Icons.close_outlined
+                  : Icons.search_outlined,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                ApplicationInformation.hasSearch.value =
+                    !ApplicationInformation.hasSearch.value;
+              });
+            },
+          ),
+        ],
       ),
       body: pages[current_page],
       bottomNavigationBar: NavigationBarTheme(
