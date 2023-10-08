@@ -16,6 +16,7 @@ class PopCapRTONEncrypt extends StatefulWidget {
 class _PopCapRTONEncryptState extends State<PopCapRTONEncrypt> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
+  late TextEditingController controllerKeyInput;
 
   String text = '';
 
@@ -26,12 +27,16 @@ class _PopCapRTONEncryptState extends State<PopCapRTONEncrypt> {
     super.initState();
     controllerInput = TextEditingController();
     controllerOutput = TextEditingController();
+    controllerKeyInput = TextEditingController(
+      text: ApplicationInformation.encryptionKey.value,
+    );
   }
 
   @override
   void dispose() {
     controllerInput.dispose();
     controllerOutput.dispose();
+    controllerKeyInput.dispose();
     super.dispose();
   }
 
@@ -86,7 +91,7 @@ class _PopCapRTONEncryptState extends State<PopCapRTONEncrypt> {
                         ),
                         child: IconButton(
                           iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new),
+                          icon: const Icon(Icons.open_in_new_outlined),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
                             final String? path = await FileSystem.pickFile();
@@ -127,13 +132,47 @@ class _PopCapRTONEncryptState extends State<PopCapRTONEncrypt> {
                         ),
                         child: IconButton(
                           iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new),
+                          icon: const Icon(Icons.open_in_new_outlined),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
                             final String? path = await FileSystem.pickFile();
                             if (path != null) {
                               controllerOutput.text = path;
                             }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  margin: const EdgeInsets.all(10.0),
+                  child: TextField(
+                    controller: controllerKeyInput,
+                    textAlign: TextAlign.center,
+                    onChanged: (String encryptionKey) {
+                      controllerKeyInput.text = encryptionKey;
+                    },
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
+                        ), // Rounded border
+                      ),
+                      labelText: AppLocalizations.of(context)!.encryption_key,
+                      alignLabelWithHint: true,
+                      suffixIcon: Container(
+                        margin: const EdgeInsets.only(
+                          right: 10.0,
+                        ),
+                        child: IconButton(
+                          iconSize: 30.0,
+                          icon: const Icon(Icons.key_outlined),
+                          tooltip: AppLocalizations.of(context)!.encryption_key,
+                          onPressed: () {
+                            controllerKeyInput.text =
+                                ApplicationInformation.encryptionKey.value;
                           },
                         ),
                       ),
@@ -153,8 +192,8 @@ class _PopCapRTONEncryptState extends State<PopCapRTONEncrypt> {
                                   controllerInput.text,
                                   controllerOutput.text,
                                   RijndaelC.has(
-                                    '65bd1b2305f46eb2806b935aab7630bb',
-                                    '1b2305f46eb2806b935aab76',
+                                    controllerKeyInput.text,
+                                    controllerKeyInput.text.substring(4, 28),
                                   ),
                                 );
                                 final DateTime endTime = DateTime.now();

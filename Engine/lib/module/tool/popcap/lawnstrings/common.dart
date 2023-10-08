@@ -103,4 +103,63 @@ class Lawnstring {
     }
     return dict;
   }
+
+  dynamic textToJsonText(
+    String text,
+  ) {
+    final dynamic jsonText = {
+      'version': 1,
+      'objects': [
+        {
+          'aliases': ["LawnStringsData"],
+          'objclass': "LawnStringsData",
+          'objdata': {
+            'LocStringValues': extractFromText(text),
+          },
+        },
+      ],
+    };
+    return jsonText;
+  }
+
+  String jsonMapToText(
+    dynamic information,
+  ) {
+    var text = '';
+    final keys =
+        information['objects'][0]['objdata']['LocStringValues'].keys().toList();
+    for (var key in keys) {
+      text = '$text[$key]';
+      text = '$text\n';
+      text =
+          '$text${information['objects'][0]['objdata']['LocStringValues'][key].replaceAll(RegExp(r'\r'), '')}';
+      text = '$text\n';
+      text = '$text\n';
+    }
+    return text;
+  }
+
+  String jsonTextToText(
+    dynamic information,
+  ) {
+    var text = '';
+    for (var i = 0;
+        i < information['objects'][0]['objdata']['LocStringValues'].length;
+        ++i) {
+      text =
+          '$text[${information['objects'][0]['objdata']['LocStringValues'][i]}]';
+      text = '$text\n';
+      text =
+          '$text${information['objects'][0]['objdata']['LocStringValues'][i + 1].replaceAll(RegExp(r'\r'), '')}';
+      text = '$text\n';
+      text = '$text\n';
+      i++;
+    }
+    return text;
+  }
+
+  dynamic jsonTextToJsonMap(dynamic jsonText) {
+    var jsonMap = {};
+    return jsonMap;
+  }
 }

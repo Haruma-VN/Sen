@@ -546,12 +546,12 @@ class ReflectionObjectNotation {
     RijndaelC? rijndael,
   ) {
     var rton = ReflectionObjectNotation();
-    dynamic json = rton.encodeRTON(
+    SenBuffer ripe = rton.encodeRTON(
       FileSystem.readJson(inFile),
       encrypt,
       rijndael,
     );
-    FileSystem.writeJson(outFile, json, '\t');
+    ripe.outFile(outFile);
     return;
   }
 

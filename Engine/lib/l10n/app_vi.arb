@@ -168,5 +168,6 @@
     "false_val": "false",
     "cannot_merge_with_oversized": "Cannot merge with oversized image",
     "flash_animation_resize": "Flash Animation Resize",
-    "originally_is_1200": "Scale or Downscale to fits actual resolution"
+    "originally_is_1200": "Scale or Downscale to fits actual resolution",
+    "encryption_key": "Encryption Key"
 }

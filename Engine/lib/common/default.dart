@@ -10,4 +10,6 @@ class ApplicationInformation {
   static ValueNotifier<bool> storagePermission =
       ValueNotifier(!Platform.isAndroid);
   static ValueNotifier<bool> allowNotification = ValueNotifier(true);
+  static ValueNotifier<String> encryptionKey =
+      ValueNotifier('65bd1b2305f46eb2806b935aab7630bb');
 }

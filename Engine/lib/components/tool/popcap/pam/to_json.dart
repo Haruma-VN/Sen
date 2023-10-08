@@ -88,7 +88,7 @@ class _PopCapAnimationConvertToJsonState
                         ),
                         child: IconButton(
                           iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new),
+                          icon: const Icon(Icons.open_in_new_outlined),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
                             final String? path = await FileSystem.pickFile();
@@ -128,7 +128,7 @@ class _PopCapAnimationConvertToJsonState
                         ),
                         child: IconButton(
                           iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new),
+                          icon: const Icon(Icons.open_in_new_outlined),
                           tooltip: AppLocalizations.of(context)!.browse,
                           onPressed: () async {
                             final String? path = await FileSystem.pickFile();

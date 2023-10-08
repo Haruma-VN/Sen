@@ -375,7 +375,7 @@ class _SettingState extends State<Setting> {
                     trailing: SizedBox(
                       child: Platform.isAndroid
                           ? Icon(
-                              Icons.open_in_new,
+                              Icons.open_in_new_outlined,
                               size: theme.iconTheme.size,
                             )
                           : null,
