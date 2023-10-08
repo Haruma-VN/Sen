@@ -1,7 +1,11 @@
 {
   "profiles": {
     "Sen": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "remoteDebugEnabled": true,
+      "nativeDebugging": true,
+      "sqlDebugging": false,
+      "jsWebView2Debugging": false
     }
   }
 }

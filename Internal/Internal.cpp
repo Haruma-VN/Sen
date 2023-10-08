@@ -11,8 +11,6 @@ UnsignedByteStream ZlibCompress(
     Integer level, 
     ArraySize& compressedSize
 ) {
-    try
-    {
         auto destSize = compressBound(dataSize);
         auto compressedData = new unsigned char[destSize];
         auto result = compress2(compressedData, &destSize, data, dataSize, level);
@@ -22,12 +20,6 @@ UnsignedByteStream ZlibCompress(
         }
         compressedSize = destSize;
         return compressedData;
-    }
-    catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX &e)
-    {
-        log(e.what());
-        throw 0;
-    }
 }
 
 InternalAPI
