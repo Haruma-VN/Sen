@@ -834,7 +834,7 @@ void DecodeETC1(
         for (auto x = 0; x < width; x += 4) {
             auto block_part1 = view->readUint32LE();
             auto block_part2 = view->readUint32LE();
-            auto image_color = new uint8_t(16);
+            auto image_color = new uint8_t[16];
             decompressBlockETC2c(
                 static_cast<unsigned int>(block_part1),
                 static_cast<unsigned int>(block_part2),
