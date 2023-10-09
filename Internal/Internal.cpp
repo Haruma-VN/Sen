@@ -817,3 +817,46 @@ void EncodeRGBAPVRTC4BPP(
 }
 
 #pragma endregion
+
+#pragma region ETCPACK
+
+InternalAPI
+void DecodeETC1(
+    char* data,
+    size_t size,
+    char* result,
+    int width,
+    int height
+) {
+    auto image_block = new uint8_t(width * height);
+    auto view = new Buffer((uint8_t*)data, size);
+    for (auto y = 0; y < height; y += 4) {
+        for (auto x = 0; x < width; x += 4) {
+            auto block_part1 = view->readUint32LE();
+            auto block_part2 = view->readUint32LE();
+            auto image_color = new uint8_t(16);
+            decompressBlockETC2c(
+                static_cast<unsigned int>(block_part1),
+                static_cast<unsigned int>(block_part2),
+                image_color,
+                static_cast<int>(width),
+                static_cast<int>(width),
+                static_cast<int>(0),
+                static_cast<int>(0),
+                4
+            );
+            for (auto i = 0; i < 4; ++i) {
+                for (auto j = 0; j < 4; ++j) {
+                    if ((y + i) < height && (x + j) < width) {
+                        image_block[(y + i) * width + x + j] = image_color[(i << 2) | j];
+                    }
+                }
+            }
+            delete[] image_color;
+        }
+    }
+    result = (char*)image_block;
+    return;
+}
+
+#pragma endregion

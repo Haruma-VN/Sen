@@ -56,6 +56,7 @@ inline constexpr auto MInternalVersion = 8;
 #include "../../dependencies/PVRTCCompressor/RgbBitmap.h"
 #include "../../dependencies/PVRTCCompressor/RgbaBitmap.h"
 #include "../../dependencies/md5/md5.h"
+#include "../../dependencies/ETCPACK/etcdec.cxx"
 
 
 #include "kernel/utility/utility.hpp"
