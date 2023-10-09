@@ -822,41 +822,38 @@ void EncodeRGBAPVRTC4BPP(
 
 InternalAPI
 void DecodeETC1(
-    char* data,
+    uint8_t* data,
     size_t size,
-    char* result,
+    uint8_t*& result,
     int width,
     int height
 ) {
-    auto image_block = new uint8_t(width * height);
-    auto view = new Buffer((uint8_t*)data, size);
-    for (auto y = 0; y < height; y += 4) {
-        for (auto x = 0; x < width; x += 4) {
-            auto block_part1 = view->readUint32LE();
-            auto block_part2 = view->readUint32LE();
-            auto image_color = new uint8_t[16];
+    auto image_block = new uint8_t[width * height]; 
+    auto view = new Buffer(data, size);
+    auto k_block_width = 4;
+    for (auto block_y = 0; block_y < height; block_y += k_block_width) {
+        for (auto block_x = 0; block_x < width; block_x += k_block_width) {
+            auto block_part1 = view->reverseEndian(view->readUint32LE());
+            auto block_part2 = view->reverseEndian(view->readUint32LE());
             decompressBlockETC2c(
-                static_cast<unsigned int>(block_part1),
-                static_cast<unsigned int>(block_part2),
-                image_color,
-                static_cast<int>(width),
-                static_cast<int>(width),
-                static_cast<int>(0),
-                static_cast<int>(0),
+                block_part1,
+                block_part2,
+                image_block,
+                static_cast<int>(k_block_width),
+                static_cast<int>(k_block_width),
+                0,
+                0,
                 4
             );
-            for (auto i = 0; i < 4; ++i) {
-                for (auto j = 0; j < 4; ++j) {
-                    if ((y + i) < height && (x + j) < width) {
-                        image_block[(y + i) * width + x + j] = image_color[(i << 2) | j];
-                    }
+            for (auto pixel_y = 0; pixel_y < k_block_width; ++pixel_y) {
+                for (auto pixel_x = 0; pixel_x < k_block_width; ++pixel_x) {
                 }
             }
-            delete[] image_color;
         }
     }
-    result = (char*)image_block;
-    return;
+    result = image_block;
 }
+
+
 
 #pragma endregion

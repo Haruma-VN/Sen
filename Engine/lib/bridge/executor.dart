@@ -450,3 +450,25 @@ final RijndaelEncryptDart RijndaelEncrypt = dylib
       'RijndaelEncrypt',
     )
     .asFunction();
+
+typedef DecodeETC1C = Void Function(
+  Pointer<Uint8> data,
+  Uint64 size,
+  Pointer<Uint8> result,
+  Int32 width,
+  Int32 height,
+);
+
+typedef DecodeETC1Dart = void Function(
+  Pointer<Uint8> data,
+  int size,
+  Pointer<Uint8> result,
+  int width,
+  int height,
+);
+
+final DecodeETC1Dart DecodeETC1Block = dylib
+    .lookup<NativeFunction<DecodeETC1C>>(
+      'DecodeETC1',
+    )
+    .asFunction();
