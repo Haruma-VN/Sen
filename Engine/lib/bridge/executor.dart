@@ -451,18 +451,16 @@ final RijndaelEncryptDart RijndaelEncrypt = dylib
     )
     .asFunction();
 
-typedef DecodeETC1C = Void Function(
+typedef DecodeETC1C = Pointer<Uint8> Function(
   Pointer<Uint8> data,
   Uint64 size,
-  Pointer<Uint8> result,
   Int32 width,
   Int32 height,
 );
 
-typedef DecodeETC1Dart = void Function(
+typedef DecodeETC1Dart = Pointer<Uint8> Function(
   Pointer<Uint8> data,
   int size,
-  Pointer<Uint8> result,
   int width,
   int height,
 );

@@ -821,37 +821,42 @@ void EncodeRGBAPVRTC4BPP(
 #pragma region ETCPACK
 
 InternalAPI
-void DecodeETC1(
-    uint8_t* data,
+unsigned char* DecodeETC1(
+    unsigned char* data,
     size_t size,
-    uint8_t*& result,
     int width,
     int height
-) {
-    auto image_block = new uint8_t[width * height]; 
-    auto view = new Buffer(data, size);
-    auto k_block_width = 4;
+) 
+{
+    auto image_block = new unsigned char[width * height * 4];
+    auto view = new Buffer((uint8_t*)data, size);
+    auto constexpr k_block_width = 4;
     for (auto block_y = 0; block_y < height; block_y += k_block_width) {
         for (auto block_x = 0; block_x < width; block_x += k_block_width) {
             auto block_part1 = view->reverseEndian(view->readUint32LE());
             auto block_part2 = view->reverseEndian(view->readUint32LE());
+            auto image_color = new uint8_t[64];
             decompressBlockETC2c(
-                block_part1,
-                block_part2,
-                image_block,
+                static_cast<unsigned int>(block_part1),
+                static_cast<unsigned int>(block_part2),
+                image_color,
                 static_cast<int>(k_block_width),
                 static_cast<int>(k_block_width),
                 0,
                 0,
                 4
             );
-            for (auto pixel_y = 0; pixel_y < k_block_width; ++pixel_y) {
-                for (auto pixel_x = 0; pixel_x < k_block_width; ++pixel_x) {
+            for (auto pixel_y = 0; pixel_y < k_block_width; pixel_y++) {
+                for (auto pixel_x = 0; pixel_x < k_block_width; pixel_x++) {
+                    for (auto i = 0; i < 4; ++i) {
+                        image_block[((block_y + pixel_y) * width + block_x + pixel_x) * 4 + i] = image_color[((pixel_y << 2) | pixel_x) * 4 + i];
+                    }
                 }
             }
         }
     }
-    result = image_block;
+    delete view;
+    return image_block;
 }
 
 

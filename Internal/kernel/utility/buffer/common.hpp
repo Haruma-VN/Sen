@@ -72,6 +72,14 @@ class Buffer {
             return;
         }
 
+        inline auto begin(
+
+        ) -> std::vector<std::uint8_t>::iterator
+        {
+            return this->data.begin();
+        }
+
+
         inline auto get
         (
 
@@ -407,6 +415,19 @@ class Buffer {
                 this->writeInt8((int)c);
             }
             return;
+        }
+
+        inline auto getBytes(
+            size_t from,
+            size_t to
+
+        ) -> uint8_t*
+        {
+            auto c = std::vector<uint8_t>{};
+            for (auto i = from; i <= to; i++) {
+                c.push_back(this->data.at(i));
+            }
+            return c.data();
         }
 
         inline auto writeBoolean
