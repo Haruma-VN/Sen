@@ -4,6 +4,7 @@ using namespace Sen::Internal::Kernel::Tool::Algorithm;
 
 #pragma region zlib
 
+
 InternalAPI
 UnsignedByteStream ZlibCompress(
     const UnsignedByteStream data,
@@ -21,6 +22,7 @@ UnsignedByteStream ZlibCompress(
         compressedSize = destSize;
         return compressedData;
 }
+
 
 InternalAPI
 Void ZlibUncompress(
