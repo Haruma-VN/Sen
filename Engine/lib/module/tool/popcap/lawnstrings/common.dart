@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 enum RawOption {
   oldInt,
   chinese,
@@ -122,6 +124,28 @@ class Lawnstring {
     return jsonText;
   }
 
+  dynamic textToJsonMap(String text) {
+    final dynamic jsonMap = {
+      'version': 1,
+      'objects': [
+        {
+          'aliases': ["LawnStringsData"],
+          'objclass': "LawnStringsData",
+          'objdata': {
+            'LocStringValues': {},
+          },
+        },
+      ],
+    };
+    List<String> data = extractFromText(text);
+    for (var i = 0; i < data.length; ++i) {
+      jsonMap['objects'][0]['objdata']['LocStringValues'][data[i]] =
+          data[i + 1];
+      ++i;
+    }
+    return jsonMap;
+  }
+
   String jsonMapToText(
     dynamic information,
   ) {
@@ -159,7 +183,51 @@ class Lawnstring {
   }
 
   dynamic jsonTextToJsonMap(dynamic jsonText) {
-    var jsonMap = {};
+    testJsonText(jsonText);
+    dynamic jsonMap = {
+      'version': 1,
+      'objects': [
+        {
+          'aliases': ["LawnStringsData"],
+          'objclass': "LawnStringsData",
+          'objdata': {
+            'LocStringValues': {},
+          },
+        },
+      ],
+    };
+    for (var i = 0;
+        i < jsonText['objects'][0]['objdata']['LocStringValues'].length;
+        ++i) {
+      jsonMap['objects'][0]['objdata']['LocStringValues']
+              [jsonText['objects'][0]['objdata']['LocStringValues'][i]] =
+          jsonText['objects'][0]['objdata']['LocStringValues'][i + 1];
+      i++;
+    }
     return jsonMap;
+  }
+
+  dynamic jsonMapToJsonText(dynamic jsonMap) {
+    dynamic jsonText = {
+      'version': 1,
+      'objects': [
+        {
+          'aliases': ["LawnStringsData"],
+          'objclass': "LawnStringsData",
+          'objdata': {
+            'LocStringValues': [],
+          },
+        },
+      ],
+    };
+    final keys =
+        jsonMap['objects'][0]['objdata']['LocStringValues'].keys.toList();
+    final values =
+        jsonMap['objects'][0]['objdata']['LocStringValues'].values.toList();
+    for (var i = 0; i < keys.length; ++i) {
+      jsonText['objects'][0]['objdata']['LocStringValues'].add(keys[i]);
+      jsonText['objects'][0]['objdata']['LocStringValues'].add(values[i]);
+    }
+    return jsonText;
   }
 }
