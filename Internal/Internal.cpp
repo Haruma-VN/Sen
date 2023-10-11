@@ -831,24 +831,26 @@ unsigned char* DecodeETC1(
     auto image_block = new unsigned char[width * height * 4];
     auto view = new Buffer((uint8_t*)data, size);
     auto constexpr k_block_width = 4;
+    auto constexpr k_start_index = 0;
+    auto constexpr k_color_size = 64;
+    auto image_color = new uint8_t[k_block_width * k_block_width];
     for (auto block_y = 0; block_y < height; block_y += k_block_width) {
         for (auto block_x = 0; block_x < width; block_x += k_block_width) {
             auto block_part1 = view->reverseEndian(view->readUint32LE());
             auto block_part2 = view->reverseEndian(view->readUint32LE());
-            auto image_color = new uint8_t[64];
             decompressBlockETC2c(
                 static_cast<unsigned int>(block_part1),
                 static_cast<unsigned int>(block_part2),
-                image_color,
+                static_cast<uint8*>(image_color),
                 static_cast<int>(k_block_width),
                 static_cast<int>(k_block_width),
-                0,
-                0,
+                static_cast<int>(k_start_index),
+                static_cast<int>(k_start_index),
                 4
             );
             for (auto pixel_y = 0; pixel_y < k_block_width; pixel_y++) {
                 for (auto pixel_x = 0; pixel_x < k_block_width; pixel_x++) {
-                    for (auto i = 0; i < 4; ++i) {
+                    for (auto i = 0; i < 5; ++i) {
                         image_block[((block_y + pixel_y) * width + block_x + pixel_x) * 4 + i] = image_color[((pixel_y << 2) | pixel_x) * 4 + i];
                     }
                 }
@@ -856,6 +858,7 @@ unsigned char* DecodeETC1(
         }
     }
     delete view;
+    delete[] image_color;
     return image_block;
 }
 

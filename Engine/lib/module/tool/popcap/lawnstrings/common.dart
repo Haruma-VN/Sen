@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 enum RawOption {
   oldInt,
   chinese,
@@ -229,5 +227,14 @@ class Lawnstring {
       jsonText['objects'][0]['objdata']['LocStringValues'].add(values[i]);
     }
     return jsonText;
+  }
+
+  static void execute(
+    String inFile,
+    String outFile,
+    RawOption mInput,
+    RawOption mOutput,
+  ) {
+    return;
   }
 }
