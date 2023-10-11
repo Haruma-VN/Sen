@@ -245,10 +245,43 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
             Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converting_resource_to_resinfo")}`);
             Sen.Shell.LotusModule.RSGUnpack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `packet`, `${manifest_group}.rsg`)), Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`)), false);
-            const manifest_path: string = manifest_additional_information.group.find((e) => e.name === manifest_group)?.subgroup[0].packet_info.res.find((e) => (e.path as string)!.endsWith(".RTON"))?.path! as string;
-            const resources_rton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`, ...manifest_path.split("\\")));
-            const resources_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_rton_path)}`, `${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`));
-            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+            const manifest_path: Array<ResInfo> = manifest_additional_information.group.find((e) => e.name === manifest_group)?.subgroup[0].packet_info.res!;
+            const resource_contains_rton: ResInfo | undefined = manifest_path.find((e) => (e.path! as string).toUpperCase().endsWith(".RTON"));
+            const resource_contains_newton: ResInfo | undefined = manifest_path.find((e) => (e.path! as string).toUpperCase().endsWith(".NEWTON"));
+            let resource_has_rton: boolean = false;
+            let resource_has_newton: boolean = false;
+            if (resource_contains_rton) {
+                resource_has_rton = true;
+            }
+            if (resource_contains_newton) {
+                resource_has_newton = true;
+            }
+            let resources_json_path: string = undefined!;
+            // Sen.Shell.Console.Print(null, resource_has_rton);
+            // Sen.Shell.Console.Print(null, resource_has_newton);
+            if (resource_has_rton && resource_has_newton) {
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_has_newton_and_rton")}`);
+                const resources_rton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`, ...(resource_contains_rton!.path! as string).split("\\")));
+                resources_json_path = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_rton_path)}`, `${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`));
+                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+            } else if (resource_has_rton && !resource_has_newton) {
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_has_rton")}`);
+                const resources_rton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`, ...(resource_contains_rton!.path! as string).split("\\")));
+                resources_json_path = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_rton_path)}`, `${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`));
+                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+            } else if (!resource_has_rton && resource_has_newton) {
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_has_newton")}`);
+                const resource_newton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `resource`, ...(resource_contains_newton!.path! as string).split("\\")));
+                resources_json_path = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resource_newton_path)}`, `${Sen.Shell.Path.Parse(resource_newton_path).name_without_extension}.json`));
+                Sen.Shell.LotusModule.DecodeNewtonResource(resource_newton_path, resources_json_path);
+            } else {
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, ""));
+                Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_invalid")}`);
+                throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("invalid_resource_group"));
+            }
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ResInfoResourceConversion.CreateConversion(resources_json_path, Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${outDirectory}`, `res.json`)), information.expand_path);
         }
         if (packages) {

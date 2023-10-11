@@ -1,4 +1,6 @@
 namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
+    export type ResInfo = Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.ResInfo;
+
     /**
      *
      * @param information - Pass information deserialize manifest
@@ -63,7 +65,22 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
         generate_resources: boolean;
         encryptRTON: boolean;
         encryptionKey: string;
-        encode_newton: boolean;
+    }
+
+    /**
+     *
+     * @param inFile - resource in file
+     * @returns
+     */
+
+    export function ExchangeResource(inFile: string): string {
+        if (inFile.toUpperCase().endsWith(".RTON")) {
+            return inFile.replace(/((\.rton))?$/i, ".json");
+        } else if (inFile.toUpperCase().endsWith(".NEWTON")) {
+            return inFile.replace(/((\.newton))?$/i, ".json");
+        } else {
+            throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("unsigned_resource_extension").replace(/\{\}/g, Sen.Shell.Path.Parse(inFile).ext));
+        }
     }
 
     /**
@@ -119,11 +136,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted")}: ${json_count} JSONs -> RTONs`);
         }
         if (option.generate_resources) {
-            const resource_file: string = Sen.Shell.Path.Join(
-                `${inDirectory}`,
-                `resource`,
-                ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
-            ).replace(/((\.rton))?$/i, ".json");
+            const resource_file: string = ExchangeResource(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\")));
             const res_info_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json`));
             //// Merge Split Res
             // const res_info_split_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `res.json.info`));
@@ -135,18 +148,20 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Script.Modules.Support.PopCap.PvZ2.Resources.Conversion.ConvertToResourceGroup.CreateConversion(Sen.Shell.Path.Resolve(res_info_path), Sen.Shell.Path.Resolve(resource_file));
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted_resinfo_to_resourcegroup")}`);
-            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(resource_file, resource_file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
-            if (option.encode_newton) {
+            const resource_contains_rton: ResInfo | undefined = manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"));
+            const resource_contains_newton: ResInfo | undefined = manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".NEWTON"));
+            if (resource_contains_rton) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(resource_file, resource_file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("got_rton_resource")}`);
+            }
+            if (resource_contains_newton) {
                 Sen.Shell.LotusModule.EncodeNewtonResource(resource_file, resource_file.replace(/((\.json))?$/i, ".NEWTON"));
                 Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
-                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("generated_newton_resource")}`);
+                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("got_newton_resource")}`);
             }
         } else {
-            const resource_file: string = Sen.Shell.Path.Join(
-                `${inDirectory}`,
-                `resource`,
-                ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\")
-            ).replace(/((\.rton))?$/i, ".json");
+            const resource_file: string = ExchangeResource(Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res[0].path as string).split("\\")));
             //// Merge Split Res
             // const resource_file_splitted_directory: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, `PROPERTIES`, `RESOURCES.res`);
             // if (Sen.Shell.FileSystem.DirectoryExists(resource_file_splitted_directory)) {
@@ -161,19 +176,20 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             );
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("converted_resources_json_to_res_json")}`);
-            if (option.encode_newton) {
+            const resource_contains_rton: ResInfo | undefined = manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"));
+            const resource_contains_newton: ResInfo | undefined = manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".NEWTON"));
+            if (resource_contains_rton) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(resource_file, resource_file.replace(/((\.json))?$/i, ".RTON"), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+                Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("got_rton_resource")}`);
+            }
+            if (resource_contains_newton) {
                 Sen.Shell.LotusModule.EncodeNewtonResource(resource_file, resource_file.replace(/((\.json))?$/i, ".NEWTON"));
                 Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
-                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("generated_newton_resource")}`);
+                Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("got_newton_resource")}`);
             }
         }
         if (manifest_group !== -1 && packages === -1) {
-            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\"));
-            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
-                Sen.Shell.Path.Resolve(resource_file.replace(/((\.rton))?$/i, ".json")),
-                Sen.Shell.Path.Resolve(resource_file),
-                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
-            );
             Sen.Shell.LotusModule.RSGPack(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `resource`)), manifestgroup_save, manifest.group[manifest_group].subgroup[0].packet_info, false);
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(manifestgroup_save).name_without_extension)}`);
@@ -183,12 +199,6 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack {
             Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
             Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("finish_rsg_pack").replace(/\{\}/g, Sen.Shell.Path.Parse(packages_save).name_without_extension)}`);
         } else if (packages !== -1 && manifest_group !== -1) {
-            const resource_file: string = Sen.Shell.Path.Join(`${inDirectory}`, `resource`, ...(manifest.group[manifest_group].subgroup[0].packet_info.res.find((e) => (e.path as string).endsWith(".RTON"))!.path as string).split("\\"));
-            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(
-                Sen.Shell.Path.Resolve(resource_file.replace(/((\.rton))?$/i, ".json")),
-                Sen.Shell.Path.Resolve(resource_file),
-                Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial
-            );
             const packages_save: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${inDirectory}`, `packet`, `${manifest.group[packages].name}.rsg`));
             Sen.Shell.LotusModule.RSGPackAsync(
                 {

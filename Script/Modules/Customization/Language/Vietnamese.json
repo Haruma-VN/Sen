@@ -670,5 +670,13 @@
     "in_manifest_file": "Execution Traceback: RSB Manifest",
     "rsg_error_path": "Execution Error: RSG Path",
     "in_manifest": "In Manifest",
-    "in_rsg": "In RSG"
+    "in_rsg": "In RSG",
+    "resource_has_rton": "MANIFESTGROUP only has RTON, decode RTON",
+    "resource_has_newton": "MANIFESTGROUP only has NEWTON, decode NEWTON",
+    "resource_invalid": "MANIFESTGROUP is invalid, must contains RTON or NEWTON",
+    "resource_has_newton_and_rton": "MANIFESTGROUP has both RTON and NEWTON, decode RTON",
+    "invalid_resource_group": "Invalid MANIFESTGROUP, please use regular rsb unpack",
+    "unsigned_resource_extension": "Unsigned resource extension: {}",
+    "got_rton_resource": "MANIFESTGROUP has RTON, encode RTON from JSON",
+    "got_newton_resource": "MANIFESTGROUP has NEWTON, encode NEWTON from JSON"
 }
