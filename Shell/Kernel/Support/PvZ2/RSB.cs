@@ -1456,7 +1456,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
                 FixFileListShuttle(RSGFile, RSGFile.readInt32LE(72), RSGFile.readInt32LE(), true);
             }
             RSGFile.readOffset = 0;
-            if (rsgMagic == "pgsr" && rsgVersion == version && rsgCompressionFlag > 0 && rsgCompressionFlag < 3 && rsgCompressionFlag == RsgInfo.readInt32LE())
+            if (rsgMagic == "pgsr" && rsgVersion == version && rsgCompressionFlag >= 0 && rsgCompressionFlag <= 3 && rsgCompressionFlag == RsgInfo.readInt32LE())
             {
                 return;
             }
@@ -1537,7 +1537,7 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSB
         {
             RSBFile.BackupReadOffset();
             var fileListOffset = RSBFile.readInt32LE(rsgOffset + 76);
-            RSBFile.BackupReadOffset();
+            RSBFile.RestoreReadOffset();
             if (fileListOffset != 0x5C && fileListOffset != 0x1000) return true;
             return false;
         }

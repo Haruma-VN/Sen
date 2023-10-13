@@ -144,7 +144,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             }
             var BKHD_length = BNKFile.readUInt32LE();
             var version = BNKFile.readUInt32LE();
-            if (version != 88 && version != 112 && version != 140)
+            if (version != 88 && version != 112 && version != 140 && version != 145)
             {
                 throw new Exception("non_supported_bnk_version");
             }
@@ -263,7 +263,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             var volumeThresHold = CreateHexString(BNKFile.readBytes(4));
             var maxVoiceInstances = CreateHexString(BNKFile.readBytes(2));
             uint unknown_type_1 = 0;
-            if (WwiseInfo.bank_header.version == 140)
+            if (WwiseInfo.bank_header.version >= 140)
             {
                 unknown_type_1 = BNKFile.readUInt16LE();
             }
@@ -296,7 +296,7 @@ namespace Sen.Shell.Kernel.Support.WWise
                 var id = BNKFile.readUInt32LE();
                 var parameter = BNKFile.readUInt32LE();
                 byte parameterCategoty = 0;
-                if (WwiseInfo.bank_header.version == 112 || WwiseInfo.bank_header.version == 140)
+                if (WwiseInfo.bank_header.version >= 112)
                 {
                     parameterCategoty = BNKFile.readUInt8();
                 }
@@ -321,7 +321,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             var gameParameterList = new STMGGameParameter[gameParameterNumber];
             for (var i = 0; i < gameParameterNumber; i++)
             {
-                if (WwiseInfo.bank_header.version == 112 || WwiseInfo.bank_header.version == 140)
+                if (WwiseInfo.bank_header.version >= 112)
                 {
                     gameParameterList[i] = new STMGGameParameter
                     {
@@ -339,7 +339,7 @@ namespace Sen.Shell.Kernel.Support.WWise
                 }
             }
             uint unknown_type_2 = 0;
-            if (WwiseInfo.bank_header.version == 140) unknown_type_2 = BNKFile.readUInt32LE();
+            if (WwiseInfo.bank_header.version >= 140) unknown_type_2 = BNKFile.readUInt32LE();
             WwiseInfo.game_synchronization = new STMG
             {
                 volume_threshold = volumeThresHold,
@@ -378,7 +378,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             {
                 lowPassFilterPoint[i] = CreateHexString(BNKFile.readBytes(12));
             }
-            if (WwiseInfo.bank_header.version == 112 || WwiseInfo.bank_header.version == 140)
+            if (WwiseInfo.bank_header.version >= 112)
             {
                 var highPassFilterValue = CreateHexString(BNKFile.readBytes(2));
                 var highPassFilterNumber = BNKFile.readUInt16LE();
@@ -537,7 +537,7 @@ namespace Sen.Shell.Kernel.Support.WWise
 
         private static void EncodeBKHD(SenBuffer BNKFile, BKHD BKHDInfo)
         {
-            if (BKHDInfo.version != 88 && BKHDInfo.version != 112 && BKHDInfo.version != 140)
+            if (BKHDInfo.version != 88 && BKHDInfo.version != 112 && BKHDInfo.version != 140 && BKHDInfo.version != 145)
             {
                 throw new Exception($"non_supported_bnk_version");
             }
@@ -616,7 +616,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             }
             BNKFile.writeBytes(volumeThresHold);
             BNKFile.writeBytes(maxVoiceInstances);
-            if (version == 140)
+            if (version >= 140)
             {
                 BNKFile.writeUInt16LE((ushort)STMGInfo.unknown_type_1);
             }
@@ -658,7 +658,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             {
                 BNKFile.writeUInt32LE(STMGInfo.game_parameter[i].id);
                 var parameterData = ConvertHexString(STMGInfo.game_parameter[i].data);
-                if (version == 112 && parameterData.Length != 17 || version == 140 && parameterData.Length != 17)
+                if (version == 112 && parameterData.Length != 17 || version >= 140 && parameterData.Length != 17)
                 {
                     throw new Exception("invalid_parameter_data");
                 }
@@ -668,7 +668,7 @@ namespace Sen.Shell.Kernel.Support.WWise
                 }
                 BNKFile.writeBytes(parameterData);
             }
-            if (version == 140) BNKFile.writeUInt32LE(STMGInfo.unknown_type_2);
+            if (version >= 140) BNKFile.writeUInt32LE(STMGInfo.unknown_type_2);
             InsertTypeLength(BNKFile, STMGLengthOffset);
         }
 
@@ -698,7 +698,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             {
                 BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.low_pass_filter.low_pass_filter_point[i]));
             }
-            if (version == 112 || version == 140)
+            if (version >= 112)
             {
                 BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.high_pass_filter!.high_pass_filter_vaule));
                 var highPassFilterNumber = ENVSItemInfo.high_pass_filter!.high_pass_filter_point.Length;
