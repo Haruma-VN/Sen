@@ -295,7 +295,7 @@
     "rton_is_not_encrypted": "RTON não está encriptado",
     "not_a_rton": "Não é um RTON",
     "invalid_bnk_magic": "WWise BNK Magic Inválida",
-    "non_supported_bnk_version": "Só suporta decodificação de WWise BNK versão 88, 112 e 140",
+    "non_supported_bnk_version": "Só suporta decodificação de WWise BNK versão 88, 112, 140 e 145",
     "invalid_bnk_reader": "WWise BNK Reader Inválido",
     "unsupported_fxpr": "Fxpr não-suportado",
     "invalid_wem_data_bank": "WEM Data Bank de WWise Inválido",
