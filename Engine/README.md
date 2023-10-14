@@ -12,6 +12,13 @@
 
 -   Dependencies: See `pubspec.yaml` for more details.
 
+-   Before compilation run these command lines first:
+
+```ps1
+flutter pub get
+flutter gen-l10n
+```
+
 -   Build lotus engine command lines:
 
     -   Android: `flutter build apk`
