@@ -80,7 +80,7 @@ class UnpackModding {
     final rsg = ResourceStreamGroup();
     rsg.unpackRSG(
       SenBuffer.OpenFile(
-        p.join(outputDirectory, 'packet', '__MANIFESTGROUP__.rsg'),
+        p.join(outputDirectory, 'packet', '$manifestGroup.rsg'),
       ),
       resourceDirectory,
       false,
