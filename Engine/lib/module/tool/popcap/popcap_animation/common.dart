@@ -6,6 +6,7 @@ import "package:path/path.dart" as path;
 import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:convert/convert.dart";
 import "dart:math";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PopCapAnimation {
   final frameFlags = <String, int>{
@@ -26,14 +27,25 @@ class PopCapAnimation {
     "animFrameNum": 1024,
   };
 
-  dynamic decodeAnimation(SenBuffer senFile) {
+  dynamic decodeAnimation(
+    SenBuffer senFile,
+    AppLocalizations? localizations,
+  ) {
     final magic = senFile.readUInt32LE();
     if (magic != 0xBAF01954) {
-      throw Exception("invalid_animation_magic");
+      throw Exception(
+        localizations != null
+            ? localizations.invalid_animation_magic
+            : "Invalid PAM Magic",
+      );
     }
     final version = senFile.readUInt32LE();
     if (version > 6 || version < 1) {
-      throw Exception("invalid_animation_version");
+      throw Exception(
+        localizations != null
+            ? localizations.invalid_animation_version
+            : "Invalid PAM Version",
+      );
     }
     final frameRate = senFile.readUInt8();
     final position = <double>[0, 0];
@@ -297,13 +309,20 @@ class PopCapAnimation {
   }
 
   // encode
-  SenBuffer encodeAnimation(dynamic jsonFile) {
+  SenBuffer encodeAnimation(
+    dynamic jsonFile,
+    AppLocalizations? localizations,
+  ) {
     final senFile = SenBuffer();
     final version = jsonFile["version"];
     senFile.writeUInt32LE(0xBAF01954);
     senFile.writeUInt32LE(version);
     if (version > 6 || version < 1) {
-      throw Exception("invalid_animation_version");
+      throw Exception(
+        localizations == null
+            ? "Invalid PAM Version"
+            : localizations.invalid_animation_version,
+      );
     }
     senFile.writeUInt8(jsonFile["frame_rate"]);
     final position = jsonFile["position"];
@@ -671,9 +690,13 @@ class PopCapAnimation {
   static void toJson(
     String inFile,
     String outFile,
+    AppLocalizations? localizations,
   ) {
     final anim = PopCapAnimation();
-    final data = anim.decodeAnimation(SenBuffer.OpenFile(inFile));
+    final data = anim.decodeAnimation(
+      SenBuffer.OpenFile(inFile),
+      localizations,
+    );
     FileSystem.writeJson(
       outFile,
       data,
@@ -685,9 +708,13 @@ class PopCapAnimation {
   static void fromJson(
     String inFile,
     String outFile,
+    AppLocalizations? localizations,
   ) {
     final anim = PopCapAnimation();
-    final data = anim.encodeAnimation(FileSystem.readJson(inFile));
+    final data = anim.encodeAnimation(
+      FileSystem.readJson(inFile),
+      localizations,
+    );
     data.outFile(outFile);
     return;
   }

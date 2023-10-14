@@ -242,6 +242,7 @@ class _PopCapAnimationConvertToFlashState
                                   controllerInput.text,
                                   controllerOutput.text,
                                   int.parse(view),
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

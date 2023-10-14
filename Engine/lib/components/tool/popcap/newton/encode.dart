@@ -156,6 +156,7 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
                                 decodeNewton(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

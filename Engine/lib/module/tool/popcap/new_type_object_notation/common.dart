@@ -2,6 +2,7 @@
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import 'package:sen_material_design/module/utility/exception/common.dart';
 import 'dart:core';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Newton {
   static const int Image = 1;
@@ -14,6 +15,7 @@ class Newton {
 
   String readString(
     SenBuffer data,
+    AppLocalizations? localizations,
   ) {
     var length = data.readUInt32LE();
     var str = "";
@@ -27,6 +29,7 @@ class Newton {
 
   dynamic decode(
     SenBuffer data,
+    AppLocalizations? localizations,
   ) {
     dynamic result = {
       'version': 1,
@@ -54,7 +57,9 @@ class Newton {
         default:
           {
             throw Exception(
-              'Unknown group type',
+              localizations != null
+                  ? localizations.unknown_group_type
+                  : "Unknown group type",
             );
           }
       }
@@ -67,22 +72,28 @@ class Newton {
       var version = data.readUInt8();
       if (version != 0x01) {
         throw Exception(
-          'Invalid version',
+          localizations != null
+              ? localizations.invalid_version
+              : "Invalid Version",
         );
       }
       var group_has_parent = data.readUInt8();
       group['id'] = readString(
         data,
+        localizations,
       );
       if (group_has_parent != 0x00) {
         group['parent'] = readString(
           data,
+          localizations,
         );
       }
       if (group_type == 0x01) {
         assertTest(
           resources_count == 0x00,
-          'resources must have size 0 with composite',
+          localizations == null
+              ? 'Property "resources" must have size 0 with composite'
+              : localizations.resource_size_zero,
         );
         group['subgroups'] = [];
         for (var subgroups_index = 0;
@@ -95,6 +106,7 @@ class Newton {
           }
           subgroup['id'] = readString(
             data,
+            localizations,
           );
           group['subgroups'].add(
             subgroup,
@@ -104,7 +116,9 @@ class Newton {
       if (group_type == 0x02) {
         assertTest(
           subgroups_count == 0x00,
-          'subgroups must have size 0 with simple',
+          localizations == null
+              ? 'Property "subgroup" must have size 0 with simple'
+              : localizations.subgroup_size_zero,
         );
         group['resources'] = [];
         for (var resources_index = 0;
@@ -150,7 +164,11 @@ class Newton {
               }
             default:
               {
-                throw Exception('Unknown Resource Type');
+                throw Exception(
+                  localizations == null
+                      ? "Unknown resource type"
+                      : localizations.unknown_resource_type,
+                );
               }
           }
           final Map<String, int> wrapper = {
@@ -198,13 +216,16 @@ class Newton {
           final bool resource_has_parent = data.readUInt8() != 0x00;
           resource_x['id'] = readString(
             data,
+            localizations,
           );
           resource_x['path'] = readString(
             data,
+            localizations,
           );
           if (resource_has_parent) {
             resource_x['parent'] = readString(
               data,
+              localizations,
             );
           }
           switch (resource_type) {
@@ -240,11 +261,14 @@ class Newton {
 
   SenBuffer encode(
     dynamic resource,
+    AppLocalizations? localizations,
   ) {
     var newton = SenBuffer();
     assertTest(
       resource['slot_count'] != null,
-      'slot_count cannot be null',
+      localizations == null
+          ? "slot_count cannot be null"
+          : localizations.slot_count_cannot_be_null,
     );
     newton.writeUInt32LE(
       resource['slot_count'],
@@ -271,7 +295,9 @@ class Newton {
         default:
           {
             throw Exception(
-              'Unknown group type',
+              localizations == null
+                  ? "Unknown group type"
+                  : localizations.unknown_group_type,
             );
           }
       }
@@ -317,7 +343,9 @@ class Newton {
       if (m_data['type'] == 'composite') {
         assertTest(
           m_data['resources'] == null,
-          'resources must be null in composite object',
+          localizations == null
+              ? 'resources must be null in composite object'
+              : localizations.resource_must_be_null,
         );
         for (var i = 0; i < subgroups_count; ++i) {
           var current = m_data['subgroups'][i]!;
@@ -398,7 +426,7 @@ class Newton {
             default:
               {
                 throw Exception(
-                  'Unknown group type: ${resource_x['type']}',
+                  '${localizations == null ? "Unknown group type" : localizations.unknown_group_type}: ${resource_x['type']}',
                 );
               }
           }
@@ -542,7 +570,9 @@ class Newton {
           );
           assertTest(
             (resource_x['path'] is String),
-            '"path" must be string',
+            localizations == null
+                ? '"Property "path" must be string'
+                : localizations.path_must_be_string,
           );
           var path = resource_x['path'].toString();
           newton.writeUInt32LE(

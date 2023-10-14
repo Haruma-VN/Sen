@@ -37,7 +37,7 @@ class _ToResInfoState extends State<ToResInfo> {
         }
       default:
         {
-          throw Exception('Invalid resource type');
+          throw Exception(AppLocalizations.of(context)!.invalid_resource_type);
         }
     }
   }

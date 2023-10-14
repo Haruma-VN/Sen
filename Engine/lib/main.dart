@@ -34,11 +34,12 @@ Future<void> main(List<String> argument) async {
         !FileSystem.fileExists(
           p.join(
             libraryPath,
-            Connection.internalLibrary(),
+            Connection.internalLibrary(null),
           ),
         )) {
       await Connection.downloadInternal(
         ApplicationInformation.libraryPath.value,
+        null,
       );
     }
   }

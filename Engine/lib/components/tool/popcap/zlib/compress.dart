@@ -36,7 +36,7 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
         }
       default:
         {
-          throw Exception('Unknown');
+          throw Exception(AppLocalizations.of(context)!.unknown);
         }
     }
   }

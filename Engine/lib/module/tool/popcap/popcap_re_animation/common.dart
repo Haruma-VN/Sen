@@ -8,6 +8,7 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:xml/xpath.dart';
 import "package:xml/xml.dart";
 import 'package:sen_material_design/module/tool/popcap/popcap_animation/common.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PopCapReAnimation {
   final xmlnsAttribute = {
@@ -23,9 +24,15 @@ class PopCapReAnimation {
     String inFile,
     String outFolder,
     int resolution,
+    AppLocalizations? localizations,
   ) {
     final PopCapReAnimation mWrapper = PopCapReAnimation();
-    mWrapper.convertToFlash(FileSystem.readJson(inFile), outFolder, resolution);
+    mWrapper.convertToFlash(
+      FileSystem.readJson(inFile),
+      outFolder,
+      resolution,
+      localizations,
+    );
     return;
   }
 
@@ -33,13 +40,18 @@ class PopCapReAnimation {
     String inFile,
     String outFolder,
     int resolution,
+    AppLocalizations? localizations,
   ) {
     final PopCapReAnimation mWrapper = PopCapReAnimation();
     final PopCapAnimation mAnim = PopCapAnimation();
     mWrapper.convertToFlash(
-      mAnim.decodeAnimation(SenBuffer.OpenFile(inFile)),
+      mAnim.decodeAnimation(
+        SenBuffer.OpenFile(inFile),
+        localizations,
+      ),
       outFolder,
       resolution,
+      localizations,
     );
     return;
   }
@@ -57,16 +69,25 @@ class PopCapReAnimation {
   static void flashToPam(
     String inDirectory,
     String outFile,
+    AppLocalizations? localizations,
   ) {
     final PopCapReAnimation mWrapper = PopCapReAnimation();
     final PopCapAnimation mAnim = PopCapAnimation();
     final pamJson = mWrapper.convertFromFlash(inDirectory);
-    final SenBuffer ripe = mAnim.encodeAnimation(pamJson);
+    final SenBuffer ripe = mAnim.encodeAnimation(
+      pamJson,
+      localizations,
+    );
     ripe.outFile(outFile);
     return;
   }
 
-  void convertToFlash(dynamic jsonFile, String outFolder, int resolution) {
+  void convertToFlash(
+    dynamic jsonFile,
+    String outFolder,
+    int resolution,
+    AppLocalizations? localizations,
+  ) {
     final imageList = jsonFile["image"];
     final scaleResolution = 1200 / resolution;
     for (var i = 0; i < imageList.length; i++) {
@@ -86,7 +107,11 @@ class PopCapReAnimation {
     for (var i = 0; i < spriteList.length; i++) {
       final spriteDocument = writeSpriteDocument(
         i,
-        decodeFrameNodeList(spriteList[i], spriteList),
+        decodeFrameNodeList(
+          spriteList[i],
+          spriteList,
+          localizations,
+        ),
       );
       FileSystem.writeFile(
         path.join(outFolder, "library", "sprite", "sprite_${i + 1}.xml"),
@@ -95,7 +120,11 @@ class PopCapReAnimation {
     }
     final mainDocument = writeSpriteDocument(
       -1,
-      decodeFrameNodeList(jsonFile["main_sprite"], spriteList),
+      decodeFrameNodeList(
+        jsonFile["main_sprite"],
+        spriteList,
+        localizations,
+      ),
     );
     FileSystem.writeFile(
       path.join(outFolder, "library", "main.xml"),
@@ -413,7 +442,11 @@ class PopCapReAnimation {
     return builder.buildDocument();
   }
 
-  dynamic decodeFrameNodeList(dynamic sprite, dynamic subSprite) {
+  dynamic decodeFrameNodeList(
+    dynamic sprite,
+    dynamic subSprite,
+    AppLocalizations? localizations,
+  ) {
     final model = {};
     final frameNodeList = {};
     frameNodeList[0] = [
@@ -458,7 +491,10 @@ class PopCapReAnimation {
         final change = moves[k];
         final layer = model[change["index"]];
         layer["state"] = true;
-        final ts = variantToStandard(change["transform"]);
+        final ts = variantToStandard(
+          change["transform"],
+          localizations,
+        );
         layer["transform"] = ts;
         if (change["color"] != null &&
             change["color"][0] != 0 &&
@@ -588,7 +624,10 @@ class PopCapReAnimation {
     return frameNodeList;
   }
 
-  dynamic variantToStandard(dynamic transform) {
+  dynamic variantToStandard(
+    dynamic transform,
+    AppLocalizations? localizations,
+  ) {
     if (transform.length == 2) {
       return [1, 0, 0, 1, transform[0], transform[1]];
     } else if (transform.length == 6) {
@@ -605,7 +644,11 @@ class PopCapReAnimation {
         transform[2],
       ];
     } else {
-      throw Exception("invaild_transform_size");
+      throw Exception(
+        localizations == null
+            ? "Invalid transform size"
+            : localizations.invaild_transform_size,
+      );
     }
   }
 

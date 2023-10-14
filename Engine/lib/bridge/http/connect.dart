@@ -4,11 +4,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Connection {
   Future<String> get(
     String link,
     String path,
+    AppLocalizations? localizations,
   ) async {
     var url = Uri.https(
       link,
@@ -19,7 +21,11 @@ class Connection {
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      throw Exception('Failed to load data');
+      throw Exception(
+        localizations == null
+            ? 'Failed to load data'
+            : localizations.failed_to_load_data,
+      );
     }
   }
 
@@ -52,7 +58,9 @@ class Connection {
     return;
   }
 
-  static String internalLibrary() {
+  static String internalLibrary(
+    AppLocalizations? localizations,
+  ) {
     if (Platform.isAndroid || Platform.isLinux) {
       return 'Internal.so';
     } else if (Platform.isWindows) {
@@ -60,23 +68,29 @@ class Connection {
     } else if (Platform.isIOS || Platform.isMacOS) {
       return 'Internal.dylib';
     } else {
-      throw Exception('Unsupproted platform');
+      throw Exception(
+        localizations == null
+            ? 'Unsupported platform'
+            : localizations.architecture_is_not_supported,
+      );
     }
   }
 
   static Future<void> downloadInternal(
     String savePath,
+    AppLocalizations? localizations,
   ) async {
     var connect = Connection();
     final dynamic data = jsonDecode(
       await connect.get(
         'api.github.com',
         '/repos/Haruma-VN/Sen/releases/tags/internal',
+        localizations,
       ),
     );
     final List<dynamic> assets = data['assets'];
     String? downloadLink;
-    final String saveFile = internalLibrary();
+    final String saveFile = internalLibrary(localizations);
     for (var i = 0; i < assets.length; ++i) {
       var current = assets[i];
       if (current['name'].toString().endsWith(saveFile)) {

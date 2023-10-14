@@ -6,8 +6,9 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:path/path.dart' as path;
 import 'package:sen_material_design/common/default.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-String getExtension() {
+String getExtension([AppLocalizations? localizations]) {
   if (Platform.isAndroid || Platform.isLinux) {
     return 'so';
   } else if (Platform.isIOS || Platform.isMacOS) {
@@ -15,9 +16,11 @@ String getExtension() {
   } else if (Platform.isWindows) {
     return 'dll';
   } else {
-    throw Exception(
-      'Architecture is not supported',
-    );
+    if (localizations != null) {
+      throw Exception(localizations.architecture_is_not_supported);
+    } else {
+      throw Exception('Architecture is not supported');
+    }
   }
 }
 

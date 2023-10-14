@@ -1,3 +1,5 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 enum RawOption {
   oldInt,
   chinese,
@@ -6,13 +8,13 @@ enum RawOption {
 }
 
 class Lawnstring {
-  void testJsonText(
-    dynamic information,
-  ) {
+  void testJsonText(dynamic information, AppLocalizations? localizations) {
     if (information['objects'][0]['objdata']['LocStringValues'].length % 2 !=
         0) {
       throw Exception(
-        'lawnstrings text error, array size must be a number can divide to two',
+        localizations == null
+            ? "Lawnstrings text error, array size must be a number can divide to two"
+            : localizations.lawnstring_text_test_error,
       );
     }
     return;
@@ -180,8 +182,14 @@ class Lawnstring {
     return text;
   }
 
-  dynamic jsonTextToJsonMap(dynamic jsonText) {
-    testJsonText(jsonText);
+  dynamic jsonTextToJsonMap(
+    dynamic jsonText,
+    AppLocalizations? localizations,
+  ) {
+    testJsonText(
+      jsonText,
+      localizations,
+    );
     dynamic jsonMap = {
       'version': 1,
       'objects': [
@@ -234,6 +242,7 @@ class Lawnstring {
     String outFile,
     RawOption mInput,
     RawOption mOutput,
+    AppLocalizations localizations,
   ) {
     return;
   }

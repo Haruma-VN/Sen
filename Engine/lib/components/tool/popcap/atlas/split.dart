@@ -51,7 +51,7 @@ class _PopCapAtlasSplitState extends State<PopCapAtlasSplit> {
         }
       default:
         {
-          throw Exception('Invalid resource type');
+          throw Exception(AppLocalizations.of(context)!.invalid_resource_type);
         }
     }
   }

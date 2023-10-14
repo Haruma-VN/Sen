@@ -153,6 +153,7 @@ class _PopCapAnimationConvertToJsonState
                                 PopCapAnimation.toJson(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

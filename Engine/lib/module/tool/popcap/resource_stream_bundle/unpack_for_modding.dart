@@ -7,6 +7,7 @@ import 'package:sen_material_design/module/tool/popcap/resource_stream_group/com
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:path/path.dart" as p;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ExtendsTextureInformation {
   sz16,
@@ -29,6 +30,7 @@ class UnpackModding {
     String outputDirectory,
     ExtendsTextureInformation extendsTextureInformation,
     ExpandPath expandPath,
+    AppLocalizations? localizations,
   ) {
     final unpack = UnpackModding();
     unpack.unpack_fs(
@@ -36,6 +38,7 @@ class UnpackModding {
       outputDirectory,
       extendsTextureInformation,
       expandPath,
+      localizations,
     );
     return;
   }
@@ -46,6 +49,7 @@ class UnpackModding {
     String outputDirectory,
     ExtendsTextureInformation extendsTextureInformation,
     ExpandPath expandPath,
+    AppLocalizations? localizations,
   ) {
     final senFile = SenBuffer.OpenFile(inFile);
     final String resourceDirectory = p.join(outputDirectory, 'resource');
@@ -123,7 +127,10 @@ class UnpackModding {
         )['path'],
       );
       json = newton.decode(
-        SenBuffer.OpenFile(resourceFile),
+        SenBuffer.OpenFile(
+          resourceFile,
+        ),
+        localizations,
       );
       resourceDestination = '${p.withoutExtension(resourceFile)}.json';
     }

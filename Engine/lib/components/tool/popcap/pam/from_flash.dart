@@ -154,6 +154,7 @@ class _PopCapAnimationConvertFromFlashState
                                 PopCapReAnimation.flashToPam(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =
