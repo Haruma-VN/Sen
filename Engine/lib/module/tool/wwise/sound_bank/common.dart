@@ -34,7 +34,7 @@ class WWiseSoundBank {
     }
     final bankHeaderLength = senFile.readUInt32LE();
     final version = senFile.readUInt32LE();
-    if (version != 88 && version != 112 && version != 140) {
+    if (version != 88 && version != 112 && version != 140 && version != 145) {
       throw Exception("non_supported_bnk_version");
     }
     final id = senFile.readUInt32LE();
@@ -144,7 +144,7 @@ class WWiseSoundBank {
     final maxVoiceInstances = createHexString(senFile.readBytes(2));
     var unknownType1 = 0;
     final version = jsonFile["bank_header"]["version"];
-    if (version == 140) {
+    if (version >= 140) {
       unknownType1 = senFile.readUInt16LE();
     }
     final stmgStageNumber = senFile.readUInt32LE();
@@ -171,7 +171,7 @@ class WWiseSoundBank {
       final id = senFile.readUInt32LE();
       final parameter = senFile.readUInt32LE();
       var parameterCategory = 0;
-      if (version == 112 || version == 140) {
+      if (version >= 112) {
         parameterCategory = senFile.readUInt8();
       }
       final parameterNumber = senFile.readUInt32LE();
@@ -191,7 +191,7 @@ class WWiseSoundBank {
     final gameParamterNumber = senFile.readUInt32LE();
     final gameParamterList = [];
     for (var i = 0; i < gameParamterNumber; i++) {
-      if (version == 112 || version == 140) {
+      if (version >= 112) {
         gameParamterList.add({
           "id": senFile.readUInt32LE(),
           "data": createHexString(senFile.readBytes(17)),
@@ -204,7 +204,7 @@ class WWiseSoundBank {
       }
     }
     var unknownType2 = 0;
-    if (version == 140) unknownType2 = senFile.readUInt32LE();
+    if (version >= 140) unknownType2 = senFile.readUInt32LE();
     jsonFile["game_synchronization"] = {
       "volume_threshold": volumeThresHold,
       "max_voice_instances": maxVoiceInstances,
@@ -240,8 +240,8 @@ class WWiseSoundBank {
     for (var i = 0; i < lowPassFilterNumber; i++) {
       lowPassFilterPoint.add(createHexString(senFile.readBytes(12)));
     }
-    if (version == 112 || version == 140) {
-      final highPassFilterValue = createHexString(senFile.readBytes(12));
+    if (version >= 112) {
+      final highPassFilterValue = createHexString(senFile.readBytes(2));
       final highPassFilterNumber = senFile.readUInt16LE();
       final highPassFilterPoint = <String>[];
       for (var i = 0; i < highPassFilterNumber; i++) {
@@ -394,7 +394,7 @@ class WWiseSoundBank {
 
   void encodeBankHeader(SenBuffer senFile, dynamic jsonFile) {
     final version = jsonFile["version"];
-    if (version != 88 && version != 112 && version != 140) {
+    if (version != 88 && version != 112 && version != 140 && version != 145) {
       throw Exception("non_support_bnk_version");
     }
     final headExpand = convertHexString(jsonFile["head_expand"]);
@@ -478,7 +478,7 @@ class WWiseSoundBank {
     }
     senFile.writeBytes(volumeThresHold);
     senFile.writeBytes(maxVoiceInstances);
-    if (version == 140) {
+    if (version >= 140) {
       senFile.writeUInt16LE(jsonFile["unknown_type_1"]);
     }
     final stageGroupLength = jsonFile["stage_group"].length;
@@ -508,7 +508,7 @@ class WWiseSoundBank {
     for (var i = 0; i < switchGroupLength; i++) {
       senFile.writeUInt32LE(jsonFile["switch_group"][i]["id"]);
       senFile.writeUInt32LE(jsonFile["switch_group"][i]["data"]["parameter"]);
-      if (version == 112 || version == 140) {
+      if (version >= 112) {
         senFile.writeUInt8(
           jsonFile["switch_group"][i]["data"]["parameter_category"],
         );
@@ -528,7 +528,7 @@ class WWiseSoundBank {
       final parameterData =
           convertHexString(jsonFile["game_paramenter"][i]["data"]);
       if (version == 112 && parameterData.length != 17 ||
-          version == 140 && parameterData.length != 17) {
+          version >= 140 && parameterData.length != 17) {
         throw Exception("invaild_parameter_data");
       }
       if (version == 88 && parameterData.length != 4) {
@@ -536,7 +536,7 @@ class WWiseSoundBank {
       }
       senFile.writeBytes(parameterData);
     }
-    if (version == 140) {
+    if (version >= 140) {
       senFile.writeUInt32LE(jsonFile["unknown_type_2"]);
     }
     insertTypeLength(senFile, stmgLengthOffset);
@@ -574,7 +574,7 @@ class WWiseSoundBank {
         ),
       );
     }
-    if (version == 112 || version == 140) {
+    if (version >= 112) {
       senFile.writeBytes(
         convertHexString(
           jsonFile["high_pass_filter"]["high_pass_filter_vaule"],

@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import
 
+import 'dart:typed_data';
+
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import 'package:sen_material_design/module/utility/compress/zlib/common.dart';
 import 'package:image/image.dart' as image;
@@ -23,11 +25,11 @@ abstract interface class PopCapSexyTexture {
 
   SenBuffer decodeRGBA5551Tiled(SenBuffer senFile, int width, int height);
 
-  void decodeRGBETC1(SenBuffer senFile, int width, int height);
+  SenBuffer decodeRGBETC1(SenBuffer senFile, int width, int height);
 
-  void decodeRGBETC1A8(SenBuffer senFile, int width, int height);
+  SenBuffer decodeRGBETC1A8(SenBuffer senFile, int width, int height);
 
-  void decodeRGBETC1APalette(SenBuffer senFile, int width, int height);
+  SenBuffer decodeRGBETC1APalette(SenBuffer senFile, int width, int height);
 
   SenBuffer decodeRGBAPVRTC4BPP(SenBuffer senFile, int width, int height);
 
@@ -242,18 +244,95 @@ class SexyTexture implements PopCapSexyTexture {
   }
 
   @override
-  void decodeRGBETC1(SenBuffer senFile, int width, int height) {
-    return;
+  SenBuffer decodeRGBETC1(SenBuffer senFile, int width, int height) {
+    final imageData = TextureCompress.decodeETC1(senFile, width, height);
+    final imgRaw = image.Image.fromBytes(
+      width: width,
+      height: height,
+      bytes: imageData.buffer,
+      numChannels: 4,
+      order: image.ChannelOrder.rgba,
+    );
+    senFile.clear();
+    final imgFile = SenBuffer.fromBytes(image.encodePng(imgRaw));
+    return imgFile;
   }
 
   @override
-  void decodeRGBETC1A8(SenBuffer senFile, int width, int height) {
-    return;
+  SenBuffer decodeRGBETC1A8(SenBuffer senFile, int width, int height) {
+    final imageData = TextureCompress.decodeETC1(senFile, width, height);
+    final imgRaw = image.Image.fromBytes(
+      width: width,
+      height: height,
+      bytes: imageData.buffer,
+      numChannels: 4,
+      order: image.ChannelOrder.rgba,
+    );
+    for (var y = 0; y < imgRaw.height; y++) {
+      for (var x = 0; x < imgRaw.width; x++) {
+        final pixel = imgRaw.getPixel(x, y);
+        pixel.a = senFile.readUInt8();
+        imgRaw.setPixel(x, y, pixel);
+      }
+    }
+    final imgFile = SenBuffer.fromBytes(image.encodePng(imgRaw));
+    return imgFile;
   }
 
   @override
-  void decodeRGBETC1APalette(SenBuffer senFile, int width, int height) {
-    return;
+  SenBuffer decodeRGBETC1APalette(SenBuffer senFile, int width, int height) {
+    final imageData = TextureCompress.decodeETC1(senFile, width, height);
+    final imgRaw = image.Image.fromBytes(
+      width: width,
+      height: height,
+      bytes: imageData.buffer,
+      numChannels: 4,
+      order: image.ChannelOrder.rgba,
+    );
+    final num = senFile.readUInt8();
+    final indexTable = Uint8List(num == 0 ? 2 : num);
+    int bitDepth;
+    if (num == 0) {
+      indexTable[0] = 0x0;
+      indexTable[1] = 0xFF;
+      bitDepth = 1;
+    } else {
+      for (var i = 0; i < num; i++) {
+        final pByte = senFile.readUInt8();
+        indexTable[i] = (pByte << 4) | pByte;
+      }
+      var tableSize = 2;
+      for (bitDepth = 1; num > tableSize; bitDepth++) {
+        tableSize *= 2;
+      }
+    }
+    var bitPos = 0;
+    var buffer = 0;
+    int readOneBit() {
+      if (bitPos == 0) {
+        buffer = senFile.readUInt8();
+      }
+      bitPos = (bitPos + 7) & 7;
+      return (buffer >> bitPos) & 1;
+    }
+
+    int readBits(int bits) {
+      var ans = 0;
+      for (var i = bits - 1; i >= 0; i--) {
+        ans |= readOneBit() << 1;
+      }
+      return ans;
+    }
+
+    for (var y = 0; y < imgRaw.height; y++) {
+      for (var x = 0; x < imgRaw.width; x++) {
+        final pixel = imgRaw.getPixel(x, y);
+        pixel.a = indexTable[readBits(bitDepth)];
+        imgRaw.setPixel(x, y, pixel);
+      }
+    }
+    final imgFile = SenBuffer.fromBytes(image.encodePng(imgRaw));
+    return imgFile;
   }
 
   @override

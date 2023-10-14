@@ -26,6 +26,8 @@ class VCDiff {
       afterPointer,
     );
     final data = resultPtr.asTypedList(afterPointer.value);
+    calloc.free(beforePtr);
+    calloc.free(patchPtr);
     return Uint8List.fromList(data);
   }
 
@@ -46,6 +48,8 @@ class VCDiff {
       patchPointer,
     );
     final data = resultPtr.asTypedList(patchPointer.value);
+    calloc.free(beforePtr);
+    calloc.free(afterPtr);
     return Uint8List.fromList(data);
   }
 
