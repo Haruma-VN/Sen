@@ -439,7 +439,7 @@ class _SettingState extends State<Setting> {
                       style: theme.textTheme.titleMedium,
                     ),
                     subtitle: Text(
-                      'Build version: ${Engine.version} & Engine: ${Engine.engineVersion} & Internal: ${Engine.internal}',
+                      '${AppLocalizations.of(context)!.build_version}: ${Engine.version} & Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal != -1 ? Engine.Internal : AppLocalizations.of(context)!.no_internal}',
                       style: theme.textTheme.bodySmall,
                     ),
                     onTap: () {

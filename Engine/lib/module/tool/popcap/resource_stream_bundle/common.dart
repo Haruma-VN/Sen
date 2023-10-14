@@ -172,13 +172,13 @@ class ResourceStreamBundle {
         "subgroup": subGroupList,
       };
     }
-    final mainfest = {
+    final manifest = {
       "version": rsbHeadInfo["version"],
       "ptx_info_size": rsbHeadInfo["ptxInfoEachLength"],
       "group": groupList,
     };
     senFile.clear();
-    return mainfest;
+    return manifest;
   }
 
   void readResourcesDescription(
@@ -491,7 +491,9 @@ class ResourceStreamBundle {
 
   static dynamic readRSBHead(SenBuffer senFile) {
     final magic = senFile.readString(4);
-    if (magic != "1bsr") throw Exception("invalid_rsb_head");
+    if (magic != "1bsr") {
+      throw Exception("invalid_rsb_head");
+    }
     final version = senFile.readUInt32LE();
     senFile.readOffset += 4;
     var fileOffset = senFile.readUInt32LE();

@@ -30,7 +30,7 @@ Future<void> main(List<String> argument) async {
   final String libraryPath = await Customization.getWorkspace();
   if (libraryPath != '') {
     ApplicationInformation.libraryPath.value = libraryPath;
-    if (!Platform.isAndroid &&
+    if (Platform.isWindows &&
         !FileSystem.fileExists(
           p.join(
             libraryPath,
