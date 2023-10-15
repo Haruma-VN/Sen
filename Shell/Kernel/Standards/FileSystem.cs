@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Jint.Native;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Sen.Shell.Kernel.Standards.IOModule
 {
@@ -79,6 +81,8 @@ namespace Sen.Shell.Kernel.Standards.IOModule
         public abstract void SetAccessTimeUTC(string path, DateTime time);
 
         public abstract void WriteBytesJS(string outpath, int[] data);
+
+        public abstract dynamic ReadJson(string filepath);
 
 
     }
@@ -425,6 +429,11 @@ namespace Sen.Shell.Kernel.Standards.IOModule
             byte[] bytes = data.Select<int, byte>(e => (byte)e).ToArray<byte>();
             this.OutFile<byte[]>(outpath, bytes);
             return;
+        }
+
+        public override dynamic ReadJson(string filepath)
+        {
+            return JsonConvert.DeserializeObject<dynamic>(this.ReadText(filepath, EncodingType.UTF8))!;
         }
     }
 
