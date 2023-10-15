@@ -482,7 +482,9 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RSG
                 }
                 else
                 {
-                    byte[] ZlibBytes = Compress.CompressZlib(dataBytes, (flags == 3 ? ZlibCompressionLevel.BEST_COMPRESSION : ZlibCompressionLevel.DEFAULT_COMPRESSION));
+                    byte[] ZlibBytes = Compress.CompressZlib(
+                        dataBytes, (flags == 3 ? ZlibCompressionLevel.BEST_COMPRESSION : ZlibCompressionLevel.DEFAULT_COMPRESSION)
+                        );
                     int ZlibAppendLength = BeautifyLength(ZlibBytes.Length);
                     RSGFile.writeBytes(ZlibBytes);
                     RSGFile.writeNull(ZlibAppendLength);
