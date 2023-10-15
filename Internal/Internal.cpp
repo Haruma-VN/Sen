@@ -851,7 +851,8 @@ unsigned char* DecodeETC1(
             for (auto pixel_y = 0; pixel_y < k_block_width; pixel_y++) {
                 for (auto pixel_x = 0; pixel_x < k_block_width; pixel_x++) {
                     for (auto i = 0; i < 4; ++i) {
-                        image_block[((block_y * k_block_width + pixel_y) * width + (block_x * k_block_width + pixel_x)) * 4 + i] = image_color[(pixel_y * k_block_width + pixel_x) * 4 + i];
+                        image_block[((block_y * k_block_width + pixel_y) * width + (block_x * k_block_width + pixel_x)) * 4 + i] = 
+                            image_color[(pixel_y * k_block_width + pixel_x) * 4 + i];
                     }
                 }
             }
