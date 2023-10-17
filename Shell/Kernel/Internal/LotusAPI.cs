@@ -45,9 +45,11 @@ namespace Sen.Shell.Kernel.Internal
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
         public static partial IntPtr GZipUncompress(byte[] data, int dataSize, out int compressedSize);
 
-        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void DeflateCompress(byte[] data, int dataSize, out IntPtr compressedData, out int size);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] 
+        public static partial void DeflateCompress(byte[] data, int dataSize, out IntPtr compressedData, out int size);
 
-        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void DeflateUncompress(byte[] input, int input_size, out IntPtr output, out int output_size);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial void DeflateUncompress(byte[] input, int input_size, out IntPtr output, out int output_size);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
