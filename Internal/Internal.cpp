@@ -16,6 +16,11 @@ unsigned char* ZlibCompress(
     auto destSize = compressBound(dataSize);
     auto compressedData = new unsigned char[destSize];
     auto result = compress2(compressedData, &destSize, data, dataSize, level);
+    if (result != Z_OK) {
+        delete[] compressedData;
+        compressedSize = 0;
+        return nullptr;
+    }
     compressedSize = static_cast<int>(destSize);
     return compressedData;
 }

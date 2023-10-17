@@ -186,6 +186,10 @@ namespace Sen.Shell.Kernel.Standards
                 _ => Deflater.DEFAULT_COMPRESSION,
             };
             IntPtr compressedDataPtr = LotusAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out var compressedSize);
+            if(compressedDataPtr == IntPtr.Zero)
+            {
+                throw new Exception("Zlib compression failed");
+            }
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
             Marshal.FreeHGlobal(compressedDataPtr);

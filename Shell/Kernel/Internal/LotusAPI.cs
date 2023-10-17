@@ -12,9 +12,8 @@ namespace Sen.Shell.Kernel.Internal
 
         private const string LibraryModule = $"./Internal";
 
-        [LibraryImport(LibraryModule)]
-        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
 
         [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] 
         public static partial void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
