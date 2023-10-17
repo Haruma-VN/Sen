@@ -4,20 +4,37 @@ import 'package:sen_material_design/module/utility/buffer/common.dart';
 import "package:path/path.dart" as path;
 import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:sen_material_design/module/tool/popcap/resource_stream_group/common.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResourceStreamBundle {
-  dynamic unpackRSB(SenBuffer senFile, String outFolder) {
+  dynamic unpackRSB(
+    SenBuffer senFile,
+    String outFolder,
+    AppLocalizations? localizations,
+  ) {
     final rsbHeadInfo = readRSBHead(senFile);
     if (rsbHeadInfo["version"] != 3 && rsbHeadInfo["version"] != 4) {
-      throw Exception("invalid_rsb_version");
+      throw Exception(
+        localizations == null
+            ? "Invalid RSB version"
+            : localizations.invalid_rsb_version,
+      );
     }
     if (rsbHeadInfo["version"] == 3 &&
         rsbHeadInfo["fileListBeginOffset"] != 0x6C) {
-      throw Exception("invalid_file_list_offset");
+      throw Exception(
+        localizations != null
+            ? localizations.invalid_file_list_offset
+            : "Invalid File List Offset",
+      );
     }
     if (rsbHeadInfo["version"] == 4 &&
         rsbHeadInfo["fileListBeginOffset"] != 0x70) {
-      throw Exception("invalid_file_list_offset");
+      throw Exception(
+        localizations != null
+            ? localizations.invalid_file_list_offset
+            : "Invalid File List Offset",
+      );
     }
     final fileList = fileListSplit(
       senFile,
@@ -42,7 +59,11 @@ class ResourceStreamBundle {
       if (rsbHeadInfo["part1BeginOffset"] == 0 &&
           rsbHeadInfo["part2BeginOffset"] == 0 &&
           rsbHeadInfo["part2BeginOffset"] == 0) {
-        throw Exception("invalid_rsb_ver_3_resource_offset");
+        throw Exception(
+          localizations != null
+              ? localizations.invalid_rsb_ver_3_resource_offset
+              : "Invalid Resource Offset for RSB version 3",
+        );
       }
       readResourcesDescription(senFile, rsbHeadInfo, outFolder);
     }
@@ -54,7 +75,9 @@ class ResourceStreamBundle {
           compositeList[i]["namePath"]
               .toUpperCase()
               .replaceAll("_COMPOSITESHELL", "")) {
-        throw Exception("invalid_composite_name: ${compositeInfo[i]["name"]}");
+        throw Exception(
+          "${localizations == null ? "Invalid Composite name" : localizations.invalid_composite_name}: ${compositeInfo[i]["name"]}",
+        );
       }
       final subGroupList = {};
       for (var k = 0; k < compositeInfo[i]["packetNumber"]; k++) {
@@ -63,20 +86,28 @@ class ResourceStreamBundle {
         var rsgListCount = 0;
         while (rsgInfoList[rsgInfoCount]["poolIndex"] != packetIndex) {
           if (rsgInfoCount >= rsgInfoList.length) {
-            throw Exception("out_of_range_1");
+            throw Exception(
+              localizations == null
+                  ? "Out of range for poolIndex"
+                  : localizations.out_of_range_1,
+            );
           }
           rsgInfoCount++;
         }
         while (rsgList[rsgListCount]["poolIndex"] != packetIndex) {
           if (rsgInfoCount >= rsgList.length) {
-            throw Exception("out_of_range_2");
+            throw Exception(
+              localizations == null
+                  ? "Out of range for packet index"
+                  : localizations.out_of_range_2,
+            );
           }
           rsgListCount++;
         }
         if (rsgInfoList[rsgInfoCount]["name"].toUpperCase() !=
             rsgList[rsgListCount]["namePath"].toUpperCase()) {
           throw Exception(
-            "invalid_rsg_name: ${rsgInfoList[rsgInfoCount]["name"]} | ${rsgList[rsgListCount]["name"]}. pool_index: $packetIndex",
+            "${localizations == null ? "Invalid RSG Name" : localizations.invalid_rsg_name}: ${rsgInfoList[rsgInfoCount]["name"]} | ${rsgList[rsgListCount]["name"]}. pool_index: $packetIndex",
           );
         }
         rsgNameList.add(rsgInfoList[rsgInfoCount]["name"]);

@@ -201,6 +201,7 @@ class _PopCapRTONEncodeAndEncryptState
                                     controllerKeyInput.text,
                                     controllerKeyInput.text.substring(4, 28),
                                   ),
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

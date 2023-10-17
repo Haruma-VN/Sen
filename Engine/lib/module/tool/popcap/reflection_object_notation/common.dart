@@ -6,6 +6,7 @@ import "package:path/path.dart" as path;
 import "package:sen_material_design/module/utility/encryption/Rijndael/common.dart";
 import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:convert/convert.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReflectionObjectNotation {
   SenBuffer decryptRTON(
@@ -62,6 +63,7 @@ class ReflectionObjectNotation {
     SenBuffer senFile,
     bool decrypt,
     RijndaelC? rijndael,
+    AppLocalizations? localizations,
   ) {
     r0x90List.clear();
     r0x92List.clear();
@@ -75,49 +77,96 @@ class ReflectionObjectNotation {
     }
     final magic = senFile.readString(4);
     if (magic != "RTON") {
-      throw Exception("invalid_rton_magic");
+      throw Exception(
+        localizations == null
+            ? 'Invalid RTON Magic, should begins with "RTON"'
+            : localizations.invalid_rton_magic,
+      );
     }
     final version = senFile.readUInt32LE();
     if (version != 0x1) {
-      throw Exception("invalid_rton_version");
+      throw Exception(
+        localizations == null
+            ? "nvalid RTON version, should be version 1"
+            : localizations.invalid_rton_version,
+      );
     }
-    jsonFile = readObject(senFile);
+    jsonFile = readObject(
+      senFile,
+      localizations,
+    );
     final endRton = senFile.readString(4);
     if (endRton != "DONE") {
-      throw Exception("invalid_rton_end");
+      throw Exception(
+        localizations == null
+            ? 'Invalid RTON ending, should ends with "DONE"'
+            : localizations.invalid_rton_end,
+      );
     }
     return jsonFile;
   }
 
-  dynamic readObject(SenBuffer senFile) {
+  dynamic readObject(
+    SenBuffer senFile,
+    AppLocalizations? localizations,
+  ) {
     final objectTemp = {};
     var bytecode = senFile.readUInt8();
     while (bytecode != 0xFF) {
-      readByteCodeProperty(senFile, bytecode);
-      objectTemp[propertyName] = readByteCode(senFile, senFile.readUInt8());
+      readByteCodeProperty(
+        senFile,
+        bytecode,
+        localizations,
+      );
+      objectTemp[propertyName] = readByteCode(
+        senFile,
+        senFile.readUInt8(),
+        localizations,
+      );
       bytecode = senFile.readUInt8();
     }
     return objectTemp;
   }
 
-  dynamic readArray(SenBuffer senFile) {
+  dynamic readArray(
+    SenBuffer senFile,
+    AppLocalizations? localizations,
+  ) {
     final arrayTemp = [];
     var bytecode = senFile.readUInt8();
     if (bytecode != 0xFD) {
-      throw Exception("invalid_rton_array_end");
+      throw Exception(
+        localizations != null
+            ? localizations.invalid_rton_array_end
+            : 'Invalid RTON ending, should ends with "DONE"',
+      );
     }
     final numArray = senFile.readVarInt32();
     for (var i = 0; i < numArray; i++) {
-      arrayTemp.add(readByteCode(senFile, senFile.readUInt8()));
+      arrayTemp.add(
+        readByteCode(
+          senFile,
+          senFile.readUInt8(),
+          localizations,
+        ),
+      );
     }
     bytecode = senFile.readUInt8();
     if (bytecode != 0xFE) {
-      throw Exception("invalid_rton_array_end");
+      throw Exception(
+        localizations != null
+            ? localizations.invalid_rton_array_end
+            : 'Invalid RTON ending, should ends with "DONE"',
+      );
     }
     return arrayTemp;
   }
 
-  void readByteCodeProperty(SenBuffer senFile, int byteCode) {
+  void readByteCodeProperty(
+    SenBuffer senFile,
+    int byteCode,
+    AppLocalizations? localizations,
+  ) {
     switch (byteCode) {
       case 0x02:
         propertyName = "*";
@@ -130,7 +179,7 @@ class ReflectionObjectNotation {
         propertyName = senFile.readStringByVarInt32();
         return;
       case 0x83:
-        propertyName = readRTID(senFile);
+        propertyName = readRTID(senFile, localizations);
         return;
       case 0x84:
         propertyName = "RTID(0)";
@@ -162,7 +211,11 @@ class ReflectionObjectNotation {
     }
   }
 
-  dynamic readByteCode(SenBuffer senFile, int byteCode) {
+  dynamic readByteCode(
+    SenBuffer senFile,
+    int byteCode,
+    AppLocalizations? localizations,
+  ) {
     switch (byteCode) {
       case 0x0:
         return false;
@@ -219,13 +272,19 @@ class ReflectionObjectNotation {
         senFile.readVarInt32();
         return senFile.readStringByVarInt32();
       case 0x83:
-        return readRTID(senFile);
+        return readRTID(
+          senFile,
+          localizations,
+        );
       case 0x84:
         return "RTID(0)";
       case 0x85:
-        return readObject(senFile);
+        return readObject(
+          senFile,
+          localizations,
+        );
       case 0x86:
-        return readArray(senFile);
+        return readArray(senFile, localizations);
       case 0x87:
         return readBinary(senFile);
       case 0x90:
@@ -255,7 +314,10 @@ class ReflectionObjectNotation {
     return "\$BINARY($str, $num)";
   }
 
-  dynamic readRTID(SenBuffer senFile) {
+  dynamic readRTID(
+    SenBuffer senFile,
+    AppLocalizations? localizations,
+  ) {
     final tempByte = senFile.readUInt8();
     switch (tempByte) {
       case 0x0:
@@ -279,7 +341,9 @@ class ReflectionObjectNotation {
         final str1 = senFile.readStringByVarInt32();
         return "RTID($str1@$str2)";
       default:
-        throw Exception("invalid_RTID");
+        throw Exception(
+          localizations != null ? localizations.invalid_RTID : "Invalid RTID",
+        );
     }
   }
 
@@ -293,13 +357,18 @@ class ReflectionObjectNotation {
     dynamic jsonFile,
     bool encrypt,
     RijndaelC? rijndael,
+    AppLocalizations? localizations,
   ) {
     r0x90Object.clear();
     r0x92Object.clear();
     final senFile = SenBuffer();
     senFile.writeString("RTON");
     senFile.writeUInt32LE(0x01);
-    writeObject(senFile, jsonFile);
+    writeObject(
+      senFile,
+      jsonFile,
+      localizations,
+    );
     senFile.writeString("DONE");
     if (!encrypt) {
       return senFile;
@@ -311,44 +380,68 @@ class ReflectionObjectNotation {
     }
   }
 
-  void writeObject(SenBuffer senFile, Map<String, dynamic> jsonFile) {
+  void writeObject(
+    SenBuffer senFile,
+    Map<String, dynamic> jsonFile,
+    AppLocalizations? localizations,
+  ) {
     jsonFile.forEach((key, value) {
       writeString(senFile, key);
-      writeValue(senFile, value);
+      writeValue(senFile, value, localizations);
     });
     senFile.writeUInt8(0xFF);
     return;
   }
 
-  void writeArray(SenBuffer senFile, dynamic jsonFile) {
+  void writeArray(
+    SenBuffer senFile,
+    dynamic jsonFile,
+    AppLocalizations? localizations,
+  ) {
     senFile.writeUInt8(0xFD);
     final arrayLength = jsonFile.length;
     senFile.writeVarInt32(arrayLength);
     for (var i = 0; i < arrayLength; i++) {
-      writeValue(senFile, jsonFile[i]);
+      writeValue(senFile, jsonFile[i], localizations);
     }
     senFile.writeUInt8(0xFE);
     return;
   }
 
-  dynamic writeValue(SenBuffer senFile, dynamic value) {
+  dynamic writeValue(
+    SenBuffer senFile,
+    dynamic value,
+    AppLocalizations? localizations,
+  ) {
     if (value == null) {
       senFile.writeUInt8(0x84);
       return;
     }
     if (value is Map) {
       senFile.writeUInt8(0x85);
-      writeObject(senFile, value as dynamic);
+      writeObject(
+        senFile,
+        value as dynamic,
+        localizations,
+      );
       return;
     }
     switch (value.runtimeType) {
       case Object:
         senFile.writeUInt8(0x85);
-        writeObject(senFile, value);
+        writeObject(
+          senFile,
+          value,
+          localizations,
+        );
         return;
       case List:
         senFile.writeUInt8(0x86);
-        writeArray(senFile, value);
+        writeArray(
+          senFile,
+          value,
+          localizations,
+        );
         return;
       case bool:
         senFile.writeBool(value);
@@ -360,7 +453,9 @@ class ReflectionObjectNotation {
       case num:
         writeNumber(senFile, value);
       default:
-        throw Exception("invalid_value_type | ${value.runtimeType}");
+        throw Exception(
+          "${localizations == null ? 'Invalid Value Type' : localizations.invalid_value_type} | ${value.runtimeType}",
+        );
     }
   }
 
@@ -527,12 +622,14 @@ class ReflectionObjectNotation {
     String outFile,
     bool decrypt,
     RijndaelC? rijndael,
+    AppLocalizations? localizations,
   ) {
     var rton = ReflectionObjectNotation();
     dynamic json = rton.decodeRTON(
       SenBuffer.OpenFile(inFile),
       decrypt,
       rijndael,
+      localizations,
     );
     FileSystem.writeJson(outFile, json, '\t');
     return;
@@ -544,12 +641,14 @@ class ReflectionObjectNotation {
     String outFile,
     bool encrypt,
     RijndaelC? rijndael,
+    AppLocalizations? localizations,
   ) {
     var rton = ReflectionObjectNotation();
     SenBuffer ripe = rton.encodeRTON(
       FileSystem.readJson(inFile),
       encrypt,
       rijndael,
+      localizations,
     );
     ripe.outFile(outFile);
     return;

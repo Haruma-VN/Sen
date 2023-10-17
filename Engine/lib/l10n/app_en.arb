@@ -243,5 +243,6 @@
     "subgroup_size_zero": "Property \"subgroup\" must have size 0 with simple",
     "slot_count_cannot_be_null": "slot_count cannot be null",
     "resource_must_be_null": "\"resources\" must be null in composite object",
-    "path_must_be_string": "Property \"path\" must be string"
+    "path_must_be_string": "Property \"path\" must be string",
+    "invalid_rton_magic": "Invalid RTON Magic, should begins with \"RTON\""
 }

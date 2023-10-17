@@ -154,6 +154,7 @@ class _PopCapRTONDecodeState extends State<PopCapRTONDecode> {
                                   controllerOutput.text,
                                   false,
                                   null,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

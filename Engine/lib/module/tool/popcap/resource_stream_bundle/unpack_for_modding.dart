@@ -16,7 +16,7 @@ enum ExtendsTextureInformation {
 }
 
 class UnpackModding {
-  String joinFs(String source, List<dynamic> dst) {
+  static String joinFs(String source, List<dynamic> dst) {
     String destination = source;
     for (var e in dst) {
       destination = p.join(destination, e.toString());
@@ -54,7 +54,11 @@ class UnpackModding {
     final senFile = SenBuffer.OpenFile(inFile);
     final String resourceDirectory = p.join(outputDirectory, 'resource');
     final rsb = ResourceStreamBundle();
-    final manifestRaw = rsb.unpackRSB(senFile, outputDirectory);
+    final manifestRaw = rsb.unpackRSB(
+      senFile,
+      outputDirectory,
+      localizations,
+    );
     final manifest = {
       'extends_texture_information_for_pvz2c': extendsTextureInformation.index,
       ...manifestRaw,
@@ -151,6 +155,7 @@ class UnpackModding {
         SenBuffer.OpenFile(resourceFile),
         false,
         null,
+        localizations,
       );
       resourceDestination = '${p.withoutExtension(resourceFile)}.json';
     }

@@ -185,16 +185,16 @@ namespace Sen.Shell.Kernel.Standards
                 ZlibCompressionLevel.DEFLATED => Deflater.DEFLATED,
                 _ => Deflater.DEFAULT_COMPRESSION,
             };
+            byte[] compressedData;
             IntPtr compressedDataPtr = LotusAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out var compressedSize);
-            if(compressedDataPtr == IntPtr.Zero)
+            if(compressedDataPtr == IntPtr.Zero || compressedSize == 0)
             {
                 throw new Exception("Zlib compression failed");
             }
-            byte[] compressedData = new byte[compressedSize];
+            compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
             Marshal.FreeHGlobal(compressedDataPtr);
             return compressedData;
-
         }
 
         public override void CompressZip(string zip_output, string[] files, string[] directories)

@@ -154,6 +154,7 @@ class _PopCapRTONEncodeState extends State<PopCapRTONEncode> {
                                   controllerOutput.text,
                                   false,
                                   null,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

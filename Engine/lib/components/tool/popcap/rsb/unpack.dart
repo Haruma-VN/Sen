@@ -151,6 +151,7 @@ class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
                                 Unpack.process(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =
