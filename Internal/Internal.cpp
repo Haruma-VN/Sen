@@ -6,21 +6,18 @@ using namespace Sen::Internal::Kernel::Tool::Algorithm;
 
 
 InternalAPI
-UnsignedByteStream ZlibCompress(
-    const UnsignedByteStream data,
-    ArraySize dataSize, 
-    Integer level, 
-    ArraySize& compressedSize
-) {
-        auto destSize = compressBound(dataSize);
-        auto compressedData = new unsigned char[destSize];
-        auto result = compress2(compressedData, &destSize, data, dataSize, level);
-        if (result != Z_OK) {
-            delete[] compressedData;
-            throw_exception("Compression failed");
-        }
-        compressedSize = destSize;
-        return compressedData;
+unsigned char* ZlibCompress(
+    unsigned char* data,
+    int dataSize, 
+    int level, 
+    int &compressedSize
+) 
+{
+    auto destSize = compressBound(dataSize);
+    auto compressedData = new unsigned char[destSize];
+    auto result = compress2(compressedData, &destSize, data, dataSize, level);
+    compressedSize = static_cast<int>(destSize);
+    return compressedData;
 }
 
 

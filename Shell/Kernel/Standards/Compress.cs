@@ -173,7 +173,7 @@ namespace Sen.Shell.Kernel.Standards
 
         }
 
-        public override byte[] CompressZlib(byte[] dataStream, ZlibCompressionLevel compression_level)
+        public unsafe override byte[] CompressZlib(byte[] dataStream, ZlibCompressionLevel compression_level)
         {
 
             var compressionLevel = compression_level switch
