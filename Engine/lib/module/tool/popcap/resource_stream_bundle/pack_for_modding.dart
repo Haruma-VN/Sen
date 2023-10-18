@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, unused_local_variable
 
 import "package:path/path.dart" as p;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
