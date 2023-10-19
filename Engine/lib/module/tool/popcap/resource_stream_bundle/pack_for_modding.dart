@@ -10,6 +10,10 @@ class PackModding {
     final dynamic manifest = FileSystem.readJson(
       p.join(inputDirectory, "manifest.json"),
     );
+    final String resJson = p.join(
+      inputDirectory,
+      "res.json",
+    );
     return;
   }
 }
