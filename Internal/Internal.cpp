@@ -835,9 +835,9 @@ unsigned char* DecodeETC1(
     auto constexpr k_block_width = 4;
     auto constexpr k_start_index = 0;
     auto constexpr k_color_size = 64;
-    auto image_color = new uint8_t[64];
+    auto image_color = new uint8_t[k_color_size];
     for (auto block_y = 0; block_y < height / k_block_width; block_y++) {
-        for (auto block_x = 0; block_x < width / k_block_width; block_x ++) {
+        for (auto block_x = 0; block_x < width / k_block_width; block_x++) {
             auto block_part1 =view->readUint32BE();
             auto block_part2 = view->readUint32BE();
             decompressBlockETC2c(

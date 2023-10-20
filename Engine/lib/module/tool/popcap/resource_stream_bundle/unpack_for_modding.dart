@@ -93,7 +93,7 @@ class UnpackModding {
     if (packages != null) {
       rsg.unpackRSG(
         SenBuffer.OpenFile(
-          p.join(outputDirectory, 'packet', 'PACKAGES.rsg'),
+          p.join(outputDirectory, 'packet', '$packages.rsg'),
         ),
         resourceDirectory,
         false,
