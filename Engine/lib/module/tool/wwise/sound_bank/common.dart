@@ -5,37 +5,59 @@ import 'package:sen_material_design/module/utility/buffer/common.dart';
 import "package:path/path.dart" as path;
 import 'package:sen_material_design/module/utility/io/common.dart';
 import "package:convert/convert.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WWiseSoundBank {
   static void decode_fs(
     String inFile,
     String outDirectory,
+    AppLocalizations? localizations,
   ) {
     final wwise = WWiseSoundBank();
-    wwise.decodeSoundBank(SenBuffer.OpenFile(inFile), outDirectory);
+    wwise.decodeSoundBank(
+      SenBuffer.OpenFile(inFile),
+      outDirectory,
+      localizations,
+    );
     return;
   }
 
   static void encode_fs(
     String inDirectory,
     String outFile,
+    AppLocalizations? localizations,
   ) {
     final wwise = WWiseSoundBank();
-    final soundbank = wwise.encodeSoundBank(inDirectory);
+    final soundbank = wwise.encodeSoundBank(
+      inDirectory,
+      localizations,
+    );
     soundbank.outFile(outFile);
     return;
   }
 
-  void decodeSoundBank(SenBuffer senFile, String outFolder) {
+  void decodeSoundBank(
+    SenBuffer senFile,
+    String outFolder,
+    AppLocalizations? localizations,
+  ) {
     final jsonFile = {};
     final bankHeaderMagic = senFile.readString(4);
     if (bankHeaderMagic != "BKHD") {
-      throw Exception("invaild_bnk_magic");
+      throw Exception(
+        localizations == null
+            ? "Invalid Soundbank magic, should starts with \"BKHD\""
+            : localizations.invalid_bnk_magic,
+      );
     }
     final bankHeaderLength = senFile.readUInt32LE();
     final version = senFile.readUInt32LE();
     if (version != 88 && version != 112 && version != 140 && version != 145) {
-      throw Exception("non_supported_bnk_version");
+      throw Exception(
+        localizations == null
+            ? "non_supported_bnk_version"
+            : localizations.non_supported_bnk_version,
+      );
     }
     final id = senFile.readUInt32LE();
     final dataLength = bankHeaderLength - 12;
@@ -49,10 +71,19 @@ class WWiseSoundBank {
     };
     final senLength = senFile.length;
     while (senFile.readOffset < senLength) {
-      decodeType(senFile, jsonFile, outFolder);
+      decodeType(
+        senFile,
+        jsonFile,
+        outFolder,
+        localizations,
+      );
     }
     if (senFile.readOffset != senLength) {
-      throw Exception("invaild_bnk_reader");
+      throw Exception(
+        localizations == null
+            ? "Invalid BNK Reader"
+            : localizations.invalid_bnk_reader,
+      );
     }
     senFile.clear();
     FileSystem.writeJson(
@@ -63,11 +94,21 @@ class WWiseSoundBank {
     return;
   }
 
-  void decodeType(SenBuffer senFile, dynamic jsonFile, String outFolder) {
+  void decodeType(
+    SenBuffer senFile,
+    dynamic jsonFile,
+    String outFolder,
+    AppLocalizations? localizations,
+  ) {
     final type = senFile.readString(4);
     switch (type) {
       case "DIDX":
-        decodeEmbeddedMedia(senFile, jsonFile, outFolder);
+        decodeEmbeddedMedia(
+          senFile,
+          jsonFile,
+          outFolder,
+          localizations,
+        );
         return;
       case "INIT":
         decodeInitialization(senFile, jsonFile);
@@ -88,9 +129,15 @@ class WWiseSoundBank {
         decodePlatformSetting(senFile, jsonFile);
         return;
       case "FXPR":
-        throw Exception("unsupported_fxpr");
+        throw Exception(
+          localizations == null
+              ? "Unsupported fxpr"
+              : localizations.unsupported_fxpr,
+        );
       default:
-        throw Exception("invaild_bnk_in_offset: ${senFile.readOffset}");
+        throw Exception(
+          "${localizations == null ? "Invalid BNK in Offset:" : localizations.invalid_bnk_in_offset} ${senFile.readOffset}",
+        );
     }
   }
 
@@ -98,6 +145,7 @@ class WWiseSoundBank {
     SenBuffer senFile,
     dynamic jsonFile,
     String outFolder,
+    AppLocalizations? localizations,
   ) {
     final didxLength = senFile.readUInt32LE() + senFile.readOffset;
     final didxList = <int>[];
@@ -109,7 +157,11 @@ class WWiseSoundBank {
       );
     }
     if (senFile.readString(4) != "DATA") {
-      throw Exception("invaild_data_bank_section");
+      throw Exception(
+        localizations == null
+            ? "Invalid Data Bank Section"
+            : localizations.invalid_data_bank_section,
+      );
     }
     final dataLength = senFile.readUInt32LE();
     final senBank = SenBuffer.fromBytes(senFile.readBytes(dataLength));
@@ -321,7 +373,10 @@ class WWiseSoundBank {
     return hexString;
   }
 
-  SenBuffer encodeSoundBank(String inFolder) {
+  SenBuffer encodeSoundBank(
+    String inFolder,
+    AppLocalizations? localizations,
+  ) {
     final senFile = SenBuffer();
     final bnkKeysList = [
       "bank_header",
@@ -340,10 +395,20 @@ class WWiseSoundBank {
       (a, b) => bnkKeysList.indexOf(a).compareTo(bnkKeysList.indexOf(b)),
     );
     if (!bnkKeys.contains("bank_header")) {
-      throw Exception("missing_bank_header");
+      throw Exception(
+        localizations == null
+            ? "Missing bank header"
+            : localizations.missing_bank_header,
+      );
     }
     bnkKeys.forEach((e) {
-      encodeType(senFile, jsonFile, e, inFolder);
+      encodeType(
+        senFile,
+        jsonFile,
+        e,
+        inFolder,
+        localizations,
+      );
     });
     return senFile;
   }
@@ -353,10 +418,15 @@ class WWiseSoundBank {
     dynamic jsonFile,
     String objectKey,
     String inFolder,
+    AppLocalizations? localizations,
   ) {
     switch (objectKey) {
       case "bank_header":
-        encodeBankHeader(senFile, jsonFile["bank_header"]);
+        encodeBankHeader(
+          senFile,
+          jsonFile["bank_header"],
+          localizations,
+        );
         return;
       case "embedded_media":
         encodeEmbeddedMedia(senFile, jsonFile["embedded_media"], inFolder);
@@ -369,6 +439,7 @@ class WWiseSoundBank {
           senFile,
           jsonFile["game_synchronization"],
           jsonFile["bank_header"]["version"],
+          localizations,
         );
         return;
       case "environments":
@@ -388,14 +459,26 @@ class WWiseSoundBank {
         encodePlatformSetting(senFile, jsonFile["platform_setting"]);
         return;
       default:
-        throw Exception("invaild_bnk");
+        throw Exception(
+          localizations == null
+              ? "Invalid Soundbank"
+              : localizations.invalid_bnk,
+        );
     }
   }
 
-  void encodeBankHeader(SenBuffer senFile, dynamic jsonFile) {
+  void encodeBankHeader(
+    SenBuffer senFile,
+    dynamic jsonFile,
+    AppLocalizations? localizations,
+  ) {
     final version = jsonFile["version"];
     if (version != 88 && version != 112 && version != 140 && version != 145) {
-      throw Exception("non_support_bnk_version");
+      throw Exception(
+        localizations == null
+            ? "Unsupported Soundbank version"
+            : localizations.non_support_bnk_version,
+      );
     }
     final headExpand = convertHexString(jsonFile["head_expand"]);
     senFile.writeString("BKHD");
@@ -464,17 +547,26 @@ class WWiseSoundBank {
     SenBuffer senFile,
     dynamic jsonFile,
     int version,
+    AppLocalizations? localizations,
   ) {
     senFile.writeString("STMG");
     final stmgLengthOffset = senFile.writeOffset;
     senFile.writeNull(4);
     final volumeThresHold = convertHexString(jsonFile["volume_threshold"]);
     if (volumeThresHold.length != 4) {
-      throw Exception("invaild_volume_threshold");
+      throw Exception(
+        localizations == null
+            ? "Invalid Volume Threshold"
+            : localizations.invalid_volume_threshold,
+      );
     }
     final maxVoiceInstances = convertHexString(jsonFile["max_voice_instances"]);
     if (maxVoiceInstances.length != 2) {
-      throw Exception("invaild_max_voice_instances");
+      throw Exception(
+        localizations == null
+            ? "Invalid Max Voice Instance"
+            : localizations.invalid_max_voice_instances,
+      );
     }
     senFile.writeBytes(volumeThresHold);
     senFile.writeBytes(maxVoiceInstances);
@@ -489,7 +581,11 @@ class WWiseSoundBank {
         jsonFile["state_group"][i]["data"]["default_transition_time"],
       );
       if (defaultTansitionTime.length != 4) {
-        throw Exception("invaild_default_transition_time");
+        throw Exception(
+          localizations == null
+              ? "Invalid Default Transition Time"
+              : localizations.invalid_default_transition_time,
+        );
       }
       senFile.writeBytes(defaultTansitionTime);
       final customTransitionLength =
@@ -529,10 +625,18 @@ class WWiseSoundBank {
           convertHexString(jsonFile["game_paramenter"][i]["data"]);
       if (version == 112 && parameterData.length != 17 ||
           version >= 140 && parameterData.length != 17) {
-        throw Exception("invaild_parameter_data");
+        throw Exception(
+          localizations == null
+              ? "Invalid Parameter data"
+              : localizations.invalid_parameter_data,
+        );
       }
       if (version == 88 && parameterData.length != 4) {
-        throw Exception("invaild_parameter_data");
+        throw Exception(
+          localizations == null
+              ? "Invalid Parameter data"
+              : localizations.invalid_parameter_data,
+        );
       }
       senFile.writeBytes(parameterData);
     }

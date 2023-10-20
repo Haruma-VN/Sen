@@ -140,13 +140,18 @@ class PackModding {
       final SenBuffer packagesRSG = rsg.packRSG(
         p.join(inputDirectory, 'resource', 'PACKAGES'),
         manifest['group'][packages][packages],
+        localizations,
         false,
       );
       packagesRSG.outFile(
         p.join(inputDirectory, 'packet', '$packages.rsg'),
       );
     }
-    Pack.process(inputDirectory, outputFile);
+    Pack.process(
+      inputDirectory,
+      outputFile,
+      localizations,
+    );
     return;
   }
 }

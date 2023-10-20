@@ -153,6 +153,7 @@ class _WWiseSoundBankEncodeState extends State<WWiseSoundBankEncode> {
                                 WWiseSoundBank.encode_fs(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

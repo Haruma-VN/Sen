@@ -2,16 +2,21 @@ import "dart:typed_data";
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import 'package:sen_material_design/module/utility/compress/zlib/common.dart';
 import "package:path/path.dart" as path;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResourceStreamGroup {
   // Unpack
   dynamic unpackRSG(
     SenBuffer senFile,
-    String outFolder, [
+    String outFolder,
+    AppLocalizations? localizations, [
     bool useResFolder = true,
     bool getPacketInfo = false,
   ]) {
-    final rsgHeadInfo = readRSGHead(senFile);
+    final rsgHeadInfo = readRSGHead(
+      senFile,
+      localizations,
+    );
     final fileList = fileListSplit(senFile, rsgHeadInfo);
     final resInfo = [];
     final part0List = fileList["part0List"];
@@ -200,19 +205,34 @@ class ResourceStreamGroup {
     return {"part0List": part0List, "part1List": part1List};
   }
 
-  dynamic readRSGHead(SenBuffer senFile) {
+  dynamic readRSGHead(
+    SenBuffer senFile,
+    AppLocalizations? localizations,
+  ) {
     final magic = senFile.readString(4);
     if (magic != "pgsr") {
-      throw Exception("invalid_rsg_magic");
+      throw Exception(
+        localizations == null
+            ? "Invalid RSG Magic, should starts with \"PGSR\""
+            : localizations.invalid_rsg_magic,
+      );
     }
     final version = senFile.readUInt32LE();
     if (version != 3 && version != 4) {
-      throw Exception("invalid_rsg_version");
+      throw Exception(
+        localizations == null
+            ? "Invalid RSG version, should be 3 or 4"
+            : localizations.invalid_rsg_version,
+      );
     }
     senFile.readOffset += 8;
     final flag = senFile.readUInt32LE();
     if (flag > 3 || flag < 0) {
-      throw Exception("invalid_rsg_compression_flag");
+      throw Exception(
+        localizations == null
+            ? "Invalid RSG Compression flag, only 0 to 3 is supported"
+            : localizations.invalid_rsg_compression_flag,
+      );
     }
     final fileOffset = senFile.readUInt32LE();
     final part0Offset = senFile.readUInt32LE();
@@ -243,15 +263,24 @@ class ResourceStreamGroup {
   //Pack
   SenBuffer packRSG(
     String inFolder,
-    dynamic packetInfo, [
+    dynamic packetInfo,
+    AppLocalizations? localizations, [
     bool useResFolder = true,
   ]) {
     if (packetInfo["version"] != 3 && packetInfo["version"] != 4) {
-      throw Exception("invalid_rsg_version");
+      throw Exception(
+        localizations == null
+            ? "Invalid RSG version, should be 3 or 4"
+            : localizations.invalid_rsg_version,
+      );
     }
     if (packetInfo["compression_flags"] < 0 ||
         packetInfo["compression_flags"] > 3) {
-      throw Exception("invalid_rsg_compression_flag");
+      throw Exception(
+        localizations == null
+            ? "Invalid RSG Compression flag, only 0 to 3 is supported"
+            : localizations.invalid_rsg_compression_flag,
+      );
     }
     final senFile = SenBuffer();
     senFile.writeString("pgsr");
@@ -259,18 +288,25 @@ class ResourceStreamGroup {
     senFile.writeOffset += 8;
     senFile.writeUInt32LE(packetInfo["compression_flags"]);
     senFile.writeOffset += 72;
-    final pathTemps = fileListPack(packetInfo["res"]);
+    final pathTemps = fileListPack(
+      packetInfo["res"],
+      localizations,
+    );
     writeRSG(
       senFile,
       pathTemps,
       packetInfo["compression_flags"],
       inFolder,
       useResFolder,
+      localizations,
     );
     return senFile;
   }
 
-  dynamic fileListPack(List<dynamic> resInfo) {
+  dynamic fileListPack(
+    List<dynamic> resInfo,
+    AppLocalizations? localizations,
+  ) {
     final resInfoList = resInfo;
     resInfoList.insert(0, {
       "path": [""],
@@ -288,7 +324,9 @@ class ResourceStreamGroup {
       String path1 = resInfoList[i]["path"].join("\\").toUpperCase();
       String path2 = resInfoList[i + 1]["path"].join("\\").toUpperCase();
       if (isNotASCII(path2)) {
-        throw Exception("name_path_must_be_ascii: $path2");
+        throw Exception(
+          "${localizations == null ? "Name path must match ASCII" : localizations.name_path_must_be_ascii}: $path2",
+        );
       }
       final longestLength =
           path1.length >= path2.length ? path1.length : path2.length;
@@ -340,11 +378,16 @@ class ResourceStreamGroup {
     int compressionFlag,
     String inFolder,
     bool useResFolder,
+    AppLocalizations? localizations,
   ) {
     final pathTempLength = pathTemps.length;
     final fileListBeginOffset = senFile.writeOffset;
     if (fileListBeginOffset != 0x5C) {
-      throw Exception("invalid_file_list_offset");
+      throw Exception(
+        localizations == null
+            ? "Invalid File List Offset"
+            : localizations.invalid_file_list_offset,
+      );
     }
     var dataGroup = SenBuffer();
     var atlasGroup = SenBuffer();

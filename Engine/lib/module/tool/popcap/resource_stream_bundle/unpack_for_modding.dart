@@ -87,6 +87,7 @@ class UnpackModding {
         p.join(outputDirectory, 'packet', '$manifestGroup.rsg'),
       ),
       resourceDirectory,
+      localizations,
       false,
       false,
     );
@@ -96,6 +97,7 @@ class UnpackModding {
           p.join(outputDirectory, 'packet', '$packages.rsg'),
         ),
         resourceDirectory,
+        localizations,
         false,
         false,
       );

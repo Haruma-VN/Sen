@@ -647,7 +647,7 @@ class PopCapReAnimation {
       throw Exception(
         localizations == null
             ? "Invalid transform size"
-            : localizations.invaild_transform_size,
+            : localizations.invalid_transform_size,
       );
     }
   }

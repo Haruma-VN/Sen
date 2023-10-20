@@ -8,23 +8,37 @@ import 'package:collection/collection.dart';
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:sen_material_design/bridge/executor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResourceStreamBundlePatch {
   SenBuffer patchEncode(
     SenBuffer senBefore,
-    SenBuffer senAfter, [
+    SenBuffer senAfter,
+    AppLocalizations? localizations, [
     bool useRawPacket = false,
   ]) {
-    final rsbBeforeHead = ResourceStreamBundle.readRSBHead(senBefore);
-    final rsbAfterHead = ResourceStreamBundle.readRSBHead(senAfter);
+    final rsbBeforeHead =
+        ResourceStreamBundle.readRSBHead(senBefore, localizations);
+    final rsbAfterHead = ResourceStreamBundle.readRSBHead(
+      senAfter,
+      localizations,
+    );
     if (rsbBeforeHead["version"] != 4 && rsbAfterHead["version"] != 4) {
-      throw Exception("rsbpatch_only_for_pvz2");
+      throw Exception(
+        localizations == null
+            ? "RSB-Patch only support PvZ2"
+            : localizations.rsbpatch_only_for_pvz2,
+      );
     }
     final rsbBeforeHeadByte =
         senBefore.readBytes(rsbBeforeHead["fileOffset"], 0);
     final rsbAfterHeadByte = senAfter.readBytes(rsbAfterHead["fileOffset"], 0);
     final md5DigestOld = md5.convert(rsbBeforeHeadByte.toList());
-    testHash(rsbBeforeHeadByte, md5DigestOld);
+    testHash(
+      rsbBeforeHeadByte,
+      md5DigestOld,
+      localizations,
+    );
     final patchExist =
         !const ListEquality().equals(rsbBeforeHeadByte, rsbAfterHeadByte);
     final senWriter = SenBuffer();
@@ -65,7 +79,11 @@ class ResourceStreamBundlePatch {
             rsbBeforeInfoList[packetBeforeSubGroupIndex]["rsgOffset"],
           );
         } else {
-          throw Exception("raw_packet_is_not_supported");
+          throw Exception(
+            localizations == null
+                ? "Raw Packet is not supported"
+                : localizations.raw_packet_is_not_supported,
+          );
         }
       }
       Uint8List packetAfter = Uint8List(1);
@@ -76,7 +94,11 @@ class ResourceStreamBundlePatch {
             rsbAfterInfoList[i]["rsgOffset"],
           );
         } else {
-          throw Exception("raw_packet_is_not_supported");
+          throw Exception(
+            localizations == null
+                ? "Raw Packet is not supported"
+                : localizations.raw_packet_is_not_supported,
+          );
         }
       }
       {
@@ -115,24 +137,43 @@ class ResourceStreamBundlePatch {
     return Uint8List.fromList(patchData);
   }
 
-  void testHash(Uint8List data, Digest hash) {
+  void testHash(
+    Uint8List data,
+    Digest hash,
+    AppLocalizations? localizations,
+  ) {
     final md5data = md5.convert(data.toList());
     if ("$md5data" != "$hash") {
-      throw Exception("invaild_md5_data");
+      throw Exception(
+        localizations == null
+            ? "Invalid MD5 Data"
+            : localizations.invalid_md5_data,
+      );
     }
     return;
   }
 
   SenBuffer patchDecode(
     SenBuffer senBefore,
-    SenBuffer senPatch, [
+    SenBuffer senPatch,
+    AppLocalizations? localizations, [
     bool useRawPacket = false,
   ]) {
-    final rsbBeforeHead = ResourceStreamBundle.readRSBHead(senBefore);
-    final rsbPatchHead = readRSBPatchHead(senPatch);
+    final rsbBeforeHead = ResourceStreamBundle.readRSBHead(
+      senBefore,
+      localizations,
+    );
+    final rsbPatchHead = readRSBPatchHead(
+      senPatch,
+      localizations,
+    );
     final beforeHeadByte = senBefore.readBytes(rsbBeforeHead["fileOffset"], 0);
     final md5DigestOld = Digest(rsbPatchHead["md5Before"]);
-    testHash(beforeHeadByte, md5DigestOld);
+    testHash(
+      beforeHeadByte,
+      md5DigestOld,
+      localizations,
+    );
     Uint8List rsbAfterByte;
     if (!rsbPatchHead["rsbNeedPatch"]) {
       rsbAfterByte = beforeHeadByte;
@@ -144,9 +185,16 @@ class ResourceStreamBundlePatch {
     }
     final senWriter = SenBuffer();
     senWriter.writeBytes(rsbAfterByte);
-    final rsbAfterHead = ResourceStreamBundle.readRSBHead(senWriter);
+    final rsbAfterHead = ResourceStreamBundle.readRSBHead(
+      senWriter,
+      localizations,
+    );
     if (rsbAfterHead["rsgNumber"] != rsbPatchHead["rsgNumber"]) {
-      throw Exception("invaild_rsg_number");
+      throw Exception(
+        localizations == null
+            ? "Invalid RSG index"
+            : localizations.invalid_rsg_number,
+      );
     }
     final rsbFunc = ResourceStreamBundle();
     final rsbBeforeInfoList = rsbFunc.readRSGInfo(senBefore, rsbBeforeHead);
@@ -161,7 +209,11 @@ class ResourceStreamBundlePatch {
       Uint8List packetAfter = Uint8List(1);
       final rsbPatchPacketInfo = readSubGroupInfo(senPatch);
       if (packetAfterName != rsbPatchPacketInfo["packetName"]) {
-        throw Exception("invaild_packet_name");
+        throw Exception(
+          localizations == null
+              ? "Invalid Packet Name"
+              : localizations.invalid_packet_name,
+        );
       }
       if (packetBeforeSubGroupIndexing.contains(packetAfterName)) {
         final packetBeforeSubGroupIndex =
@@ -171,7 +223,11 @@ class ResourceStreamBundlePatch {
           rsbBeforeInfoList[packetBeforeSubGroupIndex]["rsgOffset"],
         );
         if (useRawPacket) {
-          throw Exception("raw_packet_is_not_supported");
+          throw Exception(
+            localizations == null
+                ? "Raw Packet is not supported"
+                : localizations.raw_packet_is_not_supported,
+          );
         }
       }
       if (rsbPatchPacketInfo["packetPatchSize"] > 0) {
@@ -182,11 +238,19 @@ class ResourceStreamBundlePatch {
       } else {
         packetAfter = packetBefore;
       }
-      testHash(packetAfter, Digest(rsbPatchPacketInfo["md5Packet"]));
+      testHash(
+        packetAfter,
+        Digest(rsbPatchPacketInfo["md5Packet"]),
+        localizations,
+      );
       senWriter.writeBytes(packetAfter);
     }
     if (rsbPatchHead["rsbAfterSize"] != senWriter.length) {
-      throw Exception("this_rsb_is_invaild");
+      throw Exception(
+        localizations == null
+            ? "This RSB is invalid to use RSB-Patch"
+            : localizations.this_rsb_is_invalid,
+      );
     }
     return senWriter;
   }
@@ -210,11 +274,24 @@ class ResourceStreamBundlePatch {
     return Uint8List.fromList(afterData);
   }
 
-  dynamic readRSBPatchHead(SenBuffer senFile) {
+  dynamic readRSBPatchHead(
+    SenBuffer senFile,
+    AppLocalizations? localizations,
+  ) {
     final magic = senFile.readString(4);
-    if (magic != "PBSR") throw Exception("invaild_patch_file");
+    if (magic != "PBSR") {
+      throw Exception(
+        localizations == null
+            ? "Invalid Diff Patch file"
+            : localizations.invalid_patch_file,
+      );
+    }
     if (senFile.readUInt32LE() != 1 || senFile.readUInt32LE() != 2) {
-      throw Exception("invaild_patch_file");
+      throw Exception(
+        localizations == null
+            ? "Invalid Diff Patch file"
+            : localizations.invalid_patch_file,
+      );
     }
     return {
       "rsbAfterSize": senFile.readInt32LE(0xC),

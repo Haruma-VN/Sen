@@ -152,6 +152,7 @@ class _PopCapRSBPackState extends State<PopCapRSBPack> {
                                 Pack.process(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
                                 final Duration difference =

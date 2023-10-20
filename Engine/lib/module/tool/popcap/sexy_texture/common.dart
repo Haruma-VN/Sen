@@ -1,7 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'dart:typed_data';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 import 'package:sen_material_design/module/utility/compress/zlib/common.dart';
 import 'package:image/image.dart' as image;
@@ -31,9 +31,19 @@ abstract interface class PopCapSexyTexture {
 
   SenBuffer decodeRGBETC1APalette(SenBuffer senFile, int width, int height);
 
-  SenBuffer decodeRGBAPVRTC4BPP(SenBuffer senFile, int width, int height);
+  SenBuffer decodeRGBAPVRTC4BPP(
+    SenBuffer senFile,
+    int width,
+    int height,
+    AppLocalizations? localizations,
+  );
 
-  SenBuffer decodeRGBPVRTC4BPPA8(SenBuffer senFile, int width, int height);
+  SenBuffer decodeRGBPVRTC4BPPA8(
+    SenBuffer senFile,
+    int width,
+    int height,
+    AppLocalizations? localizations,
+  );
 
   SenBuffer encodeARGB8888(SenBuffer senFile);
 
@@ -336,9 +346,18 @@ class SexyTexture implements PopCapSexyTexture {
   }
 
   @override
-  SenBuffer decodeRGBAPVRTC4BPP(SenBuffer senFile, int width, int height) {
+  SenBuffer decodeRGBAPVRTC4BPP(
+    SenBuffer senFile,
+    int width,
+    int height,
+    AppLocalizations? localizations,
+  ) {
     if (width != height) {
-      throw Exception("PVRTC requires a square image.");
+      throw Exception(
+        localizations == null
+            ? "PVRTC can only compress a square image"
+            : localizations.pvrtc_can_only_compress_square_dimension,
+      );
     }
     final decoder = image.PvrDecoder();
     final imgRaw = decoder.decode(senFile.toBytes());
@@ -347,9 +366,18 @@ class SexyTexture implements PopCapSexyTexture {
   }
 
   @override
-  SenBuffer decodeRGBPVRTC4BPPA8(SenBuffer senFile, int width, int height) {
+  SenBuffer decodeRGBPVRTC4BPPA8(
+    SenBuffer senFile,
+    int width,
+    int height,
+    AppLocalizations? localizations,
+  ) {
     if (width != height) {
-      throw Exception("PVRTC requires a square image.");
+      throw Exception(
+        localizations == null
+            ? "PVRTC can only compress a square image"
+            : localizations.pvrtc_can_only_compress_square_dimension,
+      );
     }
     final decoder = image.PvrDecoder();
     final imgRaw = decoder.decode(senFile.readBytes(width * height ~/ 2))!;
