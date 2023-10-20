@@ -11,6 +11,38 @@ import 'package:sen_material_design/bridge/executor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResourceStreamBundlePatch {
+  static void encodeFs(
+    String before,
+    String after,
+    String patch,
+    AppLocalizations? localizations,
+  ) {
+    final ResourceStreamBundlePatch rsbpatch = ResourceStreamBundlePatch();
+    final SenBuffer patchFile = rsbpatch.patchEncode(
+      SenBuffer.OpenFile(before),
+      SenBuffer.OpenFile(after),
+      localizations,
+    );
+    patchFile.outFile(patch);
+    return;
+  }
+
+  static void decodeFs(
+    String before,
+    String patch,
+    String after,
+    AppLocalizations? localizations,
+  ) {
+    final ResourceStreamBundlePatch rsbpatch = ResourceStreamBundlePatch();
+    final SenBuffer afterFile = rsbpatch.patchDecode(
+      SenBuffer.OpenFile(before),
+      SenBuffer.OpenFile(patch),
+      localizations,
+    );
+    afterFile.outFile(after);
+    return;
+  }
+
   SenBuffer patchEncode(
     SenBuffer senBefore,
     SenBuffer senAfter,

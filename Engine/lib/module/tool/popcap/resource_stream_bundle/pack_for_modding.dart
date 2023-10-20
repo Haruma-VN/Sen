@@ -2,6 +2,7 @@
 
 import "package:path/path.dart" as p;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/from_resinfo.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_stream_bundle/common.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_stream_bundle/pack.dart';
@@ -137,8 +138,23 @@ class PackModding {
     );
     if (packages != null) {
       final rsg = ResourceStreamGroup();
+      final packagesPath = p.join(inputDirectory, 'resource', 'PACKAGES');
+      FileSystem.readDirectory(packagesPath, true).forEach((element) {
+        if (p.withoutExtension(element).endsWith('.JSON')) {
+          ReflectionObjectNotation.encode_fs(
+            element,
+            '${p.withoutExtension(element)}.RTON',
+            encryptRton,
+            RijndaelC.has(
+              ApplicationInformation.encryptionKey.value,
+              ApplicationInformation.encryptionKey.value.substring(4, 28),
+            ),
+            localizations,
+          );
+        }
+      });
       final SenBuffer packagesRSG = rsg.packRSG(
-        p.join(inputDirectory, 'resource', 'PACKAGES'),
+        packagesPath,
         manifest['group'][packages][packages],
         localizations,
         false,

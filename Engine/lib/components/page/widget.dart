@@ -20,7 +20,11 @@ import 'package:sen_material_design/components/tool/popcap/resource_group/merge.
 import 'package:sen_material_design/components/tool/popcap/resource_group/split.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/to_resinfo.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/pack.dart';
+import 'package:sen_material_design/components/tool/popcap/rsb/pack_for_modding.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/unpack.dart';
+import 'package:sen_material_design/components/tool/popcap/rsb/unpack_for_modding.dart';
+import 'package:sen_material_design/components/tool/popcap/rsbpatch/decode.dart';
+import 'package:sen_material_design/components/tool/popcap/rsbpatch/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/rsg/pack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsg/unpack.dart';
 import 'package:sen_material_design/components/tool/popcap/rton/decode.dart';
@@ -48,6 +52,8 @@ Map<String, Widget> materialWidget = const {
   'popcap.resource_group.split_atlas': PopCapAtlasSplit(),
   'popcap.resource_group.merge_atlas': PopCapAtlasMerge(),
   'popcap.rsb.unpack': PopCapRSBUnpack(),
+  'popcap.rsb.unpack_simple': PopCapRSBUnpackForModding(),
+  'popcap.rsb.pack_simple': PopCapRSBPackForModding(),
   'popcap.rsb.pack': PopCapRSBPack(),
   'popcap.rsg.unpack': PopCapRSGUnpack(),
   'popcap.rsg.pack': PopCapRSGPack(),
@@ -69,4 +75,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.animation.pam_from_flash': PopCapAnimationConvertFromFlash(),
   'popcap.animation.json_to_flash': PopCapAnimationJsonConvertToFlash(),
   'popcap.animation.json_from_flash': PopCapAnimationJsonConvertFromFlash(),
+  'popcap.rsbpatch.decode': PopCapRSBPatchDecode(),
+  'popcap.rsbpatch.encode': PopCapRSBPatchEncode(),
 };

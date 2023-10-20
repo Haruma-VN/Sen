@@ -10,9 +10,10 @@ import "package:path/path.dart" as p;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum ExtendsTextureInformation {
-  sz16,
-  sz20,
-  sz24,
+  sz0,
+  sz1,
+  sz2,
+  sz3,
 }
 
 class UnpackModding {

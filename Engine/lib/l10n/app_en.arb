@@ -251,5 +251,14 @@
     "invalid_md5_data": "Invalid MD5 Data",
     "invalid_packet_name": "Invalid Packet Name",
     "this_rsb_is_invalid": "This RSB is invalid to use RSB-Patch",
-    "invalid_patch_file": "Invalid Diff Patch file"
+    "invalid_patch_file": "Invalid Diff Patch file",
+    "extend_pvz2c_texture_information": "Extend the texture information for PvZ2C",
+    "do_not_select_if_you_not_modding_2c": "Do not select if you not modding PvZ2C",
+    "encrypt_rton": "Encrypt RTONs",
+    "use_res_info": "Use Res-Info",
+    "encrypt_rton_title": "JSONs inside PACKAGES after converted to RTONs will be encrypted",
+    "use_res_info_title": "Choose to use Res-Info or Resource-Group when pack RSB",
+    "before_file": "Before file",
+    "after_file": "After file",
+    "patch_file": "Patch File"
 }
