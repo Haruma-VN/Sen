@@ -36,12 +36,12 @@ class PackModding {
     );
     final String resourceDirectory = p.join(inputDirectory, 'resource');
     final List<dynamic> keys = manifest['group'].keys.toList();
-    final String? manifestGroup = keys.firstWhere(
+    final manifestGroup = keys.firstWhere(
       (dynamic rsg) => RegExp(r'__MANIFESTGROUP__(.+)?', caseSensitive: false)
           .hasMatch(rsg.toString()),
-      orElse: () => null,
+      orElse: () => '',
     );
-    if (manifestGroup == null) {
+    if (manifestGroup == '') {
       throw Exception('MANIFESTGROUP cannot be null');
     }
     bool resourceHasNewton = false;
@@ -134,9 +134,9 @@ class PackModding {
     }
     final packages = keys.firstWhere(
       (dynamic rsg) => rsg.toString().toUpperCase() == 'PACKAGES',
-      orElse: () => null,
+      orElse: () => '',
     );
-    if (packages != null) {
+    if (packages != '') {
       final rsg = ResourceStreamGroup();
       final packagesPath = p.join(inputDirectory, 'resource', 'PACKAGES');
       FileSystem.readDirectory(packagesPath, true).forEach((element) {
