@@ -18,7 +18,7 @@ class ConvertToResInfo {
         'type': parent['type'],
         'path': useString
             ? (parent['path'] as String).split('\\')
-            : parent['path'] as List<String>,
+            : parent['path'] as List<dynamic>,
         'dimension': {
           'width': parent['width'],
           'height': parent['height'],
@@ -33,7 +33,7 @@ class ConvertToResInfo {
             'type': element['type'],
             'path': useString
                 ? (element['path'] as String).split('\\')
-                : element['path'] as List<String>,
+                : element['path'] as List<dynamic>,
             'default': {
               'ax': element['ax'],
               'ay': element['ay'],
@@ -70,7 +70,7 @@ class ConvertToResInfo {
         'type': element['type'],
         'path': useString
             ? (element['path'] as String).split('\\')
-            : element['path'] as List<String>,
+            : element['path'] as List<dynamic>,
       };
       if (element['forceOriginalVectorSymbolSize'] != null) {
         result['packet']['data'][element['id']]
@@ -80,7 +80,7 @@ class ConvertToResInfo {
       if (element['srcpath'] != null) {
         result['packet']['data'][element['id']]['srcpath'] = useString
             ? (element['srcpath'] as String).split('\\')
-            : element['srcpath'] as List<String>;
+            : element['srcpath'] as List<dynamic>;
       }
     }
     return result;

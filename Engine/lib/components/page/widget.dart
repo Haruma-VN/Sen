@@ -13,6 +13,8 @@ import 'package:sen_material_design/components/tool/popcap/pam/json_from_flash.d
 import 'package:sen_material_design/components/tool/popcap/pam/json_to_flash.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/to_flash.dart';
 import 'package:sen_material_design/components/tool/popcap/pam/to_json.dart';
+import 'package:sen_material_design/components/tool/popcap/ptx/decode.dart';
+import 'package:sen_material_design/components/tool/popcap/ptx/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/merge.dart';
 import 'package:sen_material_design/components/tool/popcap/resinfo/split.dart';
 import 'package:sen_material_design/components/tool/popcap/resource_group/from_resinfo.dart';
@@ -63,6 +65,8 @@ Map<String, Widget> materialWidget = const {
   'popcap.resinfo.merge_atlas': MergeWithResInfo(),
   'popcap.rton.decode': PopCapRTONDecode(),
   'popcap.rton.encode': PopCapRTONEncode(),
+  'popcap.ptx.decode': PopCapPTXDecode(),
+  'popcap.ptx.encode': PopCapPTXEncode(),
   'popcap.compiled_text.decode': PopCapCompiledTextDecode(),
   'popcap.compiled_text.encode': PopCapCompiledTextEncode(),
   'popcap.rton.decrypt': PopCapRTONDecrypt(),

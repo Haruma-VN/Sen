@@ -260,5 +260,10 @@
     "use_res_info_title": "Choose to use Res-Info or Resource-Group when pack RSB",
     "before_file": "Before file",
     "after_file": "After file",
-    "patch_file": "Patch File"
+    "patch_file": "Patch File",
+    "unsupported_texture_format": "Unsupported texture format",
+    "select_texture_format": "Select texture format",
+    "choose_fmt_to_process": "Choose format to process",
+    "input_width": "Input width",
+    "input_height": "Input height" 
 }

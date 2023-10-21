@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, constant_identifier_names, non_constant_identifier_names
 
 import 'dart:typed_data';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,6 +7,35 @@ import 'package:sen_material_design/module/utility/compress/zlib/common.dart';
 import 'package:image/image.dart' as image;
 import "package:path/path.dart" as path;
 import "package:sen_material_design/module/tool/popcap/sexy_texture/compress.dart";
+
+enum TextureFormat {
+  argb_8888,
+  rgba_8888,
+  rgba_4444,
+  rgb_565,
+  rgba_5551,
+  rgba_4444_tiled,
+  rgb_565_tiled,
+  rgba_5551_tiled,
+  rgb_etc1,
+  rgb_etc1_a8,
+  rgb_etc1_palette,
+  rgba_pvrtc_4bpp,
+  rgb_pvrtc_4bpp_a8,
+}
+
+class SexyTextureFormat {
+  TextureFormat format;
+  String textureFormat;
+  String platform;
+  int actualFormat;
+  SexyTextureFormat(
+    this.format,
+    this.textureFormat,
+    this.platform,
+    this.actualFormat,
+  );
+}
 
 abstract interface class PopCapSexyTexture {
   SenBuffer decodeARGB8888(SenBuffer senFile, int width, int height);
@@ -73,6 +102,186 @@ abstract interface class PopCapSexyTexture {
 }
 
 class SexyTexture implements PopCapSexyTexture {
+  static void decode_fs(
+    String inFile,
+    String outFile,
+    TextureFormat format,
+    int width,
+    int height,
+    AppLocalizations? localizations,
+  ) {
+    final SenBuffer inStream = SenBuffer.OpenFile(inFile);
+    SenBuffer outStream;
+    final SexyTexture ptx = SexyTexture();
+    switch (format) {
+      case TextureFormat.argb_8888:
+        {
+          outStream = ptx.decodeARGB8888(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgba_8888:
+        {
+          outStream = ptx.decodeRGBA8888(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgba_4444:
+        {
+          outStream = ptx.decodeRGBA4444(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgb_565:
+        {
+          outStream = ptx.decodeRGB565(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgba_5551:
+        {
+          outStream = ptx.decodeRGBA5551(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgba_4444_tiled:
+        {
+          outStream = ptx.decodeRGBA4444Tiled(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgb_565_tiled:
+        {
+          outStream = ptx.decodeRGB565Tiled(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgba_5551_tiled:
+        {
+          outStream = ptx.decodeRGBA5551Tiled(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgb_etc1:
+        {
+          outStream = ptx.decodeRGBETC1(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgb_etc1_a8:
+        {
+          outStream = ptx.decodeRGBETC1A8(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgb_etc1_palette:
+        {
+          outStream = ptx.decodeRGBETC1APalette(inStream, width, height);
+          break;
+        }
+      case TextureFormat.rgba_pvrtc_4bpp:
+        {
+          outStream =
+              ptx.decodeRGBAPVRTC4BPP(inStream, width, height, localizations);
+          break;
+        }
+      case TextureFormat.rgb_pvrtc_4bpp_a8:
+        {
+          outStream =
+              ptx.decodeRGBAPVRTC4BPP(inStream, width, height, localizations);
+          break;
+        }
+      default:
+        {
+          throw Exception(
+            localizations != null
+                ? localizations.unsupported_texture_format
+                : 'Unsupported texture format',
+          );
+        }
+    }
+    outStream.outFile(outFile);
+    return;
+  }
+
+  static void encode_fs(
+    String inFile,
+    String outFile,
+    TextureFormat format,
+    AppLocalizations? localizations,
+  ) {
+    final SenBuffer inStream = SenBuffer.OpenFile(inFile);
+    SenBuffer outStream;
+    final SexyTexture ptx = SexyTexture();
+    switch (format) {
+      case TextureFormat.argb_8888:
+        {
+          outStream = ptx.encodeARGB8888(inStream);
+          break;
+        }
+      case TextureFormat.rgba_8888:
+        {
+          outStream = ptx.encodeRGBA8888(inStream);
+          break;
+        }
+      case TextureFormat.rgba_4444:
+        {
+          outStream = ptx.encodeRGBA4444(inStream);
+          break;
+        }
+      case TextureFormat.rgb_565:
+        {
+          outStream = ptx.encodeRGB565(inStream);
+          break;
+        }
+      case TextureFormat.rgba_5551:
+        {
+          outStream = ptx.encodeRGBA5551(inStream);
+          break;
+        }
+      case TextureFormat.rgba_4444_tiled:
+        {
+          outStream = ptx.encodeRGBA4444Tiled(inStream);
+          break;
+        }
+      case TextureFormat.rgb_565_tiled:
+        {
+          outStream = ptx.encodeRGB565Tiled(inStream);
+          break;
+        }
+      case TextureFormat.rgba_5551_tiled:
+        {
+          outStream = ptx.encodeRGBA5551Tiled(inStream);
+          break;
+        }
+      case TextureFormat.rgb_etc1:
+        {
+          outStream = ptx.encodeRGBETC1(inStream);
+          break;
+        }
+      case TextureFormat.rgb_etc1_a8:
+        {
+          outStream = ptx.encodeRGBETC1A8(inStream);
+          break;
+        }
+      case TextureFormat.rgb_etc1_palette:
+        {
+          outStream = ptx.encodeRGBETC1APalette(inStream);
+          break;
+        }
+      case TextureFormat.rgba_pvrtc_4bpp:
+        {
+          outStream = ptx.encodeRGBAPVRTC4BPP(inStream);
+          break;
+        }
+      case TextureFormat.rgb_pvrtc_4bpp_a8:
+        {
+          outStream = ptx.encodeRGBAPVRTC4BPP(inStream);
+          break;
+        }
+      default:
+        {
+          throw Exception(
+            localizations != null
+                ? localizations.unsupported_texture_format
+                : 'Unsupported texture format',
+          );
+        }
+    }
+    outStream.outFile(outFile);
+    return;
+  }
+
   @override
   SenBuffer decodeARGB8888(SenBuffer senFile, int width, int height) {
     final imgRaw = image.Image.fromBytes(
