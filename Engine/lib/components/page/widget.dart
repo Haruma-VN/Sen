@@ -25,6 +25,7 @@ import 'package:sen_material_design/components/tool/popcap/rsb/pack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/pack_for_modding.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/unpack.dart';
 import 'package:sen_material_design/components/tool/popcap/rsb/unpack_for_modding.dart';
+import 'package:sen_material_design/components/tool/popcap/rsb/unpack_loose_constraints.dart';
 import 'package:sen_material_design/components/tool/popcap/rsbpatch/decode.dart';
 import 'package:sen_material_design/components/tool/popcap/rsbpatch/encode.dart';
 import 'package:sen_material_design/components/tool/popcap/rsg/pack.dart';
@@ -81,4 +82,5 @@ Map<String, Widget> materialWidget = const {
   'popcap.animation.json_from_flash': PopCapAnimationJsonConvertFromFlash(),
   'popcap.rsbpatch.decode': PopCapRSBPatchDecode(),
   'popcap.rsbpatch.encode': PopCapRSBPatchEncode(),
+  'popcap.rsb.unpack_by_loose_constraints': PopCapRSBUnpackByLooseConstraints(),
 };

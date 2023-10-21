@@ -59,4 +59,6 @@ final List<Map<String, dynamic>> defaultMethods = [
   {"method": "popcap.newton.encode", "index": 36},
   {"method": "popcap.compiled_text.decode", "index": 37},
   {"method": "popcap.compiled_text.encode", "index": 38},
+  {"method": "popcap.rsbpatch.decode", "index": 39},
+  {"method": "popcap.rsbpatch.encode", "index": 40},
 ];
