@@ -4,7 +4,7 @@ class Message {
   bool sendByUser;
   String message;
   String title;
-  Widget icon;
+  IconData icon;
   Color color;
   Message(
     this.title,

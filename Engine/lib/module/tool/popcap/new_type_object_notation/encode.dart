@@ -14,19 +14,21 @@ void encodeNewton(
   }
   try {
     var newton = Newton();
+    if (console != null) {
+      console.sendRequest(
+        localizations != null
+            ? localizations.popcap_newton_encode
+            : "PopCap Newton: Encode",
+        inFile,
+        outFile,
+      );
+    }
     var raw = newton.encode(
       FileSystem.readJson(
         inFile,
       ),
       localizations,
     );
-    if (console != null) {
-      console.sendRequest(
-        'Encode Newton',
-        inFile,
-        outFile,
-      );
-    }
     raw.outFile(
       outFile,
     );

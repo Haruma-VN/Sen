@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/page/debug.dart';
+import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/components/tool/popcap/ptx/common.dart';
 import 'package:sen_material_design/module/tool/popcap/sexy_texture/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
@@ -234,100 +235,45 @@ class _PopCapPTXEncodeState extends State<PopCapPTXEncode> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
-                      onPressed: allowExecute
-                          ? () async {
-                              final DateTime startTime = DateTime.now();
-                              try {
-                                SexyTexture.encode_fs(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Debug(
+                              () async {
+                                // Delay the execution of the function by 1 second
+                                await Future.delayed(const Duration(seconds: 1),
+                                    () {
+                                  SexyTexture.encode_fs(
+                                    controllerInput.text,
+                                    controllerOutput.text,
+                                    CommonTextureEncode.exchangeTextureFormat(
+                                      format,
+                                    ),
+                                    AppLocalizations.of(context)!,
+                                  );
+                                });
+                              },
+                              AppLocalizations.of(context)!.popcap_ptx_encode,
+                              argumentGot: [
+                                ArgumentData(
                                   controllerInput.text,
+                                  AppLocalizations.of(context)!
+                                      .argument_obtained,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                              argumentOutput: [
+                                ArgumentData(
                                   controllerOutput.text,
-                                  CommonTextureEncode.exchangeTextureFormat(
-                                    format,
-                                  ),
-                                  AppLocalizations.of(context)!,
-                                );
-                                final DateTime endTime = DateTime.now();
-                                final Duration difference =
-                                    endTime.difference(startTime);
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_success(
-                                      '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
-                                    );
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.green[600]
-                                                : Colors.green[500],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } catch (e) {
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_error(e);
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.red[300]
-                                                : Colors.red[900],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              return;
-                            }
-                          : null,
+                                  AppLocalizations.of(context)!.argument_output,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                       style: OutlinedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

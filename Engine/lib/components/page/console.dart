@@ -20,12 +20,7 @@ class ConsoleState extends State<Console> {
       ApplicationInformation.applicationName,
       'Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal}',
       false,
-      Icon(
-        Icons.album_outlined,
-        color: ApplicationInformation.isDarkMode.value
-            ? Colors.white70
-            : Colors.black87,
-      ),
+      Icons.album_outlined,
       ApplicationInformation.isDarkMode.value ? Colors.white70 : Colors.black87,
     ),
   ];
@@ -43,12 +38,7 @@ class ConsoleState extends State<Console> {
         ApplicationInformation.applicationName,
         'Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal}',
         false,
-        Icon(
-          Icons.album_outlined,
-          color: ApplicationInformation.isDarkMode.value
-              ? Colors.white70
-              : Colors.black87,
-        ),
+        Icons.album_outlined,
         ApplicationInformation.isDarkMode.value
             ? Colors.white70
             : Colors.black87,
@@ -67,18 +57,11 @@ class ConsoleState extends State<Console> {
   void done() {
     add(
       Message(
-        ApplicationInformation.applicationName,
+        AppLocalizations.of(context)!.all_arguments_have_been_executed,
         AppLocalizations.of(context)!.command_execute_finish,
         false,
-        Icon(
-          Icons.done_outlined,
-          color: ApplicationInformation.isDarkMode.value
-              ? Colors.white70
-              : Colors.black87,
-        ),
-        ApplicationInformation.isDarkMode.value
-            ? Colors.white70
-            : Colors.black87,
+        Icons.done_all_outlined,
+        Colors.green,
       ),
     );
     return;
@@ -90,12 +73,7 @@ class ConsoleState extends State<Console> {
         AppLocalizations.of(context)!.execution_error,
         (reason).toString(),
         false,
-        Icon(
-          Icons.error_outline,
-          color: ApplicationInformation.isDarkMode.value
-              ? Colors.white70
-              : Colors.black87,
-        ),
+        Icons.done_outlined,
         Colors.red,
       ),
     );
@@ -118,12 +96,7 @@ class ConsoleState extends State<Console> {
         AppLocalizations.of(context)!.stack_for_trace_back,
         filteredStackTrace.toString(),
         false,
-        Icon(
-          Icons.settings_backup_restore_outlined,
-          color: ApplicationInformation.isDarkMode.value
-              ? Colors.white70
-              : Colors.black87,
-        ),
+        Icons.done_outlined,
         Colors.red,
       ),
     );
@@ -140,12 +113,7 @@ class ConsoleState extends State<Console> {
         AppLocalizations.of(context)!.argument_load,
         function,
         true,
-        Icon(
-          Icons.info_outline,
-          color: ApplicationInformation.isDarkMode.value
-              ? Colors.white70
-              : Colors.black87,
-        ),
+        Icons.done_outlined,
         const Color.fromARGB(255, 25, 193, 193),
       ),
     );
@@ -154,12 +122,7 @@ class ConsoleState extends State<Console> {
         AppLocalizations.of(context)!.argument_obtained,
         input,
         true,
-        Icon(
-          Icons.info_outline,
-          color: ApplicationInformation.isDarkMode.value
-              ? Colors.white70
-              : Colors.black87,
-        ),
+        Icons.done_outlined,
         Colors.green,
       ),
     );
@@ -168,12 +131,7 @@ class ConsoleState extends State<Console> {
         AppLocalizations.of(context)!.argument_output,
         output,
         true,
-        Icon(
-          Icons.info_outline,
-          color: ApplicationInformation.isDarkMode.value
-              ? Colors.white70
-              : Colors.black87,
-        ),
+        Icons.done_outlined,
         Colors.green,
       ),
     );
@@ -183,48 +141,56 @@ class ConsoleState extends State<Console> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return SingleChildScrollView(
-      child: Container(
-        width: double.infinity,
-        height: 500,
-        padding: const EdgeInsets.all(12.0),
-        child: AnimatedList(
-          key: _listKey,
-          initialItemCount: messages.length,
-          itemBuilder: (context, index, animation) {
-            return SlideTransition(
-              position: animation.drive(
-                Tween<Offset>(
-                  begin: const Offset(-1, 0),
-                  end: Offset.zero,
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: (MediaQuery.of(context).size.height) * 0.8,
+          padding: const EdgeInsets.all(8.0),
+          child: AnimatedList(
+            key: _listKey,
+            initialItemCount: messages.length,
+            itemBuilder: (context, index, animation) {
+              return SlideTransition(
+                position: animation.drive(
+                  Tween<Offset>(
+                    begin: const Offset(-1, 0),
+                    end: Offset.zero,
+                  ),
                 ),
-              ),
-              child: Card(
-                child: ListTile(
-                  title: Text(
-                    messages[index].title,
-                    style: theme.textTheme.titleSmall!.copyWith(
-                      color: ApplicationInformation.isDarkMode.value
+                child: Card(
+                  color: messages[index].color,
+                  child: ListTile(
+                    title: Text(
+                      messages[index].title,
+                      style: theme.textTheme.titleSmall!.copyWith(
+                        color: messages[index].color == Colors.black87
+                            ? Colors.white70
+                            : Colors.black87,
+                      ),
+                    ),
+                    leading: Icon(
+                      messages[index].icon,
+                      color: messages[index].color == Colors.black87
                           ? Colors.white70
                           : Colors.black87,
                     ),
-                  ),
-                  leading: messages[index].icon,
-                  subtitle: Text(
-                    messages[index].message,
-                    style: theme.textTheme.bodySmall!.copyWith(
-                      color: ApplicationInformation.isDarkMode.value
-                          ? Colors.white70
-                          : Colors.black87,
+                    subtitle: Text(
+                      messages[index].message,
+                      style: theme.textTheme.bodySmall!.copyWith(
+                        color: messages[index].color == Colors.black87
+                            ? Colors.white70
+                            : Colors.black87,
+                      ),
                     ),
+                    enabled: false,
                   ),
-                  enabled: false,
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 }

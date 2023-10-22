@@ -66,8 +66,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.resinfo.merge_atlas': MergeWithResInfo(),
   'popcap.rton.decode': PopCapRTONDecode(),
   'popcap.rton.encode': PopCapRTONEncode(),
-  'popcap.ptx.decode': PopCapPTXDecode(),
-  'popcap.ptx.encode': PopCapPTXEncode(),
   'popcap.compiled_text.decode': PopCapCompiledTextDecode(),
   'popcap.compiled_text.encode': PopCapCompiledTextEncode(),
   'popcap.rton.decrypt': PopCapRTONDecrypt(),
@@ -83,4 +81,6 @@ Map<String, Widget> materialWidget = const {
   'popcap.rsbpatch.decode': PopCapRSBPatchDecode(),
   'popcap.rsbpatch.encode': PopCapRSBPatchEncode(),
   'popcap.rsb.unpack_by_loose_constraints': PopCapRSBUnpackByLooseConstraints(),
+  'popcap.ptx.decode': PopCapPTXDecode(),
+  'popcap.ptx.encode': PopCapPTXEncode(),
 };

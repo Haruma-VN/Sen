@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/page/console.dart';
 import 'package:sen_material_design/module/tool/popcap/new_type_object_notation/decode.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart' as p;
 
 class PopCapNewtonDecode extends StatefulWidget {
   const PopCapNewtonDecode({super.key});
@@ -33,6 +35,8 @@ class _PopCapNewtonDecodeState extends State<PopCapNewtonDecode> {
     controllerOutput.dispose();
     super.dispose();
   }
+
+  final GlobalKey<ConsoleState> consoleKey = GlobalKey<ConsoleState>();
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +95,8 @@ class _PopCapNewtonDecodeState extends State<PopCapNewtonDecode> {
                             final String? path = await FileSystem.pickFile();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text = '${path.replaceAll(
-                                '\\',
-                                '/',
-                              )}.json';
+                              controllerOutput.text =
+                                  '${p.withoutExtension(path)}.json';
                               setState(() {
                                 allowExecute = true;
                               });
@@ -153,6 +155,7 @@ class _PopCapNewtonDecodeState extends State<PopCapNewtonDecode> {
                                 decodeNewton(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  consoleKey.currentState,
                                   AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
@@ -253,6 +256,9 @@ class _PopCapNewtonDecodeState extends State<PopCapNewtonDecode> {
                       ),
                     ),
                   ),
+                ),
+                Console(
+                  key: consoleKey,
                 ),
               ],
             ),

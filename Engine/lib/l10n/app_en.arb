@@ -272,5 +272,9 @@
     "argument_load": "Argument Loaded:",
     "command_execute_finish": "Command executed finish!",
     "stack_for_trace_back": "Stack for traceback:",
-    "execution_error": "Execution error:"
+    "execution_error": "Execution error:",
+    "file_exists_sen_will_override_it": "Execution Warning: File already exists, Sen will override it",
+    "folder_exists_sen_will_override_it": "Execution Warning: Directory already exists, file inside will be override",
+    "all_arguments_have_been_executed": "All arguments have been executed!",
+    "execution_finish": "Execution Finish:"
 }

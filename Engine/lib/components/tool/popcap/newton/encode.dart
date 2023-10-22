@@ -95,12 +95,8 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
                             final String? path = await FileSystem.pickFile();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text = p.withoutExtension(
-                                path.replaceAll(
-                                  '\\',
-                                  '/',
-                                ),
-                              );
+                              controllerOutput.text =
+                                  '${p.withoutExtension(path)}.newton';
                               setState(() {
                                 allowExecute = true;
                               });
