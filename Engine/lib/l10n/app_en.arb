@@ -265,5 +265,12 @@
     "select_texture_format": "Select texture format",
     "choose_fmt_to_process": "Choose format to process",
     "input_width": "Input width",
-    "input_height": "Input height" 
+    "input_height": "Input height",
+    "argument_obtained": "Argument Obtained:",
+    "argument_output": "Argument Output:",
+    "waiting": "Waiting...",
+    "argument_load": "Argument Loaded:",
+    "command_execute_finish": "Command executed finish!",
+    "stack_for_trace_back": "Stack for traceback:",
+    "execution_error": "Execution error:"
 }

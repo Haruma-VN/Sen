@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/module/tool/popcap/new_type_object_notation/decode.dart';
+import 'package:sen_material_design/components/page/console.dart';
+import 'package:sen_material_design/module/tool/popcap/new_type_object_notation/encode.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
@@ -35,6 +36,8 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
     super.dispose();
   }
 
+  final GlobalKey<ConsoleState> consoleKey = GlobalKey<ConsoleState>();
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -48,7 +51,7 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
         scrolledUnderElevation: 3,
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           Center(
             child: Column(
               children: [
@@ -153,9 +156,10 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
                           ? () async {
                               final DateTime startTime = DateTime.now();
                               try {
-                                decodeNewton(
+                                encodeNewton(
                                   controllerInput.text,
                                   controllerOutput.text,
+                                  consoleKey.currentState,
                                   AppLocalizations.of(context)!,
                                 );
                                 final DateTime endTime = DateTime.now();
@@ -256,6 +260,9 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
                       ),
                     ),
                   ),
+                ),
+                Console(
+                  key: consoleKey,
                 ),
               ],
             ),

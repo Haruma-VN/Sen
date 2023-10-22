@@ -841,8 +841,8 @@ unsigned char* DecodeETC1(
             auto block_part1 =view->readUint32BE();
             auto block_part2 = view->readUint32BE();
             decompressBlockETC2c(
-                block_part1,
-                block_part2,
+                static_cast<unsigned int>(block_part1),
+                static_cast<unsigned int>(block_part2),
                 static_cast<uint8*>(image_color),
                 static_cast<int>(k_block_width),
                 static_cast<int>(k_block_width),
@@ -852,7 +852,7 @@ unsigned char* DecodeETC1(
             );
             for (auto pixel_y = 0; pixel_y < k_block_width; pixel_y++) {
                 for (auto pixel_x = 0; pixel_x < k_block_width; pixel_x++) {
-                    for (auto i = 0; i < 4; ++i) {
+                    for (auto i = 0; i < 4; i++) {
                         image_block[((block_y * k_block_width + pixel_y) * width + (block_x * k_block_width + pixel_x)) * 4 + i] = 
                             image_color[(pixel_y * k_block_width + pixel_x) * 4 + i];
                     }
