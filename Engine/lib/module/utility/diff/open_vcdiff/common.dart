@@ -17,7 +17,7 @@ class VCDiff {
     beforePtr.asTypedList(before.length).setAll(0, before);
     Pointer<Int8> patchPtr = calloc(patch.length);
     patchPtr.asTypedList(patch.length).setAll(0, patch);
-    final afterPointer = calloc<Int32>();
+    final Pointer<Int32> afterPointer = calloc<Int32>();
     Pointer<Uint8> resultPtr = VCDiffDecode(
       beforePtr,
       before.length,
@@ -28,6 +28,8 @@ class VCDiff {
     final data = resultPtr.asTypedList(afterPointer.value);
     calloc.free(beforePtr);
     calloc.free(patchPtr);
+    calloc.free(afterPointer);
+    calloc.free(resultPtr);
     return Uint8List.fromList(data);
   }
 
@@ -50,6 +52,8 @@ class VCDiff {
     final data = resultPtr.asTypedList(patchPointer.value);
     calloc.free(beforePtr);
     calloc.free(afterPtr);
+    calloc.free(patchPointer);
+    calloc.free(resultPtr);
     return Uint8List.fromList(data);
   }
 

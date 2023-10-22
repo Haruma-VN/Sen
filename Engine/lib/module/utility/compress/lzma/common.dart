@@ -7,47 +7,33 @@ import 'package:sen_material_design/bridge/executor.dart';
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 
 class lzma {
-  static Uint8List compress(
-    Uint8List dataStream,
-  ) {
-    final data = calloc<Uint8>(
-      dataStream.length,
-    )..asTypedList(
-        dataStream.length,
-      ).setAll(
-        0,
-        dataStream,
-      );
+  static Uint8List compress(Uint8List dataStream) {
+    final Pointer<Uint8> data = calloc<Uint8>(dataStream.length)
+      ..asTypedList(dataStream.length).setAll(0, dataStream);
     Pointer<Pointer<Uint8>> outputPtr = calloc<Pointer<Uint8>>();
     Pointer<Int32> outputSizePtr = calloc<Int32>();
-    lzmaCompress(
-      data,
-      dataStream.length,
-      outputPtr,
-      outputSizePtr,
-    );
+    lzmaCompress(data, dataStream.length, outputPtr, outputSizePtr);
     Pointer<Uint8> resultPtr = outputPtr.value;
     int resultSize = outputSizePtr.value;
-    final result = resultPtr.asTypedList(resultSize);
+    final Uint8List result = resultPtr.asTypedList(resultSize);
+    calloc.free(data);
+    calloc.free(outputPtr);
+    calloc.free(outputSizePtr);
     return Uint8List.fromList(result);
   }
 
-  static Uint8List uncompress(
-    Uint8List data,
-  ) {
+  static Uint8List uncompress(Uint8List data) {
     Pointer<Uint8> dataPtr = calloc(data.length);
     dataPtr.asTypedList(data.length).setAll(0, data);
     Pointer<Pointer<Uint8>> outputPtr = calloc<Pointer<Uint8>>();
     Pointer<Int32> outputSizePtr = calloc<Int32>();
-    lzmaUncompress(
-      dataPtr,
-      data.length,
-      outputPtr,
-      outputSizePtr,
-    );
+    lzmaUncompress(dataPtr, data.length, outputPtr, outputSizePtr);
     Pointer<Uint8> resultPtr = outputPtr.value;
     int resultSize = outputSizePtr.value;
-    final result = resultPtr.asTypedList(resultSize);
+    final Uint8List result = resultPtr.asTypedList(resultSize);
+    calloc.free(dataPtr);
+    calloc.free(outputPtr);
+    calloc.free(outputSizePtr);
     return Uint8List.fromList(result);
   }
 

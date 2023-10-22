@@ -26,8 +26,9 @@ class MD5 {
       dataPtr,
       data.length,
     );
-    String result = resultPtr.toDartString();
+    final String result = resultPtr.toDartString();
     calloc.free(dataPtr);
+    calloc.free(resultPtr);
     return result;
   }
 

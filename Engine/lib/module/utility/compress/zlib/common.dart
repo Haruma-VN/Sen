@@ -8,52 +8,42 @@ import 'dart:typed_data';
 import 'package:sen_material_design/module/utility/buffer/common.dart';
 
 class Zlib {
-  /// Pass [dataStream] and [compressionLevel] to compress zlib
-  static Uint8List compress(
-    Uint8List dataStream,
-    int compressionLevel,
-  ) {
-    final dataPointer = calloc<Uint8>(dataStream.length)
+  static Uint8List uncompress(Uint8List dataStream) {
+    final Pointer<Uint8> dataPointer = calloc<Uint8>(dataStream.length)
       ..asTypedList(dataStream.length).setAll(0, dataStream);
-    final compressedSizePointer = calloc<Int32>();
-
-    final compressedDataPointer = ZlibCompress(
-      dataPointer,
-      dataStream.length,
-      compressionLevel,
-      compressedSizePointer,
-    );
-
-    final compressedData =
-        compressedDataPointer.asTypedList(compressedSizePointer.value);
-
-    return Uint8List.fromList(compressedData);
-  }
-
-  /// Pass [dataStream] to uncompress zlib
-  static Uint8List uncompress(
-    Uint8List dataStream,
-  ) {
-    final dataPointer = calloc<Uint8>(dataStream.length)
-      ..asTypedList(dataStream.length).setAll(0, dataStream);
-    final uncompressedDataPointer = calloc<Pointer<Uint8>>();
-    final uncompressedDataSizePointer = calloc<Int32>();
-
+    final Pointer<Pointer<Uint8>> uncompressedDataPointer =
+        calloc<Pointer<Uint8>>();
+    final Pointer<Int32> uncompressedDataSizePointer = calloc<Int32>();
     ZlibUncompress(
       dataPointer,
       dataStream.length,
       uncompressedDataPointer,
       uncompressedDataSizePointer,
     );
-
-    final uncompressedData = uncompressedDataPointer.value
+    final Uint8List uncompressedData = uncompressedDataPointer.value
         .asTypedList(uncompressedDataSizePointer.value);
-
     calloc.free(dataPointer);
     calloc.free(uncompressedDataPointer);
     calloc.free(uncompressedDataSizePointer);
-
     return Uint8List.fromList(uncompressedData);
+  }
+
+  static Uint8List compress(Uint8List dataStream, int compressionLevel) {
+    final Pointer<Uint8> dataPointer = calloc<Uint8>(dataStream.length)
+      ..asTypedList(dataStream.length).setAll(0, dataStream);
+    final Pointer<Int32> compressedSizePointer = calloc<Int32>();
+    final Pointer<Uint8> compressedDataPointer = ZlibCompress(
+      dataPointer,
+      dataStream.length,
+      compressionLevel,
+      compressedSizePointer,
+    );
+    final Uint8List compressedData =
+        compressedDataPointer.asTypedList(compressedSizePointer.value);
+    calloc.free(dataPointer);
+    calloc.free(compressedSizePointer);
+    calloc.free(compressedDataPointer);
+    return Uint8List.fromList(compressedData);
   }
 
   static compressFile(

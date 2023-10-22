@@ -144,18 +144,4 @@ class RectangleBinPack {
     calloc.free(resultPtr);
     return result;
   }
-
-  /// Example
-
-  // var result = RectangleBinPack.process(RectangleBox(4096, 4096, 1), [
-  //   RectangleSprite(8192, 1029, -1, -1, 'a.png', 0, 0, 1, 1, ['s', 's', 'cx']),
-  //   RectangleSprite(13, 23, -1, -1, 'b.png', 0, 0, 1, 1, ['cx', 'bs', 'ss']),
-  //   RectangleSprite(43, 23, -1, -1, 'c.png', 0, 0, 1, 1, ['9s', '7s', '0k']),
-  // ]);
-  // for (var i = 0; i < result.length; i++) {
-  //   var current = result[i];
-  //   debugPrint(
-  //     'x: ${current.x}, y: ${current.y}, width: ${current.width}, height: ${current.height}, imageIndex: ${current.imageIndex}, hasOverSize: ${current.hasOversized}, id: ${current.id}, infoX: ${current.infoX}, infoY: ${current.infoY}, cols: ${current.cols}, rows: ${current.rows}, path: ${current.path.join('/')}',
-  //   );
-  // }
 }

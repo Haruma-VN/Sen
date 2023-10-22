@@ -71,7 +71,6 @@ namespace Sen::Internal::Kernel::Tool::Algorithm
                 continue;
             }
             auto packed = bin.Insert(sprite.width + padding, sprite.height + padding, algorithm);
-
             if (packed.height != 0) {
                 sprite.x = packed.x;
                 sprite.y = packed.y;

@@ -14,7 +14,7 @@ class Brotli {
   static Uint8List compress(
     Uint8List dataStream,
   ) {
-    final data = calloc<Uint8>(
+    final Pointer<Uint8> data = calloc<Uint8>(
       dataStream.length,
     )..asTypedList(
         dataStream.length,
@@ -22,8 +22,8 @@ class Brotli {
         0,
         dataStream,
       );
-    final data_size = dataStream.length;
-    final compressed_data_size = calloc<Int32>();
+    final int data_size = dataStream.length;
+    final Pointer<Int32> compressed_data_size = calloc<Int32>();
     final Pointer<Uint8> compressedDataPtr = BrotliCompress(
       data,
       data_size,
@@ -32,6 +32,9 @@ class Brotli {
     final compressedData = compressedDataPtr.asTypedList(
       compressed_data_size.value,
     );
+    calloc.free(data);
+    calloc.free(compressed_data_size);
+    calloc.free(compressedDataPtr);
     return Uint8List.fromList(
       compressedData,
     );
@@ -40,14 +43,14 @@ class Brotli {
   static Uint8List uncompress(
     Uint8List dataStream,
   ) {
-    final data = calloc<Uint8>(
+    final Pointer<Uint8> data = calloc<Uint8>(
       dataStream.length,
     )..asTypedList(dataStream.length).setAll(
         0,
         dataStream,
       );
-    final data_size = dataStream.length;
-    final compressed_data_size = calloc<Int32>();
+    final int data_size = dataStream.length;
+    final Pointer<Int32> compressed_data_size = calloc<Int32>();
     final Pointer<Uint8> compressedDataPtr = BrotliUncompress(
       data,
       data_size,
@@ -56,6 +59,9 @@ class Brotli {
     final compressedData = compressedDataPtr.asTypedList(
       compressed_data_size.value,
     );
+    calloc.free(data);
+    calloc.free(compressed_data_size);
+    calloc.free(compressedDataPtr);
     return Uint8List.fromList(
       compressedData,
     );

@@ -88,15 +88,13 @@ class ConsoleState extends State<Console> {
         );
       }
     }
-
-    String filteredStackTrace = newLines.join('\n');
-
+    final String filteredStackTrace = newLines.join('\n');
     add(
       Message(
         AppLocalizations.of(context)!.stack_for_trace_back,
         filteredStackTrace.toString(),
         false,
-        Icons.done_outlined,
+        Icons.error_outline,
         Colors.red,
       ),
     );
