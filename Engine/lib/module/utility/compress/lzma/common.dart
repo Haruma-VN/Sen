@@ -12,7 +12,13 @@ class lzma {
       ..asTypedList(dataStream.length).setAll(0, dataStream);
     Pointer<Pointer<Uint8>> outputPtr = calloc<Pointer<Uint8>>();
     Pointer<Int32> outputSizePtr = calloc<Int32>();
-    lzmaCompress(data, dataStream.length, outputPtr, outputSizePtr);
+    lzmaCompress(
+      data,
+      dataStream.length,
+      outputPtr,
+      outputSizePtr,
+      Pointer.fromFunction(testError),
+    );
     Pointer<Uint8> resultPtr = outputPtr.value;
     int resultSize = outputSizePtr.value;
     final Uint8List result = resultPtr.asTypedList(resultSize);

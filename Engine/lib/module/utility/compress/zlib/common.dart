@@ -19,6 +19,7 @@ class Zlib {
       dataStream.length,
       uncompressedDataPointer,
       uncompressedDataSizePointer,
+      Pointer.fromFunction(testError),
     );
     final Uint8List uncompressedData = uncompressedDataPointer.value
         .asTypedList(uncompressedDataSizePointer.value);
@@ -37,6 +38,7 @@ class Zlib {
       dataStream.length,
       compressionLevel,
       compressedSizePointer,
+      Pointer.fromFunction(testError),
     );
     final Uint8List compressedData =
         compressedDataPointer.asTypedList(compressedSizePointer.value);

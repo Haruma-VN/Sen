@@ -42,12 +42,14 @@ typedef ZlibCompressC = Pointer<Uint8> Function(
   Int32 dataSize,
   Int32 level,
   Pointer<Int32> compressedSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 typedef ZlibCompressDart = Pointer<Uint8> Function(
   Pointer<Uint8> data,
   int dataSize,
   int level,
   Pointer<Int32> compressedSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 final ZlibCompress = dylib
@@ -59,6 +61,7 @@ typedef ZlibUncompressC = Void Function(
   Int32 dataSize,
   Pointer<Pointer<Uint8>> uncompressedData,
   Pointer<Int32> uncompressedDataSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef ZlibUncompressDart = void Function(
@@ -66,30 +69,35 @@ typedef ZlibUncompressDart = void Function(
   int dataSize,
   Pointer<Pointer<Uint8>> uncompressedData,
   Pointer<Int32> uncompressedDataSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef GZipCompressC = Pointer<Uint8> Function(
   Pointer<Uint8> data,
   Int32 data_size,
   Pointer<Int32> compressed_data_size,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef GZipCompressDart = Pointer<Uint8> Function(
   Pointer<Uint8> data,
   int data_size,
   Pointer<Int32> compressed_data_size,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef GZipUncompressC = Pointer<Uint8> Function(
   Pointer<Uint8> data,
   Int32 data_size,
   Pointer<Int32> compressed_data_size,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef GZipUncompressDart = Pointer<Uint8> Function(
   Pointer<Uint8> data,
   int data_size,
   Pointer<Int32> compressed_data_size,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef MD5HashFunc = Pointer<Utf8> Function(
@@ -108,6 +116,7 @@ typedef VCDiffDecodeFunc = Pointer<Uint8> Function(
   Pointer<Int8> patch,
   Int32 patchSize,
   Pointer<Int32> afterSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef VCDiffDecodeFuncDart = Pointer<Uint8> Function(
@@ -116,6 +125,7 @@ typedef VCDiffDecodeFuncDart = Pointer<Uint8> Function(
   Pointer<Int8> patch,
   int patchSize,
   Pointer<Int32> afterSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef VCDiffEncodeFunc = Pointer<Uint8> Function(
@@ -124,6 +134,7 @@ typedef VCDiffEncodeFunc = Pointer<Uint8> Function(
   Pointer<Int8> after,
   Int32 afterSize,
   Pointer<Int32> dataSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef VCDiffEncodeFuncDart = Pointer<Uint8> Function(
@@ -132,6 +143,7 @@ typedef VCDiffEncodeFuncDart = Pointer<Uint8> Function(
   Pointer<Int8> after,
   int afterSize,
   Pointer<Int32> dataSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 final ZlibUncompress = dylib
@@ -175,6 +187,7 @@ typedef DeflateCompressFunc = Void Function(
   Int32 inputSize,
   Pointer<Pointer<Int8>> output,
   Pointer<Int32> outputSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef DeflateCompressFuncDart = void Function(
@@ -182,6 +195,7 @@ typedef DeflateCompressFuncDart = void Function(
   int inputSize,
   Pointer<Pointer<Int8>> output,
   Pointer<Int32> outputSize,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef DeflateUncompressFunc = Void Function(
@@ -189,6 +203,7 @@ typedef DeflateUncompressFunc = Void Function(
   Int32 inLen,
   Pointer<Pointer<Uint8>> out,
   Pointer<Int32> outLen,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef DeflateUncompressFuncDart = void Function(
@@ -196,6 +211,7 @@ typedef DeflateUncompressFuncDart = void Function(
   int inLen,
   Pointer<Pointer<Uint8>> out,
   Pointer<Int32> outLen,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef InternalVersion = int Function();
@@ -261,6 +277,7 @@ typedef lzmaCompressFunc = Void Function(
   Int32 inLen,
   Pointer<Pointer<Uint8>> out,
   Pointer<Int32> outLen,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef lzmaCompressFuncDart = void Function(
@@ -268,6 +285,7 @@ typedef lzmaCompressFuncDart = void Function(
   int inLen,
   Pointer<Pointer<Uint8>> out,
   Pointer<Int32> outLen,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 final lzmaCompressFuncDart lzmaCompress = dylib
@@ -371,6 +389,7 @@ typedef EncodeETC1FastC = Void Function(
   Pointer<Uint64>,
   Uint32,
   Int32,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 typedef EncodeETC1FastDart = void Function(
@@ -378,6 +397,7 @@ typedef EncodeETC1FastDart = void Function(
   Pointer<Uint64>,
   int,
   int,
+  Pointer<NativeFunction<Callback>> callback,
 );
 
 final EncodeETC1FastDart CompressEtc1Rgb = dylib
@@ -473,3 +493,23 @@ final DecodeETC1Dart DecodeETC1Block = dylib
       'DecodeETC1',
     )
     .asFunction();
+
+typedef Callback = Void Function(Pointer<Utf8>);
+typedef NativeCallback = Void Function(Pointer<Utf8>);
+
+// Define the type for the C function.
+typedef TestC = Void Function(Pointer<NativeFunction<Callback>> callback);
+typedef TestDart = void Function(
+    Pointer<NativeFunction<NativeCallback>> callback);
+final cb = dylib.lookupFunction<TestC, TestDart>('test');
+
+void testPrint(Pointer<Utf8> message) {
+  // ignore: avoid_print
+  print(message.toDartString());
+  return;
+}
+
+void testError(Pointer<Utf8> message) {
+  final String msg = message.toDartString();
+  throw Exception(msg);
+}

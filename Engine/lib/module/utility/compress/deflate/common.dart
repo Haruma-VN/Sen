@@ -12,7 +12,13 @@ class Deflate {
       ..asTypedList(dataStream.length).setAll(0, dataStream);
     Pointer<Pointer<Int8>> outputPtr = calloc<Pointer<Int8>>();
     Pointer<Int32> outputSizePtr = calloc<Int32>();
-    DeflateCompress(data, dataStream.length, outputPtr, outputSizePtr);
+    DeflateCompress(
+      data,
+      dataStream.length,
+      outputPtr,
+      outputSizePtr,
+      Pointer.fromFunction(testError),
+    );
     Pointer<Int8> resultPtr = outputPtr.value;
     final result = resultPtr.asTypedList(outputSizePtr.value);
     calloc.free(data);
@@ -27,7 +33,13 @@ class Deflate {
     dataPtr.asTypedList(data.length).setAll(0, data);
     Pointer<Pointer<Uint8>> outputPtr = calloc<Pointer<Uint8>>();
     Pointer<Int32> outputSizePtr = calloc<Int32>();
-    DeflateUncompress(dataPtr, data.length, outputPtr, outputSizePtr);
+    DeflateUncompress(
+      dataPtr,
+      data.length,
+      outputPtr,
+      outputSizePtr,
+      Pointer.fromFunction(testError),
+    );
     Pointer<Uint8> resultPtr = outputPtr.value;
     int resultSize = outputSizePtr.value;
     final result = resultPtr.asTypedList(resultSize);

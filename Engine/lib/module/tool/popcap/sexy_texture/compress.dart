@@ -30,9 +30,10 @@ class TextureCompress {
       destinationBLock,
       (currentSize),
       width,
+      Pointer.fromFunction(testError),
     );
-    final data = destinationBLock.asTypedList(currentSize);
     final imgFile = SenBuffer();
+    final data = destinationBLock.asTypedList(currentSize);
     for (var i = 0; i < data.length; i++) {
       imgFile.writeBigUInt64LE(data[i]);
     }

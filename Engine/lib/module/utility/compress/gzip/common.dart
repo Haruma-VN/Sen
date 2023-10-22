@@ -28,6 +28,7 @@ class Gzip {
       data,
       data_size,
       compressed_data_size,
+      Pointer.fromFunction(testError),
     );
     final compressedData = compressedDataPtr.asTypedList(
       compressed_data_size.value,
@@ -55,6 +56,7 @@ class Gzip {
       data,
       data_size,
       compressed_data_size,
+      Pointer.fromFunction(testError),
     );
     final compressedData = compressedDataPtr.asTypedList(
       compressed_data_size.value,

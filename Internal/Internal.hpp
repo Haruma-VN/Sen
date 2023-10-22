@@ -2,7 +2,7 @@
 
 #pragma region version
 
-inline constexpr auto MInternalVersion = 8;
+inline constexpr auto MInternalVersion = 9;
 
 #pragma endregion
 
@@ -78,9 +78,6 @@ inline constexpr auto MInternalVersion = 8;
 
 #define CHUNK 16384
 
-#define log(...)\
-	std::cout << __VA_ARGS__ << std::endl;
-
 #define null NULL
 
 #pragma endregion
@@ -147,7 +144,7 @@ typedef char* CString;
 
 typedef wchar_t* UTF8String;
 
-typedef void (__stdcall *callback)(const char*);
+typedef void (*callback)(const char*);
 
 typedef std::exception Exception;
 
@@ -178,6 +175,15 @@ inline auto m_abort(
     fprintf(stderr, "\n");
     va_end(args);
     abort();
+    return;
+}
+
+inline auto log(
+    callback e, 
+    char* what
+) -> void
+{
+    e(what);
     return;
 }
 

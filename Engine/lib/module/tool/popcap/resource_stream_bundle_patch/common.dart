@@ -151,21 +151,24 @@ class ResourceStreamBundlePatch {
   }
 
   Uint8List vcDiffEncode(Uint8List before, Uint8List after) {
-    final beforePointer = calloc<Int8>(before.length)
+    final Pointer<Int8> beforePointer = calloc<Int8>(before.length)
       ..asTypedList(before.length).setAll(0, before);
-    final afterPointer = calloc<Int8>(after.length)
+    final Pointer<Int8> afterPointer = calloc<Int8>(after.length)
       ..asTypedList(after.length).setAll(0, after);
-    final sizePointer = calloc<Int32>();
-    final vcPointer = VCDiffEncode(
+    final Pointer<Int32> sizePointer = calloc<Int32>();
+    final Pointer<Uint8> vcPointer = VCDiffEncode(
       beforePointer,
       before.length,
       afterPointer,
       after.length,
       sizePointer,
+      Pointer.fromFunction(testError),
     );
     final patchData = vcPointer.asTypedList(sizePointer.value);
     calloc.free(beforePointer);
     calloc.free(afterPointer);
+    calloc.free(sizePointer);
+    calloc.free(vcPointer);
     return Uint8List.fromList(patchData);
   }
 
@@ -288,21 +291,24 @@ class ResourceStreamBundlePatch {
   }
 
   Uint8List vcDiffDecode(Uint8List before, Uint8List patch) {
-    final beforePointer = calloc<Int8>(before.length)
+    final Pointer<Int8> beforePointer = calloc<Int8>(before.length)
       ..asTypedList(before.length).setAll(0, before);
-    final patchPointer = calloc<Int8>(patch.length)
+    final Pointer<Int8> patchPointer = calloc<Int8>(patch.length)
       ..asTypedList(patch.length).setAll(0, patch);
-    final sizePointer = calloc<Int32>();
-    final vcPointer = VCDiffDecode(
+    final Pointer<Int32> sizePointer = calloc<Int32>();
+    final Pointer<Uint8> vcPointer = VCDiffDecode(
       beforePointer,
       before.length,
       patchPointer,
       patch.length,
       sizePointer,
+      Pointer.fromFunction(testError),
     );
     final afterData = vcPointer.asTypedList(sizePointer.value);
     calloc.free(beforePointer);
     calloc.free(patchPointer);
+    calloc.free(sizePointer);
+    calloc.free(vcPointer);
     return Uint8List.fromList(afterData);
   }
 

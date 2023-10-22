@@ -10,7 +10,8 @@ unsigned char* ZlibCompress(
     unsigned char* data,
     int dataSize, 
     int level, 
-    int &compressedSize
+    int &compressedSize,
+    callback cb
 ) 
 {
     auto destSize = compressBound(dataSize);
@@ -19,9 +20,12 @@ unsigned char* ZlibCompress(
     if (result != Z_OK) {
         delete[] compressedData;
         compressedSize = 0;
-        return nullptr;
+        compressedData = nullptr;
+        cb("Compress failed");
     }
-    compressedSize = static_cast<int>(destSize);
+    else {
+        compressedSize = static_cast<int>(destSize);
+    }
     return compressedData;
 }
 
@@ -31,7 +35,8 @@ Void ZlibUncompress(
     const Uint8Array* data, 
     Integer dataSize, 
     Uint8Array** uncompressedData, 
-    Integer* uncompressedDataSize
+    Integer* uncompressedDataSize,
+    callback cb
 ) {
     try
     {
@@ -45,7 +50,7 @@ Void ZlibUncompress(
         if (ret != Z_OK) {
             *uncompressedData = nullptr;
             *uncompressedDataSize = 0;
-            throw_exception("Uncompress zlib failed");
+            cb("Uncompress zlib failed");
             return;
         }
         auto outBuffer = std::vector<Uint8Array>(32768);
@@ -66,8 +71,7 @@ Void ZlibUncompress(
     }
     catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -79,7 +83,8 @@ InternalAPI
 UnsignedByteStream GZipCompress(
     const char* data, 
     size_t data_size, 
-    size_t * compressed_data_size
+    size_t * compressed_data_size,
+    callback cb
 ) {
     try
     {
@@ -90,7 +95,7 @@ UnsignedByteStream GZipCompress(
         stream.avail_in = data_size;
         stream.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(data));
         if (deflateInit2(&stream, Z_DEFAULT_COMPRESSION, Z_DEFLATED, 15 | 16, 8, Z_DEFAULT_STRATEGY) != Z_OK) {
-            throw_exception("Failed to initialize zlib stream");
+            cb("Failed to initialize zlib stream");
         }
         auto compressed_data = std::vector<uint8_t>{};
         auto buffer = std::vector<uint8_t>(1024);
@@ -100,7 +105,7 @@ UnsignedByteStream GZipCompress(
             stream.next_out = buffer.data();
             result = deflate(&stream, Z_FINISH);
             if (result == Z_STREAM_ERROR) {
-                throw_exception("Failed to compress data");
+                cb("Failed to compress data");
             }
             auto bytes_written = buffer.size() - stream.avail_out;
             compressed_data.insert(compressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
@@ -113,8 +118,7 @@ UnsignedByteStream GZipCompress(
     }
     catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -122,7 +126,8 @@ InternalAPI
 UnsignedByteStream GZipUncompress(
     const char* data, 
     size_t data_size, 
-    size_t * uncompressed_data_size
+    size_t * uncompressed_data_size,
+    callback cb
 ) {
     try
     {
@@ -133,7 +138,7 @@ UnsignedByteStream GZipUncompress(
         stream.avail_in = data_size;
         stream.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(data));
         if (inflateInit2(&stream, 15 | 16) != Z_OK) {
-            throw_exception("Failed to initialize zlib stream");
+            cb("Failed to initialize zlib stream");
         }
         auto uncompressed_data = std::vector<uint8_t>{};
         auto buffer = std::vector<uint8_t>(1024);
@@ -143,7 +148,7 @@ UnsignedByteStream GZipUncompress(
             stream.next_out = buffer.data();
             result = inflate(&stream, Z_NO_FLUSH);
             if (result == Z_STREAM_ERROR || result == Z_NEED_DICT || result == Z_DATA_ERROR || result == Z_MEM_ERROR) {
-                throw_exception("Failed to uncompress data");
+                cb("Failed to uncompress data");
             }
             auto bytes_written = buffer.size() - stream.avail_out;
             uncompressed_data.insert(uncompressed_data.end(), buffer.begin(), buffer.begin() + bytes_written);
@@ -156,8 +161,7 @@ UnsignedByteStream GZipUncompress(
     }
     catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -170,7 +174,8 @@ Void DeflateCompress(
     const char* input,
     int inputSize,
     char** output,
-    int* outputSize
+    int* outputSize,
+    callback cb
 )
 {
     try
@@ -184,7 +189,7 @@ Void DeflateCompress(
 
         auto ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
         if (ret != Z_OK){
-            throw_exception("Deflate Compress failed");
+            cb("Deflate Compress failed");
         }
         *outputSize = deflateBound(&strm, inputSize);
         *output = new char[*outputSize];
@@ -200,13 +205,12 @@ Void DeflateCompress(
             delete[] * output;
             *output = nullptr;
             *outputSize = 0;
-            throw_exception("Compress failed");
+            cb("Compress failed");
         }
     }
     catch (const std::exception& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
     return;
 }
@@ -217,7 +221,8 @@ Void DeflateUncompress(
     unsigned char* in,
     size_t in_len, 
     unsigned char** out, 
-    int* out_len
+    int* out_len,
+    callback cb
 ) 
 {
     try
@@ -235,7 +240,7 @@ Void DeflateUncompress(
         ret = inflateInit2(&strm, -MAX_WBITS);
         if (ret != Z_OK)
         {
-            throw_exception("Deflate Uncompress failed");
+            cb("Deflate Uncompress failed");
         }
         do {
             strm.avail_out = CHUNK;
@@ -261,8 +266,7 @@ Void DeflateUncompress(
     }
     catch(const std::exception& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
     
     return;
@@ -276,7 +280,8 @@ InternalAPI
 const char* BZip2Compress(
     const char* data,
     size_t data_size,
-    size_t* compressed_data_size
+    size_t* compressed_data_size,
+    callback cb
 ) {
     try
     {
@@ -289,8 +294,7 @@ const char* BZip2Compress(
     }
     catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -298,7 +302,8 @@ InternalAPI
 const char* BZip2Uncompress(
     const char* data,
     size_t data_size,
-    size_t* uncompressed_data_size
+    size_t* uncompressed_data_size,
+    callback cb
 ) {
     try
     {
@@ -311,8 +316,7 @@ const char* BZip2Uncompress(
     }
     catch (const Sen::Internal::Kernel::Utility::Exception::ExceptionX& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -325,7 +329,8 @@ Void lzmaCompress(
     unsigned char* in, 
     size_t in_len, 
     unsigned char** out, 
-    size_t* out_len
+    size_t* out_len,
+    callback cb
 ) {
     try
     {
@@ -343,8 +348,7 @@ Void lzmaCompress(
     }
     catch(const std::exception& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -354,7 +358,8 @@ Void lzmaUncompress(
     unsigned char* in, 
     size_t in_len, 
     unsigned char** out, 
-    size_t* out_len
+    size_t* out_len,
+    callback cb
 ) {
     try
     {
@@ -372,8 +377,7 @@ Void lzmaUncompress(
     }
     catch(const std::exception& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -602,7 +606,8 @@ void* VCDiffEncode(
     size_t before_size,
     char* after,
     size_t after_size,
-    size_t &data_size
+    size_t &data_size,
+    callback cb
 )
 {
     try
@@ -618,8 +623,7 @@ void* VCDiffEncode(
     }
     catch (const std::exception& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -629,7 +633,8 @@ void* VCDiffDecode(
     size_t before_size,
     char* patch,
     size_t patch_size,
-    size_t &after_size
+    size_t &after_size,
+    callback cb
 )
 {
     try
@@ -645,8 +650,7 @@ void* VCDiffDecode(
     }
     catch (const std::exception& e)
     {
-        log(e.what());
-        throw 0;
+        log(cb, const_cast<char*>(e.what()));
     }
 }
 
@@ -659,10 +663,16 @@ void EncodeETC1Fast(
     const uint32_t* src, 
     uint64_t* dst, 
     uint32_t blocks, 
-    size_t width
+    size_t width,
+    callback cb
 )
 {
-    CompressEtc1Rgb(src, dst, blocks, width);
+    try {
+        CompressEtc1Rgb(src, dst, blocks, width);
+    }
+    catch (std::exception& e) {
+        cb(const_cast<char*>(e.what()));
+    }
     return;
 }
 
@@ -671,10 +681,16 @@ void EncodeETC1FastDither(
     const uint32_t* src,
     uint64_t* dst,
     uint32_t blocks,
-    size_t width
+    size_t width,
+    callback cb
 )
 {
-    CompressEtc1RgbDither(src, dst, blocks, width);
+    try {
+        CompressEtc1RgbDither(src, dst, blocks, width);
+    }
+    catch (std::exception& e) {
+        cb(const_cast<char*>(e.what()));
+    }
     return;
 }
 
@@ -721,7 +737,8 @@ char* RijndaelDecrypt(
     const int iv_len,
     const int cipher_len,
     const RijndaelMode iMode
-) {
+) 
+{
     auto Rijndael = CRijndael{};
     auto key_str = std::string{};
     key_str.assign(key, key_len);
@@ -815,6 +832,15 @@ void EncodeRGBAPVRTC4BPP(
 {
     auto javelin = AlphaBitmap(width, height);
     PvrTcEncoder::EncodeAlpha4Bpp(result, javelin);
+    return;
+}
+
+#pragma endregion
+
+#pragma region test
+InternalAPI
+void test(callback e) {
+    e("Hello World");
     return;
 }
 
