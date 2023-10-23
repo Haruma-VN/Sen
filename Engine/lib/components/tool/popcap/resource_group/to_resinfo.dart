@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/page/debug.dart';
+import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/common.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_group/to_resinfo.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart' as p;
 
 class ToResInfo extends StatefulWidget {
   const ToResInfo({super.key});
@@ -18,8 +20,6 @@ class _ToResInfoState extends State<ToResInfo> {
   late TextEditingController controllerOutput;
 
   String text = '';
-
-  bool allowExecute = true;
 
   String view = 'old';
 
@@ -114,13 +114,10 @@ class _ToResInfoState extends State<ToResInfo> {
                             final String? path = await FileSystem.pickFile();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text = path.replaceAll(
-                                '\\',
-                                '/',
+                              controllerOutput.text = p.join(
+                                p.dirname(path),
+                                'res.json',
                               );
-                              setState(() {
-                                allowExecute = true;
-                              });
                             }
                           },
                         ),
@@ -286,97 +283,42 @@ class _ToResInfoState extends State<ToResInfo> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
-                      onPressed: allowExecute
-                          ? () async {
-                              final DateTime startTime = DateTime.now();
-                              try {
-                                ConvertToResInfo.process(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Debug(
+                              () async {
+                                await Future.delayed(const Duration(seconds: 1),
+                                    () {
+                                  ConvertToResInfo.process(
+                                    controllerInput.text,
+                                    controllerOutput.text,
+                                    exchangeViewValue(view),
+                                  );
+                                });
+                              },
+                              AppLocalizations.of(context)!
+                                  .popcap_resource_group_to_resinfo,
+                              argumentGot: [
+                                ArgumentData(
                                   controllerInput.text,
+                                  AppLocalizations.of(context)!
+                                      .argument_obtained,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                              argumentOutput: [
+                                ArgumentData(
                                   controllerOutput.text,
-                                  exchangeViewValue(view),
-                                );
-                                final DateTime endTime = DateTime.now();
-                                final Duration difference =
-                                    endTime.difference(startTime);
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_success(
-                                      '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
-                                    );
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.green[600]
-                                                : Colors.green[500],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } catch (e) {
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_error(e);
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.red[300]
-                                                : Colors.red[900],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              return;
-                            }
-                          : null,
+                                  AppLocalizations.of(context)!.argument_output,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                       style: OutlinedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

@@ -132,12 +132,22 @@ class PackModding {
       );
       rtonData.outFile(rtonFile);
     }
+    final rsg = ResourceStreamGroup();
+    final SenBuffer manifestRSG = rsg.packRSG(
+      resourceDirectory,
+      manifest['group'][manifestGroup]['subgroup'][manifestGroup]
+          ['packet_info'],
+      localizations,
+      false,
+    );
+    manifestRSG.outFile(
+      p.join(inputDirectory, 'packet', '$manifestGroup.rsg'),
+    );
     final packages = keys.firstWhere(
       (dynamic rsg) => rsg.toString().toUpperCase() == 'PACKAGES',
       orElse: () => '',
     );
     if (packages != '') {
-      final rsg = ResourceStreamGroup();
       final packagesPath = p.join(inputDirectory, 'resource', 'PACKAGES');
       FileSystem.readDirectory(packagesPath, true).forEach((element) {
         if (p.withoutExtension(element).endsWith('.JSON')) {
@@ -154,8 +164,8 @@ class PackModding {
         }
       });
       final SenBuffer packagesRSG = rsg.packRSG(
-        packagesPath,
-        manifest['group'][packages][packages],
+        resourceDirectory,
+        manifest['group'][packages]['subgroup'][packages]['packet_info'],
         localizations,
         false,
       );

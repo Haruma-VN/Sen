@@ -30,8 +30,6 @@ class _PopCapRSBUnpackForModdingState extends State<PopCapRSBUnpackForModding> {
 
   String extendTextureInformationForPvZ2C = '0';
 
-  bool allowExecute = true;
-
   ExtendsTextureInformation exchangeInformation(String extend) {
     if (extend == '1') {
       return ExtendsTextureInformation.sz1;
@@ -137,9 +135,6 @@ class _PopCapRSBUnpackForModdingState extends State<PopCapRSBUnpackForModding> {
                             if (path != null) {
                               controllerInput.text = path;
                               controllerOutput.text = '${(path)}.bundle';
-                              setState(() {
-                                allowExecute = true;
-                              });
                             }
                           },
                         ),

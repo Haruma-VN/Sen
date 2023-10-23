@@ -281,5 +281,6 @@
     "sheet_width": "Spritesheet width:",
     "sheet_height": "Spritesheet height:",
     "encryption_iv": "Encryption IV:",
-    "sheet_padding": "Spritesheet padding"
+    "sheet_padding": "Spritesheet padding",
+    "done": "DONE"
 }

@@ -50,6 +50,7 @@ class _DebugState extends State<Debug> {
         ),
         centerTitle: false,
         elevation: 3,
+        automaticallyImplyLeading: false,
         scrolledUnderElevation: 3,
       ),
       body: Column(
@@ -66,6 +67,36 @@ class _DebugState extends State<Debug> {
           ),
           Console(
             key: consoleKey,
+          ),
+          ValueListenableBuilder<bool>(
+            valueListenable: isDone,
+            builder: (context, value, child) {
+              if (value) {
+                return Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      isDone.value = false;
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.done,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!, // Increase font size
+                    ),
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
           ),
         ],
       ),

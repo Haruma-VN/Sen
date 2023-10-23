@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/page/debug.dart';
+import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/module/tool/popcap/zlib/compress.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,8 +18,6 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
   late TextEditingController controllerOutput;
 
   String text = '';
-
-  bool allowExecute = true;
 
   String view = '32bit';
 
@@ -113,9 +112,6 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                             if (path != null) {
                               controllerInput.text = path;
                               controllerOutput.text = '$path.bin';
-                              setState(() {
-                                allowExecute = true;
-                              });
                             }
                           },
                         ),
@@ -280,97 +276,48 @@ class _PopCapZlibCompressState extends State<PopCapZlibCompress> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
-                      onPressed: allowExecute
-                          ? () async {
-                              final DateTime startTime = DateTime.now();
-                              try {
-                                popcapZlibCompress(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Debug(
+                              () async {
+                                await Future.delayed(const Duration(seconds: 1),
+                                    () {
+                                  popcapZlibCompress(
+                                    controllerInput.text,
+                                    controllerOutput.text,
+                                    exchangeBitVariant(view),
+                                  );
+                                });
+                              },
+                              AppLocalizations.of(context)!
+                                  .popcap_zlib_compress,
+                              argumentGot: [
+                                ArgumentData(
                                   controllerInput.text,
+                                  AppLocalizations.of(context)!
+                                      .argument_obtained,
+                                  ArgumentType.file,
+                                ),
+                                ArgumentData(
+                                  view,
+                                  AppLocalizations.of(context)!
+                                      .use_64bit_variant,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                              argumentOutput: [
+                                ArgumentData(
                                   controllerOutput.text,
-                                  exchangeBitVariant(view),
-                                );
-                                final DateTime endTime = DateTime.now();
-                                final Duration difference =
-                                    endTime.difference(startTime);
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_success(
-                                      '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
-                                    );
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.green[600]
-                                                : Colors.green[500],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } catch (e) {
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_error(e);
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.red[300]
-                                                : Colors.red[900],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              return;
-                            }
-                          : null,
+                                  AppLocalizations.of(context)!.argument_output,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                       style: OutlinedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

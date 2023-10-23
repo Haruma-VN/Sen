@@ -8,6 +8,8 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 
 final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
+final ValueNotifier<bool> isDone = ValueNotifier<bool>(false);
+
 void finishCall(ConsoleState? console) {
   if (console != null) {
     console.done();
@@ -155,6 +157,7 @@ Future<void> execute(
       );
       finishCall(console);
       isLoading.value = false;
+      isDone.value = true;
     });
   } catch (e, s) {
     String description = localizations!.command_execute_error(e);
@@ -169,6 +172,7 @@ Future<void> execute(
     }
     finishCall(console);
     isLoading.value = false;
+    isDone.value = true;
   }
   return;
 }

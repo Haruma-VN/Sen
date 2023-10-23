@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/page/debug.dart';
+import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/module/tool/popcap/popcap_animation/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,8 +21,6 @@ class _PopCapAnimationConvertFromJsonState
   late TextEditingController controllerOutput;
 
   String text = '';
-
-  bool allowExecute = true;
 
   @override
   void initState() {
@@ -97,9 +96,6 @@ class _PopCapAnimationConvertFromJsonState
                               controllerInput.text = path;
                               controllerOutput.text =
                                   '${p.withoutExtension(path)}.json';
-                              setState(() {
-                                allowExecute = true;
-                              });
                             }
                           },
                         ),
@@ -148,97 +144,42 @@ class _PopCapAnimationConvertFromJsonState
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
-                      onPressed: allowExecute
-                          ? () async {
-                              final DateTime startTime = DateTime.now();
-                              try {
-                                PopCapAnimation.fromJson(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Debug(
+                              () async {
+                                await Future.delayed(const Duration(seconds: 1),
+                                    () {
+                                  PopCapAnimation.fromJson(
+                                    controllerInput.text,
+                                    controllerOutput.text,
+                                    AppLocalizations.of(context)!,
+                                  );
+                                });
+                              },
+                              AppLocalizations.of(context)!
+                                  .popcap_animation_encode_from_json,
+                              argumentGot: [
+                                ArgumentData(
                                   controllerInput.text,
+                                  AppLocalizations.of(context)!
+                                      .argument_obtained,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                              argumentOutput: [
+                                ArgumentData(
                                   controllerOutput.text,
-                                  AppLocalizations.of(context)!,
-                                );
-                                final DateTime endTime = DateTime.now();
-                                final Duration difference =
-                                    endTime.difference(startTime);
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_success(
-                                      '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
-                                    );
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.green[600]
-                                                : Colors.green[500],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } catch (e) {
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_error(e);
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.red[300]
-                                                : Colors.red[900],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              return;
-                            }
-                          : null,
+                                  AppLocalizations.of(context)!.argument_output,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                       style: OutlinedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

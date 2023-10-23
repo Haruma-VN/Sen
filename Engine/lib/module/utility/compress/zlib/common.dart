@@ -24,9 +24,10 @@ class Zlib {
     final Uint8List uncompressedData = uncompressedDataPointer.value
         .asTypedList(uncompressedDataSizePointer.value);
     calloc.free(dataPointer);
-    calloc.free(uncompressedDataPointer);
     calloc.free(uncompressedDataSizePointer);
-    return Uint8List.fromList(uncompressedData);
+    final Uint8List data = Uint8List.fromList(uncompressedData);
+    calloc.free(uncompressedDataPointer);
+    return data;
   }
 
   static Uint8List compress(Uint8List dataStream, int compressionLevel) {
@@ -44,8 +45,9 @@ class Zlib {
         compressedDataPointer.asTypedList(compressedSizePointer.value);
     calloc.free(dataPointer);
     calloc.free(compressedSizePointer);
+    final data = Uint8List.fromList(compressedData);
     calloc.free(compressedDataPointer);
-    return Uint8List.fromList(compressedData);
+    return data;
   }
 
   static compressFile(

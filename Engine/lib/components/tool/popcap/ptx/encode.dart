@@ -21,8 +21,6 @@ class _PopCapPTXEncodeState extends State<PopCapPTXEncode> {
 
   String text = '';
 
-  bool allowExecute = true;
-
   @override
   void initState() {
     super.initState();
@@ -98,9 +96,6 @@ class _PopCapPTXEncodeState extends State<PopCapPTXEncode> {
                               controllerInput.text = path;
                               controllerOutput.text =
                                   '${p.withoutExtension(path)}.ptx';
-                              setState(() {
-                                allowExecute = true;
-                              });
                             }
                           },
                         ),

@@ -21,8 +21,6 @@ class _PopCapRSBUnpackByLooseConstraintsState
 
   String text = '';
 
-  bool allowExecute = true;
-
   @override
   void initState() {
     super.initState();
@@ -96,9 +94,6 @@ class _PopCapRSBUnpackByLooseConstraintsState
                             if (path != null) {
                               controllerInput.text = path;
                               controllerOutput.text = '${(path)}.bundle';
-                              setState(() {
-                                allowExecute = true;
-                              });
                             }
                           },
                         ),
