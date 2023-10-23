@@ -146,7 +146,9 @@ class _RootPageState extends State<RootPage> {
                 ApplicationInformation.hasSearch.value
                     ? Icons.close_outlined
                     : Icons.search_outlined,
-                color: Colors.white,
+                color: ApplicationInformation.isDarkMode.value
+                    ? Colors.white
+                    : Colors.black,
               ),
               onPressed: () {
                 setState(() {
@@ -158,30 +160,93 @@ class _RootPageState extends State<RootPage> {
           ),
         ],
       ),
-      body: pages[current_page],
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          backgroundColor:
-              Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-        ),
-        child: NavigationBar(
-          selectedIndex: current_page,
-          onDestinationSelected: (int index) {
-            setState(() {
-              current_page = index;
-            });
-          },
-          destinations: [
-            NavigationDestination(
-              icon: const Icon(Icons.terminal_outlined),
-              label: AppLocalizations.of(context)!.command_page,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.settings_outlined),
-              label: AppLocalizations.of(context)!.setting_page,
-            ),
-          ],
-        ),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return orientation == Orientation.portrait
+              ? SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints.tightFor(
+                      height: MediaQuery.of(context).size.height,
+                    ),
+                    child: pages[current_page],
+                  ),
+                )
+              : Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: NavigationRail(
+                        selectedIndex: current_page,
+                        onDestinationSelected: (int index) {
+                          setState(() {
+                            current_page = index;
+                          });
+                        },
+                        labelType: NavigationRailLabelType.selected,
+                        destinations: [
+                          NavigationRailDestination(
+                            icon: const Icon(Icons.terminal_outlined),
+                            selectedIcon: const Icon(Icons.terminal),
+                            label: Text(
+                                AppLocalizations.of(context)!.command_page),
+                          ),
+                          NavigationRailDestination(
+                            icon: const Icon(Icons.settings_outlined),
+                            selectedIcon: const Icon(Icons.settings),
+                            label: Text(
+                                AppLocalizations.of(context)!.setting_page),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints.tightFor(
+                            height: MediaQuery.of(context).size.height,
+                          ),
+                          child: pages[current_page],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+        },
+      ),
+      bottomNavigationBar: OrientationBuilder(
+        builder: (context, orientation) {
+          return orientation == Orientation.portrait
+              ? NavigationBarTheme(
+                  data: NavigationBarThemeData(
+                    backgroundColor: Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .backgroundColor,
+                  ),
+                  child: NavigationBar(
+                    selectedIndex: current_page,
+                    onDestinationSelected: (int index) {
+                      setState(() {
+                        current_page = index;
+                      });
+                    },
+                    animationDuration: const Duration(milliseconds: 1000),
+                    elevation: 3.0,
+                    destinations: [
+                      NavigationDestination(
+                        icon: const Icon(Icons.terminal_outlined),
+                        selectedIcon: const Icon(Icons.terminal),
+                        label: AppLocalizations.of(context)!.command_page,
+                      ),
+                      NavigationDestination(
+                        icon: const Icon(Icons.settings_outlined),
+                        selectedIcon: const Icon(Icons.settings),
+                        label: AppLocalizations.of(context)!.setting_page,
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink();
+        },
       ),
     );
   }

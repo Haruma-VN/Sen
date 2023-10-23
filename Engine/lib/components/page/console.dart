@@ -24,6 +24,7 @@ class ConsoleState extends State<Console> {
       ApplicationInformation.isDarkMode.value ? Colors.white70 : Colors.black87,
     ),
   ];
+
   void reset() {
     for (int i = messages.length - 1; i >= 0; i--) {
       Message removedItem = messages.removeAt(i);

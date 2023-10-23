@@ -6,6 +6,8 @@ import 'package:sen_material_design/components/page/console.dart';
 import 'package:sen_material_design/components/page/message.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 
+final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
+
 void finishCall(ConsoleState? console) {
   if (console != null) {
     console.done();
@@ -62,6 +64,7 @@ Future<void> execute(
   ConsoleState? console, {
   Argument? argument,
 }) async {
+  isLoading.value = true;
   final DateTime startTime = DateTime.now();
   callback(
     console,
@@ -151,6 +154,7 @@ Future<void> execute(
         Colors.green,
       );
       finishCall(console);
+      isLoading.value = false;
     });
   } catch (e, s) {
     String description = localizations!.command_execute_error(e);
@@ -164,6 +168,7 @@ Future<void> execute(
       console.error(e, s);
     }
     finishCall(console);
+    isLoading.value = false;
   }
   return;
 }

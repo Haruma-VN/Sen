@@ -241,7 +241,6 @@ class _PopCapPTXEncodeState extends State<PopCapPTXEncode> {
                           MaterialPageRoute(
                             builder: (context) => Debug(
                               () async {
-                                // Delay the execution of the function by 1 second
                                 await Future.delayed(const Duration(seconds: 1),
                                     () {
                                   SexyTexture.encode_fs(
@@ -261,6 +260,11 @@ class _PopCapPTXEncodeState extends State<PopCapPTXEncode> {
                                   AppLocalizations.of(context)!
                                       .argument_obtained,
                                   ArgumentType.file,
+                                ),
+                                ArgumentData(
+                                  format,
+                                  AppLocalizations.of(context)!.texture_format,
+                                  ArgumentType.any,
                                 ),
                               ],
                               argumentOutput: [

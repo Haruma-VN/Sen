@@ -54,6 +54,16 @@ class _DebugState extends State<Debug> {
       ),
       body: Column(
         children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: isLoading,
+            builder: (context, value, child) {
+              if (value) {
+                return const LinearProgressIndicator();
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
           Console(
             key: consoleKey,
           ),
