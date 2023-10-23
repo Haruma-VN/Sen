@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/page/debug.dart';
+import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/module/tool/popcap/compiled_text/common.dart';
 import 'package:sen_material_design/module/tool/popcap/reflection_object_notation/common.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
@@ -21,8 +22,6 @@ class _PopCapCompiledTextEncodeState extends State<PopCapCompiledTextEncode> {
 
   String text = '';
 
-  bool allowExecute = true;
-
   @override
   void initState() {
     super.initState();
@@ -34,6 +33,11 @@ class _PopCapCompiledTextEncodeState extends State<PopCapCompiledTextEncode> {
   }
 
   String view = '32bit';
+
+  List<String> availables = [
+    '32bit',
+    '64bit',
+  ];
 
   @override
   void dispose() {
@@ -100,13 +104,7 @@ class _PopCapCompiledTextEncodeState extends State<PopCapCompiledTextEncode> {
                             final String? path = await FileSystem.pickFile();
                             if (path != null) {
                               controllerInput.text = path;
-                              controllerOutput.text = '${path.replaceAll(
-                                '\\',
-                                '/',
-                              )}.bin';
-                              setState(() {
-                                allowExecute = true;
-                              });
+                              controllerOutput.text = '$path.bin';
                             }
                           },
                         ),
@@ -305,101 +303,57 @@ class _PopCapCompiledTextEncodeState extends State<PopCapCompiledTextEncode> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: OutlinedButton(
-                      onPressed: allowExecute
-                          ? () async {
-                              final DateTime startTime = DateTime.now();
-                              try {
-                                CompiledText.encode_fs(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Debug(
+                              () async {
+                                await Future.delayed(const Duration(seconds: 1),
+                                    () {
+                                  CompiledText.encode_fs(
+                                    controllerInput.text,
+                                    controllerOutput.text,
+                                    RijndaelC.has(
+                                      controllerKeyInput.text,
+                                      controllerKeyInput.text.substring(4, 28),
+                                    ),
+                                    view == '64bit',
+                                  );
+                                });
+                              },
+                              AppLocalizations.of(context)!
+                                  .popcap_compiled_text_encode,
+                              argumentGot: [
+                                ArgumentData(
                                   controllerInput.text,
+                                  AppLocalizations.of(context)!
+                                      .argument_obtained,
+                                  ArgumentType.file,
+                                ),
+                                ArgumentData(
+                                  controllerKeyInput.text,
+                                  AppLocalizations.of(context)!.encryption_key,
+                                  ArgumentType.any,
+                                ),
+                                ArgumentData(
+                                  view,
+                                  AppLocalizations.of(context)!
+                                      .use_64bit_variant,
+                                  ArgumentType.any,
+                                ),
+                              ],
+                              argumentOutput: [
+                                ArgumentData(
                                   controllerOutput.text,
-                                  RijndaelC.has(
-                                    controllerKeyInput.text,
-                                    controllerKeyInput.text.substring(4, 28),
-                                  ),
-                                  view == '64bit',
-                                );
-                                final DateTime endTime = DateTime.now();
-                                final Duration difference =
-                                    endTime.difference(startTime);
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_success(
-                                      '${(difference.inMilliseconds / 1000).toStringAsFixed(3)}s',
-                                    );
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.green[600]
-                                                : Colors.green[500],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } catch (e) {
-                                WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) {
-                                    String description =
-                                        AppLocalizations.of(context)!
-                                            .command_execute_error(e);
-                                    if (ApplicationInformation
-                                        .allowNotification.value) {
-                                      NotificationService.push(
-                                        ApplicationInformation.applicationName,
-                                        description,
-                                      );
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          description,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                        backgroundColor:
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
-                                                ? Colors.red[300]
-                                                : Colors.red[900],
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                              return;
-                            }
-                          : null,
+                                  AppLocalizations.of(context)!.argument_output,
+                                  ArgumentType.file,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                       style: OutlinedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

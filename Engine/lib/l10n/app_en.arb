@@ -277,5 +277,9 @@
     "folder_exists_sen_will_override_it": "Execution Warning: Directory already exists, file inside will be override",
     "all_arguments_have_been_executed": "All arguments have been executed!",
     "execution_finish": "Execution Finish:",
-    "texture_format": "Texture Format:"
+    "texture_format": "Texture Format:",
+    "sheet_width": "Spritesheet width:",
+    "sheet_height": "Spritesheet height:",
+    "encryption_iv": "Encryption IV:",
+    "sheet_padding": "Spritesheet padding"
 }

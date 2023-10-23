@@ -71,8 +71,8 @@ Future<void> execute(
     localizations != null ? localizations.argument_load : "Argument Loaded:",
     currentFunction,
     false,
-    Icons.info_outline,
-    Colors.cyan,
+    Icons.check_outlined,
+    Colors.green,
   );
   if (argument != null) {
     if (argument.argumentGot != null) {
@@ -83,7 +83,7 @@ Future<void> execute(
           element.message,
           false,
           Icons.info_outline,
-          Colors.green,
+          Colors.cyan,
         );
       }
     }

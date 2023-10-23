@@ -1,5 +1,7 @@
 // ignore_for_file: unused_local_variable
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/common/version.dart';
@@ -14,13 +16,41 @@ class Console extends StatefulWidget {
 }
 
 class ConsoleState extends State<Console> {
+  static IconData senIcon() {
+    if (Platform.isAndroid) {
+      return Icons.android_outlined;
+    } else if (Platform.isIOS || Platform.isMacOS) {
+      return Icons.apple_outlined;
+    } else if (Platform.isWindows) {
+      return Icons.window_outlined;
+    } else {
+      return Icons.device_unknown_outlined;
+    }
+  }
+
+  static String platform() {
+    if (Platform.isAndroid) {
+      return 'Android';
+    } else if (Platform.isIOS) {
+      return 'iOS';
+    } else if (Platform.isWindows) {
+      return 'Windows';
+    } else if (Platform.isLinux) {
+      return 'Linux';
+    } else if (Platform.isMacOS) {
+      return 'Macintosh';
+    } else {
+      return 'Unknown';
+    }
+  }
+
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List<Message> messages = [
     Message(
       ApplicationInformation.applicationName,
-      'Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal}',
+      'Build Version: ${Engine.version} | Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal} | ${platform()}',
       false,
-      Icons.album_outlined,
+      senIcon(),
       ApplicationInformation.isDarkMode.value ? Colors.white70 : Colors.black87,
     ),
   ];
@@ -37,9 +67,9 @@ class ConsoleState extends State<Console> {
     add(
       Message(
         ApplicationInformation.applicationName,
-        'Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal}',
+        '${AppLocalizations.of(context)!.build_version}: ${Engine.version} | Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal} | ${platform()}',
         false,
-        Icons.album_outlined,
+        senIcon(),
         ApplicationInformation.isDarkMode.value
             ? Colors.white70
             : Colors.black87,

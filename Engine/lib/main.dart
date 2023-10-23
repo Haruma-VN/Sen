@@ -188,13 +188,15 @@ class _RootPageState extends State<RootPage> {
                             icon: const Icon(Icons.terminal_outlined),
                             selectedIcon: const Icon(Icons.terminal),
                             label: Text(
-                                AppLocalizations.of(context)!.command_page),
+                              AppLocalizations.of(context)!.command_page,
+                            ),
                           ),
                           NavigationRailDestination(
                             icon: const Icon(Icons.settings_outlined),
                             selectedIcon: const Icon(Icons.settings),
                             label: Text(
-                                AppLocalizations.of(context)!.setting_page),
+                              AppLocalizations.of(context)!.setting_page,
+                            ),
                           ),
                         ],
                       ),
