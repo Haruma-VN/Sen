@@ -194,6 +194,7 @@ class _SettingState extends State<Setting> {
                                     .new_language_will_be_applied_after_the_application_is_restarted,
                               );
                               Navigator.of(context).pop();
+                              setState(() {});
                             },
                             child: Text(AppLocalizations.of(context)!.done),
                           ),

@@ -77,6 +77,7 @@ class _DebugState extends State<Debug> {
                     return Container(
                       padding: const EdgeInsets.all(8.0),
                       width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.1,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(

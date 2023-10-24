@@ -1,19 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/bridge/http/connect.dart';
 import 'package:sen_material_design/bridge/notification_service.dart';
 import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/common/version.dart';
 import 'package:sen_material_design/components/command.dart';
 import 'package:sen_material_design/common/default.dart';
-import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:sen_material_design/components/setting.dart';
 import 'package:window_manager/window_manager.dart';
 import 'common/custom.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sen_material_design/l10n/l10n.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:path/path.dart' as p;
 
 Future<void> main(List<String> argument) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,18 +27,6 @@ Future<void> main(List<String> argument) async {
   final String libraryPath = await Customization.getWorkspace();
   if (libraryPath != '') {
     ApplicationInformation.libraryPath.value = libraryPath;
-    if (Platform.isWindows &&
-        !FileSystem.fileExists(
-          p.join(
-            libraryPath,
-            Connection.internalLibrary(null),
-          ),
-        )) {
-      await Connection.downloadInternal(
-        ApplicationInformation.libraryPath.value,
-        null,
-      );
-    }
   }
   if (Platform.isAndroid) {
     ApplicationInformation.storagePermission.value =

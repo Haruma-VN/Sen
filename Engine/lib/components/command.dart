@@ -479,8 +479,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
         ValueListenableBuilder<bool>(
@@ -488,9 +486,9 @@ class _HomePageState extends State<HomePage> {
           builder: (context, hasSearch, child) {
             return hasSearch
                 ? Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 6.0,
-                      horizontal: 20.0,
+                    margin: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.01,
+                      horizontal: MediaQuery.of(context).size.width * 0.05,
                     ),
                     child: TextField(
                       controller: _searchController,
@@ -527,15 +525,19 @@ class _HomePageState extends State<HomePage> {
                       children: ApplicationInformation.displayItems.value
                           .map(
                             (MethodItem e) => InkWell(
+                              borderRadius: BorderRadius.circular(30.0),
+                              hoverColor: Colors.blue.withAlpha(50),
                               onHover: (value) {
                                 setState(() {
                                   isHovering = value;
                                 });
                               },
                               child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                  vertical: 6.0,
-                                  horizontal: 20.0,
+                                margin: EdgeInsets.symmetric(
+                                  vertical:
+                                      MediaQuery.of(context).size.height * 0.01,
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.05,
                                 ),
                                 decoration: BoxDecoration(
                                   color: isHovering
@@ -571,7 +573,7 @@ class _HomePageState extends State<HomePage> {
                                   title: Text(
                                     (exchangeFunction(e.method).name),
                                     style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                        Theme.of(context).textTheme.titleSmall,
                                   ),
                                   subtitle: Text(
                                     exchangeFunction(e.method).subtitle,
@@ -672,9 +674,10 @@ class _HomePageState extends State<HomePage> {
                   : Column(
                       children: [
                         Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 6.0,
-                            horizontal: 20.0,
+                          margin: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.01,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05,
                           ),
                           decoration: BoxDecoration(
                             color: isHovering
@@ -719,9 +722,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 6.0,
-                            horizontal: 20.0,
+                          margin: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.01,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05,
                           ),
                           decoration: BoxDecoration(
                             color: isHovering

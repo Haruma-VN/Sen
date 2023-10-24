@@ -51,7 +51,7 @@ class ConsoleState extends State<Console> {
       'Build Version: ${Engine.version} | Engine: ${Engine.engineVersion} & Internal: ${Engine.Internal} | ${platform()}',
       false,
       senIcon(),
-      ApplicationInformation.isDarkMode.value ? Colors.white70 : Colors.black87,
+      Colors.blueGrey,
     ),
   ];
 
@@ -188,26 +188,32 @@ class ConsoleState extends State<Console> {
                   ),
                 ),
                 child: Card(
-                  color: messages[index].color,
+                  color: ApplicationInformation.isDarkMode.value
+                      ? messages[index].color.withOpacity(0.4)
+                      : Color.lerp(
+                          messages[index].color.withOpacity(0.65),
+                          Colors.white,
+                          0.85,
+                        )!,
                   child: ListTile(
                     title: Text(
                       messages[index].title,
                       style: theme.textTheme.titleSmall!.copyWith(
-                        color: messages[index].color == Colors.black87
-                            ? Colors.white70
-                            : Colors.black87,
+                        color: ApplicationInformation.isDarkMode.value
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
                     leading: Icon(
                       messages[index].icon,
-                      color: messages[index].color == Colors.black87
-                          ? Colors.white70
-                          : Colors.black87,
+                      color: ApplicationInformation.isDarkMode.value
+                          ? Colors.white
+                          : Colors.black,
                     ),
                     subtitle: Text(
                       messages[index].message,
                       style: theme.textTheme.bodySmall!.copyWith(
-                        color: messages[index].color == Colors.black87
+                        color: ApplicationInformation.isDarkMode.value
                             ? Colors.white70
                             : Colors.black87,
                       ),

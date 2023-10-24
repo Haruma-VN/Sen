@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/item/elevated/directory.dart';
+import 'package:sen_material_design/components/item/elevated/file.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_stream_bundle/unpack.dart';
@@ -51,95 +53,37 @@ class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                   margin: const EdgeInsets.all(10.0),
-                  child: Align(
-                    alignment: FractionalOffset.bottomLeft,
-                    child: Text(
-                      AppLocalizations.of(context)!.popcap_rsb_unpack,
-                      style: theme.textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: TextField(
+                  child: ElevatedFileBarContent(
                     controller: controllerInput,
-                    textAlign: TextAlign.center,
-                    onChanged: (String text) {
-                      this.text = text;
+                    onUpload: () async {
+                      final String? path = await FileSystem.pickFile();
+                      if (path != null) {
+                        controllerInput.text = path;
+                        controllerOutput.text = '${(path)}.bundle';
+                      }
                     },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ), // Rounded border
-                      ),
-                      labelText: AppLocalizations.of(context)!.data_file,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new_outlined),
-                          tooltip: AppLocalizations.of(context)!.browse,
-                          onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
-                            if (path != null) {
-                              controllerInput.text = path;
-                              controllerOutput.text = '${(path)}.bundle';
-                            }
-                          },
-                        ),
-                      ),
-                    ),
+                    isDatafile: true,
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                   margin: const EdgeInsets.all(10.0),
-                  child: TextField(
+                  child: ElevatedDirectoryBarContent(
                     controller: controllerOutput,
-                    textAlign: TextAlign.center,
-                    onChanged: (String text) {
-                      this.text = text;
+                    isInputDirectory: false,
+                    onUpload: () async {
+                      final String? path = await FileSystem.pickDirectory();
+                      if (path != null) {
+                        controllerOutput.text = path;
+                      }
                     },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ),
-                      ),
-                      labelText: AppLocalizations.of(context)!.output_directory,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new_outlined),
-                          tooltip: AppLocalizations.of(context)!.browse,
-                          onPressed: () async {
-                            final String? path =
-                                await FileSystem.pickDirectory();
-                            if (path != null) {
-                              controllerOutput.text = path;
-                            }
-                          },
-                        ),
-                      ),
-                    ),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: OutlinedButton(
+                  width: double.infinity,
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
                       onPressed: () async {
                         await Navigator.push(
                           context,
@@ -175,14 +119,9 @@ class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
                           ),
                         );
                       },
-                      style: OutlinedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(
-                          20.0,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20,
                         ),
                       ),
                       child: Text(
