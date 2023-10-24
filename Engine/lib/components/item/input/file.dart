@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/components/item/input/text.dart';
+import 'package:sen_material_design/components/item/input/template.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InputFileContent extends StatelessWidget {

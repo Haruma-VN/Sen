@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/components/item/elevated/directory.dart';

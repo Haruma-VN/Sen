@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/components/item/input/text.dart';
+import 'package:sen_material_design/components/item/input/template.dart';
 
 // ignore: must_be_immutable
 class ElevatedInputBarContent extends StatelessWidget {
@@ -24,6 +24,16 @@ class ElevatedInputBarContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {},
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed)) {
+              return Colors.transparent;
+            }
+            return Colors.transparent; // Transparent otherwise
+          },
+        ),
+      ),
       child: InputBarContent(
         iconBegin: iconBegin,
         iconEnd: iconEnd,
