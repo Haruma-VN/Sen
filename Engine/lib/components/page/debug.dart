@@ -53,50 +53,54 @@ class _DebugState extends State<Debug> {
         automaticallyImplyLeading: false,
         scrolledUnderElevation: 3,
       ),
-      body: Column(
+      body: ListView(
         children: [
-          ValueListenableBuilder<bool>(
-            valueListenable: isLoading,
-            builder: (context, value, child) {
-              if (value) {
-                return const LinearProgressIndicator();
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
-          Console(
-            key: consoleKey,
-          ),
-          ValueListenableBuilder<bool>(
-            valueListenable: isDone,
-            builder: (context, value, child) {
-              if (value) {
-                return Container(
-                  padding: const EdgeInsets.all(8.0),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20,
+          Column(
+            children: [
+              ValueListenableBuilder<bool>(
+                valueListenable: isLoading,
+                builder: (context, value, child) {
+                  if (value) {
+                    return const LinearProgressIndicator();
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+              Console(
+                key: consoleKey,
+              ),
+              ValueListenableBuilder<bool>(
+                valueListenable: isDone,
+                builder: (context, value, child) {
+                  if (value) {
+                    return Container(
+                      padding: const EdgeInsets.all(8.0),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 20,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          isDone.value = false;
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.done,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!, // Increase font size
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      isDone.value = false;
-                    },
-                    child: Text(
-                      AppLocalizations.of(context)!.done,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall!, // Increase font size
-                    ),
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ],
           ),
         ],
       ),
