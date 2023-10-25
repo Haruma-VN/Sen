@@ -469,8 +469,8 @@ class SexyTexture implements PopCapSexyTexture {
       width: width,
       height: height,
       bytes: imageData.buffer,
-      numChannels: 4,
-      order: image.ChannelOrder.rgba,
+      numChannels: 3,
+      order: image.ChannelOrder.rgb,
     );
     senFile.clear();
     final imgFile = SenBuffer.fromBytes(image.encodePng(imgRaw));
