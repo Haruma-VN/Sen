@@ -31,7 +31,7 @@ class DropButtonContent<T> extends StatelessWidget {
         focusColor: Colors.transparent,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         underline: Container(),
-        items: [...items],
+        items: items,
         onChanged: onChanged,
       ),
     );
