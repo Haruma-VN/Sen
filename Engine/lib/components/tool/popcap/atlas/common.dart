@@ -22,4 +22,14 @@ class ArgumentInputRequires {
     9,
     10,
   ];
+
+  static final List<String> pathStyle = [
+    'old',
+    'new',
+  ];
+
+  static final List<String> splitMethod = [
+    'path',
+    'id',
+  ];
 }

@@ -49,3 +49,24 @@ List<DropdownMenuItem<T>> convertItemListToDropDownMenuItemListView<T>(
           ),
         )
         .toList();
+
+class DropDownChildren<T> {
+  T value;
+  String displayText;
+  DropDownChildren(
+    this.value,
+    this.displayText,
+  );
+}
+
+List<DropdownMenuItem<T>> convertDropDownListToDropDownMenuItemListView<T>(
+  List<DropDownChildren<T>> list,
+) =>
+    list
+        .map(
+          (DropDownChildren<T> value) => DropdownMenuItem<T>(
+            value: value.value,
+            child: Text(value.displayText),
+          ),
+        )
+        .toList();

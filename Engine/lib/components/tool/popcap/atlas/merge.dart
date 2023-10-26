@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/components/item/elevated/directory.dart';
 import 'package:sen_material_design/components/item/elevated/drop_button.dart';
+import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
@@ -147,82 +148,62 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
             ),
           ),
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.5,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: OutlinedButton(
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Debug(
-                      () async {
-                        await Future.delayed(const Duration(seconds: 1), () {
-                          mergeAtlas.process(
-                            controllerInput.text,
-                            requiresData.has(
-                              width,
-                              height,
-                              padding,
-                            ),
-                            controllerOutput.text,
-                            AppLocalizations.of(context)!
-                                .cannot_merge_with_oversized,
-                          );
-                        });
-                      },
-                      AppLocalizations.of(context)!
-                          .popcap_resource_group_merge_atlas,
-                      argumentGot: [
-                        ArgumentData(
-                          controllerInput.text,
-                          AppLocalizations.of(context)!.argument_obtained,
-                          ArgumentType.directory,
+        ExecuteButton(
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Debug(
+                  () async {
+                    await Future.delayed(const Duration(seconds: 1), () {
+                      mergeAtlas.process(
+                        controllerInput.text,
+                        requiresData.has(
+                          width,
+                          height,
+                          padding,
                         ),
-                        ArgumentData(
-                          width.toString(),
-                          AppLocalizations.of(context)!.sheet_width,
-                          ArgumentType.any,
-                        ),
-                        ArgumentData(
-                          height.toString(),
-                          AppLocalizations.of(context)!.sheet_height,
-                          ArgumentType.any,
-                        ),
-                        ArgumentData(
-                          padding.toString(),
-                          AppLocalizations.of(context)!.sheet_padding,
-                          ArgumentType.any,
-                        ),
-                      ],
-                      argumentOutput: [
-                        ArgumentData(
-                          controllerOutput.text,
-                          AppLocalizations.of(context)!.argument_output,
-                          ArgumentType.directory,
-                        ),
-                      ],
+                        controllerOutput.text,
+                        AppLocalizations.of(context)!
+                            .cannot_merge_with_oversized,
+                      );
+                    });
+                  },
+                  AppLocalizations.of(context)!
+                      .popcap_resource_group_merge_atlas,
+                  argumentGot: [
+                    ArgumentData(
+                      controllerInput.text,
+                      AppLocalizations.of(context)!.argument_obtained,
+                      ArgumentType.directory,
                     ),
-                  ),
-                );
-              },
-              style: OutlinedButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                padding: const EdgeInsets.all(
-                  20.0,
+                    ArgumentData(
+                      width.toString(),
+                      AppLocalizations.of(context)!.sheet_width,
+                      ArgumentType.any,
+                    ),
+                    ArgumentData(
+                      height.toString(),
+                      AppLocalizations.of(context)!.sheet_height,
+                      ArgumentType.any,
+                    ),
+                    ArgumentData(
+                      padding.toString(),
+                      AppLocalizations.of(context)!.sheet_padding,
+                      ArgumentType.any,
+                    ),
+                  ],
+                  argumentOutput: [
+                    ArgumentData(
+                      controllerOutput.text,
+                      AppLocalizations.of(context)!.argument_output,
+                      ArgumentType.directory,
+                    ),
+                  ],
                 ),
               ),
-              child: Text(
-                AppLocalizations.of(context)!.execute,
-                style: theme.textTheme.titleSmall,
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
