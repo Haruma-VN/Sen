@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/item/widget/app.dart';
 import 'package:sen_material_design/components/page/console.dart';
 import 'package:sen_material_design/components/page/execute.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -43,68 +43,58 @@ class _DebugState extends State<Debug> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          ApplicationInformation.applicationName,
+    return SenGUI(
+      bottomNavigationBar: ValueListenableBuilder<bool>(
+        valueListenable: isDone,
+        builder: (context, value, child) {
+          if (value) {
+            return Container(
+              padding: const EdgeInsets.all(8.0),
+              width: double.infinity,
+              margin: const EdgeInsets.fromLTRB(0, 0, 0, 30.0),
+              height: MediaQuery.of(context).size.height * 0.08,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  isDone.value = false;
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.done,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ), // Increase font size
+                ),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
+      children: [
+        Column(
+          children: [
+            ValueListenableBuilder<bool>(
+              valueListenable: isLoading,
+              builder: (context, value, child) {
+                if (value) {
+                  return const LinearProgressIndicator();
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+            Console(
+              key: consoleKey,
+            ),
+          ],
         ),
-        centerTitle: false,
-        elevation: 3,
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 3,
-      ),
-      body: ListView(
-        children: [
-          Column(
-            children: [
-              ValueListenableBuilder<bool>(
-                valueListenable: isLoading,
-                builder: (context, value, child) {
-                  if (value) {
-                    return const LinearProgressIndicator();
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
-              Console(
-                key: consoleKey,
-              ),
-              ValueListenableBuilder<bool>(
-                valueListenable: isDone,
-                builder: (context, value, child) {
-                  if (value) {
-                    return Container(
-                      padding: const EdgeInsets.all(8.0),
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          isDone.value = false;
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.done,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!, // Increase font size
-                        ),
-                      ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+      ],
     );
   }
 }

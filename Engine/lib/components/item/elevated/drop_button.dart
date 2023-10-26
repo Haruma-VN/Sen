@@ -37,3 +37,15 @@ class DropButtonContent<T> extends StatelessWidget {
     );
   }
 }
+
+List<DropdownMenuItem<T>> convertItemListToDropDownMenuItemListView<T>(
+  List<T> list,
+) =>
+    list
+        .map(
+          (T value) => DropdownMenuItem<T>(
+            value: value,
+            child: Text(value.toString()),
+          ),
+        )
+        .toList();

@@ -108,9 +108,9 @@ class ConsoleState extends State<Console> {
         Colors.red,
       ),
     );
-    String stackTrace = stack.toString();
-    List<String> lines = stackTrace.split('\n');
-    List<String> newLines = [];
+    final String stackTrace = stack.toString();
+    final List<String> lines = stackTrace.split('\n');
+    final List<String> newLines = [];
 
     for (var i = 0; i < lines.length; i++) {
       if (lines[i].contains('package:sen_material_design')) {
