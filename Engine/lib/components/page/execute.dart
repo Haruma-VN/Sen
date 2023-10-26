@@ -67,7 +67,6 @@ Future<void> execute(
   Argument? argument,
 }) async {
   isLoading.value = true;
-  final DateTime startTime = DateTime.now();
   callback(
     console,
     localizations != null ? localizations.argument_load : "Argument Loaded:",
@@ -132,12 +131,8 @@ Future<void> execute(
   }
   try {
     await task();
-    final DateTime endTime = DateTime.now();
-    final Duration difference = endTime.difference(startTime);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      String description = localizations!.command_execute_success(
-        '${((difference.inMilliseconds + 1000) / 1000).toStringAsFixed(3)}s',
-      );
+      String description = localizations!.command_execute_success;
       if (ApplicationInformation.allowNotification.value) {
         NotificationService.push(
           ApplicationInformation.applicationName,

@@ -29,6 +29,7 @@ class _LanguageSelectorDialogState extends State<LanguageSelectorDialog> {
     final List<LanguageSupport> languages = [
       LanguageSupport.has('en', AppLocalizations.of(context)!.english),
       LanguageSupport.has('vi', AppLocalizations.of(context)!.vietnamese),
+      LanguageSupport.has('es', AppLocalizations.of(context)!.spanish),
     ];
     return Column(
       children: languages

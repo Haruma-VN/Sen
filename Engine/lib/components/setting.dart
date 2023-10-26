@@ -101,6 +101,10 @@ class _SettingState extends State<Setting> {
         {
           return AppLocalizations.of(context)!.russian;
         }
+      case 'es':
+        {
+          return AppLocalizations.of(context)!.spanish;
+        }
       default:
         {
           return languageCode;
@@ -173,7 +177,7 @@ class _SettingState extends State<Setting> {
                       displayDialog(
                         Text(AppLocalizations.of(context)!.language),
                         SizedBox(
-                          height: 100,
+                          height: 200,
                           child: LanguageSelectorDialog(),
                         ),
                         [
