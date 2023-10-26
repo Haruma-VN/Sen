@@ -55,12 +55,13 @@ class Rijndael {
       iMode.index,
     );
     final resultData = result.asTypedList(cipher.length);
+    final finalData = Uint8List.fromList(
+      resultData,
+    );
     calloc.free(cipherPtr);
     calloc.free(keyPtr);
     calloc.free(ivPtr);
-    return Uint8List.fromList(
-      resultData,
-    );
+    return finalData;
   }
 
   static Uint8List encrypt(
@@ -100,11 +101,12 @@ class Rijndael {
       iMode.index,
     );
     final resultData = result.asTypedList(cipher.length);
+    final finalData = Uint8List.fromList(
+      resultData,
+    );
     calloc.free(cipherPtr);
     calloc.free(keyPtr);
     calloc.free(ivPtr);
-    return Uint8List.fromList(
-      resultData,
-    );
+    return finalData;
   }
 }

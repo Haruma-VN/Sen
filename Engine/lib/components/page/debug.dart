@@ -44,6 +44,7 @@ class _DebugState extends State<Debug> {
   @override
   Widget build(BuildContext context) {
     return SenGUI(
+      hasGoBack: false,
       bottomNavigationBar: ValueListenableBuilder<bool>(
         valueListenable: isDone,
         builder: (context, value, child) {

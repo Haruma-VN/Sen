@@ -35,6 +35,10 @@ class CompiledText {
     bool use64BitVariant,
   ) {
     final SenBuffer compressedData = PopCapZlib.compress(raw, use64BitVariant);
+    ReflectionObjectNotation.fillRijndaelBlock(
+      compressedData,
+      SenBuffer.fromBytes(Uint8List.fromList(rijndael.iv.codeUnits)),
+    );
     final SenBuffer ripe =
         SenBuffer.fromBytes(Uint8List.fromList([0x10, 0x00]));
     ripe.writeBytes(

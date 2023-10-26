@@ -49,6 +49,7 @@ class _MergeWithResInfoState extends State<MergeWithResInfo> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return SenGUI(
+      hasGoBack: true,
       children: [
         TitleDisplay(
           displayText: AppLocalizations.of(context)!.popcap_resinfo_merge_atlas,

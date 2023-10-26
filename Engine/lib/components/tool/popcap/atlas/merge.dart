@@ -49,6 +49,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return SenGUI(
+      hasGoBack: true,
       children: [
         TitleDisplay(
           displayText:

@@ -44,6 +44,7 @@ class _SplitWithResInfoState extends State<SplitWithResInfo> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return SenGUI(
+      hasGoBack: true,
       children: [
         TitleDisplay(
           displayText: AppLocalizations.of(context)!.popcap_resinfo_split_atlas,

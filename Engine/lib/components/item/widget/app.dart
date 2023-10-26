@@ -4,12 +4,14 @@ import 'package:sen_material_design/common/default.dart';
 class SenGUI extends StatelessWidget {
   const SenGUI({
     super.key,
+    required this.hasGoBack,
     required this.children,
     this.bottomNavigationBar,
   });
 
   final List<Widget> children;
   final Widget? bottomNavigationBar;
+  final bool hasGoBack;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class SenGUI extends StatelessWidget {
         centerTitle: false,
         elevation: 3,
         scrolledUnderElevation: 3,
+        automaticallyImplyLeading: hasGoBack,
       ),
       body: ListView(
         children: [...children],

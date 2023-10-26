@@ -43,6 +43,7 @@ class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return SenGUI(
+      hasGoBack: true,
       children: [
         TitleDisplay(
           displayText: AppLocalizations.of(context)!.popcap_rsb_unpack,

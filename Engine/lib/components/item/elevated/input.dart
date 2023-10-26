@@ -30,7 +30,7 @@ class ElevatedInputBarContent extends StatelessWidget {
             if (states.contains(MaterialState.pressed)) {
               return Colors.transparent;
             }
-            return Colors.transparent; // Transparent otherwise
+            return Colors.transparent;
           },
         ),
       ),
@@ -41,6 +41,45 @@ class ElevatedInputBarContent extends StatelessWidget {
         toolTip: toolTip,
         iconSize: iconSize,
         child: child,
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class ElevatedInputTextField extends StatelessWidget {
+  ElevatedInputTextField({
+    super.key,
+    required this.icon,
+    required this.labelText,
+    required this.controller,
+    required this.onChanged,
+    this.iconSize,
+    this.toolTip,
+  });
+
+  final IconData icon;
+  final void Function(String value)? onChanged;
+  double? iconSize;
+  String? toolTip;
+  final TextEditingController? controller;
+  final String labelText;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedInputBarContent(
+      iconBegin: Icons.text_fields_outlined,
+      iconEnd: icon,
+      iconSize: iconSize,
+      toolTip: toolTip,
+      onSubmit: () {},
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
+          border: InputBorder.none,
+        ),
+        onChanged: onChanged,
       ),
     );
   }
