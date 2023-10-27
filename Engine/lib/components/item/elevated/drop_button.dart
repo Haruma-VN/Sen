@@ -21,7 +21,7 @@ class DropButtonContent<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedInputBarContent(
       iconBegin: Icons.menu_outlined,
-      iconEnd: Icons.question_mark_outlined,
+      iconEnd: Icons.info_outline,
       toolTip: toolTip,
       onSubmit: () {},
       child: DropdownButton<T>(

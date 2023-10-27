@@ -86,6 +86,12 @@ class _PopCapCompiledTextEncodeState extends State<PopCapCompiledTextEncode> {
             isDatafile: false,
           ),
         ),
+        TitleDisplay(
+          displayText: AppLocalizations.of(context)!.encryption_key,
+          textStyle: theme.textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         Container(
           margin: const EdgeInsets.all(10.0),
           child: ElevatedInputTextField(
@@ -96,6 +102,12 @@ class _PopCapCompiledTextEncodeState extends State<PopCapCompiledTextEncode> {
             onChanged: (String encryptionKey) {
               controllerKeyInput.text = encryptionKey;
             },
+          ),
+        ),
+        TitleDisplay(
+          displayText: AppLocalizations.of(context)!.use_64bit_variant,
+          textStyle: theme.textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.w400,
           ),
         ),
         Container(
@@ -110,7 +122,7 @@ class _PopCapCompiledTextEncodeState extends State<PopCapCompiledTextEncode> {
             displayText: AppLocalizations.of(context)!.use_64bit_variant,
             subtitle:
                 AppLocalizations.of(context)!.most_popcap_games_using_non_64bit,
-            icon: Icons.question_mark_outlined,
+            icon: Icons.info_outline,
           ),
         ),
         ExecuteButton(

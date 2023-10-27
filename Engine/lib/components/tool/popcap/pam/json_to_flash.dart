@@ -81,6 +81,12 @@ class _PopCapAnimationJsonConvertToFlashState
             isDatafile: false,
           ),
         ),
+        TitleDisplay(
+          displayText: AppLocalizations.of(context)!.flash_animation_resize,
+          textStyle: theme.textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         Container(
           margin: const EdgeInsets.all(10.0),
           child: DropButtonContent<int>(
