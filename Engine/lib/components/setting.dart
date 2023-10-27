@@ -196,14 +196,12 @@ class _SettingState extends State<Setting> {
                           [
                             TextButton(
                               onPressed: () {
-                                setState(() {});
                                 initializeCustomization();
                                 showSnackbar(
                                   AppLocalizations.of(context)!
                                       .new_language_will_be_applied_after_the_application_is_restarted,
                                 );
                                 Navigator.of(context).pop();
-                                setState(() {});
                               },
                               child: Text(AppLocalizations.of(context)!.done),
                             ),
