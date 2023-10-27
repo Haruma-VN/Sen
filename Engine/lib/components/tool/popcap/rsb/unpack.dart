@@ -5,6 +5,7 @@ import 'package:sen_material_design/components/item/elevated/directory.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/elevated/file.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -22,8 +23,6 @@ class PopCapRSBUnpack extends StatefulWidget {
 class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -49,73 +48,65 @@ class _PopCapRSBUnpackState extends State<PopCapRSBUnpack> {
           displayText: AppLocalizations.of(context)!.popcap_rsb_unpack,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Center(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(10.0),
-                child: ElevatedFileBarContent(
-                  controller: controllerInput,
-                  onUpload: () async {
-                    final String? path = await FileSystem.pickFile();
-                    if (path != null) {
-                      controllerInput.text = path;
-                      controllerOutput.text = '${(path)}.bundle';
-                    }
-                  },
-                  isDatafile: true,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10.0),
-                child: ElevatedDirectoryBarContent(
-                  controller: controllerOutput,
-                  isInputDirectory: false,
-                  onUpload: () async {
-                    final String? path = await FileSystem.pickDirectory();
-                    if (path != null) {
-                      controllerOutput.text = path;
-                    }
-                  },
-                ),
-              ),
-              ExecuteButton(
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Debug(
-                        () async {
-                          await Future.delayed(const Duration(seconds: 1), () {
-                            Unpack.process(
-                              controllerInput.text,
-                              controllerOutput.text,
-                              AppLocalizations.of(context)!,
-                            );
-                          });
-                        },
-                        AppLocalizations.of(context)!.popcap_rsb_unpack,
-                        argumentGot: [
-                          ArgumentData(
-                            controllerInput.text,
-                            AppLocalizations.of(context)!.argument_obtained,
-                            ArgumentType.file,
-                          ),
-                        ],
-                        argumentOutput: [
-                          ArgumentData(
-                            controllerOutput.text,
-                            AppLocalizations.of(context)!.argument_output,
-                            ArgumentType.directory,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
+        ContainerHasMargin(
+          child: ElevatedFileBarContent(
+            controller: controllerInput,
+            onUpload: () async {
+              final String? path = await FileSystem.pickFile();
+              if (path != null) {
+                controllerInput.text = path;
+                controllerOutput.text = '${(path)}.bundle';
+              }
+            },
+            isDatafile: true,
           ),
+        ),
+        ContainerHasMargin(
+          child: ElevatedDirectoryBarContent(
+            controller: controllerOutput,
+            isInputDirectory: false,
+            onUpload: () async {
+              final String? path = await FileSystem.pickDirectory();
+              if (path != null) {
+                controllerOutput.text = path;
+              }
+            },
+          ),
+        ),
+        ExecuteButton(
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Debug(
+                  () async {
+                    await Future.delayed(const Duration(seconds: 1), () {
+                      Unpack.process(
+                        controllerInput.text,
+                        controllerOutput.text,
+                        AppLocalizations.of(context)!,
+                      );
+                    });
+                  },
+                  AppLocalizations.of(context)!.popcap_rsb_unpack,
+                  argumentGot: [
+                    ArgumentData(
+                      controllerInput.text,
+                      AppLocalizations.of(context)!.argument_obtained,
+                      ArgumentType.file,
+                    ),
+                  ],
+                  argumentOutput: [
+                    ArgumentData(
+                      controllerOutput.text,
+                      AppLocalizations.of(context)!.argument_output,
+                      ArgumentType.directory,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ],
     );

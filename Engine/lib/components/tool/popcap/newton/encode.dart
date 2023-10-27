@@ -21,8 +21,6 @@ class _PopCapNewtonEncodeState extends State<PopCapNewtonEncode> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
-  String text = '';
-
   @override
   void initState() {
     super.initState();

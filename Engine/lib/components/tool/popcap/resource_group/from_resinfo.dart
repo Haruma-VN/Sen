@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/elevated/file.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -20,8 +21,6 @@ class FromResInfo extends StatefulWidget {
 class _FromResInfoState extends State<FromResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -48,8 +47,7 @@ class _FromResInfoState extends State<FromResInfo> {
               AppLocalizations.of(context)!.popcap_resource_group_from_resinfo,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -63,17 +61,16 @@ class _FromResInfoState extends State<FromResInfo> {
             isDatafile: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
-            controller: controllerInput,
+            controller: controllerOutput,
             onUpload: () async {
               final String? path = await FileSystem.pickFile();
               if (path != null) {
                 controllerOutput.text = path;
               }
             },
-            isDatafile: true,
+            isDatafile: false,
           ),
         ),
         ExecuteButton(

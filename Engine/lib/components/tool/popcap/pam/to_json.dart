@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/elevated/file.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -21,8 +22,6 @@ class _PopCapAnimationConvertToJsonState
     extends State<PopCapAnimationConvertToJson> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -49,8 +48,7 @@ class _PopCapAnimationConvertToJsonState
               AppLocalizations.of(context)!.popcap_animation_decode_to_json,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -63,8 +61,7 @@ class _PopCapAnimationConvertToJsonState
             isDatafile: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerOutput,
             onUpload: () async {

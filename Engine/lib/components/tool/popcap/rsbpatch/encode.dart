@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/item/elevated/execute_button.dart';
+import 'package:sen_material_design/components/item/elevated/file.dart';
+import 'package:sen_material_design/components/item/input/file.dart';
+import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
+import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/module/tool/popcap/resource_stream_bundle_patch/common.dart';
@@ -18,8 +23,6 @@ class _PopCapRSBPatchEncodeState extends State<PopCapRSBPatchEncode> {
   late TextEditingController controllerInput;
   late TextEditingController controllerAfter;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -40,209 +43,93 @@ class _PopCapRSBPatchEncodeState extends State<PopCapRSBPatchEncode> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          ApplicationInformation.applicationName,
+    return SenGUI(
+      hasGoBack: true,
+      children: [
+        TitleDisplay(
+          displayText: AppLocalizations.of(context)!.popcap_rsbpatch_encode,
+          textStyle: theme.textTheme.titleMedium!,
         ),
-        centerTitle: false,
-        elevation: 3,
-        scrolledUnderElevation: 3,
-      ),
-      body: ListView(
-        children: [
-          Center(
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: Align(
-                    alignment: FractionalOffset.bottomLeft,
-                    child: Text(
-                      AppLocalizations.of(context)!.popcap_rsbpatch_encode,
-                      style: theme.textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: controllerInput,
-                    textAlign: TextAlign.center,
-                    onChanged: (String text) {
-                      this.text = text;
-                    },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ), // Rounded border
-                      ),
-                      labelText: AppLocalizations.of(context)!.before_file,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new_outlined),
-                          tooltip: AppLocalizations.of(context)!.browse,
-                          onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
-                            if (path != null) {
-                              controllerInput.text = path;
-                              controllerOutput.text =
-                                  '${p.withoutExtension(path)}.diff.rsbpatch';
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: controllerAfter,
-                    textAlign: TextAlign.center,
-                    onChanged: (String text) {
-                      this.text = text;
-                    },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ), // Rounded border
-                      ),
-                      labelText: AppLocalizations.of(context)!.after_file,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new_outlined),
-                          tooltip: AppLocalizations.of(context)!.browse,
-                          onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
-                            if (path != null) {
-                              controllerAfter.text = path;
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: controllerOutput,
-                    textAlign: TextAlign.center,
-                    onChanged: (String text) {
-                      this.text = text;
-                    },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ),
-                      ),
-                      labelText: AppLocalizations.of(context)!.patch_file,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new_outlined),
-                          tooltip: AppLocalizations.of(context)!.browse,
-                          onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
-                            if (path != null) {
-                              controllerOutput.text = path;
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Debug(
-                              () async {
-                                await Future.delayed(const Duration(seconds: 1),
-                                    () {
-                                  ResourceStreamBundlePatch.encodeFs(
-                                    controllerInput.text,
-                                    controllerAfter.text,
-                                    controllerOutput.text,
-                                    AppLocalizations.of(context)!,
-                                  );
-                                });
-                              },
-                              AppLocalizations.of(context)!
-                                  .popcap_rsbpatch_encode,
-                              argumentGot: [
-                                ArgumentData(
-                                  controllerInput.text,
-                                  AppLocalizations.of(context)!.before_file,
-                                  ArgumentType.file,
-                                ),
-                                ArgumentData(
-                                  controllerAfter.text,
-                                  AppLocalizations.of(context)!.after_file,
-                                  ArgumentType.file,
-                                ),
-                              ],
-                              argumentOutput: [
-                                ArgumentData(
-                                  controllerOutput.text,
-                                  AppLocalizations.of(context)!.patch_file,
-                                  ArgumentType.file,
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(
-                          20.0,
-                        ),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.execute,
-                        style: theme.textTheme.titleSmall,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        ContainerHasMargin(
+          child: ElevatedVCDiffFileBarContent(
+            controller: controllerInput,
+            onUpload: () async {
+              final String? path = await FileSystem.pickFile();
+              if (path != null) {
+                controllerInput.text = path;
+                controllerOutput.text =
+                    '${p.withoutExtension(path)}.diff.rsbpatch';
+              }
+            },
+            vcdiffFileType: VCDiffFileType.before,
           ),
-        ],
-      ),
+        ),
+        ContainerHasMargin(
+          child: ElevatedVCDiffFileBarContent(
+            controller: controllerAfter,
+            onUpload: () async {
+              final String? path = await FileSystem.pickFile();
+              if (path != null) {
+                controllerAfter.text = path;
+              }
+            },
+            vcdiffFileType: VCDiffFileType.after,
+          ),
+        ),
+        ContainerHasMargin(
+          child: ElevatedVCDiffFileBarContent(
+            controller: controllerOutput,
+            onUpload: () async {
+              final String? path = await FileSystem.pickFile();
+              if (path != null) {
+                controllerOutput.text = path;
+              }
+            },
+            vcdiffFileType: VCDiffFileType.patch,
+          ),
+        ),
+        ExecuteButton(
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Debug(
+                  () async {
+                    await Future.delayed(const Duration(seconds: 1), () {
+                      ResourceStreamBundlePatch.encodeFs(
+                        controllerInput.text,
+                        controllerAfter.text,
+                        controllerOutput.text,
+                        AppLocalizations.of(context)!,
+                      );
+                    });
+                  },
+                  AppLocalizations.of(context)!.popcap_rsbpatch_encode,
+                  argumentGot: [
+                    ArgumentData(
+                      controllerInput.text,
+                      AppLocalizations.of(context)!.before_file,
+                      ArgumentType.file,
+                    ),
+                    ArgumentData(
+                      controllerAfter.text,
+                      AppLocalizations.of(context)!.after_file,
+                      ArgumentType.file,
+                    ),
+                  ],
+                  argumentOutput: [
+                    ArgumentData(
+                      controllerOutput.text,
+                      AppLocalizations.of(context)!.patch_file,
+                      ArgumentType.file,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

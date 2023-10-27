@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/item/elevated/execute_button.dart';
+import 'package:sen_material_design/components/item/elevated/file.dart';
+import 'package:sen_material_design/components/item/elevated/input.dart';
+import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
+import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
 import 'package:sen_material_design/module/tool/popcap/reflection_object_notation/common.dart';
@@ -18,8 +24,6 @@ class _PopCapRTONDecryptState extends State<PopCapRTONDecrypt> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
   late TextEditingController controllerKeyInput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -44,209 +48,100 @@ class _PopCapRTONDecryptState extends State<PopCapRTONDecrypt> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          ApplicationInformation.applicationName,
+    return SenGUI(
+      hasGoBack: true,
+      children: [
+        TitleDisplay(
+          displayText: AppLocalizations.of(context)!.popcap_rton_decrypt,
+          textStyle: theme.textTheme.titleMedium!,
         ),
-        centerTitle: false,
-        elevation: 3,
-        scrolledUnderElevation: 3,
-      ),
-      body: ListView(
-        children: [
-          Center(
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: Align(
-                    alignment: FractionalOffset.bottomLeft,
-                    child: Text(
-                      AppLocalizations.of(context)!.popcap_rton_decrypt,
-                      style: theme.textTheme.titleLarge,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: controllerInput,
-                    textAlign: TextAlign.center,
-                    onChanged: (String text) {
-                      this.text = text;
-                    },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ), // Rounded border
-                      ),
-                      labelText: AppLocalizations.of(context)!.data_file,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new_outlined),
-                          tooltip: AppLocalizations.of(context)!.browse,
-                          onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
-                            if (path != null) {
-                              controllerInput.text = path;
-                              controllerOutput.text =
-                                  '${p.withoutExtension(path)}.plain.rton';
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: controllerOutput,
-                    textAlign: TextAlign.center,
-                    onChanged: (String text) {
-                      this.text = text;
-                    },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ),
-                      ),
-                      labelText: AppLocalizations.of(context)!.output_file,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.open_in_new_outlined),
-                          tooltip: AppLocalizations.of(context)!.browse,
-                          onPressed: () async {
-                            final String? path = await FileSystem.pickFile();
-                            if (path != null) {
-                              controllerOutput.text = path;
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  margin: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: controllerKeyInput,
-                    textAlign: TextAlign.center,
-                    onChanged: (String encryptionKey) {
-                      controllerKeyInput.text = encryptionKey;
-                    },
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ), // Rounded border
-                      ),
-                      labelText: AppLocalizations.of(context)!.encryption_key,
-                      alignLabelWithHint: true,
-                      suffixIcon: Container(
-                        margin: const EdgeInsets.only(
-                          right: 10.0,
-                        ),
-                        child: IconButton(
-                          iconSize: 30.0,
-                          icon: const Icon(Icons.key_outlined),
-                          tooltip: AppLocalizations.of(context)!.encryption_key,
-                          onPressed: () {
-                            controllerKeyInput.text =
-                                ApplicationInformation.encryptionKey.value;
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Debug(
-                              () async {
-                                await Future.delayed(const Duration(seconds: 1),
-                                    () {
-                                  ReflectionObjectNotation.decrypt_fs(
-                                    controllerInput.text,
-                                    controllerOutput.text,
-                                    RijndaelC.has(
-                                      controllerKeyInput.text,
-                                      controllerKeyInput.text.substring(4, 28),
-                                    ),
-                                  );
-                                });
-                              },
-                              AppLocalizations.of(context)!.popcap_rton_decrypt,
-                              argumentGot: [
-                                ArgumentData(
-                                  controllerInput.text,
-                                  AppLocalizations.of(context)!
-                                      .argument_obtained,
-                                  ArgumentType.file,
-                                ),
-                                ArgumentData(
-                                  controllerKeyInput.text,
-                                  AppLocalizations.of(context)!.encryption_key,
-                                  ArgumentType.any,
-                                ),
-                              ],
-                              argumentOutput: [
-                                ArgumentData(
-                                  controllerOutput.text,
-                                  AppLocalizations.of(context)!.argument_output,
-                                  ArgumentType.file,
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(
-                          20.0,
-                        ),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.execute,
-                        style: theme.textTheme.titleSmall,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        ContainerHasMargin(
+          child: ElevatedFileBarContent(
+            controller: controllerInput,
+            onUpload: () async {
+              final String? path = await FileSystem.pickFile();
+              if (path != null) {
+                controllerInput.text = path;
+                controllerOutput.text =
+                    '${p.withoutExtension(path)}.plain.rton';
+              }
+            },
+            isDatafile: true,
           ),
-        ],
-      ),
+        ),
+        ContainerHasMargin(
+          child: ElevatedFileBarContent(
+            controller: controllerOutput,
+            onUpload: () async {
+              final String? path = await FileSystem.pickFile();
+              if (path != null) {
+                controllerOutput.text = path;
+              }
+            },
+            isDatafile: false,
+          ),
+        ),
+        TitleDisplay(
+          displayText: AppLocalizations.of(context)!.encryption_key,
+          textStyle: theme.textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        ContainerHasMargin(
+          child: ElevatedInputTextField(
+            icon: Icons.info_outline,
+            labelText: AppLocalizations.of(context)!.encryption_key,
+            controller: controllerKeyInput,
+            toolTip: AppLocalizations.of(context)!.encryption_key,
+            onChanged: (String encryptionKey) {
+              controllerKeyInput.text = encryptionKey;
+            },
+          ),
+        ),
+        ExecuteButton(
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Debug(
+                  () async {
+                    await Future.delayed(const Duration(seconds: 1), () {
+                      ReflectionObjectNotation.decrypt_fs(
+                        controllerInput.text,
+                        controllerOutput.text,
+                        RijndaelC.has(
+                          controllerKeyInput.text,
+                          controllerKeyInput.text.substring(4, 28),
+                        ),
+                      );
+                    });
+                  },
+                  AppLocalizations.of(context)!.popcap_rton_decrypt,
+                  argumentGot: [
+                    ArgumentData(
+                      controllerInput.text,
+                      AppLocalizations.of(context)!.argument_obtained,
+                      ArgumentType.file,
+                    ),
+                    ArgumentData(
+                      controllerKeyInput.text,
+                      AppLocalizations.of(context)!.encryption_key,
+                      ArgumentType.any,
+                    ),
+                  ],
+                  argumentOutput: [
+                    ArgumentData(
+                      controllerOutput.text,
+                      AppLocalizations.of(context)!.argument_output,
+                      ArgumentType.file,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

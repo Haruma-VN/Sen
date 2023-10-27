@@ -36,3 +36,58 @@ class InputFileContent extends StatelessWidget {
     );
   }
 }
+
+enum VCDiffFileType {
+  before,
+  after,
+  patch,
+}
+
+class InputVCDiffFileContent extends StatelessWidget {
+  final TextEditingController? controller;
+  final void Function()? onUpload;
+  final VCDiffFileType vcdiffFileType;
+  final double? iconSize;
+
+  const InputVCDiffFileContent({
+    super.key,
+    required this.controller,
+    required this.onUpload,
+    required this.vcdiffFileType,
+    this.iconSize,
+  });
+  String exchange(BuildContext context, VCDiffFileType vcdiffFileType) {
+    switch (vcdiffFileType) {
+      case VCDiffFileType.before:
+        {
+          return AppLocalizations.of(context)!.before_file;
+        }
+      case VCDiffFileType.after:
+        {
+          return AppLocalizations.of(context)!.after_file;
+        }
+      case VCDiffFileType.patch:
+        {
+          return AppLocalizations.of(context)!.patch_file;
+        }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InputBarContent(
+      iconBegin: Icons.text_fields_outlined,
+      iconEnd: Icons.file_upload_outlined,
+      onSubmit: onUpload,
+      iconSize: iconSize,
+      toolTip: AppLocalizations.of(context)!.browse,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: exchange(context, vcdiffFileType),
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
+}

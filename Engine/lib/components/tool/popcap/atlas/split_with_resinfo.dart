@@ -3,6 +3,7 @@ import 'package:sen_material_design/components/item/elevated/directory.dart';
 import 'package:sen_material_design/components/item/elevated/drop_button.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -21,8 +22,6 @@ class SplitWithResInfo extends StatefulWidget {
 class _SplitWithResInfoState extends State<SplitWithResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -50,8 +49,7 @@ class _SplitWithResInfoState extends State<SplitWithResInfo> {
           displayText: AppLocalizations.of(context)!.popcap_resinfo_split_atlas,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedDirectoryBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -64,8 +62,7 @@ class _SplitWithResInfoState extends State<SplitWithResInfo> {
             isInputDirectory: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedDirectoryBarContent(
             controller: controllerOutput,
             onUpload: () async {
@@ -83,8 +80,7 @@ class _SplitWithResInfoState extends State<SplitWithResInfo> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: DropButtonContent<String>(
             toolTip: AppLocalizations.of(context)!.split_method_subtitle,
             value: splitMethod,

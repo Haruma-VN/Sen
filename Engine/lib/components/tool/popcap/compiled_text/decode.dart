@@ -5,6 +5,7 @@ import 'package:sen_material_design/components/item/elevated/file.dart';
 import 'package:sen_material_design/components/item/elevated/input.dart';
 import 'package:sen_material_design/components/item/elevated/switch.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -25,8 +26,6 @@ class _PopCapCompiledTextDecodeState extends State<PopCapCompiledTextDecode> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
   late TextEditingController controllerKeyInput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -59,8 +58,7 @@ class _PopCapCompiledTextDecodeState extends State<PopCapCompiledTextDecode> {
               AppLocalizations.of(context)!.popcap_compiled_text_decode,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -73,8 +71,7 @@ class _PopCapCompiledTextDecodeState extends State<PopCapCompiledTextDecode> {
             isDatafile: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerOutput,
             onUpload: () async {
@@ -92,8 +89,7 @@ class _PopCapCompiledTextDecodeState extends State<PopCapCompiledTextDecode> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedInputTextField(
             icon: Icons.info_outline,
             labelText: AppLocalizations.of(context)!.encryption_key,
@@ -110,8 +106,7 @@ class _PopCapCompiledTextDecodeState extends State<PopCapCompiledTextDecode> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: SwitchContentBar(
             watchValue: use64bitVariant,
             onchanged: (bool? value) => setState(() {

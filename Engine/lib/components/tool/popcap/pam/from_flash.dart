@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/elevated/file.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -22,8 +23,6 @@ class _PopCapAnimationConvertFromFlashState
     extends State<PopCapAnimationConvertFromFlash> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -50,8 +49,7 @@ class _PopCapAnimationConvertFromFlashState
               AppLocalizations.of(context)!.popcap_animation_pam_from_flash,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -64,8 +62,7 @@ class _PopCapAnimationConvertFromFlashState
             isDatafile: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerOutput,
             onUpload: () async {

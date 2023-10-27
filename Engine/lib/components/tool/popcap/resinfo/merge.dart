@@ -3,6 +3,7 @@ import 'package:sen_material_design/components/item/elevated/directory.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/elevated/file.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -21,8 +22,6 @@ class MergeResInfo extends StatefulWidget {
 class _MergeResInfoState extends State<MergeResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -48,8 +47,7 @@ class _MergeResInfoState extends State<MergeResInfo> {
           displayText: AppLocalizations.of(context)!.popcap_resinfo_merge,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedDirectoryBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -62,8 +60,7 @@ class _MergeResInfoState extends State<MergeResInfo> {
             isInputDirectory: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedFileBarContent(
             controller: controllerOutput,
             onUpload: () async {

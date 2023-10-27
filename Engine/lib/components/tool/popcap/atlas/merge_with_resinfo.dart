@@ -3,6 +3,7 @@ import 'package:sen_material_design/components/item/elevated/directory.dart';
 import 'package:sen_material_design/components/item/elevated/drop_button.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -22,8 +23,6 @@ class MergeWithResInfo extends StatefulWidget {
 class _MergeWithResInfoState extends State<MergeWithResInfo> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -55,8 +54,7 @@ class _MergeWithResInfoState extends State<MergeWithResInfo> {
           displayText: AppLocalizations.of(context)!.popcap_resinfo_merge_atlas,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedDirectoryBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -69,8 +67,7 @@ class _MergeWithResInfoState extends State<MergeWithResInfo> {
             isInputDirectory: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedDirectoryBarContent(
             controller: controllerOutput,
             onUpload: () async {
@@ -88,8 +85,7 @@ class _MergeWithResInfoState extends State<MergeWithResInfo> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: DropButtonContent<int>(
             toolTip: AppLocalizations.of(context)!.select_width_subtitle,
             value: width,
@@ -110,8 +106,7 @@ class _MergeWithResInfoState extends State<MergeWithResInfo> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: DropButtonContent<int>(
             toolTip: AppLocalizations.of(context)!.select_height_subtitle,
             value: height,
@@ -132,8 +127,7 @@ class _MergeWithResInfoState extends State<MergeWithResInfo> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: DropButtonContent<int>(
             toolTip: AppLocalizations.of(context)!.select_padding_subtitle,
             value: padding,

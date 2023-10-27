@@ -21,8 +21,6 @@ class _WWiseSoundBankDecodeState extends State<WWiseSoundBankDecode> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
 
-  String text = '';
-
   @override
   void initState() {
     super.initState();

@@ -3,6 +3,7 @@ import 'package:sen_material_design/components/item/elevated/directory.dart';
 import 'package:sen_material_design/components/item/elevated/drop_button.dart';
 import 'package:sen_material_design/components/item/elevated/execute_button.dart';
 import 'package:sen_material_design/components/item/widget/app.dart';
+import 'package:sen_material_design/components/item/widget/container.dart';
 import 'package:sen_material_design/components/item/widget/title.dart';
 import 'package:sen_material_design/components/page/debug.dart';
 import 'package:sen_material_design/components/page/execute.dart';
@@ -22,8 +23,6 @@ class PopCapAtlasMerge extends StatefulWidget {
 class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
   late TextEditingController controllerInput;
   late TextEditingController controllerOutput;
-
-  String text = '';
 
   @override
   void initState() {
@@ -56,8 +55,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
               AppLocalizations.of(context)!.popcap_resource_group_merge_atlas,
           textStyle: theme.textTheme.titleMedium!,
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedDirectoryBarContent(
             controller: controllerInput,
             onUpload: () async {
@@ -70,8 +68,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
             isInputDirectory: true,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: ElevatedDirectoryBarContent(
             controller: controllerOutput,
             onUpload: () async {
@@ -89,8 +86,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: DropButtonContent<int>(
             toolTip: AppLocalizations.of(context)!.select_width_subtitle,
             value: width,
@@ -111,8 +107,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: DropButtonContent<int>(
             toolTip: AppLocalizations.of(context)!.select_height_subtitle,
             value: height,
@@ -133,8 +128,7 @@ class _PopCapAtlasMergeState extends State<PopCapAtlasMerge> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
+        ContainerHasMargin(
           child: DropButtonContent<int>(
             toolTip: AppLocalizations.of(context)!.select_padding_subtitle,
             value: padding,
