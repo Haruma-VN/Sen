@@ -109,6 +109,10 @@ class _SettingState extends State<Setting> {
         {
           return AppLocalizations.of(context)!.english;
         }
+      case 'zh':
+        {
+          return AppLocalizations.of(context)!.zh_chinese;
+        }
       case 'ru':
         {
           return AppLocalizations.of(context)!.russian;
