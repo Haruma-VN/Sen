@@ -5,6 +5,7 @@ import 'package:sen_material_design/bridge/functions.dart';
 import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/common/custom.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/item/elevated/input.dart';
 import 'package:sen_material_design/components/page/widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/bridge/method.dart';
@@ -488,18 +489,13 @@ class _HomePageState extends State<HomePage> {
                 ? Container(
                     margin: EdgeInsets.symmetric(
                       vertical: MediaQuery.of(context).size.height * 0.01,
-                      horizontal: MediaQuery.of(context).size.width * 0.05,
+                      horizontal: MediaQuery.of(context).size.width * 0.03,
                     ),
-                    child: TextField(
+                    child: ElevatedInputTextField(
+                      icon: Icons.search_outlined,
+                      labelText: AppLocalizations.of(context)!.search,
                       controller: _searchController,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.search,
-                        hintText: AppLocalizations.of(context)!.search,
-                        prefixIcon: const Icon(Icons.search),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                        ),
-                      ),
+                      toolTip: AppLocalizations.of(context)!.search,
                       onChanged: (String value) {
                         setState(() {
                           ApplicationInformation.searchValue.value = value;

@@ -31,23 +31,26 @@ class _LanguageSelectorDialogState extends State<LanguageSelectorDialog> {
       LanguageSupport.has('vi', AppLocalizations.of(context)!.vietnamese),
       LanguageSupport.has('es', AppLocalizations.of(context)!.spanish),
       LanguageSupport.has('zh', AppLocalizations.of(context)!.zh_chinese),
+      LanguageSupport.has('pt', AppLocalizations.of(context)!.portuguese),
     ];
-    return Column(
-      children: languages
-          .map(
-            (LanguageSupport e) => RadioListTile(
-              title: Text(e.languageValue),
-              value: e.languageCode,
-              groupValue: groupValue,
-              onChanged: (value) {
-                setState(() {
-                  groupValue = value.toString();
-                  ApplicationInformation.language.value = groupValue;
-                });
-              },
-            ),
-          )
-          .toList(),
+    return SingleChildScrollView(
+      child: Column(
+        children: languages
+            .map(
+              (LanguageSupport e) => RadioListTile(
+                title: Text(e.languageValue),
+                value: e.languageCode,
+                groupValue: groupValue,
+                onChanged: (value) {
+                  setState(() {
+                    groupValue = value.toString();
+                    ApplicationInformation.language.value = groupValue;
+                  });
+                },
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

@@ -43,10 +43,6 @@ class SwitchContentBar extends StatelessWidget {
                   displayText,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
               ],
             ),
             const Expanded(

@@ -132,7 +132,7 @@ Future<void> execute(
   try {
     await task();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      String description = localizations!.command_execute_success;
+      final String description = localizations!.command_execute_finish;
       if (ApplicationInformation.allowNotification.value) {
         NotificationService.push(
           ApplicationInformation.applicationName,
