@@ -10,13 +10,16 @@ namespace Sen.Shell.Kernel.Internal
     public static partial class LotusAPI
     {
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Callback(string message);
+
         private const string LibraryModule = $"./Internal";
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize);
+        public static extern IntPtr ZlibCompress(byte[] data, int dataSize, int level, out int compressedSize, Callback callback);
 
         [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] 
-        public static partial void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize);
+        public static partial void ZlibUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int uncompressedDataSize, Callback callback);
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr OpenFileDialog(string title, int size, string[] filters);
@@ -38,39 +41,40 @@ namespace Sen.Shell.Kernel.Internal
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial IntPtr GZipCompress(byte[] data, int dataSize, out int compressedSize);
+        public static partial IntPtr GZipCompress(byte[] data, int dataSize, out int compressedSize, Callback callback);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial IntPtr GZipUncompress(byte[] data, int dataSize, out int compressedSize);
+        public static partial IntPtr GZipUncompress(byte[] data, int dataSize, out int compressedSize, Callback callback);
 
         [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] 
-        public static partial void DeflateCompress(byte[] data, int dataSize, out IntPtr compressedData, out int size);
+        public static partial void DeflateCompress(byte[] data, int dataSize, out IntPtr compressedData, out int size, Callback callback);
 
         [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial void DeflateUncompress(byte[] input, int input_size, out IntPtr output, out int output_size);
+        public static partial void DeflateUncompress(byte[] input, int input_size, out IntPtr output, out int output_size, Callback callback);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial IntPtr BZip2Compress(byte[] data, int dataSize, out int compressedSize);
+        public static partial IntPtr BZip2Compress(byte[] data, int dataSize, out int compressedSize, Callback callback);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial IntPtr BZip2Uncompress(byte[] data, int dataSize, out int compressedSize);
+        public static partial IntPtr BZip2Uncompress(byte[] data, int dataSize, out int compressedSize, Callback callback);
 
-        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] public static partial void lzmaCompress(byte[] data, int dataSize, out IntPtr compressData, out int compressedSize);
-
-        [LibraryImport(LibraryModule)]
-        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial void lzmaUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int compressedSize);
+        [LibraryImport(LibraryModule)][UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })] 
+        public static partial void lzmaCompress(byte[] data, int dataSize, out IntPtr compressData, out int compressedSize, Callback callback);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial IntPtr VCDiffEncode(byte[] before, int before_size, byte[] after, int after_size, out int patch_size);
+        public static partial void lzmaUncompress(byte[] data, int dataSize, out IntPtr uncompressedData, out int compressedSize, Callback callback);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public static partial IntPtr VCDiffDecode(byte[] before, int before_size, byte[] patch, int patch_size, out int after_size);
+        public static partial IntPtr VCDiffEncode(byte[] before, int before_size, byte[] after, int after_size, out int patch_size, Callback callback);
+
+        [LibraryImport(LibraryModule)]
+        [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+        public static partial IntPtr VCDiffDecode(byte[] before, int before_size, byte[] patch, int patch_size, out int after_size, Callback callback);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
@@ -82,7 +86,7 @@ namespace Sen.Shell.Kernel.Internal
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-        public unsafe static partial void EncodeETC1Fast(uint* src, ulong* dst, uint block, uint width);
+        public unsafe static partial void EncodeETC1Fast(uint* src, ulong* dst, uint block, uint width, Callback callback);
 
         [LibraryImport(LibraryModule)]
         [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
@@ -90,6 +94,14 @@ namespace Sen.Shell.Kernel.Internal
 
         [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr MD5Hash(string str, int size);
+
+        [DllImport(LibraryModule, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr DecodeETC1(byte[] data, long size, int width, int height);
+
+        public static void CallbackError(string message)
+        {
+            throw new Exception(message);
+        }
 
     }
 }

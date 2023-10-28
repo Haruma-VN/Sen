@@ -83,29 +83,71 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
      * @returns Texture format
      */
 
-    export function ConvertFormat(bundle_directory: string, atlas_name: string, ptx_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo, atlas_format: number, compress_ptx: boolean): number {
+    export function ConvertFormat(bundle_directory: string, atlas_name: string, ptx_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo, atlas_format: number, compress_ptx: boolean, toAndroid: boolean): number {
         const ptx_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `unpack`, atlas_name as string));
         const png_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `convert`, atlas_name as string).replace(/((\.ptx))?$/i, `.png`));
         if (!Sen.Shell.FileSystem.DirectoryExists(Sen.Shell.Path.Dirname(png_path))) Sen.Shell.FileSystem.CreateDirectory(Sen.Shell.Path.Dirname(png_path));
-        if (atlas_format === 0) {
-            Sen.Shell.TextureHandler.Create_RGBA8888_Decode(
-                ptx_path,
-                png_path,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
-            );
-        } else if (atlas_format === 147) {
-            Sen.Shell.TextureHandler.Create_ETC1_RGB_A8_Decode(
-                ptx_path,
-                png_path,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
-                (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
-            );
+        switch (BigInt(atlas_format)) {
+            case 0n: {
+                if (toAndroid) {
+                    Sen.Shell.TextureHandler.Create_ARGB8888_Decode(
+                        ptx_path,
+                        png_path,
+                        (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
+                        (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
+                    );
+                } else {
+                    Sen.Shell.TextureHandler.Create_RGBA8888_Decode(
+                        ptx_path,
+                        png_path,
+                        (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
+                        (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
+                    );
+                }
+                break;
+            }
+            case 147n: {
+                Sen.Shell.TextureHandler.Create_ETC1_RGB_A8_Decode(
+                    ptx_path,
+                    png_path,
+                    (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
+                    (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
+                );
+                break;
+            }
+            case 30n: {
+                Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGBA_Decode(
+                    ptx_path,
+                    png_path,
+                    (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
+                    (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
+                );
+                break;
+            }
+            case 148n: {
+                Sen.Shell.TextureHandler.Create_PVRTC1_4BPP_RGBA_A8_Decode(
+                    ptx_path,
+                    png_path,
+                    (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).width as number,
+                    (ptx_info as Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PtxInfo).height as number
+                );
+                break;
+            }
         }
-        compress_ptx && atlas_format === 147
-            ? Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8)
-            : Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB8888);
-        return atlas_format === 147 && compress_ptx ? 148 : 0;
+        if (toAndroid) {
+            if (compress_ptx && atlas_format === 30) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A8);
+            } else {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888);
+            }
+        } else {
+            if (compress_ptx && atlas_format === 147) {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8);
+            } else {
+                Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB8888);
+            }
+        }
+        return toAndroid ? (atlas_format === 0 && compress_ptx ? 30 : 0) : atlas_format === 147 && compress_ptx ? 148 : 0;
     }
 
     /**
@@ -114,11 +156,12 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
      * @returns ManifestGroup name
      */
 
-    export function UnpackRSBAndConvertPTX(file_in: string, bundle_directory: string, input_resolution: number, compress_ptx: boolean): string {
+    export function UnpackRSBAndConvertPTX(file_in: string, bundle_directory: string, input_resolution: number, compress_ptx: boolean, toAndroid: boolean, use_high_thread: boolean = false): string {
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.UnpackPopCapOfficialRSB(file_in, bundle_directory, true);
         const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(
             Sen.Shell.Path.Join(`${bundle_directory}`, `manifest.json`)
         );
+        let resource_tasks: Array<Shell.LotusModule.RSGPackTemplate> = [];
         const groups: Array<string> = Object.keys(information.group);
         const atlas_res_bundle: Array<number> = [1536, 768, 384];
         const string_res_resolution: string = `_${atlas_res_bundle[input_resolution - 1]}`;
@@ -134,8 +177,10 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
             if (information.group[group].is_composite) {
                 const subgroups: Array<string> = Object.keys(information.group[group].subgroup);
                 for (const subgroup of subgroups) {
-                    if (subgroup.toUpperCase().endsWith("_COMMON")) continue;
-                    else if (subgroup.toUpperCase().endsWith(string_res_resolution)) {
+                    let resource_need_pack: boolean = false!;
+                    if (subgroup.toUpperCase().endsWith("_COMMON")) {
+                        continue;
+                    } else if (subgroup.toUpperCase().endsWith(string_res_resolution)) {
                         check_contain_atlas = true;
                         const rsg_infile_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `packet`, `${subgroup}.rsg`));
                         const rsg_outfile_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `unpack`));
@@ -147,23 +192,33 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                                 (packet_res_info.path as Array<string>).join("\\"),
                                 packet_res_info.ptx_info!,
                                 packet_res_info.ptx_property!.format,
-                                compress_ptx
+                                compress_ptx,
+                                toAndroid
                             );
                         }
                         const rsg_packetinfo: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = information.group[group].subgroup[subgroup].packet_info;
                         rsg_packetinfo.res.forEach((res) => {
                             res.path = (res.path as Array<string>).join("\\");
                         });
-                        Sen.Shell.LotusModule.RSGPack(`${rsg_outfile_path}`, `${rsg_infile_path}`, rsg_packetinfo, false);
-                        rsg_packetinfo.res.forEach((res) => {
-                            res.path = (res.path as string).split("\\");
+                        resource_need_pack = true;
+                        resource_tasks.push({
+                            inFolder: rsg_outfile_path,
+                            outFile: rsg_infile_path,
+                            packet: rsg_packetinfo,
+                            useResDirectory: false,
                         });
-                        Sen.Shell.Console.Print(
-                            Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
-                            `${Sen.Script.Modules.System.Default.Localization.GetString("execution_finish").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("converted_rsg").replace(/\{\}/g, `${subgroup}`))}`
-                        );
+                        Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("rsg_in_queue").replace(/\{\}/g, `${subgroup}`));
                     } else {
                         delete information.group[group].subgroup[subgroup];
+                    }
+                    if (resource_need_pack && !use_high_thread) {
+                        Sen.Shell.LotusModule.RSGPackAsync(...resource_tasks);
+                        resource_tasks.forEach((e) => {
+                            e.packet.res.forEach((res) => {
+                                res.path = (res.path as string).split("\\");
+                            });
+                        });
+                        resource_tasks = [];
                     }
                 }
                 if (!check_contain_atlas)
@@ -173,6 +228,14 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
                         `${file_in}`
                     );
             }
+        }
+        if (use_high_thread) {
+            Sen.Shell.LotusModule.RSGPackAsync(...resource_tasks);
+            resource_tasks.forEach((e) => {
+                e.packet.res.forEach((res) => {
+                    res.path = (res.path as string).split("\\");
+                });
+            });
         }
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Unpack.RSBManifestInformation>(Sen.Shell.Path.Join(`${bundle_directory}`, `manifest.json`), information, false);
         return manifest_packet_name;
@@ -188,11 +251,43 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         const manifest_rsg_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `${manifest_packet_name}.rsg`));
         const manifest_rsg_bundle_directory: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(bundle_directory, `${manifest_packet_name}.bundle`));
         const manifest_packet_info: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Shell.LotusModule.RSGUnpack(manifest_rsg_path, `${manifest_rsg_bundle_directory}`, false);
-        const res_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, manifest_packet_info.res[0].path as string));
-        const res_json_argument: string = res_argument.replace(/((\.rton))?$/i, `.json`);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(res_argument, res_json_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
-        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(res_argument)}`, `${Sen.Shell.Path.Parse(res_argument).name_without_extension}.res`));
-        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.SplitPopCapResources(res_json_argument, output_argument);
+        const res_argument: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.ResInfo[] = manifest_packet_info.res;
+        const resource_contains_rton: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.ResInfo | undefined = res_argument.find((e) => (e.path! as string).toUpperCase().endsWith(".RTON"));
+        const resource_contains_newton: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.ResInfo | undefined = res_argument.find((e) => (e.path! as string).toUpperCase().endsWith(".NEWTON"));
+        let resource_has_rton: boolean = false;
+        let resource_has_newton: boolean = false;
+        if (resource_contains_rton) {
+            resource_has_rton = true;
+        }
+        if (resource_contains_newton) {
+            resource_has_newton = true;
+        }
+        let resources_json_path: string = undefined!;
+        if (resource_has_rton && resource_has_newton) {
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
+            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_has_newton_and_rton")}`);
+            const resources_rton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, resource_contains_rton!.path as string));
+            resources_json_path = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_rton_path)}`, `${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`));
+            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+        } else if (resource_has_rton && !resource_has_newton) {
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
+            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_has_rton")}`);
+            const resources_rton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, resource_contains_rton!.path as string));
+            resources_json_path = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_rton_path)}`, `${Sen.Shell.Path.Parse(resources_rton_path).name_without_extension}.json`));
+            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONDecode(resources_rton_path, resources_json_path, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+        } else if (!resource_has_rton && resource_has_newton) {
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ""));
+            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_has_newton")}`);
+            const resource_newton_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(manifest_rsg_bundle_directory, resource_contains_newton!.path as string));
+            resources_json_path = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resource_newton_path)}`, `${Sen.Shell.Path.Parse(resource_newton_path).name_without_extension}.json`));
+            Sen.Shell.LotusModule.DecodeNewtonResource(resource_newton_path, resources_json_path);
+        } else {
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red, Sen.Script.Modules.System.Default.Localization.GetString("execution_error").replace(/\{\}/g, ""));
+            Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      ${Sen.Script.Modules.System.Default.Localization.GetString("resource_invalid")}`);
+            throw new Error(Sen.Script.Modules.System.Default.Localization.GetString("invalid_resource_group"));
+        }
+        const output_argument: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(resources_json_path)}`, `${Sen.Shell.Path.Parse(resources_json_path).name_without_extension}.res`));
+        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.SplitPopCapResources(resources_json_path, output_argument);
         const content_json_path: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(output_argument, `content.json`));
         const subgroup_content_json: Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json =
             Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json>(content_json_path);
@@ -219,8 +314,17 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
             }
         }
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.official_subgroup_json>(content_json_path, subgroup_content_json, false);
-        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(output_argument, res_json_argument);
-        Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(res_json_argument, res_argument, Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+        Sen.Script.Modules.Support.PopCap.PvZ2.Resources.ResourceGroup.PopCapResources.MergePopCapResources(output_argument, resources_json_path);
+        if (resource_has_newton) {
+            Sen.Shell.LotusModule.EncodeNewtonResource(resources_json_path, resources_json_path.replace(/((\.json))?$/i, `.NEWTON`));
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("got_newton_resource")}`);
+        }
+        if (resource_has_rton) {
+            Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.PopCapRTONEncode(resources_json_path, resources_json_path.replace(/((\.json))?$/i, `.RTON`), Sen.Script.Modules.Support.PopCap.PvZ2.RTON.Encode.RTONOfficial);
+            Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, ``));
+            Sen.Shell.Console.Printf(null, `      ${Sen.Script.Modules.System.Default.Localization.GetString("got_rton_resource")}`);
+        }
         Sen.Shell.LotusModule.RSGPack(`${manifest_rsg_bundle_directory}`, `${manifest_rsg_path}`, manifest_packet_info, false);
         return;
     }
@@ -257,7 +361,11 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
         );
         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      1. argb_8888`);
         Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      2. pvrtc1_4bpp_rgba_a8`);
-        const compress_ptx: boolean = Sen.Script.Modules.Interface.Arguments.TestInput([1, 2]) === 2;
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      3. rgba_8888`);
+        Sen.Shell.Console.Printf(Sen.Script.Modules.Platform.Constraints.ConsoleColor.White, `      4. rgb_etc1_a8`);
+        const input_value: number = Sen.Script.Modules.Interface.Arguments.TestInput([1, 2, 3, 4]);
+        const compress_ptx: boolean = input_value === 2 || input_value === 4;
+        const isAndroidConvert: boolean = input_value === 3 || input_value === 4;
         Sen.Shell.Console.Print(
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Cyan,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("popcap_texture_resolution"))
@@ -273,7 +381,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB {
             Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green,
             Sen.Script.Modules.System.Default.Localization.GetString("execution_status").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("rsg_list"))
         );
-        const manifest_packet_name: string = Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB.UnpackRSBAndConvertPTX(file_in, bundle_directory, input_resolution, compress_ptx);
+        const manifest_packet_name: string = Sen.Script.Modules.Executable.PvZ2.AndroidRSBtoiOSRSB.UnpackRSBAndConvertPTX(file_in, bundle_directory, input_resolution, compress_ptx, isAndroidConvert, false);
         RewriteResources(Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${bundle_directory}`, `packet`)), manifest_packet_name, input_resolution);
         Sen.Script.Modules.Support.PopCap.PvZ2.RSB.Pack.PackPopCapRSB(bundle_directory, output_file);
         Sen.Shell.FileSystem.DeleteDirectory([bundle_directory]);

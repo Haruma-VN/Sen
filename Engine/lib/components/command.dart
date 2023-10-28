@@ -5,10 +5,11 @@ import 'package:sen_material_design/bridge/functions.dart';
 import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/common/custom.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/item/elevated/button.dart';
 import 'package:sen_material_design/components/item/elevated/input.dart';
-import 'package:sen_material_design/components/page/widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/bridge/method.dart';
+import 'package:sen_material_design/components/page/widget.dart';
 import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:path/path.dart' as p;
 
@@ -460,6 +461,84 @@ class _HomePageState extends State<HomePage> {
     text: ApplicationInformation.searchValue.value,
   );
 
+  void Function() onPress(MethodItem e) {
+    return () {
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          pageBuilder: (
+            context,
+            animation,
+            secondaryAnimation,
+          ) =>
+              FutureBuilder(
+            future: refreshModule(),
+            builder: (
+              BuildContext context,
+              AsyncSnapshot snapshot,
+            ) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return materialWidget[e.method] ??
+                    Scaffold(
+                      appBar: AppBar(
+                        title: const Text(
+                          ApplicationInformation.applicationName,
+                        ),
+                        centerTitle: false,
+                        elevation: 3,
+                        scrolledUnderElevation: 3,
+                      ),
+                      body: Text(
+                        AppLocalizations.of(
+                          context,
+                        )!
+                            .have_not_implemented,
+                      ),
+                    );
+              } else {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: const Text(
+                      ApplicationInformation.applicationName,
+                    ),
+                    centerTitle: false,
+                    elevation: 3,
+                    scrolledUnderElevation: 3,
+                  ),
+                  body: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+            },
+          ),
+          transitionsBuilder: (
+            context,
+            animation,
+            secondaryAnimation,
+            child,
+          ) {
+            var begin = const Offset(
+              1.0,
+              0.0,
+            );
+            var end = Offset.zero;
+            var curve = Curves.ease;
+
+            var tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
+      );
+    };
+  }
+
   @override
   void initState() {
     super.initState();
@@ -514,158 +593,48 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         Expanded(
-          child: ListView(
-            children: [
-              ApplicationInformation.storagePermission.value
-                  ? Column(
-                      children: ApplicationInformation.displayItems.value
-                          .map(
-                            (MethodItem e) => InkWell(
-                              borderRadius: BorderRadius.circular(30.0),
-                              hoverColor: Colors.blue.withAlpha(50),
-                              onHover: (value) {
-                                setState(() {
-                                  isHovering = value;
-                                });
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(
-                                  vertical:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isHovering
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary
-                                          .withOpacity(0.7)
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  boxShadow: [
-                                    if (!(Theme.of(context).brightness ==
-                                        Brightness.dark))
-                                      const BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 2,
-                                        spreadRadius: 2,
-                                        offset: Offset(4, 2),
-                                      ),
-                                  ],
-                                ),
-                                child: ListTile(
-                                  leading: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        exchangeFunction(e.method).icon,
-                                        size: Theme.of(context).iconTheme.size,
-                                      ),
-                                    ],
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+            child: SingleChildScrollView(
+              child: ApplicationInformation.storagePermission.value
+                  ? LayoutBuilder(
+                      builder: (context, constraints) {
+                        var orientation = MediaQuery.of(context).orientation;
+                        if (orientation == Orientation.portrait) {
+                          return Column(
+                            children: ApplicationInformation.displayItems.value
+                                .map(
+                                  (MethodItem e) => RawButton(
+                                    width: double.infinity,
+                                    description:
+                                        exchangeFunction(e.method).subtitle,
+                                    onPressed: onPress(e),
+                                    text: exchangeFunction(e.method).name,
+                                    iconEnd: Icons.arrow_right_outlined,
+                                    iconStart: exchangeFunction(e.method).icon,
                                   ),
-                                  title: Text(
-                                    (exchangeFunction(e.method).name),
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
+                                )
+                                .toList(),
+                          );
+                        } else {
+                          return Wrap(
+                            direction: Axis.horizontal,
+                            children: ApplicationInformation.displayItems.value
+                                .map(
+                                  (MethodItem e) => RawButton(
+                                    width: constraints.maxWidth / 2,
+                                    description:
+                                        exchangeFunction(e.method).subtitle,
+                                    onPressed: onPress(e),
+                                    text: exchangeFunction(e.method).name,
+                                    iconEnd: Icons.arrow_right_outlined,
+                                    iconStart: exchangeFunction(e.method).icon,
                                   ),
-                                  subtitle: Text(
-                                    exchangeFunction(e.method).subtitle,
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  trailing: SizedBox(
-                                    child: Icon(
-                                      Icons.arrow_right_sharp,
-                                      size: Theme.of(context).iconTheme.size,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        pageBuilder: (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                        ) =>
-                                            FutureBuilder(
-                                          future: refreshModule(),
-                                          builder: (
-                                            BuildContext context,
-                                            AsyncSnapshot snapshot,
-                                          ) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.done) {
-                                              return materialWidget[e.method] ??
-                                                  Scaffold(
-                                                    appBar: AppBar(
-                                                      title: const Text(
-                                                        ApplicationInformation
-                                                            .applicationName,
-                                                      ),
-                                                      centerTitle: false,
-                                                      elevation: 3,
-                                                      scrolledUnderElevation: 3,
-                                                    ),
-                                                    body: Text(
-                                                      AppLocalizations.of(
-                                                        context,
-                                                      )!
-                                                          .have_not_implemented,
-                                                    ),
-                                                  );
-                                            } else {
-                                              return Scaffold(
-                                                appBar: AppBar(
-                                                  title: const Text(
-                                                    ApplicationInformation
-                                                        .applicationName,
-                                                  ),
-                                                  centerTitle: false,
-                                                  elevation: 3,
-                                                  scrolledUnderElevation: 3,
-                                                ),
-                                                body: const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                        transitionsBuilder: (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                          child,
-                                        ) {
-                                          var begin = const Offset(
-                                            1.0,
-                                            0.0,
-                                          );
-                                          var end = Offset.zero;
-                                          var curve = Curves.ease;
-
-                                          var tween = Tween(
-                                            begin: begin,
-                                            end: end,
-                                          ).chain(CurveTween(curve: curve));
-
-                                          return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
+                                )
+                                .toList(),
+                          );
+                        }
+                      },
                     )
                   : Column(
                       children: [
@@ -783,7 +752,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-            ],
+            ),
           ),
         ),
       ],

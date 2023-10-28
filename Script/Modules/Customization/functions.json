@@ -659,19 +659,5 @@
         "exclude": [],
         "is_enabled": true,
         "type": "directory"
-    },
-    "haruma_sen_package_encode": {
-        "func_number": 95,
-        "include": [".bundle"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "directory"
-    },
-    "haruma_sen_package_decode": {
-        "func_number": 96,
-        "include": [".sen"],
-        "exclude": [],
-        "is_enabled": true,
-        "type": "file"
     }
 }

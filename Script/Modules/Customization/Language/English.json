@@ -682,5 +682,6 @@
     "got_rton_resource": "MANIFESTGROUP has RTON, encode RTON from JSON",
     "got_newton_resource": "MANIFESTGROUP has NEWTON, encode NEWTON from JSON",
     "haruma_sen_package_encode": "PopCap RSB: Generate Sen Package",
-    "haruma_sen_package_decode": "PopCap RSB: Apply Sen Package"
+    "haruma_sen_package_decode": "PopCap RSB: Apply Sen Package",
+    "rsg_in_queue": "RSG in queue: {}"
 }

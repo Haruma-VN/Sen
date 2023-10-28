@@ -1,5 +1,6 @@
 using Sen.Shell.Kernel.Support.TextureEncode.TextureCoder;
 using Sen.Shell.Kernel.Standards.IOModule.Buffer;
+using System.Runtime.InteropServices;
 using Sen.Shell.Kernel.Internal;
 namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
 {
@@ -1752,28 +1753,18 @@ namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
 
     public class ETC1Encoder
     {
-
         private static Rgba32[] Decode_ETC1_Block(SenBuffer image_bytes, int width, int height)
         {
+            var size = width * height / 2;
+            IntPtr result = LotusAPI.DecodeETC1(image_bytes.readBytes(size), size, width, height);
+            byte[] raw = new byte[width * height * 4];
+            Marshal.Copy(result, raw, 0, width * height * 4);
+            Marshal.FreeHGlobal(result);
             var imageData = new Rgba32[width * height];
-            for (var y = 0; y < height; y += 4)
-            {
-                for (var x = 0; x < width; x += 4)
-                {
-                    var temp = image_bytes.readBigUInt64BE();
-                    var color_buffer = new Rgba32[16];
-                    ETC1.DecodeETC1(temp, color_buffer);
-                    for (var i = 0; i < 4; i++)
-                    {
-                        for (var j = 0; j < 4; j++)
-                        {
-                            if ((y + i) < height && (x + j) < width)
-                            {
-                                imageData[(y + i) * width + x + j] = color_buffer[(i << 2) | j];
-                            }
-                        }
-                    }
-                }
+            for (var i = 0; i < imageData.Length; i++) {
+                imageData[i].R = raw[i * 4];
+                imageData[i].G = raw[i * 4 + 1];
+                imageData[i].B = raw[i * 4 + 2];
             }
             return imageData;
         }
@@ -1791,7 +1782,7 @@ namespace Sen.Shell.Kernel.Support.TextureEncode.RSB
             {
                 fixed (ulong* destination_block = data)
                 {
-                    LotusAPI.EncodeETC1Fast(source_block, destination_block, (uint)(width * height / 16), (uint)width);
+                    LotusAPI.EncodeETC1Fast(source_block, destination_block, (uint)(width * height / 16), (uint)width, LotusAPI.CallbackError);
                 }
             }
             var image_encode = new SenBuffer();

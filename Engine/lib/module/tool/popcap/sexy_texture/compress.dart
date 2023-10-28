@@ -43,10 +43,10 @@ class TextureCompress {
   }
 
   static Uint8List decodeETC1(SenBuffer senFile, int width, int height) {
-    Pointer<Uint8> dataPtr = calloc.allocate(senFile.length);
-    dataPtr.asTypedList(senFile.length).setAll(0, senFile.toBytes());
-    Pointer<Uint8> resultPtr =
-        DecodeETC1Block(dataPtr, senFile.length, width, height);
+    final int size = width * height ~/ 2;
+    Pointer<Uint8> dataPtr = calloc.allocate(size);
+    dataPtr.asTypedList(size).setAll(0, senFile.readBytes(size));
+    Pointer<Uint8> resultPtr = DecodeETC1Block(dataPtr, size, width, height);
     return Uint8List.fromList(resultPtr.asTypedList(width * height * 4));
   }
 

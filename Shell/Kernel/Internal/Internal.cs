@@ -95,7 +95,7 @@ namespace Sen.Shell.Kernel.Internal
 
         public byte[] Decode(byte[] before, byte[] patch)
         {
-            var after = LotusAPI.VCDiffDecode(before, before.Length, patch, patch.Length, out var size);
+            var after = LotusAPI.VCDiffDecode(before, before.Length, patch, patch.Length, out var size, LotusAPI.CallbackError);
             byte[] afterData = new byte[size];
             Marshal.Copy(after, afterData, 0, size);
             Marshal.FreeHGlobal(after);
@@ -111,7 +111,7 @@ namespace Sen.Shell.Kernel.Internal
 
         public byte[] Encode(byte[] before, byte[] after)
         {
-            var patch = LotusAPI.VCDiffEncode(before, before.Length, after, after.Length, out var size);
+            var patch = LotusAPI.VCDiffEncode(before, before.Length, after, after.Length, out var size, LotusAPI.CallbackError);
             byte[] patchData = new byte[size];
             Marshal.Copy(patch, patchData, 0, size);
             Marshal.FreeHGlobal(patch);

@@ -143,6 +143,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                 encode: bigint;
             };
         };
+        is_android_port: boolean;
     }
 
     /**
@@ -152,7 +153,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
      * @returns RSG converted to 2i
      */
 
-    export function ConvertTextureRSG(file_in: string, file_out: string, format: bigint): void {
+    export function ConvertTextureRSG(file_in: string, file_out: string, format: bigint, is_android_port: boolean): void {
         const packet_directory: string = Sen.Shell.Path.Resolve(`${Sen.Shell.Path.Join(`${Sen.Shell.Path.Dirname(file_in)}`, `${Sen.Shell.Path.Parse(file_in).name_without_extension}.packet`)}`);
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGUnpack(file_in, packet_directory);
         const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(
@@ -175,13 +176,25 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                     Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ETC1_RGB_A8);
                     break;
                 }
+                case 148n: {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA_A8);
+                    break;
+                }
+                case 30n: {
+                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.PVRTC1_4BPP_RGBA);
+                    break;
+                }
                 case 0n: {
-                    Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888);
+                    if (is_android_port) {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.RGBA8888);
+                    } else {
+                        Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.EncodePopCapPTX(png_path, ptx_path, Sen.Script.Modules.Support.PopCap.PvZ2.Texture.Encode.TextureEncoderUnofficial.ARGB8888);
+                    }
                 }
             }
             Sen.Shell.FileSystem.DeleteFile(png_path);
         });
-        information.compression_flags = 0b0011;
+        information.compression_flags = 0x03;
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
@@ -201,7 +214,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
         const information: Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(
             Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`)
         );
-        information.compression_flags = 0b0011;
+        information.compression_flags = 0x03;
         Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.PacketInfo>(Sen.Shell.Path.Join(`${packet_directory}`, `packet.json`), information, true);
         Sen.Script.Modules.Support.PopCap.PvZ2.RSG.Pack.RSGPack(packet_directory, file_out);
         Sen.Shell.FileSystem.DeleteDirectory([packet_directory]);
@@ -225,17 +238,17 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                 );
                 const entry: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.cn_bundle, `packet`, rsg_entry));
                 const output: string = Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(option.int_bundle, `packet`, rsg_entry));
-                (option.watch[key] as any).subgroup[rsg_name].packet_info.compression_flags = 0b0011;
+                (option.watch[key] as any).subgroup[rsg_name].packet_info.compression_flags = 0x03;
                 switch ((option.watch[key] as any).subgroup[rsg_name].category[0]) {
                     case 0: {
                         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ConvertCommonRSG(entry, output);
                         break;
                     }
                     default: {
-                        Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ConvertTextureRSG(entry, output, option.rsg.ptx.encode);
+                        Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.ConvertTextureRSG(entry, output, option.rsg.ptx.encode, option.is_android_port);
                         (option.watch[key] as any).subgroup[rsg_name].packet_info.res.forEach((e: any) => {
                             e.ptx_property.format = option.rsg.ptx.encode;
-                            e.ptx_property.pitch = BigInt(e.ptx_info.width) * 4n;
+                            e.ptx_property.pitch = option.rsg.ptx.encode === 30n ? BigInt(e.ptx_info.width) / 2n : BigInt(e.ptx_info.width) * 4n;
                         });
                         break;
                     }
@@ -309,6 +322,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle {
                     encode: 147n,
                 },
             },
+            is_android_port: true,
         };
         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AddsRSGToOfficialPacketBundle(executable_option);
         Sen.Script.Modules.Executable.PvZ2.PvZ2CBundlePortToPvZ2IBundle.AppendUnofficialResources(executable_option);

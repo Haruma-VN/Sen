@@ -28,7 +28,7 @@ class DropButtonContent<T> extends StatelessWidget {
         value: value,
         hint: Text(choose),
         isExpanded: true,
-        focusColor: Colors.transparent,
+        // focusColor: Colors.transparent,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         underline: Container(),
         items: items,

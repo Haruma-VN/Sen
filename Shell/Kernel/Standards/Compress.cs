@@ -90,7 +90,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] UncompressZlib(byte[] zlibData)
         {
-            LotusAPI.ZlibUncompress(zlibData, zlibData.Length, out var uncompressedDataPtr, out var uncompressedDataSize);
+            LotusAPI.ZlibUncompress(zlibData, zlibData.Length, out var uncompressedDataPtr, out var uncompressedDataSize, LotusAPI.CallbackError);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(uncompressedDataPtr);
@@ -99,7 +99,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] UncompressGZip(byte[] zlibData)
         {
-            IntPtr uncompressedDataPtr = LotusAPI.GZipUncompress(zlibData, zlibData.Length, out int uncompressedDataSize);
+            IntPtr uncompressedDataPtr = LotusAPI.GZipUncompress(zlibData, zlibData.Length, out int uncompressedDataSize, LotusAPI.CallbackError);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(uncompressedDataPtr);
@@ -108,7 +108,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] UncompressDeflate(byte[] zlibData)
         {
-            LotusAPI.DeflateUncompress(zlibData, zlibData.Length, out IntPtr output, out int uncompressedDataSize);
+            LotusAPI.DeflateUncompress(zlibData, zlibData.Length, out IntPtr output, out int uncompressedDataSize, LotusAPI.CallbackError);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(output, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(output);
@@ -117,7 +117,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] UncompressBzip2(byte[] data)
         {
-            IntPtr uncompressedDataPtr = LotusAPI.BZip2Uncompress(data, data.Length, out int uncompressedDataSize);
+            IntPtr uncompressedDataPtr = LotusAPI.BZip2Uncompress(data, data.Length, out int uncompressedDataSize, LotusAPI.CallbackError);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(uncompressedDataPtr);
@@ -126,7 +126,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] UncompressLzma(byte[] lzma)
         {
-            LotusAPI.lzmaUncompress(lzma, lzma.Length, out IntPtr uncompressedDataPtr ,out int uncompressedDataSize);
+            LotusAPI.lzmaUncompress(lzma, lzma.Length, out IntPtr uncompressedDataPtr ,out int uncompressedDataSize, LotusAPI.CallbackError);
             byte[] uncompressedData = new byte[uncompressedDataSize];
             Marshal.Copy(uncompressedDataPtr, uncompressedData, 0, uncompressedDataSize);
             Marshal.FreeHGlobal(uncompressedDataPtr);
@@ -135,7 +135,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] CompressGZip(byte[] dataStream)
         {
-            IntPtr compressedDataPtr = LotusAPI.GZipCompress(dataStream, dataStream.Length, out var compressedSize);
+            IntPtr compressedDataPtr = LotusAPI.GZipCompress(dataStream, dataStream.Length, out var compressedSize, LotusAPI.CallbackError);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
             Marshal.FreeHGlobal(compressedDataPtr);
@@ -145,7 +145,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] CompressBzip2(byte[] dataStream)
         {
-            IntPtr compressedDataPtr = LotusAPI.BZip2Compress(dataStream, dataStream.Length, out var compressedSize);
+            IntPtr compressedDataPtr = LotusAPI.BZip2Compress(dataStream, dataStream.Length, out var compressedSize, LotusAPI.CallbackError);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressedDataPtr, compressedData, 0, compressedSize);
             Marshal.FreeHGlobal(compressedDataPtr);
@@ -155,7 +155,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] CompressLzma(byte[] dataStream)
         {
-            LotusAPI.lzmaCompress(dataStream, dataStream.Length, out IntPtr compressData ,out int compressedSize);
+            LotusAPI.lzmaCompress(dataStream, dataStream.Length, out IntPtr compressData ,out int compressedSize, LotusAPI.CallbackError);
             byte[] compressedData = new byte[compressedSize];
             Marshal.Copy(compressData, compressedData, 0, compressedSize);
             Marshal.FreeHGlobal(compressData);
@@ -165,7 +165,7 @@ namespace Sen.Shell.Kernel.Standards
 
         public override byte[] CompressDeflate(byte[] dataStream)
         {
-            LotusAPI.DeflateCompress(dataStream, dataStream.Length, out var compressedData, out var size);
+            LotusAPI.DeflateCompress(dataStream, dataStream.Length, out var compressedData, out var size, LotusAPI.CallbackError);
             byte[] deflateData = new byte[size];
             Marshal.Copy(compressedData, deflateData, 0, size);
             Marshal.FreeHGlobal(compressedData);
@@ -175,7 +175,6 @@ namespace Sen.Shell.Kernel.Standards
 
         public unsafe override byte[] CompressZlib(byte[] dataStream, ZlibCompressionLevel compression_level)
         {
-
             var compressionLevel = compression_level switch
             {
                 ZlibCompressionLevel.NO_COMPRESSION => Deflater.NO_COMPRESSION,
@@ -186,7 +185,7 @@ namespace Sen.Shell.Kernel.Standards
                 _ => Deflater.DEFAULT_COMPRESSION,
             };
             byte[] compressedData;
-            IntPtr compressedDataPtr = LotusAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out var compressedSize);
+            IntPtr compressedDataPtr = LotusAPI.ZlibCompress(dataStream, dataStream.Length, compressionLevel, out var compressedSize, LotusAPI.CallbackError);
             if(compressedDataPtr == IntPtr.Zero || compressedSize == 0)
             {
                 throw new Exception("Zlib compression failed");
