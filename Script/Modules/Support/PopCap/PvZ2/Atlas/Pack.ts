@@ -379,6 +379,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             const atlas_json: Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson = Sen.Script.Modules.FileSystem.Json.ReadJson<Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson>(
                 atlas_json_path
             ) satisfies Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Split.AtlasJson;
+            // const atlas_ids = Object.keys(atlas_json.groups);
             this.CheckAtlasJsonStructure(atlas_json);
             const is_path: boolean = atlas_json.method === "path";
             const group_members: Array<string> = Object.keys(atlas_json.groups);
@@ -500,6 +501,8 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
                 },
                 "file"
             );
+            // const mArray = atlas_ids.map((e) => subgroup_output.resources.find((m) => m.id === e)!);
+            // subgroup_output.resources = mArray;
             Sen.Script.Modules.FileSystem.Json.WriteJson<Sen.Script.resource_atlas_and_sprites>(
                 Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.Path.Resolve(Sen.Shell.Path.Dirname(directory_path))}`, `${atlas_json.subgroup}.json`)),
                 subgroup_output,

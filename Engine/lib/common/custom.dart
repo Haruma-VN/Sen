@@ -59,7 +59,7 @@ class Customization {
       final file = await getLocalData();
       final contents = FileSystem.readFile(file);
       final decode_data = jsonDecode(contents);
-      switch (decode_data['theme']) {
+      switch (decode_data['theme'].toString()) {
         case 'dark':
           {
             theme_data = ThemeMode.dark;
@@ -77,7 +77,7 @@ class Customization {
           }
       }
     } catch (e) {
-      theme_data = ThemeMode.system;
+      theme_data = ThemeMode.light;
       write('light', '', 'English', !Platform.isAndroid, true);
     }
     return;
