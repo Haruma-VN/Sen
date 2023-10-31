@@ -99,7 +99,7 @@ class Customization {
       var custom = Customization.init();
       var path = await custom.getLocalData();
       var data = FileSystem.readJson(path);
-      return data['allowNotification'] as bool;
+      return bool.parse(data['allowNotification']);
     } catch (e) {
       return true;
     }
