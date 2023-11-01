@@ -20,7 +20,8 @@ class Customization {
 
   Future<String> getLocalData() async {
     if (Platform.isAndroid) {
-      return '/storage/emulated/0/SenGUI/interface/user.json';
+      var k = await getApplicationSupportDirectory();
+      return p.join(k.path, 'interface', 'user.json');
     }
     var directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
@@ -59,7 +60,7 @@ class Customization {
       final file = await getLocalData();
       final contents = FileSystem.readFile(file);
       final decode_data = jsonDecode(contents);
-      switch (decode_data['theme'].toString()) {
+      switch (decode_data['theme'] as String) {
         case 'dark':
           {
             theme_data = ThemeMode.dark;
@@ -68,11 +69,6 @@ class Customization {
         case 'light':
           {
             theme_data = ThemeMode.light;
-            break;
-          }
-        case 'system':
-          {
-            theme_data = ThemeMode.system;
             break;
           }
       }
@@ -99,7 +95,7 @@ class Customization {
       var custom = Customization.init();
       var path = await custom.getLocalData();
       var data = FileSystem.readJson(path);
-      return bool.parse(data['allowNotification']);
+      return data['allowNotification'] as bool;
     } catch (e) {
       return true;
     }

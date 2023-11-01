@@ -144,10 +144,6 @@ namespace Sen.Shell.Kernel.Support.WWise
             }
             var BKHD_length = BNKFile.readUInt32LE();
             var version = BNKFile.readUInt32LE();
-            if (version != 88 && version != 112 && version != 140 && version != 145)
-            {
-                throw new Exception("non_supported_bnk_version");
-            }
             var id = BNKFile.readUInt32LE();
             var dataLength = BKHD_length - 12;
             var language = BNKFile.readUInt32LE();
@@ -537,10 +533,6 @@ namespace Sen.Shell.Kernel.Support.WWise
 
         private static void EncodeBKHD(SenBuffer BNKFile, BKHD BKHDInfo)
         {
-            if (BKHDInfo.version != 88 && BKHDInfo.version != 112 && BKHDInfo.version != 140 && BKHDInfo.version != 145)
-            {
-                throw new Exception($"non_supported_bnk_version");
-            }
             var head_expand = ConvertHexString(BKHDInfo.head_expand);
             BNKFile.writeString("BKHD");
             BNKFile.writeUInt32LE(BKHDInfo.version, 8);

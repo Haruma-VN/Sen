@@ -3,15 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sen_material_design/bridge/functions.dart';
 import 'package:sen_material_design/bridge/service.dart';
-import 'package:sen_material_design/common/custom.dart';
 import 'package:sen_material_design/common/default.dart';
 import 'package:sen_material_design/components/item/elevated/button.dart';
 import 'package:sen_material_design/components/item/elevated/input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/bridge/method.dart';
 import 'package:sen_material_design/components/page/widget.dart';
-import 'package:sen_material_design/module/utility/io/common.dart';
-import 'package:path/path.dart' as p;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,18 +35,6 @@ class RipeValue {
 
 class _HomePageState extends State<HomePage> {
   bool isHovering = false;
-
-  String methodFile = p.join(
-    ApplicationInformation.libraryPath.value,
-    'interface',
-    'methods.json',
-  );
-
-  String initMethod() {
-    Customization.initMethod(methodFile);
-    return methodFile;
-  }
-
   Method exchangeFunction(
     String id,
   ) {
@@ -542,18 +527,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    if (ApplicationInformation.storagePermission.value &&
-        ApplicationInformation.methodItems.value.isEmpty &&
-        ApplicationInformation.displayItems.value.isEmpty) {
-      ApplicationInformation.methodItems.value = List<MethodItem>.from(
-        FileSystem.readJson(
-          FileSystem.fileExists(methodFile) ? methodFile : initMethod(),
-        ).map((dynamic e) => MethodItem.fromJson(e)),
-      );
-      ApplicationInformation.displayItems.value = [
-        ...ApplicationInformation.methodItems.value,
+    setState(() {
+      ApplicationInformation.displayItems.value =
+          defaultMethods.map((e) => MethodItem.has(e['method'])).toList();
+      ApplicationInformation.methodItems.value = [
+        ...ApplicationInformation.displayItems.value,
       ];
-    }
+    });
   }
 
   @override
