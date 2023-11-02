@@ -277,19 +277,19 @@ class PopCapAnimation {
     }
     changeInfo["transform"] = transform;
     if (count & moveFlags["srcRect"]! != 0) {
-      final sourceReact = <int>[0, 0, 0, 0];
-      sourceReact[0] = senFile.readInt16LE() ~/ 20;
-      sourceReact[1] = senFile.readInt16LE() ~/ 20;
-      sourceReact[2] = senFile.readInt16LE() ~/ 20;
-      sourceReact[3] = senFile.readInt16LE() ~/ 20;
+      final sourceReact = <double>[0, 0, 0, 0];
+      sourceReact[0] = senFile.readInt16LE() / 20;
+      sourceReact[1] = senFile.readInt16LE() / 20;
+      sourceReact[2] = senFile.readInt16LE() / 20;
+      sourceReact[3] = senFile.readInt16LE() / 20;
       changeInfo["source_rectangle"] = sourceReact;
     }
     if (count & moveFlags["color"]! != 0) {
-      final color = <int>[0, 0, 0, 0];
-      color[0] = senFile.readUInt8() ~/ 255;
-      color[1] = senFile.readUInt8() ~/ 255;
-      color[2] = senFile.readUInt8() ~/ 255;
-      color[3] = senFile.readUInt8() ~/ 255;
+      final color = <double>[0, 0, 0, 0];
+      color[0] = senFile.readUInt8() / 255;
+      color[1] = senFile.readUInt8() / 255;
+      color[2] = senFile.readUInt8() / 255;
+      color[3] = senFile.readUInt8() / 255;
       changeInfo["color"] = color;
     }
     var spriteFrameNumber = 0;
