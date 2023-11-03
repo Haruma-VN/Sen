@@ -21,6 +21,7 @@ namespace Sen.Script {
             `Modules/System/Default/Localization`,
             `Modules/System/Default/Timer`,
             `Modules/Support/Json/Generic`,
+            `Modules/Support/Haruma/Package/Encode`,
             `Modules/Support/PopCap/PvZ/CryptData/Encrypt`,
             `Modules/Support/PopCap/PvZ/ReAnimation/Encode`,
             `Modules/Support/PopCap/PvZ/Particles/Encode`,
@@ -160,7 +161,6 @@ namespace Sen.Script {
             Sen.Shell.Console.Print(11 as Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, "Press any keys to continue...");
             return;
         }
-        Sen.Script.TestShell();
         const time_start: number = Date.now();
         Sen.Script.LoadModules(Sen.Script.ScriptModules);
         const time_end: number = Date.now();

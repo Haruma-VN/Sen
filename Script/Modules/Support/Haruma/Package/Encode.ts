@@ -415,4 +415,3 @@ namespace Sen.Script.Modules.Support.Haruma.Package.Encode {
         return;
     }
 }
-Sen.Script.Modules.Support.Haruma.Package.Encode.execute();
