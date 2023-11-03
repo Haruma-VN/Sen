@@ -56,7 +56,7 @@ class ConsoleState extends State<Console> {
   ];
 
   void reset() {
-    for (int i = messages.length - 1; i >= 0; i--) {
+    for (var i = messages.length - 1; i >= 0; i--) {
       Message removedItem = messages.removeAt(i);
       _listKey.currentState?.removeItem(
         i,

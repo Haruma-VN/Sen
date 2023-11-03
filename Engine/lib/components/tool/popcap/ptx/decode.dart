@@ -14,8 +14,22 @@ import 'package:sen_material_design/module/utility/io/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 
+// ignore: must_be_immutable
 class PopCapPTXDecode extends StatefulWidget {
-  const PopCapPTXDecode({super.key});
+  PopCapPTXDecode({
+    super.key,
+    this.dataFile,
+    this.outputFile,
+    this.format,
+    this.inputHeight,
+    this.inputWidth,
+  });
+
+  String? dataFile;
+  String? outputFile;
+  int? inputHeight;
+  int? inputWidth;
+  String? format;
 
   @override
   State<PopCapPTXDecode> createState() => _PopCapPTXDecodeState();
@@ -30,10 +44,29 @@ class _PopCapPTXDecodeState extends State<PopCapPTXDecode> {
   @override
   void initState() {
     super.initState();
-    controllerInput = TextEditingController();
-    controllerOutput = TextEditingController();
-    inputHeight = TextEditingController();
-    inputWidth = TextEditingController();
+    String dataFile = '';
+    String outputFile = '';
+    String width = '';
+    String height = '';
+    if (widget.dataFile != null) {
+      dataFile = widget.dataFile!;
+    }
+    if (widget.outputFile != null) {
+      outputFile = widget.outputFile!;
+    }
+    if (widget.inputWidth != null) {
+      width = widget.inputWidth.toString();
+    }
+    if (widget.inputHeight != null) {
+      height = widget.inputHeight.toString();
+    }
+    if (widget.format != null) {
+      format = widget.format!;
+    }
+    controllerInput = TextEditingController(text: dataFile);
+    controllerOutput = TextEditingController(text: outputFile);
+    inputHeight = TextEditingController(text: height);
+    inputWidth = TextEditingController(text: width);
   }
 
   @override

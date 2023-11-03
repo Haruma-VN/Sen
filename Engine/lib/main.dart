@@ -5,6 +5,7 @@ import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/common/version.dart';
 import 'package:sen_material_design/components/command.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/rsb_workspace.dart';
 import 'package:sen_material_design/components/setting.dart';
 import 'package:window_manager/window_manager.dart';
 import 'common/custom.dart';
@@ -108,6 +109,7 @@ class _RootPageState extends State<RootPage> {
 
   List<Widget> pages = const [
     HomePage(),
+    RSBWorkspace(),
     Setting(),
   ];
 
@@ -174,6 +176,14 @@ class _RootPageState extends State<RootPage> {
                             selectedIcon: const Icon(Icons.terminal),
                             label: Text(
                               AppLocalizations.of(context)!.command_page,
+                            ),
+                          ),
+                          NavigationRailDestination(
+                            icon: const Icon(Icons.data_object_outlined),
+                            selectedIcon:
+                                const Icon(Icons.data_object_outlined),
+                            label: Text(
+                              'RSB Workspace',
                             ),
                           ),
                           NavigationRailDestination(
