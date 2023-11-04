@@ -58,7 +58,7 @@ namespace Sen.Script {
      * @returns
      */
 
-    export function LoadModules(scripts: Array<string>): void {
+    export function LoadModules<script extends string>(scripts: Array<script>): void {
         for (const script of scripts) {
             try {
                 Sen.Shell.JavaScriptCoreEngine.Evaluate(
