@@ -178,10 +178,9 @@ class _RootPageState extends State<RootPage> {
                               AppLocalizations.of(context)!.command_page,
                             ),
                           ),
-                          NavigationRailDestination(
-                            icon: const Icon(Icons.data_object_outlined),
-                            selectedIcon:
-                                const Icon(Icons.data_object_outlined),
+                          const NavigationRailDestination(
+                            icon: Icon(Icons.data_object_outlined),
+                            selectedIcon: Icon(Icons.data_object_outlined),
                             label: Text(
                               'RSB Workspace',
                             ),
