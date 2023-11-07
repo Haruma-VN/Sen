@@ -559,7 +559,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Atlas.Pack {
             };
             RectsPacker.addArray(packable_datas as any);
             const max_rects_collections: Array<Array<MaxRectsReturnData>> = [];
-            RectsPacker.bins.forEach((bin) => max_rects_collections.push(bin.rects as any));
+            RectsPacker.bins.forEach((bin: Third.JavaScript.MaxRectsAlgorithm.Bin<Third.JavaScript.MaxRectsAlgorithm.Rectangle>) => max_rects_collections.push(bin.rects as any));
             const trim: boolean = atlas_json.trim;
             if (trim) {
                 Sen.Shell.Console.Print(Sen.Script.Modules.Platform.Constraints.ConsoleColor.Green, Sen.Script.Modules.System.Default.Localization.GetString("use_trim"));
