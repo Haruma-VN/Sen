@@ -5,6 +5,7 @@ import 'package:sen_material_design/bridge/service.dart';
 import 'package:sen_material_design/common/version.dart';
 import 'package:sen_material_design/components/command.dart';
 import 'package:sen_material_design/common/default.dart';
+import 'package:sen_material_design/components/item/widget/app.dart';
 import 'package:sen_material_design/components/rsb_workspace.dart';
 import 'package:sen_material_design/components/setting.dart';
 import 'package:window_manager/window_manager.dart';
@@ -115,39 +116,9 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          ApplicationInformation.applicationName,
-          style: theme.textTheme.titleLarge!,
-        ),
-        centerTitle: false,
-        elevation: 3,
-        scrolledUnderElevation: 2,
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(
-                ApplicationInformation.hasSearch.value
-                    ? Icons.close_outlined
-                    : Icons.search_outlined,
-                color: ApplicationInformation.isDarkMode.value
-                    ? Colors.white
-                    : Colors.black,
-              ),
-              onPressed: () {
-                setState(() {
-                  ApplicationInformation.hasSearch.value =
-                      !ApplicationInformation.hasSearch.value;
-                });
-              },
-            ),
-          ),
-        ],
-      ),
-      body: OrientationBuilder(
+    return SenGUI(
+      hasGoBack: false,
+      mWidget: OrientationBuilder(
         builder: (context, orientation) {
           return orientation == Orientation.portrait
               ? SingleChildScrollView(
@@ -244,6 +215,28 @@ class _RootPageState extends State<RootPage> {
               : const SizedBox.shrink();
         },
       ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            icon: Icon(
+              ApplicationInformation.hasSearch.value
+                  ? Icons.close_outlined
+                  : Icons.search_outlined,
+              color: ApplicationInformation.isDarkMode.value
+                  ? Colors.white
+                  : Colors.black,
+            ),
+            onPressed: () {
+              setState(() {
+                ApplicationInformation.hasSearch.value =
+                    !ApplicationInformation.hasSearch.value;
+              });
+            },
+          ),
+        ),
+      ],
+      children: const [],
     );
   }
 }

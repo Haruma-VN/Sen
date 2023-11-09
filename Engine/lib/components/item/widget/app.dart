@@ -7,11 +7,17 @@ class SenGUI extends StatelessWidget {
     required this.hasGoBack,
     required this.children,
     this.bottomNavigationBar,
+    this.scrolledUnderElevation,
+    this.mWidget,
+    this.actions,
   });
 
   final List<Widget> children;
   final Widget? bottomNavigationBar;
   final bool hasGoBack;
+  final double? scrolledUnderElevation;
+  final Widget? mWidget;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +28,14 @@ class SenGUI extends StatelessWidget {
         ),
         centerTitle: false,
         elevation: 3,
-        scrolledUnderElevation: 3,
+        scrolledUnderElevation: scrolledUnderElevation ?? 3,
         automaticallyImplyLeading: hasGoBack,
+        actions: actions,
       ),
-      body: ListView(
-        children: [...children],
-      ),
+      body: mWidget ??
+          ListView(
+            children: [...children],
+          ),
       bottomNavigationBar: bottomNavigationBar,
     );
   }

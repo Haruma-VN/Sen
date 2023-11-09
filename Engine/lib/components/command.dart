@@ -8,6 +8,7 @@ import 'package:sen_material_design/components/item/elevated/button.dart';
 import 'package:sen_material_design/components/item/elevated/input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sen_material_design/bridge/method.dart';
+import 'package:sen_material_design/components/item/widget/app.dart';
 import 'package:sen_material_design/components/page/widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -463,35 +464,24 @@ class _HomePageState extends State<HomePage> {
             ) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return materialWidget[e.method] ??
-                    Scaffold(
-                      appBar: AppBar(
-                        title: const Text(
-                          ApplicationInformation.applicationName,
+                    SenGUI(
+                      hasGoBack: true,
+                      children: [
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          )!
+                              .have_not_implemented,
                         ),
-                        centerTitle: false,
-                        elevation: 3,
-                        scrolledUnderElevation: 3,
-                      ),
-                      body: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!
-                            .have_not_implemented,
-                      ),
+                      ],
                     );
               } else {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: const Text(
-                      ApplicationInformation.applicationName,
-                    ),
-                    centerTitle: false,
-                    elevation: 3,
-                    scrolledUnderElevation: 3,
-                  ),
-                  body: const Center(
+                return const SenGUI(
+                  hasGoBack: true,
+                  mWidget: Center(
                     child: CircularProgressIndicator(),
                   ),
+                  children: [],
                 );
               }
             },
