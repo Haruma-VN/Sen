@@ -41,7 +41,7 @@ import 'package:sen_material_design/components/tool/popcap/zlib/uncompress.dart'
 import 'package:sen_material_design/components/tool/wwise/decode.dart';
 import 'package:sen_material_design/components/tool/wwise/encode.dart';
 
-Map<String, Widget> materialWidget = {
+final Map<String, Widget> materialWidget = {
   'popcap.resource_group.split': SplitPopCapResourceGroup(),
   'popcap.resource_group.merge': MergePopCapResourceGroup(),
   'popcap.resource_group.to_resinfo': ToResInfo(),
