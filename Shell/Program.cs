@@ -5,10 +5,10 @@ using Sen.Shell.Kernel.Support.Download;
 
 namespace Sen.Shell
 {
-     public partial class Program
+     public class Program
      {
 
-        public static readonly string Script_Directory = Platform.CurrentPlatform() switch {
+        public unsafe static readonly string Script_Directory = Platform.CurrentPlatform() switch {
             UserPlatform.Windows => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Scripts"),
             UserPlatform.Linux => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Scripts"),
             UserPlatform.Macintosh => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Scripts"),
@@ -17,7 +17,7 @@ namespace Sen.Shell
             _ => throw new Exception($"Unknown"),
         };
 
-        public static readonly string InternalPath = Platform.CurrentPlatform() switch
+        public unsafe static readonly string InternalPath = Platform.CurrentPlatform() switch
         {
             UserPlatform.Windows => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Internal.dll"),
             UserPlatform.Linux => ImplementPath.FullPath($"{Platform.CurrentDirectoryContainsShell}/Internal.so"),
