@@ -731,7 +731,6 @@ namespace Sen.Shell.Kernel.Support.WWise
             for (var i = 0; i < STIDDataLength; i++)
             {
                 BNKFile.writeUInt32LE(STIDInfo.data[i].id);
-                BNKFile.writeUInt8((byte)STIDInfo.data[i].name.Length);
                 BNKFile.writeStringByUInt8(STIDInfo.data[i].name);
             }
             InsertTypeLength(BNKFile, STIDLengthOffset);
