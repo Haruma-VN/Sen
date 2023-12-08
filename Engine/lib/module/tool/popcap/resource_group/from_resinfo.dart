@@ -147,7 +147,7 @@ class ConvertFromResInfo {
         result['groups'].add(generateComposite(compositeName, group));
         for (var subgroupName in group['subgroup'].keys.toList()) {
           final dynamic subgroup = group['subgroup'][subgroupName];
-          if (subgroup['type'] != null && subgroup['type'] != 0) {
+          if (subgroup['type'] != null && subgroup['type'] != "0") {
             result['groups'].add(
               generateImageInfo(
                 SubInformation(
