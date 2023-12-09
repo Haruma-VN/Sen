@@ -683,5 +683,9 @@
     "got_newton_resource": "MANIFESTGROUP has NEWTON, encode NEWTON from JSON",
     "haruma_sen_package_encode": "PopCap RSB: Generate Sen Package",
     "haruma_sen_package_decode": "PopCap RSB: Apply Sen Package",
-    "rsg_in_queue": "RSG in queue: {}"
+    "rsg_in_queue": "RSG in queue: {}",
+    "input_worldmap_data": "Input worldmapdata path",
+    "input_worldmap_data_directory": "Input splitted worldmapdata directory",
+    "split_worldmap_data": "Split World Map Data",
+    "merge_worldmap_data": "Merge World Map Data"
 }
