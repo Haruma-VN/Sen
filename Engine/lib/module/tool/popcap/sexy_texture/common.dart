@@ -538,7 +538,7 @@ class SexyTexture implements PopCapSexyTexture {
     int readBits(int bits) {
       var ans = 0;
       for (var i = bits - 1; i >= 0; i--) {
-        ans |= readOneBit() << 1;
+        ans |= readOneBit() << i;
       }
       return ans;
     }
