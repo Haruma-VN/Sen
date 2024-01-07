@@ -113,7 +113,12 @@ namespace Sen.Shell.Kernel.Support.Compress
                 buffer.slice(8, buffer.length);
             }
             var compress = new Compress();
-            return compress.UncompressZlib(buffer.toBytes());
+            var result = compress.UncompressZlib(buffer.toBytes());
+            if(result.Length == 0)
+            {
+                throw new Exception("Invalid zlib");
+            }
+            return result;
         }
     }
 }

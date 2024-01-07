@@ -194,12 +194,14 @@ namespace Sen.Shell.Kernel.Support.PvZ2.RTON
                     );
             }
 
-            if (Rton_ver != version) throw new RTONDecodeException(
+            if (Rton_ver != version) {
+                throw new RTONDecodeException(
                 $"wrong_rton_version",
                 RtonFile.filePath ??= "undefined",
                 $"version_must_be_1",
                 RTONListException.Version
                 );
+            }
             ReadObject(RtonFile, jsonWriter);
             var EOF = RtonFile.readString(4);
             if (EOF != EOR) throw new RTONDecodeException($"end_of_rton_file_wrong",

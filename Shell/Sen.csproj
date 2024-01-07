@@ -45,13 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.16.0" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Jint" Version="3.23.5" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Jint" Version="3.23.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NullFX.CRC" Version="1.1.10" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
-	  <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
+	  <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.0" />
 	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" Condition="'$(TargetFramework)' == 'netstandard2.1'" />
   </ItemGroup>
 </Project>
