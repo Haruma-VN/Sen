@@ -16,7 +16,6 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 import java.io.File
 import java.io.FileOutputStream
 
-// Base Source : https://github.com/twinkles-twinstar/TwinStar.ToolKit/blob/master/ShellGUI/android/app/src/main/kotlin/com/twinstar/toolkit/shell_gui/MainActivity.kt
 class MainActivity: FlutterActivity() {
 	private lateinit var methodResult: MethodChannel.Result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

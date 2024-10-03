@@ -101,12 +101,12 @@ namespace Sen.Shell.Kernel.Support.WWise
 
     public class ENVSLowPassFilter
     {
-        public required string low_pass_filter_vaule { get; set; }
+        public required string low_pass_filter_value { get; set; }
         public required string[] low_pass_filter_point { get; set; }
     }
     public class ENVSHighPassFilter
     {
-        public required string high_pass_filter_vaule { get; set; }
+        public required string high_pass_filter_value { get; set; }
         public required string[] high_pass_filter_point { get; set; }
     }
 
@@ -392,12 +392,12 @@ namespace Sen.Shell.Kernel.Support.WWise
                     },
                     low_pass_filter = new ENVSLowPassFilter
                     {
-                        low_pass_filter_vaule = lowPassFilterValue,
+                        low_pass_filter_value = lowPassFilterValue,
                         low_pass_filter_point = lowPassFilterPoint
                     },
                     high_pass_filter = new ENVSHighPassFilter
                     {
-                        high_pass_filter_vaule = highPassFilterValue,
+                        high_pass_filter_value = highPassFilterValue,
                         high_pass_filter_point = highPassFilterPoint
                     }
                 };
@@ -413,7 +413,7 @@ namespace Sen.Shell.Kernel.Support.WWise
                     },
                     low_pass_filter = new ENVSLowPassFilter
                     {
-                        low_pass_filter_vaule = lowPassFilterValue,
+                        low_pass_filter_value = lowPassFilterValue,
                         low_pass_filter_point = lowPassFilterPoint
                     }
                 };
@@ -683,7 +683,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             {
                 BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.volume.volume_point[i]));
             }
-            BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.low_pass_filter.low_pass_filter_vaule));
+            BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.low_pass_filter.low_pass_filter_value));
             var lowPassFilterNumber = ENVSItemInfo.low_pass_filter.low_pass_filter_point.Length;
             BNKFile.writeUInt16LE((ushort)lowPassFilterNumber);
             for (var i = 0; i < lowPassFilterNumber; i++)
@@ -692,7 +692,7 @@ namespace Sen.Shell.Kernel.Support.WWise
             }
             if (version >= 112)
             {
-                BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.high_pass_filter!.high_pass_filter_vaule));
+                BNKFile.writeBytes(ConvertHexString(ENVSItemInfo.high_pass_filter!.high_pass_filter_value));
                 var highPassFilterNumber = ENVSItemInfo.high_pass_filter!.high_pass_filter_point.Length;
                 BNKFile.writeUInt16LE((ushort)highPassFilterNumber);
                 for (var i = 0; i < highPassFilterNumber; i++)

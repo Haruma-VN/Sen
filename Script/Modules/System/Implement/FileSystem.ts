@@ -7,11 +7,7 @@ namespace Sen.Script.Modules.FileSystem {
          */
 
         public static ReadJson<Generic_T>(filePath: string): Generic_T {
-            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(
-                Sen.Shell.FileSystem.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8),
-                Sen.Script.Modules.System.Default.Localization.use_trailing_commas,
-                filePath
-            );
+            return Sen.Script.Modules.FileSystem.Implement.JsonLibrary.ParseJson<Generic_T>(Sen.Shell.FileSystem.ReadText(filePath, Sen.Script.Modules.FileSystem.Constraints.EncodingType.UTF8), true, filePath);
         }
 
         /**

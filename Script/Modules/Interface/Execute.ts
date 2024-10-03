@@ -1394,24 +1394,7 @@ namespace Sen.Script.Modules.Interface.Execute {
                             Sen.Script.Modules.System.Default.Localization.GetString("execution_argument").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("input_more_that_path").replace(/\{\}/g, "png"))
                         );
                         const png_argument: Array<string> = new Array<string>();
-                        assert_argument: while (true) {
-                            let arg: string = Sen.Script.Modules.Interface.Arguments.InputPath("file");
-                            if (arg.endsWith(` `)) {
-                                arg = arg.slice(0, -1);
-                            }
-                            if ((arg.startsWith(`"`) && arg.endsWith(`"`)) || (arg.startsWith(`'`) && arg.endsWith(`'`))) {
-                                arg = arg.slice(1, -1);
-                            }
-                            if (Sen.Shell.FileSystem.FileExists(arg) && /((\.png))$/i.test(arg)) {
-                                png_argument.push(arg);
-                                break assert_argument;
-                            } else {
-                                Sen.Shell.Console.Print(
-                                    Sen.Script.Modules.Platform.Constraints.ConsoleColor.Red,
-                                    Sen.Script.Modules.System.Default.Localization.GetString("execution_failed").replace(/\{\}/g, Sen.Script.Modules.System.Default.Localization.GetString("file_assert_is_not").replace(/\{\}/g, "png"))
-                                );
-                            }
-                        }
+                        png_argument.push(...Sen.Shell.Console.OpenMultipleFileDialog("Sen", []));
                         const resolution: int = Sen.Script.Modules.Support.PopCap.PvZ2.Argument.Input.InputTextureResolution(
                             Sen.Script.Modules.System.Default.Localization.GetString("popcap_resize_animation"),
                             Sen.Shell.Path.Resolve(Sen.Shell.Path.Join(`${Sen.Shell.MainScriptDirectory}`, `Modules`, `Customization`, `Methods`, `popcap_animation.json`)),

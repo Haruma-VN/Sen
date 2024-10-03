@@ -123,7 +123,7 @@ namespace Sen.Script.Modules.Support.PopCap.PvZ2.Animation.Helper {
      */
 
     export interface Option {
-        generate_sprite: "none" | "old" | "new";
+        generate_sprite: "none" | "old" | "new" | "implement";
         sprite_name: string;
     }
 

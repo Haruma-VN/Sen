@@ -108,7 +108,7 @@ namespace Sen.Script.Modules.Executable.PvZ2.CloneAnimateContent {
                         "1": [Sen.Script.Modules.System.Default.Localization.GetString("sprite"), Sen.Script.Modules.System.Default.Localization.GetString("sprite")],
                         "2": [Sen.Script.Modules.System.Default.Localization.GetString("image"), Sen.Script.Modules.System.Default.Localization.GetString("image")],
                     }) as 1 | 2;
-                    let k_find: string;
+                    let k_find: string = undefined!;
                     switch (import_k) {
                         case 1: {
                             Sen.Shell.Console.Print(
